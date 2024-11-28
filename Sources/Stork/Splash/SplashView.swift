@@ -14,9 +14,6 @@ struct SplashView: View {
     @StateObject private var viewModel = SplashViewModel()
     @State private var isInfoPresented = false
     
-    
-    //TODO: add a view of an orange beak holding a bag
-
     var body: some View {
         ZStack {
             VStack {
@@ -28,7 +25,7 @@ struct SplashView: View {
                             isInfoPresented = true
                         }
                     }, label: {
-                        Image(systemName: "info.circle")
+                        Image(systemName: "info.circle.fill")
                             .foregroundStyle(.orange)
                             .font(.title)
                     })
@@ -51,18 +48,14 @@ struct SplashView: View {
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
                 
-                Spacer()
+                LoginView(showRegistration: .constant(false), onAuthenticated: {})
+                    .opacity(viewModel.showMore && !isUserLoggedIn ? 1.0 : 0.0)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
                 
-                
-                if viewModel.showMore && !isUserLoggedIn {
-                    //                        CustomTextButtonView(text: "Get Started", backgroundColor: Color.indigo, action: {
-                    //                            withAnimation {
-                    //                                viewState = .auth
-                    //
-                    //                            }
-                    //                        })
-                    //                        .frame(width: 200, height: 60)
-                    //                        .font(.title)
+                if (isUserLoggedIn) {
+                    ProgressView()
+                        .scaleEffect(2)
+                        .tint(.indigo)
                 }
                 
                 Spacer()

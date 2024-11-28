@@ -66,6 +66,12 @@
         }
       }
     },
+    "Don't have an account yet?" : {
+
+    },
+    "Email" : {
+
+    },
     "Hello [%@](https://skip.tools)!" : {
       "localizations" : {
         "es" : {
@@ -178,6 +184,9 @@
         }
       }
     },
+    "Log In" : {
+
+    },
     "Main" : {
 
     },
@@ -210,6 +219,9 @@
       }
     },
     "Onboard" : {
+
+    },
+    "Password" : {
 
     },
     "Powered by %@" : {
@@ -299,7 +311,7 @@
     "Stork" : {
 
     },
-    "Stork is a labor and delivery app designed to assist healthcare providers in managing labor and delivery statistics seamlessly." : {
+    "Stork is a labor and delivery app designed to assist healthcare providers in managing weekly delivery statistics." : {
 
     },
     "System" : {
