@@ -119,7 +119,7 @@ public class MockProfileRepository: ProfileRepositoryInterface {
     /// - Parameter profile: The `Profile` object containing the profile picture to upload.
     public func uploadProfilePicture(_ profile: Profile) async throws {
         guard let image = profile.profilePicture else {
-            throw ProfileError.uploadError("No profile picture provided for profile with ID \(profile.id).")
+            throw ProfileError.creationFailed("No profile picture provided for profile with ID \(profile.id).")
         }
         profilePictures[profile.id] = image
     }

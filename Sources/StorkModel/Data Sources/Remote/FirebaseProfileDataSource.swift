@@ -57,7 +57,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
                 throw ProfileError.notFound("Profile with ID \(id) not found.")
             }
             guard var profile = Profile(from: data) else {
-                throw ProfileError.invalidData("Invalid data for profile with ID \(id).")
+                throw ProfileError.notFound("Invalid data for profile with ID \(id).")
             }
 
             // Attempt to retrieve the profile picture
@@ -70,13 +70,14 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
 
             return profile
         } catch {
-            throw ProfileError.firebaseError("Failed to fetch profile with ID \(id): \(error.localizedDescription)")
+            throw ProfileError.notFound("Failed to fetch profile with ID \(id): \(error.localizedDescription)")
         }
     }
     
     public func getCurrentProfile() async throws -> Profile {
         do {
             guard let userId = auth.currentUser?.uid else {
+                await self.signOut()
                 throw ProfileError.notFound("No profile currently logged in.")
             }
 
@@ -84,8 +85,9 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             guard let data = document.data() else {
                 throw ProfileError.notFound("Profile with ID \(userId) not found.")
             }
+            
             guard var profile = Profile(from: data) else {
-                throw ProfileError.invalidData("Invalid data for profile with ID \(userId).")
+                throw ProfileError.notFound("Invalid data for profile with ID \(userId).")
             }
 
             // Attempt to retrieve the profile picture
@@ -98,7 +100,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
 
             return profile
         } catch {
-            throw ProfileError.firebaseError("Failed to fetch current profile: \(error.localizedDescription)")
+            throw ProfileError.notFound("Failed to fetch current profile: \(error.localizedDescription)")
         }
     }
     
@@ -159,7 +161,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
                 Profile(from: document.data())
             }
         } catch {
-            throw ProfileError.firebaseError("Failed to list profiles: \(error.localizedDescription)")
+            throw ProfileError.notFound("Failed to list profiles: \(error.localizedDescription)")
         }
     }
     
@@ -180,7 +182,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             }
 
         } catch {
-            throw ProfileError.firebaseError("Failed to create profile: \(error.localizedDescription)")
+            throw ProfileError.creationFailed("Failed to create profile: \(error.localizedDescription)")
         }
         
     }
@@ -198,7 +200,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             let data = profile.dictionary
             try await db.collection("Profile").document(profile.id).updateData(data)
         } catch {
-            throw ProfileError.firebaseError("Failed to update profile: \(error.localizedDescription)")
+            throw ProfileError.updateFailed("Failed to update profile: \(error.localizedDescription)")
         }
     }
     
@@ -214,7 +216,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
         do {
             try await db.collection("Profile").document(profile.id).delete()
         } catch {
-            throw ProfileError.firebaseError("Failed to delete profile: \(error.localizedDescription)")
+            throw ProfileError.deletionFailed("Failed to delete profile: \(error.localizedDescription)")
         }
     }
     
@@ -261,12 +263,12 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             }
             
             guard let userProfile = Profile(from: data) else {
-                throw ProfileError.invalidData("Invalid data found for profile with ID \(firebaseUser.uid).")
+                throw ProfileError.authenticationFailed("Invalid data found for profile with ID \(firebaseUser.uid).")
             }
             
             return userProfile
         } catch {
-            throw ProfileError.firebaseError("Failed to sign in with email: \(error.localizedDescription)")
+            throw ProfileError.authenticationFailed("Failed to sign in with email: \(error.localizedDescription)")
         }
     }
     
@@ -314,6 +316,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture: "])
         }
 
+        //TODO:
 //
 //        do {
 //            let data = try await storageRef.data(maxSize: 5 * 1024 * 1024)

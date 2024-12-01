@@ -10,8 +10,10 @@ import SwiftUI
 struct SplashView: View {
     @AppStorage("appState") private var appState: AppState = AppState.splash
     @AppStorage("isUserLoggedIn") private var isUserLoggedIn: Bool = false
+    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
 
     @StateObject private var viewModel = SplashViewModel()
+    @Binding var showRegistration: Bool
     @State private var isInfoPresented = false
     
     var body: some View {
@@ -48,15 +50,26 @@ struct SplashView: View {
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
                 
-                LoginView(showRegistration: .constant(false), onAuthenticated: {})
-                    .opacity(viewModel.showMore && !isUserLoggedIn ? 1.0 : 0.0)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                LoginView(onAuthenticated: {
+                    withAnimation {
+                        appState = (isOnboardingComplete) ? .main : .onboard
+                    }
+                })
+                .opacity(viewModel.showMore && !isUserLoggedIn ? 1.0 : 0.0)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            
+                Divider()
+                    .scaleEffect(y: 4)
+                    .padding(.horizontal)
+
+                Text("Don't have an account yet?")
+                    .padding()
                 
-                if (isUserLoggedIn) {
-                    ProgressView()
-                        .scaleEffect(2)
-                        .tint(.indigo)
-                }
+                CustomButtonView(text: "Sign Up", width: 100, height: 40, color: Color.orange, isEnabled: .constant(true), onTapAction: {
+                        withAnimation {
+                            appState = AppState.register
+                        }
+                })
                 
                 Spacer()
             }
@@ -68,7 +81,7 @@ struct SplashView: View {
                         }) {
                             Image(systemName: "info.circle")
                                 .font(.title2)
-                                .foregroundColor(.orange)
+                                .foregroundColor(.indigo)
                         }
                         .shadow(radius: 5)
                     }
@@ -80,12 +93,10 @@ struct SplashView: View {
             SplashInfoView()
                 .transition(.scale.combined(with: .opacity))
                 .presentationDetents([.fraction(0.3)])
-
-
         }
     }
 }
 
 #Preview {
-    SplashView()
+    SplashView(showRegistration: .constant(false))
 }

@@ -17,7 +17,7 @@ struct CustomTextfieldView: View {
     var body: some View {
         HStack {
             icon
-                .foregroundStyle(iconColor ?? .primary)
+                .foregroundStyle(iconColor ?? .black)
                 .frame(width: 20)
             
             Group {
@@ -39,6 +39,7 @@ struct CustomTextfieldView: View {
                 .cornerRadius(10)
                 .shadow(radius: 2)
         }
+        .frame(height: 40)
     }
 }
 

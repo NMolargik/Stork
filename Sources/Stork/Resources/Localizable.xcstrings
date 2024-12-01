@@ -1,6 +1,35 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
+    "%@ %@, %@ %@ - %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@, %3$@ %4$@ - %5$@"
+          }
+        }
+      }
+    },
+    "%@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%lld reported babies" : {
+
+    },
+    "%lld reported deliveries" : {
+
+    },
     "a labor and delivery app" : {
 
     },
@@ -8,6 +37,7 @@
 
     },
     "Appearance" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -35,10 +65,20 @@
         }
       }
     },
-    "Auth" : {
+    "Babies: %lld" : {
+
+    },
+    "Birthing Center" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Confirm Password" : {
 
     },
     "Dark" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -66,13 +106,32 @@
         }
       }
     },
+    "Deliveries" : {
+
+    },
+    "Deliveries: %lld" : {
+
+    },
     "Don't have an account yet?" : {
 
     },
     "Email" : {
 
     },
+    "Emergency Services" : {
+
+    },
+    "First Name" : {
+
+    },
+    "Forgot Your Password?" : {
+
+    },
+    "Go to shared profile view" : {
+
+    },
     "Hello [%@](https://skip.tools)!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -128,7 +187,11 @@
         }
       }
     },
+    "Hospitals" : {
+
+    },
     "Item %lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -156,7 +219,11 @@
         }
       }
     },
+    "Last Name" : {
+
+    },
     "Light" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -187,10 +254,23 @@
     "Log In" : {
 
     },
-    "Main" : {
+    "Log In Instead" : {
+
+    },
+    "Map requires iOS 17" : {
+
+    },
+    "Missing Hospital" : {
+
+    },
+    "Missing?" : {
+
+    },
+    "Muster" : {
 
     },
     "Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -218,13 +298,17 @@
         }
       }
     },
-    "Onboard" : {
+    "Other View: %@" : {
+
+    },
+    "Owned by: %@" : {
 
     },
     "Password" : {
 
     },
     "Powered by %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -252,7 +336,14 @@
         }
       }
     },
+    "Provide an email address and we can send a password reset email." : {
+
+    },
+    "Role" : {
+
+    },
     "Screen %lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -279,6 +370,15 @@
           }
         }
       }
+    },
+    "Select Birthday" : {
+
+    },
+    "Select Your Birthday" : {
+
+    },
+    "Select Your Role" : {
+
     },
     "Settings" : {
       "localizations" : {
@@ -308,13 +408,29 @@
         }
       }
     },
+    "Shared Profile View" : {
+
+    },
+    "Sign Up" : {
+
+    },
+    "Skip Onboarding" : {
+
+    },
+    "Sorry we are missing your hospital. Please provide its name and we will take it from there!" : {
+
+    },
     "Stork" : {
 
     },
     "Stork is a labor and delivery app designed to assist healthcare providers in managing weekly delivery statistics." : {
 
     },
+    "Submit" : {
+
+    },
     "System" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -342,7 +458,11 @@
         }
       }
     },
+    "Use Location" : {
+
+    },
     "Welcome" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -369,9 +489,6 @@
           }
         }
       }
-    },
-    "Yo" : {
-
     }
   },
   "version" : "1.0"

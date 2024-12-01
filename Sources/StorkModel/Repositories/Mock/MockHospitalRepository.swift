@@ -45,7 +45,7 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     /// - Returns: An array of `Hospital` objects matching the specified name filter.
     public func listHospitalsByPartialName(partialName: String?) async throws -> [Hospital] {
         guard let name = partialName?.lowercased() else { return hospitals }
-        return hospitals.filter { $0.name.lowercased().contains(partialName ?? "") }
+        return hospitals.filter { $0.facility_name.lowercased().contains(partialName ?? "") }
     }
 
     /// Lists hospitals filtered by city and state.
@@ -58,14 +58,15 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     public func getHospitals(byCity city: String, andState state: String) async throws -> [Hospital] {
         let filteredHospitals = hospitals.filter {
             #if !SKIP
-            $0.city.caseInsensitiveCompare(city) == ComparisonResult.orderedSame &&
+            $0.citytown.caseInsensitiveCompare(city) == ComparisonResult.orderedSame &&
             $0.state.caseInsensitiveCompare(state) == ComparisonResult.orderedSame
             #else
-            $0.city.equals(city, ignoreCase = true) &&
+            $0.citytown.equals(city, ignoreCase = true) &&
             $0.state.equals(state, ignoreCase = true)
             #endif
         }
         guard !filteredHospitals.isEmpty else {
+            print("damn")
             throw HospitalError.notFound("No hospitals found in \(city), \(state).")
         }
         return filteredHospitals
@@ -79,9 +80,9 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     public func searchHospitals(byPartialName partialName: String) async throws -> [Hospital] {
         let filteredHospitals = hospitals.filter {
             #if !SKIP
-            $0.name.range(of: partialName, options: NSString.CompareOptions.caseInsensitive) != nil
+            $0.facility_name.range(of: partialName, options: NSString.CompareOptions.caseInsensitive) != nil
             #else
-            $0.name.contains(partialName, ignoreCase = true)
+            $0.facility_name.contains(partialName, ignoreCase = true)
             #endif
         }
         guard !filteredHospitals.isEmpty else {
@@ -95,7 +96,8 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     /// - Parameter hospital: The `Hospital` object to create.
     /// - Throws: `HospitalError.creationFailed` if a hospital with the same ID already exists.
     public func createHospital(_ name: String) async throws {
-        let hospital = Hospital(id: UUID().description, name: name, address: "", city: "", state: "", zipCode: "", county: "", phone: "", type: "", ownership: "", emergencyServices: false, birthingFriendly: false, deliveryCount: 0, babyCount: 0)
+        
+        let hospital = Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0)
         if hospitals.contains(where: { $0.id == hospital.id }) {
             throw HospitalError.creationFailed("Hospital with ID \(hospital.id) already exists.")
         }
@@ -131,12 +133,12 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     /// - Returns: An array of `Hospital` objects representing mock data.
     private static func generateMockHospitals() -> [Hospital] {
         return [
-            Hospital(id: UUID().uuidString, name: "Parkview Medical Center", address: "123 Health Ave", city: "Fort Wayne", state: "IN", zipCode: "46805", county: "Allen", phone: "123-456-7890", type: "Acute Care", ownership: "Private", emergencyServices: true, birthingFriendly: true, deliveryCount: 50, babyCount: 100),
-            Hospital(id: UUID().uuidString, name: "Parkway Hospital", address: "456 Wellness St", city: "Indianapolis", state: "IN", zipCode: "46220", county: "Marion", phone: "987-654-3210", type: "Acute Care", ownership: "Government", emergencyServices: true, birthingFriendly: false, deliveryCount: 30, babyCount: 60),
-            Hospital(id: UUID().uuidString, name: "Sunnyvale General", address: "789 Sunshine Blvd", city: "Bloomington", state: "IN", zipCode: "47408", county: "Monroe", phone: "555-123-4567", type: "General", ownership: "Private", emergencyServices: false, birthingFriendly: true, deliveryCount: 20, babyCount: 40),
-            Hospital(id: UUID().uuidString, name: "Community Health Center", address: "321 Care Rd", city: "Muncie", state: "IN", zipCode: "47303", county: "Delaware", phone: "444-555-6666", type: "Community", ownership: "Non-Profit", emergencyServices: true, birthingFriendly: false, deliveryCount: 10, babyCount: 20),
-            Hospital(id: UUID().uuidString, name: "Greenfield Regional Hospital", address: "654 Regional Dr", city: "Greenfield", state: "IN", zipCode: "46140", county: "Hancock", phone: "333-222-1111", type: "Regional", ownership: "Private", emergencyServices: true, birthingFriendly: true, deliveryCount: 40, babyCount: 80),
-            Hospital(id: UUID().uuidString, name: "Springfield Medical", address: "987 Specialty Ln", city: "Evansville", state: "IN", zipCode: "47715", county: "Vanderburgh", phone: "999-888-7777", type: "Specialty", ownership: "Private", emergencyServices: false, birthingFriendly: true, deliveryCount: 15, babyCount: 30)
+            Hospital(id: UUID().uuidString, facility_name: "Parkview Medical Center", address: "123 Health Ave", citytown: "Fort Wayne", state: "IN", zip_code: "46805", countyparish: "Allen", telephone_number: "123-456-7890", hospital_type: "Acute Care", hospital_ownership: "Private", emergency_services: true, meets_criteria_for_birthing_friendly_designation: true, deliveryCount: 50, babyCount: 100),
+            Hospital(id: UUID().uuidString, facility_name: "Parkway Hospital", address: "456 Wellness St", citytown: "Indianapolis", state: "IN", zip_code: "46220", countyparish: "Marion", telephone_number: "987-654-3210", hospital_type: "Acute Care", hospital_ownership: "Government", emergency_services: true, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 30, babyCount: 60),
+            Hospital(id: UUID().uuidString, facility_name: "Sunnyvale General", address: "789 Sunshine Blvd", citytown: "Fort Wayne", state: "IN", zip_code: "47408", countyparish: "Monroe", telephone_number: "555-123-4567", hospital_type: "General", hospital_ownership: "Private", emergency_services: false, meets_criteria_for_birthing_friendly_designation: true, deliveryCount: 20, babyCount: 40),
+            Hospital(id: UUID().uuidString, facility_name: "Community Health Center", address: "321 Care Rd", citytown: "Muncie", state: "IN", zip_code: "47303", countyparish: "Delaware", telephone_number: "444-555-6666", hospital_type: "Community", hospital_ownership: "Non-Profit", emergency_services: true, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 10, babyCount: 20),
+            Hospital(id: UUID().uuidString, facility_name: "Greenfield Regional Hospital", address: "654 Regional Dr", citytown: "Greenfield", state: "IN", zip_code: "46140", countyparish: "Hancock", telephone_number: "333-222-1111", hospital_type: "Regional", hospital_ownership: "Private", emergency_services: true, meets_criteria_for_birthing_friendly_designation: true, deliveryCount: 40, babyCount: 80),
+            Hospital(id: UUID().uuidString, facility_name: "Springfield Medical", address: "987 Specialty Ln", citytown: "Evansville", state: "IN", zip_code: "47715", countyparish: "Vanderburgh", telephone_number: "999-888-7777", hospital_type: "Specialty", hospital_ownership: "Private", emergency_services: false, meets_criteria_for_birthing_friendly_designation: true, deliveryCount: 15, babyCount: 30)
         ]
     }
 }

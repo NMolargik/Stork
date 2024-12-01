@@ -10,120 +10,114 @@ import SwiftUI
 import StorkModel
 
 enum AppState : String, Hashable {
-    case splash, auth, onboard, main
+    case splash, register, onboard, main
 }
-
 
 public struct AppStateControllerView: View {
     @AppStorage("appState") private var appState: AppState = AppState.splash
+    @AppStorage("errorMessage") private var errorMessage: String = ""
+    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
 
-//    @StateObject private var bottomBarViewModel = BottomBarViewModel()
-//    @StateObject private var profileViewModel: ProfileViewModel
-//    @State var viewState: ViewState = .splash
+    @StateObject private var profileViewModel: ProfileViewModel
+    @StateObject private var hospitalViewModel: HospitalViewModel
+    
+    @State var showRegistration: Bool = false
     
     /// The repositories passed down to child views.
     private let deliveryRepository: DeliveryRepositoryInterface
     private let hospitalRepository: HospitalRepositoryInterface
     private let profileRepository: ProfileRepositoryInterface
     private let musterRepository: MusterRepositoryInterface
+    private let locationProvider: LocationProviderInterface
     
     /// Initializes the RootView with the required dependencies.
     ///
-    /// - Parameter deliveryRepository: An instance of `DeliveryRepository` to be used in the app.
-    /// - Parameter hospitalRepository: An instance of `HospitalRepository` to be used in the app.
-    /// - Parameter profileRepository: An instance of `ProfileRepository` to be used in the app.
-    /// - Parameter musterRepository: An instance of `MusterRepository` to be used in the app.
+    /// - Parameter deliveryRepository: An instance of `DeliveryRepositoryInterface` to be used in the app.
+    /// - Parameter hospitalRepository: An instance of `HospitalRepositoryInterface` to be used in the app.
+    /// - Parameter profileRepository: An instance of `ProfileRepositoryInterface` to be used in the app.
+    /// - Parameter musterRepository: An instance of `MusterRepositoryInterface` to be used in the app.
+    /// - Parameter locationManager: An instance of `LocationManagerInterface` to be used in the app.
     public init(
         deliveryRepository: DeliveryRepositoryInterface,
         hospitalRepository: HospitalRepositoryInterface,
         profileRepository: ProfileRepositoryInterface,
-        musterRepository: MusterRepositoryInterface
+        musterRepository: MusterRepositoryInterface,
+        locationProvider: LocationProviderInterface
     ) {
         self.deliveryRepository = deliveryRepository
         self.hospitalRepository = hospitalRepository
         self.profileRepository = profileRepository
         self.musterRepository = musterRepository
-//        self._profileViewModel = StateObject(wrappedValue: ProfileViewModel(profileRepository: profileRepository))
+        self.locationProvider = locationProvider
+        
+        // Initialize profileViewModel with profileRepository
+        _profileViewModel = StateObject(wrappedValue: ProfileViewModel(profileRepository: profileRepository))
+        
+        _hospitalViewModel = StateObject(wrappedValue: HospitalViewModel(hospitalRepository: hospitalRepository, locationProvider: locationProvider))
     }
     
     public var body: some View {
         ZStack {
             Group {
-                Text("Yo")
                 switch appState {
                 case .splash:
-                    SplashView()
-                    //                case .onboarding:
-                    //                    OnboardingView(viewState: $viewState)
-                    //                case .auth:
-                    //                    AuthFlowView(viewState: $viewState)
-                    //                        .environmentObject(profileViewModel)
-                    //                case .mainApp:
-                    //                    MainView(
-                    //                        viewState: $viewState,
-                    //                        deliveryRepository: deliveryRepository,
-                    //                        hospitalRepository: hospitalRepository,
-                    //                        locationManager: locationManager,
-                    //                        onSignOut: {
-                    //                            profileViewModel.reset()
-                    //                            viewState = ViewState.splash
-                    //                        }
-                    //                    )
-                    //                }
-                case .auth:
-                    Text("Auth")
+                    SplashView(showRegistration: $showRegistration)
+                case .register:
+                    RegisterView(showRegistration: $showRegistration, onAuthenticated: {
+                        
+                    })
                 case .onboard:
-                    Text("Onboard")
-
+                    Button(action: {
+                        withAnimation {
+                            appState = AppState.main
+                        }
+                    }, label: {
+                        Text("Skip Onboarding")
+                            .foregroundStyle(.blue)
+                    })
                 case .main:
-                    Text("Main")
+                    MainView()
 
                 }
             }
-//            .background {
-//                LinearGradient(
-//                    gradient: Gradient(colors: [Color("primaryColor"), Color.indigo.opacity(0.8)]),
-//                    startPoint: .top,
-//                    endPoint: .bottom
-//                )
-//                .ignoresSafeArea()
-//                
-//            }
-//            .environmentObject(bottomBarViewModel)
-//            .environmentObject(profileViewModel)
-//            .onAppear {
-//                checkAppState()
-//            }
+            .onAppear {
+                print("Started")
+                checkAppState()
+            }
+            
+            if (errorMessage != "") {
+                ErrorToastView()
+            }
         }
+        .environmentObject(profileViewModel)
+        .environmentObject(hospitalViewModel)
     }
     
     func checkAppState() {
         if isUserLoggedIn() {
-//            if (profileViewModel.profile == nil) {
-//                Task {
-//                    let getCurrentProfileUseCase = GetCurrentProfileUseCase(profileRepository: profileRepository)
-//                    profileViewModel.profile = try await getCurrentProfileUseCase.execute()
-//
-//                    withAnimation {
-//                        viewState = .mainApp
-//                    }
-//                }
-//            } else {
-//                viewState = .mainApp
-//            }
-//        } else {
-//            viewState = hasCompletedOnboarding() ? .auth : .splash
+            if profileViewModel.profile.email == "" {
+                Task {
+                    do {
+                        profileViewModel.profile = try await profileViewModel.profileRepository.getCurrentProfile()
+                        withAnimation {
+                            appState = .main
+                        }
+                    } catch {
+                        
+                        errorMessage = "Failed to load profile: \(error.localizedDescription)"
+                        return
+                    }
+                }
+            } else {
+                appState = .main
+            }
+        } else {
+            appState = isOnboardingComplete ? .main : .splash
         }
     }
-        
     
     private func isUserLoggedIn() -> Bool {
         return profileRepository.isAuthenticated()
-    }
-    
-    private func hasCompletedOnboarding() -> Bool {
-        // Check UserDefaults or similar for onboarding completion
-        return UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
     }
 }
 
@@ -132,6 +126,9 @@ public struct AppStateControllerView: View {
         deliveryRepository: MockDeliveryRepository(),
         hospitalRepository: MockHospitalRepository(),
         profileRepository: MockProfileRepository(),
-        musterRepository: MockMusterRepository()
+        musterRepository: MockMusterRepository(),
+        locationProvider: MockLocationProvider()
     )
+    .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+    .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
 }

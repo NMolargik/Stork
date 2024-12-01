@@ -1,5 +1,10 @@
 import java.util.Properties
 
+dependencies {
+    implementation("com.google.maps.android:maps-compose:2.11.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+}
+
 plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)

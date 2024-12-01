@@ -39,7 +39,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
             ]
             try await db.collection("hospitals").document(hospital.id).setData(data, merge: true)
         } catch {
-            throw HospitalError.firebaseError("Failed to update hospital stats: \(error.localizedDescription)")
+            throw HospitalError.updateFailed("Failed to update hospital stats: \(error.localizedDescription)")
         }
     }
 
@@ -48,23 +48,23 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
         do {
             let data: [String: Any] = [
                 "id": hospital.id,
-                "name": hospital.name,
+                "facility_name": hospital.facility_name,
                 "address": hospital.address,
-                "citytown": hospital.city,
+                "citytown": hospital.citytown,
                 "state": hospital.state,
-                "zip_code": hospital.zipCode,
-                "countyparish": hospital.county,
-                "telephone_number": hospital.phone ?? "",
-                "hospital_type": hospital.type,
-                "hospital_ownership": hospital.ownership,
-                "emergency_services": hospital.emergencyServices,
-                "meets_criteria_for_birthing_friendly_designation": hospital.birthingFriendly,
+                "zip_code": hospital.zip_code,
+                "countyparish": hospital.countyparish,
+                "telephone_number": hospital.telephone_number,
+                "hospital_type": hospital.hospital_type,
+                "hospital_ownership": hospital.hospital_ownership,
+                "emergency_services": hospital.emergency_services,
+                "meets_criteria_for_birthing_friendly_designation": hospital.meets_criteria_for_birthing_friendly_designation,
                 "deliveryCount": hospital.deliveryCount,
                 "babyCount": hospital.babyCount
             ]
             try await db.collection("hospitals").document(hospital.id).setData(data)
         } catch {
-            throw HospitalError.firebaseError("Failed to create hospital: \(error.localizedDescription)")
+            throw HospitalError.creationFailed("Failed to create hospital: \(error.localizedDescription)")
         }
     }
 
@@ -73,7 +73,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
         do {
             try await db.collection("hospitals").document(id).delete()
         } catch {
-            throw HospitalError.firebaseError("Failed to delete hospital with ID \(id): \(error.localizedDescription)")
+            throw HospitalError.deletionFailed("Failed to delete hospital with ID \(id): \(error.localizedDescription)")
         }
     }
 
@@ -84,97 +84,117 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
             guard let data = document.data() else {
                 throw HospitalError.notFound("Hospital with ID \(id) not found.")
             }
-            return try mapDocumentToHospital(id: id, data: data)
+            return try mapDocumentToHospital(data: data)
         } catch {
-            throw HospitalError.firebaseError("Failed to fetch hospital with ID \(id): \(error.localizedDescription)")
+            throw HospitalError.notFound("Failed to fetch hospital with ID \(id): \(error.localizedDescription)")
         }
     }
 
     /// Fetches hospitals located in a specific city and state.
     public func listHospitals(city: String, state: String) async throws -> [Hospital] {
         do {
-            let query = db.collection("hospitals")
-                .whereField("citytown", isEqualTo: city)
-                .whereField("state", isEqualTo: state)
+            // Automatically uppercase both city and state
+            let uppercasedCity = city.uppercased()
+            let uppercasedState = state.uppercased()
+            
+            let query = db.collection("Hospital")
+                .whereField("citytown", isEqualTo: uppercasedCity)
+                .whereField("state", isEqualTo: uppercasedState)
             let snapshot = try await query.getDocuments()
+            
             return try snapshot.documents.map { document in
-                try mapDocumentToHospital(id: document.documentID, data: document.data())
+                try mapDocumentToHospital(data: document.data())
             }
         } catch {
-            throw HospitalError.firebaseError("Failed to fetch hospitals in \(city), \(state): \(error.localizedDescription)")
+            throw HospitalError.notFound("Failed to fetch hospitals in \(city), \(state): \(error.localizedDescription)")
         }
     }
 
+    @MainActor
     /// Searches for hospitals by a partial name match.
     public func listHospitalsByPartialName(partialName: String?) async throws -> [Hospital] {
+        guard let partialName = partialName, !partialName.isEmpty else {
+            throw HospitalError.notFound("Invalid search text")
+        }
+
+        // Normalize user input to uppercase to match Firestore data
+        let normalizedPartialName = partialName.uppercased()
+
         do {
-            let query = db.collection("hospitals")
-                .whereField("name", isGreaterThanOrEqualTo: partialName ?? "")
-                .whereField("name", isLessThanOrEqualTo: (partialName ?? "") + "\u{f8ff}")
+            let query = db.collection("Hospital")
+                .whereField("facility_name", isGreaterThanOrEqualTo: normalizedPartialName)
+                .whereField("facility_name", isLessThan: normalizedPartialName + "\u{F8FF}")
+                .order(by: "facility_name")
+
             let snapshot = try await query.getDocuments()
+
             return try snapshot.documents.map { document in
-                try mapDocumentToHospital(id: document.documentID, data: document.data())
+                try mapDocumentToHospital(data: document.data())
             }
         } catch {
-            throw HospitalError.firebaseError("Failed to search hospitals by name \(partialName): \(error.localizedDescription)")
+            print("Error occurred: \(error.localizedDescription)")
+            throw HospitalError.notFound("Failed to search hospitals by name \(partialName): \(error.localizedDescription)")
         }
     }
 
     /// Increments the delivery count for a specific hospital.
     public func incrementDeliveryCount(forHospitalId id: String) async throws {
         do {
-            try await db.collection("hospitals").document(id).updateData([
+            try await db.collection("Hospital").document(id).updateData([
                 "deliveryCount": FieldValue.increment(Int64(1))
             ])
         } catch {
-            throw HospitalError.firebaseError("Failed to increment delivery count for hospital with ID \(id): \(error.localizedDescription)")
+            throw HospitalError.updateFailed("Failed to increment delivery count for hospital with ID \(id): \(error.localizedDescription)")
         }
     }
 
     /// Increments the baby count for a specific hospital.
+    //TODO: pass a number of babies!!!
     public func incrementBabyCount(forHospitalId id: String) async throws {
         do {
-            try await db.collection("hospitals").document(id).updateData([
+            try await db.collection("Hospital").document(id).updateData([
                 "babyCount": FieldValue.increment(Int64(1))
             ])
         } catch {
-            throw HospitalError.firebaseError("Failed to increment baby count for hospital with ID \(id): \(error.localizedDescription)")
+            throw HospitalError.updateFailed("Failed to increment baby count for hospital with ID \(id): \(error.localizedDescription)")
         }
     }
 
     // MARK: - Private Methods
-
     /// Maps Firestore document data to a `Hospital` object.
-    private func mapDocumentToHospital(id: String, data: [String: Any]) throws -> Hospital {
+    private func mapDocumentToHospital(data: [String: Any]) throws -> Hospital {
         guard
-            let name = data["name"] as? String,
+            let id = data["id"] as? String,
+            let facility_name = data["facility_name"] as? String,
             let address = data["address"] as? String,
-            let city = data["citytown"] as? String,
+            let citytown = data["citytown"] as? String,
             let state = data["state"] as? String,
-            let zipCode = data["zip_code"] as? String,
-            let county = data["countyparish"] as? String,
-            let type = data["hospital_type"] as? String,
-            let ownership = data["hospital_ownership"] as? String,
-            let emergencyServices = data["emergency_services"] as? Bool,
-            let birthingFriendly = data["meets_criteria_for_birthing_friendly_designation"] as? Bool,
+            let zip_code = data["zip_code"] as? String,
+            let countyparish = data["countyparish"] as? String,
+            let telephone_number = data["telephone_number"] as? String,
+            let hospital_type = data["hospital_type"] as? String,
+            let hospital_ownership = data["hospital_ownership"] as? String,
+            let emergency_services = data["emergency_services"] as? Bool,
+            let meets_criteria_for_birthing_friendly_designation = data["meets_criteria_for_birthing_friendly_designation"] as? Bool,
             let deliveryCount = data["deliveryCount"] as? Int,
             let babyCount = data["babyCount"] as? Int
         else {
-            throw HospitalError.mappingError("Failed to map hospital data with ID \(id).")
+            print("mapping failed")
+            throw HospitalError.unknown("Failed to map hospital data.")
         }
         return Hospital(
             id: id,
-            name: name,
+            facility_name: facility_name,
             address: address,
-            city: city,
+            citytown: citytown,
             state: state,
-            zipCode: zipCode,
-            county: county,
-            phone: data["telephone_number"] as? String,
-            type: type,
-            ownership: ownership,
-            emergencyServices: emergencyServices,
-            birthingFriendly: birthingFriendly,
+            zip_code: zip_code,
+            countyparish: countyparish,
+            telephone_number: telephone_number,
+            hospital_type: hospital_type,
+            hospital_ownership: hospital_ownership,
+            emergency_services: emergency_services,
+            meets_criteria_for_birthing_friendly_designation: meets_criteria_for_birthing_friendly_designation,
             deliveryCount: deliveryCount,
             babyCount: babyCount
         )

@@ -9,35 +9,35 @@ import Foundation
 
 public struct Hospital: Identifiable, Codable, Hashable {
     public var id: String                       // Unique identifier for the hospital
-    var name: String                     // Name of the hospital
-    var address: String                  // Hospital's street address
-    var city: String                     // City where the hospital is located
-    var state: String                    // State abbreviation (e.g., IN)
-    var zipCode: String                  // ZIP code of the hospital
-    var county: String                   // County where the hospital is located
-    var phone: String?                   // Optional phone number of the hospital
-    var type: String                     // Type of hospital (e.g., Acute Care)
-    var ownership: String                // Ownership type of the hospital
-    var emergencyServices: Bool          // Whether the hospital provides emergency services
-    var birthingFriendly: Bool           // Whether it meets the birthing-friendly criteria
-    var deliveryCount: Int               // Total deliveries recorded at the hospital
-    var babyCount: Int                   // Total babies born at the hospital
+    public var facility_name: String                     // Name of the hospital
+    public var address: String                  // Hospital's street address
+    public var citytown: String                     // City where the hospital is located
+    public var state: String                    // State abbreviation (e.g., IN)
+    public var zip_code: String                  // ZIP code of the hospital
+    public var countyparish: String                   // County where the hospital is located
+    public var telephone_number: String
+    public var hospital_type: String                     // Type of hospital (e.g., Acute Care)
+    public var hospital_ownership: String                // Ownership type of the hospital
+    public var emergency_services: Bool          // Whether the hospital provides emergency services
+    public var meets_criteria_for_birthing_friendly_designation: Bool           // Whether it meets the birthing-friendly criteria
+    public var deliveryCount: Int               // Total deliveries recorded at the hospital
+    public var babyCount: Int                   // Total babies born at the hospital
 
     // Init from dictionary
     var dictionary: [String: Any] {
         return [
             "id": id,
-            "name": name,
+            "facility_name": facility_name,
             "address": address,
-            "city": city,
+            "citytown": citytown,
             "state": state,
-            "zipCode": zipCode,
-            "county": county,
-            "phone": phone ?? "",
-            "type": type,
-            "ownership": ownership,
-            "emergencyServices": emergencyServices,
-            "birthingFriendly": birthingFriendly,
+            "zip_code": zip_code,
+            "countyparish": countyparish,
+            "telephone_number": telephone_number,
+            "hospital_type": hospital_type,
+            "hospital_ownership": hospital_ownership,
+            "emergency_services": emergency_services,
+            "meets_criteria_for_birthing_friendly_designation": meets_criteria_for_birthing_friendly_designation,
             "deliveryCount": deliveryCount,
             "babyCount": babyCount
         ]
@@ -46,16 +46,17 @@ public struct Hospital: Identifiable, Codable, Hashable {
     init?(from dictionary: [String: Any]) {
         guard
             let id = dictionary["id"] as? String,
-            let name = dictionary["name"] as? String,
+            let facility_name = dictionary["facility_name"] as? String,
             let address = dictionary["address"] as? String,
-            let city = dictionary["city"] as? String,
+            let citytown = dictionary["citytown"] as? String,
             let state = dictionary["state"] as? String,
-            let zipCode = dictionary["zipCode"] as? String,
-            let county = dictionary["county"] as? String,
-            let type = dictionary["type"] as? String,
-            let ownership = dictionary["ownership"] as? String,
-            let emergencyServices = dictionary["emergencyServices"] as? Bool,
-            let birthingFriendly = dictionary["birthingFriendly"] as? Bool,
+            let zip_code = dictionary["zip_code"] as? String,
+            let countyparish = dictionary["countyparish"] as? String,
+            let telephone_number = dictionary["telephone_number"] as? String,
+            let hospital_type = dictionary["hospital_type"] as? String,
+            let hospital_ownership = dictionary["hospital_ownership"] as? String,
+            let emergency_services = dictionary["emergency_services"] as? Bool,
+            let meets_criteria_for_birthing_friendly_designation = dictionary["meets_criteria_for_birthing_friendly_designation"] as? Bool,
             let deliveryCount = dictionary["deliveryCount"] as? Int,
             let babyCount = dictionary["babyCount"] as? Int
         else {
@@ -63,49 +64,49 @@ public struct Hospital: Identifiable, Codable, Hashable {
         }
 
         self.id = id
-        self.name = name
+        self.facility_name = facility_name
         self.address = address
-        self.city = city
+        self.citytown = citytown
         self.state = state
-        self.zipCode = zipCode
-        self.county = county
-        self.phone = dictionary["phone"] as? String
-        self.type = type
-        self.ownership = ownership
-        self.emergencyServices = emergencyServices
-        self.birthingFriendly = birthingFriendly
+        self.zip_code = zip_code
+        self.countyparish = countyparish
+        self.telephone_number = telephone_number
+        self.hospital_type = hospital_type
+        self.hospital_ownership = hospital_ownership
+        self.emergency_services = emergency_services
+        self.meets_criteria_for_birthing_friendly_designation = meets_criteria_for_birthing_friendly_designation
         self.deliveryCount = deliveryCount
         self.babyCount = babyCount
     }
 
-    init(
+    public init(
         id: String,
-        name: String,
+        facility_name: String,
         address: String,
-        city: String,
+        citytown: String,
         state: String,
-        zipCode: String,
-        county: String,
-        phone: String? = nil,
-        type: String,
-        ownership: String,
-        emergencyServices: Bool,
-        birthingFriendly: Bool,
+        zip_code: String,
+        countyparish: String,
+        telephone_number: String,
+        hospital_type: String,
+        hospital_ownership: String,
+        emergency_services: Bool,
+        meets_criteria_for_birthing_friendly_designation: Bool,
         deliveryCount: Int = 0,
         babyCount: Int = 0
     ) {
         self.id = id
-        self.name = name
+        self.facility_name = facility_name
         self.address = address
-        self.city = city
+        self.citytown = citytown
         self.state = state
-        self.zipCode = zipCode
-        self.county = county
-        self.phone = phone
-        self.type = type
-        self.ownership = ownership
-        self.emergencyServices = emergencyServices
-        self.birthingFriendly = birthingFriendly
+        self.zip_code = zip_code
+        self.countyparish = countyparish
+        self.telephone_number = telephone_number
+        self.hospital_type = hospital_type
+        self.hospital_ownership = hospital_ownership
+        self.emergency_services = emergency_services
+        self.meets_criteria_for_birthing_friendly_designation = meets_criteria_for_birthing_friendly_designation
         self.deliveryCount = deliveryCount
         self.babyCount = babyCount
     }

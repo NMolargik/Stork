@@ -10,16 +10,16 @@ import UIKit
 
 public struct Profile: Identifiable, Codable, Hashable {
     public var id: String
-    var primaryHospitalId: String
-    var musterId: String
-    var firstName: String
-    var lastName: String
-    var email: String
-    var birthday: String
-    var joinDate: String
-    var role: ProfileRole
-    var isAdmin: Bool
-    var profilePicture: UIImage? // Optional profile picture
+    public var primaryHospitalId: String
+    public var musterId: String
+    public var firstName: String
+    public var lastName: String
+    public var email: String
+    public var birthday: Date
+    public var joinDate: String
+    public var role: ProfileRole
+    public var isAdmin: Bool
+    public var profilePicture: UIImage? // Optional profile picture
 
     // Custom date formatter for DD-MM-YYYY format
     private static let dateFormatter: DateFormatter = {
@@ -46,7 +46,7 @@ public struct Profile: Identifiable, Codable, Hashable {
     }
 
     // Initialize from Firestore data dictionary
-    init?(from dictionary: [String: Any]) {
+    public init?(from dictionary: [String: Any]) {
         guard
             let id = dictionary["id"] as? String,
             let primaryHospitalId = dictionary["primaryHospitalId"] as? String,
@@ -54,7 +54,7 @@ public struct Profile: Identifiable, Codable, Hashable {
             let firstName = dictionary["firstName"] as? String,
             let lastName = dictionary["lastName"] as? String,
             let email = dictionary["email"] as? String,
-            let birthday = dictionary["birthday"] as? String, // Already a string
+            let birthday = dictionary["birthday"] as? Date, // Already a string
             let joinDate = dictionary["joinDate"] as? String, // Already a string
             let roleString = dictionary["role"] as? String,
             let role = ProfileRole(rawValue: roleString), // Decode role
@@ -77,14 +77,14 @@ public struct Profile: Identifiable, Codable, Hashable {
     }
 
     // Initialize from Strings for birthday and joinDate
-    init(
+    public init(
         id: String,
         primaryHospitalId: String,
         musterId: String,
         firstName: String,
         lastName: String,
         email: String,
-        birthday: String,
+        birthday: Date,
         joinDate: String,
         role: ProfileRole,
         isAdmin: Bool,
@@ -101,6 +101,20 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.role = role
         self.isAdmin = isAdmin
         self.profilePicture = profilePicture
+    }
+    
+    public init(thisIsTemporary: Bool?) {
+        self.id = UUID().uuidString
+        self.primaryHospitalId = ""
+        self.musterId = ""
+        self.firstName = ""
+        self.lastName = ""
+        self.email = ""
+        self.birthday = Date()
+        self.joinDate = Date().description
+        self.role = ProfileRole.other
+        self.isAdmin = false
+        self.profilePicture = nil
     }
 
     // Exclude profilePicture from Codable

@@ -20,8 +20,9 @@ public struct RootView : View {
             deliveryRepository: createDeliveryRepository(),
             hospitalRepository: createHospitalRepository(),
             profileRepository: createProfileRepository(),
-            musterRepository: createMusterRepository()
-        )    
+            musterRepository: createMusterRepository(),
+            locationProvider: createLocationProvider()
+        )
         .task {
             logger.log("Welcome to Skip on \(androidSDK != nil ? "Android" : "Darwin")!")
             logger.warning("Skip app logs are viewable in the Xcode console for iOS; Android logs can be viewed in Studio or using adb logcat")
@@ -54,6 +55,10 @@ public struct RootView : View {
     private func createMusterRepository() -> MusterRepositoryInterface {
         let musterRemoteDataSource = FirebaseMusterDataSource()
         return DefaultMusterRepository(remoteDataSource: musterRemoteDataSource)
+    }
+    
+    private func createLocationProvider() -> LocationProviderInterface {
+        return LocationProvider()
     }
 }
 

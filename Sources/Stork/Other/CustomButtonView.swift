@@ -12,7 +12,7 @@ struct CustomButtonView: View {
     var width: CGFloat
     var height: CGFloat
     var color: Color
-    @State var isEnabled: Bool?
+    @Binding var isEnabled: Bool
 
     var onTapAction: () -> Void
     
@@ -27,21 +27,20 @@ struct CustomButtonView: View {
                 .fontWeight(.bold)
                 .frame(width: width - 5, height: height - 5)
                 .background {
-                    // Content
-                    (isEnabled ?? true ? color : Color.gray)
+                    (isEnabled ? color : Color.gray)
                         .cornerRadius(10)
                         .shadow(radius: 5)
                 }
         })
-        .disabled(!(isEnabled ?? true))
+        .disabled(!isEnabled)
     }
 }
 
 #Preview {
     VStack(spacing: 20) {
-        CustomButtonView(text: "Push Me", width: 200, height: 50, color: Color.indigo, onTapAction: {})
+        CustomButtonView(text: "Push Me", width: 200, height: 50, color: Color.indigo, isEnabled: .constant(true), onTapAction: {})
         
-        CustomButtonView(text: "No, Push Me!", width: 300, height: 50, color: Color.blue, isEnabled: false, onTapAction: {})
+        CustomButtonView(text: "No, Push Me!", width: 300, height: 50, color: Color.blue, isEnabled: .constant(false), onTapAction: {})
     }
     .padding()
 }

@@ -42,14 +42,14 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
 
             // Parse data into Muster model
             guard let muster = Muster(from: data) else {
-                throw MusterError.invalidData("Invalid data for muster with ID \(id).")
+                throw MusterError.notFound("Invalid data for muster with ID \(id).")
             }
 
             return muster
         } catch let error as MusterError {
             throw error
         } catch {
-            throw MusterError.firebaseError("Failed to fetch muster with ID \(id): \(error.localizedDescription)")
+            throw MusterError.notFound("Failed to fetch muster with ID \(id): \(error.localizedDescription)")
         }
     }
 
@@ -113,7 +113,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
 
             return musters
         } catch {
-            throw MusterError.firebaseError("Failed to fetch musters: \(error.localizedDescription)")
+            throw MusterError.notFound("Failed to fetch musters: \(error.localizedDescription)")
         }
     }
 
@@ -129,7 +129,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
             let data = muster.dictionary
             try await db.collection("Muster").document(muster.id).setData(data)
         } catch {
-            throw MusterError.firebaseError("Failed to create muster: \(error.localizedDescription)")
+            throw MusterError.creationFailed("Failed to create muster: \(error.localizedDescription)")
         }
     }
 
@@ -145,7 +145,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
             let data = muster.dictionary
             try await db.collection("Muster").document(muster.id).updateData(data)
         } catch {
-            throw MusterError.firebaseError("Failed to update muster: \(error.localizedDescription)")
+            throw MusterError.updateFailed("Failed to update muster: \(error.localizedDescription)")
         }
     }
 
@@ -160,7 +160,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
         do {
             try await db.collection("Muster").document(muster.id).delete()
         } catch {
-            throw MusterError.firebaseError("Failed to delete muster: \(error.localizedDescription)")
+            throw MusterError.deletionFailed("Failed to delete muster: \(error.localizedDescription)")
         }
     }
 }
