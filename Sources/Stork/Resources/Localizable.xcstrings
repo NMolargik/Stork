@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%.1f inches" : {
+
+    },
+    "%.1f lbs" : {
+
+    },
     "%@" : {
 
     },
@@ -36,6 +42,9 @@
     "About Stork" : {
 
     },
+    "Add To Muster" : {
+
+    },
     "Appearance" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -68,6 +77,12 @@
     "Babies: %lld" : {
 
     },
+    "Baby #%lld" : {
+
+    },
+    "Baby Count: %lld" : {
+
+    },
     "Birthing Center" : {
 
     },
@@ -75,6 +90,9 @@
 
     },
     "Confirm Password" : {
+
+    },
+    "Currently searching by location" : {
 
     },
     "Dark" : {
@@ -106,10 +124,25 @@
         }
       }
     },
+    "Date: %@" : {
+
+    },
     "Deliveries" : {
 
     },
     "Deliveries: %lld" : {
+
+    },
+    "Delivery Details" : {
+
+    },
+    "Delivery Method" : {
+
+    },
+    "Delivery Method: %@" : {
+
+    },
+    "Delivery Options" : {
 
     },
     "Don't have an account yet?" : {
@@ -119,6 +152,15 @@
 
     },
     "Emergency Services" : {
+
+    },
+    "Epidural Used" : {
+
+    },
+    "Epidural Used: %@" : {
+
+    },
+    "Female" : {
 
     },
     "First Name" : {
@@ -186,6 +228,9 @@
           }
         }
       }
+    },
+    "Hospital ID: %@" : {
+
     },
     "Hospitals" : {
 
@@ -257,6 +302,12 @@
     "Log In Instead" : {
 
     },
+    "Loss" : {
+
+    },
+    "Male" : {
+
+    },
     "Map requires iOS 17" : {
 
     },
@@ -267,6 +318,9 @@
 
     },
     "Muster" : {
+
+    },
+    "Muster Name" : {
 
     },
     "Name" : {
@@ -297,6 +351,18 @@
           }
         }
       }
+    },
+    "New" : {
+
+    },
+    "New Delivery" : {
+
+    },
+    "No deliveries for %@." : {
+
+    },
+    "Nurse Catch" : {
+
     },
     "Other View: %@" : {
 
@@ -407,6 +473,9 @@
           }
         }
       }
+    },
+    "Sex" : {
+
     },
     "Shared Profile View" : {
 

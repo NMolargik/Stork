@@ -9,13 +9,13 @@ import Foundation
 
 public struct Delivery: Identifiable, Codable, Hashable {
     public var id: String
-    var hospitalId: String
-    var musterId: String
-    var date: Date
-    var babies: [Baby]
-    var babyCount: Int
-    var deliveryMethod: DeliveryMethod
-    var epiduralUsed: Bool
+    public var hospitalId: String
+    public var musterId: String
+    public var date: Date
+    public var babies: [Baby]
+    public var babyCount: Int
+    public var deliveryMethod: DeliveryMethod
+    public var epiduralUsed: Bool
 
     // Converts the `DeliveryModel` into a dictionary format suitable for Firestore storage.
     var dictionary: [String: Any] {
@@ -32,7 +32,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
     }
 
     // Initializes a `DeliveryModel` from a Firestore data dictionary.
-    init?(from dictionary: [String: Any]) {
+    public init?(from dictionary: [String: Any]) {
         guard
             let id = dictionary["id"] as? String,
             let hospitalId = dictionary["hospitalId"] as? String,
@@ -58,7 +58,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
     }
 
     // A standard initializer for creating a new `DeliveryModel` instance.
-    init(id: String, hospitalId: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
+    public init(id: String, hospitalId: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
         self.id = id
         self.hospitalId = hospitalId
         self.musterId = musterId
@@ -67,5 +67,20 @@ public struct Delivery: Identifiable, Codable, Hashable {
         self.babyCount = babyCount
         self.deliveryMethod = deliveryMethod
         self.epiduralUsed = epiduralUsed
+    }
+    
+    public init(sample: Bool) {
+        self.id = UUID().uuidString
+        self.hospitalId = "1234"
+        self.musterId = "5678"
+        self.date = Date()
+        self.babies = [
+            Baby(deliveryId: "12345", nurseCatch: true, sex: Sex.male),
+            Baby(deliveryId: "12345", nurseCatch: false, sex: Sex.female),
+            Baby(deliveryId: "12345", nurseCatch: false, sex: Sex.loss),
+        ]
+        self.babyCount = 3
+        self.deliveryMethod = DeliveryMethod.vaginal
+        self.epiduralUsed = false
     }
 }

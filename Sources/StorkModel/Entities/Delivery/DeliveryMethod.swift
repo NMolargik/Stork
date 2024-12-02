@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum DeliveryMethod: String, CaseIterable, Codable, CustomStringConvertible {
+public enum DeliveryMethod: String, CaseIterable, Codable, Hashable {
     case vaginal
     case cSection
     case vBac
@@ -21,5 +21,9 @@ public enum DeliveryMethod: String, CaseIterable, Codable, CustomStringConvertib
         case .vBac:
             return "VBAC"
         }
+    }
+
+    public var stringValue: String {
+        self.description
     }
 }

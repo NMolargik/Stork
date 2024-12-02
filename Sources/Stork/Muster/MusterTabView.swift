@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct MusterTabView: View {
-    @Binding var navigationPath: [String]
+    @Binding var selectedTab: Tab
+    @Binding var showingDeliveryAddition: Bool
+    
+    @State private var navigationPath: [String] = []
+
+    
     var body: some View {
         VStack {
             NavigationStack(path: $navigationPath) {
@@ -35,5 +40,5 @@ struct MusterTabView: View {
 }
 
 #Preview {
-    MusterTabView(navigationPath: .constant([]))
+    MusterTabView(selectedTab: .constant(.home), showingDeliveryAddition: .constant(false))
 }

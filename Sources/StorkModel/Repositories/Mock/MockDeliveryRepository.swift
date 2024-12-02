@@ -19,50 +19,76 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
     /// Initializes the mock repository with optional sample data.
     ///
     /// - Parameter deliveries: An array of `Delivery` objects to initialize the repository with.
-    ///   Defaults to a single sample delivery.
+    ///   Defaults to multiple sample deliveries with associated babies.
     public init(deliveries: [Delivery] = []) {
         if deliveries.isEmpty {
-            self.deliveries = [MockDeliveryRepository.createSampleDelivery()]
+            self.deliveries = MockDeliveryRepository.createSampleDeliveries()
         } else {
             self.deliveries = deliveries
         }
     }
-    
 
     // MARK: - Methods
 
-    /// Creates a sample delivery with three babies.
+    /// Creates multiple sample deliveries with random babies.
     ///
-    /// - Returns: A sample `Delivery` object.
-    private static func createSampleDelivery() -> Delivery {
-        let deliveryId = UUID().uuidString
-        let hospitalId = UUID().uuidString
-        let musterId = UUID().uuidString
-        let date = Date()
+    /// - Returns: An array of `Delivery` objects.
+    private static func createSampleDeliveries() -> [Delivery] {
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let deliveryMethods: [DeliveryMethod] = [.vaginal, .cSection, .vBac]
 
-        let babies = [
-            Baby(deliveryId: deliveryId, nurseCatch: true, sex: Sex.male),
-            Baby(deliveryId: deliveryId, nurseCatch: false, sex: Sex.female),
-            Baby(deliveryId: deliveryId, nurseCatch: true, sex: Sex.loss)
-        ]
+        var sampleDeliveries: [Delivery] = []
 
-        return Delivery(
-            id: deliveryId,
-            hospitalId: hospitalId,
-            musterId: musterId,
-            date: date,
-            babies: babies,
-            babyCount: babies.count,
-            deliveryMethod: DeliveryMethod.vaginal,
-            epiduralUsed: true
-        )
+        for monthOffset in 0..<6 { // Generate deliveries for the last 6 months
+            guard let monthDate = calendar.date(byAdding: .month, value: -monthOffset, to: currentDate) else { continue }
+            let numberOfDeliveries = Int.random(in: 1...5) // Randomize number of deliveries per month
+
+            for _ in 0..<numberOfDeliveries {
+                let randomDate: Date = {
+                    var components = Calendar.current.dateComponents([.year, .month], from: monthDate)
+                    components.day = Int.random(in: 1...28) // Random day in the range
+                    return Calendar.current.date(from: components) ?? monthDate
+                }()
+                
+                // Generate delivery ID
+                let deliveryId = UUID().uuidString
+
+                // Generate babies for the delivery
+                let babyCount = Int.random(in: 1...4)
+                let babies = (0..<babyCount).map { _ in
+                    Baby(
+                        id: UUID().uuidString,
+                        deliveryId: deliveryId,
+                        birthday: randomDate,
+                        height: Double.random(in: 17.0...22.0), // Height in inches
+                        weight: Double.random(in: 5.0...9.0),   // Weight in pounds
+                        nurseCatch: true,
+                        sex: .male
+                    )
+                }
+
+                // Create the delivery
+                let newDelivery = Delivery(
+                    id: deliveryId,
+                    hospitalId: UUID().uuidString,
+                    musterId: UUID().uuidString,
+                    date: randomDate,
+                    babies: babies,
+                    babyCount: babies.count,
+                    deliveryMethod: deliveryMethods.randomElement() ?? DeliveryMethod.vaginal,
+                    epiduralUsed: true
+                )
+
+                sampleDeliveries.append(newDelivery)
+            }
+        }
+
+        return sampleDeliveries.sorted { $0.date > $1.date }
     }
 
-    /// Fetches a delivery by its unique ID.
-    ///
-    /// - Parameter id: The unique ID of the delivery.
-    /// - Returns: A `Delivery` object matching the ID.
-    /// - Throws: `DeliveryError.notFound` if no delivery with the specified ID exists.
+    // MARK: - CRUD Methods
+
     public func getDelivery(byId id: String) async throws -> Delivery? {
         guard let delivery = deliveries.first(where: { $0.id == id }) else {
             throw DeliveryError.notFound("Delivery with ID \(id) not found.")
@@ -70,17 +96,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         return delivery
     }
 
-    /// Lists deliveries based on optional filters.
-    ///
-    /// - Parameters:
-    ///   - id: An optional delivery ID filter.
-    ///   - hospitalId: An optional hospital ID filter.
-    ///   - musterId: An optional muster ID filter.
-    ///   - date: An optional date filter.
-    ///   - babyCount: An optional baby count filter.
-    ///   - deliveryMethod: An optional delivery method filter.
-    ///   - epiduralUsed: An optional epidural usage filter.
-    /// - Returns: A list of `Delivery` objects matching the filters.
     public func listDeliveries(
         id: String?,
         hospitalId: String?,
@@ -101,10 +116,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    /// Creates a new delivery record.
-    ///
-    /// - Parameter delivery: The `Delivery` object to create.
-    /// - Throws: `DeliveryError.creationFailed` if a delivery with the same ID already exists.
     public func createDelivery(_ delivery: Delivery) async throws {
         if deliveries.contains(where: { $0.id == delivery.id }) {
             throw DeliveryError.creationFailed("Delivery with ID \(delivery.id) already exists.")
@@ -112,10 +123,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         deliveries.append(delivery)
     }
 
-    /// Updates an existing delivery record.
-    ///
-    /// - Parameter delivery: The `Delivery` object to update.
-    /// - Throws: `DeliveryError.notFound` if the delivery does not exist.
     public func updateDelivery(_ delivery: Delivery) async throws {
         guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
             throw DeliveryError.notFound("Delivery with ID \(delivery.id) not found.")
@@ -123,10 +130,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         deliveries[index] = delivery
     }
 
-    /// Deletes an existing delivery record.
-    ///
-    /// - Parameter delivery: The `Delivery` object to delete.
-    /// - Throws: `DeliveryError.deletionFailed` if the delivery does not exist.
     public func deleteDelivery(_ delivery: Delivery) async throws {
         guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
             throw DeliveryError.deletionFailed("Failed to delete delivery with ID \(delivery.id).")

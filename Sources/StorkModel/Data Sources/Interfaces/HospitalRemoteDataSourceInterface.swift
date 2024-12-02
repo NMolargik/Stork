@@ -88,5 +88,5 @@ public protocol HospitalRemoteDataSourceInterface {
     /// - Parameter id: The unique ID of the hospital to update.
     /// - Throws:
     ///   - `HospitalError.firebaseError`: If the update operation fails due to a Firestore-related issue.
-    func incrementBabyCount(forHospitalId id: String) async throws
+    func incrementBabyCount(babyCount: Int, forHospitalId id: String) async throws
 }

@@ -149,11 +149,10 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     }
 
     /// Increments the baby count for a specific hospital.
-    //TODO: pass a number of babies!!!
-    public func incrementBabyCount(forHospitalId id: String) async throws {
+    public func incrementBabyCount(babyCount: Int, forHospitalId id: String) async throws {
         do {
             try await db.collection("Hospital").document(id).updateData([
-                "babyCount": FieldValue.increment(Int64(1))
+                "babyCount": FieldValue.increment(Int64(babyCount))
             ])
         } catch {
             throw HospitalError.updateFailed("Failed to increment baby count for hospital with ID \(id): \(error.localizedDescription)")

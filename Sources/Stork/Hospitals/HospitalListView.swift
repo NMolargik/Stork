@@ -11,22 +11,14 @@ import StorkModel
 struct HospitalListView: View {
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    @Binding var navigationPath: [String]
+    
+    @State private var navigationPath: [String] = []
     
     var selectionMode: Bool = false
     var onSelection: ((Hospital) -> Void)?
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            if (hospitalViewModel.usingLocation) {
-                HStack {
-                    Text("Currently searching by location")
-                    Image(systemName: "location.circle.fill")
-                }
-                .foregroundStyle(.blue)
-                .font(.footnote)
-            }
-            
             HStack {
                 CustomTextfieldView(text: $hospitalViewModel.searchQuery, hintText: "Search by name", icon: Image(systemName: "magnifyingglass"), isSecure: false)
                 
@@ -78,9 +70,19 @@ struct HospitalListView: View {
                 }
             }
             .toolbar {
-                
-                //TODO: this button is broken for some reason
-                if (!hospitalViewModel.usingLocation) {
+                if (hospitalViewModel.usingLocation) {
+                    ToolbarItem {
+                        HStack {
+                            Spacer()
+                            
+                            Text("Currently searching by location")
+                            Image(systemName: "location.circle.fill")
+                        }
+                        .foregroundStyle(.blue)
+                        .font(.footnote)
+                        .padding(.trailing)
+                    }
+                } else {
                     ToolbarItem {
                         Button(action: {
                             withAnimation {
@@ -113,88 +115,19 @@ struct HospitalListView: View {
             }
         }
         .sheet(isPresented: $hospitalViewModel.isMissingHospitalSheetPresented, content: {
-            AddHospitalSheetView(onSubmit: { hospitalName in
+            MissingHospitalSheetView(onSubmit: { hospitalName in
                 try await hospitalViewModel.hospitalRepository.createHospital(hospitalName)
                 
+                // TODO: somehow alert the admins
                 hospitalViewModel.searchHospitals()
+                
             })
         })
     }
 }
 
 #Preview {
-    HospitalListView(navigationPath: .constant([]), selectionMode: true)
+    HospitalListView(selectionMode: true)
         .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-}
-
-struct AddHospitalSheetView: View {
-    @Environment(\.dismiss) var dismiss
-    @State private var hospitalName: String = ""
-    @State private var isSubmitting: Bool = false
-    @State private var errorMessage: String? = nil
-
-    var onSubmit: (String) async throws -> Void
-
-    var body: some View {
-        NavigationStack {
-            VStack {
-                Text("Sorry we are missing your hospital. Please provide its name and we will take it from there!")
-                    .font(.headline)
-                    .padding(.bottom, 16)
-                
-                CustomTextfieldView(text: $hospitalName, hintText: "Missing hospital name...", icon: Image(systemName: "building"), isSecure: false, iconColor: Color.orange)
-                    .padding()
-
-                if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.center)
-                        .padding(.bottom)
-                }
-
-                Button(action: {
-                    Task {
-                        isSubmitting = true
-                        errorMessage = nil
-                        do {
-                            try await onSubmit(hospitalName)
-                            dismiss()
-                        } catch {
-                            errorMessage = "Failed to add hospital: \(error.localizedDescription)"
-                        }
-                        isSubmitting = false
-                    }
-                    // TODO: alert admins somehow
-                }) {
-                    if isSubmitting {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                    } else {
-                        Text("Submit")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(hospitalName.isEmpty ? Color.gray : Color.indigo)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                }
-                .disabled(hospitalName.isEmpty || isSubmitting)
-                .padding()
-
-                Spacer()
-            }
-            .padding()
-            .navigationTitle("Missing Hospital")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                    .foregroundStyle(.red)
-                }
-            }
-        }
-    }
 }
