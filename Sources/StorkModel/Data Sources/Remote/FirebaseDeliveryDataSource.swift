@@ -55,6 +55,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     ///
     /// - Parameters:
     ///   - id: An optional filter for the delivery ID.
+    ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery.
     ///   - musterId: An optional filter for the muster ID associated with the delivery.
     ///   - date: An optional filter for the delivery date.
@@ -66,6 +67,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     ///   - `DeliveryError.firebaseError`: If an error occurs while fetching the deliveries.
     public func listDeliveries(
         id: String? = nil,
+        userId: String? = nil,
         hospitalId: String? = nil,
         musterId: String? = nil,
         date: Date? = nil,
@@ -79,6 +81,9 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
             // Apply optional filters to the query
             if let id = id {
                 query = query.whereField("id", isEqualTo: id)
+            }
+            if let userId = userId {
+                query = query.whereField("userId", isEqualTo: userId)
             }
             if let hospitalId = hospitalId {
                 query = query.whereField("hospitalId", isEqualTo: hospitalId)

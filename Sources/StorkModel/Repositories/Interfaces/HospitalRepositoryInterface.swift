@@ -69,4 +69,6 @@ public protocol HospitalRepositoryInterface {
     ///   - `HospitalError.notFound`: If no hospitals are found matching the partial name.
     ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
     func searchHospitals(byPartialName partialName: String) async throws -> [Hospital]
+    
+    func updateAfterDelivery(_ hospital: Hospital, babyCount: Int) async throws -> Hospital
 }

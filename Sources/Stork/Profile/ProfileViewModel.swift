@@ -10,11 +10,14 @@ import SwiftUI
 import StorkModel
 
 public class ProfileViewModel: ObservableObject {
+    @AppStorage("appState") var appState: AppState = .register
+
     // MARK: - Published Properties
     @Published public var profile: Profile = Profile(thisIsTemporary: true)
     @Published var tempProfile: Profile = Profile(thisIsTemporary: true)
     @Published var dateRangeText: String = "06/07/1998 - 07/07/1998"
     @Published var errorMessage: String?
+    @Published var selectedImageURL: URL?
         
     // MARK: - Dependencies
     var profileRepository: ProfileRepositoryInterface
@@ -44,9 +47,19 @@ public class ProfileViewModel: ObservableObject {
         }
     }
     
+    public func signOut() {
+        Task {
+            self.reset()
+            await self.profileRepository.signOut()
+            print("Signed Out")
+            appState = .splash
+        }
+    }
+    
     public func reset() {
         self.dateRangeText = ""
         self.errorMessage = ""
+        self.selectedImageURL = nil
         self.profile = Profile(thisIsTemporary: true)
     }
 }

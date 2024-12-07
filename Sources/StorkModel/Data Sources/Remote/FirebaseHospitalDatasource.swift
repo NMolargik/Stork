@@ -37,7 +37,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
                 "deliveryCount": hospital.deliveryCount,
                 "babyCount": hospital.babyCount
             ]
-            try await db.collection("hospitals").document(hospital.id).setData(data, merge: true)
+            try await db.collection("Hospital").document(hospital.id).setData(data, merge: true)
         } catch {
             throw HospitalError.updateFailed("Failed to update hospital stats: \(error.localizedDescription)")
         }
@@ -62,7 +62,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
                 "deliveryCount": hospital.deliveryCount,
                 "babyCount": hospital.babyCount
             ]
-            try await db.collection("hospitals").document(hospital.id).setData(data)
+            try await db.collection("Hospital").document(hospital.id).setData(data)
         } catch {
             throw HospitalError.creationFailed("Failed to create hospital: \(error.localizedDescription)")
         }
@@ -71,7 +71,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// Deletes a hospital from Firestore.
     public func deleteHospital(byId id: String) async throws {
         do {
-            try await db.collection("hospitals").document(id).delete()
+            try await db.collection("Hospital").document(id).delete()
         } catch {
             throw HospitalError.deletionFailed("Failed to delete hospital with ID \(id): \(error.localizedDescription)")
         }

@@ -125,6 +125,14 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
         }
         hospitals.remove(at: index)
     }
+    
+    public func updateAfterDelivery(_ hospital: Hospital, babyCount: Int) async throws -> Hospital {
+        var updatedHospital = hospital
+        updatedHospital.deliveryCount += 1
+        updatedHospital.babyCount += babyCount
+        return updatedHospital
+    }
+
 
     // MARK: - Mock Data Generator
 

@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
-//import PhotosUI
 import StorkModel
+import SkipKit
+
 
 struct RegisterView: View {
     @AppStorage("appState") var appState: AppState = .register
@@ -16,8 +17,8 @@ struct RegisterView: View {
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @Binding var showRegistration: Bool
     
-    //@State private var selectedItem: PhotosPickerItem? = nil
-    
+    @State private var selectedImageURL: URL?
+        
     var onAuthenticated: () -> Void
 
     var body: some View {
@@ -110,27 +111,22 @@ struct RegisterView: View {
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 100, height: 100)
-                                //TODO: fix this for Android
-//                                #if !SKIP
-//                                    .clipShape(Shape.Circle())
-//                                    .overlay(Circle().stroke(Color.orange, lineWidth: 2))
-//                                    .shadow(radius: 5.0)
-//                                    .padding(Edge.Set.bottom, 10.0)
-//                                #endif
+                                    .clipShape(Circle())
+                            } else {
+                                Image(systemName: "person.circle")
+                                    .foregroundStyle(.orange)
+                                    .font(.largeTitle)
                             }
                         
                             HStack {
                                 Spacer()
                                 
-                                //TODO: fix this
-//                                PhotosPicker("Select A Profile Picture", selection: $selectedItem, matching: PHPickerFilter.images)
-//                                    .onChange(of: selectedItem) { _ in
-//                                        Task {
-//                                            await viewModel.loadImage(from: selectedItem)
-//                                        }
-//                                    }
-//                                    .tint(Color.blue)
-                                
+                                MediaButton(type: .library, selectedImageURL: $selectedImageURL, onImageSelected: { url in
+                                    if let url = url, let imageData = try? Data(contentsOf: url), let image = UIImage(data: imageData) {
+                                            viewModel.profilePicture = image
+                                        }
+                                })
+
                                 Spacer()
                             }
                         }
@@ -154,6 +150,10 @@ struct RegisterView: View {
                                     isEnabled: $viewModel.isFormValid,
                                     onTapAction: {
                                         Task {
+                                            if let picture = viewModel.profilePicture {
+                                                profileViewModel.profile.profilePicture = picture
+                                            }
+                                            
                                             viewModel.registerWithEmail(profile: profileViewModel.profile, profileRepository: profileViewModel.profileRepository) { profile in
                                                 withAnimation {
                                                     profileViewModel.profile = profile

@@ -118,4 +118,13 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
             throw HospitalError.unknown("Failed to search hospitals by name \(partialName): \(error.localizedDescription)")
         }
     }
+    
+    public func updateAfterDelivery(_ hospital: Hospital, babyCount: Int) async throws -> Hospital {
+        var updatedHospital = hospital
+        updatedHospital.deliveryCount += 1
+        updatedHospital.babyCount += babyCount
+        
+        try await self.updateHospital(updatedHospital)
+        return updatedHospital
+    }
 }

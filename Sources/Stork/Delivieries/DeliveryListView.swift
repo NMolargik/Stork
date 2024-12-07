@@ -9,61 +9,92 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryListView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @AppStorage("leftHanded") var leftHanded: Bool = false
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    @Binding var showingDeliveryAddition: Bool
+    
     @State private var navigationPath: [String] = []
     
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 16) {
-                    // Group deliveries by month and year
-                    ForEach(groupDeliveriesByMonth(), id: \.key) { (monthYear, deliveries) in
-                        VStack(alignment: .leading, spacing: 8) {
-                            // Month-Year Header
-                            Text(monthYear)
-                                .font(.largeTitle)
-                                .foregroundStyle(.primary)
-                                .fontWeight(.bold)
-                                .opacity(0.2)
-                                .padding(.leading, -15)
-                            
-                            if deliveries.isEmpty {
-                                Text("No deliveries for \(monthYear).")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                                    .padding(.leading)
-                            } else {
-                                ForEach(deliveries) { delivery in
-                                    NavigationLink(destination: DeliveryDetailView(delivery: delivery)) {
-                                        DeliveryRowView(delivery: delivery)
-                                            .padding(.vertical, 4)
+        VStack {
+            NavigationStack(path: $navigationPath) {
+                ScrollView {
+                    if (deliveryViewModel.deliveries.count > 0) {
+                        LazyVStack(alignment: .leading, spacing: 16) {
+                            ForEach(groupDeliveriesByMonth(), id: \.key) { (monthYear, deliveries) in
+                                VStack(alignment: (leftHanded ? .trailing : .leading), spacing: 8) {
+                                    Text(monthYear)
+                                        .font(.largeTitle)
+                                        .foregroundStyle(.primary)
+                                        .fontWeight(.bold)
+                                        .opacity(0.2)
+                                        .padding(.leading, -15)
+                                    
+                                    if deliveries.isEmpty {
+                                        Text("No deliveries for \(monthYear).")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                            .padding(.leading)
+                                    } else {
+                                        ForEach(deliveries) { delivery in
+                                            NavigationLink(destination: DeliveryDetailView(delivery: delivery)) {
+                                                DeliveryRowView(delivery: delivery)
+                                                    .padding(.vertical, 4)
+                                            }
+                                        }
                                     }
                                 }
+                                .padding(.horizontal)
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.top)
+                    } else {
+                        VStack {
+                            Spacer()
+                            
+                            Image(systemName: "figure.child")
+                                .foregroundStyle(.indigo)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Text("No deliveries recorded yet. Use the button above to get started!")
+                                .multilineTextAlignment(.center)
+                                .font(.title3)
+                        }
+                        .padding()
+                    }
+                    
+                    Spacer()
+                }
+                .navigationTitle("Deliveries")
+                .navigationDestination(for: Delivery.self) { delivery in
+                    DeliveryDetailView(delivery: delivery)
+                }
+                .toolbar {
+                    ToolbarItem {
+                        Button(action: {
+                            withAnimation {
+                                showingDeliveryAddition = true
+                            }
+                        }, label: {
+                            Text("New Delivery")
+                                .bold()
+                        })
                     }
                 }
-                .padding(.top)
-            }
-            .navigationTitle("Deliveries")
-            .navigationDestination(for: Delivery.self) { delivery in
-                DeliveryDetailView(delivery: delivery)
             }
         }
     }
     
-    // TOOD: Post release, let user delete their delivery entries
+    // TOOD: Post-release, let user delete their delivery entries
     
-    
-    /// Groups deliveries by month and year.
     private func groupDeliveriesByMonth() -> [(key: String, value: [Delivery])] {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM ''yy" // Format: Full month name and 2-digit year with apostrophe
+        dateFormatter.dateFormat = "MMMM ''yy"
         
         var grouped: [String: [Delivery]] = [:]
         
-        // Manually group deliveries by month and year
         for delivery in deliveryViewModel.deliveries {
             let key = dateFormatter.string(from: delivery.date)
             if grouped[key] != nil {
@@ -73,19 +104,17 @@ struct DeliveryListView: View {
             }
         }
         
-        // Sort keys by month and year descending
         let sortedKeys = grouped.keys.sorted { lhs, rhs in
             let lhsDate = dateFormatter.date(from: lhs) ?? Date.distantPast
             let rhsDate = dateFormatter.date(from: rhs) ?? Date.distantPast
             return lhsDate > rhsDate
         }
         
-        // Return sorted groups
         return sortedKeys.map { key in (key, grouped[key] ?? []) }
     }
 }
 
 #Preview {
-    DeliveryListView()
+    DeliveryListView(showingDeliveryAddition: .constant(false))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
 }

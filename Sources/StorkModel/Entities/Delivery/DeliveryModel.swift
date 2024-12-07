@@ -9,6 +9,7 @@ import Foundation
 
 public struct Delivery: Identifiable, Codable, Hashable {
     public var id: String
+    public var userId: String
     public var hospitalId: String
     public var musterId: String
     public var date: Date
@@ -21,6 +22,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
     var dictionary: [String: Any] {
         return [
             "id": id,
+            "userId": userId,
             "hospitalId": hospitalId,
             "musterId": musterId,
             "date": date.timeIntervalSince1970,
@@ -35,6 +37,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
     public init?(from dictionary: [String: Any]) {
         guard
             let id = dictionary["id"] as? String,
+            let userId = dictionary["userId"] as? String,
             let hospitalId = dictionary["hospitalId"] as? String,
             let musterId = dictionary["musterId"] as? String,
             let dateTimestamp = dictionary["date"] as? TimeInterval,
@@ -48,6 +51,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
         }
 
         self.id = id
+        self.userId = userId
         self.hospitalId = hospitalId
         self.musterId = musterId
         self.date = Date(timeIntervalSince1970: dateTimestamp)
@@ -58,8 +62,9 @@ public struct Delivery: Identifiable, Codable, Hashable {
     }
 
     // A standard initializer for creating a new `DeliveryModel` instance.
-    public init(id: String, hospitalId: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
+    public init(id: String, userId: String, hospitalId: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
         self.id = id
+        self.userId = userId
         self.hospitalId = hospitalId
         self.musterId = musterId
         self.date = date
@@ -71,6 +76,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
     
     public init(sample: Bool) {
         self.id = UUID().uuidString
+        self.userId = UUID().uuidString
         self.hospitalId = "1234"
         self.musterId = "5678"
         self.date = Date()

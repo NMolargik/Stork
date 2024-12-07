@@ -1,6 +1,6 @@
 import Foundation
 
-enum DeliveryError: Error, LocalizedError {
+public enum DeliveryError: Error, LocalizedError {
     case notFound(String)
     case creationFailed(String)
     case updateFailed(String)
@@ -8,7 +8,7 @@ enum DeliveryError: Error, LocalizedError {
     case firebaseError(String)
     case unknown(String)
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .notFound(let message):
             return "Delivery Not Found: \(message)"

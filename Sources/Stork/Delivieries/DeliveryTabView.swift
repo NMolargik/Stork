@@ -9,17 +9,19 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryTabView: View {
+    @AppStorage("leftHanded") var leftHanded: Bool = false
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
     @Binding var showingDeliveryAddition: Bool
+    @State private var inDetailView: Bool = false
     @State private var navigationPath: [String] = []
     
     var body: some View {
         VStack {
             if (showingDeliveryAddition) {
                 NavigationStack {
-                    DeliveryAdditionView()
+                    DeliveryAdditionView(showingDeliveryAddition: $showingDeliveryAddition)
                         .toolbar {
                             ToolbarItem {
                                 Button(action: {
@@ -36,29 +38,24 @@ struct DeliveryTabView: View {
                         .navigationTitle("New Delivery")
                 }
             } else {
-                NavigationStack(path: $navigationPath) {
-                    List {
-                        DeliveryListView()
-                            .padding(.bottom, 70)
-                    }
-                    .toolbar {
-                        ToolbarItem {
-                            Button(action: {
-                                withAnimation {
-                                    showingDeliveryAddition = true
-                                }
-                            }, label: {
-                                HStack {
-                                    Text("New")
-                                    Image(systemName: "plus.circle.fill")
-                                }
-                            })
+                ZStack {
+                    NavigationStack(path: $navigationPath) {
+                        List {
+                            DeliveryListView(showingDeliveryAddition: $showingDeliveryAddition)
+                                .padding(.bottom, 70)
+                        }     
+                        .refreshable {
+                            Task {
+                                try await deliveryViewModel.deliveryRepository.listDeliveries(id: nil, userId: profileViewModel.profile.id, hospitalId: nil, musterId: nil, date: nil, babyCount: nil, deliveryMethod: nil, epiduralUsed: nil)
+                            }
                         }
+                        .navigationTitle("Deliveries")
+
                     }
+                    .padding(.bottom, -50)
+                    
+
                 }
-                .padding(.bottom, -50)
-                .navigationTitle("Deliveries")
-                
             }
         }
     }

@@ -22,7 +22,9 @@ INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphone*] = YES
 INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphone*] = YES
 INFOPLIST_KEY_UIStatusBarStyle[sdk=iphone*] = UIStatusBarStyleDefault
 INFOPLIST_KEY_UISupportedInterfaceOrientations[sdk=iphone*] = UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown
-INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork needs your location to determine nearby hospitals"
+INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork needs your location to determine nearby hospitals."
+INFOPLIST_KEY_NSCameraUsageDescription = "Stork needs to access the camera for taking profile pictures.";
+INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Stork needs to access the camera for selecting profile pictures.";
 
 IPHONEOS_DEPLOYMENT_TARGET = 16.0
 MACOSX_DEPLOYMENT_TARGET = 13.0

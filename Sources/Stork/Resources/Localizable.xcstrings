@@ -127,6 +127,9 @@
     "Date: %@" : {
 
     },
+    "Delete Account" : {
+
+    },
     "Deliveries" : {
 
     },
@@ -352,13 +355,16 @@
         }
       }
     },
-    "New" : {
-
-    },
     "New Delivery" : {
 
     },
     "No deliveries for %@." : {
+
+    },
+    "No deliveries recorded yet. Use the button above to get started!" : {
+
+    },
+    "No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above." : {
 
     },
     "Nurse Catch" : {
@@ -402,6 +408,9 @@
         }
       }
     },
+    "Profile" : {
+
+    },
     "Provide an email address and we can send a password reset email." : {
 
     },
@@ -438,6 +447,9 @@
       }
     },
     "Select Birthday" : {
+
+    },
+    "Select Media" : {
 
     },
     "Select Your Birthday" : {
@@ -478,6 +490,9 @@
 
     },
     "Shared Profile View" : {
+
+    },
+    "Sign Out" : {
 
     },
     "Sign Up" : {
@@ -526,6 +541,9 @@
           }
         }
       }
+    },
+    "Take Photo" : {
+
     },
     "Use Location" : {
 

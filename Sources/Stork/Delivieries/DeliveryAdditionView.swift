@@ -9,22 +9,20 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryAdditionView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     
+    @Binding var showingDeliveryAddition: Bool
     @State private var babies: [Baby] = []
-    @State private var epiduralUsed: Bool = false
-    @State private var deliveryMethod: DeliveryMethod = .vaginal
-    @State private var addToMuster: Bool = false
-    @State private var selectedHospital: Hospital? = nil
-    @State private var submitEnabled: Bool = false
-    @State private var isSelectingHospital: Bool = false // State for the sheet
-    
+    @State private var isSubmitting: Bool = false // Progress indicator state
+
     var body: some View {
         List {
             ScrollView {
-                VStack(alignment: .center, spacing: 15) {
+                VStack {
                     ForEach(Array(babies.enumerated()), id: \.element.id) { index, baby in
                         BabyEditorView(
                             baby: Binding(
@@ -42,17 +40,19 @@ struct DeliveryAdditionView: View {
                         )
                     }
                     
-                    CustomButtonView(text: "Add A Baby", width: 220, height: 40, color: Color.orange, icon: Image(systemName: "plus.circle.fill"), isEnabled: .constant(true), onTapAction: {
-                        addBaby()
-                    })
-                    
+                    CustomButtonView(
+                        text: "Add A Baby",
+                        width: 220,
+                        height: 40,
+                        color: Color.indigo,
+                        icon: Image(systemName: "plus.circle.fill"),
+                        isEnabled: .constant(true),
+                        onTapAction: {
+                            addBaby()
+                        }
+                    )
+                    .padding()
                 }
-                .padding()
-                .cornerRadius(10)
-                
-                Rectangle()
-                    .frame(height: 4)
-                    .foregroundStyle(.indigo)
                 
                 // Section: Delivery Options
                 VStack(alignment: .center, spacing: 8) {
@@ -65,7 +65,7 @@ struct DeliveryAdditionView: View {
                             Text("Muster Name")
                                 .font(.headline)
                             
-                            Toggle("Add To Muster", isOn: $addToMuster)
+                            Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
                                 .padding()
                                 .foregroundStyle(.white)
                                 .fontWeight(.bold)
@@ -83,7 +83,7 @@ struct DeliveryAdditionView: View {
                         }
                     }
                     
-                    Toggle("Epidural Used", isOn: $epiduralUsed)
+                    Toggle("Epidural Used", isOn: $deliveryViewModel.epiduralUsed)
                         .padding()
                         .fontWeight(.bold)
                         .background {
@@ -96,12 +96,13 @@ struct DeliveryAdditionView: View {
                         Text("Delivery Method")
                             .font(.headline)
                         
-                        Picker("Delivery Method", selection: $deliveryMethod) {
+                        Picker("Delivery Method", selection: $deliveryViewModel.deliveryMethod) {
                             ForEach(DeliveryMethod.allCases, id: \.self) { method in
                                 Text(method.description).tag(method)
                             }
                         }
                         .padding(.bottom)
+                        .pickerStyle(.segmented)
                         
                     }
                     .padding()
@@ -113,11 +114,12 @@ struct DeliveryAdditionView: View {
                     }
                     
                     VStack {
-                        Text(selectedHospital?.facility_name ?? "No Hospital Selected")
+                        Text(deliveryViewModel.selectedHospital?.facility_name ?? "No Hospital Selected")
                             .font(.headline)
+                            .multilineTextAlignment(.center)
                         
                         CustomButtonView(text: "Select A Hospital", width: 250, height: 40, color: Color.black, icon: Image(systemName: "building"), isEnabled: .constant(true), onTapAction: {
-                            isSelectingHospital = true // Trigger the sheet
+                            deliveryViewModel.isSelectingHospital = true // Trigger the sheet
                         })
                     }
                     .padding()
@@ -132,22 +134,50 @@ struct DeliveryAdditionView: View {
                 
                 Spacer(minLength: 50)
                 
-                CustomButtonView(text: "Submit Delivery", width: 200, height: 40, color: Color.indigo, isEnabled: $submitEnabled, onTapAction: {
-                    
-                })
-                
-                
+                if isSubmitting {
+                    ProgressView()
+                        .frame(width: 200, height: 40)
+                } else {
+                    CustomButtonView(
+                        text: "Submit Delivery",
+                        width: 200,
+                        height: 40,
+                        color: Color.indigo,
+                        isEnabled: $deliveryViewModel.submitEnabled,
+                        onTapAction: {
+                            Task {
+                                isSubmitting = true
+                                do {
+                                    try await deliveryViewModel.submitDelivery(
+                                        babies: babies,
+                                        profileViewModel: profileViewModel,
+                                        hospitalViewModel: hospitalViewModel
+                                    )
+                                    withAnimation {
+                                        showingDeliveryAddition = false
+                                    }
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                }
+                                isSubmitting = false
+                            }
+                        }
+                    )
+                }
             }
         }
         .onChange(of: babies.count) { newCount in
-            submitEnabled = newCount > 0
+            deliveryViewModel.submitEnabled = newCount > 0 && deliveryViewModel.selectedHospital != nil
         }
-        .sheet(isPresented: $isSelectingHospital) {
+        .onChange(of: deliveryViewModel.selectedHospital) { _ in
+            deliveryViewModel.submitEnabled = babies.count > 0 && deliveryViewModel.selectedHospital != nil
+        }
+        .sheet(isPresented: $deliveryViewModel.isSelectingHospital) {
             HospitalListView(
                 selectionMode: true,
                 onSelection: { selectedHospital in
-                    self.selectedHospital = selectedHospital
-                    isSelectingHospital = false
+                    deliveryViewModel.selectedHospital = selectedHospital
+                    deliveryViewModel.isSelectingHospital = false
                 }
             )
             .environmentObject(hospitalViewModel)
@@ -155,21 +185,15 @@ struct DeliveryAdditionView: View {
         }
     }
 
-    // MARK: - Actions
     private func addBaby() {
         let newBaby = Baby(deliveryId: UUID().uuidString, nurseCatch: false, sex: .male)
         babies.append(newBaby)
-    }
-    
-    
-    private func selectHospital() {
-        // Action for selecting a hospital
     }
 }
                     
 
 #Preview {
-    DeliveryAdditionView()
+    DeliveryAdditionView(showingDeliveryAddition: .constant(true))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
         .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))

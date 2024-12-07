@@ -236,7 +236,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             
             var updatedProfile = profile
             updatedProfile.id = result.user.uid
-                        
+            
+            try await self.createProfile(updatedProfile)
+            try await self.uploadProfilePicture(updatedProfile)
+
             return updatedProfile
         } catch {
             throw error
@@ -258,10 +261,12 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             let firebaseUser = result.user
             
             let document = try await db.collection("Profile").document(firebaseUser.uid).getDocument()
+            
             guard let data = document.data() else {
                 throw ProfileError.notFound("Profile not found for user with ID \(firebaseUser.uid).")
             }
             
+            print(data)
             guard let userProfile = Profile(from: data) else {
                 throw ProfileError.authenticationFailed("Invalid data found for profile with ID \(firebaseUser.uid).")
             }
@@ -294,7 +299,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             throw NSError(domain: "FirebaseAuthRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Profile Picture contains invalid data"])
         }
         
-        let storageRef = storage.reference().child("profile_pictures/\(profile.email).jpg")
+        let storageRef = storage.reference().child("profile_pictures/\(profile.id).jpg")
         
         do {
             let _ = try await storageRef.putDataAsync(imageData, metadata: nil)
@@ -311,14 +316,8 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     ///   - `NSError`: If the profile picture cannot be retrieved or converted to a `UIImage`.
     public func retrieveProfilePicture(_ profile: Profile) async throws -> UIImage? {
         let storageRef = storage.reference().child("profile_pictures/\(profile.email).jpg")
-        
-        do {
-            throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture: "])
-        }
 
-        //TODO:
-//
-//        do {
+        do {
 //            let data = try await storageRef.data(maxSize: 5 * 1024 * 1024)
 //            guard let image = UIImage(data: data) else {
 //                throw NSError(domain: "FirebaseProfileDataSource", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unable to convert data to UIImage."])
@@ -326,8 +325,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
 //
 //            return image
 //        } catch {
+//            
+            throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture:"])
 //            throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture: \(error.localizedDescription)"])
-//        }
+        }
     }
     
 //    suspend fun retrieveProfilePicture(profile: Profile): Bitmap? {

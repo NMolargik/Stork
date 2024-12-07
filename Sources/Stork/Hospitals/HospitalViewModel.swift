@@ -74,4 +74,16 @@ class HospitalViewModel: ObservableObject {
             }
         }
     }
+    
+    func updateHospitalWithNewDelivery(hospital: Hospital, babyCount: Int) {
+        Task {
+            var updatedHospital = hospital
+            updatedHospital = try await hospitalRepository.updateAfterDelivery(updatedHospital, babyCount: babyCount)
+            
+            if let index = self.hospitals.firstIndex(where: { $0.id == hospital.id }) {
+                // Replace the hospital at the found index
+                self.hospitals[index] = updatedHospital
+            }
+        }
+    }
 }

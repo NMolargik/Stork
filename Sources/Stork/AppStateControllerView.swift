@@ -67,7 +67,9 @@ public struct AppStateControllerView: View {
                     SplashView(showRegistration: $showRegistration)
                 case .register:
                     RegisterView(showRegistration: $showRegistration, onAuthenticated: {
-                        
+                        withAnimation {
+                            self.appState = self.isOnboardingComplete ? .main : .onboard
+                        }
                     })
                 case .onboard:
                     Button(action: {

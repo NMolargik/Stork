@@ -18,6 +18,8 @@ struct HospitalListView: View {
     var onSelection: ((Hospital) -> Void)?
 
     var body: some View {
+        //TODO: post release, show default hospital at top
+        
         NavigationStack(path: $navigationPath) {
             HStack {
                 CustomTextfieldView(text: $hospitalViewModel.searchQuery, hintText: "Search by name", icon: Image(systemName: "magnifyingglass"), isSecure: false)
@@ -34,6 +36,18 @@ struct HospitalListView: View {
                 
             }
             .padding(.horizontal)
+            
+            if (hospitalViewModel.hospitals.count == 0 && !hospitalViewModel.isLoading) {
+                Text("No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above.")
+                    .padding()
+                    .multilineTextAlignment(.center)
+                    .background {
+                        Color.white
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                    }
+                    .padding()
+            }
             
             List(hospitalViewModel.hospitals, id: \.id) { hospital in
                 if (selectionMode) {

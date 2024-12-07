@@ -18,12 +18,13 @@ let package = Package(
     dependencies: [
         .package(url: "https://source.skip.tools/skip.git", from: "1.1.18"),
         .package(url: "https://source.skip.tools/skip-ui.git", from: "1.0.0"),
+        .package(url: "https://source.skip.tools/skip-kit.git", from: "0.1.4"),
         .package(url: "https://source.skip.tools/skip-firebase.git", branch: "main"),
         .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.0.0"),
         .package(url: "https://source.skip.tools/skip-model.git", from: "1.0.0")
     ],
     targets: [
-        .target(name: "Stork", dependencies: ["StorkAuth", .product(name: "SkipUI", package: "skip-ui"), .product(name: "SkipModel", package: "skip-model"), .product(name: "SkipFirebaseMessaging", package: "skip-firebase"), .product(name: "SkipFirebaseStorage", package: "skip-firebase")], resources: [.process("Resources")], plugins: [.plugin(name: "skipstone", package: "skip")]),
+        .target(name: "Stork", dependencies: ["StorkAuth", .product(name: "SkipUI", package: "skip-ui"), .product(name: "SkipModel", package: "skip-model"), .product(name: "SkipKit", package: "skip-kit"), .product(name: "SkipFirebaseMessaging", package: "skip-firebase"), .product(name: "SkipFirebaseStorage", package: "skip-firebase")], resources: [.process("Resources")], plugins: [.plugin(name: "skipstone", package: "skip")]),
         .testTarget(name: "StorkTests", dependencies: ["Stork", .product(name: "SkipTest", package: "skip")], resources: [.process("Resources")], plugins: [.plugin(name: "skipstone", package: "skip")]),
         .target(name: "StorkAuth", dependencies: ["StorkModel", .product(name: "SkipFirebaseAuth", package: "skip-firebase")], resources: [.process("Resources")], plugins: [.plugin(name: "skipstone", package: "skip")]),
         .testTarget(name: "StorkAuthTests", dependencies: ["StorkAuth", .product(name: "SkipTest", package: "skip")], resources: [.process("Resources")], plugins: [.plugin(name: "skipstone", package: "skip")]),

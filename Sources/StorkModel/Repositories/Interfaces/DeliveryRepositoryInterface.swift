@@ -17,6 +17,7 @@ public protocol DeliveryRepositoryInterface {
     /// Lists deliveries based on optional filters.
     /// - Parameters:
     ///   - id: An optional delivery ID filter.
+    ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - hospitalId: An optional hospital ID filter.
     ///   - musterId: An optional muster ID filter.
     ///   - date: An optional date filter.
@@ -27,6 +28,7 @@ public protocol DeliveryRepositoryInterface {
     /// - Throws: `DeliveryError` if the query fails.
     func listDeliveries(
         id: String?,
+        userId: String?,
         hospitalId: String?,
         musterId: String?,
         date: Date?,

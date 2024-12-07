@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import StorkModel
 
 struct HomeTabView: View {
+    @EnvironmentObject var profileViewModel: ProfileViewModel
+    
     @Binding var navigationPath: [String]
     @Binding var selectedTab: Tab
     @Binding var showingDeliveryAddition: Bool
@@ -17,21 +20,18 @@ struct HomeTabView: View {
             Group {
                 Spacer()
                 
-                Button(action: {
-                    
-                }, label: {
-                    CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
-                        withAnimation {
-                            showingDeliveryAddition = true
-                            selectedTab = .deliveries
-                        }
-                    })
+                CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
+                    withAnimation {
+                        showingDeliveryAddition = true
+                        selectedTab = .deliveries
+                    }
                 })
             }
+            .padding(.bottom, 20)
             .navigationTitle("Stork")
             .navigationDestination(for: String.self) { value in
                 if value == "ProfileView" {
-                    Text("Shared Profile View")
+                    ProfileView()
                 } else {
                     Text("Other View: \(value)")
                 }
@@ -43,9 +43,17 @@ struct HomeTabView: View {
                             navigationPath.append("ProfileView")
                         }
                     }, label: {
-                        Image(systemName: "person.circle")
-                            .font(.title2)
-                            .foregroundStyle(.orange)
+                        if let profilePicture = profileViewModel.profile.profilePicture {
+                            Image(uiImage: profilePicture)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: "person.circle")
+                                .font(.title2)
+                                .foregroundStyle(.orange)
+                        }
                     })
                 }
             }
@@ -56,4 +64,5 @@ struct HomeTabView: View {
 
 #Preview {
     HomeTabView(navigationPath: .constant([]), selectedTab: .constant(Tab.home), showingDeliveryAddition: .constant(false))
+        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

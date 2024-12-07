@@ -49,6 +49,7 @@ class RegisterViewModel: ObservableObject {
             do {
                 self.registering = true
                 let registeredProfile = try await profileRepository.registerWithEmail(profile, password: passwordText)
+                
                 print("Registration succeeded: \(registeredProfile.firstName) \(registeredProfile.lastName)")
                 self.registering = false
                 completion(registeredProfile)
@@ -79,13 +80,6 @@ class RegisterViewModel: ObservableObject {
                 birthdayError == nil
         }
     }
-    
-//    func loadImage(from item: PhotosPickerItem?) async {
-//        guard let item = item else { return }
-//        if let data = try? await item.loadTransferable(type: Data.self) {
-//            self.profile.profilePicture = UIImage(data: data)
-//        }
-//    }
 
     private func isEmailValid(email: String) -> Bool {
         let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"

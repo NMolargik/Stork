@@ -47,6 +47,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     ///
     /// - Parameters:
     ///   - id: An optional filter for the delivery ID.
+    ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery.
     ///   - musterId: An optional filter for the muster ID associated with the delivery
     ///   - date: An optional filter for the delivery date.
@@ -58,6 +59,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     ///   - `DeliveryError.firebaseError`: If the operation fails due to a Firestore-related issue.
     public func listDeliveries(
         id: String? = nil,
+        userId: String? = nil,
         hospitalId: String? = nil,
         musterId: String? = nil,
         date: Date? = nil,
@@ -68,6 +70,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         do {
             return try await remoteDataSource.listDeliveries(
                 id: id,
+                userId: userId,
                 hospitalId: hospitalId,
                 musterId: musterId,
                 date: date,

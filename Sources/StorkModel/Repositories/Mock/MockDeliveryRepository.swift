@@ -53,6 +53,9 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
                 
                 // Generate delivery ID
                 let deliveryId = UUID().uuidString
+                
+                // Generate user ID
+                let userId = UUID().uuidString
 
                 // Generate babies for the delivery
                 let babyCount = Int.random(in: 1...4)
@@ -71,6 +74,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
                 // Create the delivery
                 let newDelivery = Delivery(
                     id: deliveryId,
+                    userId: userId,
                     hospitalId: UUID().uuidString,
                     musterId: UUID().uuidString,
                     date: randomDate,
@@ -98,6 +102,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
 
     public func listDeliveries(
         id: String?,
+        userId: String?,
         hospitalId: String?,
         musterId: String?,
         date: Date?,
@@ -107,6 +112,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
     ) async throws -> [Delivery] {
         return deliveries.filter { delivery in
             (id == nil || delivery.id == id) &&
+            (userId == nil || delivery.userId == userId) &&
             (hospitalId == nil || delivery.hospitalId == hospitalId) &&
             (musterId == nil || delivery.musterId == musterId) &&
             (date == nil || Calendar.current.isDate(delivery.date, inSameDayAs: date!)) &&

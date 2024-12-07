@@ -26,8 +26,9 @@ struct LoginView: View {
                     
                     CustomTextfieldView(text: $viewModel.password, hintText: "Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.red)
                         .padding(.bottom)
-
-                    
+                        .onSubmit {
+                            signIn()
+                        }
                 }
                 .padding(.horizontal)
                 
@@ -40,19 +41,7 @@ struct LoginView: View {
                 } else {
 
                     CustomButtonView(text: "Log In", width: 110, height: 40, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
-                        Task {
-                            do {
-                                try await viewModel.loginWithEmail(profileRepository: profileViewModel.profileRepository)
-                                withAnimation {
-                                    profileViewModel.profile = viewModel.profile
-                                    onAuthenticated()
-                                }
-                            } catch {
-                                errorMessage = error.localizedDescription
-                            }
-                        }
-                        
-                        onAuthenticated()
+                        signIn()
                     })
                     
                     Button(action: {
@@ -76,6 +65,26 @@ struct LoginView: View {
             PasswordResetSheetView(isPasswordResetPresented: $isPasswordResetPresented, email: $viewModel.profile.email, isWorking: $viewModel.isWorking)
                 .presentationDetents([PresentationDetent.medium])
         }
+    }
+    
+    private func signIn() {
+        Task {
+            do {
+                viewModel.isWorking = true
+                try await viewModel.loginWithEmail(profileRepository: profileViewModel.profileRepository)
+                viewModel.isWorking = false
+                
+                withAnimation {
+                    profileViewModel.profile = viewModel.profile
+                    onAuthenticated()
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+                viewModel.isWorking = false
+
+            }
+        }
+        
     }
 }
 

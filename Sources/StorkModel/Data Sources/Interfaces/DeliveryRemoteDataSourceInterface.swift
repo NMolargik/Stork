@@ -20,6 +20,7 @@ public protocol DeliveryRemoteDataSourceInterface {
     ///
     /// - Parameters:
     ///   - id: An optional filter for the delivery ID. If nil, this filter is ignored.
+    ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery. If nil, this filter is ignored.
     ///   - musterId: An optional filter for the muster ID associated with the delivery. If nil, this filter is ignored.
     ///   - date: An optional filter for the delivery date. If nil, this filter is ignored.
@@ -30,6 +31,7 @@ public protocol DeliveryRemoteDataSourceInterface {
     /// - Throws: `DeliveryError` if the operation fails or no deliveries are found.
     func listDeliveries(
         id: String?,
+        userId: String?,
         hospitalId: String?,
         musterId: String?,
         date: Date?,

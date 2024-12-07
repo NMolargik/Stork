@@ -6,18 +6,40 @@
 //
 
 import SwiftUI
+import StorkModel
 
 struct SettingsTabView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var profileViewModel: ProfileViewModel
     @Binding var navigationPath: [String]
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             List {
-//                        NavigationLink("Go to Details", destination: Text("Jesus, another details view?"))
-                
-                Button("Go to shared profile view") {
-                    navigationPath.append("ProfileView")
-                }
+                Section("Profile", content: {
+                    Button(action: {
+                        withAnimation {
+                            profileViewModel.signOut()
+                        }
+                    }, label: {
+                        Text("Sign Out")
+                            .foregroundStyle(.red)
+                    })
+                    
+                    HStack {
+                        Button(action: {
+                            // TODO: this
+                        }, label: {
+                            Text("Delete Account")
+                                .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
+                        })
+                        
+                        Spacer()
+                        
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundStyle(.yellow)
+                    }
+                })
             }
             .navigationTitle("Settings")
             .navigationDestination(for: String.self) { value in
@@ -33,4 +55,5 @@ struct SettingsTabView: View {
 
 #Preview {
     SettingsTabView(navigationPath: .constant([]))
+        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

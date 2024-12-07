@@ -38,7 +38,7 @@ public struct Profile: Identifiable, Codable, Hashable {
             "firstName": firstName,
             "lastName": lastName,
             "email": email,
-            "birthday": birthday,
+            "birthday": birthday.description,
             "joinDate": joinDate,
             "role": role.rawValue,
             "isAdmin": isAdmin
@@ -47,21 +47,35 @@ public struct Profile: Identifiable, Codable, Hashable {
 
     // Initialize from Firestore data dictionary
     public init?(from dictionary: [String: Any]) {
+        let isoFormatter = ISO8601DateFormatter()
+        let fallbackFormatter = DateFormatter()
+        fallbackFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+
         guard
             let id = dictionary["id"] as? String,
-            let primaryHospitalId = dictionary["primaryHospitalId"] as? String,
-            let musterId = dictionary["musterId"] as? String,
             let firstName = dictionary["firstName"] as? String,
             let lastName = dictionary["lastName"] as? String,
+            let joinDateString = dictionary["joinDate"] as? String,
             let email = dictionary["email"] as? String,
-            let birthday = dictionary["birthday"] as? Date, // Already a string
-            let joinDate = dictionary["joinDate"] as? String, // Already a string
+            let isAdminInt = dictionary["isAdmin"] as? Int,
             let roleString = dictionary["role"] as? String,
-            let role = ProfileRole(rawValue: roleString), // Decode role
-            let isAdmin = dictionary["isAdmin"] as? Bool
+            let role = ProfileRole(rawValue: roleString),
+            let birthdayString = dictionary["birthday"] as? String
         else {
+            print("Missing or invalid required fields")
             return nil
         }
+        
+        // Parse dates with fallback
+        guard let birthday = isoFormatter.date(from: birthdayString) ??
+                              fallbackFormatter.date(from: birthdayString) else {
+            print("Invalid birthday format: \(birthdayString)")
+            return nil
+        }
+
+        // Assign optional fields with defaults
+        let primaryHospitalId = dictionary["primaryHospitalId"] as? String ?? ""
+        let musterId = dictionary["musterId"] as? String ?? ""
 
         self.id = id
         self.primaryHospitalId = primaryHospitalId
@@ -70,10 +84,10 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.lastName = lastName
         self.email = email
         self.birthday = birthday
-        self.joinDate = joinDate
+        self.joinDate = joinDateString // Keeping as a string
         self.role = role
-        self.isAdmin = isAdmin
-        self.profilePicture = nil // Default to nil
+        self.isAdmin = isAdminInt != 0
+        self.profilePicture = nil
     }
 
     // Initialize from Strings for birthday and joinDate
