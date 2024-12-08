@@ -22,7 +22,7 @@ struct HospitalListView: View {
         
         NavigationStack(path: $navigationPath) {
             HStack {
-                CustomTextfieldView(text: $hospitalViewModel.searchQuery, hintText: "Search by name", icon: Image(systemName: "magnifyingglass"), isSecure: false)
+                CustomTextfieldView(text: $hospitalViewModel.searchQuery, hintText: "Search by name", icon: Image(systemName: hospitalViewModel.usingLocation ? "location.fill" : "magnifyingglass"), isSecure: false, iconColor: hospitalViewModel.usingLocation ? Color.blue : Color.orange)
                 
                 CustomButtonView(text: "Search", width: 80, height: 40, color: Color.indigo, isEnabled: $hospitalViewModel.searchEnabled, onTapAction: {
                     hospitalViewModel.searchHospitals()

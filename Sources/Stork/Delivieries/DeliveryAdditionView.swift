@@ -16,24 +16,22 @@ struct DeliveryAdditionView: View {
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     
     @Binding var showingDeliveryAddition: Bool
-    @State private var babies: [Baby] = []
-    @State private var isSubmitting: Bool = false // Progress indicator state
 
     var body: some View {
         List {
             ScrollView {
                 VStack {
-                    ForEach(Array(babies.enumerated()), id: \.element.id) { index, baby in
+                    ForEach(Array(deliveryViewModel.newBabies.enumerated()), id: \.element.id) { index, baby in
                         BabyEditorView(
                             baby: Binding(
-                                get: { self.babies[index] },
-                                set: { self.babies[index] = $0 }
+                                get: { deliveryViewModel.newBabies[index] },
+                                set: { deliveryViewModel.newBabies[index] = $0 }
                             ),
                             babyIndex: index,
                             removeBaby: { removeAtIndex in
                                 withAnimation {
-                                    if babies.indices.contains(removeAtIndex) {
-                                        self.babies.remove(at: removeAtIndex)
+                                    if deliveryViewModel.newBabies.indices.contains(removeAtIndex) {
+                                        deliveryViewModel.newBabies.remove(at: removeAtIndex)
                                     }
                                 }
                             }
@@ -52,7 +50,9 @@ struct DeliveryAdditionView: View {
                         }
                     )
                     .padding()
+                    .padding(.bottom, 50)
                 }
+                .padding(.top)
                 
                 // Section: Delivery Options
                 VStack(alignment: .center, spacing: 8) {
@@ -73,6 +73,10 @@ struct DeliveryAdditionView: View {
                                     Color.black
                                         .cornerRadius(10)
                                 }
+
+                            //TODO: search for similar deliveries to prevent duplicates. present them to the user to let them decide whether or not to add to the muster
+                            
+                            // function is ready in deliveryViewModel!
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -134,7 +138,7 @@ struct DeliveryAdditionView: View {
                 
                 Spacer(minLength: 50)
                 
-                if isSubmitting {
+                if deliveryViewModel.isSubmitting {
                     ProgressView()
                         .frame(width: 200, height: 40)
                 } else {
@@ -146,10 +150,10 @@ struct DeliveryAdditionView: View {
                         isEnabled: $deliveryViewModel.submitEnabled,
                         onTapAction: {
                             Task {
-                                isSubmitting = true
+                                deliveryViewModel.isSubmitting = true
                                 do {
                                     try await deliveryViewModel.submitDelivery(
-                                        babies: babies,
+                                        babies: deliveryViewModel.newBabies,
                                         profileViewModel: profileViewModel,
                                         hospitalViewModel: hospitalViewModel
                                     )
@@ -159,18 +163,18 @@ struct DeliveryAdditionView: View {
                                 } catch {
                                     errorMessage = error.localizedDescription
                                 }
-                                isSubmitting = false
+                                deliveryViewModel.isSubmitting = false
                             }
                         }
                     )
                 }
             }
         }
-        .onChange(of: babies.count) { newCount in
+        .onChange(of: deliveryViewModel.newBabies.count) { newCount in
             deliveryViewModel.submitEnabled = newCount > 0 && deliveryViewModel.selectedHospital != nil
         }
         .onChange(of: deliveryViewModel.selectedHospital) { _ in
-            deliveryViewModel.submitEnabled = babies.count > 0 && deliveryViewModel.selectedHospital != nil
+            deliveryViewModel.submitEnabled = deliveryViewModel.newBabies.count > 0 && deliveryViewModel.selectedHospital != nil
         }
         .sheet(isPresented: $deliveryViewModel.isSelectingHospital) {
             HospitalListView(
@@ -187,7 +191,7 @@ struct DeliveryAdditionView: View {
 
     private func addBaby() {
         let newBaby = Baby(deliveryId: UUID().uuidString, nurseCatch: false, sex: .male)
-        babies.append(newBaby)
+        deliveryViewModel.newBabies.append(newBaby)
     }
 }
                     

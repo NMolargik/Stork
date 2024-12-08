@@ -148,11 +148,12 @@ struct HospitalDetailView: View {
             .padding()
             
             HStack {
-                // TODO: change to a stork
+                // TODO: replace with a stork!
                 Image(systemName: "bird.fill")
                     .foregroundStyle(.indigo)
                 
-                Text("\(hospital.deliveryCount) reported deliveries")
+                // Text for delivery count
+                Text("\(hospital.deliveryCount) reported deliver\(hospital.deliveryCount == 1 ? "y" : "ies")")
                     .foregroundStyle(.black)
             }
             .padding(5)
@@ -162,10 +163,9 @@ struct HospitalDetailView: View {
                     .foregroundStyle(.white)
                     .shadow(radius: 5)
                     .opacity(0.9)
-
             }
             .padding([.horizontal, .bottom])
-            
+
             HStack {
                 ZStack {
                     Image(systemName: "figure.child")
@@ -180,12 +180,12 @@ struct HospitalDetailView: View {
                         .foregroundStyle(.blue)
                         .shadow(radius: 2)
                         .offset(x: 15)
-
                 }
                 .offset(x: -5)
                 .frame(width: 25)
                 
-                Text("\(hospital.babyCount) reported babies")
+                // Text for baby count
+                Text("\(hospital.babyCount) reported bab\(hospital.babyCount == 1 ? "y" : "ies")")
                     .foregroundStyle(.black)
             }
             .padding(8)
@@ -195,7 +195,6 @@ struct HospitalDetailView: View {
                     .foregroundStyle(.white)
                     .shadow(radius: 5)
                     .opacity(0.9)
-
             }
             .padding(.leading)
             

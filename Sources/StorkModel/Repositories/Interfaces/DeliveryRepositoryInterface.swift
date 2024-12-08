@@ -18,6 +18,7 @@ public protocol DeliveryRepositoryInterface {
     /// - Parameters:
     ///   - id: An optional delivery ID filter.
     ///   - userId: An optional filter for id of the user associated with the delivery
+    ///   - userFirstName: An optional filter for first name of the user associated with the delivery
     ///   - hospitalId: An optional hospital ID filter.
     ///   - musterId: An optional muster ID filter.
     ///   - date: An optional date filter.
@@ -29,6 +30,7 @@ public protocol DeliveryRepositoryInterface {
     func listDeliveries(
         id: String?,
         userId: String?,
+        userFirstName: String?,
         hospitalId: String?,
         musterId: String?,
         date: Date?,

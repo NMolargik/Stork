@@ -30,11 +30,25 @@
         }
       }
     },
-    "%lld reported babies" : {
-
+    "%lld reported bab%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld reported bab%2$@"
+          }
+        }
+      }
     },
-    "%lld reported deliveries" : {
-
+    "%lld reported deliver%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld reported deliver%2$@"
+          }
+        }
+      }
     },
     "a labor and delivery app" : {
 
@@ -576,6 +590,9 @@
           }
         }
       }
+    },
+    "You can submit up to 8 deliveries per day" : {
+
     }
   },
   "version" : "1.0"

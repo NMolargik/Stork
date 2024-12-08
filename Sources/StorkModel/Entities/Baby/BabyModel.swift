@@ -20,32 +20,47 @@ public struct Baby: Identifiable, Codable, Hashable {
     var dictionary: [String: Any] {
         return [
             "id": id,
-            "birthday": birthday.timeIntervalSince1970,
+            "birthday": birthday.description,
             "height": height,
             "weight": weight,
             "sex": sex.rawValue,
-            "deliveryId": deliveryId
+            "deliveryId": deliveryId,
+            "nurseCatch": nurseCatch
         ]
     }
     
     // Initialize from Firestore data dictionary
     public init?(from dictionary: [String: Any]) {
+        print(dictionary.description)
+        let isoFormatter = ISO8601DateFormatter()
+        let fallbackFormatter = DateFormatter()
+        fallbackFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        
         guard
             let id = dictionary["id"] as? String,
             let deliveryId = dictionary["deliveryId"] as? String,
-            let birthdayTimestamp = dictionary["birthday"] as? TimeInterval,
+            let birthdayString = dictionary["birthday"] as? String,
             let height = dictionary["height"] as? Double,
             let weight = dictionary["weight"] as? Double,
             let nurseCatch = dictionary["nurseCatch"] as? Bool,
             let sexRawValue = dictionary["sex"] as? String,
             let sex = Sex(rawValue: sexRawValue)
         else {
+            print("Missing or invalid required fields for baby")
+            return nil
+        }
+        
+        // Parse dates with fallback
+        guard let birthday = isoFormatter.date(from: birthdayString) ??
+                              fallbackFormatter.date(from: birthdayString)
+        else {
+            print("Invalid birthday format: \(birthdayString)")
             return nil
         }
         
         self.id = id
         self.deliveryId = deliveryId
-        self.birthday = Date(timeIntervalSince1970: birthdayTimestamp)
+        self.birthday = birthday
         self.height = height
         self.weight = weight
         self.nurseCatch = nurseCatch

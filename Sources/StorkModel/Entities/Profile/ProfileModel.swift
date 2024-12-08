@@ -68,7 +68,8 @@ public struct Profile: Identifiable, Codable, Hashable {
         
         // Parse dates with fallback
         guard let birthday = isoFormatter.date(from: birthdayString) ??
-                              fallbackFormatter.date(from: birthdayString) else {
+                              fallbackFormatter.date(from: birthdayString)
+        else {
             print("Invalid birthday format: \(birthdayString)")
             return nil
         }
@@ -119,15 +120,15 @@ public struct Profile: Identifiable, Codable, Hashable {
     
     public init(thisIsTemporary: Bool?) {
         self.id = UUID().uuidString
-        self.primaryHospitalId = ""
-        self.musterId = ""
-        self.firstName = ""
-        self.lastName = ""
-        self.email = ""
+        self.primaryHospitalId = "123456"
+        self.musterId = "1234"
+        self.firstName = "Nick"
+        self.lastName = "Molargik"
+        self.email = "nmolargik@gmail.com"
         self.birthday = Date()
         self.joinDate = Date().description
-        self.role = ProfileRole.other
-        self.isAdmin = false
+        self.role = ProfileRole.nurse
+        self.isAdmin = true
         self.profilePicture = nil
     }
 

@@ -57,6 +57,8 @@ struct BabyEditorView: View {
                     .tint(.indigo)
             }
             
+            //TODO: dynamic units, better ranges
+            
             HStack {
                 Text("\(baby.height, specifier: "%.1f") inches")
                     .foregroundStyle(.black)
@@ -67,6 +69,8 @@ struct BabyEditorView: View {
                     .tint(.indigo)
 
             }
+            //TODO: dynamic units, better ranges
+
 
             Toggle("Nurse Catch", isOn: $baby.nurseCatch)
                 .foregroundStyle(.black)

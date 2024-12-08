@@ -10,6 +10,7 @@ import Foundation
 public struct Delivery: Identifiable, Codable, Hashable {
     public var id: String
     public var userId: String
+    public var userFirstName: String
     public var hospitalId: String
     public var musterId: String
     public var date: Date
@@ -23,6 +24,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
         return [
             "id": id,
             "userId": userId,
+            "userFirstName": userFirstName,
             "hospitalId": hospitalId,
             "musterId": musterId,
             "date": date.timeIntervalSince1970,
@@ -38,6 +40,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
         guard
             let id = dictionary["id"] as? String,
             let userId = dictionary["userId"] as? String,
+            let userFirstName = dictionary["userFirstName"] as? String,
             let hospitalId = dictionary["hospitalId"] as? String,
             let musterId = dictionary["musterId"] as? String,
             let dateTimestamp = dictionary["date"] as? TimeInterval,
@@ -52,6 +55,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
 
         self.id = id
         self.userId = userId
+        self.userFirstName = userFirstName
         self.hospitalId = hospitalId
         self.musterId = musterId
         self.date = Date(timeIntervalSince1970: dateTimestamp)
@@ -62,9 +66,10 @@ public struct Delivery: Identifiable, Codable, Hashable {
     }
 
     // A standard initializer for creating a new `DeliveryModel` instance.
-    public init(id: String, userId: String, hospitalId: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
+    public init(id: String, userId: String, userFirstName: String, hospitalId: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
         self.id = id
         self.userId = userId
+        self.userFirstName = userFirstName
         self.hospitalId = hospitalId
         self.musterId = musterId
         self.date = date
@@ -77,6 +82,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
     public init(sample: Bool) {
         self.id = UUID().uuidString
         self.userId = UUID().uuidString
+        self.userFirstName = "FirstName"
         self.hospitalId = "1234"
         self.musterId = "5678"
         self.date = Date()
@@ -87,6 +93,6 @@ public struct Delivery: Identifiable, Codable, Hashable {
         ]
         self.babyCount = 3
         self.deliveryMethod = DeliveryMethod.vaginal
-        self.epiduralUsed = false
+        self.epiduralUsed = true
     }
 }

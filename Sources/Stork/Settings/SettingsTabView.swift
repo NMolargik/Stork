@@ -9,6 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct SettingsTabView: View {
+    @AppStorage("useMetricUnits") var useMetricUnits = false
+    
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @Binding var navigationPath: [String]
@@ -39,6 +41,12 @@ struct SettingsTabView: View {
                         Image(systemName: "exclamationmark.triangle")
                             .foregroundStyle(.yellow)
                     }
+                })
+                
+                Section("Units", content: {
+                    Toggle("Use Metric Units", isOn: $useMetricUnits)
+                    
+                    //TODO: use this throughout the app!
                 })
             }
             .navigationTitle("Settings")

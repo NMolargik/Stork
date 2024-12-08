@@ -48,6 +48,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     /// - Parameters:
     ///   - id: An optional filter for the delivery ID.
     ///   - userId: An optional filter for id of the user associated with the delivery
+    ///   - userFirstName: An optional filter for first name of the user associated with the delivery
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery.
     ///   - musterId: An optional filter for the muster ID associated with the delivery
     ///   - date: An optional filter for the delivery date.
@@ -60,6 +61,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     public func listDeliveries(
         id: String? = nil,
         userId: String? = nil,
+        userFirstName: String? = nil,
         hospitalId: String? = nil,
         musterId: String? = nil,
         date: Date? = nil,
@@ -71,6 +73,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
             return try await remoteDataSource.listDeliveries(
                 id: id,
                 userId: userId,
+                userFirstName: userFirstName,
                 hospitalId: hospitalId,
                 musterId: musterId,
                 date: date,

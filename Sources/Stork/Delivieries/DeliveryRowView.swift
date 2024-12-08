@@ -116,6 +116,7 @@ struct DeliveryRowView: View {
     DeliveryRowView(delivery: Delivery(
         id: "1",
         userId: "user1",
+        userFirstName: "FirstName",
         hospitalId: "Hospital1",
         musterId: "Muster1",
         date: Date(),

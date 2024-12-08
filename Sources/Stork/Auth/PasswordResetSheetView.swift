@@ -16,7 +16,7 @@ struct PasswordResetSheetView: View {
     @Binding var email: String
     @Binding var isWorking: Bool
     
-    @State private  var validEmail: Bool = false
+    @State private var validEmail: Bool = false
     
     var body: some View {
         VStack {
@@ -36,7 +36,6 @@ struct PasswordResetSheetView: View {
                     .tint(.indigo)
             } else {
                 
-                //TODO: validate email first
                 CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: $validEmail, onTapAction: {
                     // TODO: send the reset email
                     isPasswordResetPresented = false
@@ -44,7 +43,9 @@ struct PasswordResetSheetView: View {
                 .frame(width: 100)
                 .padding(.bottom, 30)
                 .onChange(of: email) { email in
-                    validEmail = isEmailValid(email: email)
+                    withAnimation {
+                        validEmail = isEmailValid(email: email)
+                    }
                 }
             }
                 
@@ -55,6 +56,9 @@ struct PasswordResetSheetView: View {
             })
         }
         .padding()
+        .onChange(of: email) { _ in
+            self.validEmail = isEmailValid(email: email)
+        }
     }
     
     private func isEmailValid(email: String) -> Bool {

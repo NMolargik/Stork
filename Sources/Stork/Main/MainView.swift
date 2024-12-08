@@ -14,13 +14,13 @@ import SkipUI
 #endif
 
 public struct MainView: View {
+    @AppStorage("selectedTab") var selectedTab = Tab.hospitals
+
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
-    @AppStorage("selectedTab") var selectedTab = Tab.hospitals
     @State private var navigationPath: [String] = []
-    
     @State private var showingDeliveryAddition: Bool = false
     
     public var body: some View {
@@ -38,7 +38,6 @@ public struct MainView: View {
                     Label(Tab.deliveries.title, systemImage: Tab.deliveries.icon)
                 }
                 .tag(Tab.deliveries)
-            
             
             // Hospitals
             HospitalListView()
@@ -63,7 +62,6 @@ public struct MainView: View {
             
         }
         .tint(Color.indigo)
-        
         .onAppear {
             withAnimation {
                 deliveryViewModel.getDeliveries(userId: profileViewModel.profile.id)

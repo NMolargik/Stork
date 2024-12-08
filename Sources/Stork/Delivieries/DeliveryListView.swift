@@ -61,11 +61,33 @@ struct DeliveryListView: View {
                             Text("No deliveries recorded yet. Use the button above to get started!")
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
+                            
+                            Spacer(minLength: 300)
+                            
+                            HStack {
+                                Spacer()
+                                
+                                Image(systemName: "info.circle")
+                                    .font(.title)
+                                    .foregroundStyle(.indigo)
+                                    .padding(.trailing)
+                                
+                                Text("You can submit up to 8 deliveries per day")
+                                    .foregroundStyle(colorScheme == .dark ? Color.black : Color.white)
+                                    .multilineTextAlignment(.center)
+                                
+                                Spacer()
+                            }
+                            .padding(8)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                            }
                         }
                         .padding()
                     }
-                    
-                    Spacer()
                 }
                 .navigationTitle("Deliveries")
                 .navigationDestination(for: Delivery.self) { delivery in

@@ -60,12 +60,14 @@ class HospitalViewModel: ObservableObject {
     /// - Parameter name: The partial name to search for.
     func searchHospitals() {
         Task {
+            @MainActor in // Ensure the entire Task runs on the main thread
             isLoading = true
             errorMessage = nil
             usingLocation = false
             do {
                 self.hospitals = []
-                self.hospitals = try await hospitalRepository.searchHospitals(byPartialName: searchQuery)
+                let results = try await hospitalRepository.searchHospitals(byPartialName: searchQuery)
+                self.hospitals = results
                 isLoading = false
             } catch {
                 print("FAILURE")
