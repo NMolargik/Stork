@@ -15,7 +15,7 @@ struct HospitalListView: View {
     @State private var navigationPath: [String] = []
     
     var selectionMode: Bool = false
-    var onSelection: ((Hospital) -> Void)?
+    var onSelection: ((Hospital) -> Void)
 
     var body: some View {
         //TODO: post release, show default hospital at top
@@ -54,7 +54,7 @@ struct HospitalListView: View {
                     Button(action: {
                         withAnimation {
                             print("Selecting \(hospital.facility_name)")
-                            onSelection!(hospital)
+                            onSelection(hospital)
                         }
                     }, label: {
                         HospitalRowView(hospital: hospital)
@@ -130,18 +130,19 @@ struct HospitalListView: View {
         }
         .sheet(isPresented: $hospitalViewModel.isMissingHospitalSheetPresented, content: {
             MissingHospitalSheetView(onSubmit: { hospitalName in
-                try await hospitalViewModel.hospitalRepository.createHospital(hospitalName)
+                let newHospital = try await hospitalViewModel.hospitalRepository.createHospital(hospitalName)
                 
-                // TODO: somehow alert the admins
-                hospitalViewModel.searchHospitals()
+                //TODO: somehow alert admins
                 
+                onSelection(newHospital)
+
             })
         })
     }
 }
 
 #Preview {
-    HospitalListView(selectionMode: true)
+    HospitalListView(selectionMode: true, onSelection: { _ in })
         .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

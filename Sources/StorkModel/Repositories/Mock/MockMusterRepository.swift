@@ -12,7 +12,10 @@ public class MockMusterRepository: MusterRepositoryInterface {
     // MARK: - Properties
 
     /// A list of mock Musters used for in-memory storage.
-    private var musters: [Muster]
+    private var musters: [Muster] = []
+    
+    /// A list of mock invitations used for in-memory storage.
+    private var invites: [MusterInvite] = []
 
     // MARK: - Initializer
 
@@ -20,9 +23,22 @@ public class MockMusterRepository: MusterRepositoryInterface {
     ///
     /// - Parameter musters: An array of `Muster` objects to initialize the repository with.
     ///   Defaults to an empty array.
-    public init(musters: [Muster] = []) {
+    /// - Parameter invites: An array of `MusterInvite` objects to initialize the repository with.
+    ///   Defaults to an empty array.
+    public init(musters: [Muster] = [], invites: [MusterInvite] = []) {
         self.musters = musters
+        
+        self.invites.append(
+            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jessica", musterName: "Admin Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is the message", primaryColor: "red", status: InvitationStatus.pending)
+    
+        )
+        
+        self.invites.append(
+            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jeanne", musterName: "Parkview Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is another message", primaryColor: "purple", status: InvitationStatus.pending)
+    
+        )
     }
+
 
     // MARK: - Methods
 
@@ -41,7 +57,6 @@ public class MockMusterRepository: MusterRepositoryInterface {
     /// Lists musters based on optional filters.
     ///
     /// - Parameters:
-    ///   - id: An optional filter for the muster ID.
     ///   - profileIds: An optional filter for profile IDs associated with the muster.
     ///   - primaryHospitalId: An optional filter for hospital ID associated with the muster
     ///   - administratorProfileIds: An optional filter for the administrators' profile IDs.
@@ -49,7 +64,6 @@ public class MockMusterRepository: MusterRepositoryInterface {
     ///   - primaryColor: An optional filter for the muster’s primary color.
     /// - Returns: An array of `Muster` objects matching the specified filters.
     public func listMusters(
-        id: String? = nil,
         profileIds: [String]? = nil,
         primaryHospitalId: String? = nil,
         administratorProfileIds: [String]? = nil,
@@ -58,7 +72,7 @@ public class MockMusterRepository: MusterRepositoryInterface {
     ) async throws -> [Muster] {
         return musters.filter { muster in
             let nameFilter = name?.lowercased()
-            return (id == nil || muster.id == id) &&
+            return
                 (profileIds == nil || profileIds!.allSatisfy { muster.profileIds.contains($0) }) &&
                 (primaryHospitalId == nil || primaryHospitalId == primaryHospitalId) &&
                 (administratorProfileIds == nil || administratorProfileIds!.allSatisfy { muster.administratorProfileIds.contains($0) }) &&
@@ -70,12 +84,14 @@ public class MockMusterRepository: MusterRepositoryInterface {
     /// Creates a new muster record.
     ///
     /// - Parameter muster: The `Muster` object to create.
+    /// - Returns: The same 'Muster' object to confirm creation
     /// - Throws: `MusterError.creationFailed` if a muster with the same ID already exists.
-    public func createMuster(_ muster: Muster) async throws {
+    public func createMuster(_ muster: Muster) async throws -> Muster {
         if musters.contains(where: { $0.id == muster.id }) {
             throw MusterError.creationFailed("Muster with ID \(muster.id) already exists.")
         }
         musters.append(muster)
+        return muster
     }
 
     /// Updates an existing muster record.
@@ -98,5 +114,62 @@ public class MockMusterRepository: MusterRepositoryInterface {
             throw MusterError.deletionFailed("Failed to delete muster with ID \(muster.id).")
         }
         musters.remove(at: index)
+    }
+    
+    // MARK: - Invitation Methods
+    
+    /// Sends a profile an invite to join a muster.
+    ///
+    /// - Parameter invite: The `MusterInvite` object defining the invitation.
+    /// - Parameter userId: The id of the user that is being invited.
+    /// - Throws:
+    public func sendMusterInvite(_ invite: MusterInvite, userId: String) async throws {
+        // Ensure no duplicate invite with the same ID
+        if invites.contains(where: { $0.id == invite.id }) {
+            throw MusterError.invitationFailed("An invite with ID \(invite.id) already exists.")
+        }
+        invites.append(invite)
+    }
+    
+    /// Responds to a muster invite.
+    ///
+    /// - Parameter invite: The `MusterInvite` object being responded to.
+    /// - Parameter response: The answer to the invitation.
+    /// - Throws:
+    public func respondToMusterInvite(_ invite: MusterInvite, response: Bool) async throws {
+        guard let index = invites.firstIndex(where: { $0.id == invite.id }) else {
+            throw MusterError.invitationResponseFailed("Invite with ID \(invite.id) not found.")
+        }
+        
+        var updatedInvite = invites[index]
+        updatedInvite.status = response ? .accepted : .declined
+        invites[index] = updatedInvite
+    }
+    
+    /// Collects all muster invitations for a user.
+    ///
+    /// - Parameter userId: The userId associated with potential muster invites.
+    /// - Throws:
+    public func collectUserMusterInvites(userId: String) async throws -> [MusterInvite] {
+        return self.invites.filter { $0.recipientId == userId }
+    }
+    
+    /// Collects all muster invitations for a specific muster.
+    ///
+    /// - Parameter musterId: The musterId associated with potential muster invites.
+    /// - Throws:
+    public func collectInvitesForMuster(musterId: String) async throws -> [MusterInvite] {
+        return invites.filter { $0.musterId == musterId }
+    }
+    
+    /// Cancels a sent muster invitation.
+    ///
+    /// - Parameter invitationId: The id of the invitation.
+    /// - Throws:
+    public func cancelMusterInvite(invitationId: String) async throws {
+        guard let index = invites.firstIndex(where: { $0.id == invitationId }) else {
+            throw MusterError.failedToCancelInvite("Invite with ID \(invitationId) not found.")
+        }
+        invites.remove(at: index)
     }
 }

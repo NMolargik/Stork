@@ -103,7 +103,7 @@ struct HospitalDetailView: View {
                 }
                 
                 HStack {
-                    Image(systemName: "person.crop.square")
+                    Image(systemName: "dollarsign.square.fill")
                         .foregroundStyle(.orange)
                         .frame(width: 30)
 

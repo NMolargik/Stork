@@ -9,15 +9,14 @@ import Foundation
 
 public struct Muster: Identifiable, Codable, Hashable {
     public var id: String
-    var profileIds: [String]
-    var primaryHospitalId: String
-    var administratorProfileIds: [String]
-    var name: String
-    var primaryColor: String
+    public var profileIds: [String]
+    public var primaryHospitalId: String
+    public var administratorProfileIds: [String]
+    public var name: String
+    public var primaryColor: String
 
     var dictionary: [String: Any] {
         return [
-            "id": id,
             "profileIds": profileIds,
             "primaryHospitalId": primaryHospitalId,
             "administratorProfileIds": administratorProfileIds,
@@ -26,9 +25,9 @@ public struct Muster: Identifiable, Codable, Hashable {
         ]
     }
 
-    init?(from dictionary: [String: Any]) {
+    public init?(from dictionary: [String: Any], id: String?) {
         guard
-            let id = dictionary["id"] as? String,
+            let id = id,
             let profileIds = dictionary["profileIds"] as? [String],
             let primaryHospitalId = dictionary["primaryHospitalId"] as? String,
             let administratorProfileIds = dictionary["administratorProfileIds"] as? [String],
@@ -46,7 +45,7 @@ public struct Muster: Identifiable, Codable, Hashable {
         self.primaryColor = primaryColor
     }
 
-    init(
+    public init(
         id: String, 
         profileIds: [String],
         primaryHospitalId: String,

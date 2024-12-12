@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "[ muhs-ter ] - noun\nA group of storks" : {
+
+    },
     "%.1f inches" : {
 
     },
@@ -9,6 +12,16 @@
     },
     "%@" : {
 
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
     },
     "%@ %@, %@ %@ - %@" : {
       "localizations" : {
@@ -19,6 +32,9 @@
           }
         }
       }
+    },
+    "%@ Delivery" : {
+
     },
     "%@, %@" : {
       "localizations" : {
@@ -56,7 +72,16 @@
     "About Stork" : {
 
     },
+    "Accept" : {
+
+    },
     "Add To Muster" : {
+
+    },
+    "Added to your muster!" : {
+
+    },
+    "Admin Controls" : {
 
     },
     "Appearance" : {
@@ -88,13 +113,19 @@
         }
       }
     },
+    "Are you sure you want to leave this muster?" : {
+
+    },
+    "Assign" : {
+
+    },
+    "Assign Admin" : {
+
+    },
     "Babies: %lld" : {
 
     },
     "Baby #%lld" : {
-
-    },
-    "Baby Count: %lld" : {
 
     },
     "Birthing Center" : {
@@ -103,7 +134,25 @@
     "Cancel" : {
 
     },
+    "Change" : {
+
+    },
+    "Change Primary Color" : {
+
+    },
+    "Close" : {
+
+    },
     "Confirm Password" : {
+
+    },
+    "Create A Muster" : {
+
+    },
+    "Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors." : {
+
+    },
+    "Create New Muster" : {
 
     },
     "Currently searching by location" : {
@@ -138,7 +187,7 @@
         }
       }
     },
-    "Date: %@" : {
+    "Decline" : {
 
     },
     "Delete Account" : {
@@ -150,13 +199,7 @@
     "Deliveries: %lld" : {
 
     },
-    "Delivery Details" : {
-
-    },
     "Delivery Method" : {
-
-    },
-    "Delivery Method: %@" : {
 
     },
     "Delivery Options" : {
@@ -174,9 +217,6 @@
     "Epidural Used" : {
 
     },
-    "Epidural Used: %@" : {
-
-    },
     "Female" : {
 
     },
@@ -184,9 +224,6 @@
 
     },
     "Forgot Your Password?" : {
-
-    },
-    "Go to shared profile view" : {
 
     },
     "Hello [%@](https://skip.tools)!" : {
@@ -246,10 +283,13 @@
         }
       }
     },
-    "Hospital ID: %@" : {
+    "Hospitals" : {
 
     },
-    "Hospitals" : {
+    "Invite User" : {
+
+    },
+    "It's that easy!\n\nYou'll be able to add members to your muster after creation." : {
 
     },
     "Item %lld" : {
@@ -281,7 +321,22 @@
         }
       }
     },
+    "Join A Muster" : {
+
+    },
+    "Kick" : {
+
+    },
+    "Kick Member" : {
+
+    },
     "Last Name" : {
+
+    },
+    "Leave" : {
+
+    },
+    "Leave Muster" : {
 
     },
     "Light" : {
@@ -340,6 +395,9 @@
     "Muster Name" : {
 
     },
+    "Muster Stats Go Here" : {
+
+    },
     "Name" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -368,6 +426,9 @@
           }
         }
       }
+    },
+    "New Color Hex/Name" : {
+
     },
     "New Delivery" : {
 
@@ -460,6 +521,9 @@
         }
       }
     },
+    "Select An Accent Color" : {
+
+    },
     "Select Birthday" : {
 
     },
@@ -518,6 +582,9 @@
     "Sorry we are missing your hospital. Please provide its name and we will take it from there!" : {
 
     },
+    "Statistics for %@" : {
+
+    },
     "Stork" : {
 
     },
@@ -559,7 +626,16 @@
     "Take Photo" : {
 
     },
+    "Units" : {
+
+    },
     "Use Location" : {
+
+    },
+    "Use Metric Units" : {
+
+    },
+    "User ID" : {
 
     },
     "Welcome" : {
@@ -592,6 +668,9 @@
       }
     },
     "You can submit up to 8 deliveries per day" : {
+
+    },
+    "Your Invitations" : {
 
     }
   },

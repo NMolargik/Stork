@@ -41,7 +41,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
             }
 
             // Parse data into Delivery model
-            return Delivery(from: data)
+            return Delivery(from: data, id: document.documentID)
         } catch let error as DeliveryError {
             throw error
         } catch {
@@ -54,7 +54,6 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// Lists deliveries based on optional filters.
     ///
     /// - Parameters:
-    ///   - id: An optional filter for the delivery ID.
     ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - userFirstName: An optional filter for the first name of the user associated with the delivery
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery.
@@ -67,7 +66,6 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If an error occurs while fetching the deliveries.
     public func listDeliveries(
-        id: String? = nil,
         userId: String? = nil,
         userFirstName: String? = nil,
         hospitalId: String? = nil,
@@ -80,10 +78,6 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         do {
             var query: Query = db.collection("Delivery")
 
-            // Apply optional filters to the query
-            if let id = id {
-                query = query.whereField("id", isEqualTo: id)
-            }
             if let userId = userId {
                 query = query.whereField("userId", isEqualTo: userId)
             }
@@ -113,7 +107,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
             let snapshot = try await query.getDocuments()
             return snapshot.documents.compactMap { document in
                 let data = document.data()
-                return Delivery(from: data)
+                return Delivery(from: data, id: document.documentID)
             }
         } catch {
             throw DeliveryError.firebaseError("Failed to fetch deliveries: \(error.localizedDescription)")
@@ -127,11 +121,15 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// - Parameter delivery: The `Delivery` object to create.
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If an error occurs while creating the delivery.
-    public func createDelivery(_ delivery: Delivery) async throws {
+    public func createDelivery(_ delivery: Delivery) async throws -> Delivery {
         do {
             let data = delivery.dictionary
             print("Trying to create delivery record")
-            try await db.collection("Delivery").document(delivery.id).setData(data)
+            let reference = try await db.collection("Delivery").addDocument(data: data)
+            
+            var newDelivery = delivery
+            newDelivery.id = reference.documentID
+            return newDelivery
         } catch {
             throw DeliveryError.firebaseError("Failed to create delivery: \(error.localizedDescription)")
         }

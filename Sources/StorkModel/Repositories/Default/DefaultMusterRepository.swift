@@ -40,7 +40,6 @@ public class DefaultMusterRepository: MusterRepositoryInterface {
     /// Lists musters based on optional filter criteria.
     ///
     /// - Parameters:
-    ///   - id: An optional filter for the muster ID.
     ///   - profileIds: An optional filter for profile IDs associated with the muster.
     ///   - primaryHospitalId: An optional filter for the hospital id associated with the muster
     ///   - name: An optional filter for the muster name.
@@ -50,7 +49,6 @@ public class DefaultMusterRepository: MusterRepositoryInterface {
     /// - Throws:
     ///   - `MusterError`: For failures during the fetch operation.
     public func listMusters(
-        id: String? = nil,
         profileIds: [String]? = nil,
         primaryHospitalId: String? = nil,
         administratorProfileIds: [String]? = nil,
@@ -58,7 +56,6 @@ public class DefaultMusterRepository: MusterRepositoryInterface {
         primaryColor: String? = nil
     ) async throws -> [Muster] {
         return try await remoteDataSource.listMusters(
-            id: id,
             profileIds: profileIds,
             primaryHospitalId: primaryHospitalId,
             administratorProfileIds: administratorProfileIds,
@@ -70,11 +67,12 @@ public class DefaultMusterRepository: MusterRepositoryInterface {
     /// Creates a new muster record.
     ///
     /// - Parameter muster: The `Muster` object to create.
+    /// - Returns: The same 'Muster' object to confirm creation
     /// - Throws:
     ///   - `MusterError.creationFailed`: If the creation operation fails.
     ///   - `MusterError`: For other failures during the creation operation.
-    public func createMuster(_ muster: Muster) async throws {
-        try await remoteDataSource.createMuster(muster)
+    public func createMuster(_ muster: Muster) async throws -> Muster {
+        return try await remoteDataSource.createMuster(muster)
     }
 
     /// Updates an existing muster record.
@@ -97,5 +95,47 @@ public class DefaultMusterRepository: MusterRepositoryInterface {
     ///   - `MusterError`: For other failures during the deletion operation.
     public func deleteMuster(_ muster: Muster) async throws {
         try await remoteDataSource.deleteMuster(muster)
+    }
+    
+    /// Sends a profile an invite to join a muster
+    ///
+    /// - Parameter invite: The `MusterInvite` object defining the invitaiton
+    /// - Parameter userId: The id of the user that is being invited
+    /// - Throws:
+    public func sendMusterInvite(_ invite: MusterInvite, userId: String) async throws {
+        try await remoteDataSource.sendMusterInvite(invite, userId: userId)
+    }
+    
+    /// Sends a profile an invite to join a muster
+    ///
+    /// - Parameter invite: The `MusterInvite` object being responded to
+    /// - Parameter respoonse: The answer to the invitation
+    /// - Throws:
+    public func respondToMusterInvite(_ invite: MusterInvite, response: Bool) async throws {
+        try await remoteDataSource.respondToMusterInvite(invite, response: response)
+    }
+    
+    /// Collects all muster invitations for a user
+    ///
+    /// - Parameter userId: The userId associated with potential muster invites
+    /// - Throws:
+    public func collectUserMusterInvites(userId: String) async throws -> [MusterInvite] {
+        return try await remoteDataSource.collectUserMusterInvites(userId: userId)
+    }
+    
+    /// Collects all muster invitations for a muster
+    ///
+    /// - Parameter musterId: The musterId associated with potential muster invites
+    /// - Throws:
+    public func collectInvitesForMuster(musterId: String) async throws -> [MusterInvite] {
+        return try await remoteDataSource.collectInvitesForMuster(musterId: musterId)
+    }
+    
+    /// Cancels a sent muster invitation
+    ///
+    /// - Parameter invitationId: The id from the invitation
+    /// - Throws:
+    public func cancelMusterInvite(invitationId: String) async throws {
+        try await remoteDataSource.cancelMusterInvite(invitationId: invitationId)
     }
 }

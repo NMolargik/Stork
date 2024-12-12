@@ -21,6 +21,7 @@ public struct AppStateControllerView: View {
     @StateObject private var profileViewModel: ProfileViewModel
     @StateObject private var hospitalViewModel: HospitalViewModel
     @StateObject private var deliveryViewModel: DeliveryViewModel
+    @StateObject private var musterViewModel: MusterViewModel
     
     @State var showRegistration: Bool = false
     
@@ -57,6 +58,8 @@ public struct AppStateControllerView: View {
         _hospitalViewModel = StateObject(wrappedValue: HospitalViewModel(hospitalRepository: hospitalRepository, locationProvider: locationProvider))
         
         _deliveryViewModel = StateObject(wrappedValue: DeliveryViewModel(deliveryRepository: deliveryRepository))
+        
+        _musterViewModel = StateObject(wrappedValue: MusterViewModel(musterRepository: musterRepository))
     }
     
     public var body: some View {
@@ -97,6 +100,7 @@ public struct AppStateControllerView: View {
         .environmentObject(profileViewModel)
         .environmentObject(hospitalViewModel)
         .environmentObject(deliveryViewModel)
+        .environmentObject(musterViewModel)
     }
     
     func checkAppState() {

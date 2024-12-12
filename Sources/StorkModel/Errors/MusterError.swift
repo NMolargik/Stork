@@ -1,13 +1,17 @@
 import Foundation
 
-enum MusterError: Error, LocalizedError {
+public enum MusterError: Error, LocalizedError {
     case notFound(String)
     case creationFailed(String)
     case updateFailed(String)
     case deletionFailed(String)
+    case invitationFailed(String)
+    case invitationResponseFailed(String)
+    case failedToCollectInvitations(String)
+    case failedToCancelInvite(String)
     case unknown(String)
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .notFound(let message):
             return "Muster Not Found: \(message)"
@@ -19,6 +23,14 @@ enum MusterError: Error, LocalizedError {
             return "Muster Deletion Failed: \(message)"
         case .unknown(let message):
             return "Unknown Muster Error: \(message)"
+        case .invitationFailed(let message):
+            return "Invitation Failed To Send: \(message)"
+        case .invitationResponseFailed(let message):
+            return "Failed to respond to invitation: \(message)"
+        case .failedToCollectInvitations(let message):
+            return "Failed to collect invitations: \(message)"
+        case .failedToCancelInvite(let message):
+            return "Failed to cancel invitation: \(message)"
         }
     }
 }

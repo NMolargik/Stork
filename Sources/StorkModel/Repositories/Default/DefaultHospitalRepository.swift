@@ -49,9 +49,9 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
     }
 
     /// Creates a new hospital record.
-    public func createHospital(_ name: String) async throws {
+    public func createHospital(_ name: String) async throws -> Hospital {
         do {
-            try await remoteDataSource.createHospital(Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0))
+            return try await remoteDataSource.createHospital(Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0))
         } catch let error as HospitalError {
             throw error
         } catch {

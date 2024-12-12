@@ -18,6 +18,7 @@ public class ProfileViewModel: ObservableObject {
     @Published var dateRangeText: String = "06/07/1998 - 07/07/1998"
     @Published var errorMessage: String?
     @Published var selectedImageURL: URL?
+    @Published var isWorking: Bool = false
         
     // MARK: - Dependencies
     var profileRepository: ProfileRepositoryInterface
@@ -25,6 +26,11 @@ public class ProfileViewModel: ObservableObject {
     // MARK: - Initializer
     public init(profileRepository: ProfileRepositoryInterface) {
         self.profileRepository = profileRepository
+        
+        Task {
+            try await self.profile = profileRepository.getCurrentProfile()
+            print(profile.id)
+        }
     }
 
     // MARK: - Profile Image Loading Logic

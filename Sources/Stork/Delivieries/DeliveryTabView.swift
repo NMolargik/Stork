@@ -47,7 +47,7 @@ struct DeliveryTabView: View {
                         }     
                         .refreshable {
                             Task {
-                                try await deliveryViewModel.deliveryRepository.listDeliveries(id: nil, userId: profileViewModel.profile.id, userFirstName: nil, hospitalId: nil, musterId: nil, date: nil, babyCount: nil, deliveryMethod: nil, epiduralUsed: nil)
+                                try await deliveryViewModel.deliveryRepository.listDeliveries(userId: profileViewModel.profile.id, userFirstName: nil, hospitalId: nil, musterId: nil, date: nil, babyCount: nil, deliveryMethod: nil, epiduralUsed: nil)
                             }
                         }
                         .navigationTitle("Deliveries")

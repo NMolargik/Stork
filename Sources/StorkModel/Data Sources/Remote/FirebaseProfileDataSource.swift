@@ -109,7 +109,6 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// Lists profiles based on optional filters.
     ///
     /// - Parameters:
-    ///   - id: An optional filter for the profile ID.
     ///   - firstName: An optional filter for the profile's first name.
     ///   - lastName: An optional filter for the profile's last name.
     ///   - email: An optional filter for the profile's email address.
@@ -308,6 +307,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
         }
     }
     
+    
+    
+    //TODO: solve this
+    
     /// Retrieves the profile picture from Firebase Storage for the specified profile.
     ///
     /// - Parameter profile: The `Profile` object containing the email used to locate the profile picture.
@@ -325,7 +328,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
 //
 //            return image
 //        } catch {
-//            
+//
             throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture:"])
 //            throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture: \(error.localizedDescription)"])
         }

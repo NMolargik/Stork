@@ -13,10 +13,9 @@ struct SettingsTabView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    @Binding var navigationPath: [String]
     
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationStack() {
             List {
                 Section("Profile", content: {
                     Button(action: {
@@ -50,18 +49,11 @@ struct SettingsTabView: View {
                 })
             }
             .navigationTitle("Settings")
-            .navigationDestination(for: String.self) { value in
-                if value == "ProfileView" {
-                    Text("Shared Profile View")
-                } else {
-                    Text("Other View: \(value)")
-                }
-            }
         }
     }
 }
 
 #Preview {
-    SettingsTabView(navigationPath: .constant([]))
+    SettingsTabView()
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

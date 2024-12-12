@@ -16,7 +16,6 @@ public protocol DeliveryRepositoryInterface {
 
     /// Lists deliveries based on optional filters.
     /// - Parameters:
-    ///   - id: An optional delivery ID filter.
     ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - userFirstName: An optional filter for first name of the user associated with the delivery
     ///   - hospitalId: An optional hospital ID filter.
@@ -28,7 +27,6 @@ public protocol DeliveryRepositoryInterface {
     /// - Returns: A list of `Delivery` objects matching the filters.
     /// - Throws: `DeliveryError` if the query fails.
     func listDeliveries(
-        id: String?,
         userId: String?,
         userFirstName: String?,
         hospitalId: String?,
@@ -41,8 +39,9 @@ public protocol DeliveryRepositoryInterface {
 
     /// Creates a new delivery record.
     /// - Parameter delivery: The `Delivery` object to create.
+    /// - Returns: The same `Delivery` object with a new ID
     /// - Throws: `DeliveryError` if the creation fails.
-    func createDelivery(_ delivery: Delivery) async throws
+    func createDelivery(_ delivery: Delivery) async throws -> Delivery
 
     /// Updates an existing delivery record.
     /// - Parameter delivery: The `Delivery` object to update.

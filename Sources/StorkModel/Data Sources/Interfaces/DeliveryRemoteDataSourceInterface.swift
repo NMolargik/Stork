@@ -19,7 +19,6 @@ public protocol DeliveryRemoteDataSourceInterface {
     /// Lists deliveries based on optional filters.
     ///
     /// - Parameters:
-    ///   - id: An optional filter for the delivery ID. If nil, this filter is ignored.
     ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - userFirstName: An optional filter for first name of the user associated with the delivery
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery. If nil, this filter is ignored.
@@ -31,7 +30,6 @@ public protocol DeliveryRemoteDataSourceInterface {
     /// - Returns: An array of `Delivery` objects matching the specified filters.
     /// - Throws: `DeliveryError` if the operation fails or no deliveries are found.
     func listDeliveries(
-        id: String?,
         userId: String?,
         userFirstName: String?,
         hospitalId: String?,
@@ -45,8 +43,9 @@ public protocol DeliveryRemoteDataSourceInterface {
     /// Creates a new delivery record.
     ///
     /// - Parameter delivery: The `Delivery` object to create.
+    /// - Returns: The same `Delivery` object with a new ID
     /// - Throws: `DeliveryError` if the creation fails.
-    func createDelivery(_ delivery: Delivery) async throws
+    func createDelivery(_ delivery: Delivery) async throws -> Delivery
 
     /// Updates an existing delivery record.
     ///

@@ -26,7 +26,6 @@ public struct Hospital: Identifiable, Codable, Hashable {
     // Init from dictionary
     var dictionary: [String: Any] {
         return [
-            "id": id,
             "facility_name": facility_name,
             "address": address,
             "citytown": citytown,
@@ -43,9 +42,9 @@ public struct Hospital: Identifiable, Codable, Hashable {
         ]
     }
 
-    init?(from dictionary: [String: Any]) {
+    init?(from dictionary: [String: Any], id: String?) {
         guard
-            let id = dictionary["id"] as? String,
+            let id = id,
             let facility_name = dictionary["facility_name"] as? String,
             let address = dictionary["address"] as? String,
             let citytown = dictionary["citytown"] as? String,

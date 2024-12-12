@@ -26,7 +26,7 @@ public protocol HospitalRemoteDataSourceInterface {
     /// - Parameter hospital: The `Hospital` object to create.
     /// - Throws:
     ///   - `HospitalError.firebaseError`: If the creation operation fails due to a Firestore-related issue.
-    func createHospital(_ hospital: Hospital) async throws
+    func createHospital(_ hospital: Hospital) async throws -> Hospital
 
     /// Deletes a hospital record from Firestore.
     ///
@@ -63,14 +63,6 @@ public protocol HospitalRemoteDataSourceInterface {
     /// - Throws:
     ///   - `HospitalError.firebaseError`: If the fetch operation fails due to a Firestore-related issue.
     func listHospitals(city: String, state: String) async throws -> [Hospital]
-
-    /// Searches for hospitals by a partial name match.
-    ///
-    /// - Parameter partialName: The partial string to match against hospital names.
-    /// - Returns: A list of `Hospital` objects with names matching the partial string.
-    /// - Throws:
-    ///   - `HospitalError.firebaseError`: If the fetch operation fails due to a Firestore-related issue.
-    //func listHospitals(partialName: String) async throws -> [Hospital]
 
     /// Increments the delivery count for a specific hospital.
     ///

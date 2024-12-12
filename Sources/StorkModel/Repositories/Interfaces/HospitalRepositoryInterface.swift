@@ -29,10 +29,11 @@ public protocol HospitalRepositoryInterface {
     /// Creates a new hospital record in Firestore.
     ///
     /// - Parameter name: The name of the new`Hospital` object to create.
+    /// - Returns: The same `Hospital` object with a new ID
     /// - Throws:
     ///   - `HospitalError.creationFailed`: If the operation fails to create the hospital.
     ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
-    func createHospital(_ name: String) async throws
+    func createHospital(_ name: String) async throws -> Hospital
 
     /// Updates the statistics of an existing hospital record in Firestore.
     ///

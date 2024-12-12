@@ -44,10 +44,9 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     }
 
     /// Creates a new hospital record in Firestore.
-    public func createHospital(_ hospital: Hospital) async throws {
+    public func createHospital(_ hospital: Hospital) async throws -> Hospital {
         do {
             let data: [String: Any] = [
-                "id": hospital.id,
                 "facility_name": hospital.facility_name,
                 "address": hospital.address,
                 "citytown": hospital.citytown,
@@ -62,7 +61,10 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
                 "deliveryCount": hospital.deliveryCount,
                 "babyCount": hospital.babyCount
             ]
-            try await db.collection("Hospital").document(hospital.id).setData(data)
+            let reference = try await db.collection("Hospital").addDocument(data: data)
+            var newHospital = hospital
+            newHospital.id = reference.documentID
+            return newHospital
         } catch {
             throw HospitalError.creationFailed("Failed to create hospital: \(error.localizedDescription)")
         }

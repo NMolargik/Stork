@@ -14,7 +14,6 @@ struct DeliveryRowView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                // Date formatted as title
                 Text(delivery.date.formatted(date: .abbreviated, time: .omitted))
                     .font(.headline)
                     .foregroundColor(.black)
@@ -72,11 +71,11 @@ struct DeliveryRowView: View {
         // Manually count the number of each sex
         for baby in babies {
             switch baby.sex {
-            case .male:
+            case Sex.male:
                 maleCount += 1
-            case .female:
+            case Sex.female:
                 femaleCount += 1
-            case .loss:
+            case Sex.loss:
                 lossCount += 1
             }
         }
@@ -105,9 +104,9 @@ struct DeliveryRowView: View {
     private func gradientColors(for babies: [Baby]) -> [Color] {
         // Group and sort colors by sex
         var colors: [Color] = []
-        colors.append(contentsOf: Array(repeating: Color.blue, count: babies.filter { $0.sex == .male }.count))
-        colors.append(contentsOf: Array(repeating: Color.pink, count: babies.filter { $0.sex == .female }.count))
-        colors.append(contentsOf: Array(repeating: Color.purple, count: babies.filter { $0.sex == .loss }.count))
+        colors.append(contentsOf: Array(repeating: Color.blue, count: babies.filter { $0.sex == Sex.male }.count))
+        colors.append(contentsOf: Array(repeating: Color.pink, count: babies.filter { $0.sex == Sex.female }.count))
+        colors.append(contentsOf: Array(repeating: Color.purple, count: babies.filter { $0.sex == Sex.loss }.count))
         return colors
     }
 }

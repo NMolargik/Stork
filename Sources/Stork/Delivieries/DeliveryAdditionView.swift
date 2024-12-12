@@ -190,7 +190,7 @@ struct DeliveryAdditionView: View {
     }
 
     private func addBaby() {
-        let newBaby = Baby(deliveryId: UUID().uuidString, nurseCatch: false, sex: .male)
+        let newBaby = Baby(deliveryId: UUID().uuidString, nurseCatch: false, sex: Sex.male)
         deliveryViewModel.newBabies.append(newBaby)
     }
 }

@@ -25,7 +25,6 @@ public protocol MusterRepositoryInterface {
     /// Lists Musters based on optional filtering criteria.
     ///
     /// - Parameters:
-    ///   - id: An optional filter for the muster ID.
     ///   - profileIds: An optional filter for profile IDs associated with the muster.
     ///   - primaryHospitalId: An optional filter for hospital Id associated with the muster.
     ///   - administratorProfileIds: An optional filter for the administrators' profile IDs.
@@ -35,7 +34,6 @@ public protocol MusterRepositoryInterface {
     /// - Throws:
     ///   - `MusterError`: If the operation fails or no matching Musters are found.
     func listMusters(
-        id: String?,
         profileIds: [String]?,
         primaryHospitalId: String?,
         administratorProfileIds: [String]?,
@@ -46,10 +44,11 @@ public protocol MusterRepositoryInterface {
     /// Creates a new Muster record.
     ///
     /// - Parameter muster: The `Muster` object to create.
+    /// - Returns: The same 'Muster' object with a new ID
     /// - Throws:
     ///   - `MusterError.creationFailed`: If the creation fails.
     ///   - `MusterError`: For other failures during the creation.
-    func createMuster(_ muster: Muster) async throws
+    func createMuster(_ muster: Muster) async throws -> Muster
 
     /// Updates an existing Muster record.
     ///
@@ -68,4 +67,36 @@ public protocol MusterRepositoryInterface {
     ///   - `MusterError.deletionFailed`: If the deletion operation fails.
     ///   - `MusterError`: For other failures during the deletion.
     func deleteMuster(_ muster: Muster) async throws
+    
+    /// Sends a profile an invite to join a muster
+    ///
+    /// - Parameter invite: The `MusterInvite` object defining the invitaiton
+    /// - Parameter userId: The id of the user that is being invited
+    /// - Throws:
+    func sendMusterInvite(_ invite: MusterInvite, userId: String) async throws
+    
+    /// Sends a profile an invite to join a muster
+    ///
+    /// - Parameter invite: The `MusterInvite` object being responded to
+    /// - Parameter respoonse: The answer to the invitation
+    /// - Throws:
+    func respondToMusterInvite(_ invite: MusterInvite, response: Bool) async throws
+    
+    /// Collects all muster invitations for a user
+    ///
+    /// - Parameter userId: The userId associated with potential muster invites
+    /// - Throws:
+    func collectUserMusterInvites(userId: String) async throws -> [MusterInvite]
+    
+    /// Collects all muster invitations for a muster
+    ///
+    /// - Parameter musterId: The musterId associated with potential muster invites
+    /// - Throws:
+    func collectInvitesForMuster(musterId: String) async throws -> [MusterInvite]
+    
+    /// Cancels a sent muster invitation
+    ///
+    /// - Parameter invitationId: The id from the invitation
+    /// - Throws:
+    func cancelMusterInvite(invitationId: String) async throws
 }

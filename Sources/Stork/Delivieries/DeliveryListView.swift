@@ -55,8 +55,9 @@ struct DeliveryListView: View {
                             
                             Image(systemName: "figure.child")
                                 .foregroundStyle(.indigo)
-                                .font(.title2)
+                                .font(.largeTitle)
                                 .fontWeight(.bold)
+                                .padding(.bottom, 30)
                             
                             Text("No deliveries recorded yet. Use the button above to get started!")
                                 .multilineTextAlignment(.center)
@@ -69,11 +70,11 @@ struct DeliveryListView: View {
                                 
                                 Image(systemName: "info.circle")
                                     .font(.title)
-                                    .foregroundStyle(.indigo)
+                                    .foregroundStyle(.blue)
                                     .padding(.trailing)
                                 
                                 Text("You can submit up to 8 deliveries per day")
-                                    .foregroundStyle(colorScheme == .dark ? Color.black : Color.white)
+                                    .foregroundStyle(.black)
                                     .multilineTextAlignment(.center)
                                 
                                 Spacer()
@@ -81,9 +82,9 @@ struct DeliveryListView: View {
                             .padding(8)
                             .background {
                                 Rectangle()
-                                    .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
+                                    .foregroundStyle(.white)
                                     .cornerRadius(10)
-                                    .shadow(radius: 5)
+                                    .shadow(radius: 2)
                             }
                         }
                         .padding()

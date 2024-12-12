@@ -46,7 +46,6 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     /// Lists deliveries based on optional filter criteria.
     ///
     /// - Parameters:
-    ///   - id: An optional filter for the delivery ID.
     ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - userFirstName: An optional filter for first name of the user associated with the delivery
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery.
@@ -59,7 +58,6 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If the operation fails due to a Firestore-related issue.
     public func listDeliveries(
-        id: String? = nil,
         userId: String? = nil,
         userFirstName: String? = nil,
         hospitalId: String? = nil,
@@ -71,7 +69,6 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     ) async throws -> [Delivery] {
         do {
             return try await remoteDataSource.listDeliveries(
-                id: id,
                 userId: userId,
                 userFirstName: userFirstName,
                 hospitalId: hospitalId,
@@ -93,9 +90,9 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     /// - Parameter delivery: The `Delivery` object to be created.
     /// - Throws:
     ///   - `DeliveryError.creationFailed`: If the operation fails to create the delivery.
-    public func createDelivery(_ delivery: Delivery) async throws {
+    public func createDelivery(_ delivery: Delivery) async throws -> Delivery {
         do {
-            try await remoteDataSource.createDelivery(delivery)
+            return try await remoteDataSource.createDelivery(delivery)
         } catch let error as DeliveryError {
             throw error
         } catch {

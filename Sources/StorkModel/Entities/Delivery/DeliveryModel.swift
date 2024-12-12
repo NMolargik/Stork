@@ -22,7 +22,6 @@ public struct Delivery: Identifiable, Codable, Hashable {
     // Converts the `DeliveryModel` into a dictionary format suitable for Firestore storage.
     var dictionary: [String: Any] {
         return [
-            "id": id,
             "userId": userId,
             "userFirstName": userFirstName,
             "hospitalId": hospitalId,
@@ -36,9 +35,9 @@ public struct Delivery: Identifiable, Codable, Hashable {
     }
 
     // Initializes a `DeliveryModel` from a Firestore data dictionary.
-    public init?(from dictionary: [String: Any]) {
+    public init?(from dictionary: [String: Any], id: String?) {
         guard
-            let id = dictionary["id"] as? String,
+            let id = id,
             let userId = dictionary["userId"] as? String,
             let userFirstName = dictionary["userFirstName"] as? String,
             let hospitalId = dictionary["hospitalId"] as? String,

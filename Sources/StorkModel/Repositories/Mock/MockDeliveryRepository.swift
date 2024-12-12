@@ -102,7 +102,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
     }
 
     public func listDeliveries(
-        id: String?,
         userId: String?,
         userFirstName: String?,
         hospitalId: String?,
@@ -113,7 +112,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         epiduralUsed: Bool?
     ) async throws -> [Delivery] {
         return deliveries.filter { delivery in
-            (id == nil || delivery.id == id) &&
             (userId == nil || delivery.userId == userId) &&
             (userFirstName == nil || delivery.userFirstName == userFirstName) &&
             (hospitalId == nil || delivery.hospitalId == hospitalId) &&
@@ -125,11 +123,12 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    public func createDelivery(_ delivery: Delivery) async throws {
+    public func createDelivery(_ delivery: Delivery) async throws -> Delivery {
         if deliveries.contains(where: { $0.id == delivery.id }) {
             throw DeliveryError.creationFailed("Delivery with ID \(delivery.id) already exists.")
         }
         deliveries.append(delivery)
+        return delivery
     }
 
     public func updateDelivery(_ delivery: Delivery) async throws {

@@ -91,6 +91,9 @@ class DeliveryViewModel: ObservableObject {
     
     func submitDelivery(babies: [Baby], profileViewModel: ProfileViewModel, hospitalViewModel: HospitalViewModel) async throws {
         // Enforce the daily limit
+        
+        
+        //TODO: query Muster is applicable to make sure user is still a member of it
         guard currentDeliveryCount < dailyLimit else {
             throw DeliveryError.creationFailed("You have reached the daily limit of \(dailyLimit) deliveries.")
         }
@@ -113,16 +116,16 @@ class DeliveryViewModel: ObservableObject {
         )
         
         do {
-            try await deliveryRepository.createDelivery(newDelivery)
-            self.deliveries.append(newDelivery)
-            currentDeliveryCount += 1 // Increment the count
+            let delivery = try await deliveryRepository.createDelivery(newDelivery)
+            self.deliveries.append(delivery)
+            currentDeliveryCount += 1
             
             hospitalViewModel.updateHospitalWithNewDelivery(hospital: selectedHospital, babyCount: babies.count)
         } catch {
             throw DeliveryError.creationFailed("Failed to submit delivery: \(error.localizedDescription)")
         }
         
-        // TODO: post-release add to muster timeline if chosen. remember to implement duplicate prevention system
+        // TODO: post-release add to new muster timeline feature if chosen. remember to implement duplicate prevention system
         
         self.resetDelivery()
     }
@@ -130,7 +133,6 @@ class DeliveryViewModel: ObservableObject {
     func getDeliveries(userId: String) {
         Task { @MainActor in
             self.deliveries = try await deliveryRepository.listDeliveries(
-                id: nil,
                 userId: userId,
                 userFirstName: nil,
                 hospitalId: nil,
@@ -148,7 +150,7 @@ class DeliveryViewModel: ObservableObject {
         self.searchingForDuplicates = true
         
         do {
-            let duplicates = try await deliveryRepository.listDeliveries(id: nil, userId: nil, userFirstName: nil, hospitalId: selectedHospital?.id, musterId: musterId, date: self.currentDate, babyCount: self.selectedHospital?.babyCount, deliveryMethod: self.deliveryMethod, epiduralUsed: self.epiduralUsed)
+            let duplicates = try await deliveryRepository.listDeliveries(userId: nil, userFirstName: nil, hospitalId: selectedHospital?.id, musterId: musterId, date: self.currentDate, babyCount: self.selectedHospital?.babyCount, deliveryMethod: self.deliveryMethod, epiduralUsed: self.epiduralUsed)
             
             self.submitEnabled = true
             self.searchingForDuplicates = false

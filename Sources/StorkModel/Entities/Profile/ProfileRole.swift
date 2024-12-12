@@ -10,9 +10,9 @@ import Foundation
 public enum ProfileRole: String, Codable, Hashable, CaseIterable, Identifiable, CustomStringConvertible {
     public var description: String {
         switch self {
-        case.nurse: "Nurse"
-        case.doctor: "Doctor"
-        case.other: "Other User"
+        case .nurse: "Nurse"
+        case .doctor: "Doctor"
+        case .other: ""
     }
 }
     case nurse

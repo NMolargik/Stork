@@ -40,21 +40,21 @@ public struct MainView: View {
                 .tag(Tab.deliveries)
             
             // Hospitals
-            HospitalListView()
+            HospitalListView(onSelection: { _ in })
                 .tabItem {
                     Label(Tab.hospitals.title, systemImage: Tab.hospitals.icon)
                 }
                 .tag(Tab.hospitals)
             
             // Muster
-            MusterTabView(selectedTab: $selectedTab, showingDeliveryAddition: $showingDeliveryAddition)
+            MusterTabView()
                 .tabItem {
                     Label(Tab.muster.title, systemImage: Tab.muster.icon)
                 }
                 .tag(Tab.muster)
             
             // Settings
-            SettingsTabView(navigationPath: $navigationPath)
+            SettingsTabView()
                 .tabItem {
                     Label(Tab.settings.title, systemImage: Tab.settings.icon)
                 }
@@ -75,4 +75,5 @@ public struct MainView: View {
     MainView()
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
 }

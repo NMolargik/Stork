@@ -45,7 +45,7 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     /// - Returns: An array of `Hospital` objects matching the specified name filter.
     public func listHospitalsByPartialName(partialName: String?) async throws -> [Hospital] {
         guard let name = partialName?.lowercased() else { return hospitals }
-        return hospitals.filter { $0.facility_name.lowercased().contains(partialName ?? "") }
+        return hospitals.filter { $0.facility_name.lowercased().contains(name) }
     }
 
     /// Lists hospitals filtered by city and state.
@@ -95,13 +95,14 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     ///
     /// - Parameter hospital: The `Hospital` object to create.
     /// - Throws: `HospitalError.creationFailed` if a hospital with the same ID already exists.
-    public func createHospital(_ name: String) async throws {
+    public func createHospital(_ name: String) async throws -> Hospital {
         
         let hospital = Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0)
         if hospitals.contains(where: { $0.id == hospital.id }) {
             throw HospitalError.creationFailed("Hospital with ID \(hospital.id) already exists.")
         }
         hospitals.append(hospital)
+        return hospital
     }
 
     /// Updates an existing hospital record.

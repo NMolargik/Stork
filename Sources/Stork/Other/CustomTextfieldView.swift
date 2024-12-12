@@ -23,14 +23,19 @@ struct CustomTextfieldView: View {
             Group {
                 if (isSecure) {
                     SecureField(hintText, text: $text)
+                        .frame(height: 50)
+
                 } else {
                     TextField(hintText, text: $text)
+                        .frame(height: 50)
+
                 }
             }
             .colorScheme(.light)
             .textInputAutocapitalization(.never)
             .textFieldStyle(.roundedBorder)
             .padding(.leading, 2)
+            .padding(.trailing, 5)
                 
         }
         .padding(.leading)
@@ -39,7 +44,7 @@ struct CustomTextfieldView: View {
                 .cornerRadius(10)
                 .shadow(radius: 2)
         }
-        .frame(height: 40)
+        .frame(height: 50)
     }
 }
 
