@@ -24,8 +24,10 @@ struct HospitalListView: View {
             HStack {
                 CustomTextfieldView(text: $hospitalViewModel.searchQuery, hintText: "Search by name", icon: Image(systemName: hospitalViewModel.usingLocation ? "location.fill" : "magnifyingglass"), isSecure: false, iconColor: hospitalViewModel.usingLocation ? Color.blue : Color.orange)
                 
-                CustomButtonView(text: "Search", width: 80, height: 40, color: Color.indigo, isEnabled: $hospitalViewModel.searchEnabled, onTapAction: {
-                    hospitalViewModel.searchHospitals()
+                CustomButtonView(text: "Search", width: 80, height: 55, color: Color.indigo, isEnabled: $hospitalViewModel.searchEnabled, onTapAction: {
+                    Task {
+                        try await hospitalViewModel.searchHospitals()
+                    }
                 })
                 .onChange(of: hospitalViewModel.searchQuery) { query in
                     hospitalViewModel.searchEnabled = query.count > 0
@@ -37,7 +39,7 @@ struct HospitalListView: View {
             }
             .padding(.horizontal)
             
-            if (hospitalViewModel.hospitals.count == 0 && !hospitalViewModel.isLoading) {
+            if (hospitalViewModel.hospitals.count == 0 && !hospitalViewModel.isWorking) {
                 Text("No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above.")
                     .padding()
                     .multilineTextAlignment(.center)
@@ -67,7 +69,9 @@ struct HospitalListView: View {
             }
             .refreshable {
                 withAnimation {
-                    hospitalViewModel.fetchHospitalsNearby()
+                    Task {
+                        hospitalViewModel.fetchHospitalsNearby()
+                    }
                 }
             }
             .navigationTitle("Hospitals")
@@ -79,7 +83,7 @@ struct HospitalListView: View {
                 }
             }
             .overlay {
-                if hospitalViewModel.isLoading {
+                if hospitalViewModel.isWorking {
                     ProgressView()
                 }
             }
@@ -130,11 +134,7 @@ struct HospitalListView: View {
         }
         .sheet(isPresented: $hospitalViewModel.isMissingHospitalSheetPresented, content: {
             MissingHospitalSheetView(onSubmit: { hospitalName in
-                let newHospital = try await hospitalViewModel.hospitalRepository.createHospital(hospitalName)
-                
-                //TODO: somehow alert admins
-                
-                onSelection(newHospital)
+                onSelection(try await hospitalViewModel.hospitalRepository.createHospital(name: hospitalName))
 
             })
         })

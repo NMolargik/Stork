@@ -13,6 +13,23 @@ import Foundation
 /// the data layer, allowing the application to interact with Muster-related
 /// data sources in a consistent manner.
 public protocol MusterRepositoryInterface {
+    /// Creates a new Muster record.
+    ///
+    /// - Parameter muster: The `Muster` object to create.
+    /// - Throws:
+    ///   - `MusterError.creationFailed`: If the creation fails.
+    ///   - `MusterError`: For other failures during the creation.
+    func createMuster(muster: Muster) async throws
+    
+    /// Updates an existing Muster record.
+    ///
+    /// - Parameter muster: The `Muster` object containing updated data.
+    /// - Throws:
+    ///   - `MusterError.notFound`: If the muster does not exist.
+    ///   - `MusterError.updateFailed`: If the update operation fails.
+    ///   - `MusterError`: For other failures during the update.
+    func updateMuster(muster: Muster) async throws
+    
     /// Retrieves a single Muster by its unique ID.
     ///
     /// - Parameter id: The unique identifier of the Muster to fetch.
@@ -21,7 +38,7 @@ public protocol MusterRepositoryInterface {
     ///   - `MusterError.notFound`: If the muster cannot be found.
     ///   - `MusterError`: If another error occurs during the fetch operation.
     func getMuster(byId id: String) async throws -> Muster
-
+    
     /// Lists Musters based on optional filtering criteria.
     ///
     /// - Parameters:
@@ -40,47 +57,13 @@ public protocol MusterRepositoryInterface {
         name: String?,
         primaryColor: String?
     ) async throws -> [Muster]
-
-    /// Creates a new Muster record.
-    ///
-    /// - Parameter muster: The `Muster` object to create.
-    /// - Returns: The same 'Muster' object with a new ID
-    /// - Throws:
-    ///   - `MusterError.creationFailed`: If the creation fails.
-    ///   - `MusterError`: For other failures during the creation.
-    func createMuster(_ muster: Muster) async throws -> Muster
-
-    /// Updates an existing Muster record.
-    ///
-    /// - Parameter muster: The `Muster` object containing updated data.
-    /// - Throws:
-    ///   - `MusterError.notFound`: If the muster does not exist.
-    ///   - `MusterError.updateFailed`: If the update operation fails.
-    ///   - `MusterError`: For other failures during the update.
-    func updateMuster(_ muster: Muster) async throws
-
-    /// Deletes an existing Muster record.
-    ///
-    /// - Parameter muster: The `Muster` object to delete.
-    /// - Throws:
-    ///   - `MusterError.notFound`: If the muster does not exist.
-    ///   - `MusterError.deletionFailed`: If the deletion operation fails.
-    ///   - `MusterError`: For other failures during the deletion.
-    func deleteMuster(_ muster: Muster) async throws
     
     /// Sends a profile an invite to join a muster
     ///
     /// - Parameter invite: The `MusterInvite` object defining the invitaiton
     /// - Parameter userId: The id of the user that is being invited
     /// - Throws:
-    func sendMusterInvite(_ invite: MusterInvite, userId: String) async throws
-    
-    /// Sends a profile an invite to join a muster
-    ///
-    /// - Parameter invite: The `MusterInvite` object being responded to
-    /// - Parameter respoonse: The answer to the invitation
-    /// - Throws:
-    func respondToMusterInvite(_ invite: MusterInvite, response: Bool) async throws
+    func sendMusterInvite(invite: MusterInvite, userId: String) async throws
     
     /// Collects all muster invitations for a user
     ///
@@ -99,4 +82,14 @@ public protocol MusterRepositoryInterface {
     /// - Parameter invitationId: The id from the invitation
     /// - Throws:
     func cancelMusterInvite(invitationId: String) async throws
+    
+    /// Deletes an existing Muster record.
+    ///
+    /// - Parameter muster: The `Muster` object to delete.
+    /// - Throws:
+    ///   - `MusterError.notFound`: If the muster does not exist.
+    ///   - `MusterError.deletionFailed`: If the deletion operation fails.
+    ///   - `MusterError`: For other failures during the deletion.
+    func deleteMuster(muster: Muster) async throws
+    
 }

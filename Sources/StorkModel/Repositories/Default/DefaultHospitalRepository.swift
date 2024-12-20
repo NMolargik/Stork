@@ -25,6 +25,28 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
     }
 
     // MARK: - Methods
+    
+    /// Creates a new hospital record.
+    public func createHospital(name: String) async throws -> Hospital {
+        do {
+            return try await remoteDataSource.createHospital(hospital: Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0))
+        } catch let error as HospitalError {
+            throw error
+        } catch {
+            throw HospitalError.creationFailed("Failed to create hospital: \(error.localizedDescription)")
+        }
+    }
+
+    /// Updates an existing hospital record.
+    public func updateHospital(hospital: Hospital) async throws {
+        do {
+            try await remoteDataSource.updateHospitalStats(hospital: hospital)
+        } catch let error as HospitalError {
+            throw error
+        } catch {
+            throw HospitalError.updateFailed("Failed to update hospital: \(error.localizedDescription)")
+        }
+    }
 
     /// Fetches a single hospital by its unique ID.
     public func getHospital(byId id: String) async throws -> Hospital {
@@ -47,40 +69,7 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
             throw HospitalError.unknown("Failed to list hospitals: \(error.localizedDescription)")
         }
     }
-
-    /// Creates a new hospital record.
-    public func createHospital(_ name: String) async throws -> Hospital {
-        do {
-            return try await remoteDataSource.createHospital(Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0))
-        } catch let error as HospitalError {
-            throw error
-        } catch {
-            throw HospitalError.creationFailed("Failed to create hospital: \(error.localizedDescription)")
-        }
-    }
-
-    /// Updates an existing hospital record.
-    public func updateHospital(_ hospital: Hospital) async throws {
-        do {
-            try await remoteDataSource.updateHospitalStats(hospital)
-        } catch let error as HospitalError {
-            throw error
-        } catch {
-            throw HospitalError.updateFailed("Failed to update hospital: \(error.localizedDescription)")
-        }
-    }
-
-    /// Deletes an existing hospital record.
-    public func deleteHospital(_ hospital: Hospital) async throws {
-        do {
-            try await remoteDataSource.deleteHospital(byId: hospital.id)
-        } catch let error as HospitalError {
-            throw error
-        } catch {
-            throw HospitalError.deletionFailed("Failed to delete hospital: \(error.localizedDescription)")
-        }
-    }
-
+    
     /// Fetches hospitals located in a given city and state.
     ///
     /// - Parameters:
@@ -119,12 +108,24 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
         }
     }
     
-    public func updateAfterDelivery(_ hospital: Hospital, babyCount: Int) async throws -> Hospital {
+    public func updateAfterDelivery(hospital: Hospital, babyCount: Int) async throws -> Hospital {
         var updatedHospital = hospital
         updatedHospital.deliveryCount += 1
         updatedHospital.babyCount += babyCount
         
-        try await self.updateHospital(updatedHospital)
+        try await self.updateHospital(hospital: updatedHospital)
         return updatedHospital
     }
+    
+    /// Deletes an existing hospital record.
+    public func deleteHospital(hospital: Hospital) async throws {
+        do {
+            try await remoteDataSource.deleteHospital(byId: hospital.id)
+        } catch let error as HospitalError {
+            throw error
+        } catch {
+            throw HospitalError.deletionFailed("Failed to delete hospital: \(error.localizedDescription)")
+        }
+    }
+
 }

@@ -1,12 +1,10 @@
 //
 //  ProfileModel.swift
 //
-//
 //  Created by Nick Molargik on 11/26/24.
 //
 
 import Foundation
-import UIKit
 
 public struct Profile: Identifiable, Codable, Hashable {
     public var id: String
@@ -19,13 +17,14 @@ public struct Profile: Identifiable, Codable, Hashable {
     public var joinDate: String
     public var role: ProfileRole
     public var isAdmin: Bool
-    public var profilePicture: UIImage? // Optional profile picture
 
-    // Custom date formatter for DD-MM-YYYY format
+    // Standard Date Formatter
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy"
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        #if !SKIP
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        #endif
         return formatter
     }()
 
@@ -38,7 +37,7 @@ public struct Profile: Identifiable, Codable, Hashable {
             "firstName": firstName,
             "lastName": lastName,
             "email": email,
-            "birthday": birthday.description,
+            "birthday": Profile.dateFormatter.string(from: birthday),
             "joinDate": joinDate,
             "role": role.rawValue,
             "isAdmin": isAdmin
@@ -47,9 +46,7 @@ public struct Profile: Identifiable, Codable, Hashable {
 
     // Initialize from Firestore data dictionary
     public init?(from dictionary: [String: Any]) {
-        let isoFormatter = ISO8601DateFormatter()
-        let fallbackFormatter = DateFormatter()
-        fallbackFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        let formatter = Profile.dateFormatter
 
         guard
             let id = dictionary["id"] as? String,
@@ -60,17 +57,10 @@ public struct Profile: Identifiable, Codable, Hashable {
             let isAdminInt = dictionary["isAdmin"] as? Int,
             let roleString = dictionary["role"] as? String,
             let role = ProfileRole(rawValue: roleString),
-            let birthdayString = dictionary["birthday"] as? String
+            let birthdayString = dictionary["birthday"] as? String,
+            let birthday = formatter.date(from: birthdayString)
         else {
             print("Missing or invalid required fields")
-            return nil
-        }
-        
-        // Parse dates with fallback
-        guard let birthday = isoFormatter.date(from: birthdayString) ??
-                              fallbackFormatter.date(from: birthdayString)
-        else {
-            print("Invalid birthday format: \(birthdayString)")
             return nil
         }
 
@@ -88,10 +78,9 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.joinDate = joinDateString // Keeping as a string
         self.role = role
         self.isAdmin = isAdminInt != 0
-        self.profilePicture = nil
     }
 
-    // Initialize from Strings for birthday and joinDate
+    // Initialize from explicit parameters
     public init(
         id: String,
         primaryHospitalId: String,
@@ -102,8 +91,7 @@ public struct Profile: Identifiable, Codable, Hashable {
         birthday: Date,
         joinDate: String,
         role: ProfileRole,
-        isAdmin: Bool,
-        profilePicture: UIImage? = nil
+        isAdmin: Bool
     ) {
         self.id = id
         self.primaryHospitalId = primaryHospitalId
@@ -115,24 +103,23 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.joinDate = joinDate
         self.role = role
         self.isAdmin = isAdmin
-        self.profilePicture = profilePicture
-    }
-    
-    public init(thisIsTemporary: Bool?) {
-        self.id = UUID().uuidString
-        self.primaryHospitalId = "123456"
-        self.musterId = "1234"
-        self.firstName = "Nick"
-        self.lastName = "Molargik"
-        self.email = "nmolargik@gmail.com"
-        self.birthday = Date()
-        self.joinDate = Date().description
-        self.role = ProfileRole.nurse
-        self.isAdmin = true
-        self.profilePicture = nil
     }
 
-    // Exclude profilePicture from Codable
+    // Temporary initializer without parameters
+    public init() {
+        self.id = UUID().uuidString
+        self.primaryHospitalId = ""
+        self.musterId = ""
+        self.firstName = ""
+        self.lastName = ""
+        self.email = ""
+        self.birthday = Date()
+        self.joinDate = Profile.dateFormatter.string(from: Date())
+        self.role = .nurse
+        self.isAdmin = false
+    }
+
+    // Exclude profilePictureURL from Codable if necessary
     private enum CodingKeys: String, CodingKey {
         case id, primaryHospitalId, musterId, firstName, lastName, email, birthday, joinDate, role, isAdmin
     }

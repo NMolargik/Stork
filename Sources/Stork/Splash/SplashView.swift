@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SplashView: View {
     @AppStorage("appState") private var appState: AppState = AppState.splash
-    @AppStorage("isUserLoggedIn") private var isUserLoggedIn: Bool = false
+    @AppStorage("loggedIn") private var loggedIn: Bool = false
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
 
     @StateObject private var viewModel = SplashViewModel()
@@ -52,10 +52,11 @@ struct SplashView: View {
                 
                 LoginView(onAuthenticated: {
                     withAnimation {
+                        self.loggedIn = true
                         appState = (isOnboardingComplete) ? .main : .onboard
                     }
                 })
-                .opacity(viewModel.showMore && !isUserLoggedIn ? 1.0 : 0.0)
+                .opacity(viewModel.showMore && !loggedIn ? 1.0 : 0.0)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             
                 Divider()
@@ -74,7 +75,7 @@ struct SplashView: View {
                 Spacer()
             }
             .toolbar {
-                if (!isUserLoggedIn) {
+                if (!loggedIn) {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             isInfoPresented = !isInfoPresented

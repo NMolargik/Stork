@@ -15,11 +15,12 @@ import java.util.regex.Pattern
 #endif
 
 class RegisterViewModel: ObservableObject {
-    // Fields and form
+    // MARK: - Published Properties
+    @Published var profile: Profile = Profile()
+
     @Published var passwordText = ""
     @Published var confirmPassword = ""
     @Published var registrationError: String = ""
-    @Published var selectedProfileRole: ProfileRole = .nurse
     @Published var isFormValid = false
 
     // Individual field errors
@@ -31,34 +32,60 @@ class RegisterViewModel: ObservableObject {
     @Published var birthdayError: String? = nil
     
     @Published public var profilePicture: UIImage?
-    @Published var registering: Bool = false
+    @Published var isWorking: Bool = false
+    
+    // MARK: - Required Repository
+    var profileRepository: ProfileRepositoryInterface
+
+    // MARK: - Initializer
+    @MainActor
+    public init(profileRepository: ProfileRepositoryInterface) {
+        self.profileRepository = profileRepository
+    }
     
     @MainActor
-    func registerWithEmail(profile: Profile, profileRepository: ProfileRepositoryInterface, completion: @escaping (Profile) -> Void) {
-        self.registrationError = ""
-        
-        guard passwordText == confirmPassword else {
-            confirmPasswordError = "Passwords do not match"
-            completion(profile)
-            return
+    func registerWithEmail() async throws {
+        guard isFormValid else {
+            throw ProfileError.creationFailed("Entered details are invalid. Please fill out all fields.")
         }
         
-        print("Starting Registration")
+        self.isWorking = true
         
-        Task {
-            do {
-                self.registering = true
-                let registeredProfile = try await profileRepository.registerWithEmail(profile, password: passwordText)
-                
-                print("Registration succeeded: \(registeredProfile.firstName) \(registeredProfile.lastName)")
-                self.registering = false
-                completion(registeredProfile)
-            } catch {
-                self.registering = false
-                self.registrationError = error.localizedDescription
-                print("Registration failed")
-                completion(profile)
-            }
+        do {
+            try await profileRepository.registerWithEmail(profile: self.profile, password: self.passwordText)
+            print("Registration succeeded: \(profile.email)")
+        } catch {
+            self.isWorking = false
+            throw ProfileError.creationFailed(error.localizedDescription)
+        }
+        
+        do {
+            try await self.createProfile()
+            print("Created profile for \(profile.firstName) \(profile.lastName)")
+            self.isWorking = false
+        } catch {
+            self.isWorking = false
+            try await profileRepository.signOut()
+            throw ProfileError.creationFailed(error.localizedDescription)
+        }
+        
+        //TODO: if there is a profile picture, upload it
+
+    }
+    
+    private func uploadProfilePicture() async throws {
+        guard let profilePicture else { return }
+        
+        do {
+            try await profileRepository.uploadProfilePicture(profile: self.profile, profilePicture: self.profilePicture!)
+        } catch {
+            throw ProfileError.creationFailed(error.localizedDescription)
+        }
+    }
+    
+    private func createProfile() async throws {
+        do {
+            try await profileRepository.createProfile(profile: self.profile)
         }
     }
     

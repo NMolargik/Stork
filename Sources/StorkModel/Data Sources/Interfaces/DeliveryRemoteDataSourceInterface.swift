@@ -9,6 +9,18 @@ import Foundation
 
 /// A protocol defining the interface for remote data source interactions related to deliveries.
 public protocol DeliveryRemoteDataSourceInterface {
+    /// Creates a new delivery record.
+    ///
+    /// - Parameter delivery: The `Delivery` object to create.
+    /// - Throws: `DeliveryError` if the creation fails.
+    func createDelivery(delivery: Delivery) async throws
+
+    /// Updates an existing delivery record.
+    ///
+    /// - Parameter delivery: The `Delivery` object containing the updated data.
+    /// - Throws: `DeliveryError` if the update fails or the delivery does not exist.
+    func updateDelivery(delivery: Delivery) async throws
+
     /// Retrieves a single delivery by its unique ID.
     ///
     /// - Parameter id: The unique ID of the delivery to fetch.
@@ -40,22 +52,9 @@ public protocol DeliveryRemoteDataSourceInterface {
         epiduralUsed: Bool?
     ) async throws -> [Delivery]
 
-    /// Creates a new delivery record.
-    ///
-    /// - Parameter delivery: The `Delivery` object to create.
-    /// - Returns: The same `Delivery` object with a new ID
-    /// - Throws: `DeliveryError` if the creation fails.
-    func createDelivery(_ delivery: Delivery) async throws -> Delivery
-
-    /// Updates an existing delivery record.
-    ///
-    /// - Parameter delivery: The `Delivery` object containing the updated data.
-    /// - Throws: `DeliveryError` if the update fails or the delivery does not exist.
-    func updateDelivery(_ delivery: Delivery) async throws
-
     /// Deletes an existing delivery record.
     ///
     /// - Parameter delivery: The `Delivery` object to delete.
     /// - Throws: `DeliveryError` if the deletion fails or the delivery does not exist.
-    func deleteDelivery(_ delivery: Delivery) async throws
+    func deleteDelivery(delivery: Delivery) async throws
 }

@@ -1,71 +1,116 @@
 //
 //  ProfileViewModel.swift
 //
-//
 //  Created by Nick Molargik on 11/8/24.
 //
 
 import Foundation
+import Combine
 import SwiftUI
 import StorkModel
 
 public class ProfileViewModel: ObservableObject {
-    @AppStorage("appState") var appState: AppState = .register
+    @AppStorage("loggedIn") var loggedIn = false
 
-    // MARK: - Published Properties
-    @Published public var profile: Profile = Profile(thisIsTemporary: true)
-    @Published var tempProfile: Profile = Profile(thisIsTemporary: true)
-    @Published var dateRangeText: String = "06/07/1998 - 07/07/1998"
+    @Published var profile: Profile
+    @Published var tempProfile: Profile
     @Published var errorMessage: String?
-    @Published var selectedImageURL: URL?
     @Published var isWorking: Bool = false
-        
-    // MARK: - Dependencies
-    var profileRepository: ProfileRepositoryInterface
 
-    // MARK: - Initializer
+    let profileRepository: ProfileRepositoryInterface
+
+    @MainActor
+    // Initializer
     public init(profileRepository: ProfileRepositoryInterface) {
         self.profileRepository = profileRepository
+        self.profile = Profile()
+        self.tempProfile = Profile()
+        fetchCurrentProfile()
+    }
+
+    @MainActor
+    // Fetch the current profile asynchronously
+    func fetchCurrentProfile() {
+        isWorking = true
+        Task {
+            do {
+                let fetchedProfile = try await profileRepository.getCurrentProfile()
+                self.profile = fetchedProfile
+                self.isWorking = false
+            } catch {
+                self.errorMessage = "Failed to load profile: \(error.localizedDescription)"
+                self.isWorking = false
+                throw error
+            }
+        }
+    }
+    
+    
+    func updateMuster(musterId: String) async throws {
+        isWorking = true
+        
+        var tempProfile = self.profile
+        tempProfile.musterId = musterId
         
         Task {
-            try await self.profile = profileRepository.getCurrentProfile()
-            print(profile.id)
+            do {
+                try await self.updateProfile()
+            } catch {
+                throw error
+            }
+        }
+    }
+    
+    // Update the profile
+    func updateProfile() async throws {
+        isWorking = true
+        
+        Task {
+            do {
+                try await profileRepository.updateProfile(profile: tempProfile)
+                self.profile = tempProfile
+                self.isWorking = false
+            } catch {
+                self.errorMessage = "Failed to update profile: \(error.localizedDescription)"
+                self.isWorking = false
+                throw error
+            }
         }
     }
 
-    // MARK: - Profile Image Loading Logic
-    private func fetchImageData(from url: String) async throws -> Data {
-        guard let url = URL(string: url) else {
-            throw URLError(.badURL)
-        }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return data
-    }
-    
-    public func updateProfile() {
-        self.profile.firstName = tempProfile.firstName
-        self.profile.lastName = tempProfile.lastName
-        self.profile.birthday = tempProfile.birthday
-        self.profile.role = tempProfile.role
+    // Save the updated profile asynchronously
+    private func saveProfile() {
+        isWorking = true
         
+        
+    }
+
+    @MainActor
+    // Sign out the user asynchronously
+    func signOut() {
+        isWorking = true
+        
+        //TODO: broken
         Task {
-            try await profileRepository.updateProfile(profile)
+            do {
+                try await profileRepository.signOut()
+                DispatchQueue.main.async {
+                    self.isWorking = false
+                    self.loggedIn = false
+                    // Handle post-sign-out actions, e.g., navigate to splash screen
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Failed to sign out: \(error.localizedDescription)"
+                    self.isWorking = false
+                }
+            }
         }
     }
-    
-    public func signOut() {
-        Task {
-            self.reset()
-            await self.profileRepository.signOut()
-            print("Signed Out")
-            appState = .splash
-        }
-    }
-    
-    public func reset() {
-        self.dateRangeText = ""
-        self.errorMessage = ""
-        self.selectedImageURL = nil
-        self.profile = Profile(thisIsTemporary: true)
+
+    // Reset profile data
+    func reset() {
+        profile = Profile()
+        errorMessage = nil
     }
 }

@@ -9,6 +9,23 @@ import Foundation
 
 /// A protocol defining the interface for domain-level hospital operations.
 public protocol HospitalRepositoryInterface {
+    /// Creates a new hospital record in Firestore. Requires admin intervention afterwards
+    ///
+    /// - Parameter name: The name of the new`Hospital` object to create.
+    /// - Throws:
+    ///   - `HospitalError.creationFailed`: If the operation fails to create the hospital.
+    ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
+    func createHospital(name: String) async throws -> Hospital
+
+    /// Updates the statistics of an existing hospital record in Firestore.
+    ///
+    /// - Parameter hospital: The `Hospital` object containing updated statistics.
+    /// - Throws:
+    ///   - `HospitalError.updateFailed`: If the operation fails to update the hospital.
+    ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
+    func updateHospital(hospital: Hospital) async throws
+
+    
     /// Fetches a single hospital by its unique ID.
     ///
     /// - Parameter id: The unique ID of the hospital to fetch.
@@ -25,31 +42,6 @@ public protocol HospitalRepositoryInterface {
     /// - Throws:
     ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
     func listHospitalsByPartialName(partialName: String?) async throws -> [Hospital]
-
-    /// Creates a new hospital record in Firestore.
-    ///
-    /// - Parameter name: The name of the new`Hospital` object to create.
-    /// - Returns: The same `Hospital` object with a new ID
-    /// - Throws:
-    ///   - `HospitalError.creationFailed`: If the operation fails to create the hospital.
-    ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
-    func createHospital(_ name: String) async throws -> Hospital
-
-    /// Updates the statistics of an existing hospital record in Firestore.
-    ///
-    /// - Parameter hospital: The `Hospital` object containing updated statistics.
-    /// - Throws:
-    ///   - `HospitalError.updateFailed`: If the operation fails to update the hospital.
-    ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
-    func updateHospital(_ hospital: Hospital) async throws
-
-    /// Deletes an existing hospital record from Firestore.
-    ///
-    /// - Parameter hospital: The `Hospital` object to delete.
-    /// - Throws:
-    ///   - `HospitalError.deletionFailed`: If the operation fails to delete the hospital.
-    ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
-    func deleteHospital(_ hospital: Hospital) async throws
 
     /// Fetches hospitals in a specific city and state.
     ///
@@ -71,5 +63,19 @@ public protocol HospitalRepositoryInterface {
     ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
     func searchHospitals(byPartialName partialName: String) async throws -> [Hospital]
     
-    func updateAfterDelivery(_ hospital: Hospital, babyCount: Int) async throws -> Hospital
+    /// Updates a hospital record's baby count whenever new deliveries are associated with it
+    ///
+    /// - Parameter hospital: The hospital record
+    /// - Parameter babyCount: The total of new babies to add
+    
+    func updateAfterDelivery(hospital: Hospital, babyCount: Int) async throws -> Hospital
+    
+    /// Deletes an existing hospital record from Firestore.
+    ///
+    /// - Parameter hospital: The `Hospital` object to delete.
+    /// - Throws:
+    ///   - `HospitalError.deletionFailed`: If the operation fails to delete the hospital.
+    ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
+    func deleteHospital(hospital: Hospital) async throws
+
 }

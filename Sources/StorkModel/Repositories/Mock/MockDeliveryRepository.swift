@@ -91,8 +91,23 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
 
         return sampleDeliveries.sorted { $0.date > $1.date }
     }
+    
 
     // MARK: - CRUD Methods
+    
+    public func createDelivery(delivery: Delivery) async throws {
+        if deliveries.contains(where: { $0.id == delivery.id }) {
+            throw DeliveryError.creationFailed("Delivery with ID \(delivery.id) already exists.")
+        }
+        deliveries.append(delivery)
+    }
+
+    public func updateDelivery(delivery: Delivery) async throws {
+        guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
+            throw DeliveryError.notFound("Delivery with ID \(delivery.id) not found.")
+        }
+        deliveries[index] = delivery
+    }
 
     public func getDelivery(byId id: String) async throws -> Delivery? {
         guard let delivery = deliveries.first(where: { $0.id == id }) else {
@@ -123,22 +138,9 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    public func createDelivery(_ delivery: Delivery) async throws -> Delivery {
-        if deliveries.contains(where: { $0.id == delivery.id }) {
-            throw DeliveryError.creationFailed("Delivery with ID \(delivery.id) already exists.")
-        }
-        deliveries.append(delivery)
-        return delivery
-    }
 
-    public func updateDelivery(_ delivery: Delivery) async throws {
-        guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
-            throw DeliveryError.notFound("Delivery with ID \(delivery.id) not found.")
-        }
-        deliveries[index] = delivery
-    }
 
-    public func deleteDelivery(_ delivery: Delivery) async throws {
+    public func deleteDelivery(delivery: Delivery) async throws {
         guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
             throw DeliveryError.deletionFailed("Failed to delete delivery with ID \(delivery.id).")
         }

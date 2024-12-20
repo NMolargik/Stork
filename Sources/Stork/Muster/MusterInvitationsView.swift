@@ -35,7 +35,7 @@ struct MusterInvitationsView: View {
                         ProgressView()
                             .tint(.indigo)
                     } else if (invite.status == .accepted || invite.status == .declined) {
-                        Text(invite.status.description)
+                        Text(invite.status.stringValue)
                             .foregroundStyle(.gray)
                     } else {
                         HStack {
@@ -75,7 +75,7 @@ struct MusterInvitationsView: View {
             }
             .onAppear {
                 Task {
-                    await musterViewModel.fetchInvitations(profileId: profileViewModel.profile.id)
+                    await musterViewModel.fetchMyInvitations(profileId: profileViewModel.profile.id)
                 }
             }
             .navigationTitle("Your Invitations")

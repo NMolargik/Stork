@@ -10,6 +10,7 @@ import StorkModel
 
 struct HomeTabView: View {
     @EnvironmentObject var profileViewModel: ProfileViewModel
+    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
     @Binding var navigationPath: [String]
     @Binding var selectedTab: Tab
@@ -22,6 +23,8 @@ struct HomeTabView: View {
                 
                 CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
                     withAnimation {
+                        deliveryViewModel.startNewDelivery()
+
                         showingDeliveryAddition = true
                         selectedTab = .deliveries
                     }
@@ -43,17 +46,18 @@ struct HomeTabView: View {
                             navigationPath.append("ProfileView")
                         }
                     }, label: {
-                        if let profilePicture = profileViewModel.profile.profilePicture {
-                            Image(uiImage: profilePicture)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                        } else {
+                        //TODO: fix this
+//                        if let profilePicture = profileViewModel.profile.profilePicture {
+//                            Image(uiImage: profilePicture)
+//                                .resizable()
+//                                .scaledToFill()
+//                                .frame(width: 100, height: 100)
+//                                .clipShape(Circle())
+//                        } else {
                             Image(systemName: "person.circle")
                                 .font(.title2)
                                 .foregroundStyle(.orange)
-                        }
+                        //}
                     })
                 }
             }
@@ -65,4 +69,5 @@ struct HomeTabView: View {
 #Preview {
     HomeTabView(navigationPath: .constant([]), selectedTab: .constant(Tab.home), showingDeliveryAddition: .constant(false))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
 }

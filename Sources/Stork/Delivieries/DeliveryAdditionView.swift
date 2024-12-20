@@ -149,7 +149,7 @@ struct DeliveryAdditionView: View {
                         color: Color.indigo,
                         isEnabled: $deliveryViewModel.submitEnabled,
                         onTapAction: {
-                            Task {
+                            Task {  @MainActor in
                                 deliveryViewModel.isSubmitting = true
                                 do {
                                     try await deliveryViewModel.submitDelivery(
@@ -157,13 +157,31 @@ struct DeliveryAdditionView: View {
                                         profileViewModel: profileViewModel,
                                         hospitalViewModel: hospitalViewModel
                                     )
-                                    withAnimation {
-                                        showingDeliveryAddition = false
-                                    }
                                 } catch {
+                                    deliveryViewModel.isWorking = false
                                     errorMessage = error.localizedDescription
                                 }
-                                deliveryViewModel.isSubmitting = false
+                                
+                                do {
+                                    try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: deliveryViewModel.selectedHospital, babyCount: deliveryViewModel.newBabies.count)
+
+                                    
+                                } catch {
+                                    deliveryViewModel.isWorking = false
+                                    errorMessage = error.localizedDescription
+                                }
+                                
+                                do {
+                                    //TODO: Add to muster
+                                    
+                                } catch {
+                                    deliveryViewModel.isWorking = false
+                                    errorMessage = error.localizedDescription
+                                }
+                                
+                                
+                                
+                                deliveryViewModel.isWorking = false
                             }
                         }
                     )

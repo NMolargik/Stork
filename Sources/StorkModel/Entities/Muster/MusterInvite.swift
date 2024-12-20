@@ -17,7 +17,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
     public var primaryHospitalName: String
     public var message: String
     public var primaryColor: String
-    public var status: InvitationStatus
     
     public var dictionary: [String: Any] {
         return [
@@ -28,8 +27,7 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
             "musterId": musterId,
             "primaryHospitalName": primaryHospitalName,
             "message": message,
-            "primaryColor": primaryColor,
-            "status": status
+            "primaryColor": primaryColor
         ]
     }
 
@@ -43,8 +41,7 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
             let musterId = dictionary["musterId"] as? String,
             let primaryHospitalName = dictionary["primaryHospitalName"] as? String,
             let message = dictionary["message"] as? String,
-            let primaryColor = dictionary["primaryColor"] as? String,
-            let status = dictionary["status"] as? InvitationStatus
+            let primaryColor = dictionary["primaryColor"] as? String
         else {
             return nil
         }
@@ -58,7 +55,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         self.primaryHospitalName = primaryHospitalName
         self.message = message
         self.primaryColor = primaryColor
-        self.status = status
     }
 
     public init(
@@ -70,8 +66,7 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         musterId: String,
         primaryHospitalName: String,
         message: String,
-        primaryColor: String,
-        status: InvitationStatus
+        primaryColor: String
     ) {
         self.id = id
         self.recipientId = recipientId
@@ -82,6 +77,5 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         self.primaryHospitalName = primaryHospitalName
         self.message = message
         self.primaryColor = primaryColor
-        self.status = status
     }
 }

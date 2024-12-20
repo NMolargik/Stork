@@ -1,7 +1,6 @@
 //
 //  AppStateControllerView.swift
 //
-//
 //  Created by Nick Molargik on 11/4/24.
 //
 
@@ -9,42 +8,37 @@ import Foundation
 import SwiftUI
 import StorkModel
 
-enum AppState : String, Hashable {
+enum AppState: String, Hashable {
     case splash, register, onboard, main
 }
 
 public struct AppStateControllerView: View {
-    @AppStorage("appState") private var appState: AppState = AppState.splash
+    @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("errorMessage") private var errorMessage: String = ""
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-
+    @AppStorage("loggedIn") private var loggedIn: Bool = false
+    
     @StateObject private var profileViewModel: ProfileViewModel
     @StateObject private var hospitalViewModel: HospitalViewModel
     @StateObject private var deliveryViewModel: DeliveryViewModel
     @StateObject private var musterViewModel: MusterViewModel
     
-    @State var showRegistration: Bool = false
+    @State private var showRegistration: Bool = false
     
-    /// The repositories passed down to child views.
+    // Repositories
     private let deliveryRepository: DeliveryRepositoryInterface
     private let hospitalRepository: HospitalRepositoryInterface
     private let profileRepository: ProfileRepositoryInterface
     private let musterRepository: MusterRepositoryInterface
     private let locationProvider: LocationProviderInterface
     
-    /// Initializes the RootView with the required dependencies.
-    ///
-    /// - Parameter deliveryRepository: An instance of `DeliveryRepositoryInterface` to be used in the app.
-    /// - Parameter hospitalRepository: An instance of `HospitalRepositoryInterface` to be used in the app.
-    /// - Parameter profileRepository: An instance of `ProfileRepositoryInterface` to be used in the app.
-    /// - Parameter musterRepository: An instance of `MusterRepositoryInterface` to be used in the app.
-    /// - Parameter locationManager: An instance of `LocationManagerInterface` to be used in the app.
+    // Initializer
     public init(
-        deliveryRepository: DeliveryRepositoryInterface,
-        hospitalRepository: HospitalRepositoryInterface,
-        profileRepository: ProfileRepositoryInterface,
-        musterRepository: MusterRepositoryInterface,
-        locationProvider: LocationProviderInterface
+        deliveryRepository: DeliveryRepositoryInterface = DefaultDeliveryRepository(remoteDataSource: FirebaseDeliveryDataSource()),
+        hospitalRepository: HospitalRepositoryInterface = DefaultHospitalRepository(remoteDataSource: FirebaseHospitalDatasource()),
+        profileRepository: ProfileRepositoryInterface = DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource()),
+        musterRepository: MusterRepositoryInterface = DefaultMusterRepository(remoteDataSource: FirebaseMusterDataSource()),
+        locationProvider: LocationProviderInterface = LocationProvider()
     ) {
         self.deliveryRepository = deliveryRepository
         self.hospitalRepository = hospitalRepository
@@ -52,13 +46,10 @@ public struct AppStateControllerView: View {
         self.musterRepository = musterRepository
         self.locationProvider = locationProvider
         
-        // Initialize profileViewModel with profileRepository
+        // Initialize ViewModels with repositories
         _profileViewModel = StateObject(wrappedValue: ProfileViewModel(profileRepository: profileRepository))
-        
         _hospitalViewModel = StateObject(wrappedValue: HospitalViewModel(hospitalRepository: hospitalRepository, locationProvider: locationProvider))
-        
         _deliveryViewModel = StateObject(wrappedValue: DeliveryViewModel(deliveryRepository: deliveryRepository))
-        
         _musterViewModel = StateObject(wrappedValue: MusterViewModel(musterRepository: musterRepository))
     }
     
@@ -69,15 +60,16 @@ public struct AppStateControllerView: View {
                 case .splash:
                     SplashView(showRegistration: $showRegistration)
                 case .register:
-                    RegisterView(showRegistration: $showRegistration, onAuthenticated: {
+                    RegisterView(profileRepository: profileRepository, onAuthenticated: {
                         withAnimation {
+                            self.loggedIn = true
                             self.appState = self.isOnboardingComplete ? .main : .onboard
                         }
                     })
                 case .onboard:
                     Button(action: {
                         withAnimation {
-                            appState = AppState.main
+                            appState = .main
                         }
                     }, label: {
                         Text("Skip Onboarding")
@@ -85,7 +77,6 @@ public struct AppStateControllerView: View {
                     })
                 case .main:
                     MainView()
-
                 }
             }
             .onAppear {
@@ -93,7 +84,7 @@ public struct AppStateControllerView: View {
                 checkAppState()
             }
             
-            if (errorMessage != "") {
+            if !errorMessage.isEmpty {
                 ErrorToastView()
             }
         }
@@ -104,18 +95,17 @@ public struct AppStateControllerView: View {
     }
     
     func checkAppState() {
-        if isUserLoggedIn() {
-            if profileViewModel.profile.email == "" {
+        if loggedIn {
+            if profileViewModel.profile.email.isEmpty {
                 Task {
                     do {
-                        profileViewModel.profile = try await profileViewModel.profileRepository.getCurrentProfile()
+                        let fetchedProfile = try await profileViewModel.profileRepository.getCurrentProfile()
+                        profileViewModel.profile = fetchedProfile
                         withAnimation {
                             appState = .main
                         }
                     } catch {
-                        
                         errorMessage = "Failed to load profile: \(error.localizedDescription)"
-                        return
                     }
                 }
             } else {
@@ -125,12 +115,9 @@ public struct AppStateControllerView: View {
             appState = isOnboardingComplete ? .main : .splash
         }
     }
-    
-    private func isUserLoggedIn() -> Bool {
-        return profileRepository.isAuthenticated()
-    }
 }
 
+// Preview with mock repositories
 #Preview {
     AppStateControllerView(
         deliveryRepository: MockDeliveryRepository(),
@@ -139,7 +126,5 @@ public struct AppStateControllerView: View {
         musterRepository: MockMusterRepository(),
         locationProvider: MockLocationProvider()
     )
-    .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-    .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
-    .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+    .padding()
 }

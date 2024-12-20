@@ -98,6 +98,7 @@ struct DeliveryListView: View {
                     ToolbarItem {
                         Button(action: {
                             withAnimation {
+                                deliveryViewModel.startNewDelivery()
                                 showingDeliveryAddition = true
                             }
                         }, label: {

@@ -66,9 +66,6 @@ struct MusterTabView: View {
                         .padding(.bottom)
                     }
                     .navigationTitle(muster.name)
-                    .toolbar {
-                        // Potential additional toolbar items
-                    }
                     .confirmationDialog(
                         "Are you sure you want to leave this muster?",
                         isPresented: $musterViewModel.showLeaveConfirmation,
@@ -83,11 +80,10 @@ struct MusterTabView: View {
                     }
                     // Admin sheets
                     .sheet(isPresented: $musterViewModel.showInviteUserSheet) {
-                        MusterAdminInviteUserView { profile in
-                            Task {
-                                await musterViewModel.inviteUserToMuster(userId: profile.id)
-                            }
-                        }
+                        MusterAdminInviteUserView()
+                        #if !SKIP
+                            .interactiveDismissDisabled(true)
+                        #endif
                     }
                     .sheet(isPresented: $musterViewModel.showAssignAdminSheet) {
                         MusterAdminAssignAdminView { userId in

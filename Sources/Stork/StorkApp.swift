@@ -16,49 +16,11 @@ public struct RootView : View {
     }
 
     public var body: some View {
-        AppStateControllerView(
-            deliveryRepository: createDeliveryRepository(),
-            hospitalRepository: createHospitalRepository(),
-            profileRepository: createProfileRepository(),
-            musterRepository: createMusterRepository(),
-            locationProvider: createLocationProvider()
-        )
+        AppStateControllerView()
         .task {
             logger.log("Welcome to Skip on \(androidSDK != nil ? "Android" : "Darwin")!")
             logger.warning("Skip app logs are viewable in the Xcode console for iOS; Android logs can be viewed in Studio or using adb logcat")
         }
-    }
-    
-    /// Factory method to create the `DeliveryRepository` instance.
-    /// This ensures a single source of truth for the repository dependency.
-    private func createDeliveryRepository() -> DeliveryRepositoryInterface {
-        let deliveryRemoteDataSource = FirebaseDeliveryDataSource()
-        return DefaultDeliveryRepository(remoteDataSource: deliveryRemoteDataSource)
-    }
-
-    /// Factory method to create the `HospitalRepository` instance.
-    /// This ensures a single source of truth for the repository dependency.
-    private func createHospitalRepository() -> HospitalRepositoryInterface {
-        let hospitalRemoteDataSource = FirebaseHospitalDatasource()
-        return DefaultHospitalRepository(remoteDataSource: hospitalRemoteDataSource)
-    }
-
-    /// Factory method to create the `ProfileRepository` instance.
-    /// This ensures a single source of truth for the repository dependency.
-    private func createProfileRepository() -> ProfileRepositoryInterface {
-        let profileRemoteDataSource = FirebaseProfileDataSource()
-        return DefaultProfileRepository(remoteDataSource: profileRemoteDataSource)
-    }
-
-    /// Factory method to create the `MusterRepository` instance.
-    /// This ensures a single source of truth for the repository dependency.
-    private func createMusterRepository() -> MusterRepositoryInterface {
-        let musterRemoteDataSource = FirebaseMusterDataSource()
-        return DefaultMusterRepository(remoteDataSource: musterRemoteDataSource)
-    }
-    
-    private func createLocationProvider() -> LocationProviderInterface {
-        return LocationProvider()
     }
 }
 

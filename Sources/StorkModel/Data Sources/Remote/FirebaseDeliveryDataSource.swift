@@ -21,6 +21,38 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     public init() {
         self.db = Firestore.firestore()
     }
+    
+    // MARK: - Create a New Delivery Record
+
+    /// Creates a new delivery record in Firestore.
+    ///
+    /// - Parameter delivery: The `Delivery` object to create.
+    /// - Throws:
+    ///   - `DeliveryError.firebaseError`: If an error occurs while creating the delivery.
+    public func createDelivery(delivery: Delivery) async throws {
+        do {
+            let data = delivery.dictionary
+            let reference = try await db.collection("Delivery").addDocument(data: data)
+        } catch {
+            throw DeliveryError.firebaseError("Failed to create delivery: \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: - Update an Existing Delivery Record
+
+    /// Updates an existing delivery record in Firestore.
+    ///
+    /// - Parameter delivery: The `Delivery` object containing updated data.
+    /// - Throws:
+    ///   - `DeliveryError.firebaseError`: If an error occurs while updating the delivery.
+    public func updateDelivery(delivery: Delivery) async throws {
+        do {
+            let data = delivery.dictionary
+            try await db.collection("Delivery").document(delivery.id).updateData(data)
+        } catch {
+            throw DeliveryError.firebaseError("Failed to update delivery: \(error.localizedDescription)")
+        }
+    }
 
     // MARK: - Retrieve a Single Delivery by ID
 
@@ -114,43 +146,6 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         }
     }
 
-    // MARK: - Create a New Delivery Record
-
-    /// Creates a new delivery record in Firestore.
-    ///
-    /// - Parameter delivery: The `Delivery` object to create.
-    /// - Throws:
-    ///   - `DeliveryError.firebaseError`: If an error occurs while creating the delivery.
-    public func createDelivery(_ delivery: Delivery) async throws -> Delivery {
-        do {
-            let data = delivery.dictionary
-            print("Trying to create delivery record")
-            let reference = try await db.collection("Delivery").addDocument(data: data)
-            
-            var newDelivery = delivery
-            newDelivery.id = reference.documentID
-            return newDelivery
-        } catch {
-            throw DeliveryError.firebaseError("Failed to create delivery: \(error.localizedDescription)")
-        }
-    }
-
-    // MARK: - Update an Existing Delivery Record
-
-    /// Updates an existing delivery record in Firestore.
-    ///
-    /// - Parameter delivery: The `Delivery` object containing updated data.
-    /// - Throws:
-    ///   - `DeliveryError.firebaseError`: If an error occurs while updating the delivery.
-    public func updateDelivery(_ delivery: Delivery) async throws {
-        do {
-            let data = delivery.dictionary
-            try await db.collection("Delivery").document(delivery.id).updateData(data)
-        } catch {
-            throw DeliveryError.firebaseError("Failed to update delivery: \(error.localizedDescription)")
-        }
-    }
-
     // MARK: - Delete an Existing Delivery Record
 
     /// Deletes an existing delivery record from Firestore.
@@ -158,7 +153,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// - Parameter delivery: The `Delivery` object to delete.
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If an error occurs while deleting the delivery.
-    public func deleteDelivery(_ delivery: Delivery) async throws {
+    public func deleteDelivery(delivery: Delivery) async throws {
         do {
             try await db.collection("Delivery").document(delivery.id).delete()
         } catch {

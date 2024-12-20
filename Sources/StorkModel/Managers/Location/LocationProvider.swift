@@ -31,6 +31,7 @@ public class LocationProvider: NSObject, LocationProviderInterface {
     #endif
     }
     
+    //TODO: make throw
     public func fetch() async throws {
         let (latitude, longitude) = try await fetchCurrentLocation()
         location = Location(latitude: latitude, longitude: longitude)
@@ -40,6 +41,7 @@ public class LocationProvider: NSObject, LocationProviderInterface {
         self.state = state
     }
     
+    //TODO: make throw
     public func fetchCurrentLocation() async throws -> (latitude: Double, longitude: Double) {
     #if !SKIP
         return try await withCheckedThrowingContinuation { continuation in

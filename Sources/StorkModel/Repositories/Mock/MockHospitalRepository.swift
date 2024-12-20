@@ -26,6 +26,32 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     }
 
     // MARK: - Methods
+    
+    /// Creates a new hospital record.
+    ///
+    /// - Parameter hospital: The `Hospital` object to create.
+    /// - Throws: `HospitalError.creationFailed` if a hospital with the same ID already exists.
+    public func createHospital(name: String) async throws -> Hospital {
+        
+        let hospital = Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0)
+        if hospitals.contains(where: { $0.id == hospital.id }) {
+            throw HospitalError.creationFailed("Hospital with ID \(hospital.id) already exists.")
+        }
+        hospitals.append(hospital)
+        return hospital
+    }
+
+    /// Updates an existing hospital record.
+    ///
+    /// - Parameter hospital: The `Hospital` object containing updated data.
+    /// - Throws: `HospitalError.notFound` if the hospital does not exist.
+    public func updateHospital(hospital: Hospital) async throws {
+        guard let index = hospitals.firstIndex(where: { $0.id == hospital.id }) else {
+            throw HospitalError.notFound("Hospital with ID \(hospital.id) not found.")
+        }
+        hospitals[index] = hospital
+    }
+
 
     /// Fetches a single hospital by its unique ID.
     ///
@@ -91,43 +117,19 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
         return filteredHospitals
     }
 
-    /// Creates a new hospital record.
-    ///
-    /// - Parameter hospital: The `Hospital` object to create.
-    /// - Throws: `HospitalError.creationFailed` if a hospital with the same ID already exists.
-    public func createHospital(_ name: String) async throws -> Hospital {
-        
-        let hospital = Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0)
-        if hospitals.contains(where: { $0.id == hospital.id }) {
-            throw HospitalError.creationFailed("Hospital with ID \(hospital.id) already exists.")
-        }
-        hospitals.append(hospital)
-        return hospital
-    }
-
-    /// Updates an existing hospital record.
-    ///
-    /// - Parameter hospital: The `Hospital` object containing updated data.
-    /// - Throws: `HospitalError.notFound` if the hospital does not exist.
-    public func updateHospital(_ hospital: Hospital) async throws {
-        guard let index = hospitals.firstIndex(where: { $0.id == hospital.id }) else {
-            throw HospitalError.notFound("Hospital with ID \(hospital.id) not found.")
-        }
-        hospitals[index] = hospital
-    }
 
     /// Deletes an existing hospital record.
     ///
     /// - Parameter hospital: The `Hospital` object to delete.
     /// - Throws: `HospitalError.deletionFailed` if the hospital does not exist.
-    public func deleteHospital(_ hospital: Hospital) async throws {
+    public func deleteHospital(hospital: Hospital) async throws {
         guard let index = hospitals.firstIndex(where: { $0.id == hospital.id }) else {
             throw HospitalError.deletionFailed("Failed to delete hospital with ID \(hospital.id).")
         }
         hospitals.remove(at: index)
     }
     
-    public func updateAfterDelivery(_ hospital: Hospital, babyCount: Int) async throws -> Hospital {
+    public func updateAfterDelivery(hospital: Hospital, babyCount: Int) async throws -> Hospital {
         var updatedHospital = hospital
         updatedHospital.deliveryCount += 1
         updatedHospital.babyCount += babyCount

@@ -62,7 +62,7 @@ struct MusterSplashView: View {
                 
                 CustomButtonView(text: "View Invitations", width: 200, height: 50, color: Color.indigo, icon: Image(systemName: "envelope.fill"), isEnabled: .constant(true), onTapAction: {
                     Task {
-                        await musterViewModel.fetchInvitations(profileId: profileViewModel.profile.id)
+                        await musterViewModel.fetchMyInvitations(profileId: profileViewModel.profile.id)
                         musterViewModel.showInvitationsFullScreen = true
                     }
                 })
@@ -76,7 +76,7 @@ struct MusterSplashView: View {
                 onRespond: { invite, accepted in
                     Task {
                         await musterViewModel.respondToInvite(invite: invite, accepted: accepted, profileId: profileViewModel.profile.id)
-                        await musterViewModel.fetchInvitations(profileId: profileViewModel.profile.id)
+                        await musterViewModel.fetchMyInvitations(profileId: profileViewModel.profile.id)
                     }
                 }
             )

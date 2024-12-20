@@ -25,6 +25,39 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
     }
 
     // MARK: - Methods
+    
+    /// Creates a new profile.
+    ///
+    /// - Parameter profile: The `Profile` object to create.
+    /// - Throws:
+    ///   - `ProfileError.creationFailed`: If the creation fails.
+    ///   - `ProfileError`: For other failures during the creation operation.
+    public func createProfile(profile: Profile) async throws {
+        do {
+            try await remoteDataSource.createProfile(profile: profile)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.creationFailed("Failed to create profile: \(error.localizedDescription)")
+        }
+    }
+
+    /// Updates an existing profile.
+    ///
+    /// - Parameter profile: The `Profile` object containing updated data.
+    /// - Throws:
+    ///   - `ProfileError.updateFailed`: If the update fails.
+    ///   - `ProfileError.notFound`: If the profile does not exist.
+    ///   - `ProfileError`: For other failures during the update operation.
+    public func updateProfile(profile: Profile) async throws {
+        do {
+            try await remoteDataSource.updateProfile(profile: profile)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.updateFailed("Failed to update profile: \(error.localizedDescription)")
+        }
+    }
 
     /// Fetches a single profile by its unique ID.
     ///
@@ -34,11 +67,23 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
     ///   - `ProfileError.notFound`: If the profile cannot be found.
     ///   - `ProfileError`: For other failures during the fetch operation.
     public func getProfile(byId id: String) async throws -> Profile {
-        return try await remoteDataSource.getProfile(byId: id)
+        do {
+            return try await remoteDataSource.getProfile(byId: id)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.notFound("Failed to find profile: \(error.localizedDescription)")
+        }
     }
     
     public func getCurrentProfile() async throws -> Profile {
-        return try await remoteDataSource.getCurrentProfile()
+        do {
+            return try await remoteDataSource.getCurrentProfile()
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.notFound("Failed to collect current profile: \(error.localizedDescription)")
+        }
     }
 
     /// Lists profiles based on optional filter criteria.
@@ -68,64 +113,54 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
         musterId: String? = nil,
         isAdmin: Bool? = nil
     ) async throws -> [Profile] {
-        return try await remoteDataSource.listProfiles(
-            id: id,
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            birthday: birthday,
-            role: role,
-            primaryHospital: primaryHospital,
-            joinDate: joinDate,
-            musterId: musterId,
-            isAdmin: isAdmin
-        )
-    }
-
-    /// Creates a new profile.
-    ///
-    /// - Parameter profile: The `Profile` object to create.
-    /// - Throws:
-    ///   - `ProfileError.creationFailed`: If the creation fails.
-    ///   - `ProfileError`: For other failures during the creation operation.
-    public func createProfile(_ profile: Profile) async throws {
-        try await remoteDataSource.createProfile(profile)
-    }
-
-    /// Updates an existing profile.
-    ///
-    /// - Parameter profile: The `Profile` object containing updated data.
-    /// - Throws:
-    ///   - `ProfileError.updateFailed`: If the update fails.
-    ///   - `ProfileError.notFound`: If the profile does not exist.
-    ///   - `ProfileError`: For other failures during the update operation.
-    public func updateProfile(_ profile: Profile) async throws {
-        try await remoteDataSource.updateProfile(profile)
-    }
-
-    /// Deletes an existing profile.
-    ///
-    /// - Parameter profile: The `Profile` object to delete.
-    /// - Parameter password: The password for the profile, for confirmation purposes
-    /// - Throws:
-    ///   - `ProfileError.deletionFailed`: If the deletion fails.
-    ///   - `ProfileError.notFound`: If the profile does not exist.
-    ///   - `ProfileError`: For other failures during the deletion operation.
-    public func deleteProfile(_ profile: Profile, password: String) async throws {
-        try await remoteDataSource.deleteProfile(profile, password: password)
+        do {
+            return try await remoteDataSource.listProfiles(
+                id: id,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                birthday: birthday,
+                role: role,
+                primaryHospital: primaryHospital,
+                joinDate: joinDate,
+                musterId: musterId,
+                isAdmin: isAdmin
+            )
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.fetchFailed("Failed to fetch profiles: \(error.localizedDescription)")
+        }
     }
     
-    public func registerWithEmail(_ profile: Profile, password: String) async throws -> Profile {
-        try await remoteDataSource.registerWithEmail(profile, password: password)
-        
+    public func registerWithEmail(profile: Profile, password: String) async throws {
+        do {
+            try await remoteDataSource.registerWithEmail(profile: profile, password: password)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.creationFailed("Failed to register profiles: \(error.localizedDescription)")
+        }
     }
     
-    public func signInWithEmail(_ profile: Profile, password: String) async throws -> Profile {
-        try await remoteDataSource.signInWithEmail(profile, password: password)
+    public func signInWithEmail(profile: Profile, password: String) async throws {
+        do {
+            try await remoteDataSource.signInWithEmail(profile: profile, password: password)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.authenticationFailed("Failed to authenticate profile: \(error.localizedDescription)")
+        }
     }
     
-    public func signOut() async {
-        await remoteDataSource.signOut()
+    public func signOut() async throws {
+        do {
+            try await remoteDataSource.signOut()
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.fetchFailed("Failed to fetch profiles: \(error.localizedDescription)")
+        }
     }
 
     /// Uploads a profile picture for the specified profile.
@@ -134,8 +169,14 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
     /// - Throws:
     ///   - `ProfileError.uploadFailed`: If the upload process fails.
     ///   - `ProfileError`: For other failures during the upload operation.
-    public func uploadProfilePicture(_ profile: Profile) async throws {
-        return try await remoteDataSource.uploadProfilePicture(profile)
+    public func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws {
+        do {
+            try await remoteDataSource.uploadProfilePicture(profile: profile, profilePicture: profilePicture)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.pictureUploadFailed("Failed to upload picture: \(error.localizedDescription)")
+        }
     }
 
     /// Retrieves the profile picture for the specified profile.
@@ -145,15 +186,41 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
     /// - Throws:
     ///   - `ProfileError.notFound`: If the profile picture does not exist.
     ///   - `ProfileError`: For other failures during the retrieval operation.
-    public func retrieveProfilePicture(_ profile: Profile) async throws -> UIImage? {
-        return try await remoteDataSource.retrieveProfilePicture(profile)
-    }
-    
-    public func isAuthenticated() -> Bool {
-        return remoteDataSource.isAuthenticated()
+    public func retrieveProfilePicture(profile: Profile) async throws -> UIImage? {
+        do {
+            return try await remoteDataSource.retrieveProfilePicture(profile: profile)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.pictureRetrievalFailed("Failed to retrieve picture: \(error.localizedDescription)")
+        }
     }
     
     public func sendPasswordReset(email: String) async throws {
-        return try await remoteDataSource.sendPasswordReset(email: email)
+        do {
+            return try await remoteDataSource.sendPasswordReset(email: email)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.passwordResetFailed("Failed to reset password: \(error.localizedDescription)")
+        }
+    }
+    
+    /// Deletes an existing profile.
+    ///
+    /// - Parameter profile: The `Profile` object to delete.
+    /// - Parameter password: The password for the profile, for confirmation purposes
+    /// - Throws:
+    ///   - `ProfileError.deletionFailed`: If the deletion fails.
+    ///   - `ProfileError.notFound`: If the profile does not exist.
+    ///   - `ProfileError`: For other failures during the deletion operation.
+    public func deleteProfile(profile: Profile, password: String) async throws {
+        do {
+            try await remoteDataSource.deleteProfile(profile: profile, password: password)
+        } catch let error as ProfileError {
+            throw error
+        } catch {
+            throw ProfileError.deletionFailed("Failed to delete profile: \(error.localizedDescription)")
+        }
     }
 }

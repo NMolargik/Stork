@@ -6,15 +6,17 @@
 //
 
 import SwiftUI
+import StorkModel
 
 #if SKIP
 import java.util.regex.Pattern
 #endif
 
 struct PasswordResetSheetView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+    @ObservedObject var viewModel: LoginViewModel
     @Binding var isPasswordResetPresented: Bool
     @Binding var email: String
-    @Binding var isWorking: Bool
     
     @State private var validEmail: Bool = false
     
@@ -31,14 +33,21 @@ struct PasswordResetSheetView: View {
             CustomTextfieldView(text: $email, hintText: "Enter your email address...", icon: Image(systemName: "envelope"), isSecure: false, iconColor: .blue)
                 .padding(.bottom)
             
-            if (isWorking) {
+            if (viewModel.isWorking) {
                 ProgressView()
                     .tint(.indigo)
             } else {
                 
                 CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: $validEmail, onTapAction: {
-                    // TODO: send the reset email
-                    isPasswordResetPresented = false
+                    Task {
+                        do {
+                            try await viewModel.sendPasswordReset()
+                            isPasswordResetPresented = false
+                        } catch {
+                            errorMessage = error.localizedDescription
+                            throw error
+                        }
+                    }
                 })
                 .frame(width: 100)
                 .padding(.bottom, 30)
@@ -75,5 +84,5 @@ struct PasswordResetSheetView: View {
 }
 
 #Preview {
-    PasswordResetSheetView(isPasswordResetPresented: .constant(true), email: .constant("email@email.com"), isWorking: .constant(false))
+    PasswordResetSheetView(viewModel: LoginViewModel(profileRepository: MockProfileRepository()), isPasswordResetPresented: .constant(true), email: .constant("email@email.com"))
 }

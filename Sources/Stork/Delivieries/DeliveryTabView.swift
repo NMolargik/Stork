@@ -8,8 +8,11 @@
 import SwiftUI
 import StorkModel
 
+@MainActor
 struct DeliveryTabView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
     @AppStorage("leftHanded") var leftHanded: Bool = false
+    
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
@@ -22,21 +25,18 @@ struct DeliveryTabView: View {
             if (showingDeliveryAddition) {
                 NavigationStack {
                     DeliveryAdditionView(showingDeliveryAddition: $showingDeliveryAddition)
-                        .toolbar {
-                            ToolbarItem {
+                        .toolbar(content: {
+                            ToolbarItem(placement: .navigationBarTrailing) {
                                 Button(action: {
                                     withAnimation {
-                                        deliveryViewModel.resetDelivery()
                                         showingDeliveryAddition = false
                                     }
-                                }, label: {
+                                }) {
                                     Text("Cancel")
                                         .foregroundStyle(.red)
-
-                                })
+                                }
                             }
-                        }
-                        .navigationTitle("New Delivery")
+                        })
                 }
             } else {
                 ZStack {
@@ -46,16 +46,18 @@ struct DeliveryTabView: View {
                                 .padding(.bottom, 70)
                         }     
                         .refreshable {
-                            Task {
-                                try await deliveryViewModel.deliveryRepository.listDeliveries(userId: profileViewModel.profile.id, userFirstName: nil, hospitalId: nil, musterId: nil, date: nil, babyCount: nil, deliveryMethod: nil, epiduralUsed: nil)
+                            Task { @MainActor in
+                                do {
+                                    try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                    throw error
+                                }
                             }
                         }
                         .navigationTitle("Deliveries")
-
                     }
                     .padding(.bottom, -50)
-                    
-
                 }
             }
         }

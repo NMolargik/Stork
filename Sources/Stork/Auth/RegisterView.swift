@@ -11,15 +11,27 @@ import SkipKit
 
 
 struct RegisterView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
     @AppStorage("appState") var appState: AppState = .register
     
-    @StateObject private var viewModel: RegisterViewModel = RegisterViewModel()
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    @Binding var showRegistration: Bool
+    @StateObject private var viewModel: RegisterViewModel
     
+    @Binding var showRegistration: Bool
     @State private var selectedImageURL: URL?
-        
+    
+    private let profileRepository: ProfileRepositoryInterface
     var onAuthenticated: () -> Void
+    
+    public init(
+        profileRepository: ProfileRepositoryInterface = DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource()),
+        onAuthenticated: @escaping () -> Void
+    ) {
+        self.profileRepository = profileRepository
+        self.onAuthenticated = onAuthenticated
+        
+        _viewModel = StateObject(wrappedValue: RegisterViewModel(profileRepository: profileRepository))
+    }
 
     var body: some View {
         ZStack {
@@ -137,10 +149,9 @@ struct RegisterView: View {
                         HStack {
                             Spacer()
                             
-                            if (viewModel.registering) {
+                            if (viewModel.isWorking) {
                                 ProgressView()
                                     .tint(.orange)
-                                
                             } else {
                                 CustomButtonView(
                                     text: "Sign Up",
@@ -150,15 +161,15 @@ struct RegisterView: View {
                                     isEnabled: $viewModel.isFormValid,
                                     onTapAction: {
                                         Task {
-                                            if let picture = viewModel.profilePicture {
-                                                profileViewModel.profile.profilePicture = picture
-                                            }
-                                            
-                                            viewModel.registerWithEmail(profile: profileViewModel.profile, profileRepository: profileViewModel.profileRepository) { profile in
-                                                withAnimation {
-                                                    profileViewModel.profile = profile
-                                                    onAuthenticated()
+                                            do {
+                                                try await viewModel.registerWithEmail() {
+                                                    withAnimation {
+                                                        onAuthenticated()
+                                                    }
                                                 }
+                                            } catch {
+                                                self.errorMessage = error.localizedDescription
+                                                throw error
                                             }
                                         }
                                     }
@@ -213,6 +224,6 @@ struct RegisterView: View {
 
 
 #Preview {
-    RegisterView(showRegistration: .constant(true), onAuthenticated: {})
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+    RegisterView(profileRepository: MockProfileRepository(), onAuthenticated: {})
+    .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

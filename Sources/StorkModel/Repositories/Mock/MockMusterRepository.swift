@@ -29,18 +29,40 @@ public class MockMusterRepository: MusterRepositoryInterface {
         self.musters = musters
         
         self.invites.append(
-            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jessica", musterName: "Admin Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is the message", primaryColor: "red", status: InvitationStatus.pending)
+            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jessica", musterName: "Admin Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is the message", primaryColor: "red")
     
         )
         
         self.invites.append(
-            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jeanne", musterName: "Parkview Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is another message", primaryColor: "purple", status: InvitationStatus.pending)
+            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jeanne", musterName: "Parkview Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is another message", primaryColor: "purple")
     
         )
     }
 
-
     // MARK: - Methods
+    
+    /// Creates a new muster record.
+    ///
+    /// - Parameter muster: The `Muster` object to create.
+    /// - Throws: `MusterError.creationFailed` if a muster with the same ID already exists.
+    public func createMuster(muster: Muster) async throws{
+        if musters.contains(where: { $0.id == muster.id }) {
+            throw MusterError.creationFailed("Muster with ID \(muster.id) already exists.")
+        }
+        musters.append(muster)
+    }
+
+    /// Updates an existing muster record.
+    ///
+    /// - Parameter muster: The `Muster` object containing updated data.
+    /// - Throws: `MusterError.notFound` if the muster does not exist.
+    public func updateMuster(muster: Muster) async throws {
+        guard let index = musters.firstIndex(where: { $0.id == muster.id }) else {
+            throw MusterError.notFound("Muster with ID \(muster.id) not found.")
+        }
+        musters[index] = muster
+    }
+
 
     /// Fetches a single muster by its unique ID.
     ///
@@ -80,41 +102,6 @@ public class MockMusterRepository: MusterRepositoryInterface {
                 (primaryColor == nil || muster.primaryColor == primaryColor)
         }
     }
-
-    /// Creates a new muster record.
-    ///
-    /// - Parameter muster: The `Muster` object to create.
-    /// - Returns: The same 'Muster' object to confirm creation
-    /// - Throws: `MusterError.creationFailed` if a muster with the same ID already exists.
-    public func createMuster(_ muster: Muster) async throws -> Muster {
-        if musters.contains(where: { $0.id == muster.id }) {
-            throw MusterError.creationFailed("Muster with ID \(muster.id) already exists.")
-        }
-        musters.append(muster)
-        return muster
-    }
-
-    /// Updates an existing muster record.
-    ///
-    /// - Parameter muster: The `Muster` object containing updated data.
-    /// - Throws: `MusterError.notFound` if the muster does not exist.
-    public func updateMuster(_ muster: Muster) async throws {
-        guard let index = musters.firstIndex(where: { $0.id == muster.id }) else {
-            throw MusterError.notFound("Muster with ID \(muster.id) not found.")
-        }
-        musters[index] = muster
-    }
-
-    /// Deletes an existing muster record.
-    ///
-    /// - Parameter muster: The `Muster` object to delete.
-    /// - Throws: `MusterError.deletionFailed` if the muster does not exist.
-    public func deleteMuster(_ muster: Muster) async throws {
-        guard let index = musters.firstIndex(where: { $0.id == muster.id }) else {
-            throw MusterError.deletionFailed("Failed to delete muster with ID \(muster.id).")
-        }
-        musters.remove(at: index)
-    }
     
     // MARK: - Invitation Methods
     
@@ -123,27 +110,12 @@ public class MockMusterRepository: MusterRepositoryInterface {
     /// - Parameter invite: The `MusterInvite` object defining the invitation.
     /// - Parameter userId: The id of the user that is being invited.
     /// - Throws:
-    public func sendMusterInvite(_ invite: MusterInvite, userId: String) async throws {
+    public func sendMusterInvite(invite: MusterInvite, userId: String) async throws {
         // Ensure no duplicate invite with the same ID
         if invites.contains(where: { $0.id == invite.id }) {
             throw MusterError.invitationFailed("An invite with ID \(invite.id) already exists.")
         }
         invites.append(invite)
-    }
-    
-    /// Responds to a muster invite.
-    ///
-    /// - Parameter invite: The `MusterInvite` object being responded to.
-    /// - Parameter response: The answer to the invitation.
-    /// - Throws:
-    public func respondToMusterInvite(_ invite: MusterInvite, response: Bool) async throws {
-        guard let index = invites.firstIndex(where: { $0.id == invite.id }) else {
-            throw MusterError.invitationResponseFailed("Invite with ID \(invite.id) not found.")
-        }
-        
-        var updatedInvite = invites[index]
-        updatedInvite.status = response ? .accepted : .declined
-        invites[index] = updatedInvite
     }
     
     /// Collects all muster invitations for a user.
@@ -171,5 +143,16 @@ public class MockMusterRepository: MusterRepositoryInterface {
             throw MusterError.failedToCancelInvite("Invite with ID \(invitationId) not found.")
         }
         invites.remove(at: index)
+    }
+    
+    /// Deletes an existing muster record.
+    ///
+    /// - Parameter muster: The `Muster` object to delete.
+    /// - Throws: `MusterError.deletionFailed` if the muster does not exist.
+    public func deleteMuster(muster: Muster) async throws {
+        guard let index = musters.firstIndex(where: { $0.id == muster.id }) else {
+            throw MusterError.deletionFailed("Failed to delete muster with ID \(muster.id).")
+        }
+        musters.remove(at: index)
     }
 }

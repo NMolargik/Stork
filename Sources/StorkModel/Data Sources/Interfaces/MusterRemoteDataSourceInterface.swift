@@ -9,6 +9,23 @@ import Foundation
 
 /// A protocol defining the interface for remote data source interactions related to musters.
 public protocol MusterRemoteDataSourceInterface {
+    /// Creates a new muster record.
+    ///
+    /// - Parameter muster: The `Muster` object to create.
+    /// - Throws:
+    ///   - `MusterError.creationFailed`: If the creation fails.
+    ///   - `MusterError.firebaseError`: If the Firestore operation fails.
+    func createMuster(muster: Muster) async throws
+
+    /// Updates an existing muster record.
+    ///
+    /// - Parameter muster: The `Muster` object containing the updated data.
+    /// - Throws:
+    ///   - `MusterError.notFound`: If the muster does not exist.
+    ///   - `MusterError.updateFailed`: If the update operation fails.
+    ///   - `MusterError.firebaseError`: If the Firestore operation fails.
+    func updateMuster(muster: Muster) async throws
+    
     /// Retrieves a single muster by its unique ID.
     ///
     /// - Parameter id: The unique ID of the muster to fetch.
@@ -35,47 +52,13 @@ public protocol MusterRemoteDataSourceInterface {
         name: String?,
         primaryColor: String?
     ) async throws -> [Muster]
-
-    /// Creates a new muster record.
-    ///
-    /// - Parameter muster: The `Muster` object to create.
-    /// - Returns: The same 'Muster' object to confirm creation
-    /// - Throws:
-    ///   - `MusterError.creationFailed`: If the creation fails.
-    ///   - `MusterError.firebaseError`: If the Firestore operation fails.
-    func createMuster(_ muster: Muster) async throws -> Muster
-
-    /// Updates an existing muster record.
-    ///
-    /// - Parameter muster: The `Muster` object containing the updated data.
-    /// - Throws:
-    ///   - `MusterError.notFound`: If the muster does not exist.
-    ///   - `MusterError.updateFailed`: If the update operation fails.
-    ///   - `MusterError.firebaseError`: If the Firestore operation fails.
-    func updateMuster(_ muster: Muster) async throws
-
-    /// Deletes an existing muster record.
-    ///
-    /// - Parameter muster: The `Muster` object to delete.
-    /// - Throws:
-    ///   - `MusterError.notFound`: If the muster does not exist.
-    ///   - `MusterError.deletionFailed`: If the deletion operation fails.
-    ///   - `MusterError.firebaseError`: If the Firestore operation fails.
-    func deleteMuster(_ muster: Muster) async throws
     
     /// Sends a profile an invite to join a muster
     ///
     /// - Parameter invite: The `MusterInvite` object defining the invitaiton
     /// - Parameter userId: The id of the user that is being invited
     /// - Throws:
-    func sendMusterInvite(_ invite: MusterInvite, userId: String) async throws
-    
-    /// Sends a profile an invite to join a muster
-    ///
-    /// - Parameter invite: The `MusterInvite` object being responded to
-    /// - Parameter respoonse: The answer to the invitation
-    /// - Throws:
-    func respondToMusterInvite(_ invite: MusterInvite, response: Bool) async throws
+    func sendMusterInvite(invite: MusterInvite, userId: String) async throws
     
     /// Collects all muster invitations for a user
     ///
@@ -94,4 +77,14 @@ public protocol MusterRemoteDataSourceInterface {
     /// - Parameter invitationId: The id from the invitation
     /// - Throws:
     func cancelMusterInvite(invitationId: String) async throws
+    
+    /// Deletes an existing muster record.
+    ///
+    /// - Parameter muster: The `Muster` object to delete.
+    /// - Throws:
+    ///   - `MusterError.notFound`: If the muster does not exist.
+    ///   - `MusterError.deletionFailed`: If the deletion operation fails.
+    ///   - `MusterError.firebaseError`: If the Firestore operation fails.
+    func deleteMuster(muster: Muster) async throws
+    
 }

@@ -29,6 +29,28 @@ public class MockProfileRepository: ProfileRepositoryInterface {
     }
 
     // MARK: - Methods
+    
+    /// Creates a new profile.
+    ///
+    /// - Parameter profile: The `Profile` object to create.
+    /// - Throws: `ProfileError.creationFailed` if a profile with the same ID already exists.
+    public func createProfile(profile: Profile) async throws {
+        if profiles.contains(where: { $0.id == profile.id }) {
+            throw ProfileError.creationFailed("Profile with ID \(profile.id) already exists.")
+        }
+        profiles.append(profile)
+    }
+
+    /// Updates an existing profile.
+    ///
+    /// - Parameter profile: The `Profile` object containing updated data.
+    /// - Throws: `ProfileError.notFound` if the profile does not exist.
+    public func updateProfile(profile: Profile) async throws {
+        guard let index = profiles.firstIndex(where: { $0.id == profile.id }) else {
+            throw ProfileError.notFound("Profile with ID \(profile.id) not found.")
+        }
+        profiles[index] = profile
+    }
 
     /// Fetches a single profile by its unique ID.
     ///
@@ -80,55 +102,22 @@ public class MockProfileRepository: ProfileRepositoryInterface {
         return profiles
     }
 
-    /// Creates a new profile.
-    ///
-    /// - Parameter profile: The `Profile` object to create.
-    /// - Throws: `ProfileError.creationFailed` if a profile with the same ID already exists.
-    public func createProfile(_ profile: Profile) async throws {
-        if profiles.contains(where: { $0.id == profile.id }) {
-            throw ProfileError.creationFailed("Profile with ID \(profile.id) already exists.")
-        }
-        profiles.append(profile)
-    }
-
-    /// Updates an existing profile.
-    ///
-    /// - Parameter profile: The `Profile` object containing updated data.
-    /// - Throws: `ProfileError.notFound` if the profile does not exist.
-    public func updateProfile(_ profile: Profile) async throws {
-        guard let index = profiles.firstIndex(where: { $0.id == profile.id }) else {
-            throw ProfileError.notFound("Profile with ID \(profile.id) not found.")
-        }
-        profiles[index] = profile
-    }
-
-    /// Deletes an existing profile.
-    ///
-    /// - Parameter profile: The `Profile` object to delete.
-    /// - Throws: `ProfileError.deletionFailed` if the profile does not exist.
-    public func deleteProfile(_ profile: Profile, password: String) async throws {
-        guard let index = profiles.firstIndex(where: { $0.id == profile.id }) else {
-            throw ProfileError.deletionFailed("Failed to delete profile with ID \(profile.id).")
-        }
-        profiles.remove(at: index)
-        profilePictures.removeValue(forKey: profile.id)
-    }
-
     /// Uploads a profile picture for the specified profile.
     ///
     /// - Parameter profile: The `Profile` object containing the profile picture to upload.
-    public func uploadProfilePicture(_ profile: Profile) async throws {
-        guard let image = profile.profilePicture else {
-            throw ProfileError.creationFailed("No profile picture provided for profile with ID \(profile.id).")
-        }
-        profilePictures[profile.id] = image
+    public func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws {
+        // TODO: fix this
+//        guard let image = profile.profilePicture else {
+//            throw ProfileError.creationFailed("No profile picture provided for profile with ID \(profile.id).")
+//        }
+//        profilePictures[profile.id] = image
     }
 
     /// Retrieves the profile picture for the specified profile.
     ///
     /// - Parameter profile: The `Profile` object containing the reference to the image.
     /// - Returns: A `UIImage` object representing the profile picture.
-    public func retrieveProfilePicture(_ profile: Profile) async throws -> UIImage? {
+    public func retrieveProfilePicture(profile: Profile) async throws -> UIImage? {
         guard let image = profilePictures[profile.id] else {
             throw ProfileError.notFound("Profile picture for ID \(profile.id) not found.")
         }
@@ -139,14 +128,12 @@ public class MockProfileRepository: ProfileRepositoryInterface {
         return true
     }
 
-    public func registerWithEmail(_ profile: Profile, password: String) async throws -> Profile {
+    public func registerWithEmail(profile: Profile, password: String) async throws {
         profiles.append(profile)
-        return profile
     }
     
-    public func signInWithEmail(_ profile: Profile, password: String) async throws -> Profile {
+    public func signInWithEmail(profile: Profile, password: String) async throws{
         profiles.append(profile)
-        return profile
     }
     
     public func signOut() async {
@@ -155,5 +142,18 @@ public class MockProfileRepository: ProfileRepositoryInterface {
     
     public func sendPasswordReset(email: String) async throws {
         return
+    }
+    
+    
+    /// Deletes an existing profile.
+    ///
+    /// - Parameter profile: The `Profile` object to delete.
+    /// - Throws: `ProfileError.deletionFailed` if the profile does not exist.
+    public func deleteProfile(profile: Profile, password: String) async throws {
+        guard let index = profiles.firstIndex(where: { $0.id == profile.id }) else {
+            throw ProfileError.deletionFailed("Failed to delete profile with ID \(profile.id).")
+        }
+        profiles.remove(at: index)
+        profilePictures.removeValue(forKey: profile.id)
     }
 }

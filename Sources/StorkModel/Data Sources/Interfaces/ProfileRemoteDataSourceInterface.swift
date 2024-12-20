@@ -10,6 +10,25 @@ import UIKit
 
 /// A protocol defining the interface for remote data source interactions related to profiles.
 public protocol ProfileRemoteDataSourceInterface {
+    /// Creates a new profile record in Firestore.
+    ///
+    /// - Parameter profile: The `Profile` object to create.
+    /// - Throws:
+    ///   - `ProfileError.creationFailed`: If the creation operation fails.
+    ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
+    ///   - `ProfileError.unknown`: If any other error occurs.
+    func createProfile(profile: Profile) async throws
+
+    /// Updates an existing profile record in Firestore.
+    ///
+    /// - Parameter profile: The `Profile` object containing updated data.
+    /// - Throws:
+    ///   - `ProfileError.updateFailed`: If the update operation fails.
+    ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
+    ///   - `ProfileError.notFound`: If the profile does not exist.
+    ///   - `ProfileError.unknown`: If any other error occurs.
+    func updateProfile(profile: Profile) async throws
+    
     /// Retrieves a single profile by its unique ID.
     ///
     /// - Parameter id: The unique ID of the profile to fetch.
@@ -20,7 +39,6 @@ public protocol ProfileRemoteDataSourceInterface {
     ///   - `ProfileError.unknown`: If any other error occurs.
     func getProfile(byId id: String) async throws -> Profile
 
-    
     func getCurrentProfile() async throws -> Profile
     
     /// Lists profiles based on optional filter criteria.
@@ -53,37 +71,6 @@ public protocol ProfileRemoteDataSourceInterface {
         isAdmin: Bool?
     ) async throws -> [Profile]
 
-    /// Creates a new profile record in Firestore.
-    ///
-    /// - Parameter profile: The `Profile` object to create.
-    /// - Throws:
-    ///   - `ProfileError.creationFailed`: If the creation operation fails.
-    ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
-    ///   - `ProfileError.unknown`: If any other error occurs.
-    func createProfile(_ profile: Profile) async throws
-
-    /// Updates an existing profile record in Firestore.
-    ///
-    /// - Parameter profile: The `Profile` object containing updated data.
-    /// - Throws:
-    ///   - `ProfileError.updateFailed`: If the update operation fails.
-    ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
-    ///   - `ProfileError.notFound`: If the profile does not exist.
-    ///   - `ProfileError.unknown`: If any other error occurs.
-    func updateProfile(_ profile: Profile) async throws
-
-    /// Deletes an existing profile record from Firestore.
-    ///
-    /// - Parameters:
-    ///   - profile: The `Profile` object to delete.
-    ///   - password: The user's password for confirmation.
-    /// - Throws:
-    ///   - `ProfileError.deletionFailed`: If the deletion operation fails.
-    ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
-    ///   - `ProfileError.notFound`: If the profile does not exist.
-    ///   - `ProfileError.unknown`: If any other error occurs.
-    func deleteProfile(_ profile: Profile, password: String) async throws
-
     /// Registers a new user account with an email and password.
     ///
     /// - Parameters:
@@ -94,7 +81,7 @@ public protocol ProfileRemoteDataSourceInterface {
     ///   - `ProfileError.creationFailed`: If the account creation fails.
     ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
     ///   - `ProfileError.unknown`: If any other error occurs.
-    func registerWithEmail(_ profile: Profile, password: String) async throws -> Profile
+    func registerWithEmail(profile: Profile, password: String) async throws
 
     /// Signs in an existing user with an email and password.
     ///
@@ -106,22 +93,23 @@ public protocol ProfileRemoteDataSourceInterface {
     ///   - `ProfileError.authenticationFailed`: If the authentication fails.
     ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
     ///   - `ProfileError.unknown`: If any other error occurs.
-    func signInWithEmail(_ profile: Profile, password: String) async throws -> Profile
+    func signInWithEmail(profile: Profile, password: String) async throws
 
     /// Signs out the currently authenticated user.
     ///
     /// - Throws:
     ///   - `ProfileError.signOutFailed`: If the sign-out operation fails.
-    func signOut() async
+    func signOut() async throws
 
     /// Uploads a profile picture to Firebase Storage.
     ///
-    /// - Parameter profile: The `Profile` object containing the image to upload.
+    /// - Parameter profile: The `Profile` object to associate
+    /// - Parameter profilePicture: A `UIImage` of the picture to upload
     /// - Throws:
     ///   - `ProfileError.uploadFailed`: If the upload operation fails.
     ///   - `ProfileError.firebaseError`: If the Firebase Storage operation fails.
     ///   - `ProfileError.unknown`: If any other error occurs.
-    func uploadProfilePicture(_ profile: Profile) async throws
+    func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws
 
     /// Retrieves a profile picture from Firebase Storage.
     ///
@@ -131,10 +119,19 @@ public protocol ProfileRemoteDataSourceInterface {
     ///   - `ProfileError.notFound`: If the image cannot be found.
     ///   - `ProfileError.firebaseError`: If the Firebase Storage operation fails.
     ///   - `ProfileError.unknown`: If any other error occurs.
-    func retrieveProfilePicture(_ profile: Profile) async throws -> UIImage?
-    
-    func isAuthenticated() -> Bool
+    func retrieveProfilePicture(profile: Profile) async throws -> UIImage?
     
     func sendPasswordReset(email: String) async throws
     
+    /// Deletes an existing profile record from Firestore.
+    ///
+    /// - Parameters:
+    ///   - profile: The `Profile` object to delete.
+    ///   - password: The user's password for confirmation.
+    /// - Throws:
+    ///   - `ProfileError.deletionFailed`: If the deletion operation fails.
+    ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
+    ///   - `ProfileError.notFound`: If the profile does not exist.
+    ///   - `ProfileError.unknown`: If any other error occurs.
+    func deleteProfile(profile: Profile, password: String) async throws
 }

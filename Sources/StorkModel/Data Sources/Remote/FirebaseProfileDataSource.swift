@@ -41,6 +41,40 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
         self.storage = Storage.storage()
     }
     
+    // MARK: - Create a New Profile
+    
+    /// Creates a new profile record in Firestore.
+    ///
+    /// - Parameter profile: The `Profile` object to create.
+    /// - Throws:
+    ///   - `ProfileError.firebaseError`: If an error occurs while creating the profile.
+    public func createProfile(profile: Profile) async throws {
+        do {
+            let data = profile.dictionary
+            try await db.collection("Profile").document(profile.id).setData(data)
+        } catch {
+            throw error
+        }
+        
+    }
+    
+    // MARK: - Update an Existing Profile
+    
+    /// Updates an existing profile record in Firestore.
+    ///
+    /// - Parameter profile: The `Profile` object containing updated data.
+    /// - Throws:
+    ///   - `ProfileError.firebaseError`: If an error occurs while updating the profile.
+    ///   - `ProfileError.notFound`: If the profile does not exist.
+    public func updateProfile(profile: Profile) async throws {
+        do {
+            let data = profile.dictionary
+            try await db.collection("Profile").document(profile.id).updateData(data)
+        } catch {
+            throw error
+        }
+    }
+    
     // MARK: - Retrieve a Single Profile by ID
     
     /// Fetches a single profile by its unique ID.
@@ -59,18 +93,9 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             guard var profile = Profile(from: data) else {
                 throw ProfileError.notFound("Invalid data for profile with ID \(id).")
             }
-
-            // Attempt to retrieve the profile picture
-            do {
-                let profilePicture = try await self.retrieveProfilePicture(profile)
-                profile.profilePicture = profilePicture
-            } catch {
-                print("No profile picture found for profile with ID \(id): \(error.localizedDescription)")
-            }
-
             return profile
         } catch {
-            throw ProfileError.notFound("Failed to fetch profile with ID \(id): \(error.localizedDescription)")
+            throw error
         }
     }
     
@@ -89,18 +114,9 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             guard var profile = Profile(from: data) else {
                 throw ProfileError.notFound("Invalid data for profile with ID \(userId).")
             }
-
-            // Attempt to retrieve the profile picture
-            do {
-                let profilePicture = try await self.retrieveProfilePicture(profile)
-                profile.profilePicture = profilePicture
-            } catch {
-                print("No profile picture found for profile with ID \(userId): \(error.localizedDescription)")
-            }
-
             return profile
         } catch {
-            throw ProfileError.notFound("Failed to fetch current profile: \(error.localizedDescription)")
+            throw error
         }
     }
     
@@ -160,48 +176,11 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
                 Profile(from: document.data())
             }
         } catch {
-            throw ProfileError.notFound("Failed to list profiles: \(error.localizedDescription)")
+            throw error
         }
     }
     
-    // MARK: - Create a New Profile
     
-    /// Creates a new profile record in Firestore.
-    ///
-    /// - Parameter profile: The `Profile` object to create.
-    /// - Throws:
-    ///   - `ProfileError.firebaseError`: If an error occurs while creating the profile.
-    public func createProfile(_ profile: Profile) async throws {
-        do {
-            let data = profile.dictionary
-            try await db.collection("Profile").document(profile.id).setData(data)
-            
-            if profile.profilePicture != nil {
-                try await self.uploadProfilePicture(profile)
-            }
-
-        } catch {
-            throw ProfileError.creationFailed("Failed to create profile: \(error.localizedDescription)")
-        }
-        
-    }
-    
-    // MARK: - Update an Existing Profile
-    
-    /// Updates an existing profile record in Firestore.
-    ///
-    /// - Parameter profile: The `Profile` object containing updated data.
-    /// - Throws:
-    ///   - `ProfileError.firebaseError`: If an error occurs while updating the profile.
-    ///   - `ProfileError.notFound`: If the profile does not exist.
-    public func updateProfile(_ profile: Profile) async throws {
-        do {
-            let data = profile.dictionary
-            try await db.collection("Profile").document(profile.id).updateData(data)
-        } catch {
-            throw ProfileError.updateFailed("Failed to update profile: \(error.localizedDescription)")
-        }
-    }
     
     // MARK: - Delete an Existing Profile
     
@@ -211,11 +190,11 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If an error occurs while deleting the profile.
     ///   - `ProfileError.notFound`: If the profile does not exist.
-    public func deleteProfile(_ profile: Profile, password: String) async throws {
+    public func deleteProfile(profile: Profile, password: String) async throws {
         do {
             try await db.collection("Profile").document(profile.id).delete()
         } catch {
-            throw ProfileError.deletionFailed("Failed to delete profile: \(error.localizedDescription)")
+            throw error
         }
     }
     
@@ -229,17 +208,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Returns: The same `Profile` object after successful registration.
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If the registration process fails in Firebase.
-    public func registerWithEmail(_ profile: Profile, password: String) async throws -> Profile {
+    public func registerWithEmail(profile: Profile, password: String) async throws {
         do {
             let result = try await auth.createUser(withEmail: profile.email, password: password)
-            
-            var updatedProfile = profile
-            updatedProfile.id = result.user.uid
-            
-            try await self.createProfile(updatedProfile)
-            try await self.uploadProfilePicture(updatedProfile)
 
-            return updatedProfile
         } catch {
             throw error
         }
@@ -254,7 +226,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Throws:
     ///   - `ProfileError.notFound`: If the user's profile is not found in Firestore.
     ///   - `ProfileError.firebaseError`: If the authentication or profile retrieval process fails.
-    public func signInWithEmail(_ profile: Profile, password: String) async throws -> Profile {
+    public func signInWithEmail(profile: Profile, password: String) async throws {
         do {
             let result = try await auth.signIn(withEmail: profile.email, password: password)
             let firebaseUser = result.user
@@ -268,9 +240,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             print(data)
             guard let userProfile = Profile(from: data) else {
                 throw ProfileError.authenticationFailed("Invalid data found for profile with ID \(firebaseUser.uid).")
-            }
-            
-            return userProfile
+            }            
         } catch {
             throw ProfileError.authenticationFailed("Failed to sign in with email: \(error.localizedDescription)")
         }
@@ -288,28 +258,29 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
         }
     }
     
+    //TODO: implement this
     /// Uploads the profile picture to Firebase Storage for the specified profile.
     ///
     /// - Parameter profile: The `Profile` object containing the profile picture to upload.
     /// - Throws:
     ///   - `NSError`: If the profile picture data is invalid or the upload process fails.
-    public func uploadProfilePicture(_ profile: Profile) async throws {
-        guard let imageData = profile.profilePicture?.jpegData(compressionQuality: 0.8) else {
-            throw NSError(domain: "FirebaseAuthRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Profile Picture contains invalid data"])
-        }
-        
-        let storageRef = storage.reference().child("profile_pictures/\(profile.id).jpg")
-        
-        do {
-            let _ = try await storageRef.putDataAsync(imageData, metadata: nil)
-        } catch {
-            throw error
-        }
+    public func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws {
+//        guard let imageData = profile.profilePicture?.jpegData(compressionQuality: 0.8) else {
+//            throw NSError(domain: "FirebaseAuthRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Profile Picture contains invalid data"])
+//        }
+//        
+//        let storageRef = storage.reference().child("profile_pictures/\(profile.id).jpg")
+//        
+//        do {
+//            let _ = try await storageRef.putDataAsync(imageData, metadata: nil)
+//        } catch {
+//            throw error
+//        }
     }
     
     
     
-    //TODO: solve this
+    //TODO: implement this
     
     /// Retrieves the profile picture from Firebase Storage for the specified profile.
     ///
@@ -317,7 +288,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Returns: A `UIImage` object representing the profile picture.
     /// - Throws:
     ///   - `NSError`: If the profile picture cannot be retrieved or converted to a `UIImage`.
-    public func retrieveProfilePicture(_ profile: Profile) async throws -> UIImage? {
+    public func retrieveProfilePicture(profile: Profile) async throws -> UIImage? {
         let storageRef = storage.reference().child("profile_pictures/\(profile.email).jpg")
 
         do {

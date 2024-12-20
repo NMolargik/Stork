@@ -13,6 +13,23 @@ import SwiftUI
 /// This protocol acts as an abstraction layer between the domain and data layers,
 /// allowing the application to interact with profile-related data sources consistently.
 public protocol ProfileRepositoryInterface {
+    /// Creates a new profile.
+    ///
+    /// - Parameter profile: The `Profile` object to create.
+    /// - Throws:
+    ///   - `ProfileError.creationFailed`: If the creation fails.
+    ///   - `ProfileError`: For other errors during the creation operation.
+    func createProfile(profile: Profile) async throws
+
+    /// Updates an existing profile.
+    ///
+    /// - Parameter profile: The `Profile` object containing updated data.
+    /// - Throws:
+    ///   - `ProfileError.updateFailed`: If the update fails.
+    ///   - `ProfileError.notFound`: If the profile does not exist.
+    ///   - `ProfileError`: For other errors during the update operation.
+    func updateProfile(profile: Profile) async throws
+    
     /// Fetches a single profile by its unique ID.
     ///
     /// - Parameter id: The unique identifier of the profile to fetch.
@@ -23,6 +40,9 @@ public protocol ProfileRepositoryInterface {
     func getProfile(byId id: String) async throws -> Profile
     
     
+    /// Fetches the profile currently assigned to the connected data source
+    /// - Throws:
+    /// TODO: document, make throw
     func getCurrentProfile() async throws -> Profile
     
     /// Lists profiles based on optional filter criteria.
@@ -53,23 +73,6 @@ public protocol ProfileRepositoryInterface {
         isAdmin: Bool?
     ) async throws -> [Profile]
 
-    /// Creates a new profile.
-    ///
-    /// - Parameter profile: The `Profile` object to create.
-    /// - Throws:
-    ///   - `ProfileError.creationFailed`: If the creation fails.
-    ///   - `ProfileError`: For other errors during the creation operation.
-    func createProfile(_ profile: Profile) async throws
-
-    /// Updates an existing profile.
-    ///
-    /// - Parameter profile: The `Profile` object containing updated data.
-    /// - Throws:
-    ///   - `ProfileError.updateFailed`: If the update fails.
-    ///   - `ProfileError.notFound`: If the profile does not exist.
-    ///   - `ProfileError`: For other errors during the update operation.
-    func updateProfile(_ profile: Profile) async throws
-
     /// Deletes an existing profile.
     ///
     /// - Parameter profile: The `Profile` object to delete.
@@ -78,21 +81,23 @@ public protocol ProfileRepositoryInterface {
     ///   - `ProfileError.deletionFailed`: If the deletion fails.
     ///   - `ProfileError.notFound`: If the profile does not exist.
     ///   - `ProfileError`: For other errors during the deletion operation.
-    func deleteProfile(_ profile: Profile, password: String) async throws
+    func deleteProfile(profile: Profile, password: String) async throws
     
-    func registerWithEmail(_ profile: Profile, password: String) async throws -> Profile
     
-    func signInWithEmail(_ profile: Profile, password: String) async throws -> Profile
+    func registerWithEmail(profile: Profile, password: String) async throws
     
-    func signOut() async
+    func signInWithEmail(profile: Profile, password: String) async throws
+    
+    func signOut() async throws
 
     /// Uploads a profile picture to Firebase Storage.
     ///
-    /// - Parameter profile: The `Profile` object to delete
+    /// - Parameter profile: The `Profile` object to associate with the picture
+    /// - Parameter profilePicture: The `UIImage` to upload
     /// - Throws:
     ///   - `ProfileError.uploadFailed`: If the upload process fails.
     ///   - `ProfileError`: For other errors during the upload operation.
-    func uploadProfilePicture(_ profile: Profile) async throws
+    func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws
 
     /// Retrieves a profile picture from Firebase Storage.
     ///
@@ -101,9 +106,7 @@ public protocol ProfileRepositoryInterface {
     /// - Throws:
     ///   - `ProfileError.notFound`: If the profile picture does not exist.
     ///   - `ProfileError`: For other errors during the retrieval operation.
-    func retrieveProfilePicture(_ profile: Profile) async throws -> UIImage?
-    
-    func isAuthenticated() -> Bool
-    
+    func retrieveProfilePicture(profile: Profile) async throws -> UIImage?
+        
     func sendPasswordReset(email: String) async throws
 }

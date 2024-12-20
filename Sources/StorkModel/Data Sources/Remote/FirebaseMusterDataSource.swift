@@ -22,8 +22,39 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
         self.db = Firestore.firestore()
     }
 
-    // MARK: - Retrieve a Single Muster by ID
+    // MARK: - Create a New Muster Record
 
+    /// Creates a new muster record in Firestore.
+    ///
+    /// - Parameter muster: The `Muster` object to create.
+    /// - Returns: The same 'Muster' object to confirm creation
+    /// - Throws:
+    ///   - `MusterError.firebaseError`: If an error occurs while creating the muster.
+    public func createMuster(muster: Muster) async throws {
+        do {
+            print(muster.id)
+            let data = muster.dictionary
+            let reference = try await db.collection("Muster").addDocument(data: data)
+        } catch {
+            throw MusterError.creationFailed("Failed to create muster: \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: - Update an Existing Muster Record
+
+    /// Updates an existing muster record in Firestore.
+    ///
+    /// - Parameter muster: The `Muster` object containing updated data.
+    /// - Throws:
+    ///   - `MusterError.firebaseError`: If an error occurs while updating the muster.
+    public func updateMuster(muster: Muster) async throws {
+        do {
+            let data = muster.dictionary
+            try await db.collection("Muster").document(muster.id).updateData(data)
+        } catch {
+            throw MusterError.updateFailed("Failed to update muster: \(error.localizedDescription)")
+        }
+    }
     /// Fetches a single muster by its unique ID.
     ///
     /// - Parameter id: The unique ID of the muster to fetch.
@@ -111,44 +142,6 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
         }
     }
 
-    // MARK: - Create a New Muster Record
-
-    /// Creates a new muster record in Firestore.
-    ///
-    /// - Parameter muster: The `Muster` object to create.
-    /// - Returns: The same 'Muster' object to confirm creation
-    /// - Throws:
-    ///   - `MusterError.firebaseError`: If an error occurs while creating the muster.
-    public func createMuster(_ muster: Muster) async throws -> Muster {
-        do {
-            print(muster.id)
-            let data = muster.dictionary
-            let reference = try await db.collection("Muster").addDocument(data: data)
-            
-            var newMuster = muster
-            newMuster.id = reference.documentID
-            return newMuster
-        } catch {
-            throw MusterError.creationFailed("Failed to create muster: \(error.localizedDescription)")
-        }
-    }
-
-    // MARK: - Update an Existing Muster Record
-
-    /// Updates an existing muster record in Firestore.
-    ///
-    /// - Parameter muster: The `Muster` object containing updated data.
-    /// - Throws:
-    ///   - `MusterError.firebaseError`: If an error occurs while updating the muster.
-    public func updateMuster(_ muster: Muster) async throws {
-        do {
-            let data = muster.dictionary
-            try await db.collection("Muster").document(muster.id).updateData(data)
-        } catch {
-            throw MusterError.updateFailed("Failed to update muster: \(error.localizedDescription)")
-        }
-    }
-
     // MARK: - Delete an Existing Muster Record
 
     /// Deletes an existing muster record from Firestore.
@@ -156,7 +149,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     /// - Parameter muster: The `Muster` object to delete.
     /// - Throws:
     ///   - `MusterError.firebaseError`: If an error occurs while deleting the muster.
-    public func deleteMuster(_ muster: Muster) async throws {
+    public func deleteMuster(muster: Muster) async throws {
         do {
             try await db.collection("Muster").document(muster.id).delete()
         } catch {
@@ -171,29 +164,12 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     /// - Parameter invite: The `MusterInvite` object defining the invitation
     /// - Parameter userId: The id of the user that is being invited
     /// - Throws:
-    public func sendMusterInvite(_ invite: MusterInvite, userId: String) async throws {
+    public func sendMusterInvite(invite: MusterInvite, userId: String) async throws {
         do {
             let data = invite.dictionary
-            try await db.collection("MusterInvite").document(invite.id).setData(data)
+            let reference = try await db.collection("MusterInvite").addDocument(data: data)
         } catch {
             throw MusterError.invitationFailed(error.localizedDescription)
-        }
-    }
-    
-    // MARK: - Accept or decline a received muster invite
-    
-    /// Sends a profile an invite to join a muster
-    ///
-    /// - Parameter invite: The `MusterInvite` object being responded to
-    /// - Parameter respoonse: The answer to the invitation
-    /// - Throws:
-    public func respondToMusterInvite(_ invite: MusterInvite, response: Bool) async throws {
-        do {
-            let newInvitationStatus = response ? InvitationStatus.accepted : InvitationStatus.declined
-
-            try await db.collection("MusterInvite").document(invite.id).setData(["status" : newInvitationStatus.stringValue])
-        } catch {
-            throw MusterError.invitationResponseFailed(error.localizedDescription)
         }
     }
     

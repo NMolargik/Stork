@@ -16,12 +16,41 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     private let remoteDataSource: DeliveryRemoteDataSourceInterface
 
     // MARK: - Initializer
-
-    /// Initializes the `DefaultDeliveryRepository` with a specified remote data source.
+    /// Initializes the repository with a remote data source.
     ///
-    /// - Parameter remoteDataSource: The remote data source implementing `DeliveryRemoteDataSourceInterface`.
+    /// - Parameter remoteDataSource: An instance of `DeliveryRemoteDataSourceInterface`.
     public init(remoteDataSource: DeliveryRemoteDataSourceInterface) {
         self.remoteDataSource = remoteDataSource
+    }
+    
+    /// Creates a new delivery record.
+    ///
+    /// - Parameter delivery: The `Delivery` object to be created.
+    /// - Throws:
+    ///   - `DeliveryError.creationFailed`: If the operation fails to create the delivery.
+    public func createDelivery(delivery: Delivery) async throws {
+        do {
+            try await remoteDataSource.createDelivery(delivery: delivery)
+        } catch let error as DeliveryError {
+            throw error
+        } catch {
+            throw DeliveryError.creationFailed("Failed to create delivery: \(error.localizedDescription)")
+        }
+    }
+
+    /// Updates an existing delivery record.
+    ///
+    /// - Parameter delivery: The `Delivery` object containing the updated data.
+    /// - Throws:
+    ///   - `DeliveryError.updateFailed`: If the operation fails to update the delivery.
+    public func updateDelivery(delivery: Delivery) async throws {
+        do {
+            try await remoteDataSource.updateDelivery(delivery: delivery)
+        } catch let error as DeliveryError {
+            throw error
+        } catch {
+            throw DeliveryError.updateFailed("Failed to update delivery: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Methods
@@ -85,44 +114,14 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    /// Creates a new delivery record.
-    ///
-    /// - Parameter delivery: The `Delivery` object to be created.
-    /// - Throws:
-    ///   - `DeliveryError.creationFailed`: If the operation fails to create the delivery.
-    public func createDelivery(_ delivery: Delivery) async throws -> Delivery {
-        do {
-            return try await remoteDataSource.createDelivery(delivery)
-        } catch let error as DeliveryError {
-            throw error
-        } catch {
-            throw DeliveryError.creationFailed("Failed to create delivery: \(error.localizedDescription)")
-        }
-    }
-
-    /// Updates an existing delivery record.
-    ///
-    /// - Parameter delivery: The `Delivery` object containing the updated data.
-    /// - Throws:
-    ///   - `DeliveryError.updateFailed`: If the operation fails to update the delivery.
-    public func updateDelivery(_ delivery: Delivery) async throws {
-        do {
-            try await remoteDataSource.updateDelivery(delivery)
-        } catch let error as DeliveryError {
-            throw error
-        } catch {
-            throw DeliveryError.updateFailed("Failed to update delivery: \(error.localizedDescription)")
-        }
-    }
-
     /// Deletes an existing delivery record.
     ///
     /// - Parameter delivery: The `Delivery` object to be deleted.
     /// - Throws:
     ///   - `DeliveryError.deletionFailed`: If the operation fails to delete the delivery.
-    public func deleteDelivery(_ delivery: Delivery) async throws {
+    public func deleteDelivery(delivery: Delivery) async throws {
         do {
-            try await remoteDataSource.deleteDelivery(delivery)
+            try await remoteDataSource.deleteDelivery(delivery: delivery)
         } catch let error as DeliveryError {
             throw error
         } catch {
