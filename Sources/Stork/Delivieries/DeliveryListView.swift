@@ -62,16 +62,18 @@ struct DeliveryListView: View {
                             Text("No deliveries recorded yet. Use the button above to get started!")
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
+                                .fontWeight(.semibold)
                             
                             Spacer(minLength: 300)
                             
                             HStack {
                                 Spacer()
                                 
-                                Image(systemName: "info.circle")
+                                Image(systemName: "exclamationmark.circle")
                                     .font(.title)
                                     .foregroundStyle(.blue)
                                     .padding(.trailing)
+                                    .foregroundStyle(.orange)
                                 
                                 Text("You can submit up to 8 deliveries per day")
                                     .foregroundStyle(.black)

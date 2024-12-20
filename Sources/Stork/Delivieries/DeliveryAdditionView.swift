@@ -14,28 +14,30 @@ struct DeliveryAdditionView: View {
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
+    @EnvironmentObject var musterViewModel: MusterViewModel
     
     @Binding var showingDeliveryAddition: Bool
+    
+    @State private var selectedHospital: Hospital? = nil
 
     var body: some View {
         List {
             ScrollView {
                 VStack {
-                    ForEach(Array(deliveryViewModel.newBabies.enumerated()), id: \.element.id) { index, baby in
+                    ForEach($deliveryViewModel.newDelivery.babies) { $baby in
+                        let babyNumber = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0 + 1
+                        
                         BabyEditorView(
-                            baby: Binding(
-                                get: { deliveryViewModel.newBabies[index] },
-                                set: { deliveryViewModel.newBabies[index] = $0 }
-                            ),
-                            babyIndex: index,
-                            removeBaby: { removeAtIndex in
+                            baby: $baby,
+                            babyNumber: babyNumber,
+                            removeBaby: { babyId in
                                 withAnimation {
-                                    if deliveryViewModel.newBabies.indices.contains(removeAtIndex) {
-                                        deliveryViewModel.newBabies.remove(at: removeAtIndex)
-                                    }
+                                    deliveryViewModel.newDelivery.babies.removeAll { $0.id == babyId }
+                                    print("Removed baby with id \(babyId)")
                                 }
                             }
                         )
+                        .id(baby.id)
                     }
                     
                     CustomButtonView(
@@ -60,34 +62,7 @@ struct DeliveryAdditionView: View {
                         .font(.title2)
                         .fontWeight(.bold)
                     
-                    if (profileViewModel.profile.musterId != "") {
-                        VStack {
-                            Text("Muster Name")
-                                .font(.headline)
-                            
-                            Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
-                                .padding()
-                                .foregroundStyle(.white)
-                                .fontWeight(.bold)
-                                .background {
-                                    Color.black
-                                        .cornerRadius(10)
-                                }
-
-                            //TODO: search for similar deliveries to prevent duplicates. present them to the user to let them decide whether or not to add to the muster
-                            
-                            // function is ready in deliveryViewModel!
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background {
-                            Color.indigo
-                                .opacity(0.2)
-                                .cornerRadius(10)
-                        }
-                    }
-                    
-                    Toggle("Epidural Used", isOn: $deliveryViewModel.epiduralUsed)
+                    Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
                         .padding()
                         .fontWeight(.bold)
                         .background {
@@ -96,11 +71,22 @@ struct DeliveryAdditionView: View {
                                 .cornerRadius(10)
                         }
                     
+                    if (profileViewModel.profile.musterId != "") {
+                        Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
+                            .padding()
+                            .fontWeight(.bold)
+                            .background {
+                                Color.indigo
+                                    .opacity(0.2)
+                                    .cornerRadius(10)
+                            }
+                    }
+                    
                     VStack {
                         Text("Delivery Method")
                             .font(.headline)
                         
-                        Picker("Delivery Method", selection: $deliveryViewModel.deliveryMethod) {
+                        Picker("Delivery Method", selection: $deliveryViewModel.newDelivery.deliveryMethod) {
                             ForEach(DeliveryMethod.allCases, id: \.self) { method in
                                 Text(method.description).tag(method)
                             }
@@ -118,12 +104,12 @@ struct DeliveryAdditionView: View {
                     }
                     
                     VStack {
-                        Text(deliveryViewModel.selectedHospital?.facility_name ?? "No Hospital Selected")
+                        Text(selectedHospital?.facility_name ?? "No Hospital Selected")
                             .font(.headline)
                             .multilineTextAlignment(.center)
                         
                         CustomButtonView(text: "Select A Hospital", width: 250, height: 40, color: Color.black, icon: Image(systemName: "building"), isEnabled: .constant(true), onTapAction: {
-                            deliveryViewModel.isSelectingHospital = true // Trigger the sheet
+                            deliveryViewModel.isSelectingHospital = true
                         })
                     }
                     .padding()
@@ -138,7 +124,7 @@ struct DeliveryAdditionView: View {
                 
                 Spacer(minLength: 50)
                 
-                if deliveryViewModel.isSubmitting {
+                if deliveryViewModel.isWorking {
                     ProgressView()
                         .frame(width: 200, height: 40)
                 } else {
@@ -149,56 +135,51 @@ struct DeliveryAdditionView: View {
                         color: Color.indigo,
                         isEnabled: $deliveryViewModel.submitEnabled,
                         onTapAction: {
-                            Task {  @MainActor in
-                                deliveryViewModel.isSubmitting = true
+                            Task {
+                                deliveryViewModel.isWorking = true
+                                guard let hospital = deliveryViewModel.selectedHospital else {
+                                    errorMessage = "No hospital selected"
+                                    deliveryViewModel.isWorking = false
+                                    throw DeliveryError.creationFailed("No hospital selected")
+                                }
+                                
                                 do {
-                                    try await deliveryViewModel.submitDelivery(
-                                        babies: deliveryViewModel.newBabies,
-                                        profileViewModel: profileViewModel,
-                                        hospitalViewModel: hospitalViewModel
-                                    )
+                                    try await deliveryViewModel.submitDelivery(profile: profileViewModel.profile)
                                 } catch {
                                     deliveryViewModel.isWorking = false
                                     errorMessage = error.localizedDescription
                                 }
-                                
-                                do {
-                                    try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: deliveryViewModel.selectedHospital, babyCount: deliveryViewModel.newBabies.count)
 
-                                    
-                                } catch {
-                                    deliveryViewModel.isWorking = false
-                                    errorMessage = error.localizedDescription
-                                }
                                 
                                 do {
-                                    //TODO: Add to muster
-                                    
+                                    try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: deliveryViewModel.newDelivery.babies.count)
                                 } catch {
                                     deliveryViewModel.isWorking = false
                                     errorMessage = error.localizedDescription
                                 }
-                                
-                                
-                                
+
                                 deliveryViewModel.isWorking = false
+                                showingDeliveryAddition = false
                             }
                         }
                     )
                 }
             }
         }
-        .onChange(of: deliveryViewModel.newBabies.count) { newCount in
-            deliveryViewModel.submitEnabled = newCount > 0 && deliveryViewModel.selectedHospital != nil
+        .onChange(of: deliveryViewModel.newDelivery.babies.count) { newCount in
+            deliveryViewModel.submitEnabled = newCount > 0 && self.selectedHospital != nil
         }
-        .onChange(of: deliveryViewModel.selectedHospital) { _ in
-            deliveryViewModel.submitEnabled = deliveryViewModel.newBabies.count > 0 && deliveryViewModel.selectedHospital != nil
+        .onChange(of: selectedHospital) { _ in
+            deliveryViewModel.submitEnabled = deliveryViewModel.newDelivery.babies.count > 0 && self.selectedHospital != nil
         }
         .sheet(isPresented: $deliveryViewModel.isSelectingHospital) {
             HospitalListView(
                 selectionMode: true,
                 onSelection: { selectedHospital in
+                    print("selectedHospital: \(selectedHospital.facility_name)")
+                    self.selectedHospital = selectedHospital
                     deliveryViewModel.selectedHospital = selectedHospital
+                    deliveryViewModel.newDelivery.hospitalId = selectedHospital.id
                     deliveryViewModel.isSelectingHospital = false
                 }
             )
@@ -209,18 +190,14 @@ struct DeliveryAdditionView: View {
 
     private func addBaby() {
         let newBaby = Baby(deliveryId: UUID().uuidString, nurseCatch: false, sex: Sex.male)
-        deliveryViewModel.newBabies.append(newBaby)
+        deliveryViewModel.newDelivery.babies.append(newBaby)
     }
 }
                     
-
 #Preview {
     DeliveryAdditionView(showingDeliveryAddition: .constant(true))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
         .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
+        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
 }
-
-
-
-

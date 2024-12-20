@@ -32,7 +32,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     public func createDelivery(delivery: Delivery) async throws {
         do {
             let data = delivery.dictionary
-            let reference = try await db.collection("Delivery").addDocument(data: data)
+            try await db.collection("Delivery").addDocument(data: data)
         } catch {
             throw DeliveryError.firebaseError("Failed to create delivery: \(error.localizedDescription)")
         }

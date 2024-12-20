@@ -11,6 +11,7 @@ import SkipKit
 
 
 struct RegisterView: View {
+    // Existing properties
     @AppStorage("errorMessage") var errorMessage: String = ""
     @AppStorage("appState") var appState: AppState = .register
     
@@ -24,9 +25,11 @@ struct RegisterView: View {
     var onAuthenticated: () -> Void
     
     public init(
+        showRegistration: Binding<Bool>,
         profileRepository: ProfileRepositoryInterface = DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource()),
         onAuthenticated: @escaping () -> Void
     ) {
+        self._showRegistration = showRegistration
         self.profileRepository = profileRepository
         self.onAuthenticated = onAuthenticated
         
@@ -38,13 +41,13 @@ struct RegisterView: View {
             NavigationStack {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        CustomTextfieldView(text: $profileViewModel.profile.email, hintText: "Email Address", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.email, hintText: "Email Address", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
                         
                         if let emailError = viewModel.emailError {
                             Text(emailError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                                .padding(.top, -12)
+                                .padding(.top, -5)
                         }
                         
                         CustomTextfieldView(text: $viewModel.passwordText, hintText: "Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
@@ -53,7 +56,7 @@ struct RegisterView: View {
                             Text(passwordError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                                .padding(.top, -12)
+                                .padding(.top, -5)
                         }
                         
                         CustomTextfieldView(text: $viewModel.confirmPassword, hintText: "Confirm Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
@@ -62,33 +65,33 @@ struct RegisterView: View {
                             Text(confirmPasswordError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                                .padding(.top, -12)
+                                .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.profile.firstName, hintText: "First Name", icon: Image(systemName: "1.square"), isSecure: false, iconColor: Color.green)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image(systemName: "1.square"), isSecure: false, iconColor: Color.green)
                         
                         if let firstNameError = viewModel.firstNameError {
                             Text(firstNameError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .bold()
-                                .padding(.top, -12)
+                                .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.profile.lastName, hintText: "Last Name", icon: Image(systemName: "2.square"), isSecure: false, iconColor: Color.green)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image(systemName: "2.square"), isSecure: false, iconColor: Color.green)
                         
                         if let lastNameError = viewModel.lastNameError {
                             Text(lastNameError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                                .padding(.top, -12)
+                                .padding(.top, -5)
                         }
                         
                         Divider()
                         
                         Text("Select Your Birthday")
                         
-                        DatePicker("Select Birthday", selection: $profileViewModel.profile.birthday, displayedComponents: [.date])
+                        DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
                             .tint(.indigo)
                         #if !SKIP
                             .datePickerStyle(WheelDatePickerStyle())
@@ -101,14 +104,14 @@ struct RegisterView: View {
                             Text(birthdayError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                                .padding(.top, -12)
+                                .padding(.top, -5)
                         }
-                        
+
                         Divider()
                         
                         Text("Select Your Role")
                         
-                        Picker("Role", selection: $profileViewModel.profile.role) {
+                        Picker("Role", selection: $profileViewModel.tempProfile.role) {
                             ForEach(ProfileRole.allCases, id: \.self) { role in
                                 Text(role.rawValue.capitalized).tag(role)
                             }
@@ -148,10 +151,10 @@ struct RegisterView: View {
                         
                         HStack {
                             Spacer()
-                            
+
                             if (viewModel.isWorking) {
                                 ProgressView()
-                                    .tint(.orange)
+                                    .tint(.indigo)
                             } else {
                                 CustomButtonView(
                                     text: "Sign Up",
@@ -162,11 +165,9 @@ struct RegisterView: View {
                                     onTapAction: {
                                         Task {
                                             do {
-                                                try await viewModel.registerWithEmail() {
-                                                    withAnimation {
-                                                        onAuthenticated()
-                                                    }
-                                                }
+                                                let uid = try await viewModel.registerWithEmail(profile: profileViewModel.tempProfile)
+                                                profileViewModel.profile.id = uid
+                                                onAuthenticated()
                                             } catch {
                                                 self.errorMessage = error.localizedDescription
                                                 throw error
@@ -185,6 +186,7 @@ struct RegisterView: View {
                 .toolbar(content: {
                     Button(action: {
                         withAnimation {
+                            showRegistration = false
                             appState = AppState.splash
                         }
                     }, label: {
@@ -195,35 +197,38 @@ struct RegisterView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .onChange(of: profileViewModel.profile.email) { _ in
-            viewModel.validateForm(profile: profileViewModel.profile)
+        .onChange(of: profileViewModel.tempProfile.email) { _ in
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
         .onChange(of: viewModel.passwordText) { _ in
-            viewModel.validateForm(profile: profileViewModel.profile)
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
         .onChange(of: viewModel.confirmPassword) { _ in
-            viewModel.validateForm(profile: profileViewModel.profile)
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
-        .onChange(of: profileViewModel.profile.firstName) { _ in
-            viewModel.validateForm(profile: profileViewModel.profile)
+        .onChange(of: profileViewModel.tempProfile.firstName) { _ in
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
-        .onChange(of: profileViewModel.profile.lastName) { _ in
-            viewModel.validateForm(profile: profileViewModel.profile)
+        .onChange(of: profileViewModel.tempProfile.lastName) { _ in
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
-        .onChange(of: profileViewModel.profile.birthday) { _ in
-            viewModel.validateForm(profile: profileViewModel.profile)
+        .onChange(of: profileViewModel.tempProfile.birthday) { _ in
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
-        .onChange(of: profileViewModel.profile.role) { _ in
-            viewModel.validateForm(profile: profileViewModel.profile)
+        .onChange(of: profileViewModel.tempProfile.role) { _ in
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
         .onAppear {
-            viewModel.validateForm(profile: profileViewModel.profile)
+            viewModel.validateForm(profile: profileViewModel.tempProfile)
         }
     }
 }
 
-
 #Preview {
-    RegisterView(profileRepository: MockProfileRepository(), onAuthenticated: {})
+    RegisterView(
+        showRegistration: .constant(false),
+        profileRepository: MockProfileRepository(),
+        onAuthenticated: {}
+    )
     .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

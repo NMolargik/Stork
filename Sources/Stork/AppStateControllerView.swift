@@ -60,12 +60,17 @@ public struct AppStateControllerView: View {
                 case .splash:
                     SplashView(showRegistration: $showRegistration)
                 case .register:
-                    RegisterView(profileRepository: profileRepository, onAuthenticated: {
-                        withAnimation {
-                            self.loggedIn = true
-                            self.appState = self.isOnboardingComplete ? .main : .onboard
+                    RegisterView(
+                        showRegistration: $showRegistration,
+                        profileRepository: profileRepository,
+                        onAuthenticated: {
+                            withAnimation {
+                                self.loggedIn = true
+                                self.showRegistration = false
+                                self.appState = self.isOnboardingComplete ? .main : .onboard
+                            }
                         }
-                    })
+                    )
                 case .onboard:
                     Button(action: {
                         withAnimation {
@@ -88,6 +93,9 @@ public struct AppStateControllerView: View {
                 ErrorToastView()
             }
         }
+        .onChange(of: appState) { _ in
+            checkAppState()
+        }
         .environmentObject(profileViewModel)
         .environmentObject(hospitalViewModel)
         .environmentObject(deliveryViewModel)
@@ -99,8 +107,12 @@ public struct AppStateControllerView: View {
             if profileViewModel.profile.email.isEmpty {
                 Task {
                     do {
-                        let fetchedProfile = try await profileViewModel.profileRepository.getCurrentProfile()
+                        let fetchedProfile = try await
+                        profileViewModel.profileRepository.getCurrentProfile()
+                            
                         profileViewModel.profile = fetchedProfile
+                        
+                        try await deliveryViewModel.getUserDeliveries(profile: fetchedProfile)
                         withAnimation {
                             appState = .main
                         }
@@ -112,7 +124,7 @@ public struct AppStateControllerView: View {
                 appState = .main
             }
         } else {
-            appState = isOnboardingComplete ? .main : .splash
+            appState = showRegistration ? .register : .splash
         }
     }
 }

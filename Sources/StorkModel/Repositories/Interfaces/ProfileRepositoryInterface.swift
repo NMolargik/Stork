@@ -84,7 +84,7 @@ public protocol ProfileRepositoryInterface {
     func deleteProfile(profile: Profile, password: String) async throws
     
     
-    func registerWithEmail(profile: Profile, password: String) async throws
+    func registerWithEmail(profile: Profile, password: String) async throws -> String
     
     func signInWithEmail(profile: Profile, password: String) async throws
     

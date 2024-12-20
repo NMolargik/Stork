@@ -81,7 +81,7 @@ public protocol ProfileRemoteDataSourceInterface {
     ///   - `ProfileError.creationFailed`: If the account creation fails.
     ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
     ///   - `ProfileError.unknown`: If any other error occurs.
-    func registerWithEmail(profile: Profile, password: String) async throws
+    func registerWithEmail(profile: Profile, password: String) async throws -> String
 
     /// Signs in an existing user with an email and password.
     ///

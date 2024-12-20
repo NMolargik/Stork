@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import StorkModel
 
 struct SplashView: View {
     @AppStorage("appState") private var appState: AppState = AppState.splash
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
+    
+    @EnvironmentObject var profileViewModel: ProfileViewModel
 
     @StateObject private var viewModel = SplashViewModel()
     @Binding var showRegistration: Bool
@@ -68,6 +71,8 @@ struct SplashView: View {
                 
                 CustomButtonView(text: "Sign Up", width: 100, height: 40, color: Color.orange, isEnabled: .constant(true), onTapAction: {
                         withAnimation {
+                            profileViewModel.resetTempProfile()
+                            showRegistration = true
                             appState = AppState.register
                         }
                 })
@@ -100,4 +105,5 @@ struct SplashView: View {
 
 #Preview {
     SplashView(showRegistration: .constant(false))
+        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

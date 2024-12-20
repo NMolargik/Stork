@@ -48,7 +48,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
                 "deliveryCount": hospital.deliveryCount,
                 "babyCount": hospital.babyCount
             ]
-            let reference = try await db.collection("Hospital").addDocument(data: data)
+            try await db.collection("Hospital").addDocument(data: data)
             return hospital
         } catch {
             throw HospitalError.creationFailed("Failed to create hospital: \(error.localizedDescription)")

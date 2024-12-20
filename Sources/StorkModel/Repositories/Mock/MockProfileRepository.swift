@@ -128,8 +128,9 @@ public class MockProfileRepository: ProfileRepositoryInterface {
         return true
     }
 
-    public func registerWithEmail(profile: Profile, password: String) async throws {
+    public func registerWithEmail(profile: Profile, password: String) async throws -> String {
         profiles.append(profile)
+        return profile.id
     }
     
     public func signInWithEmail(profile: Profile, password: String) async throws{

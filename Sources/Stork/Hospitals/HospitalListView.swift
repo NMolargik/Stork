@@ -9,6 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct HospitalListView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
@@ -68,11 +70,7 @@ struct HospitalListView: View {
                 }
             }
             .refreshable {
-                withAnimation {
-                    Task {
-                        hospitalViewModel.fetchHospitalsNearby()
-                    }
-                }
+                self.getNearbyHospitals()
             }
             .navigationTitle("Hospitals")
             .navigationDestination(for: String.self) { value in
@@ -89,7 +87,7 @@ struct HospitalListView: View {
             }
             .toolbar {
                 if (hospitalViewModel.usingLocation) {
-                    ToolbarItem {
+                    ToolbarItem(placement: .topBarLeading) {
                         HStack {
                             Spacer()
                             
@@ -105,7 +103,7 @@ struct HospitalListView: View {
                         Button(action: {
                             withAnimation {
                                 hospitalViewModel.searchQuery = ""
-                                hospitalViewModel.fetchHospitalsNearby()
+                                self.getNearbyHospitals()
                             }
                         }, label: {
                             Text("Use Location")
@@ -129,7 +127,7 @@ struct HospitalListView: View {
         }
         .onAppear {
             if (hospitalViewModel.hospitals.count == 0) {
-                hospitalViewModel.fetchHospitalsNearby()
+                getNearbyHospitals()
             }
         }
         .sheet(isPresented: $hospitalViewModel.isMissingHospitalSheetPresented, content: {
@@ -138,6 +136,18 @@ struct HospitalListView: View {
 
             })
         })
+    }
+    
+    private func getNearbyHospitals() {
+        Task {
+            do {
+                try await hospitalViewModel.fetchHospitalsNearby()
+
+            } catch {
+                errorMessage = error.localizedDescription
+                throw error
+            }
+        }
     }
 }
 

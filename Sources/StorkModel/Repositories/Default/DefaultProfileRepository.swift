@@ -133,9 +133,10 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
         }
     }
     
-    public func registerWithEmail(profile: Profile, password: String) async throws {
+    public func registerWithEmail(profile: Profile, password: String) async throws -> String {
         do {
-            try await remoteDataSource.registerWithEmail(profile: profile, password: password)
+            let uid = try await remoteDataSource.registerWithEmail(profile: profile, password: password)
+            return uid
         } catch let error as ProfileError {
             throw error
         } catch {

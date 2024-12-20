@@ -90,7 +90,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             guard let data = document.data() else {
                 throw ProfileError.notFound("Profile with ID \(id) not found.")
             }
-            guard var profile = Profile(from: data) else {
+            guard let profile = Profile(from: data) else {
                 throw ProfileError.notFound("Invalid data for profile with ID \(id).")
             }
             return profile
@@ -111,7 +111,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
                 throw ProfileError.notFound("Profile with ID \(userId) not found.")
             }
             
-            guard var profile = Profile(from: data) else {
+            guard let profile = Profile(from: data) else {
                 throw ProfileError.notFound("Invalid data for profile with ID \(userId).")
             }
             return profile
@@ -208,9 +208,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Returns: The same `Profile` object after successful registration.
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If the registration process fails in Firebase.
-    public func registerWithEmail(profile: Profile, password: String) async throws {
+    public func registerWithEmail(profile: Profile, password: String) async throws -> String {
         do {
             let result = try await auth.createUser(withEmail: profile.email, password: password)
+            return(result.user.uid)
 
         } catch {
             throw error
@@ -238,7 +239,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             }
             
             print(data)
-            guard let userProfile = Profile(from: data) else {
+            guard Profile(from: data) != nil else {
                 throw ProfileError.authenticationFailed("Invalid data found for profile with ID \(firebaseUser.uid).")
             }            
         } catch {
@@ -289,7 +290,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Throws:
     ///   - `NSError`: If the profile picture cannot be retrieved or converted to a `UIImage`.
     public func retrieveProfilePicture(profile: Profile) async throws -> UIImage? {
-        let storageRef = storage.reference().child("profile_pictures/\(profile.email).jpg")
+        _ = storage.reference().child("profile_pictures/\(profile.email).jpg")
 
         do {
 //            let data = try await storageRef.data(maxSize: 5 * 1024 * 1024)

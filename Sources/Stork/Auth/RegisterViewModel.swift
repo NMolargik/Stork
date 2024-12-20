@@ -16,8 +16,6 @@ import java.util.regex.Pattern
 
 class RegisterViewModel: ObservableObject {
     // MARK: - Published Properties
-    @Published var profile: Profile = Profile()
-
     @Published var passwordText = ""
     @Published var confirmPassword = ""
     @Published var registrationError: String = ""
@@ -44,15 +42,17 @@ class RegisterViewModel: ObservableObject {
     }
     
     @MainActor
-    func registerWithEmail() async throws {
+    func registerWithEmail(profile: Profile) async throws -> String {
         guard isFormValid else {
             throw ProfileError.creationFailed("Entered details are invalid. Please fill out all fields.")
         }
         
         self.isWorking = true
         
+        var uid = ""
+        
         do {
-            try await profileRepository.registerWithEmail(profile: self.profile, password: self.passwordText)
+            uid = try await profileRepository.registerWithEmail(profile: profile, password: self.passwordText)
             print("Registration succeeded: \(profile.email)")
         } catch {
             self.isWorking = false
@@ -60,9 +60,13 @@ class RegisterViewModel: ObservableObject {
         }
         
         do {
-            try await self.createProfile()
+            var updatedProfile = profile
+            updatedProfile.id = uid
+            
+            try await self.createProfile(profile: updatedProfile)
             print("Created profile for \(profile.firstName) \(profile.lastName)")
             self.isWorking = false
+            return uid
         } catch {
             self.isWorking = false
             try await profileRepository.signOut()
@@ -73,19 +77,19 @@ class RegisterViewModel: ObservableObject {
 
     }
     
-    private func uploadProfilePicture() async throws {
+    private func uploadProfilePicture(profile: Profile) async throws {
         guard let profilePicture else { return }
         
         do {
-            try await profileRepository.uploadProfilePicture(profile: self.profile, profilePicture: self.profilePicture!)
+            try await profileRepository.uploadProfilePicture(profile: profile, profilePicture: profilePicture)
         } catch {
             throw ProfileError.creationFailed(error.localizedDescription)
         }
     }
     
-    private func createProfile() async throws {
+    private func createProfile(profile: Profile) async throws {
         do {
-            try await profileRepository.createProfile(profile: self.profile)
+            try await profileRepository.createProfile(profile: profile)
         }
     }
     

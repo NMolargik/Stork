@@ -9,6 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct MusterSplashView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
@@ -62,8 +64,13 @@ struct MusterSplashView: View {
                 
                 CustomButtonView(text: "View Invitations", width: 200, height: 50, color: Color.indigo, icon: Image(systemName: "envelope.fill"), isEnabled: .constant(true), onTapAction: {
                     Task {
-                        await musterViewModel.fetchMyInvitations(profileId: profileViewModel.profile.id)
-                        musterViewModel.showInvitationsFullScreen = true
+                        do {
+                            try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
+                            musterViewModel.showInvitationsFullScreen = true
+                        } catch {
+                            errorMessage = error.localizedDescription
+                            throw error
+                        }
                     }
                 })
                 
@@ -75,18 +82,35 @@ struct MusterSplashView: View {
                 onDismiss: { musterViewModel.showInvitationsFullScreen = false },
                 onRespond: { invite, accepted in
                     Task {
-                        await musterViewModel.respondToInvite(invite: invite, accepted: accepted, profileId: profileViewModel.profile.id)
-                        await musterViewModel.fetchMyInvitations(profileId: profileViewModel.profile.id)
+                        do {
+                            try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: accepted)
+                            musterViewModel.showInvitationsFullScreen = false
+                        } catch {
+                            errorMessage = error.localizedDescription
+                            throw error
+                        }
                     }
                 }
             )
+            #if !SKIP
+                .interactiveDismissDisabled(true)
+            #endif
         }
         .sheet(isPresented: $musterViewModel.showCreateMusterSheet) {
             MusterCreationView { newMuster in
                 Task {
-                   try await musterViewModel.createMuster(profileId: profileViewModel.profile.id)
+                    do {
+                        try await musterViewModel.createMuster(profileId: profileViewModel.profile.id)
+                    } catch {
+                        errorMessage = error.localizedDescription
+                        throw error
+                    }
                 }
             }
+        #if !SKIP
+            .interactiveDismissDisabled(true)
+        #endif
+            
         }
     }
 }

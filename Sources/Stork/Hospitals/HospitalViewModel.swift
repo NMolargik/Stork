@@ -43,7 +43,7 @@ class HospitalViewModel: ObservableObject {
             usingLocation = true
             
             var location = (latitude: 0.0, longitude: 0.0)
-            var cityState: (city: String?, state: String?) = (city: nil, state: nil)
+            let cityState: (city: String?, state: String?) = (city: nil, state: nil)
             
             do {
                 location = try await locationProvider.fetchCurrentLocation()

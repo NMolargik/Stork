@@ -34,7 +34,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
         do {
             print(muster.id)
             let data = muster.dictionary
-            let reference = try await db.collection("Muster").addDocument(data: data)
+            try await db.collection("Muster").addDocument(data: data)
         } catch {
             throw MusterError.creationFailed("Failed to create muster: \(error.localizedDescription)")
         }
@@ -167,7 +167,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     public func sendMusterInvite(invite: MusterInvite, userId: String) async throws {
         do {
             let data = invite.dictionary
-            let reference = try await db.collection("MusterInvite").addDocument(data: data)
+            try await db.collection("MusterInvite").addDocument(data: data)
         } catch {
             throw MusterError.invitationFailed(error.localizedDescription)
         }

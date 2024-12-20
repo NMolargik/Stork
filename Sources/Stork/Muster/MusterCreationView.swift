@@ -9,17 +9,22 @@ import SwiftUI
 import StorkModel
 
 struct MusterCreationView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
+    
+    @State private var selectedHospital: Hospital? = nil
     
     var onCreate: (Muster) -> Void
 
     var body: some View {
         if (musterViewModel.showHospitalSelection) {
             HospitalListView(selectionMode: true, onSelection: { hospital in
-                musterViewModel.newMusterSelectedHospital = hospital
+                self.selectedHospital = hospital
+                musterViewModel.newMuster.primaryHospitalId = hospital.id
                 musterViewModel.showHospitalSelection = false
             })
         } else {
@@ -28,13 +33,13 @@ struct MusterCreationView: View {
                     VStack(spacing: 20) {
                         // Muster Name Input
                         CustomTextfieldView(
-                            text: $musterViewModel.newMusterName,
+                            text: $musterViewModel.newMuster.name,
                             hintText: "Enter Muster name",
                             icon: Image(systemName: "tag.fill"),
                             isSecure: false,
                             iconColor: Color.blue
                         )
-                        
+//                        
                         // Color Selection Buttons
                         VStack(alignment: .center, spacing: 10) {
                             Text("Select An Accent Color")
@@ -46,12 +51,12 @@ struct MusterCreationView: View {
                                 ForEach(musterViewModel.colors, id: \.self) { color in
                                     Button(action: {
                                         withAnimation {
-                                            musterViewModel.newMusterSelectedColor = color
+                                            musterViewModel.newMuster.primaryColor = color.description
                                         }
                                     }, label: {
                                         Circle()
                                             .foregroundStyle(color)
-                                            .frame(width: color == musterViewModel.newMusterSelectedColor ? 50.0 : 40.0)
+                                            .frame(width: color.description == musterViewModel.newMuster.primaryColor ? 50.0 : 40.0)
                                             .shadow(radius: 1.0)
                                     })
                                 }
@@ -67,7 +72,7 @@ struct MusterCreationView: View {
                         
                         // Hospital Selection
                         VStack {
-                            Text(musterViewModel.newMusterSelectedHospital?.facility_name ?? "Select A Primary Hospital")
+                            Text(self.selectedHospital?.facility_name ?? "Select A Primary Hospital")
                                 .font(.headline)
                                 .multilineTextAlignment(.center)
                                 .foregroundStyle(.black)
@@ -118,8 +123,9 @@ struct MusterCreationView: View {
                             })
                         }
                     }
-                    .padding(20)
                     .frame(maxWidth: .infinity)
+                    .padding(20)
+
                 }
                 .navigationTitle("Create A Muster")
                 .toolbar {
@@ -130,36 +136,47 @@ struct MusterCreationView: View {
                     }
                 }
             }
-            .onChange(of: musterViewModel.newMusterName) { _ in
+            .onChange(of: musterViewModel.newMuster.name) { _ in
                 musterViewModel.validateCreationForm()
             }
-            .onChange(of: musterViewModel.newMusterSelectedColor) { _ in
+            .onChange(of: musterViewModel.newMuster.primaryColor) { _ in
                 musterViewModel.validateCreationForm()
             }
-            .onChange(of: musterViewModel.newMusterSelectedHospital) { _ in
+            .onChange(of: musterViewModel.newMuster.primaryHospitalId) { _ in
                 musterViewModel.validateCreationForm()
             }
         }
     }
     
+    @MainActor
     private func createMuster() {
         Task {
             do {
                 try await musterViewModel.createMuster(profileId: profileViewModel.profile.id)
                 
                 if let muster = musterViewModel.currentMuster {
-                    // Update profile
-                    profileViewModel.profile.musterId = muster.id
-                    profileViewModel.updateProfile()
-                    
-                    onCreate(muster)
+                    do {
+                        profileViewModel.tempProfile = profileViewModel.profile
+                        profileViewModel.tempProfile.musterId = muster.id
+                        
+                        try await profileViewModel.updateProfile()
+                        onCreate(muster)
+                    } catch {
+                        errorMessage = error.localizedDescription
+                        musterViewModel.isWorking = false
+                        throw error
+                    }
                 } else {
                     musterViewModel.validateCreationForm()
                 }
+                
             } catch {
                 musterViewModel.validateCreationForm()
                 musterViewModel.isWorking = false
+                
             }
+            
+            dismiss()
         }
     }
 }

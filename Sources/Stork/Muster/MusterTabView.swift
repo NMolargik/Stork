@@ -9,6 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct MusterTabView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
     
@@ -73,7 +75,12 @@ struct MusterTabView: View {
                     ) {
                         Button("Leave", role: .destructive) {
                             Task {
-                                await musterViewModel.leaveMuster(profileId: profileViewModel.profile.id)
+                                do {
+                                    try await musterViewModel.leaveMuster(profileId: profileViewModel.profile.id)
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                    throw error
+                                }
                             }
                         }
                         Button("Cancel", role: .cancel) {}
@@ -88,21 +95,36 @@ struct MusterTabView: View {
                     .sheet(isPresented: $musterViewModel.showAssignAdminSheet) {
                         MusterAdminAssignAdminView { userId in
                             Task {
-                                await musterViewModel.assignAdmin(userId: userId)
+                                do {
+                                    try await musterViewModel.assignAdmin(userId: userId)
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                    throw error
+                                }
                             }
                         }
                     }
                     .sheet(isPresented: $musterViewModel.showKickMemberSheet) {
                         MusterAdminKickMemberView { userId in
                             Task {
-                                await musterViewModel.kickMember(userId: userId)
+                                do {
+                                    try await musterViewModel.kickMember(userId: userId)
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                    throw error
+                                }
                             }
                         }
                     }
                     .sheet(isPresented: $musterViewModel.showChangeColorSheet) {
                         MusterAdminChangeColorView { newColor in
                             Task {
-                                await musterViewModel.changeMusterColor(newColor: newColor)
+                                do {
+                                    try await musterViewModel.changeMusterColor(newColor: newColor)
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                    throw error
+                                }
                             }
                         }
                     }
@@ -114,8 +136,20 @@ struct MusterTabView: View {
         }
         .task {
             // Attempt to load user's current muster at start
-            print("LOADING YOUR MUSTER")
-            await musterViewModel.loadCurrentMuster(profileId: profileViewModel.profile.id)
+            guard profileViewModel.profile.musterId != "" else {
+                return print("User is not in a muster")
+            }
+            
+            print("Loading user's muster")
+            
+            Task {
+                do {
+                    try await musterViewModel.loadCurrentMuster(profile: profileViewModel.profile)
+                } catch {
+                    errorMessage = error.localizedDescription
+                    throw error
+                }
+            }
         }
     }
 }

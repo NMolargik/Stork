@@ -10,6 +10,7 @@ import SwiftUI
 import StorkModel
 
 public class ProfileViewModel: ObservableObject {
+    @AppStorage("appState") private var appState: AppState = AppState.splash
     @AppStorage("loggedIn") var loggedIn = false
 
     @Published var profile: Profile
@@ -40,11 +41,11 @@ public class ProfileViewModel: ObservableObject {
             } catch {
                 self.errorMessage = "Failed to load profile: \(error.localizedDescription)"
                 self.isWorking = false
+                self.signOut()
                 throw error
             }
         }
     }
-    
     
     func updateMuster(musterId: String) async throws {
         isWorking = true
@@ -59,6 +60,10 @@ public class ProfileViewModel: ObservableObject {
                 throw error
             }
         }
+    }
+    
+    func resetTempProfile() {
+        self.tempProfile = Profile(id: UUID().uuidString, primaryHospitalId: "", musterId: "", firstName: "", lastName: "", email: "", birthday: Date(), joinDate: Date().description, role: ProfileRole.nurse, isAdmin: false)
     }
     
     // Update the profile
@@ -81,29 +86,23 @@ public class ProfileViewModel: ObservableObject {
     // Save the updated profile asynchronously
     private func saveProfile() {
         isWorking = true
-        
-        
     }
 
     @MainActor
     // Sign out the user asynchronously
     func signOut() {
         isWorking = true
-        
-        //TODO: broken
+
         Task {
             do {
                 try await profileRepository.signOut()
-                DispatchQueue.main.async {
-                    self.isWorking = false
-                    self.loggedIn = false
-                    // Handle post-sign-out actions, e.g., navigate to splash screen
-                }
+                self.isWorking = false
+                self.loggedIn = false
+                self.appState = AppState.splash
+                
             } catch {
-                DispatchQueue.main.async {
-                    self.errorMessage = "Failed to sign out: \(error.localizedDescription)"
-                    self.isWorking = false
-                }
+                self.errorMessage = "Failed to sign out: \(error.localizedDescription)"
+                self.isWorking = false
             }
         }
     }

@@ -54,7 +54,13 @@ struct MusterAdminInviteUserView: View {
                         
                         Task {
                             if let currentMuster = musterViewModel.currentMuster {
-                                await musterViewModel.fetchSentInvitations(musterId: currentMuster.id)
+                                do {
+                                    try await musterViewModel.getMusterInvitations(muster: currentMuster)
+                                    
+                                } catch {
+                                    errorMessage = error.localizedDescription
+                                    throw error
+                                }
                             }
                         }
                     }
@@ -74,10 +80,10 @@ struct MusterAdminInviteUserView: View {
                                 profile: profile,
                                 currentUser: profileViewModel.profile,
                                 onInvite: {
-                                    inviteUser(profile)
+                                    inviteUser(profile: profile)
                                 },
-                                onCancelInvite: {
-                                    cancelInvite(profile)
+                                onCancelInvite: { invite in
+                                    cancelInvite(profile: profile, invite: invite)
                                 }
                             )
                             .padding(.vertical, 5)
@@ -125,32 +131,30 @@ struct MusterAdminInviteUserView: View {
     }
     
     // MARK: - Invite User
-    private func inviteUser(_ profile: Profile) {
+    private func inviteUser(profile: Profile) {
         Task {
             do {
-                try await musterViewModel.inviteUserToMuster(userId: profile.id)
-                // Refresh the invitations after sending invite
-                await musterViewModel.fetchSentInvitations(musterId: musterViewModel.currentMuster!.id)
+                try await musterViewModel.inviteUserToMuster(profile: profile)
                 print("Invited user: \(profile.firstName) \(profile.lastName)")
             } catch {
-                errorMessage = "Failed to invite user. Please try again."
-                print("Error inviting user: \(error)")
+                errorMessage = error.localizedDescription
+                throw error
             }
         }
     }
     
     // MARK: - Cancel Invitation (Placeholder)
-    private func cancelInvite(_ profile: Profile) {
+    private func cancelInvite(profile: Profile, invite: MusterInvite) {
         // Placeholder function: Implement cancellation logic here
         Task {
-            do {
-                //try await musterViewModel.cancelInvitation(toUserId: profile.id)
-                // Refresh the invitations after cancellation
-                await musterViewModel.fetchSentInvitations(musterId: musterViewModel.currentMuster!.id)
-                print("Cancelled invitation to user: \(profile.firstName) \(profile.lastName)")
-            } catch {
-                errorMessage = "Failed to cancel invitation. Please try again."
-                print("Error cancelling invitation: \(error)")
+            if musterViewModel.currentMuster != nil {
+                do {
+                    try await musterViewModel.respondToUserInvite(profile: profile, invite: invite, accepted: false)
+                    print("Cancelled invitation to user: \(profile.firstName) \(profile.lastName)")
+                } catch {
+                    errorMessage = error.localizedDescription
+                    throw error
+                }
             }
         }
     }

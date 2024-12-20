@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public enum Sex: String, Codable, Hashable {
+public enum Sex: String, Codable, Hashable, CaseIterable {
     case male
     case female
     case loss

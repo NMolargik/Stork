@@ -82,9 +82,6 @@
     "About Stork" : {
 
     },
-    "Accept" : {
-
-    },
     "Add To Muster" : {
 
     },
@@ -135,7 +132,7 @@
     "Babies: %lld" : {
 
     },
-    "Baby #%lld" : {
+    "Baby %lld" : {
 
     },
     "Birthing Center" : {
@@ -148,9 +145,6 @@
 
     },
     "Change Primary Color" : {
-
-    },
-    "Close" : {
 
     },
     "Confirm Password" : {
@@ -197,9 +191,6 @@
         }
       }
     },
-    "Decline" : {
-
-    },
     "Delete Account" : {
 
     },
@@ -218,16 +209,10 @@
     "Don't have an account yet?" : {
 
     },
-    "Email" : {
-
-    },
     "Emergency Services" : {
 
     },
     "Epidural Used" : {
-
-    },
-    "Female" : {
 
     },
     "First Name" : {
@@ -384,12 +369,6 @@
     "Log In Instead" : {
 
     },
-    "Loss" : {
-
-    },
-    "Male" : {
-
-    },
     "Map requires iOS 17" : {
 
     },
@@ -400,9 +379,6 @@
 
     },
     "Muster" : {
-
-    },
-    "Muster Name" : {
 
     },
     "Muster Stats Go Here" : {
@@ -678,9 +654,6 @@
       }
     },
     "You can submit up to 8 deliveries per day" : {
-
-    },
-    "Your Invitations" : {
 
     }
   },

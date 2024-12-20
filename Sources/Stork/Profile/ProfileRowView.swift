@@ -15,7 +15,7 @@ struct ProfileRowView: View {
     var profile: Profile
     var currentUser: Profile
     var onInvite: () -> Void
-    var onCancelInvite: () -> Void
+    var onCancelInvite: (_ invite: MusterInvite) -> Void
     
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -81,55 +81,55 @@ struct ProfileRowView: View {
                     )
                 } else if let invitation = existingInvitations.first(where: { $0.recipientId == profile.id }) {
                     // Condition 4: Existing Invitation
-                    VStack(alignment: .trailing, spacing: 5) {
-                        Text(invitation.status.stringValue)
-                            .foregroundColor(invitation.status == .declined ? .red : .blue)
-                            .fontWeight(.semibold)
-                        
-                        if invitation.status == .pending {
-                            HStack(spacing: 10) {
-                                CustomButtonView(
-                                    text: "Cancel",
-                                    width: 80,
-                                    height: 40,
-                                    color: Color.red,
-                                    icon: nil,
-                                    isEnabled: .constant(true),
-                                    onTapAction: {
-                                        withAnimation {
-                                            onCancelInvite()
-                                        }
-                                    }
-                                )
-                                
-                                CustomButtonView(
-                                    text: "Pending",
-                                    width: 80,
-                                    height: 40,
-                                    color: Color.gray,
-                                    icon: nil,
-                                    isEnabled: .constant(false),
-                                    onTapAction: {}
-                                )
-                            }
-                        } else if invitation.status == .declined {
-                            CustomButtonView(
-                                text: "Declined",
-                                width: 120,
-                                height: 50,
-                                color: Color.orange,
-                                icon: nil,
-                                isEnabled: .constant(true),
-                                onTapAction: {
-                                    withAnimation {
-                                        onInvite()
-                                    }
-                                }
-                            )
-                        } else {
-                            EmptyView()
-                        }
-                    }
+//                    VStack(alignment: .trailing, spacing: 5) {
+//                        Text(invitation.status.stringValue)
+//                            .foregroundColor(invitation.status == .declined ? .red : .blue)
+//                            .fontWeight(.semibold)
+//                        
+//                        if invitation.status == .pending {
+//                            HStack(spacing: 10) {
+//                                CustomButtonView(
+//                                    text: "Cancel",
+//                                    width: 80,
+//                                    height: 40,
+//                                    color: Color.red,
+//                                    icon: nil,
+//                                    isEnabled: .constant(true),
+//                                    onTapAction: {
+//                                        withAnimation {
+//                                            onCancelInvite()
+//                                        }
+//                                    }
+//                                )
+//                                
+//                                CustomButtonView(
+//                                    text: "Pending",
+//                                    width: 80,
+//                                    height: 40,
+//                                    color: Color.gray,
+//                                    icon: nil,
+//                                    isEnabled: .constant(false),
+//                                    onTapAction: {}
+//                                )
+//                            }
+//                        } else if invitation.status == .declined {
+//                            CustomButtonView(
+//                                text: "Declined",
+//                                width: 120,
+//                                height: 50,
+//                                color: Color.orange,
+//                                icon: nil,
+//                                isEnabled: .constant(true),
+//                                onTapAction: {
+//                                    withAnimation {
+//                                        onInvite()
+//                                    }
+//                                }
+//                            )
+//                        } else {
+//                            EmptyView()
+//                        }
+//                    }
                 } else {
                     // Condition 5: No Existing Invitation
                     CustomButtonView(
@@ -159,5 +159,5 @@ struct ProfileRowView: View {
 }
 
 #Preview {
-    ProfileRowView(existingInvitations: .constant([]), profile: Profile(), currentUser: Profile(), onInvite: {}, onCancelInvite: {})
+    ProfileRowView(existingInvitations: .constant([]), profile: Profile(), currentUser: Profile(), onInvite: {}, onCancelInvite: {invite in })
 }

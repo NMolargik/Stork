@@ -12,6 +12,7 @@ import StorkModel
 public class MusterViewModel: ObservableObject {
     @Published var currentMuster: Muster?
     @Published var invites: [MusterInvite] = []
+    @Published var musterInvites: [MusterInvite] = []
     @Published var showInvitationsFullScreen = false
     @Published var showCreateMusterSheet = false
     @Published var showLeaveConfirmation = false
@@ -24,7 +25,7 @@ public class MusterViewModel: ObservableObject {
     @Published var showChangeColorSheet = false
     
     // Creation
-    @Published var newMuster: Muster?
+    @Published var newMuster: Muster = Muster(id: UUID().uuidString, profileIds: [], primaryHospitalId: "", administratorProfileIds: [], name: "", primaryColor: "")
     @Published var showHospitalSelection: Bool = false
     @Published var creationFormValid: Bool = false
     
@@ -43,10 +44,6 @@ public class MusterViewModel: ObservableObject {
     }
     
     func validateCreationForm() {
-        guard let newMuster else {
-            self.creationFormValid = false
-            return
-        }
         self.creationFormValid = newMuster.name != "" && newMuster.primaryHospitalId != ""
     }
     
@@ -55,12 +52,8 @@ public class MusterViewModel: ObservableObject {
     }
     
     /// Handles the creation of a new Muster
+    @MainActor
     func createMuster(profileId: String) async throws {
-        guard let newMuster else {
-            throw MusterError.creationFailed("Critical: There was an issue, please exit and try again.")
-
-        }
-        
         guard !newMuster.name.isEmpty else {
             throw MusterError.creationFailed("Muster must have a name!")
         }
@@ -70,6 +63,9 @@ public class MusterViewModel: ObservableObject {
         }
         
         self.isWorking = true
+        
+        self.newMuster.profileIds.append(profileId)
+        self.newMuster.administratorProfileIds.append(profileId)
         
         do {
             try await musterRepository.createMuster(muster: newMuster)
@@ -94,22 +90,7 @@ public class MusterViewModel: ObservableObject {
         )
     }
     
-    func startNewMusterInvite() {
-        self.invite = MusterInvite(
-            id: UUID().uuidString,
-            recipientId: "",
-            recipientName: "",
-            senderName: "",
-            musterName: "",
-            musterId: "",
-            primaryHospitalName: "",
-            message: "",
-            primaryColor: ""
-        )
-    }
-    
     func loadCurrentMuster(profile: Profile) async throws {
-
         do {
             self.isWorking = true
             self.currentMuster = try await musterRepository.getMuster(byId: profile.musterId)
@@ -120,18 +101,17 @@ public class MusterViewModel: ObservableObject {
         }
     }
     
-    func fetchUserInvitations(profileId: String) async throws {
-        self.isWorking = true
-        
-        do {
-            invites = try await musterRepository.collectUserMusterInvites(userId: profileId)
-            self.isWorking = false
-        } catch {
-            self.isWorking = false
-            throw error
-        }
+    func clearCurrentMuster() {
+        self.currentMuster = Muster(
+            id: UUID().uuidString,
+            profileIds: [""],
+            primaryHospitalId: "",
+            administratorProfileIds: [""],
+            name: "",
+            primaryColor: Color.red.description
+        )
     }
-    
+
     func leaveMuster(profileId: String) async throws {
         guard let muster = currentMuster else { throw MusterError.deletionFailed("No muster to delete") }
         isWorking = true
@@ -167,9 +147,77 @@ public class MusterViewModel: ObservableObject {
         }
     }
     
+    // Invites - Recipient
+    
+    func fetchUserInvitations(profileId: String) async throws {
+        self.isWorking = true
+        
+        do {
+            invites = try await musterRepository.collectUserMusterInvites(userId: profileId)
+            self.isWorking = false
+        } catch {
+            self.isWorking = false
+            throw error
+        }
+    }
+    
+    func startNewMusterInvite() {
+        self.invite = MusterInvite(
+            id: UUID().uuidString,
+            recipientId: "",
+            recipientName: "",
+            senderName: "",
+            musterName: "",
+            musterId: "",
+            primaryHospitalName: "",
+            message: "",
+            primaryColor: ""
+        )
+    }
+    
+    func respondToUserInvite(profile: Profile, invite: MusterInvite, accepted: Bool) async throws {
+        isWorking = true
+        
+        if (accepted) {
+            startNewMuster()
+            
+            do {
+                currentMuster = try await musterRepository.getMuster(byId: invite.musterId)
+            } catch {
+                isWorking = false
+                throw error
+            }
+            
+            var tempMuster = currentMuster
+            tempMuster?.profileIds.append(profile.id)
+            
+            guard let updatedMuster = tempMuster else {
+                isWorking = false
+                throw MusterError.invitationResponseFailed("Failed to respond to invite. Please try again.")
+            }
+            
+            do {
+                try await musterRepository.updateMuster(muster: updatedMuster)
+                currentMuster = updatedMuster
+                
+            } catch {
+                isWorking = false
+                throw error
+            }
+                
+            do {
+                try await musterRepository.cancelMusterInvite(invitationId: invite.id)
+                invites.removeAll(where: { $0.id == invite.id })
+            } catch {
+                isWorking = false
+                throw error
+            }
+        }
+    }
+    
     // Admin functions
     func inviteUserToMuster(profile: Profile) async throws {
-        guard let musterId = invite?.musterId else {
+        guard (invite?.musterId) != nil else {
             throw MusterError.invitationFailed("No muster to invite to")
         }
         
@@ -189,8 +237,20 @@ public class MusterViewModel: ObservableObject {
         }
     }
     
+    func getMusterInvitations(muster: Muster) async throws {
+        isWorking = true
+        
+        do {
+            musterInvites = try await musterRepository.collectInvitesForMuster(musterId: muster.id)
+            isWorking = false
+        } catch {
+            isWorking = false
+            throw error
+        }
+    }
+    
     func assignAdmin(userId: String) async throws {
-        guard var muster = currentMuster, !muster.administratorProfileIds.contains(userId) else {
+        guard let muster = currentMuster, !muster.administratorProfileIds.contains(userId) else {
             throw MusterError.invitationFailed("User is already an admin")
         }
         
@@ -211,7 +271,7 @@ public class MusterViewModel: ObservableObject {
     }
     
     func kickMember(userId: String) async throws {
-        guard var muster = currentMuster else {
+        guard let muster = currentMuster else {
             throw MusterError.creationFailed("No muster found")
         }
         
@@ -232,7 +292,7 @@ public class MusterViewModel: ObservableObject {
     }
     
     func changeMusterColor(newColor: String) async throws {
-        guard var muster = currentMuster else {
+        guard let muster = currentMuster else {
             throw MusterError.updateFailed("No muster to update")
         }
         

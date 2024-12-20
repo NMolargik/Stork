@@ -12,8 +12,7 @@ import SwiftUI
 class DeliveryViewModel: ObservableObject {
     @Published var deliveries: [Delivery] = []
     
-    @Published var newDelivery: Delivery? = nil
-    @Published var newBabies: [Baby] = []
+    @Published var newDelivery: Delivery = Delivery(sample: true)
     @Published var epiduralUsed: Bool = false
     @Published var deliveryMethod: DeliveryMethod = .vaginal
     @Published var addToMuster: Bool = false
@@ -48,21 +47,22 @@ class DeliveryViewModel: ObservableObject {
         timer?.invalidate()
     }
     
-
     // MARK: - Delivery Management
-    func submitDelivery(profile: Profile) async throws {
-        //TODO: query Muster is applicable to make sure user is still a member of it, if they choose to use it
-        guard let newDelivery else {
-            throw DeliveryError.creationFailed("Critical: There was an issue, please exit and try again.")
-
-        }
-        
+    func submitDelivery(profile: Profile) async throws {        
         guard currentDeliveryCount < dailyLimit else {
             throw DeliveryError.creationFailed("You have reached the daily limit of \(dailyLimit) deliveries.")
         }
         
-        guard let selectedHospital = self.selectedHospital else {
+        guard self.selectedHospital != nil else {
             throw DeliveryError.creationFailed("No hospital selected.")
+        }
+        
+        newDelivery.babyCount = newDelivery.babies.count
+        newDelivery.userFirstName = profile.firstName
+        newDelivery.userId = profile.id
+        
+        if (self.addToMuster) {
+            newDelivery.musterId = profile.musterId
         }
         
         do {
@@ -81,7 +81,7 @@ class DeliveryViewModel: ObservableObject {
     }
     
     func startNewDelivery() {
-        let newDelivery = Delivery(
+        self.newDelivery = Delivery(
             id: UUID().uuidString,
             userId: "",
             userFirstName: "",
