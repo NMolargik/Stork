@@ -148,15 +148,19 @@ public class MusterViewModel: ObservableObject {
     }
     
     // Invites - Recipient
-    
     func fetchUserInvitations(profileId: String) async throws {
         self.isWorking = true
         
         do {
-            invites = try await musterRepository.collectUserMusterInvites(userId: profileId)
-            self.isWorking = false
+            let fetchedInvites = try await musterRepository.collectUserMusterInvites(userId: profileId)
+            await MainActor.run {
+                self.invites = fetchedInvites
+                self.isWorking = false
+            }
         } catch {
-            self.isWorking = false
+            await MainActor.run {
+                self.isWorking = false
+            }
             throw error
         }
     }

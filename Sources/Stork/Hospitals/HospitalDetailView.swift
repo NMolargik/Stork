@@ -19,7 +19,7 @@ struct HospitalDetailView: View {
     let hospital: Hospital
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 15) {
             ZStack {
                 if let location = location {
                     MapView(latitude: location.latitude, longitude: location.longitude)
@@ -145,18 +145,21 @@ struct HospitalDetailView: View {
                     .shadow(radius: 5)
                     .opacity(0.9)
             }
-            .padding()
+            .padding(.horizontal)
             
             HStack {
                 // TODO: replace with a stork!
-                Image(systemName: "bird.fill")
+                Image(systemName: "figure.child")
                     .foregroundStyle(.indigo)
-                
+                    .frame(width: 30)
+
                 // Text for delivery count
                 Text("\(hospital.deliveryCount) reported deliver\(hospital.deliveryCount == 1 ? "y" : "ies")")
                     .foregroundStyle(.black)
+                    .fontWeight(.semibold)
+
             }
-            .padding(5)
+            .padding()
             .background {
                 Rectangle()
                     .cornerRadius(10)
@@ -164,7 +167,7 @@ struct HospitalDetailView: View {
                     .shadow(radius: 5)
                     .opacity(0.9)
             }
-            .padding([.horizontal, .bottom])
+            .padding(.horizontal)
 
             HStack {
                 ZStack {
@@ -182,13 +185,15 @@ struct HospitalDetailView: View {
                         .offset(x: 15)
                 }
                 .offset(x: -5)
-                .frame(width: 25)
-                
+                .frame(width: 30)
+
                 // Text for baby count
                 Text("\(hospital.babyCount) reported bab\(hospital.babyCount == 1 ? "y" : "ies")")
                     .foregroundStyle(.black)
+                    .fontWeight(.semibold)
+
             }
-            .padding(8)
+            .padding()
             .background {
                 Rectangle()
                     .cornerRadius(10)
@@ -196,13 +201,12 @@ struct HospitalDetailView: View {
                     .shadow(radius: 5)
                     .opacity(0.9)
             }
-            .padding(.leading)
-            
+            .padding(.horizontal)
+
             Spacer()
             
-            
             HStack {
-                CustomButtonView(text: "Back", width: 100, height: 40, color: Color.red, isEnabled: .constant(true), onTapAction: {
+                CustomButtonView(text: "Back", width: 100, height: 40, color: Color.orange, icon: Image(systemName: "arrow.left"), isEnabled: .constant(true), onTapAction: {
                     withAnimation {
                         dismiss()
                     }

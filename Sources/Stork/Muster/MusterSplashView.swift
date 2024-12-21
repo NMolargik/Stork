@@ -55,6 +55,8 @@ struct MusterSplashView: View {
                     }, label: {
                         Text("Create New Muster")
                             .fontWeight(.bold)
+                            .foregroundStyle(.orange)
+
                     })
                 }
             }

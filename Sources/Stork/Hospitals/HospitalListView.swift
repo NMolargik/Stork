@@ -107,7 +107,7 @@ struct HospitalListView: View {
                             }
                         }, label: {
                             Text("Use Location")
-                                .foregroundStyle(.indigo)
+                                .foregroundStyle(.blue)
                         })
                     }
                 }
@@ -119,8 +119,8 @@ struct HospitalListView: View {
                         }
                     }, label: {
                         Text("Missing?")
-                            .foregroundStyle(.red)
-
+                            .foregroundStyle(.orange)
+                            .fontWeight(.bold)
                     })
                 }
             }

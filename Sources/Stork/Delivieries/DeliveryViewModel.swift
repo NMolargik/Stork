@@ -112,10 +112,22 @@ class DeliveryViewModel: ObservableObject {
     
     func getUserDeliveries(profile: Profile) async throws {
         do {
-            self.deliveries = try await deliveryRepository.listDeliveries(userId: profile.id, userFirstName: nil, hospitalId: nil, musterId: nil, date: nil, babyCount: nil, deliveryMethod: nil, epiduralUsed: nil)
+            let fetchedDeliveries = try await deliveryRepository.listDeliveries(
+                userId: profile.id,
+                userFirstName: nil,
+                hospitalId: nil,
+                musterId: nil,
+                date: nil,
+                babyCount: nil,
+                deliveryMethod: nil,
+                epiduralUsed: nil
+            )
+            await MainActor.run {
+                self.deliveries = fetchedDeliveries
+            }
         } catch {
             throw error
-        } 
+        }
     }
     
     func searchForDuplicates(musterId: String) async -> [Delivery] {

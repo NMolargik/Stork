@@ -173,7 +173,6 @@ struct MusterCreationView: View {
             } catch {
                 musterViewModel.validateCreationForm()
                 musterViewModel.isWorking = false
-                
             }
             
             dismiss()

@@ -9,149 +9,156 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryDetailView: View {
-    @Environment(\.colorScheme) var colorScheme
-    var delivery: Delivery
+    @Binding var delivery: Delivery
     
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text(delivery.id)
-                    Spacer()
-                }
-                .padding(.leading)
-                .font(.system(size: 10))
-                
-                ForEach(delivery.babies, id: \.self) { baby in
-                    HStack {
-                        Image(systemName: "figure.child")
-                            .foregroundStyle(baby.sex.color)
-                            .font(.title)
-                            .shadow(radius: 1)
-
-                        VStack {
-                            HStack {
-                                Spacer()
-                                
-                                Image(systemName: "scalemass.fill")
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-
-                                Text(baby.weight.description)
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                
-                                //TODO: fix units
-
-                            }
-                            
-                            HStack {
-                                Spacer()
-                                
-                                Image(systemName: "ruler.fill")
-                                    .foregroundStyle(.orange)
-                                
-                                Text(baby.weight.description)
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                
-                                //TODO: fix units
-                            }
-                        }
-                        .frame(width: 100)
-                        .padding(.trailing)
-                        
-                        if (baby.nurseCatch) {
-                            HStack {
-                                Image(systemName: "stethoscope")
-                                    .foregroundStyle(.indigo)
-                                
-                                Text("Nurse Catch")
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .font(.subheadline)
-                            }
-                            .frame(width: 100)
-                        } else {
-                            Rectangle()
-                                .frame(width: 100, height: 20)
-                                .opacity(0)
-                        }
-                    }
-                    .padding()
-                    .background {
-                        Rectangle()
-                            .cornerRadius(10)
-                            .foregroundStyle(colorScheme == .dark ? .white : .black)
-                            .shadow(radius: 5)
-                            .opacity(0.9)
-                    }
-                    .padding(.horizontal)
-                        
-                }
-                
-                Divider()
-                
-                HStack {
-                    VStack (alignment: .leading, spacing: 10) {
-                        if (delivery.epiduralUsed) {
-                            HStack {
-                                Image(systemName: "syringe.fill")
-                                    .foregroundStyle(.red)
-                                    .frame(width: 30)
-                                
-                                Text("Epidural Used")
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .fontWeight(.bold)
-                            }
-                        }
-                        
+        // No extra NavigationStack here
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                VStack(alignment: .leading, spacing: 10) {
+                    if delivery.epiduralUsed {
                         HStack {
-                            Image(systemName: "figure.fall")
-                                .foregroundStyle(.indigo)
+                            Image(systemName: "syringe.fill")
+                                .foregroundStyle(.red)
                                 .frame(width: 30)
+                                .font(.title)
                             
-                            Text("\(delivery.deliveryMethod.description) Delivery")
-                                .foregroundStyle(colorScheme == .dark ? .black : .white)
+                            Text("Epidural Used")
                                 .fontWeight(.bold)
-
-
-                        }
-                        
-                        if (delivery.musterId != "") {
-                            HStack {
-                                Image(systemName: "person.3.fill")
-                                    .foregroundStyle(.blue)
-                                    .frame(width: 30)
-                                
-                                Text("Added to your muster!")
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .fontWeight(.bold)
-                            }
+                                .foregroundStyle(.black)
+                                .font(.subheadline)
+                                .lineLimit(1)
+                                .fontWeight(.semibold)
                         }
                     }
                     
-                    Spacer()
+                    HStack {
+                        Image(systemName: "figure.fall")
+                            .foregroundStyle(.indigo)
+                            .frame(width: 30)
+                            .font(.title)
+                        
+                        Text("\(delivery.deliveryMethod.description) Delivery")
+                            .fontWeight(.bold)
+                            .foregroundStyle(.black)
+                            .font(.subheadline)
+                            .lineLimit(1)
+                            .fontWeight(.semibold)
+                    }
+                    
+                    if !delivery.musterId.isEmpty {
+                        HStack {
+                            Image(systemName: "person.3.fill")
+                                .foregroundStyle(.blue)
+                                .frame(width: 30)
+                                .font(.title)
+                            
+                            Text("Added to your muster")
+                                .fontWeight(.bold)
+                                .foregroundStyle(.black)
+                                .font(.subheadline)
+                                .lineLimit(1)
+                                .fontWeight(.semibold)
+
+                        }
+                    }
+                }
+            }
+            .padding()
+            .background {
+                Rectangle()
+                    .cornerRadius(10)
+                    .foregroundStyle(.white)
+                    .shadow(radius: 5)
+                    .opacity(0.9)
+            }
+            .padding(.horizontal)
+            
+            ForEach(delivery.babies, id: \.self) { baby in
+                HStack {
+                    Image(systemName: "figure.child")
+                        .foregroundStyle(baby.sex.color)
+                        .font(.title)
+                        .frame(width: 30)
+                        .shadow(radius: 1)
+                    
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "scalemass.fill")
+                                .frame(width: 15)
+                                .foregroundStyle(.green)
+
+                            
+                            Text(baby.weight.description)
+                                .foregroundStyle(.black)
+                                .font(.subheadline)
+                                .lineLimit(1)
+                                .fontWeight(.semibold)
+                            // TODO: fix units
+                        }
+                        
+                        HStack {
+                            Spacer()
+                            Image(systemName: "ruler.fill")
+                                .foregroundStyle(.orange)
+                                .frame(width: 15)
+                            
+                            // NOTE: This uses baby.weight twice – might be a bug
+                            Text(baby.weight.description)
+                                .foregroundStyle(.black)
+                                .font(.subheadline)
+                                .lineLimit(1)
+                                .fontWeight(.semibold)
+                            // TODO: fix units
+                        }
+                    }
+                    .frame(width: 70)
+                    .padding(.trailing)
+                    
+                    if baby.nurseCatch {
+                        HStack {
+                            Image(systemName: "stethoscope")
+                                .foregroundStyle(.indigo)
+                                .font(.title)
+                                .frame(width: 50)
+                                .shadow(radius: 1)
+                            
+                            Text("Nurse Catch")
+                                .foregroundStyle(.black)
+                                .font(.subheadline)
+                                .lineLimit(1)
+                                .fontWeight(.semibold)
+                        }
+                    }
                 }
                 .padding()
                 .background {
                     Rectangle()
                         .cornerRadius(10)
-                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                        .foregroundStyle(.white)
                         .shadow(radius: 5)
                         .opacity(0.9)
                 }
                 .padding(.horizontal)
-                    
-                Spacer()
-
             }
-            .navigationTitle("\(delivery.date.formatted(date: .long, time: .omitted))")
             
-            //TODO: post-release, let user delete a delivery
+            Spacer()
             
-            //TODO: post-release, let user modify delivery
+            HStack {
+                Spacer()
+                
+                Text("ID: \(delivery.id)")
+                    .foregroundStyle(.gray)
+            }
+            .padding([.trailing, .bottom])
+            .font(.system(size: 10))
         }
+        .navigationTitle(delivery.date.formatted(date: .long, time: .omitted))
     }
 }
 
 #Preview {
-    DeliveryDetailView(delivery: Delivery(sample: true))
+    // Preview with a constant binding
+    DeliveryDetailView(delivery: .constant(Delivery(sample: true)))
 }
-

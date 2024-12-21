@@ -85,7 +85,7 @@
     "Add To Muster" : {
 
     },
-    "Added to your muster!" : {
+    "Added to your muster" : {
 
     },
     "Admin Controls" : {
@@ -120,6 +120,12 @@
         }
       }
     },
+    "Are you absolutely sure you want to delete your account?" : {
+
+    },
+    "Are you sure you want to delete your account?" : {
+
+    },
     "Are you sure you want to leave this muster?" : {
 
     },
@@ -147,7 +153,13 @@
     "Change Primary Color" : {
 
     },
+    "Confirm Deletion" : {
+
+    },
     "Confirm Password" : {
+
+    },
+    "Continue" : {
 
     },
     "Create A Muster" : {
@@ -191,6 +203,9 @@
         }
       }
     },
+    "Delete" : {
+
+    },
     "Delete Account" : {
 
     },
@@ -203,7 +218,13 @@
     "Delivery Method" : {
 
     },
+    "Delivery not found" : {
+
+    },
     "Delivery Options" : {
+
+    },
+    "Developer:" : {
 
     },
     "Don't have an account yet?" : {
@@ -279,6 +300,9 @@
       }
     },
     "Hospitals" : {
+
+    },
+    "ID: %@" : {
 
     },
     "Invite User" : {
@@ -419,7 +443,10 @@
     "New Delivery" : {
 
     },
-    "No deliveries for %@." : {
+    "Nick Molargik" : {
+
+    },
+    "No deliveries found" : {
 
     },
     "No deliveries recorded yet. Use the button above to get started!" : {
@@ -473,6 +500,9 @@
 
     },
     "Provide an email address and we can send a password reset email." : {
+
+    },
+    "Restart Onboarding" : {
 
     },
     "Role" : {
@@ -612,6 +642,12 @@
     "Take Photo" : {
 
     },
+    "This action will permanently delete all your personal information and your deliveries." : {
+
+    },
+    "This will remove all your personal data and cannot be undone." : {
+
+    },
     "Units" : {
 
     },
@@ -622,6 +658,9 @@
 
     },
     "User ID" : {
+
+    },
+    "Version:" : {
 
     },
     "Welcome" : {

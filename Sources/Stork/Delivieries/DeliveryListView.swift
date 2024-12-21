@@ -12,108 +12,85 @@ struct DeliveryListView: View {
     @Environment(\.colorScheme) var colorScheme
     @AppStorage("leftHanded") var leftHanded: Bool = false
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    
     @Binding var showingDeliveryAddition: Bool
     
-    @State private var navigationPath: [String] = []
-    
     var body: some View {
-        VStack {
-            NavigationStack(path: $navigationPath) {
-                ScrollView {
-                    if (deliveryViewModel.deliveries.count > 0) {
-                        LazyVStack(alignment: .leading, spacing: 16) {
-                            ForEach(groupDeliveriesByMonth(), id: \.key) { (monthYear, deliveries) in
-                                VStack(alignment: (leftHanded ? .trailing : .leading), spacing: 8) {
-                                    Text(monthYear)
-                                        .font(.largeTitle)
-                                        .foregroundStyle(.primary)
-                                        .fontWeight(.bold)
-                                        .opacity(0.2)
-                                        .padding(.leading, -15)
+        // If you prefer a scrollable list style, wrap your ForEach in a List:
+        List {
+            let grouped = groupDeliveriesByMonth()
+            
+            if deliveryViewModel.deliveries.isEmpty {
+                emptyStateView
+            } else {
+                ForEach(grouped, id: \.key) { (monthYear, deliveries) in
+                    Section(header:
+                        Text(monthYear)
+                            .font(.title)
+                            .foregroundStyle(.primary)
+                            .fontWeight(.bold)
+                            .opacity(0.2)
+                    ) {
+                        if deliveries.isEmpty {
+                            Text("No deliveries found")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        } else {
+                            ForEach(deliveries, id: \.id) { delivery in
+                                NavigationLink(value: delivery) {
+                                    DeliveryRowView(delivery: delivery)
+                                        .padding(.vertical, 4)
                                     
-                                    if deliveries.isEmpty {
-                                        Text("No deliveries for \(monthYear).")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                            .padding(.leading)
-                                    } else {
-                                        ForEach(deliveries) { delivery in
-                                            NavigationLink(destination: DeliveryDetailView(delivery: delivery)) {
-                                                DeliveryRowView(delivery: delivery)
-                                                    .padding(.vertical, 4)
-                                            }
-                                        }
-                                    }
                                 }
-                                .padding(.horizontal)
+                                .listRowSeparator(.hidden)
                             }
                         }
-                        .padding(.top)
-                    } else {
-                        VStack {
-                            Spacer()
-                            
-                            Image(systemName: "figure.child")
-                                .foregroundStyle(.indigo)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .padding(.bottom, 30)
-                            
-                            Text("No deliveries recorded yet. Use the button above to get started!")
-                                .multilineTextAlignment(.center)
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                            
-                            Spacer(minLength: 300)
-                            
-                            HStack {
-                                Spacer()
-                                
-                                Image(systemName: "exclamationmark.circle")
-                                    .font(.title)
-                                    .foregroundStyle(.blue)
-                                    .padding(.trailing)
-                                    .foregroundStyle(.orange)
-                                
-                                Text("You can submit up to 8 deliveries per day")
-                                    .foregroundStyle(.black)
-                                    .multilineTextAlignment(.center)
-                                
-                                Spacer()
-                            }
-                            .padding(8)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(.white)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 2)
-                            }
-                        }
-                        .padding()
-                    }
-                }
-                .navigationTitle("Deliveries")
-                .navigationDestination(for: Delivery.self) { delivery in
-                    DeliveryDetailView(delivery: delivery)
-                }
-                .toolbar {
-                    ToolbarItem {
-                        Button(action: {
-                            withAnimation {
-                                deliveryViewModel.startNewDelivery()
-                                showingDeliveryAddition = true
-                            }
-                        }, label: {
-                            Text("New Delivery")
-                                .bold()
-                        })
                     }
                 }
             }
         }
     }
     
-    // TOOD: Post-release, let user delete their delivery entries
+    private var emptyStateView: some View {
+        VStack {
+            Spacer()
+            Image(systemName: "figure.child")
+                .foregroundStyle(.indigo)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.bottom, 30)
+            
+            Text("No deliveries recorded yet. Use the button above to get started!")
+                .multilineTextAlignment(.center)
+                .font(.title3)
+                .fontWeight(.semibold)
+            
+            Spacer(minLength: 300)
+            
+            HStack {
+                Spacer()
+                Image(systemName: "exclamationmark.circle")
+                    .font(.title)
+                    .foregroundStyle(.blue)
+                    .padding(.trailing)
+                    .foregroundStyle(.orange)
+                
+                Text("You can submit up to 8 deliveries per day")
+                    .foregroundStyle(.black)
+                    .multilineTextAlignment(.center)
+                
+                Spacer()
+            }
+            .padding(8)
+            .background {
+                Rectangle()
+                    .foregroundStyle(.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 2)
+            }
+        }
+        .padding()
+    }
     
     private func groupDeliveriesByMonth() -> [(key: String, value: [Delivery])] {
         let dateFormatter = DateFormatter()
@@ -123,20 +100,17 @@ struct DeliveryListView: View {
         
         for delivery in deliveryViewModel.deliveries {
             let key = dateFormatter.string(from: delivery.date)
-            if grouped[key] != nil {
-                grouped[key]?.append(delivery)
-            } else {
-                grouped[key] = [delivery]
-            }
+            grouped[key, default: []].append(delivery)
         }
         
+        // Sort descending by date
         let sortedKeys = grouped.keys.sorted { lhs, rhs in
             let lhsDate = dateFormatter.date(from: lhs) ?? Date.distantPast
             let rhsDate = dateFormatter.date(from: rhs) ?? Date.distantPast
-            return lhsDate > rhsDate
+            return lhsDate < rhsDate
         }
         
-        return sortedKeys.map { key in (key, grouped[key] ?? []) }
+        return sortedKeys.map { (key: $0, value: grouped[$0] ?? []) }
     }
 }
 

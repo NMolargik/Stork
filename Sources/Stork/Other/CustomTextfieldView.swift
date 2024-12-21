@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct CustomTextfieldView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     @Binding var text: String
+    
     var hintText: String
     var icon: Image
     var isSecure: Bool
@@ -17,7 +20,7 @@ struct CustomTextfieldView: View {
     var body: some View {
         HStack {
             icon
-                .foregroundStyle(iconColor ?? .black)
+                .foregroundStyle(iconColor ?? (colorScheme == .dark ? .white : .black))
                 .frame(width: 20)
             
             Group {
@@ -31,7 +34,6 @@ struct CustomTextfieldView: View {
 
                 }
             }
-            .colorScheme(.light)
             .textInputAutocapitalization(.never)
             .textFieldStyle(.roundedBorder)
             .padding(.leading, 2)
@@ -40,9 +42,15 @@ struct CustomTextfieldView: View {
         }
         .padding(.leading)
         .background {
-            Color.white
-                .cornerRadius(10)
-                .shadow(radius: 2)
+            if (colorScheme == .dark) {
+                Color.gray.opacity(0.5)
+                    .cornerRadius(10)
+                    .shadow(radius: 2)
+            } else {
+                Color.white
+                    .cornerRadius(10)
+                    .shadow(radius: 2)
+            }
         }
         .frame(height: 50)
     }

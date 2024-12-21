@@ -36,10 +36,6 @@ struct DeliveryRowView: View {
             .padding(8)
             
             Spacer()
-            
-            Image(systemName: "chevron.right")
-                .padding(.trailing)
-                .foregroundStyle(.white)
         }
         .background{
             Rectangle()

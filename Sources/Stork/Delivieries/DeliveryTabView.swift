@@ -17,49 +17,74 @@ struct DeliveryTabView: View {
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
     @Binding var showingDeliveryAddition: Bool
-    @State private var inDetailView: Bool = false
-    @State private var navigationPath: [String] = []
+    
+    // Single untyped path for all main flow navigation
+    @State private var navigationPath = NavigationPath()
     
     var body: some View {
-        VStack {
-            if (showingDeliveryAddition) {
-                NavigationStack {
-                    DeliveryAdditionView(showingDeliveryAddition: $showingDeliveryAddition)
-                        .toolbar(content: {
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button(action: {
-                                    withAnimation {
-                                        showingDeliveryAddition = false
-                                    }
-                                }) {
-                                    Text("Cancel")
-                                        .foregroundStyle(.red)
-                                }
-                            }
-                        })
+        NavigationStack(path: $navigationPath) {
+            DeliveryListView(showingDeliveryAddition: $showingDeliveryAddition)
+                .refreshable {
+                    Task {
+                        do {
+                            try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
+                        } catch {
+                            errorMessage = error.localizedDescription
+                            throw error
+                        }
+                    }
                 }
-            } else {
-                ZStack {
-                    NavigationStack(path: $navigationPath) {
-                        List {
-                            DeliveryListView(showingDeliveryAddition: $showingDeliveryAddition)
-                                .padding(.bottom, 70)
-                        }     
-                        .refreshable {
-                            Task { @MainActor in
-                                do {
-                                    try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
-                                } catch {
-                                    errorMessage = error.localizedDescription
-                                    throw error
+                .navigationTitle("Deliveries")
+                // Matches NavigationLink(value: delivery) calls in DeliveryListView
+                .navigationDestination(for: Delivery.self) { delivery in
+                    if let index = deliveryViewModel.deliveries.firstIndex(where: { $0.id == delivery.id }) {
+                        DeliveryDetailView(delivery: $deliveryViewModel.deliveries[index])
+                    } else {
+                        Text("Delivery not found")
+                    }
+                }
+                .toolbar {
+                    ToolbarItem {
+                        Button(action: {
+                            withAnimation {
+                                self.showingDeliveryAddition = true
+                            }
+                        }, label: {
+                            Text("New Delivery")
+                                .foregroundStyle(.orange)
+                                .fontWeight(.bold)
+                        })
+                    }
+                }
+            
+            Spacer()
+        }
+        // Present DeliveryAdditionView via sheet when showingDeliveryAddition is flipped
+        .sheet(isPresented: $showingDeliveryAddition) {
+            NavigationStack {
+                DeliveryAdditionView(showingDeliveryAddition: $showingDeliveryAddition)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Text("New Delivery")
+                                .fontWeight(.bold)
+
+                        }
+                        
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                withAnimation {
+                                    showingDeliveryAddition = false
                                 }
+                            }) {
+                                Text("Cancel")
+                                    .foregroundStyle(.orange)
                             }
                         }
-                        .navigationTitle("Deliveries")
                     }
-                    .padding(.bottom, -50)
-                }
             }
+            #if !SKIP
+            .interactiveDismissDisabled()
+            #endif
         }
     }
 }
