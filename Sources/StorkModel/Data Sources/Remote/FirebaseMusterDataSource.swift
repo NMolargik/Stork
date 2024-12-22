@@ -167,7 +167,8 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     public func sendMusterInvite(invite: MusterInvite, userId: String) async throws {
         do {
             let data = invite.dictionary
-            try await db.collection("MusterInvite").addDocument(data: data)
+            try await db.collection("MusterInvite").document(invite.id).setData(data)
+
         } catch {
             throw MusterError.invitationFailed(error.localizedDescription)
         }
@@ -201,6 +202,19 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
             return invitations
         } catch {
             throw MusterError.failedToCollectInvitations(error.localizedDescription)
+        }
+    }
+    
+    public func deleteMusterInvites(musterId: String) async throws {
+        let query: Query = db.collection("MusterInvite").whereField("musterId", isEqualTo: musterId)
+        
+        let snapshot = try await query.getDocuments()
+        let invitations = snapshot.documents.compactMap { document in
+            MusterInvite(from: document.data(), id: document.documentID)
+        }
+        
+        for musterInvite in invitations {
+            try await db.collection("MusterInvite").document(musterInvite.id).delete()
         }
     }
     

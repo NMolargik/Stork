@@ -9,105 +9,108 @@ import SwiftUI
 import StorkModel
 
 struct MusterAdminInviteUserView: View {
-    @AppStorage("errorMessage") var errorMessage: String = ""
+    @AppStorage("errorMessage") private var errorMessage: String = ""
     
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     @State private var searchText = ""
-    @State private var searchEnabled: Bool = false
-    
+    @State private var searchEnabled = false
     @State private var profiles: [Profile] = []
     
     var body: some View {
         NavigationStack {
             VStack {
-                // Search Bar
-                HStack {
-                    CustomTextfieldView(
-                        text: $searchText,
-                        hintText: "Search by last name",
-                        icon: Image(systemName: "magnifyingglass"),
-                        isSecure: false,
-                        iconColor: Color.blue
-                    )
-                    
-                    CustomButtonView(
-                        text: "Search",
-                        width: 80,
-                        height: 55,
-                        color: Color.indigo,
-                        isEnabled: $searchEnabled,
-                        onTapAction: {
-                            withAnimation {
-                                profileViewModel.isWorking = true
-                                searchUsers()
-                            }
-                        }
-                    )
-                    .onChange(of: searchText) { text in
-                        searchEnabled = text.trimmingCharacters(in: .whitespacesAndNewlines).count > 0
-                    }
-                    .onAppear {
-                        searchEnabled = searchText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0
+                searchBar
+                    .padding(.horizontal)
+
+                if profiles.isEmpty && !profileViewModel.isWorking {
+                    Spacer()
+                    VStack {
+                        Image(systemName: "person.crop.badge.magnifyingglass")
+                            .foregroundStyle(.red)
                         
-                        Task {
-                            if let currentMuster = musterViewModel.currentMuster {
-                                do {
-                                    try await musterViewModel.getMusterInvitations(muster: currentMuster)
-                                    
-                                } catch {
-                                    errorMessage = error.localizedDescription
-                                    throw error
-                                }
-                            }
-                        }
+                        Text("No users found with that last name")
+                            .multilineTextAlignment(.center)
+                            .font(.title3)
                     }
-                }
-                .padding()
-                
-                // Profiles List
-                if profileViewModel.isWorking {
+                    Spacer()
+                } else if profileViewModel.isWorking {
+                    Spacer()
                     ProgressView()
                         .tint(.indigo)
                         .padding()
+                    Spacer()
                 } else {
-                    List {
-                        ForEach(profiles, id: \.id) { profile in
-                            ProfileRowView(
-                                existingInvitations: $musterViewModel.invites,
-                                profile: profile,
-                                currentUser: profileViewModel.profile,
-                                onInvite: {
-                                    inviteUser(profile: profile)
-                                },
-                                onCancelInvite: { invite in
-                                    cancelInvite(profile: profile, invite: invite)
-                                }
-                            )
-                            .padding(.vertical, 5)
-                        }
-                    }
+                    profilesListView
                 }
             }
             .navigationTitle("Invite User")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                    .foregroundStyle(.red)
+                    Button("Close") { dismiss() }
+                        .foregroundStyle(.red)
                 }
+            }
+            .onAppear {
+                refreshInvites()
+                updateSearchEnabled()
             }
         }
     }
-    
+
+    // MARK: - Search Bar
+    private var searchBar: some View {
+        HStack {
+            CustomTextfieldView(
+                text: $searchText,
+                hintText: "Search by last name",
+                icon: Image(systemName: "magnifyingglass"),
+                isSecure: false,
+                iconColor: Color.blue
+            )
+            
+            CustomButtonView(
+                text: "Search",
+                width: 80,
+                height: 55,
+                color: .indigo,
+                isEnabled: $searchEnabled,
+                onTapAction: { withAnimation { searchUsers() } }
+            )
+        }
+        .onChange(of: searchText) { _ in updateSearchEnabled() }
+    }
+
+    // MARK: - Profiles List View
+    private var profilesListView: some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(profiles, id: \.id) { profile in
+                    ProfileRowView(
+                        existingInvitations: $musterViewModel.invites,
+                        profile: profile,
+                        currentUser: profileViewModel.profile,
+                        onInvite: { inviteUser(profile: profile) }
+                    )
+                    .padding(.vertical, 5)
+                    .padding(.horizontal)
+                }
+            }
+        }
+        .refreshable { searchUsers() }
+        .padding(.top)
+    }
+
     // MARK: - Search Users
     private func searchUsers() {
+        guard !profileViewModel.isWorking else { return }
+        
+        profileViewModel.isWorking = true
         Task {
             do {
-                self.profiles = try await profileViewModel.profileRepository.listProfiles(
+                profiles = try await profileViewModel.profileRepository.listProfiles(
                     id: nil,
                     firstName: nil,
                     lastName: searchText.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -119,43 +122,41 @@ struct MusterAdminInviteUserView: View {
                     musterId: nil,
                     isAdmin: nil
                 )
-                
-                print("Profiles found: \(self.profiles)")
-                
-                profileViewModel.isWorking = false
+                print("Profiles found: \(profiles)")
             } catch {
                 errorMessage = "Failed to search for users. Please try again."
-                profileViewModel.isWorking = false
+            }
+            profileViewModel.isWorking = false
+        }
+    }
+
+    // MARK: - Refresh Invitations
+    private func refreshInvites() {
+        Task {
+            guard let muster = musterViewModel.currentMuster else { return }
+            do {
+                try await musterViewModel.getMusterInvitations(muster: muster)
+            } catch {
+                errorMessage = error.localizedDescription
             }
         }
     }
-    
+
     // MARK: - Invite User
     private func inviteUser(profile: Profile) {
         Task {
             do {
-                try await musterViewModel.inviteUserToMuster(profile: profile)
-                print("Invited user: \(profile.firstName) \(profile.lastName)")
+                print("Inviting user: \(profile.firstName) \(profile.lastName)")
+                try await musterViewModel.inviteUserToMuster(profile: profile, currentUser: profileViewModel.profile)
+                refreshInvites()
             } catch {
                 errorMessage = error.localizedDescription
-                throw error
             }
         }
     }
-    
-    // MARK: - Cancel Invitation (Placeholder)
-    private func cancelInvite(profile: Profile, invite: MusterInvite) {
-        // Placeholder function: Implement cancellation logic here
-        Task {
-            if musterViewModel.currentMuster != nil {
-                do {
-                    try await musterViewModel.respondToUserInvite(profile: profile, invite: invite, accepted: false)
-                    print("Cancelled invitation to user: \(profile.firstName) \(profile.lastName)")
-                } catch {
-                    errorMessage = error.localizedDescription
-                    throw error
-                }
-            }
-        }
+
+    // MARK: - Helper to Update Search Enabled State
+    private func updateSearchEnabled() {
+        searchEnabled = !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }

@@ -45,7 +45,7 @@ class HospitalViewModel: ObservableObject {
             usingLocation = true
             
             var location = (latitude: 0.0, longitude: 0.0)
-            let cityState: (city: String?, state: String?) = (city: nil, state: nil)
+            var cityState: (city: String?, state: String?) = (city: nil, state: nil)
             
             do {
                 location = try await locationProvider.fetchCurrentLocation()
@@ -57,7 +57,7 @@ class HospitalViewModel: ObservableObject {
             }
                 
             do {
-                let cityState = try await locationProvider.fetchCityAndState(from: Location(latitude: location.latitude, longitude: location.longitude))
+                cityState = try await locationProvider.fetchCityAndState(from: Location(latitude: location.latitude, longitude: location.longitude))
                 print(cityState)
             } catch {
                 isWorking = false

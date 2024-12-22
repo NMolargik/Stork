@@ -16,6 +16,8 @@ struct MusterCreationView: View {
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     
+    @Binding var showCreateMusterSheet: Bool
+    
     @State private var selectedHospital: Hospital? = nil
     
     var body: some View {
@@ -137,9 +139,14 @@ struct MusterCreationView: View {
                 .navigationTitle("Create A Muster")
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { dismiss() }
-                            .foregroundStyle(.red)
-                            .disabled(musterViewModel.isWorking)
+                        Button(action: {
+                            showCreateMusterSheet = false
+                            dismiss()
+                        }, label: {
+                            Text("Cancel")
+                                .foregroundStyle(.red)
+                        })
+                        .disabled(musterViewModel.isWorking)
                     }
                 }
             }
@@ -167,6 +174,9 @@ struct MusterCreationView: View {
                         profileViewModel.tempProfile.musterId = muster.id
                         
                         try await profileViewModel.updateProfile()
+                        
+                        musterViewModel.musterMembers.append(profileViewModel.profile)
+                        
                     } catch {
                         errorMessage = error.localizedDescription
                         musterViewModel.isWorking = false
@@ -187,7 +197,7 @@ struct MusterCreationView: View {
 }
 
 #Preview {
-    MusterCreationView()
+    MusterCreationView(showCreateMusterSheet: .constant(true))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
         .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))

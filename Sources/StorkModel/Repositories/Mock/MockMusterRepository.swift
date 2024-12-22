@@ -29,12 +29,28 @@ public class MockMusterRepository: MusterRepositoryInterface {
         self.musters = musters
         
         self.invites.append(
-            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jessica", musterName: "Admin Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is the message", primaryColor: "red")
+            MusterInvite(
+                id: UUID().description,
+                recipientId: "",
+                recipientName: "Nick",
+                senderName: "Jessica",
+                musterName: "Admin Muster",
+                musterId: "",
+                primaryColor: "red"
+            )
     
         )
         
         self.invites.append(
-            MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jeanne", musterName: "Parkview Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is another message", primaryColor: "purple")
+            MusterInvite(
+                id: UUID().description,
+                recipientId: "",
+                recipientName: "Nick",
+                senderName: "Jeanne",
+                musterName: "Parkview Muster",
+                musterId: "",
+                primaryColor: "purple"
+            )
         )
     }
 
@@ -141,6 +157,10 @@ public class MockMusterRepository: MusterRepositoryInterface {
             throw MusterError.failedToCancelInvite("Invite with ID \(invitationId) not found.")
         }
         invites.remove(at: index)
+    }
+    
+    public func deleteMusterInvites(musterId: String) async throws {
+        invites.removeAll(where: { $0.musterId == musterId })
     }
     
     /// Deletes an existing muster record.

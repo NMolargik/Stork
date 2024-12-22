@@ -60,6 +60,14 @@ public class ProfileViewModel: ObservableObject {
         }
     }
     
+    func searchProfilesByMuster(musterId: String) async throws -> [Profile] {
+        do {
+            return try await profileRepository.listProfiles(id: nil, firstName: nil, lastName: nil, email: nil, birthday: nil, role: nil, primaryHospital: nil, joinDate: nil, musterId: musterId, isAdmin: nil)
+        } catch {
+            throw error
+        }
+    }
+    
     func resetTempProfile() {
         self.tempProfile = Profile(id: UUID().uuidString, primaryHospitalId: "", musterId: "", firstName: "", lastName: "", email: "", birthday: Date(), joinDate: Date().description, role: ProfileRole.nurse, isAdmin: false)
     }
@@ -67,17 +75,18 @@ public class ProfileViewModel: ObservableObject {
     // Update the profile
     func updateProfile() async throws {
         isWorking = true
-        
-        Task {
-            do {
-                try await profileRepository.updateProfile(profile: tempProfile)
-                self.profile = tempProfile
-                self.isWorking = false
-            } catch {
-                self.errorMessage = "Failed to update profile: \(error.localizedDescription)"
-                self.isWorking = false
-                throw error
-            }
+
+        do {
+            print("updating profile: \(tempProfile.musterId)")
+
+            try await profileRepository.updateProfile(profile: tempProfile)
+            self.profile = tempProfile
+            self.profile.musterId = ""
+            self.isWorking = false
+        } catch {
+            self.errorMessage = "Failed to update profile: \(error.localizedDescription)"
+            self.isWorking = false
+            throw error
         }
     }
 

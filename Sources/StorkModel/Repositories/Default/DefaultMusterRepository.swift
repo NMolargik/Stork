@@ -168,6 +168,15 @@ public class DefaultMusterRepository: MusterRepositoryInterface {
         }
     }
     
+    public func deleteMusterInvites(musterId: String) async throws {
+        do {
+            try await remoteDataSource.deleteMusterInvites(musterId: musterId)
+            
+        } catch {
+            throw error
+        }
+    }
+    
     /// Deletes an existing muster record.
     ///
     /// - Parameter muster: The `Muster` object to delete.

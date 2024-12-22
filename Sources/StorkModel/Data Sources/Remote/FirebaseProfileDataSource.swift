@@ -69,6 +69,8 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     public func updateProfile(profile: Profile) async throws {
         do {
             let data = profile.dictionary
+            print("New muster ID: \(profile.musterId)")
+            print("Updating Profile: \(profile.id)")
             try await db.collection("Profile").document(profile.id).updateData(data)
         } catch {
             throw error

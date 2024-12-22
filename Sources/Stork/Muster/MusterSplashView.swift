@@ -15,78 +15,65 @@ struct MusterSplashView: View {
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
     var body: some View {
-        NavigationStack {
-            
-            //TODO: replace with muster icons
-            Image(systemName: "person.3")
-                .font(.system(size: 50))
-                .navigationTitle("Join A Muster")
-            
-            List {
-                Section {
-                    HStack {
-                        Spacer()
-                        
-                        Text("[ muhs-ter ] - noun\nA group of storks")
-                            .multilineTextAlignment(.center)
-                            .font(.title3)
-                            .fontWeight(.bold)
-                        
-                        Spacer()
-                    }
-                }
+        List {
+            VStack {
+                Image(systemName: "person.3")
+                    .font(.system(size: 50))
+                    .navigationTitle("Join A Muster")
+                    .padding(.bottom)
+
+                    
+                Text("[ muhs-ter ] - noun\nA group of storks")
+                    .multilineTextAlignment(.center)
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.gray)
+            }
+            .frame(maxWidth: .infinity)
+
                 
-                Section {
-                    HStack {
-                        Spacer()
-                        
-                        Text("Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors.")
-                            .multilineTextAlignment(.center)
-                            .font(.title3)
-                        
-                        Spacer()
-                    }
+            Section {
+                VStack {
+                    Text("Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors.")
+                        .multilineTextAlignment(.center)
+                        .font(.body)
+                        .padding(.bottom, 25)
+                    
+                    CustomButtonView(text: "Create New Muster", width: 300, height: 50, color: Color.indigo, icon: Image(systemName: "plus.app"), isEnabled: .constant(true), onTapAction: {
+                        musterViewModel.showCreateMusterSheet = true
+                    })
                 }
+                .frame(maxWidth: .infinity)
             }
             .toolbar {
                 ToolbarItem {
                     Button(action: {
-                        musterViewModel.showCreateMusterSheet = true
+                        Task {
+                            do {
+                                try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
+                                musterViewModel.showMusterInvitations = true
+                            } catch {
+                                errorMessage = error.localizedDescription
+                                throw error
+                            }
+                        }
                     }, label: {
-                        Text("Create New Muster")
+                        Text("Invitations")
                             .fontWeight(.bold)
                             .foregroundStyle(.orange)
 
                     })
                 }
             }
-            
-            HStack {
-                Spacer()
-                
-                CustomButtonView(text: "View Invitations", width: 200, height: 50, color: Color.indigo, icon: Image(systemName: "envelope.fill"), isEnabled: .constant(true), onTapAction: {
-                    Task {
-                        do {
-                            try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
-                            musterViewModel.showInvitationsFullScreen = true
-                        } catch {
-                            errorMessage = error.localizedDescription
-                            throw error
-                        }
-                    }
-                })
-                
-                Spacer()
-            }
         }
-        .fullScreenCover(isPresented: $musterViewModel.showInvitationsFullScreen) {
+        .sheet(isPresented: $musterViewModel.showMusterInvitations) {
             MusterInvitationsView(
-                onDismiss: { musterViewModel.showInvitationsFullScreen = false },
+                showMusterInvitations: $musterViewModel.showMusterInvitations,
                 onRespond: { invite, accepted in
                     Task {
                         do {
                             try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: accepted)
-                            musterViewModel.showInvitationsFullScreen = false
+                            musterViewModel.showMusterInvitations = false
                         } catch {
                             errorMessage = error.localizedDescription
                             throw error
@@ -99,7 +86,7 @@ struct MusterSplashView: View {
             #endif
         }
         .sheet(isPresented: $musterViewModel.showCreateMusterSheet) {
-            MusterCreationView()
+            MusterCreationView(showCreateMusterSheet: $musterViewModel.showCreateMusterSheet)
         #if !SKIP
             .interactiveDismissDisabled(true)
         #endif

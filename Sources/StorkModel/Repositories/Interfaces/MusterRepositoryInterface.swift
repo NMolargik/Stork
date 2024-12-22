@@ -83,6 +83,8 @@ public protocol MusterRepositoryInterface {
     /// - Throws:
     func cancelMusterInvite(invitationId: String) async throws
     
+    func deleteMusterInvites(musterId: String) async throws
+    
     /// Deletes an existing Muster record.
     ///
     /// - Parameter muster: The `Muster` object to delete.

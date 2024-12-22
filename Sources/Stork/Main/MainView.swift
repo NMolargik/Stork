@@ -83,7 +83,7 @@ public struct MainView: View {
                         
                         print("Loading user's muster")
                         do {
-                            try await musterViewModel.loadCurrentMuster(profile: profileViewModel.profile)
+                            try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
                         } catch {
                             errorMessage = error.localizedDescription
                             throw error

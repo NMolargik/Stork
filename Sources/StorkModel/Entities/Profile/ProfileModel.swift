@@ -52,12 +52,12 @@ public struct Profile: Identifiable, Codable, Hashable {
             let id = dictionary["id"] as? String,
             let firstName = dictionary["firstName"] as? String,
             let lastName = dictionary["lastName"] as? String,
-            let joinDateString = dictionary["joinDate"] as? String,
             let email = dictionary["email"] as? String,
-            let isAdminInt = dictionary["isAdmin"] as? Int,
+            let birthdayString = dictionary["birthday"] as? String,
+            let joinDateString = dictionary["joinDate"] as? String,
             let roleString = dictionary["role"] as? String,
             let role = ProfileRole(rawValue: roleString),
-            let birthdayString = dictionary["birthday"] as? String,
+            let isAdmin = dictionary["isAdmin"] as? Bool,
             let birthday = formatter.date(from: birthdayString)
         else {
             print("Missing or invalid required fields")
@@ -77,7 +77,7 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.birthday = birthday
         self.joinDate = joinDateString // Keeping as a string
         self.role = role
-        self.isAdmin = isAdminInt != 0
+        self.isAdmin = isAdmin
     }
 
     // Initialize from explicit parameters

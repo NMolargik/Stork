@@ -74,7 +74,7 @@ struct SettingsTabView: View {
                 // New About Section
                 Section(header: Text("Stork")) {
                     HStack {
-                        Text("Version:")
+                        Text("Version")
                         
                         Spacer()
                         
@@ -82,7 +82,7 @@ struct SettingsTabView: View {
                     }
                     
                     HStack {
-                        Text("Developer:")
+                        Text("Developer")
                         
                         Spacer()
 

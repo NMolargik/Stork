@@ -14,8 +14,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
     public var senderName: String
     public var musterName: String
     public var musterId: String
-    public var primaryHospitalName: String
-    public var message: String
     public var primaryColor: String
     
     public var dictionary: [String: Any] {
@@ -25,8 +23,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
             "senderName": senderName,
             "musterName": musterName,
             "musterId": musterId,
-            "primaryHospitalName": primaryHospitalName,
-            "message": message,
             "primaryColor": primaryColor
         ]
     }
@@ -39,8 +35,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
             let senderName = dictionary["senderName"] as? String,
             let musterName = dictionary["musterName"] as? String,
             let musterId = dictionary["musterId"] as? String,
-            let primaryHospitalName = dictionary["primaryHospitalName"] as? String,
-            let message = dictionary["message"] as? String,
             let primaryColor = dictionary["primaryColor"] as? String
         else {
             return nil
@@ -52,8 +46,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         self.senderName = senderName
         self.musterName = musterName
         self.musterId = musterId
-        self.primaryHospitalName = primaryHospitalName
-        self.message = message
         self.primaryColor = primaryColor
     }
 
@@ -64,8 +56,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         senderName: String,
         musterName: String,
         musterId: String,
-        primaryHospitalName: String,
-        message: String,
         primaryColor: String
     ) {
         self.id = id
@@ -74,8 +64,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         self.senderName = senderName
         self.musterName = musterName
         self.musterId = musterId
-        self.primaryHospitalName = primaryHospitalName
-        self.message = message
         self.primaryColor = primaryColor
     }
 }

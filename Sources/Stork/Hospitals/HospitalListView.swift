@@ -80,11 +80,6 @@ struct HospitalListView: View {
                     Text("Other View: \(value)")
                 }
             }
-            .overlay {
-                if hospitalViewModel.isWorking {
-                    ProgressView()
-                }
-            }
             .toolbar {
                 if (hospitalViewModel.usingLocation) {
                     ToolbarItem(placement: .topBarLeading) {

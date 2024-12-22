@@ -65,7 +65,6 @@ struct DeliveryAdditionView: View {
                         .padding(.bottom, 30)
                     }
                     
-                    // Other Delivery Options
                     VStack {
                         Text("Delivery Options")
                             .font(.title2)

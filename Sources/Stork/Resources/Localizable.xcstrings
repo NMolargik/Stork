@@ -151,10 +151,7 @@
     "Cancel" : {
 
     },
-    "Change" : {
-
-    },
-    "Change Primary Color" : {
+    "Close" : {
 
     },
     "Confirm Deletion" : {
@@ -228,7 +225,7 @@
     "Delivery Options" : {
 
     },
-    "Developer:" : {
+    "Developer" : {
 
     },
     "Don't have an account yet?" : {
@@ -309,6 +306,9 @@
     "ID: %@" : {
 
     },
+    "Invitations" : {
+
+    },
     "Invite User" : {
 
     },
@@ -345,12 +345,6 @@
       }
     },
     "Join A Muster" : {
-
-    },
-    "Kick" : {
-
-    },
-    "Kick Member" : {
 
     },
     "Last Name" : {
@@ -403,6 +397,9 @@
     "Map requires iOS 17" : {
 
     },
+    "Members" : {
+
+    },
     "Missing Hospital" : {
 
     },
@@ -444,9 +441,6 @@
         }
       }
     },
-    "New Color Hex/Name" : {
-
-    },
     "New Delivery" : {
 
     },
@@ -460,6 +454,12 @@
 
     },
     "No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above." : {
+
+    },
+    "No invitations found. Ask a muster admin to send you an invitation!" : {
+
+    },
+    "No users found with that last name" : {
 
     },
     "Nurse Catch" : {
@@ -667,7 +667,7 @@
     "User ID" : {
 
     },
-    "Version:" : {
+    "Version" : {
 
     },
     "Weight: %@" : {
@@ -703,6 +703,9 @@
       }
     },
     "You can submit up to 8 deliveries per day" : {
+
+    },
+    "Your Invitations" : {
 
     }
   },
