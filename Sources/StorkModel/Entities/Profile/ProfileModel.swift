@@ -6,19 +6,42 @@
 
 import Foundation
 
+/// Represents a user profile within the Stork application.
 public struct Profile: Identifiable, Codable, Hashable {
+    
+    // MARK: - Properties
+    
+    /// Unique identifier for the profile.
     public var id: String
+    
+    /// Identifier for the primary hospital associated with the profile.
     public var primaryHospitalId: String
+    
+    /// Identifier for the muster the profile belongs to.
     public var musterId: String
+    
+    /// First name of the user.
     public var firstName: String
+    
+    /// Last name of the user.
     public var lastName: String
+    
+    /// Email address of the user.
     public var email: String
+    
+    /// Birthday of the user.
     public var birthday: Date
+    
+    /// Join date of the user as a string.
     public var joinDate: String
+    
+    /// Role of the user within the application.
     public var role: ProfileRole
+    
+    /// Indicates whether the user has administrative privileges.
     public var isAdmin: Bool
-
-    // Standard Date Formatter
+    
+    /// Predefined date formatter for standardizing date formats.
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         #if !SKIP
@@ -27,27 +50,15 @@ public struct Profile: Identifiable, Codable, Hashable {
         #endif
         return formatter
     }()
-
-    // Convert the model to a dictionary for Firestore compatibility
-    var dictionary: [String: Any] {
-        return [
-            "id": id,
-            "primaryHospitalId": primaryHospitalId,
-            "musterId": musterId,
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-            "birthday": Profile.dateFormatter.string(from: birthday),
-            "joinDate": joinDate,
-            "role": role.rawValue,
-            "isAdmin": isAdmin
-        ]
-    }
-
-    // Initialize from Firestore data dictionary
+    
+    // MARK: - Initializers
+    
+    /// Initializes a `Profile` instance from a Firestore data dictionary.
+    /// - Parameter dictionary: A dictionary containing profile data fetched from Firestore.
     public init?(from dictionary: [String: Any]) {
         let formatter = Profile.dateFormatter
-
+        
+        // Extract and validate required fields.
         guard
             let id = dictionary["id"] as? String,
             let firstName = dictionary["firstName"] as? String,
@@ -63,11 +74,11 @@ public struct Profile: Identifiable, Codable, Hashable {
             print("Missing or invalid required fields")
             return nil
         }
-
-        // Assign optional fields with defaults
+        
+        // Assign optional fields with default values if necessary.
         let primaryHospitalId = dictionary["primaryHospitalId"] as? String ?? ""
         let musterId = dictionary["musterId"] as? String ?? ""
-
+        
         self.id = id
         self.primaryHospitalId = primaryHospitalId
         self.musterId = musterId
@@ -79,8 +90,19 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.role = role
         self.isAdmin = isAdmin
     }
-
-    // Initialize from explicit parameters
+    
+    /// Initializes a `Profile` instance with explicit parameters.
+    /// - Parameters:
+    ///   - id: Unique identifier for the profile.
+    ///   - primaryHospitalId: Primary hospital ID.
+    ///   - musterId: Muster ID.
+    ///   - firstName: First name.
+    ///   - lastName: Last name.
+    ///   - email: Email address.
+    ///   - birthday: Birthday date.
+    ///   - joinDate: Join date as a string.
+    ///   - role: User role.
+    ///   - isAdmin: Administrative status.
     public init(
         id: String,
         primaryHospitalId: String,
@@ -104,8 +126,8 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.role = role
         self.isAdmin = isAdmin
     }
-
-    // Temporary initializer without parameters
+    
+    /// Initializes a `Profile` instance with default values.
     public init() {
         self.id = UUID().uuidString
         self.primaryHospitalId = ""
@@ -118,13 +140,34 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.role = .nurse
         self.isAdmin = false
     }
-
-    // Exclude profilePictureURL from Codable if necessary
+    
+    // MARK: - Computed Properties
+    
+    /// Converts the profile data into a dictionary suitable for Firestore.
+    var dictionary: [String: Any] {
+        return [
+            "id": id,
+            "primaryHospitalId": primaryHospitalId,
+            "musterId": musterId,
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "birthday": Profile.dateFormatter.string(from: birthday),
+            "joinDate": joinDate,
+            "role": role.rawValue,
+            "isAdmin": isAdmin
+        ]
+    }
+    
+    // MARK: - Coding Keys
+    
+    /// Specifies the coding keys for encoding and decoding.
     private enum CodingKeys: String, CodingKey {
         case id, primaryHospitalId, musterId, firstName, lastName, email, birthday, joinDate, role, isAdmin
     }
-
-    // Custom Hashable implementation
+    
+    // MARK: - Hashable Conformance
+    
     public static func == (lhs: Profile, rhs: Profile) -> Bool {
         return lhs.id == rhs.id &&
             lhs.primaryHospitalId == rhs.primaryHospitalId &&
@@ -137,7 +180,7 @@ public struct Profile: Identifiable, Codable, Hashable {
             lhs.role == rhs.role &&
             lhs.isAdmin == rhs.isAdmin
     }
-
+    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(primaryHospitalId)
