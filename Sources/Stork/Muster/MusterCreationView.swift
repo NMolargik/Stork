@@ -26,6 +26,8 @@ struct MusterCreationView: View {
                 self.selectedHospital = hospital
                 musterViewModel.newMuster.primaryHospitalId = hospital.id
                 musterViewModel.showHospitalSelection = false
+                musterViewModel.validateCreationForm()
+
             })
         } else {
             NavigationStack {
@@ -154,9 +156,6 @@ struct MusterCreationView: View {
                 musterViewModel.validateCreationForm()
             }
             .onChange(of: musterViewModel.newMuster.primaryColor) { _ in
-                musterViewModel.validateCreationForm()
-            }
-            .onChange(of: selectedHospital) { _ in
                 musterViewModel.validateCreationForm()
             }
         }

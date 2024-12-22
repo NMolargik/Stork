@@ -64,7 +64,7 @@ struct DeliveryDetailView: View {
                     }
                     
                     HStack {
-                        Image(systemName: "figure.fall")
+                        Image(systemName: "shippingbox.fill")
                             .foregroundStyle(.indigo)
                             .frame(width: 30)
                             .font(.title)

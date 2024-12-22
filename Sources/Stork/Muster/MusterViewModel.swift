@@ -332,47 +332,6 @@ public class MusterViewModel: ObservableObject {
         }
     }
     
-    /// Kicks a member out of the muster.
-    func kickMember(userId: String) async throws {
-        guard var muster = currentMuster else {
-            throw MusterError.creationFailed("No muster found")
-        }
-        
-        isWorking = true
-        defer { isWorking = false }
-        
-        muster.profileIds.removeAll { $0 == userId }
-        muster.administratorProfileIds.removeAll { $0 == userId }
-        
-        do {
-            try await musterRepository.updateMuster(muster: muster)
-            currentMuster = muster
-            print("Member with user ID \(userId) has been kicked out.")
-        } catch {
-            throw error
-        }
-    }
-    
-    /// Changes the primary color of the muster.
-    func changeMusterColor(newColor: String) async throws {
-        guard var muster = currentMuster else {
-            throw MusterError.updateFailed("No muster to update")
-        }
-        
-        isWorking = true
-        defer { isWorking = false }
-        
-        muster.primaryColor = newColor
-        
-        do {
-            try await musterRepository.updateMuster(muster: muster)
-            currentMuster = muster
-            print("Muster color changed to \(newColor)")
-        } catch {
-            throw error
-        }
-    }
-    
     // MARK: - Helper Methods
     
     /// Configures the muster invite with necessary details.
