@@ -63,8 +63,8 @@ public class MusterViewModel: ObservableObject {
         }
         
         creationFormValid = !newMuster.name.isEmpty &&
-        newMuster.name.count <= 25 &&
-        !newMuster.primaryHospitalId.isEmpty
+                            newMuster.name.count <= 25 &&
+                            !newMuster.primaryHospitalId.isEmpty
     }
     
     /// Creates a new muster with the provided profile ID.
@@ -103,7 +103,7 @@ public class MusterViewModel: ObservableObject {
             primaryHospitalId: "",
             administratorProfileIds: [],
             name: "",
-            primaryColor: Color.red.description
+            primaryColor: "red" // Assuming primaryColor is a String
         )
     }
     
@@ -141,14 +141,13 @@ public class MusterViewModel: ObservableObject {
             primaryHospitalId: "",
             administratorProfileIds: [""],
             name: "",
-            primaryColor: Color.red.description
+            primaryColor: "red" // Assuming primaryColor is a String
         )
     }
     
     /// Allows a user to leave the current muster.
     func leaveMuster(profileViewModel: ProfileViewModel) async throws {
-        try await self.loadCurrentMuster(profileViewModel: profileViewModel)
-        
+        try await loadCurrentMuster(profileViewModel: profileViewModel)
         
         guard var muster = currentMuster else {
             throw MusterError.deletionFailed("No muster to delete")
@@ -267,19 +266,6 @@ public class MusterViewModel: ObservableObject {
         }
     }
     
-    /// Starts a new muster invite by resetting the invite state.
-    private func startNewMusterInvite() {
-        invite = MusterInvite(
-            id: UUID().uuidString,
-            recipientId: "",
-            recipientName: "",
-            senderName: "",
-            musterName: "",
-            musterId: "",
-            primaryColor: ""
-        )
-    }
-    
     // MARK: - Admin Functions
     
     /// Invites a user to the current muster.
@@ -308,18 +294,9 @@ public class MusterViewModel: ObservableObject {
         }
     }
     
+    /// Checks if the user is an admin within the muster.
     func isUserAdmin(profile: Profile) -> Bool {
         return musterMembers.contains(where: { $0.id == profile.id && $0.isAdmin }) && profile.isAdmin
-    }
-    
-    /// Configures the muster invite with necessary details.
-    private func configureInvite(for profile: Profile, currentUser: Profile, muster: Muster) {
-        invite?.musterId = muster.id
-        invite?.recipientId = profile.id
-        invite?.musterName = muster.name
-        invite?.senderName = currentUser.firstName
-        invite?.primaryColor = muster.primaryColor
-        invite?.recipientName = profile.firstName
     }
     
     /// Retrieves muster invitations for the specified muster.
@@ -394,5 +371,30 @@ public class MusterViewModel: ObservableObject {
         } catch {
             throw error
         }
+    }
+    
+    // MARK: - Helper Methods
+    
+    /// Configures the muster invite with necessary details.
+    private func configureInvite(for profile: Profile, currentUser: Profile, muster: Muster) {
+        invite?.musterId = muster.id
+        invite?.recipientId = profile.id
+        invite?.musterName = muster.name
+        invite?.senderName = currentUser.firstName
+        invite?.primaryColor = muster.primaryColor
+        invite?.recipientName = profile.firstName
+    }
+    
+    /// Starts a new muster invite by resetting the invite state.
+    private func startNewMusterInvite() {
+        invite = MusterInvite(
+            id: UUID().uuidString,
+            recipientId: "",
+            recipientName: "",
+            senderName: "",
+            musterName: "",
+            musterId: "",
+            primaryColor: ""
+        )
     }
 }
