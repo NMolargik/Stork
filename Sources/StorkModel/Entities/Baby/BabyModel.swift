@@ -83,8 +83,8 @@ public struct Baby: Identifiable, Codable, Hashable {
         self.id = UUID().uuidString
         self.deliveryId = deliveryId
         self.birthday = Date()
-        self.height = 3.3
-        self.weight = 4.4
+        self.height = 16.0
+        self.weight = 112.0
         self.nurseCatch = nurseCatch
         self.sex = sex
     }

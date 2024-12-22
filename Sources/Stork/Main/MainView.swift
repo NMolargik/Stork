@@ -14,11 +14,14 @@ import SkipUI
 #endif
 
 public struct MainView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
     @AppStorage("selectedTab") var selectedTab = Tab.hospitals
 
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    @EnvironmentObject var hospitalViewModel: HospitalViewModel
+    @EnvironmentObject var musterViewModel: MusterViewModel
     
     @State private var navigationPath: [String] = []
     @State private var showingDeliveryAddition: Bool = false
@@ -64,8 +67,29 @@ public struct MainView: View {
         .tint(Color.indigo)
         .onAppear {
             withAnimation {
-                deliveryViewModel.getDeliveries(userId: profileViewModel.profile.id)
                 selectedTab = .home
+                
+                Task {
+                    do {
+                        try await profileViewModel.fetchCurrentProfile()
+                                                
+                        try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
+                        try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
+                        
+                        
+                        guard profileViewModel.profile.musterId != "" else {
+                            return print("User is not in a muster")
+                        }
+                        
+                        print("Loading user's muster")
+                        do {
+                            try await musterViewModel.loadCurrentMuster(profile: profileViewModel.profile)
+                        } catch {
+                            errorMessage = error.localizedDescription
+                            throw error
+                        }
+                    }
+                }
             }
         }
     }
@@ -76,4 +100,5 @@ public struct MainView: View {
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
         .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
+        .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
 }

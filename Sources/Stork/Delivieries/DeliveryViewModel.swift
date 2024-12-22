@@ -11,6 +11,7 @@ import SwiftUI
 
 class DeliveryViewModel: ObservableObject {
     @Published var deliveries: [Delivery] = []
+    @Published var groupedDeliveries: [(key: String, value: [Delivery])] = []
     
     @Published var newDelivery: Delivery = Delivery(sample: true)
     @Published var epiduralUsed: Bool = false
@@ -19,14 +20,11 @@ class DeliveryViewModel: ObservableObject {
     @Published var selectedHospital: Hospital? = nil
     @Published var submitEnabled: Bool = false
     @Published var possibleDuplicates: [Delivery] = []
-
     @Published var isWorking: Bool = false
     @Published var isSelectingHospital: Bool = false
-
-    
     @Published private(set) var currentDeliveryCount: Int = 0
-    private var currentDate: Date = Date()
     
+    private var currentDate: Date = Date()
     private var dailyLimit = 8
     private var timer: Timer?
     
@@ -38,8 +36,8 @@ class DeliveryViewModel: ObservableObject {
         self.deliveryRepository = deliveryRepository
         resetCountIfNeeded()
         startDailyResetTimer()
-        
-        startNewDelivery() // Wipe out existing delivery details
+        startNewDelivery()
+        groupDeliveriesByMonth()
     }
     
     deinit {
@@ -70,6 +68,7 @@ class DeliveryViewModel: ObservableObject {
             print("New delivery successfully submitted")
             self.deliveries.append(newDelivery)
             currentDeliveryCount += 1
+            groupDeliveriesByMonth()
             
         } catch {
             throw DeliveryError.creationFailed("Failed to submit delivery: \(error.localizedDescription)")
@@ -80,12 +79,50 @@ class DeliveryViewModel: ObservableObject {
         self.startNewDelivery()
     }
     
+    func groupDeliveriesByMonth() {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM ''yy"
+            
+            let sortedDeliveries = deliveries.sorted(by: { $0.date > $1.date })
+            
+            var tempGroupedDeliveries: [(key: String, value: [Delivery])] = []
+            var currentKey: String? = nil
+            var currentGroup: [Delivery] = []
+            
+            for delivery in sortedDeliveries {
+                let key = dateFormatter.string(from: delivery.date)
+                if key != currentKey {
+                    if let existingKey = currentKey {
+                        tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
+                    }
+
+                    currentKey = key
+                    currentGroup = [delivery]
+                } else {
+                    currentGroup.append(delivery)
+                }
+            }
+
+            if let existingKey = currentKey {
+                tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
+            }
+            
+            DispatchQueue.main.async {
+                self.groupedDeliveries = tempGroupedDeliveries
+                print("Grouped Deliveries Updated:")
+                for group in self.groupedDeliveries {
+                    print("Month-Year: \(group.key), Deliveries Count: \(group.value.count)")
+                }
+            }
+        }
+    
     func startNewDelivery() {
         self.newDelivery = Delivery(
             id: UUID().uuidString,
             userId: "",
             userFirstName: "",
             hospitalId: "",
+            hospitalName: "",
             musterId: "",
             date: Date(),
             babies: [],
@@ -95,27 +132,13 @@ class DeliveryViewModel: ObservableObject {
         )
     }
     
-    func getDeliveries(userId: String) {
-        Task { @MainActor in
-            self.deliveries = try await deliveryRepository.listDeliveries(
-                userId: userId,
-                userFirstName: nil,
-                hospitalId: nil,
-                musterId: nil,
-                date: nil,
-                babyCount: nil,
-                deliveryMethod: nil,
-                epiduralUsed: nil
-            )
-        }
-    }
-    
     func getUserDeliveries(profile: Profile) async throws {
         do {
             let fetchedDeliveries = try await deliveryRepository.listDeliveries(
                 userId: profile.id,
                 userFirstName: nil,
                 hospitalId: nil,
+                hospitalName: nil,
                 musterId: nil,
                 date: nil,
                 babyCount: nil,
@@ -124,6 +147,7 @@ class DeliveryViewModel: ObservableObject {
             )
             await MainActor.run {
                 self.deliveries = fetchedDeliveries
+                groupDeliveriesByMonth()
             }
         } catch {
             throw error
@@ -135,7 +159,7 @@ class DeliveryViewModel: ObservableObject {
         self.isWorking = true
         
         do {
-            let duplicates = try await deliveryRepository.listDeliveries(userId: nil, userFirstName: nil, hospitalId: selectedHospital?.id, musterId: musterId, date: self.currentDate, babyCount: self.selectedHospital?.babyCount, deliveryMethod: self.deliveryMethod, epiduralUsed: self.epiduralUsed)
+            let duplicates = try await deliveryRepository.listDeliveries(userId: nil, userFirstName: nil, hospitalId: selectedHospital?.id, hospitalName: nil, musterId: musterId, date: self.currentDate, babyCount: self.selectedHospital?.babyCount, deliveryMethod: self.deliveryMethod, epiduralUsed: self.epiduralUsed)
             
             self.submitEnabled = true
             self.isWorking = false
@@ -190,6 +214,4 @@ class DeliveryViewModel: ObservableObject {
         currentDeliveryCount = 0
         currentDate = Date()
     }
-    
-
 }

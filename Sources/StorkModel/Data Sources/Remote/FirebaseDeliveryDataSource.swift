@@ -101,6 +101,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         userId: String? = nil,
         userFirstName: String? = nil,
         hospitalId: String? = nil,
+        hospitalName: String? = nil,
         musterId: String? = nil,
         date: Date? = nil,
         babyCount: Int? = nil,
@@ -118,6 +119,9 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
             }
             if let hospitalId = hospitalId {
                 query = query.whereField("hospitalId", isEqualTo: hospitalId)
+            }
+            if let hospitalName = hospitalName {
+                query = query.whereField("hospitalName", isEqualTo: hospitalName)
             }
             if let musterId = musterId {
                 query = query.whereField("musterId", isEqualTo: musterId)

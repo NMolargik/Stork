@@ -1,7 +1,6 @@
 //
 //  DeliveryListView.swift
 //
-//
 //  Created by Nick Molargik on 11/30/24.
 //
 
@@ -16,20 +15,18 @@ struct DeliveryListView: View {
     @Binding var showingDeliveryAddition: Bool
     
     var body: some View {
-        // If you prefer a scrollable list style, wrap your ForEach in a List:
         List {
-            let grouped = groupDeliveriesByMonth()
-            
             if deliveryViewModel.deliveries.isEmpty {
                 emptyStateView
             } else {
-                ForEach(grouped, id: \.key) { (monthYear, deliveries) in
+                ForEach(deliveryViewModel.groupedDeliveries, id: \.key) { (monthYear, deliveries) in
                     Section(header:
                         Text(monthYear)
                             .font(.title)
                             .foregroundStyle(.primary)
                             .fontWeight(.bold)
                             .opacity(0.2)
+                            .offset(x: -15)
                     ) {
                         if deliveries.isEmpty {
                             Text("No deliveries found")
@@ -40,7 +37,6 @@ struct DeliveryListView: View {
                                 NavigationLink(value: delivery) {
                                     DeliveryRowView(delivery: delivery)
                                         .padding(.vertical, 4)
-                                    
                                 }
                                 .listRowSeparator(.hidden)
                             }
@@ -71,9 +67,8 @@ struct DeliveryListView: View {
                 Spacer()
                 Image(systemName: "exclamationmark.circle")
                     .font(.title)
-                    .foregroundStyle(.blue)
-                    .padding(.trailing)
                     .foregroundStyle(.orange)
+                    .padding(.trailing)
                 
                 Text("You can submit up to 8 deliveries per day")
                     .foregroundStyle(.black)
@@ -90,27 +85,6 @@ struct DeliveryListView: View {
             }
         }
         .padding()
-    }
-    
-    private func groupDeliveriesByMonth() -> [(key: String, value: [Delivery])] {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM ''yy"
-        
-        var grouped: [String: [Delivery]] = [:]
-        
-        for delivery in deliveryViewModel.deliveries {
-            let key = dateFormatter.string(from: delivery.date)
-            grouped[key, default: []].append(delivery)
-        }
-        
-        // Sort descending by date
-        let sortedKeys = grouped.keys.sorted { lhs, rhs in
-            let lhsDate = dateFormatter.date(from: lhs) ?? Date.distantPast
-            let rhsDate = dateFormatter.date(from: rhs) ?? Date.distantPast
-            return lhsDate < rhsDate
-        }
-        
-        return sortedKeys.map { (key: $0, value: grouped[$0] ?? []) }
     }
 }
 

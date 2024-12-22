@@ -134,23 +134,6 @@ struct MusterTabView: View {
                 MusterSplashView()
             }
         }
-        .task {
-            // Attempt to load user's current muster at start
-            guard profileViewModel.profile.musterId != "" else {
-                return print("User is not in a muster")
-            }
-            
-            print("Loading user's muster")
-            
-            Task {
-                do {
-                    try await musterViewModel.loadCurrentMuster(profile: profileViewModel.profile)
-                } catch {
-                    errorMessage = error.localizedDescription
-                    throw error
-                }
-            }
-        }
     }
 }
 

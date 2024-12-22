@@ -45,6 +45,7 @@ public protocol DeliveryRemoteDataSourceInterface {
         userId: String?,
         userFirstName: String?,
         hospitalId: String?,
+        hospitalName: String?,
         musterId: String?,
         date: Date?,
         babyCount: Int?,

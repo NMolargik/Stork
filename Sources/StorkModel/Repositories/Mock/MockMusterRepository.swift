@@ -35,7 +35,6 @@ public class MockMusterRepository: MusterRepositoryInterface {
         
         self.invites.append(
             MusterInvite(id: UUID().description, recipientId: "", recipientName: "Nick", senderName: "Jeanne", musterName: "Parkview Muster", musterId: "", primaryHospitalName: "Parkview Regional Medical Center", message: "Hey this is another message", primaryColor: "purple")
-    
         )
     }
 
@@ -45,7 +44,7 @@ public class MockMusterRepository: MusterRepositoryInterface {
     ///
     /// - Parameter muster: The `Muster` object to create.
     /// - Throws: `MusterError.creationFailed` if a muster with the same ID already exists.
-    public func createMuster(muster: Muster) async throws{
+    public func createMuster(muster: Muster) async throws {
         if musters.contains(where: { $0.id == muster.id }) {
             throw MusterError.creationFailed("Muster with ID \(muster.id) already exists.")
         }
@@ -62,7 +61,6 @@ public class MockMusterRepository: MusterRepositoryInterface {
         }
         musters[index] = muster
     }
-
 
     /// Fetches a single muster by its unique ID.
     ///

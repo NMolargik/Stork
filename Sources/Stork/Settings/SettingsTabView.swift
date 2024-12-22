@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct SettingsTabView: View {
-    @AppStorage("useMetricUnits") var useMetricUnits = false
+    @AppStorage("useMetric") private var useMetric: Bool = false
     @AppStorage("appState") private var appState: AppState = .splash
     
     @Environment(\.colorScheme) var colorScheme
@@ -67,10 +67,8 @@ struct SettingsTabView: View {
                 }
                 
                 Section(header: Text("Units")) {
-                    Toggle("Use Metric Units", isOn: $useMetricUnits)
+                    Toggle("Use Metric Units", isOn: $useMetric)
                         .tint(.green)
-                    
-                    // TODO: Apply metric units throughout the app!
                 }
                 
                 // New About Section

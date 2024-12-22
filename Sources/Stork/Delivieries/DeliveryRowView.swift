@@ -14,7 +14,7 @@ struct DeliveryRowView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(delivery.date.formatted(date: .abbreviated, time: .omitted))
+                Text(delivery.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.headline)
                     .foregroundColor(.black)
                     .padding(.horizontal, 5)
@@ -80,18 +80,18 @@ struct DeliveryRowView: View {
         var summary = [String]()
         
         if maleCount > 0 {
-            summary.append("\(maleCount) boy\(maleCount > 1 ? "s" : "")")
+            summary.append("\(maleCount) boy\(maleCount > 1 ? "s" : "")    ")
         }
         
         if femaleCount > 0 {
-            summary.append("\(femaleCount) girl\(femaleCount > 1 ? "s" : "")")
+            summary.append("\(femaleCount) girl\(femaleCount > 1 ? "s" : "")    ")
         }
         
         if lossCount > 0 {
-            summary.append("\(lossCount) loss\(lossCount > 1 ? "es" : "")")
+            summary.append("\(lossCount) loss\(lossCount > 1 ? "es" : "")    ")
         }
         
-        return summary.isEmpty ? "No babies" : summary.joined(separator: " ")
+        return summary.isEmpty ? "No babies... somehow" : summary.joined(separator: " ")
     }
     
     /// Generates a gradient representing the distribution of sexes in the delivery.
@@ -113,6 +113,7 @@ struct DeliveryRowView: View {
         userId: "user1",
         userFirstName: "FirstName",
         hospitalId: "Hospital1",
+        hospitalName: "Hospital Name",
         musterId: "Muster1",
         date: Date(),
         babies: [

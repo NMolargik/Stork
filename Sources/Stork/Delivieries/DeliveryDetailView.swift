@@ -9,11 +9,42 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryDetailView: View {
-    @Binding var delivery: Delivery
+    @AppStorage("useMetric") private var useMetric: Bool = false
     
+    @EnvironmentObject var musterViewModel: MusterViewModel
+
+    @Binding var delivery: Delivery
+
     var body: some View {
-        // No extra NavigationStack here
         VStack(alignment: .leading, spacing: 10) {
+            Text(delivery.date.formatted(date: .omitted, time: .shortened))
+                .padding(.leading)
+            
+            HStack {
+                Image(systemName: "building.fill")
+                    .foregroundStyle(.orange)
+                    .font(.title)
+                    .frame(width: 30)
+                    .shadow(radius: 1)
+                
+                Text(delivery.hospitalName)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.black)
+                    .font(.subheadline)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .fontWeight(.semibold)
+            }
+            .padding()
+            .background {
+                Rectangle()
+                    .cornerRadius(10)
+                    .foregroundStyle(.white)
+                    .shadow(radius: 5)
+                    .opacity(0.9)
+            }
+            .padding(.horizontal)
+            
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     if delivery.epiduralUsed {
@@ -51,7 +82,7 @@ struct DeliveryDetailView: View {
                             Image(systemName: "person.3.fill")
                                 .foregroundStyle(.blue)
                                 .frame(width: 30)
-                                .font(.title)
+                                .font(.body)
                             
                             Text("Added to your muster")
                                 .fontWeight(.bold)
@@ -82,54 +113,42 @@ struct DeliveryDetailView: View {
                         .frame(width: 30)
                         .shadow(radius: 1)
                     
-                    VStack {
+                    VStack(alignment: .leading) {
                         HStack {
-                            Spacer()
                             Image(systemName: "scalemass.fill")
-                                .frame(width: 15)
-                                .foregroundStyle(.green)
-
+                                .frame(width: 30)
+                                .foregroundStyle(.orange)
                             
-                            Text(baby.weight.description)
+                            // Display weight with units
+                            Text(weightText(for: baby.weight))
                                 .foregroundStyle(.black)
                                 .font(.subheadline)
                                 .lineLimit(1)
                                 .fontWeight(.semibold)
-                            // TODO: fix units
                         }
                         
                         HStack {
-                            Spacer()
                             Image(systemName: "ruler.fill")
-                                .foregroundStyle(.orange)
-                                .frame(width: 15)
-                            
-                            // NOTE: This uses baby.weight twice – might be a bug
-                            Text(baby.weight.description)
+                                .foregroundStyle(.green)
+                                .frame(width: 30)
+
+                            // Display height with units
+                            Text(heightText(for: baby.height))
                                 .foregroundStyle(.black)
                                 .font(.subheadline)
                                 .lineLimit(1)
                                 .fontWeight(.semibold)
-                            // TODO: fix units
                         }
                     }
-                    .frame(width: 70)
                     .padding(.trailing)
+                    .frame(width: 150)
                     
                     if baby.nurseCatch {
-                        HStack {
-                            Image(systemName: "stethoscope")
-                                .foregroundStyle(.indigo)
-                                .font(.title)
-                                .frame(width: 50)
-                                .shadow(radius: 1)
-                            
-                            Text("Nurse Catch")
-                                .foregroundStyle(.black)
-                                .font(.subheadline)
-                                .lineLimit(1)
-                                .fontWeight(.semibold)
-                        }
+                        Text("Nurse Catch")
+                            .foregroundStyle(.black)
+                            .font(.subheadline)
+                            .lineLimit(1)
+                            .fontWeight(.semibold)
                     }
                 }
                 .padding()
@@ -156,9 +175,32 @@ struct DeliveryDetailView: View {
         }
         .navigationTitle(delivery.date.formatted(date: .long, time: .omitted))
     }
+
+    // Computed property to format weight based on useMetric
+    private func weightText(for weightInOunces: Double) -> String {
+        if useMetric {
+            let weightInKilograms = weightInOunces * 0.0283495 // 1 ounce = 0.0283495 kg
+            return "\(String(format: "%.2f", weightInKilograms)) kg"
+        } else {
+            let pounds = Int(weightInOunces) / 16
+            let ounces = Int(weightInOunces) % 16
+            return "\(pounds) lbs \(ounces) oz"
+        }
+    }
+    
+    // Computed property to format height based on useMetric
+    private func heightText(for heightInInches: Double) -> String {
+        if useMetric {
+            let heightInCentimeters = heightInInches * 2.54 // 1 inch = 2.54 cm
+            return "\(String(format: "%.1f", heightInCentimeters)) cm"
+        } else {
+            return "\(String(format: "%.1f", heightInInches)) inches"
+        }
+    }
 }
 
 #Preview {
     // Preview with a constant binding
     DeliveryDetailView(delivery: .constant(Delivery(sample: true)))
+        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
 }

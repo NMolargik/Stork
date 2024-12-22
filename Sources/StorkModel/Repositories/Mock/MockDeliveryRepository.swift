@@ -77,6 +77,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
                     userId: userId,
                     userFirstName: "FirstName",
                     hospitalId: UUID().uuidString,
+                    hospitalName: "Parkview Regional Medical Center",
                     musterId: UUID().uuidString,
                     date: randomDate,
                     babies: babies,
@@ -120,6 +121,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         userId: String?,
         userFirstName: String?,
         hospitalId: String?,
+        hospitalName: String?,
         musterId: String?,
         date: Date?,
         babyCount: Int?,
@@ -130,6 +132,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
             (userId == nil || delivery.userId == userId) &&
             (userFirstName == nil || delivery.userFirstName == userFirstName) &&
             (hospitalId == nil || delivery.hospitalId == hospitalId) &&
+            (hospitalName == nil || delivery.hospitalName == hospitalName) &&
             (musterId == nil || delivery.musterId == musterId) &&
             (date == nil || Calendar.current.isDate(delivery.date, inSameDayAs: date!)) &&
             (babyCount == nil || delivery.babies.count == babyCount) &&

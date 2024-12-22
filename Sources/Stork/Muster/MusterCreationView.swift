@@ -18,8 +18,6 @@ struct MusterCreationView: View {
     
     @State private var selectedHospital: Hospital? = nil
     
-    var onCreate: (Muster) -> Void
-
     var body: some View {
         if (musterViewModel.showHospitalSelection) {
             HospitalListView(selectionMode: true, onSelection: { hospital in
@@ -32,14 +30,23 @@ struct MusterCreationView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         // Muster Name Input
-                        CustomTextfieldView(
-                            text: $musterViewModel.newMuster.name,
-                            hintText: "Enter Muster name",
-                            icon: Image(systemName: "tag.fill"),
-                            isSecure: false,
-                            iconColor: Color.blue
-                        )
-//                        
+                        Group {
+                            CustomTextfieldView(
+                                text: $musterViewModel.newMuster.name,
+                                hintText: "Enter Muster name",
+                                icon: Image(systemName: "tag.fill"),
+                                isSecure: false,
+                                iconColor: Color.blue,
+                                characterLimit: 20
+                            )
+                            
+                            if let error = musterViewModel.nameError {
+                                Text(error)
+                                    .foregroundStyle(.gray)
+                                    .font(.footnote)
+                            }
+                        }
+                        
                         // Color Selection Buttons
                         VStack(alignment: .center, spacing: 10) {
                             Text("Select An Accent Color")
@@ -142,7 +149,7 @@ struct MusterCreationView: View {
             .onChange(of: musterViewModel.newMuster.primaryColor) { _ in
                 musterViewModel.validateCreationForm()
             }
-            .onChange(of: musterViewModel.newMuster.primaryHospitalId) { _ in
+            .onChange(of: selectedHospital) { _ in
                 musterViewModel.validateCreationForm()
             }
         }
@@ -160,7 +167,6 @@ struct MusterCreationView: View {
                         profileViewModel.tempProfile.musterId = muster.id
                         
                         try await profileViewModel.updateProfile()
-                        onCreate(muster)
                     } catch {
                         errorMessage = error.localizedDescription
                         musterViewModel.isWorking = false
@@ -169,19 +175,19 @@ struct MusterCreationView: View {
                 } else {
                     musterViewModel.validateCreationForm()
                 }
-                
             } catch {
                 musterViewModel.validateCreationForm()
                 musterViewModel.isWorking = false
             }
             
+            musterViewModel.isWorking = false
             dismiss()
         }
     }
 }
 
 #Preview {
-    MusterCreationView(onCreate: { _ in })
+    MusterCreationView()
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
         .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))

@@ -26,24 +26,22 @@ public class ProfileViewModel: ObservableObject {
         self.profileRepository = profileRepository
         self.profile = Profile()
         self.tempProfile = Profile()
-        fetchCurrentProfile()
     }
 
     @MainActor
     // Fetch the current profile asynchronously
-    func fetchCurrentProfile() {
+    func fetchCurrentProfile() async throws {
         isWorking = true
-        Task {
-            do {
-                let fetchedProfile = try await profileRepository.getCurrentProfile()
-                self.profile = fetchedProfile
-                self.isWorking = false
-            } catch {
-                self.errorMessage = "Failed to load profile: \(error.localizedDescription)"
-                self.isWorking = false
-                self.signOut()
-                throw error
-            }
+
+        do {
+            let fetchedProfile = try await profileRepository.getCurrentProfile()
+            self.profile = fetchedProfile
+            self.isWorking = false
+        } catch {
+            self.errorMessage = "Failed to load profile: \(error.localizedDescription)"
+            self.isWorking = false
+            self.signOut()
+            throw error
         }
     }
     

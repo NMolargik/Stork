@@ -34,7 +34,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
         do {
             print(muster.id)
             let data = muster.dictionary
-            try await db.collection("Muster").addDocument(data: data)
+            try await db.collection("Muster").document(muster.id).setData(data)
         } catch {
             throw MusterError.creationFailed("Failed to create muster: \(error.localizedDescription)")
         }

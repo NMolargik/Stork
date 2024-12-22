@@ -101,6 +101,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     
     public func getCurrentProfile() async throws -> Profile {
         do {
+            print("Auth User ID: \(auth.currentUser?.uid)")
             guard let userId = auth.currentUser?.uid else {
                 await self.signOut()
                 throw ProfileError.notFound("No profile currently logged in.")

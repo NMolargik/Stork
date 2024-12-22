@@ -28,6 +28,7 @@ public class MusterViewModel: ObservableObject {
     @Published var newMuster: Muster = Muster(id: UUID().uuidString, profileIds: [], primaryHospitalId: "", administratorProfileIds: [], name: "", primaryColor: "")
     @Published var showHospitalSelection: Bool = false
     @Published var creationFormValid: Bool = false
+    @Published var nameError: String? = nil
     
     // Invitation
     @Published var invite: MusterInvite? = nil
@@ -44,7 +45,13 @@ public class MusterViewModel: ObservableObject {
     }
     
     func validateCreationForm() {
-        self.creationFormValid = newMuster.name != "" && newMuster.primaryHospitalId != ""
+        if newMuster.name.count > 20 {
+            nameError = "Muster name cannot exceed 25 characters"
+        } else {
+            nameError = nil
+        }
+        
+        self.creationFormValid = !newMuster.name.isEmpty && newMuster.name.count <= 25 && !newMuster.primaryHospitalId.isEmpty
     }
     
     func isUserAdmin(of muster: Muster, profileId: String) -> Bool {

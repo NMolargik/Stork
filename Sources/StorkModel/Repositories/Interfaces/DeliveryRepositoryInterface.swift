@@ -40,6 +40,7 @@ public protocol DeliveryRepositoryInterface {
         userId: String?,
         userFirstName: String?,
         hospitalId: String?,
+        hospitalName: String?,
         musterId: String?,
         date: Date?,
         babyCount: Int?,

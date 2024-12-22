@@ -1,13 +1,13 @@
 import Foundation
 
-enum HospitalError: Error, LocalizedError {
+public enum HospitalError: Error, LocalizedError {
     case notFound(String)
     case creationFailed(String)
     case updateFailed(String)
     case deletionFailed(String)
     case unknown(String)
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .notFound(let message):
             return "Hospital Not Found: \(message)"

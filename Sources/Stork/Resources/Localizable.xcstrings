@@ -4,12 +4,6 @@
     "[ muhs-ter ] - noun\nA group of storks" : {
 
     },
-    "%.1f inches" : {
-
-    },
-    "%.1f lbs" : {
-
-    },
     "%@" : {
 
     },
@@ -72,6 +66,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld reported deliver%2$@"
+          }
+        }
+      }
+    },
+    "%lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
           }
         }
       }
@@ -356,6 +360,9 @@
 
     },
     "Leave Muster" : {
+
+    },
+    "Length: %@" : {
 
     },
     "Light" : {
@@ -661,6 +668,9 @@
 
     },
     "Version:" : {
+
+    },
+    "Weight: %@" : {
 
     },
     "Welcome" : {

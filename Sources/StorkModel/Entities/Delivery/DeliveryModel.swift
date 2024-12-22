@@ -12,6 +12,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
     public var userId: String
     public var userFirstName: String
     public var hospitalId: String
+    public var hospitalName: String
     public var musterId: String
     public var date: Date
     public var babies: [Baby]
@@ -25,6 +26,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
             "userId": userId,
             "userFirstName": userFirstName,
             "hospitalId": hospitalId,
+            "hospitalName": hospitalName,
             "musterId": musterId,
             "date": date.timeIntervalSince1970,
             "babies": babies.map { $0.dictionary },
@@ -41,6 +43,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
             let userId = dictionary["userId"] as? String,
             let userFirstName = dictionary["userFirstName"] as? String,
             let hospitalId = dictionary["hospitalId"] as? String,
+            let hospitalName = dictionary["hospitalName"] as? String,
             let musterId = dictionary["musterId"] as? String,
             let dateTimestamp = dictionary["date"] as? TimeInterval,
             let babiesData = dictionary["babies"] as? [[String: Any]],
@@ -56,6 +59,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
         self.userId = userId
         self.userFirstName = userFirstName
         self.hospitalId = hospitalId
+        self.hospitalName = hospitalName
         self.musterId = musterId
         self.date = Date(timeIntervalSince1970: dateTimestamp)
         self.babies = babiesData.compactMap { Baby(from: $0) }
@@ -65,11 +69,12 @@ public struct Delivery: Identifiable, Codable, Hashable {
     }
 
     // A standard initializer for creating a new `DeliveryModel` instance.
-    public init(id: String, userId: String, userFirstName: String, hospitalId: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
+    public init(id: String, userId: String, userFirstName: String, hospitalId: String, hospitalName: String, musterId: String, date: Date, babies: [Baby], babyCount: Int, deliveryMethod: DeliveryMethod, epiduralUsed: Bool) {
         self.id = id
         self.userId = userId
         self.userFirstName = userFirstName
         self.hospitalId = hospitalId
+        self.hospitalName = hospitalName
         self.musterId = musterId
         self.date = date
         self.babies = babies
@@ -83,6 +88,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
         self.userId = UUID().uuidString
         self.userFirstName = "FirstName"
         self.hospitalId = "1234"
+        self.hospitalName = "Parkview Regional Medical Center"
         self.musterId = "5678"
         self.date = Date()
         self.babies = [

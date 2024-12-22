@@ -13,6 +13,8 @@ class HospitalViewModel: ObservableObject {
     @AppStorage("errorMessage") var errorMessage: String = ""
 
     @Published var hospitals: [Hospital] = []
+    @Published var primaryHospital: Hospital?
+    
     @Published var isWorking: Bool = false
     @Published var searchQuery: String = ""
     @Published var searchEnabled: Bool = true
@@ -95,6 +97,18 @@ class HospitalViewModel: ObservableObject {
             }
             
             isWorking = false
+        }
+    }
+    
+    func getUserPrimaryHospital(profile: Profile) async throws {
+        if (profile.primaryHospitalId.isEmpty) {
+            return
+        }
+        
+        do {
+            self.primaryHospital = try await self.hospitalRepository.getHospital(byId: profile.primaryHospitalId)
+        } catch {
+            throw error
         }
     }
     

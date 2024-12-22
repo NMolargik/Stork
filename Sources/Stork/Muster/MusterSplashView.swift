@@ -99,16 +99,7 @@ struct MusterSplashView: View {
             #endif
         }
         .sheet(isPresented: $musterViewModel.showCreateMusterSheet) {
-            MusterCreationView { newMuster in
-                Task {
-                    do {
-                        try await musterViewModel.createMuster(profileId: profileViewModel.profile.id)
-                    } catch {
-                        errorMessage = error.localizedDescription
-                        throw error
-                    }
-                }
-            }
+            MusterCreationView()
         #if !SKIP
             .interactiveDismissDisabled(true)
         #endif
