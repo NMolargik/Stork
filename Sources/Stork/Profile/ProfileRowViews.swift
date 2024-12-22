@@ -97,3 +97,4 @@ struct ProfileRowView: View {
         onInvite: {}
     )
 }
+

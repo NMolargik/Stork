@@ -1,38 +1,61 @@
 //
 //  MusterAdminAssignAdminView.swift
 //
-//
 //  Created by Nick Molargik on 12/11/24.
 //
 
 import SwiftUI
+import StorkModel
 
 struct MusterAdminAssignAdminView: View {
-    var onAssign: (String) -> Void
+    @EnvironmentObject var musterViewModel: MusterViewModel
+    @EnvironmentObject var profileViewModel: ProfileViewModel
     @Environment(\.dismiss) var dismiss
-    @State private var userId = ""
-    
+
     var body: some View {
         NavigationStack {
-            Form {
-                TextField("User ID", text: $userId)
+            List {
+                ForEach(musterViewModel.musterMembers, id: \.id) { profile in
+                    ProfileAssignmentRowView(
+                        profile: profile,
+                        onAssign: {
+                            assignUser(profile: profile)
+                        }
+                    )
+                }
             }
             .navigationTitle("Assign Admin")
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Assign") {
-                        onAssign(userId)
-                        dismiss()
-                    }
-                }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("Close") { dismiss() }
+                        .foregroundStyle(.red)
                 }
             }
+        }
+    }
+
+    // Update the profile locally in musterMembers
+    private func updateProfileLocally(profileId: String) {
+        if let index = musterViewModel.musterMembers.firstIndex(where: { $0.id == profileId }) {
+            musterViewModel.musterMembers[index].isAdmin = true
+        }
+    }
+    
+    private func assignUser(profile: Profile) {
+        Task {
+            var tempProfile = profile
+            tempProfile.isAdmin = true
+            
+            try await musterViewModel.assignAdmin(userId: tempProfile.id)
+            updateProfileLocally(profileId: tempProfile.id)
+            
+            try await profileViewModel.updateOtherProfile(profile: tempProfile)
         }
     }
 }
 
 #Preview {
-    MusterAdminAssignAdminView(onAssign: { _ in })
+    MusterAdminAssignAdminView()
+        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
+        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

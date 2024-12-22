@@ -86,16 +86,7 @@ struct MusterTabView: View {
 #endif
                 }
                 .sheet(isPresented: $musterViewModel.showAssignAdminSheet) {
-                    MusterAdminAssignAdminView { userId in
-                        Task {
-                            do {
-                                try await musterViewModel.assignAdmin(userId: userId)
-                            } catch {
-                                errorMessage = error.localizedDescription
-                                throw error
-                            }
-                        }
-                    }
+                    MusterAdminAssignAdminView()
                 }
             } else {
                 MusterSplashView()

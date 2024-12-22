@@ -89,6 +89,19 @@ public class ProfileViewModel: ObservableObject {
             throw error
         }
     }
+    
+    func updateOtherProfile(profile: Profile) async throws {
+        isWorking = true
+        
+        do {
+            print("About to update profile: \(profile.firstName)")
+            try await profileRepository.updateProfile(profile: profile)
+            self.isWorking = false
+        } catch {
+            self.isWorking = false
+            throw error
+        }
+    }
 
     // Save the updated profile asynchronously
     private func saveProfile() {
