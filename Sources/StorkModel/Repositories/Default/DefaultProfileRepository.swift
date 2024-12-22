@@ -163,39 +163,6 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
             throw ProfileError.fetchFailed("Failed to fetch profiles: \(error.localizedDescription)")
         }
     }
-
-    /// Uploads a profile picture for the specified profile.
-    ///
-    /// - Parameter profile: The `Profile` object to delete.
-    /// - Throws:
-    ///   - `ProfileError.uploadFailed`: If the upload process fails.
-    ///   - `ProfileError`: For other failures during the upload operation.
-    public func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws {
-        do {
-            try await remoteDataSource.uploadProfilePicture(profile: profile, profilePicture: profilePicture)
-        } catch let error as ProfileError {
-            throw error
-        } catch {
-            throw ProfileError.pictureUploadFailed("Failed to upload picture: \(error.localizedDescription)")
-        }
-    }
-
-    /// Retrieves the profile picture for the specified profile.
-    ///
-    /// - Parameter profile: The `Profile` object to delete.
-    /// - Returns: A `Data` object containing the image data of the profile picture.
-    /// - Throws:
-    ///   - `ProfileError.notFound`: If the profile picture does not exist.
-    ///   - `ProfileError`: For other failures during the retrieval operation.
-    public func retrieveProfilePicture(profile: Profile) async throws -> UIImage? {
-        do {
-            return try await remoteDataSource.retrieveProfilePicture(profile: profile)
-        } catch let error as ProfileError {
-            throw error
-        } catch {
-            throw ProfileError.pictureRetrievalFailed("Failed to retrieve picture: \(error.localizedDescription)")
-        }
-    }
     
     public func sendPasswordReset(email: String) async throws {
         do {

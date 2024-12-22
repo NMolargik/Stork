@@ -57,12 +57,6 @@ class LoginViewModel: ObservableObject {
             try await profileRepository.signOut()
             throw ProfileError.notFound(error.localizedDescription)
         }
-        
-        //TODO: fetch profilePicture
-    }
-    
-    private func retrieveProfilePicture() async throws {
-        // TODO: implement
     }
     
     private func getCurrentUser() async throws {

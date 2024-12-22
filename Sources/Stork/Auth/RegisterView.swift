@@ -19,7 +19,6 @@ struct RegisterView: View {
     @StateObject private var viewModel: RegisterViewModel
     
     @Binding var showRegistration: Bool
-    @State private var selectedImageURL: URL?
     
     private let profileRepository: ProfileRepositoryInterface
     var onAuthenticated: () -> Void
@@ -117,35 +116,6 @@ struct RegisterView: View {
                             }
                         }
                         .pickerStyle(.segmented)
-                        
-                        Divider()
-                        
-                        VStack {
-                            if let image = viewModel.profilePicture {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100)
-                                    .clipShape(Circle())
-                            } else {
-                                Image(systemName: "person.circle")
-                                    .foregroundStyle(.orange)
-                                    .font(.largeTitle)
-                            }
-                        
-                            HStack {
-                                Spacer()
-                                
-                                MediaButton(type: .library, selectedImageURL: $selectedImageURL, onImageSelected: { url in
-                                    if let url = url, let imageData = try? Data(contentsOf: url), let image = UIImage(data: imageData) {
-                                            viewModel.profilePicture = image
-                                        }
-                                })
-
-                                Spacer()
-                            }
-                        }
-                        .padding()
                         
                         Divider()
                         

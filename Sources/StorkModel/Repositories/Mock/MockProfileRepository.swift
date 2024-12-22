@@ -15,9 +15,6 @@ public class MockProfileRepository: ProfileRepositoryInterface {
     /// A list of mock profiles used for in-memory storage.
     private var profiles: [Profile]
 
-    /// A dictionary to simulate profile picture storage in-memory.
-    private var profilePictures: [String: UIImage] = [:]
-
     // MARK: - Initializer
 
     /// Initializes the mock repository with optional sample data.
@@ -81,7 +78,6 @@ public class MockProfileRepository: ProfileRepositoryInterface {
     ///   - email: An optional filter for the profile's email address.
     ///   - birthday: An optional filter for the profile's birthday.
     ///   - role: An optional filter for the profile's role.
-    ///   - profilePictureURL: An optional filter for the profile's picture URL.
     ///   - primaryHospital: An optional filter for the profile's primary hospital ID.
     ///   - joinDate: An optional filter for the profile's join date.
     ///   - musterId: An optional filter for the muster ID associated with the profile.
@@ -100,28 +96,6 @@ public class MockProfileRepository: ProfileRepositoryInterface {
         isAdmin: Bool? = nil
     ) async throws -> [Profile] {
         return profiles
-    }
-
-    /// Uploads a profile picture for the specified profile.
-    ///
-    /// - Parameter profile: The `Profile` object containing the profile picture to upload.
-    public func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws {
-        // TODO: fix this
-//        guard let image = profile.profilePicture else {
-//            throw ProfileError.creationFailed("No profile picture provided for profile with ID \(profile.id).")
-//        }
-//        profilePictures[profile.id] = image
-    }
-
-    /// Retrieves the profile picture for the specified profile.
-    ///
-    /// - Parameter profile: The `Profile` object containing the reference to the image.
-    /// - Returns: A `UIImage` object representing the profile picture.
-    public func retrieveProfilePicture(profile: Profile) async throws -> UIImage? {
-        guard let image = profilePictures[profile.id] else {
-            throw ProfileError.notFound("Profile picture for ID \(profile.id) not found.")
-        }
-        return image
     }
     
     public func isAuthenticated() -> Bool {
@@ -145,7 +119,6 @@ public class MockProfileRepository: ProfileRepositoryInterface {
         return
     }
     
-    
     /// Deletes an existing profile.
     ///
     /// - Parameter profile: The `Profile` object to delete.
@@ -155,6 +128,5 @@ public class MockProfileRepository: ProfileRepositoryInterface {
             throw ProfileError.deletionFailed("Failed to delete profile with ID \(profile.id).")
         }
         profiles.remove(at: index)
-        profilePictures.removeValue(forKey: profile.id)
     }
 }

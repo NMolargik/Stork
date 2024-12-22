@@ -203,10 +203,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     
     // AUTHENTICATION
     
-    /// Registers a new user account with an email and password, and uploads their profile picture if provided.
+    /// Registers a new user account with an email and password
     ///
     /// - Parameters:
-    ///   - profile: The `Profile` object containing user information, including email and optional profile picture.
+    ///   - profile: The `Profile` object containing user information, including email
     ///   - password: The password for the user's account.
     /// - Returns: The same `Profile` object after successful registration.
     /// - Throws:
@@ -261,67 +261,6 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             print("Error signing out: \(error.localizedDescription)")
         }
     }
-    
-    //TODO: implement this
-    /// Uploads the profile picture to Firebase Storage for the specified profile.
-    ///
-    /// - Parameter profile: The `Profile` object containing the profile picture to upload.
-    /// - Throws:
-    ///   - `NSError`: If the profile picture data is invalid or the upload process fails.
-    public func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws {
-//        guard let imageData = profile.profilePicture?.jpegData(compressionQuality: 0.8) else {
-//            throw NSError(domain: "FirebaseAuthRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Profile Picture contains invalid data"])
-//        }
-//        
-//        let storageRef = storage.reference().child("profile_pictures/\(profile.id).jpg")
-//        
-//        do {
-//            let _ = try await storageRef.putDataAsync(imageData, metadata: nil)
-//        } catch {
-//            throw error
-//        }
-    }
-    
-    
-    
-    //TODO: implement this
-    
-    /// Retrieves the profile picture from Firebase Storage for the specified profile.
-    ///
-    /// - Parameter profile: The `Profile` object containing the email used to locate the profile picture.
-    /// - Returns: A `UIImage` object representing the profile picture.
-    /// - Throws:
-    ///   - `NSError`: If the profile picture cannot be retrieved or converted to a `UIImage`.
-    public func retrieveProfilePicture(profile: Profile) async throws -> UIImage? {
-        _ = storage.reference().child("profile_pictures/\(profile.email).jpg")
-
-        do {
-//            let data = try await storageRef.data(maxSize: 5 * 1024 * 1024)
-//            guard let image = UIImage(data: data) else {
-//                throw NSError(domain: "FirebaseProfileDataSource", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unable to convert data to UIImage."])
-//            }
-//
-//            return image
-//        } catch {
-//
-            throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture:"])
-//            throw NSError(domain: "FirebaseProfileDataSource", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve profile picture: \(error.localizedDescription)"])
-        }
-    }
-    
-//    suspend fun retrieveProfilePicture(profile: Profile): Bitmap? {
-//           val storageRef = storage.reference.child("profile_pictures/${profile.email}.jpg")
-//           return try {
-//               // Fetch data from Firebase Storage
-//
-//               // Convert data to a Bitmap
-//               val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
-//               bitmap ?: throw Exception("Unable to convert data to Bitmap.")
-//           } catch (e: Exception) {
-//               // Handle errors
-//               throw Exception("Failed to retrieve profile picture: ${e.message}", e)
-//           }
-//       }
     
     public func isAuthenticated() -> Bool {
         return auth.currentUser != nil

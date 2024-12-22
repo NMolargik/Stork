@@ -90,23 +90,5 @@ public protocol ProfileRepositoryInterface {
     
     func signOut() async throws
 
-    /// Uploads a profile picture to Firebase Storage.
-    ///
-    /// - Parameter profile: The `Profile` object to associate with the picture
-    /// - Parameter profilePicture: The `UIImage` to upload
-    /// - Throws:
-    ///   - `ProfileError.uploadFailed`: If the upload process fails.
-    ///   - `ProfileError`: For other errors during the upload operation.
-    func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws
-
-    /// Retrieves a profile picture from Firebase Storage.
-    ///
-    /// - Parameter profile: The `Profile` object to reference
-    /// - Returns: A `UIImage` representing the profile picture
-    /// - Throws:
-    ///   - `ProfileError.notFound`: If the profile picture does not exist.
-    ///   - `ProfileError`: For other errors during the retrieval operation.
-    func retrieveProfilePicture(profile: Profile) async throws -> UIImage?
-        
     func sendPasswordReset(email: String) async throws
 }

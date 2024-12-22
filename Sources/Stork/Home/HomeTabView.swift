@@ -46,18 +46,10 @@ struct HomeTabView: View {
                             navigationPath.append("ProfileView")
                         }
                     }, label: {
-                        //TODO: fix this
-//                        if let profilePicture = profileViewModel.profile.profilePicture {
-//                            Image(uiImage: profilePicture)
-//                                .resizable()
-//                                .scaledToFill()
-//                                .frame(width: 100, height: 100)
-//                                .clipShape(Circle())
-//                        } else {
+                        //TODO: build profile Initials view
                             Image(systemName: "person.circle")
                                 .font(.title2)
                                 .foregroundStyle(.orange)
-                        //}
                     })
                 }
             }

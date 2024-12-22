@@ -13,8 +13,6 @@ struct ProfileView: View {
     
     //TODO: this and an edit view
     
-    //TODO: fix profile picture
-    
     var body: some View {
         VStack (alignment: .leading) {
             HStack {
@@ -30,6 +28,7 @@ struct ProfileView: View {
                 
                 Spacer()
                 
+                //TODO: replace with initials
                 Image(systemName: "person")
                     .foregroundStyle(.orange)
                     .font(.largeTitle)

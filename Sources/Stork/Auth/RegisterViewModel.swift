@@ -29,7 +29,6 @@ class RegisterViewModel: ObservableObject {
     @Published var lastNameError: String? = nil
     @Published var birthdayError: String? = nil
     
-    @Published public var profilePicture: UIImage?
     @Published var isWorking: Bool = false
     
     // MARK: - Required Repository
@@ -70,19 +69,6 @@ class RegisterViewModel: ObservableObject {
         } catch {
             self.isWorking = false
             try await profileRepository.signOut()
-            throw ProfileError.creationFailed(error.localizedDescription)
-        }
-        
-        //TODO: if there is a profile picture, upload it
-
-    }
-    
-    private func uploadProfilePicture(profile: Profile) async throws {
-        guard let profilePicture else { return }
-        
-        do {
-            try await profileRepository.uploadProfilePicture(profile: profile, profilePicture: profilePicture)
-        } catch {
             throw ProfileError.creationFailed(error.localizedDescription)
         }
     }

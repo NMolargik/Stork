@@ -101,26 +101,6 @@ public protocol ProfileRemoteDataSourceInterface {
     ///   - `ProfileError.signOutFailed`: If the sign-out operation fails.
     func signOut() async throws
 
-    /// Uploads a profile picture to Firebase Storage.
-    ///
-    /// - Parameter profile: The `Profile` object to associate
-    /// - Parameter profilePicture: A `UIImage` of the picture to upload
-    /// - Throws:
-    ///   - `ProfileError.uploadFailed`: If the upload operation fails.
-    ///   - `ProfileError.firebaseError`: If the Firebase Storage operation fails.
-    ///   - `ProfileError.unknown`: If any other error occurs.
-    func uploadProfilePicture(profile: Profile, profilePicture: UIImage) async throws
-
-    /// Retrieves a profile picture from Firebase Storage.
-    ///
-    /// - Parameter profile: The `Profile` object containing the reference to the image.
-    /// - Returns: A `UIImage` object representing the profile picture.
-    /// - Throws:
-    ///   - `ProfileError.notFound`: If the image cannot be found.
-    ///   - `ProfileError.firebaseError`: If the Firebase Storage operation fails.
-    ///   - `ProfileError.unknown`: If any other error occurs.
-    func retrieveProfilePicture(profile: Profile) async throws -> UIImage?
-    
     func sendPasswordReset(email: String) async throws
     
     /// Deletes an existing profile record from Firestore.
