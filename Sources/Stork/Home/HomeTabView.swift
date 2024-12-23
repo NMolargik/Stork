@@ -16,9 +16,31 @@ struct HomeTabView: View {
     @Binding var selectedTab: Tab
     @Binding var showingDeliveryAddition: Bool
     
+    @State private var showProfileView: Bool = false
+    
     var body: some View {
         NavigationStack(path: $navigationPath) {
             Group {
+                Spacer()
+                
+                ZStack {
+                    Rectangle()
+                        .frame(width: 300, height: 200)
+                        .foregroundStyle(.gray)
+                    
+                    Text("Jar and Marbles View")
+                        .foregroundStyle(.black)
+                }
+                
+                ZStack {
+                    Rectangle()
+                        .frame(width: 300, height: 200)
+                        .foregroundStyle(.gray)
+                    
+                    Text("Personal Stats Graph")
+                        .foregroundStyle(.black)
+                }
+                
                 Spacer()
                 
                 CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
@@ -32,24 +54,20 @@ struct HomeTabView: View {
             }
             .padding(.bottom, 20)
             .navigationTitle("Stork")
-            .navigationDestination(for: String.self) { value in
-                if value == "ProfileView" {
-                    ProfileView()
-                } else {
-                    Text("Other View: \(value)")
-                }
-            }
+            .sheet(isPresented: $showProfileView, content: {
+                ProfileView()
+                #if !SKIP
+                    .interactiveDismissDisabled()
+                #endif
+            })
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         withAnimation {
-                            navigationPath.append("ProfileView")
+                            showProfileView = true
                         }
                     }, label: {
-                        //TODO: build profile Initials view
-                            Image(systemName: "person.circle")
-                                .font(.title2)
-                                .foregroundStyle(.orange)
+                        InitialsAvatarView(firstName: profileViewModel.profile.firstName, lastName: profileViewModel.profile.lastName)
                     })
                 }
             }

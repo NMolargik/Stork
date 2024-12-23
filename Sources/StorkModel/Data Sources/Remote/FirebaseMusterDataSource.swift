@@ -64,6 +64,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     ///   - `MusterError.firebaseError`: If an error occurs while fetching the muster.
     public func getMuster(byId id: String) async throws -> Muster {
         do {
+            print("MusterId: \(id)")
             let document = try await db.collection("Muster").document(id).getDocument()
 
             // Safely unwrap the optional data

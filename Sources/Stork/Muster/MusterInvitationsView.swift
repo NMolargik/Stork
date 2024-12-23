@@ -32,6 +32,7 @@ struct MusterInvitationsView: View {
                         Image(systemName: "exclamationmark.magnifyingglass")
                             .foregroundStyle(.red)
                             .font(.largeTitle)
+                            .padding()
                         
                         Text("No invitations found. Ask a muster admin to send you an invitation!")
                             .multilineTextAlignment(.center)
@@ -47,12 +48,13 @@ struct MusterInvitationsView: View {
                             VStack(alignment: .leading) {
                                 Text(invite.senderName + " invited you to join " + invite.musterName)
                                     .font(.headline)
+                                    .foregroundStyle(.black)
                                 
                                 HStack {
                                     CustomButtonView(text: "Accept", width: 100, height: 40, color: Color.blue, isEnabled: .constant(true), onTapAction: {
                                         
                                         Task {
-                                            try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: true)
+                                            try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: true, profileViewModel: profileViewModel)
                                             
                                             print("Invite Muster ID: \(invite.musterId)")
                                             profileViewModel.tempProfile = profileViewModel.profile
@@ -74,7 +76,7 @@ struct MusterInvitationsView: View {
                                     CustomButtonView(text: "Decline", width: 100, height: 40, color: Color.red, isEnabled: .constant(true), onTapAction: {
                                         
                                         Task {
-                                            try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: false)
+                                            try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: false, profileViewModel: profileViewModel)
                                                                                         
                                             musterViewModel.isWorking = false
                                             musterViewModel.invites.removeAll(where: { $0.musterId == invite.musterId })

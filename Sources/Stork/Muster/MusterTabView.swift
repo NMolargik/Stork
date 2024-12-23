@@ -17,14 +17,13 @@ struct MusterTabView: View {
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     
     @State private var showingMusterInvitations: Bool = false
-    
     @State private var navigationPath = NavigationPath()
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             
             if let muster = musterViewModel.currentMuster {
-                VStack {
+                ScrollView {
                     // Show muster statistics or info
                     Text("Statistics for \(muster.name)")
                         .font(.title)
@@ -66,6 +65,11 @@ struct MusterTabView: View {
                         musterViewModel.showLeaveConfirmation = true
                     }
                     .padding(.bottom)
+                }
+                .refreshable {
+                    Task {
+                        try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
+                    }
                 }
                 .navigationTitle(muster.name)
                 .confirmationDialog(

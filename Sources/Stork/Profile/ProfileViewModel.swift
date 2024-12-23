@@ -77,11 +77,8 @@ public class ProfileViewModel: ObservableObject {
         isWorking = true
 
         do {
-            print("updating profile: \(tempProfile.musterId)")
-
             try await profileRepository.updateProfile(profile: tempProfile)
             self.profile = tempProfile
-            self.profile.musterId = ""
             self.isWorking = false
         } catch {
             self.errorMessage = "Failed to update profile: \(error.localizedDescription)"

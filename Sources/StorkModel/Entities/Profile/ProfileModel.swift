@@ -42,7 +42,7 @@ public struct Profile: Identifiable, Codable, Hashable {
     public var isAdmin: Bool
     
     /// Predefined date formatter for standardizing date formats.
-    private static let dateFormatter: DateFormatter = {
+    public static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         #if !SKIP
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"

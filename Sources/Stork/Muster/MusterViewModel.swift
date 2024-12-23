@@ -114,6 +114,10 @@ public class MusterViewModel: ObservableObject {
         isWorking = true
         defer { isWorking = false }
         
+        if (profileViewModel.profile.musterId.isEmpty) {
+            return
+        }
+        
         do {
             currentMuster = try await musterRepository.getMuster(byId: profileViewModel.profile.musterId)
         } catch {
@@ -135,14 +139,7 @@ public class MusterViewModel: ObservableObject {
     
     /// Clears the current muster data.
     func clearCurrentMuster() {
-        currentMuster = Muster(
-            id: UUID().uuidString,
-            profileIds: [""],
-            primaryHospitalId: "",
-            administratorProfileIds: [""],
-            name: "",
-            primaryColor: "red" // Assuming primaryColor is a String
-        )
+        currentMuster = nil
     }
     
     /// Allows a user to leave the current muster.
@@ -169,6 +166,8 @@ public class MusterViewModel: ObservableObject {
         } else {
             try await updateMuster(muster: muster)
         }
+        
+        clearCurrentMuster()
     }
     
     /// Deletes the muster if no members are left.
@@ -214,19 +213,19 @@ public class MusterViewModel: ObservableObject {
     }
     
     /// Responds to a user's muster invite.
-    func respondToUserInvite(profile: Profile, invite: MusterInvite, accepted: Bool) async throws {
+    func respondToUserInvite(profile: Profile, invite: MusterInvite, accepted: Bool, profileViewModel: ProfileViewModel) async throws {
         isWorking = true
         defer { isWorking = false }
         
         if accepted {
-            try await acceptInvite(profile: profile, invite: invite)
+            try await acceptInvite(profile: profile, invite: invite, profileViewModel: profileViewModel)
         } else {
             try await declineInvite(invite: invite)
         }
     }
     
     /// Accepts a muster invite.
-    private func acceptInvite(profile: Profile, invite: MusterInvite) async throws {
+    private func acceptInvite(profile: Profile, invite: MusterInvite, profileViewModel: ProfileViewModel) async throws {
         startNewMusterInvite()
         
         do {
@@ -244,6 +243,7 @@ public class MusterViewModel: ObservableObject {
         do {
             try await musterRepository.updateMuster(muster: muster)
             currentMuster = muster
+            
         } catch {
             throw error
         }
@@ -254,6 +254,8 @@ public class MusterViewModel: ObservableObject {
         } catch {
             throw error
         }
+        
+        profileViewModel.profile.musterId = muster.id
     }
     
     /// Declines a muster invite.

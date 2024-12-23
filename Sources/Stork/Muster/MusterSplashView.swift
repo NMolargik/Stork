@@ -72,7 +72,7 @@ struct MusterSplashView: View {
                 onRespond: { invite, accepted in
                     Task {
                         do {
-                            try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: accepted)
+                            try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: accepted, profileViewModel: profileViewModel)
                             musterViewModel.showMusterInvitations = false
                         } catch {
                             errorMessage = error.localizedDescription
