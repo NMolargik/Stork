@@ -45,7 +45,7 @@ public struct Profile: Identifiable, Codable, Hashable {
     public static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         #if !SKIP
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.dateFormat = "MM/dd/yyyy"
         formatter.locale = Locale(identifier: "en_US_POSIX")
         #endif
         return formatter

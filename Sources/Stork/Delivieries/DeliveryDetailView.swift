@@ -16,152 +16,156 @@ struct DeliveryDetailView: View {
     @Binding var delivery: Delivery
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(delivery.date.formatted(date: .omitted, time: .shortened))
-                .padding(.leading)
-            
-            HStack {
-                Image(systemName: "building.fill")
-                    .foregroundStyle(.orange)
-                    .font(.title)
-                    .frame(width: 30)
-                    .shadow(radius: 1)
-                
-                Text(delivery.hospitalName)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.black)
-                    .font(.subheadline)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                    .fontWeight(.semibold)
-            }
-            .padding()
-            .background {
-                Rectangle()
-                    .cornerRadius(10)
-                    .foregroundStyle(.white)
-                    .shadow(radius: 5)
-                    .opacity(0.9)
-            }
-            .padding(.horizontal)
-            
-            HStack {
+        VStack {
+            ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
-                    if delivery.epiduralUsed {
-                        HStack {
-                            Image(systemName: "syringe.fill")
-                                .foregroundStyle(.red)
-                                .frame(width: 30)
-                                .font(.title)
-                            
-                            Text("Epidural Used")
-                                .fontWeight(.bold)
-                                .foregroundStyle(.black)
-                                .font(.subheadline)
-                                .lineLimit(1)
-                                .fontWeight(.semibold)
-                        }
-                    }
+                    Text(delivery.date.formatted(date: .omitted, time: .shortened))
+                        .padding(.leading)
                     
                     HStack {
-                        Image(systemName: "shippingbox.fill")
-                            .foregroundStyle(.indigo)
-                            .frame(width: 30)
+                        Image(systemName: "building.fill")
+                            .foregroundStyle(.orange)
                             .font(.title)
+                            .frame(width: 30)
+                            .shadow(radius: 1)
                         
-                        Text("\(delivery.deliveryMethod.description) Delivery")
+                        Text(delivery.hospitalName)
                             .fontWeight(.bold)
                             .foregroundStyle(.black)
                             .font(.subheadline)
-                            .lineLimit(1)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
                             .fontWeight(.semibold)
                     }
+                    .padding()
+                    .background {
+                        Rectangle()
+                            .cornerRadius(10)
+                            .foregroundStyle(.white)
+                            .shadow(radius: 5)
+                            .opacity(0.9)
+                    }
+                    .padding(.horizontal)
                     
-                    if !delivery.musterId.isEmpty {
-                        HStack {
-                            Image(systemName: "person.3.fill")
-                                .foregroundStyle(.blue)
-                                .frame(width: 30)
-                                .font(.body)
+                    HStack {
+                        VStack(alignment: .leading, spacing: 10) {
+                            if delivery.epiduralUsed {
+                                HStack {
+                                    Image(systemName: "syringe.fill")
+                                        .foregroundStyle(.red)
+                                        .frame(width: 30)
+                                        .font(.title)
+                                    
+                                    Text("Epidural Used")
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.black)
+                                        .font(.subheadline)
+                                        .lineLimit(1)
+                                        .fontWeight(.semibold)
+                                }
+                            }
                             
-                            Text("Added to your muster")
-                                .fontWeight(.bold)
-                                .foregroundStyle(.black)
-                                .font(.subheadline)
-                                .lineLimit(1)
-                                .fontWeight(.semibold)
-
-                        }
-                    }
-                }
-            }
-            .padding()
-            .background {
-                Rectangle()
-                    .cornerRadius(10)
-                    .foregroundStyle(.white)
-                    .shadow(radius: 5)
-                    .opacity(0.9)
-            }
-            .padding(.horizontal)
-            
-            ForEach(delivery.babies, id: \.self) { baby in
-                HStack {
-                    Image(systemName: "figure.child")
-                        .foregroundStyle(baby.sex.color)
-                        .font(.title)
-                        .frame(width: 30)
-                        .shadow(radius: 1)
-                    
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Image(systemName: "scalemass.fill")
-                                .frame(width: 30)
-                                .foregroundStyle(.orange)
+                            HStack {
+                                Image(systemName: "shippingbox.fill")
+                                    .foregroundStyle(.indigo)
+                                    .frame(width: 30)
+                                    .font(.title)
+                                
+                                Text("\(delivery.deliveryMethod.description) Delivery")
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.black)
+                                    .font(.subheadline)
+                                    .lineLimit(1)
+                                    .fontWeight(.semibold)
+                            }
                             
-                            // Display weight with units
-                            Text(weightText(for: baby.weight))
-                                .foregroundStyle(.black)
-                                .font(.subheadline)
-                                .lineLimit(1)
-                                .fontWeight(.semibold)
-                        }
-                        
-                        HStack {
-                            Image(systemName: "ruler.fill")
-                                .foregroundStyle(.green)
-                                .frame(width: 30)
-
-                            // Display height with units
-                            Text(heightText(for: baby.height))
-                                .foregroundStyle(.black)
-                                .font(.subheadline)
-                                .lineLimit(1)
-                                .fontWeight(.semibold)
+                            if !delivery.musterId.isEmpty {
+                                HStack {
+                                    Image(systemName: "person.3.fill")
+                                        .foregroundStyle(.blue)
+                                        .frame(width: 30)
+                                        .font(.body)
+                                    
+                                    Text("Added to your muster")
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.black)
+                                        .font(.subheadline)
+                                        .lineLimit(1)
+                                        .fontWeight(.semibold)
+                                    
+                                }
+                            }
                         }
                     }
-                    .padding(.trailing)
-                    .frame(width: 150)
+                    .padding()
+                    .background {
+                        Rectangle()
+                            .cornerRadius(10)
+                            .foregroundStyle(.white)
+                            .shadow(radius: 5)
+                            .opacity(0.9)
+                    }
+                    .padding(.horizontal)
                     
-                    if baby.nurseCatch {
-                        Text("Nurse Catch")
-                            .foregroundStyle(.black)
-                            .font(.subheadline)
-                            .lineLimit(1)
-                            .fontWeight(.semibold)
+                    ForEach(delivery.babies, id: \.self) { baby in
+                        HStack {
+                            Image(systemName: "figure.child")
+                                .foregroundStyle(baby.sex.color)
+                                .font(.title)
+                                .frame(width: 30)
+                                .shadow(radius: 1)
+                            
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Image(systemName: "scalemass.fill")
+                                        .frame(width: 30)
+                                        .foregroundStyle(.orange)
+                                    
+                                    // Display weight with units
+                                    Text(weightText(for: baby.weight))
+                                        .foregroundStyle(.black)
+                                        .font(.subheadline)
+                                        .lineLimit(1)
+                                        .fontWeight(.semibold)
+                                }
+                                
+                                HStack {
+                                    Image(systemName: "ruler.fill")
+                                        .foregroundStyle(.green)
+                                        .frame(width: 30)
+                                    
+                                    // Display height with units
+                                    Text(heightText(for: baby.height))
+                                        .foregroundStyle(.black)
+                                        .font(.subheadline)
+                                        .lineLimit(1)
+                                        .fontWeight(.semibold)
+                                }
+                            }
+                            .padding(.trailing)
+                            .frame(width: 150)
+                            
+                            if baby.nurseCatch {
+                                Text("Nurse Catch")
+                                    .foregroundStyle(.black)
+                                    .font(.subheadline)
+                                    .lineLimit(1)
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .padding()
+                        .background {
+                            Rectangle()
+                                .cornerRadius(10)
+                                .foregroundStyle(.white)
+                                .shadow(radius: 5)
+                                .opacity(0.9)
+                        }
+                        .padding(.horizontal)
                     }
                 }
-                .padding()
-                .background {
-                    Rectangle()
-                        .cornerRadius(10)
-                        .foregroundStyle(.white)
-                        .shadow(radius: 5)
-                        .opacity(0.9)
-                }
-                .padding(.horizontal)
             }
-            
+                
             Spacer()
             
             HStack {

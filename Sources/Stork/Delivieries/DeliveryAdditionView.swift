@@ -66,12 +66,6 @@ struct DeliveryAdditionView: View {
                     }
                     
                     VStack {
-                        Text("Delivery Options")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                    }
-                    
-                    VStack {
                         Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
                             .padding()
                             .fontWeight(.bold)
@@ -181,8 +175,12 @@ struct DeliveryAdditionView: View {
                 }
                 .padding()
             }
-            
-            // Optional: Other footer content
+        }
+        .onAppear {
+            withAnimation {
+                addBaby()
+                selectedHospital = hospitalViewModel.primaryHospital
+            }
         }
         .onChange(of: deliveryViewModel.newDelivery.babies.count) { newCount in
             deliveryViewModel.submitEnabled = newCount > 0 && self.selectedHospital != nil

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct InitialsAvatarView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     // MARK: - Properties
     
     /// The user's first name.
@@ -52,7 +54,7 @@ struct InitialsAvatarView: View {
             
             Text(initials)
                 .font(font)
-                .foregroundColor(.white)
+                .foregroundColor(colorScheme == .dark ? .black : .white)
                 .accessibilityLabel(Text("User initials: \(initials)"))
         }
     }

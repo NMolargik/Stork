@@ -20,7 +20,7 @@ struct HomeTabView: View {
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            Group {
+            VStack {
                 Spacer()
                 
                 ZStack {
@@ -54,12 +54,6 @@ struct HomeTabView: View {
             }
             .padding(.bottom, 20)
             .navigationTitle("Stork")
-            .sheet(isPresented: $showProfileView, content: {
-                ProfileView()
-                #if !SKIP
-                    .interactiveDismissDisabled()
-                #endif
-            })
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -71,6 +65,13 @@ struct HomeTabView: View {
                     })
                 }
             }
+            .sheet(isPresented: $showProfileView, content: {
+                ProfileView()
+                #if !SKIP
+                    .interactiveDismissDisabled()
+                #endif
+                    .presentationDetents(profileViewModel.editingProfile ? [.fraction(0.75)] : [.fraction(0.3)])
+            })
         }
         .frame(maxWidth: .infinity)
     }

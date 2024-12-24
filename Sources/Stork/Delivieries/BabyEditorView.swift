@@ -33,7 +33,7 @@ struct BabyEditorView: View {
                 Text("Baby \(babyNumber)")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                    .foregroundStyle(.black)
                 
                 Spacer()
                 

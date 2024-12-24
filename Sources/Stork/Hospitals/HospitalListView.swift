@@ -25,19 +25,22 @@ struct HospitalListView: View {
         NavigationStack(path: $navigationPath) {
             HStack {
                 CustomTextfieldView(text: $hospitalViewModel.searchQuery, hintText: "Search by name", icon: Image(systemName: hospitalViewModel.usingLocation ? "location.fill" : "magnifyingglass"), isSecure: false, iconColor: hospitalViewModel.usingLocation ? Color.blue : Color.orange)
-                
-                CustomButtonView(text: "Search", width: 80, height: 55, color: Color.indigo, isEnabled: $hospitalViewModel.searchEnabled, onTapAction: {
-                    Task {
-                        try await hospitalViewModel.searchHospitals()
+                    .onChange(of: hospitalViewModel.searchQuery) { query in
+                        withAnimation {
+                            hospitalViewModel.searchEnabled = query.count > 0
+                        }
                     }
-                })
-                .onChange(of: hospitalViewModel.searchQuery) { query in
-                    hospitalViewModel.searchEnabled = query.count > 0
-                }
-                .onAppear {
-                    hospitalViewModel.searchEnabled = hospitalViewModel.searchQuery.count > 0
-                }
+                    .onAppear {
+                        hospitalViewModel.searchEnabled = hospitalViewModel.searchQuery.count > 0
+                    }
                 
+                if (hospitalViewModel.searchEnabled) {
+                    CustomButtonView(text: "Search", width: 80, height: 55, color: Color.indigo, isEnabled: $hospitalViewModel.searchEnabled, onTapAction: {
+                        Task {
+                            try await hospitalViewModel.searchHospitals()
+                        }
+                    })
+                }
             }
             .padding(.horizontal)
             

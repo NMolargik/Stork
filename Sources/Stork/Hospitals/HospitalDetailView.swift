@@ -10,6 +10,8 @@ import SwiftUI
 import StorkModel
 
 struct HospitalDetailView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @Environment(\.dismiss) var dismiss
@@ -242,6 +244,17 @@ struct HospitalDetailView: View {
             profileViewModel.profile.primaryHospitalId = ""
         } else {
             profileViewModel.profile.primaryHospitalId = hospital.id
+        }
+        
+        profileViewModel.tempProfile = profileViewModel.profile
+        profileViewModel.tempProfile.primaryHospitalId = hospital.id
+        
+        Task {
+            do {
+                try await profileViewModel.updateProfile()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 }

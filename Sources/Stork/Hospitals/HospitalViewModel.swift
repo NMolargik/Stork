@@ -104,7 +104,6 @@ class HospitalViewModel: ObservableObject {
         if (profile.primaryHospitalId.isEmpty) {
             return
         }
-        
         do {
             self.primaryHospital = try await self.hospitalRepository.getHospital(byId: profile.primaryHospitalId)
         } catch {

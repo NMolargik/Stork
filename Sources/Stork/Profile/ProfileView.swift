@@ -2,147 +2,181 @@ import SwiftUI
 import StorkModel
 
 struct ProfileView: View {
+    @AppStorage("errorMessage") var errorMessage: String = ""
+
     // MARK: - Environment Objects
-    
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @Environment(\.dismiss) var dismiss
-    
-    // MARK: - State Variables
-    
-    @State private var showingEditSheet = false
-    @State private var joinDateFormatted: String = ""
-    
-    // MARK: - Date Formatter
-    
-    private let displayDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
-        return formatter
-    }()
-    
-    // MARK: - Body
-    
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
-            VStack(spacing: 20) {
-                // Profile Image
-                InitialsAvatarView(
-                    firstName: profileViewModel.profile.firstName,
-                    lastName: profileViewModel.profile.lastName,
-                    size: 100
-                )
-                .accessibilityLabel(Text("Profile image"))
-                
-                // Name and Role
-                VStack(alignment: .center, spacing: 5) {
-                    Text("\(profileViewModel.profile.firstName) \(profileViewModel.profile.lastName)")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
+        NavigationStack {
+            VStack {
+                if (profileViewModel.editingProfile) {
+                    CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image(systemName: "1.square"), isSecure: false, iconColor: Color.green)
                     
-                    Text(profileViewModel.profile.role.description)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                
-                // Birthday
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Birthday:")
-                        .font(.headline)
-                    Text(displayDateFormatter.string(from: profileViewModel.profile.birthday))
-                        .font(.body)
-                        .foregroundColor(.primary)
-                }
-                .padding(.horizontal)
-                
-                // Member of Muster
-                
-                if let muster = musterViewModel.currentMuster {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Member of Muster:")
-                            .font(.headline)
-                        Text(muster.name)
-                            .font(.body)
-                            .foregroundColor(.primary)
+                    if let firstNameError = profileViewModel.firstNameError {
+                        Text(firstNameError)
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .bold()
+                            .padding(.top, -5)
                     }
-                    .padding(.horizontal)
-                }
-                
-                // Member Since
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Member since:")
-                        .font(.headline)
-                    Text(formatJoinDate(joinDateString: profileViewModel.profile.joinDate))
-                        .font(.body)
-                        .foregroundColor(.primary)
-                }
-                .padding(.horizontal)
-                
-                // Primary Hospital
-                if let hospital = hospitalViewModel.primaryHospital {
                     
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Primary Hospital:")
-                            .font(.headline)
-                        Text(hospital.facility_name)
-                            .font(.body)
-                            .foregroundColor(.primary)
+                    CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image(systemName: "2.square"), isSecure: false, iconColor: Color.green)
+                    
+                    if let lastNameError = profileViewModel.lastNameError {
+                        Text(lastNameError)
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .padding(.top, -5)
                     }
-                    .padding(.horizontal)
-                }
-                
-                Spacer()
-                
-                // Edit Profile Button
-                Button(action: {
-                    showingEditSheet = true
-                }) {
-                    Text("Edit Profile")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                }
-            }
-            .navigationTitle("Profile")
-            .toolbar {
-                ToolbarItem {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                            Text("Back")
+                    
+                    Divider()
+                    
+                    Text("Select Your Birthday")
+                    
+                    DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
+                        .tint(.indigo)
+                    #if !SKIP
+                        .datePickerStyle(WheelDatePickerStyle())
+                    #endif
+                        .labelsHidden()
+                        .environment(\.locale, Locale(identifier: "en_US"))
+                        .padding(.top, -15)
+                    
+                    if let birthdayError = profileViewModel.birthdayError {
+                        Text(birthdayError)
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .padding(.top, -5)
+                    }
+
+                    Divider()
+                    
+                    Text("Select Your Role")
+                    
+                    Picker("Role", selection: $profileViewModel.tempProfile.role) {
+                        ForEach(ProfileRole.allCases, id: \.self) { role in
+                            Text(role.rawValue.capitalized).tag(role)
                         }
                     }
+                    .pickerStyle(.segmented)
+                    .onChange(of: profileViewModel.tempProfile.firstName) { _ in
+                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                    }
+                    .onChange(of: profileViewModel.tempProfile.lastName) { _ in
+                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                    }
+                    .onChange(of: profileViewModel.tempProfile.birthday) { _ in
+                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                    }
+                    .onChange(of: profileViewModel.tempProfile.role) { _ in
+                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                    }
+                    .onAppear {
+                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                    }
+                } else {
+                    HStack(alignment: .center) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("\(profileViewModel.profile.role.description) \(profileViewModel.profile.firstName) \(profileViewModel.profile.lastName)")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.leading)
+                            
+                            HStack {
+                                Image(systemName: "birthday.cake.fill")
+                                Text(Profile.dateFormatter.string(from: profileViewModel.profile.birthday))
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        Spacer()
+                        
+                        VStack {
+                            InitialsAvatarView(
+                                firstName: profileViewModel.profile.firstName,
+                                lastName: profileViewModel.profile.lastName,
+                                size: 80.0,
+                                font: Font.largeTitle.bold()
+                            )
+                        }
+                        .padding(.trailing)
+                    }
                 }
             }
-            .sheet(isPresented: $showingEditSheet) {
-                EditProfileView()
-                    .environmentObject(profileViewModel)
-                    .environmentObject(musterViewModel)
-                    .environmentObject(hospitalViewModel)
+            .padding()
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if (!profileViewModel.editingProfile) {
+                        Button(action: {
+                            dismiss()
+                        }, label: {
+                            Text("Close")
+                                .font(.body)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.red)
+                        })
+                    } else {
+                        Text("Editing Profile")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            //.foregroundStyle(colorScheme == .dark ? .black : .white)
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing){
+                    Button(action: {
+                        withAnimation {
+                            if profileViewModel.editingProfile {
+                                stopEditingProfile()
+                            } else {
+                                startEditingProfile()
+                            }
+                        }
+                    }, label: {
+                        Text(profileViewModel.editingProfile ? "Save" : "Edit")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.orange)
+                    })
+                    .disabled(profileViewModel.isWorking || (profileViewModel.editingProfile && !profileViewModel.isFormValid))
+                }
             }
-            .onAppear {
-                joinDateFormatted = formatJoinDate(joinDateString: profileViewModel.profile.joinDate)
-            }
+        }
     }
     
-    // MARK: - Helper Functions
+    private func startEditingProfile() {
+        profileViewModel.editingProfile = true
+        profileViewModel.tempProfile = profileViewModel.profile
+        
+    }
     
-    /// Formats the join date string to "dd/MM/yyyy". If parsing fails, returns the original string.
-    /// - Parameter joinDateString: The join date as a string.
-    /// - Returns: Formatted join date string.
-    private func formatJoinDate(joinDateString: String) -> String {
-        let inputFormatter = Profile.dateFormatter
-        if let date = inputFormatter.date(from: joinDateString) {
-            return displayDateFormatter.string(from: date)
-        } else {
-            return joinDateString
+    private func stopEditingProfile() {
+        profileViewModel.editingProfile = false
+        profileViewModel.isWorking = true
+
+        Task {
+            do {
+                try await profileViewModel.updateProfile()
+                profileViewModel.editingProfile = false
+                profileViewModel.isWorking = false
+
+            } catch {
+                profileViewModel.isWorking = false
+                errorMessage = error.localizedDescription
+            }
         }
+    }
+}
+
+// MARK: - Preview
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
     }
 }

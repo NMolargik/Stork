@@ -10,7 +10,6 @@ import StorkModel
 
 struct EditProfileView: View {
     // MARK: - Environment Objects
-    
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var hospitalViewModel: HospitalViewModel

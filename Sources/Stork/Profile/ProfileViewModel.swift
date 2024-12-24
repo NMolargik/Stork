@@ -17,6 +17,14 @@ public class ProfileViewModel: ObservableObject {
     @Published var tempProfile: Profile
     @Published var errorMessage: String?
     @Published var isWorking: Bool = false
+    @Published var editingProfile: Bool = false
+    
+    @Published var isFormValid = false
+    @Published var firstNameError: String? = nil
+    @Published var lastNameError: String? = nil
+    @Published var birthdayError: String? = nil
+    
+    
 
     let profileRepository: ProfileRepositoryInterface
 
@@ -122,6 +130,34 @@ public class ProfileViewModel: ObservableObject {
                 self.isWorking = false
             }
         }
+    }
+    
+    func validateForm(profile: Profile) {
+        firstNameError = isNameValid(name: profile.firstName) ? nil : "First name cannot be empty"
+        lastNameError = isNameValid(name: profile.lastName) ? nil : "Last name cannot be empty"
+        birthdayError = isBirthdayValid(birthday:profile.birthday) ? nil : "Please select a valid birthday. You should be at least 16."
+        
+        withAnimation {
+            isFormValid =
+                firstNameError == nil &&
+                lastNameError == nil &&
+                birthdayError == nil
+        }
+    }
+    
+    private func isNameValid(name: String) -> Bool {
+        return !name.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    private func isBirthdayValid(birthday: Date) -> Bool {
+        guard let sixteenYearsAgo = Calendar.current.date(byAdding: .year, value: -16, to: Date()) else {
+            return false
+        }
+        return birthday <= sixteenYearsAgo
+    }
+    
+    func onFieldsChanged(profile: Profile) {
+        validateForm(profile: profile)
     }
 
     // Reset profile data

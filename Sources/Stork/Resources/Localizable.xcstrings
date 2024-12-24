@@ -7,16 +7,6 @@
     "%@" : {
 
     },
-    "%@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
-          }
-        }
-      }
-    },
     "%@ %@ %@" : {
       "localizations" : {
         "en" : {
@@ -151,9 +141,6 @@
     "Birthday" : {
 
     },
-    "Birthday:" : {
-
-    },
     "Birthing Center" : {
 
     },
@@ -231,16 +218,19 @@
     "Delivery not found" : {
 
     },
-    "Delivery Options" : {
-
-    },
     "Developer" : {
 
     },
     "Don't have an account yet?" : {
 
     },
+    "Edit" : {
+
+    },
     "Edit Profile" : {
+
+    },
+    "Editing Profile" : {
 
     },
     "Emergency Services" : {
@@ -412,12 +402,6 @@
     "Map requires iOS 17" : {
 
     },
-    "Member of Muster:" : {
-
-    },
-    "Member since:" : {
-
-    },
     "Members" : {
 
     },
@@ -526,13 +510,7 @@
         }
       }
     },
-    "Primary Hospital:" : {
-
-    },
     "Profile" : {
-
-    },
-    "Profile image" : {
 
     },
     "Provide an email address and we can send a password reset email." : {
