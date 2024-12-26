@@ -71,7 +71,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// Fetches a hospital by its unique ID from Firestore.
     public func getHospital(byId id: String) async throws -> Hospital {
         do {
-            let document = try await db.collection("hospitals").document(id).getDocument()
+            let document = try await db.collection("Hospital").document(id).getDocument()
             guard let data = document.data() else {
                 throw HospitalError.notFound("Hospital with ID \(id) not found.")
             }

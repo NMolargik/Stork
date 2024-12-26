@@ -39,10 +39,11 @@ struct MusterSplashView: View {
                         .font(.body)
                         .padding(.bottom, 25)
                     
-                    CustomButtonView(text: "Create New Muster", width: 300, height: 50, color: Color.indigo, icon: Image(systemName: "plus.app"), isEnabled: .constant(true), onTapAction: {
+                    CustomButtonView(text: "Create New Muster", width: 300, height: 50, color: Color.indigo, icon: nil, isEnabled: .constant(true), onTapAction: {
                         musterViewModel.showCreateMusterSheet = true
                     })
                 }
+                .padding()
                 .frame(maxWidth: .infinity)
             }
             .toolbar {

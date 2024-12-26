@@ -49,10 +49,10 @@ struct DeliveryAdditionView: View {
                             
                             CustomButtonView(
                                 text: "Add A Baby",
-                                width: 220,
-                                height: 40,
+                                width: 250,
+                                height: 50,
                                 color: Color.indigo,
-                                icon: Image(systemName: "plus.circle.fill"),
+                                icon: nil,
                                 isEnabled: .constant(true),
                                 onTapAction: {
                                     addBaby()
@@ -61,9 +61,9 @@ struct DeliveryAdditionView: View {
                             
                             Spacer()
                         }
-                        .padding()
-                        .padding(.bottom, 30)
                     }
+                    .padding()
+                    .padding(.bottom, 10)
                     
                     VStack {
                         Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
@@ -138,8 +138,8 @@ struct DeliveryAdditionView: View {
                     } else {
                         CustomButtonView(
                             text: "Submit Delivery",
-                            width: 200,
-                            height: 40,
+                            width: 250,
+                            height: 50,
                             color: Color.indigo,
                             isEnabled: $deliveryViewModel.submitEnabled,
                             onTapAction: {
@@ -178,8 +178,20 @@ struct DeliveryAdditionView: View {
         }
         .onAppear {
             withAnimation {
-                addBaby()
-                selectedHospital = hospitalViewModel.primaryHospital
+                if (deliveryViewModel.newDelivery.babies.count == 0) {
+                    addBaby()
+                }
+                
+                Task {
+                    if hospitalViewModel.primaryHospital == nil {
+                        print(hospitalViewModel.primaryHospital)
+                        try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
+                    }
+                    
+                    print(hospitalViewModel.selectedHospital)
+                    
+                    selectedHospital = hospitalViewModel.primaryHospital
+                }
             }
         }
         .onChange(of: deliveryViewModel.newDelivery.babies.count) { newCount in

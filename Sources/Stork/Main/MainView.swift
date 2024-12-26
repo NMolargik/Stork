@@ -71,10 +71,6 @@ public struct MainView: View {
                         try await profileViewModel.fetchCurrentProfile()
                     }
 
-                    if hospitalViewModel.primaryHospital == nil {
-                        try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
-                    }
-
                     if deliveryViewModel.deliveries.isEmpty {
                         try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
                     }

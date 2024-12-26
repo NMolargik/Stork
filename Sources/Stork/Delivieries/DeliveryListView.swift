@@ -50,11 +50,24 @@ struct DeliveryListView: View {
     private var emptyStateView: some View {
         VStack {
             Spacer()
-            Image(systemName: "figure.child")
-                .foregroundStyle(.indigo)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.bottom, 30)
+            
+            ZStack {
+                Image(systemName: "figure.child")
+                    .foregroundStyle(.purple)
+                
+                Image(systemName: "figure.child")
+                    .foregroundStyle(.pink)
+                    .shadow(radius: 2)
+                    .offset(x: 16)
+
+                Image(systemName: "figure.child")
+                    .foregroundStyle(.blue)
+                    .shadow(radius: 2)
+                    .offset(x: 32)
+            }
+            .font(.largeTitle)
+            .offset(x: -5)
+            .frame(width: 30)
             
             Text("No deliveries recorded yet. Use the button above to get started!")
                 .multilineTextAlignment(.center)
@@ -71,7 +84,6 @@ struct DeliveryListView: View {
                     .padding(.trailing)
                 
                 Text("You can submit up to 8 deliveries per day")
-                    .foregroundStyle(.black)
                     .multilineTextAlignment(.center)
                 
                 Spacer()
@@ -79,7 +91,7 @@ struct DeliveryListView: View {
             .padding(8)
             .background {
                 Rectangle()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(colorScheme == .dark ? .black : .white)
                     .cornerRadius(10)
                     .shadow(radius: 2)
             }

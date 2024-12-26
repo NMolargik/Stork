@@ -27,7 +27,16 @@
         }
       }
     },
+    "%@ cm" : {
+
+    },
     "%@ Delivery" : {
+
+    },
+    "%@ in" : {
+
+    },
+    "%@ kg" : {
 
     },
     "%@, %@" : {
@@ -39,6 +48,12 @@
           }
         }
       }
+    },
+    "%lld lbs" : {
+
+    },
+    "%lld oz" : {
+
     },
     "%lld reported bab%@" : {
       "localizations" : {
@@ -361,9 +376,6 @@
     "Leave Muster" : {
 
     },
-    "Length: %@" : {
-
-    },
     "Light" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -672,9 +684,6 @@
 
     },
     "Version" : {
-
-    },
-    "Weight: %@" : {
 
     },
     "Welcome" : {
