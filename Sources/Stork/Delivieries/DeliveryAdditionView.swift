@@ -134,12 +134,13 @@ struct DeliveryAdditionView: View {
                     
                     if deliveryViewModel.isWorking {
                         ProgressView()
-                            .frame(width: 200, height: 40)
+                            .frame(height: 40)
+                            .padding()
                     } else {
                         CustomButtonView(
                             text: "Submit Delivery",
                             width: 250,
-                            height: 50,
+                            height: 40,
                             color: Color.indigo,
                             isEnabled: $deliveryViewModel.submitEnabled,
                             onTapAction: {

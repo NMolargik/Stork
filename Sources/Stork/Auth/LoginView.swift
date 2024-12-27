@@ -56,6 +56,7 @@ struct LoginView: View {
                     ProgressView()
                         .tint(.indigo)
                         .frame(height: 40)
+                        .padding()
                     
                 } else {
                     CustomButtonView(text: "Log In", width: 110, height: 40, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
@@ -67,17 +68,18 @@ struct LoginView: View {
                             }
                         }
                     })
-                    
-                    Button(action: {
-                        withAnimation {
-                            isPasswordResetPresented = true
-                        }
-                    }, label: {
-                        Text("Forgot Your Password?")
-                            .foregroundStyle(.red)
-                    })
-                    .padding()
                 }
+                
+                 Button(action: {
+                     withAnimation {
+                         isPasswordResetPresented = true
+                     }
+                 }, label: {
+                     Text("Forgot Your Password?")
+                         .foregroundStyle(.red)
+                 })
+                 .padding()
+                 .opacity(viewModel.isWorking ? 0.0 : 1.0)
                 
                 Spacer()
                     .frame(height: 50)

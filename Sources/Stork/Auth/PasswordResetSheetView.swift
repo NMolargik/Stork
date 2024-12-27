@@ -36,6 +36,8 @@ struct PasswordResetSheetView: View {
             if (viewModel.isWorking) {
                 ProgressView()
                     .tint(.indigo)
+                    .frame(height: 40)
+                    .padding()
             } else {
                 
                 CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: $validEmail, onTapAction: {

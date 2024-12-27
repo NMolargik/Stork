@@ -11,6 +11,7 @@ import StorkModel
 struct SettingsTabView: View {
     @AppStorage("useMetric") private var useMetric: Bool = false
     @AppStorage("appState") private var appState: AppState = .splash
+    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
@@ -33,8 +34,8 @@ struct SettingsTabView: View {
                     HStack {
                         Button(action: {
                             withAnimation {
+                                isOnboardingComplete = false
                                 appState = AppState.onboard
-                                //TODO: fix, this doesn't kick back to onboarding
                             }
                         }) {
                             Text("Restart Onboarding")

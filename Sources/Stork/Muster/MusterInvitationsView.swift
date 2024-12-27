@@ -30,7 +30,6 @@ struct MusterInvitationsView: View {
                     
                     VStack {
                         Image(systemName: "exclamationmark.magnifyingglass")
-                            .foregroundStyle(.red)
                             .font(.largeTitle)
                             .padding()
                         

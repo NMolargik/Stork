@@ -15,6 +15,7 @@ enum AppState: String, Hashable {
 public struct AppStateControllerView: View {
     @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("errorMessage") private var errorMessage: String = ""
+    @AppStorage("selectedTab") var selectedTab = Tab.hospitals
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     
@@ -74,6 +75,8 @@ public struct AppStateControllerView: View {
                 case .onboard:
                     Button(action: {
                         withAnimation {
+                            isOnboardingComplete = true
+                            selectedTab = .home
                             appState = .main
                         }
                     }, label: {
@@ -114,6 +117,7 @@ public struct AppStateControllerView: View {
                         
                         try await deliveryViewModel.getUserDeliveries(profile: fetchedProfile)
                         withAnimation {
+                            selectedTab = .home
                             appState = .main
                         }
                     } catch {
@@ -121,7 +125,11 @@ public struct AppStateControllerView: View {
                     }
                 }
             } else {
-                appState = .main
+                if (isOnboardingComplete) {
+                    appState = .main
+                } else {
+                    appState = .onboard
+                }
             }
         } else {
             appState = showRegistration ? .register : .splash

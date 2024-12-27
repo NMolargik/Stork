@@ -125,6 +125,8 @@ struct RegisterView: View {
                             if (viewModel.isWorking) {
                                 ProgressView()
                                     .tint(.indigo)
+                                    .frame(height: 40)
+                                    .padding()
                             } else {
                                 CustomButtonView(
                                     text: "Sign Up",

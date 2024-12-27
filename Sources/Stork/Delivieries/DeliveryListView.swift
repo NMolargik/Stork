@@ -80,7 +80,7 @@ struct DeliveryListView: View {
                 Spacer()
                 Image(systemName: "exclamationmark.circle")
                     .font(.title)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.blue)
                     .padding(.trailing)
                 
                 Text("You can submit up to 8 deliveries per day")

@@ -63,7 +63,7 @@ public struct MainView: View {
                 }
                 .tag(Tab.settings)
         }
-        .tint(Color.indigo)
+        .tint(colorScheme == .dark ? .white : .black)
         .onAppear {
             Task {
                 do {

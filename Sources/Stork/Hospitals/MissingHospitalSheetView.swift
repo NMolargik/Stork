@@ -53,7 +53,7 @@ struct MissingHospitalSheetView: View {
             }) {
                 if isSubmitting {
                     ProgressView()
-                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
                         .padding()
                 } else {
                     Text("Submit")
@@ -62,6 +62,8 @@ struct MissingHospitalSheetView: View {
                         .background(hospitalName.isEmpty ? Color.gray : Color.indigo)
                         .foregroundColor(.white)
                         .cornerRadius(8)
+                        .frame(height: 40)
+                        .padding()
                 }
             }
             .disabled(hospitalName.isEmpty || isSubmitting)
