@@ -63,19 +63,19 @@ struct ProfileView: View {
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: profileViewModel.tempProfile.firstName) { _ in
-                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                        profileViewModel.validateProfileForm(profileViewModel.tempProfile)
                     }
                     .onChange(of: profileViewModel.tempProfile.lastName) { _ in
-                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                        profileViewModel.validateProfileForm(profileViewModel.tempProfile)
                     }
                     .onChange(of: profileViewModel.tempProfile.birthday) { _ in
-                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                        profileViewModel.validateProfileForm(profileViewModel.tempProfile)
                     }
                     .onChange(of: profileViewModel.tempProfile.role) { _ in
-                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                        profileViewModel.validateProfileForm(profileViewModel.tempProfile)
                     }
                     .onAppear {
-                        profileViewModel.validateForm(profile: profileViewModel.tempProfile)
+                        profileViewModel.validateProfileForm(profileViewModel.tempProfile)
                     }
                 } else {
                     HStack(alignment: .center) {

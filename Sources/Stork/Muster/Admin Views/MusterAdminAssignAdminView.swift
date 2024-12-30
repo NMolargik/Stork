@@ -49,7 +49,7 @@ struct MusterAdminAssignAdminView: View {
             try await musterViewModel.assignAdmin(userId: tempProfile.id)
             updateProfileLocally(profileId: tempProfile.id)
             
-            try await profileViewModel.updateOtherProfile(profile: tempProfile)
+            try await profileViewModel.updateProfileAdminStatus(profile: tempProfile)
         }
     }
 }

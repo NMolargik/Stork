@@ -11,28 +11,21 @@ import SkipKit
 
 
 struct RegisterView: View {
-    // Existing properties
     @AppStorage("errorMessage") var errorMessage: String = ""
     @AppStorage("appState") var appState: AppState = .register
     
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    @StateObject private var viewModel: RegisterViewModel
     
     @Binding var showRegistration: Bool
     
-    private let profileRepository: ProfileRepositoryInterface
     var onAuthenticated: () -> Void
     
     public init(
         showRegistration: Binding<Bool>,
-        profileRepository: ProfileRepositoryInterface = DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource()),
         onAuthenticated: @escaping () -> Void
     ) {
         self._showRegistration = showRegistration
-        self.profileRepository = profileRepository
         self.onAuthenticated = onAuthenticated
-        
-        _viewModel = StateObject(wrappedValue: RegisterViewModel(profileRepository: profileRepository))
     }
 
     var body: some View {
@@ -42,25 +35,25 @@ struct RegisterView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         CustomTextfieldView(text: $profileViewModel.tempProfile.email, hintText: "Email Address", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
                         
-                        if let emailError = viewModel.emailError {
+                        if let emailError = profileViewModel.emailError {
                             Text(emailError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $viewModel.passwordText, hintText: "Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
+                        CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
                         
-                        if let passwordError = viewModel.passwordError {
+                        if let passwordError = profileViewModel.passwordError {
                             Text(passwordError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $viewModel.confirmPassword, hintText: "Confirm Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
+                        CustomTextfieldView(text: $profileViewModel.confirmPassword, hintText: "Confirm Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
                         
-                        if let confirmPasswordError = viewModel.confirmPasswordError {
+                        if let confirmPasswordError = profileViewModel.confirmPasswordError {
                             Text(confirmPasswordError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
@@ -69,7 +62,7 @@ struct RegisterView: View {
                         
                         CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image(systemName: "1.square"), isSecure: false, iconColor: Color.green)
                         
-                        if let firstNameError = viewModel.firstNameError {
+                        if let firstNameError = profileViewModel.firstNameError {
                             Text(firstNameError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
@@ -79,7 +72,7 @@ struct RegisterView: View {
                         
                         CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image(systemName: "2.square"), isSecure: false, iconColor: Color.green)
                         
-                        if let lastNameError = viewModel.lastNameError {
+                        if let lastNameError = profileViewModel.lastNameError {
                             Text(lastNameError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
@@ -99,7 +92,7 @@ struct RegisterView: View {
                             .environment(\.locale, Locale(identifier: "en_US"))
                             .padding(.top, -15)
                         
-                        if let birthdayError = viewModel.birthdayError {
+                        if let birthdayError = profileViewModel.birthdayError {
                             Text(birthdayError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
@@ -122,7 +115,7 @@ struct RegisterView: View {
                         HStack {
                             Spacer()
 
-                            if (viewModel.isWorking) {
+                            if (profileViewModel.isWorking) {
                                 ProgressView()
                                     .tint(.indigo)
                                     .frame(height: 40)
@@ -133,12 +126,11 @@ struct RegisterView: View {
                                     width: 120,
                                     height: 40,
                                     color: Color.indigo,
-                                    isEnabled: $viewModel.isFormValid,
+                                    isEnabled: $profileViewModel.isFormValid,
                                     onTapAction: {
                                         Task {
                                             do {
-                                                let uid = try await viewModel.registerWithEmail(profile: profileViewModel.tempProfile)
-                                                profileViewModel.profile.id = uid
+                                                try await profileViewModel.registerWithEmail()
                                                 onAuthenticated()
                                             } catch {
                                                 self.errorMessage = error.localizedDescription
@@ -170,28 +162,28 @@ struct RegisterView: View {
             }
         }
         .onChange(of: profileViewModel.tempProfile.email) { _ in
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+            profileViewModel.validateRegistrationForm()
         }
-        .onChange(of: viewModel.passwordText) { _ in
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+        .onChange(of: profileViewModel.passwordText) { _ in
+            profileViewModel.validateRegistrationForm()
         }
-        .onChange(of: viewModel.confirmPassword) { _ in
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+        .onChange(of: profileViewModel.confirmPassword) { _ in
+            profileViewModel.validateRegistrationForm()
         }
         .onChange(of: profileViewModel.tempProfile.firstName) { _ in
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+            profileViewModel.validateRegistrationForm()
         }
         .onChange(of: profileViewModel.tempProfile.lastName) { _ in
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+            profileViewModel.validateRegistrationForm()
         }
         .onChange(of: profileViewModel.tempProfile.birthday) { _ in
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+            profileViewModel.validateRegistrationForm()
         }
         .onChange(of: profileViewModel.tempProfile.role) { _ in
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+            profileViewModel.validateRegistrationForm()
         }
         .onAppear {
-            viewModel.validateForm(profile: profileViewModel.tempProfile)
+            profileViewModel.validateRegistrationForm()
         }
     }
 }
@@ -199,7 +191,6 @@ struct RegisterView: View {
 #Preview {
     RegisterView(
         showRegistration: .constant(false),
-        profileRepository: MockProfileRepository(),
         onAuthenticated: {}
     )
     .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))

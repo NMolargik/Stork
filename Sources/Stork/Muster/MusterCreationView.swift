@@ -39,7 +39,6 @@ struct MusterCreationView: View {
                                 hintText: "Enter Muster name",
                                 icon: Image(systemName: "tag.fill"),
                                 isSecure: false,
-                                iconColor: Color.from(string: musterViewModel.newMuster.primaryColor),
                                 characterLimit: 20
                             )
 
@@ -48,37 +47,6 @@ struct MusterCreationView: View {
                                     .foregroundStyle(.gray)
                                     .font(.footnote)
                             }
-                        }
-
-                        // Color Selection Buttons
-                        VStack(alignment: .center, spacing: 10) {
-                            Text("Select An Accent Color")
-                                .font(.headline)
-                                .foregroundColor(.black)
-
-                            // Color Buttons
-                            HStack(spacing: 10) {
-                                ForEach(musterViewModel.colors, id: \.self) { color in
-                                    Button(action: {
-                                        withAnimation {
-                                            // Update primaryColor as string
-                                            musterViewModel.newMuster.primaryColor = color.description.lowercased()
-                                        }
-                                    }, label: {
-                                        Circle()
-                                            .foregroundStyle(color)
-                                            .frame(width: color.description == musterViewModel.newMuster.primaryColor.capitalized ? 50.0 : 40.0)
-                                            .shadow(radius: 1.0)
-                                    })
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background {
-                            Color.white
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
                         }
 
                         // Hospital Selection
@@ -92,7 +60,7 @@ struct MusterCreationView: View {
                                 text: "Select A Hospital",
                                 width: 250,
                                 height: 40,
-                                color: Color.from(string: musterViewModel.newMuster.primaryColor),
+                                color: Color.indigo,
                                 icon: Image(systemName: "building"),
                                 isEnabled: .constant(true),
                                 onTapAction: {
@@ -129,7 +97,7 @@ struct MusterCreationView: View {
                                 .frame(height: 70)
                                 .padding()
                         } else {
-                            CustomButtonView(text: "Muster Up!", width: 200, height: 70, color: Color.from(string: musterViewModel.newMuster.primaryColor), icon: nil, isEnabled: $musterViewModel.creationFormValid, onTapAction: {
+                            CustomButtonView(text: "Muster Up!", width: 200, height: 70, color: Color.indigo, icon: nil, isEnabled: $musterViewModel.creationFormValid, onTapAction: {
                                 withAnimation {
                                     createMuster()
                                 }
@@ -155,9 +123,6 @@ struct MusterCreationView: View {
                 }
             }
             .onChange(of: musterViewModel.newMuster.name) { _ in
-                musterViewModel.validateCreationForm()
-            }
-            .onChange(of: musterViewModel.newMuster.primaryColor) { _ in
                 musterViewModel.validateCreationForm()
             }
         }

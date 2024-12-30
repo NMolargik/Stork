@@ -110,7 +110,7 @@ struct MusterAdminInviteUserView: View {
         profileViewModel.isWorking = true
         Task {
             do {
-                profiles = try await profileViewModel.profileRepository.listProfiles(
+                profiles = try await profileViewModel.listProfiles(
                     id: nil,
                     firstName: nil,
                     lastName: searchText.trimmingCharacters(in: .whitespacesAndNewlines),

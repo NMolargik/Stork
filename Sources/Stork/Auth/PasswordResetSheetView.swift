@@ -14,7 +14,9 @@ import java.util.regex.Pattern
 
 struct PasswordResetSheetView: View {
     @AppStorage("errorMessage") var errorMessage: String = ""
-    @ObservedObject var viewModel: LoginViewModel
+    
+    @EnvironmentObject var profileViewModel: ProfileViewModel
+
     @Binding var isPasswordResetPresented: Bool
     @Binding var email: String
     
@@ -33,7 +35,7 @@ struct PasswordResetSheetView: View {
             CustomTextfieldView(text: $email, hintText: "Enter your email address...", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
                 .padding(.bottom)
             
-            if (viewModel.isWorking) {
+            if (profileViewModel.isWorking) {
                 ProgressView()
                     .tint(.indigo)
                     .frame(height: 40)
@@ -43,7 +45,7 @@ struct PasswordResetSheetView: View {
                 CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: $validEmail, onTapAction: {
                     Task {
                         do {
-                            try await viewModel.sendPasswordReset()
+                            try await profileViewModel.sendPasswordReset()
                             isPasswordResetPresented = false
                         } catch {
                             errorMessage = error.localizedDescription
@@ -55,7 +57,7 @@ struct PasswordResetSheetView: View {
                 .padding(.bottom, 30)
                 .onChange(of: email) { email in
                     withAnimation {
-                        validEmail = isEmailValid(email: email)
+                        validEmail = profileViewModel.isEmailValid(email)
                     }
                 }
             }
@@ -68,23 +70,12 @@ struct PasswordResetSheetView: View {
         }
         .padding()
         .onChange(of: email) { _ in
-            self.validEmail = isEmailValid(email: email)
+            validEmail = profileViewModel.isEmailValid(email)
         }
-    }
-    
-    private func isEmailValid(email: String) -> Bool {
-        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        
-        #if !SKIP
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailFormat)
-        return emailPredicate.evaluate(with: email)
-        #else
-        let emailPattern = Pattern.compile(emailFormat)
-        return emailPattern.matcher(email).matches()
-        #endif
     }
 }
 
 #Preview {
-    PasswordResetSheetView(viewModel: LoginViewModel(profileRepository: MockProfileRepository()), isPasswordResetPresented: .constant(true), email: .constant("email@email.com"))
+    PasswordResetSheetView(isPasswordResetPresented: .constant(true), email: .constant("email@email.com"))
+        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

@@ -8,6 +8,7 @@ public enum ProfileError: Error, LocalizedError {
     case authenticationFailed(String)
     case passwordResetFailed(String)
     case fetchFailed(String)
+    case signOutFailed(String)
     case unknown(String)
 
     public var errorDescription: String? {
@@ -26,6 +27,8 @@ public enum ProfileError: Error, LocalizedError {
             return "Password Reset Failed: \(message)"
         case .fetchFailed(let message):
             return "Profile fetch failed: \(message)"
+        case .signOutFailed(let message):
+            return "Profile sign out failed: \(message)"
         case .unknown(let message):
             return "Unknown Error: \(message)"
         }

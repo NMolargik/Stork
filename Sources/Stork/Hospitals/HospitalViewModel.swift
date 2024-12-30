@@ -115,7 +115,7 @@ class HospitalViewModel: ObservableObject {
         Task {
             isWorking = true
             do {
-                let updatedHospital = try await hospitalRepository.updateAfterDelivery(hospital: hospital, babyCount: babyCount)
+                let updatedHospital = try await hospitalRepository.updateHospitalStats(hospital: hospital, additionalDeliveryCount: 1, additionalBabyCount: babyCount)
                 
                 if let index = self.hospitals.firstIndex(where: { $0.id == hospital.id }) {
                     // Replace the hospital at the found index

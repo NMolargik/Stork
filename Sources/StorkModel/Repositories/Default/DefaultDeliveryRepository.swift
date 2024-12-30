@@ -16,6 +16,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     private let remoteDataSource: DeliveryRemoteDataSourceInterface
 
     // MARK: - Initializer
+
     /// Initializes the repository with a remote data source.
     ///
     /// - Parameter remoteDataSource: An instance of `DeliveryRemoteDataSourceInterface`.
@@ -23,14 +24,18 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         self.remoteDataSource = remoteDataSource
     }
     
-    /// Creates a new delivery record.
+    // MARK: - Create
+
+    /// Creates a new delivery record and returns the newly created `Delivery`.
     ///
     /// - Parameter delivery: The `Delivery` object to be created.
+    /// - Returns: The newly created `Delivery`, including its Firestore-generated `id`.
     /// - Throws:
     ///   - `DeliveryError.creationFailed`: If the operation fails to create the delivery.
-    public func createDelivery(delivery: Delivery) async throws {
+    public func createDelivery(delivery: Delivery) async throws -> Delivery {
         do {
-            try await remoteDataSource.createDelivery(delivery: delivery)
+            let createdDelivery = try await remoteDataSource.createDelivery(delivery: delivery)
+            return createdDelivery
         } catch let error as DeliveryError {
             throw error
         } catch {
@@ -38,14 +43,18 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    /// Updates an existing delivery record.
+    // MARK: - Update
+
+    /// Updates an existing delivery record and returns the updated `Delivery`.
     ///
     /// - Parameter delivery: The `Delivery` object containing the updated data.
+    /// - Returns: The updated `Delivery`.
     /// - Throws:
     ///   - `DeliveryError.updateFailed`: If the operation fails to update the delivery.
-    public func updateDelivery(delivery: Delivery) async throws {
+    public func updateDelivery(delivery: Delivery) async throws -> Delivery {
         do {
-            try await remoteDataSource.updateDelivery(delivery: delivery)
+            let updatedDelivery = try await remoteDataSource.updateDelivery(delivery: delivery)
+            return updatedDelivery
         } catch let error as DeliveryError {
             throw error
         } catch {
@@ -53,7 +62,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    // MARK: - Methods
+    // MARK: - Read
 
     /// Fetches a single delivery by its unique ID.
     ///
@@ -62,7 +71,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     /// - Throws:
     ///   - `DeliveryError.notFound`: If the delivery with the specified ID is not found.
     ///   - `DeliveryError.firebaseError`: If the operation fails due to a Firestore-related issue.
-    public func getDelivery(byId id: String) async throws -> Delivery? {
+    public func getDelivery(byId id: String) async throws -> Delivery {
         do {
             return try await remoteDataSource.getDelivery(byId: id)
         } catch let error as DeliveryError {
@@ -75,10 +84,11 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     /// Lists deliveries based on optional filter criteria.
     ///
     /// - Parameters:
-    ///   - userId: An optional filter for id of the user associated with the delivery
-    ///   - userFirstName: An optional filter for first name of the user associated with the delivery
+    ///   - userId: An optional filter for the ID of the user associated with the delivery.
+    ///   - userFirstName: An optional filter for the first name of the user.
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery.
-    ///   - musterId: An optional filter for the muster ID associated with the delivery
+    ///   - hospitalName: An optional filter for the hospital name.
+    ///   - musterId: An optional filter for the muster ID associated with the delivery.
     ///   - date: An optional filter for the delivery date.
     ///   - babyCount: An optional filter for the number of babies in the delivery.
     ///   - deliveryMethod: An optional filter for the delivery method (e.g., vaginal, c-section).
@@ -115,6 +125,8 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
             throw DeliveryError.firebaseError("Failed to list deliveries: \(error.localizedDescription)")
         }
     }
+
+    // MARK: - Delete
 
     /// Deletes an existing delivery record.
     ///

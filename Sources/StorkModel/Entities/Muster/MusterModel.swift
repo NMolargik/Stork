@@ -26,18 +26,14 @@ public struct Muster: Identifiable, Codable, Hashable {
     
     /// Name of the muster.
     public var name: String
-    
-    /// Primary color representing the muster, stored as a string (e.g., "blue", "red").
-    public var primaryColor: String
-    
+
     /// Converts the muster data into a dictionary format, suitable for Firestore or similar databases.
     var dictionary: [String: Any] {
         return [
             "profileIds": profileIds,
             "primaryHospitalId": primaryHospitalId,
             "administratorProfileIds": administratorProfileIds,
-            "name": name,
-            "primaryColor": primaryColor
+            "name": name
         ]
     }
     
@@ -54,8 +50,7 @@ public struct Muster: Identifiable, Codable, Hashable {
             let profileIds = dictionary["profileIds"] as? [String],
             let primaryHospitalId = dictionary["primaryHospitalId"] as? String,
             let administratorProfileIds = dictionary["administratorProfileIds"] as? [String],
-            let name = dictionary["name"] as? String,
-            let primaryColor = dictionary["primaryColor"] as? String
+            let name = dictionary["name"] as? String
         else {
             print("Initialization failed: Missing or invalid required fields.")
             return nil
@@ -66,7 +61,6 @@ public struct Muster: Identifiable, Codable, Hashable {
         self.primaryHospitalId = primaryHospitalId
         self.administratorProfileIds = administratorProfileIds
         self.name = name
-        self.primaryColor = primaryColor
     }
     
     /// Initializes a `Muster` instance with explicit parameters.
@@ -77,21 +71,18 @@ public struct Muster: Identifiable, Codable, Hashable {
     ///   - primaryHospitalId: Identifier for the primary hospital.
     ///   - administratorProfileIds: List of administrator profile IDs.
     ///   - name: Name of the muster.
-    ///   - primaryColor: Primary color of the muster.
     public init(
         id: String,
         profileIds: [String],
         primaryHospitalId: String,
         administratorProfileIds: [String],
-        name: String,
-        primaryColor: String
+        name: String
     ) {
         self.id = id
         self.profileIds = profileIds
         self.primaryHospitalId = primaryHospitalId
         self.administratorProfileIds = administratorProfileIds
         self.name = name
-        self.primaryColor = primaryColor
     }
     
     // MARK: - Default Initializer
@@ -104,7 +95,6 @@ public struct Muster: Identifiable, Codable, Hashable {
         self.primaryHospitalId = ""
         self.administratorProfileIds = []
         self.name = "New Muster"
-        self.primaryColor = "blue" // Default color
     }
     
     // MARK: - Codable Conformance
@@ -116,7 +106,6 @@ public struct Muster: Identifiable, Codable, Hashable {
         case primaryHospitalId
         case administratorProfileIds
         case name
-        case primaryColor
     }
     
     // MARK: - Hashable Conformance
@@ -132,8 +121,7 @@ public struct Muster: Identifiable, Codable, Hashable {
             lhs.profileIds == rhs.profileIds &&
             lhs.primaryHospitalId == rhs.primaryHospitalId &&
             lhs.administratorProfileIds == rhs.administratorProfileIds &&
-            lhs.name == rhs.name &&
-            lhs.primaryColor == rhs.primaryColor
+            lhs.name == rhs.name
     }
     
     /// Generates a hash value for the `Muster` instance by combining its properties.
@@ -145,6 +133,5 @@ public struct Muster: Identifiable, Codable, Hashable {
         hasher.combine(primaryHospitalId)
         hasher.combine(administratorProfileIds)
         hasher.combine(name)
-        hasher.combine(primaryColor)
     }
 }

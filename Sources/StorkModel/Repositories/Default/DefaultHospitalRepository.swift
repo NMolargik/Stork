@@ -24,12 +24,36 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
         self.remoteDataSource = remoteDataSource
     }
 
-    // MARK: - Methods
-    
-    /// Creates a new hospital record.
+    // MARK: - Create
+
+    /// Creates a new hospital record in Firestore.
+    ///
+    /// - Parameter name: The name of the new `Hospital`.
+    /// - Returns: The newly created `Hospital`, including its Firestore-generated `id`.
+    /// - Throws: `HospitalError.creationFailed`, or other domain-specific errors on failure.
     public func createHospital(name: String) async throws -> Hospital {
         do {
-            return try await remoteDataSource.createHospital(hospital: Hospital(id: UUID().description, facility_name: name, address: "", citytown: "", state: "", zip_code: "", countyparish: "", telephone_number: "", hospital_type: "", hospital_ownership: "", emergency_services: false, meets_criteria_for_birthing_friendly_designation: false, deliveryCount: 0, babyCount: 0))
+            // Build an initial Hospital model with default fields
+            let hospital = Hospital(
+                id: UUID().uuidString,
+                facility_name: name,
+                address: "",
+                citytown: "",
+                state: "",
+                zip_code: "",
+                countyparish: "",
+                telephone_number: "",
+                hospital_type: "",
+                hospital_ownership: "",
+                emergency_services: false,
+                meets_criteria_for_birthing_friendly_designation: false,
+                deliveryCount: 0,
+                babyCount: 0
+            )
+
+            // Call the remote data source to create it
+            let createdHospital = try await remoteDataSource.createHospital(hospital: hospital)
+            return createdHospital
         } catch let error as HospitalError {
             throw error
         } catch {
@@ -37,18 +61,45 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
         }
     }
 
-    /// Updates an existing hospital record.
-    public func updateHospital(hospital: Hospital) async throws {
+    // MARK: - Update Stats
+
+    /// Updates hospital statistics in Firestore (e.g., incrementing `deliveryCount` and `babyCount`).
+    ///
+    /// - Parameters:
+    ///   - hospital: The `Hospital` object whose stats are being updated.
+    ///   - additionalDeliveryCount: How many deliveries to add.
+    ///   - additionalBabyCount: How many babies to add.
+    /// - Returns: The updated `Hospital`, reflecting the new counts.
+    /// - Throws: `HospitalError.updateFailed`, or other errors if the update fails.
+    public func updateHospitalStats(
+        hospital: Hospital,
+        additionalDeliveryCount: Int,
+        additionalBabyCount: Int
+    ) async throws -> Hospital {
         do {
-            try await remoteDataSource.updateHospitalStats(hospital: hospital)
+            let updatedHospital = try await remoteDataSource.updateHospitalStats(
+                hospital: hospital,
+                additionalDeliveryCount: additionalDeliveryCount,
+                additionalBabyCount: additionalBabyCount
+            )
+            return updatedHospital
         } catch let error as HospitalError {
             throw error
         } catch {
-            throw HospitalError.updateFailed("Failed to update hospital: \(error.localizedDescription)")
+            throw HospitalError.updateFailed("Failed to update hospital stats: \(error.localizedDescription)")
         }
     }
 
+    // MARK: - Fetch (Single)
+
     /// Fetches a single hospital by its unique ID.
+    ///
+    /// - Parameter id: The unique ID of the hospital to fetch.
+    /// - Returns: A `Hospital` object for the specified ID.
+    /// - Throws:
+    ///   - `HospitalError.notFound`: If no hospital with the specified ID exists.
+    ///   - `HospitalError.firebaseError`: If Firestore fails.
+    ///   - `HospitalError.unknown`: For other unexpected errors.
     public func getHospital(byId id: String) async throws -> Hospital {
         do {
             return try await remoteDataSource.getHospital(byId: id)
@@ -59,7 +110,13 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
         }
     }
 
-    /// Lists hospitals based on optional filter criteria.
+    // MARK: - List / Search
+
+    /// Lists hospitals based on an optional partial name.
+    ///
+    /// - Parameter partialName: An optional substring to match against hospital names.
+    /// - Returns: A list of matching `Hospital` objects.
+    /// - Throws: `HospitalError.firebaseError` or `HospitalError.unknown` if the operation fails.
     public func listHospitalsByPartialName(partialName: String?) async throws -> [Hospital] {
         do {
             return try await remoteDataSource.listHospitalsByPartialName(partialName: partialName)
@@ -69,17 +126,17 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
             throw HospitalError.unknown("Failed to list hospitals: \(error.localizedDescription)")
         }
     }
-    
-    /// Fetches hospitals located in a given city and state.
+
+    /// Fetches hospitals located in a specific city and state.
     ///
     /// - Parameters:
-    ///   - city: The city to filter hospitals.
-    ///   - state: The state to filter hospitals.
-    /// - Returns: A list of `Hospital` objects matching the given city and state.
+    ///   - city: The city to filter hospitals by.
+    ///   - state: The state to filter hospitals by.
+    /// - Returns: A list of `Hospital` objects matching the city and state.
     /// - Throws:
     ///   - `HospitalError.notFound`: If no hospitals are found.
-    ///   - `HospitalError.firebaseError`: If the fetch operation fails due to a Firestore-related issue.
-    ///   - `HospitalError.unknown`: If any other error occurs.
+    ///   - `HospitalError.firebaseError`: If Firestore fails.
+    ///   - `HospitalError.unknown`: For any other error.
     public func getHospitals(byCity city: String, andState state: String) async throws -> [Hospital] {
         do {
             return try await remoteDataSource.listHospitals(city: city, state: state)
@@ -93,11 +150,11 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
     /// Searches for hospitals by a partial name match.
     ///
     /// - Parameter partialName: The partial string to match against hospital names.
-    /// - Returns: A list of `Hospital` objects with names matching the partial string.
+    /// - Returns: A list of `Hospital` objects with matching names.
     /// - Throws:
-    ///   - `HospitalError.notFound`: If no hospitals are found.
-    ///   - `HospitalError.firebaseError`: If the fetch operation fails due to a Firestore-related issue.
-    ///   - `HospitalError.unknown`: If any other error occurs.
+    ///   - `HospitalError.notFound`: If none are found.
+    ///   - `HospitalError.firebaseError`: If Firestore fails.
+    ///   - `HospitalError.unknown`: For other unexpected errors.
     public func searchHospitals(byPartialName partialName: String) async throws -> [Hospital] {
         do {
             return try await remoteDataSource.listHospitalsByPartialName(partialName: partialName)
@@ -107,17 +164,15 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
             throw HospitalError.unknown("Failed to search hospitals by name \(partialName): \(error.localizedDescription)")
         }
     }
-    
-    public func updateAfterDelivery(hospital: Hospital, babyCount: Int) async throws -> Hospital {
-        var updatedHospital = hospital
-        updatedHospital.deliveryCount += 1
-        updatedHospital.babyCount += babyCount
-        
-        try await self.updateHospital(hospital: updatedHospital)
-        return updatedHospital
-    }
-    
+
+    // MARK: - Delete
+
     /// Deletes an existing hospital record.
+    ///
+    /// - Parameter hospital: The `Hospital` object to delete.
+    /// - Throws:
+    ///   - `HospitalError.deletionFailed`: If Firestore deletion fails.
+    ///   - `HospitalError`: For other domain-specific errors.
     public func deleteHospital(hospital: Hospital) async throws {
         do {
             try await remoteDataSource.deleteHospital(byId: hospital.id)
@@ -127,5 +182,4 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
             throw HospitalError.deletionFailed("Failed to delete hospital: \(error.localizedDescription)")
         }
     }
-
 }

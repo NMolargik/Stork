@@ -63,7 +63,6 @@ public struct AppStateControllerView: View {
                 case .register:
                     RegisterView(
                         showRegistration: $showRegistration,
-                        profileRepository: profileRepository,
                         onAuthenticated: {
                             withAnimation {
                                 self.loggedIn = true
@@ -110,12 +109,9 @@ public struct AppStateControllerView: View {
             if profileViewModel.profile.email.isEmpty {
                 Task {
                     do {
-                        let fetchedProfile = try await
-                        profileViewModel.profileRepository.getCurrentProfile()
-                            
-                        profileViewModel.profile = fetchedProfile
+                        try await profileViewModel.fetchCurrentProfile()
                         
-                        try await deliveryViewModel.getUserDeliveries(profile: fetchedProfile)
+                        try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
                         withAnimation {
                             selectedTab = .home
                             appState = .main

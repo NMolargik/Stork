@@ -12,12 +12,15 @@ struct SettingsTabView: View {
     @AppStorage("useMetric") private var useMetric: Bool = false
     @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
+    @AppStorage("errorMessage") var errorMessage: String = ""
     
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
+    @EnvironmentObject var musterViewModel: MusterViewModel
     
     @State private var showingDeleteConfirmation = false
     @State private var deleteConfirmationStep = 1
+    @State private var passwordString: String = ""
     
     private var appInfo: (name: String, version: String) {
         let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ??
@@ -121,18 +124,35 @@ struct SettingsTabView: View {
     
     /// Function to handle account deletion
     private func deleteAccount() {
-        // TODO: Add account deletion logic here
-        // For example:
-        // profileViewModel.deleteAccount()
-        // deliveryViewModel.deleteAllDeliveries()
+        profileViewModel.isWorking = true
         
-        // After deletion, navigate the user to splash screen
+        Task {
+            // Leave Muster
+            if (!profileViewModel.profile.musterId.isEmpty) {
+                do {
+                    try await musterViewModel.leaveMuster(profileViewModel: profileViewModel)
+                } catch {
+                    profileViewModel.isWorking = false
+                    errorMessage = error.localizedDescription
+                    return
+                }
+            }
+            
+            do {
+                try await profileViewModel.deleteProfile(password: passwordString)
+            } catch {
+                profileViewModel.isWorking = false
+                errorMessage = error.localizedDescription
+                return
+            }
+        }
     }
 }
 
 #Preview {
     SettingsTabView()
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
 }
 
 

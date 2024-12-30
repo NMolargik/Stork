@@ -10,25 +10,29 @@ import Foundation
 public protocol DeliveryRepositoryInterface {
     /// Creates a new delivery record.
     /// - Parameter delivery: The `Delivery` object to create.
+    /// - Returns: The newly created `Delivery` (including its generated ID).
     /// - Throws: `DeliveryError` if the creation fails.
-    func createDelivery(delivery: Delivery) async throws
+    func createDelivery(delivery: Delivery) async throws -> Delivery
 
     /// Updates an existing delivery record.
     /// - Parameter delivery: The `Delivery` object to update.
+    /// - Returns: The updated `Delivery`.
     /// - Throws: `DeliveryError` if the update fails.
-    func updateDelivery(delivery: Delivery) async throws
+    func updateDelivery(delivery: Delivery) async throws -> Delivery
 
     /// Fetches a delivery by its unique ID.
     /// - Parameter id: The unique ID of the delivery.
-    /// - Returns: A `Delivery` object.
-    /// - Throws: `DeliveryError` if the delivery cannot be fetched or does not exist.
-    func getDelivery(byId id: String) async throws -> Delivery?
+    /// - Returns: A `Delivery` object for the specified ID.
+    /// - Throws: `DeliveryError.notFound` if the delivery cannot be found.
+    ///           Other `DeliveryError` if the fetch fails.
+    func getDelivery(byId id: String) async throws -> Delivery
 
     /// Lists deliveries based on optional filters.
     /// - Parameters:
     ///   - userId: An optional filter for id of the user associated with the delivery
     ///   - userFirstName: An optional filter for first name of the user associated with the delivery
     ///   - hospitalId: An optional hospital ID filter.
+    ///   - hospitalName: An optional hospital name filter.
     ///   - musterId: An optional muster ID filter.
     ///   - date: An optional date filter.
     ///   - babyCount: An optional baby count filter.

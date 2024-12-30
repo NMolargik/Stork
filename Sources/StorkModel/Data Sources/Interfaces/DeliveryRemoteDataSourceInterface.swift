@@ -9,31 +9,34 @@ import Foundation
 
 /// A protocol defining the interface for remote data source interactions related to deliveries.
 public protocol DeliveryRemoteDataSourceInterface {
-    /// Creates a new delivery record.
+    /// Creates a new delivery record and returns the newly created `Delivery`.
     ///
     /// - Parameter delivery: The `Delivery` object to create.
+    /// - Returns: The newly created `Delivery`.
     /// - Throws: `DeliveryError` if the creation fails.
-    func createDelivery(delivery: Delivery) async throws
+    func createDelivery(delivery: Delivery) async throws -> Delivery
 
-    /// Updates an existing delivery record.
+    /// Updates an existing delivery record and returns the updated `Delivery`.
     ///
     /// - Parameter delivery: The `Delivery` object containing the updated data.
+    /// - Returns: The updated `Delivery`.
     /// - Throws: `DeliveryError` if the update fails or the delivery does not exist.
-    func updateDelivery(delivery: Delivery) async throws
+    func updateDelivery(delivery: Delivery) async throws -> Delivery
 
     /// Retrieves a single delivery by its unique ID.
     ///
     /// - Parameter id: The unique ID of the delivery to fetch.
     /// - Returns: A `Delivery` object representing the delivery with the specified ID.
     /// - Throws: `DeliveryError` if the delivery cannot be found or another error occurs.
-    func getDelivery(byId id: String) async throws -> Delivery?
+    func getDelivery(byId id: String) async throws -> Delivery
 
     /// Lists deliveries based on optional filters.
     ///
     /// - Parameters:
-    ///   - userId: An optional filter for id of the user associated with the delivery
-    ///   - userFirstName: An optional filter for first name of the user associated with the delivery
+    ///   - userId: An optional filter for id of the user associated with the delivery.
+    ///   - userFirstName: An optional filter for the first name of the user associated with the delivery.
     ///   - hospitalId: An optional filter for the hospital ID associated with the delivery. If nil, this filter is ignored.
+    ///   - hospitalName: An optional filter for the hospital name. If nil, this filter is ignored.
     ///   - musterId: An optional filter for the muster ID associated with the delivery. If nil, this filter is ignored.
     ///   - date: An optional filter for the delivery date. If nil, this filter is ignored.
     ///   - babyCount: An optional filter for the number of babies in the delivery. If nil, this filter is ignored.

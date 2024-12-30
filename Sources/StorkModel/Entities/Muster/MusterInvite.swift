@@ -29,9 +29,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
     /// Identifier of the muster.
     public var musterId: String
     
-    /// Primary color associated with the muster, stored as a string (e.g., "blue", "red").
-    public var primaryColor: String
-    
     // MARK: - Computed Properties
     
     /// Converts the muster invite data into a dictionary format, suitable for Firestore or similar databases.
@@ -41,8 +38,7 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
             "recipientName": recipientName,
             "senderName": senderName,
             "musterName": musterName,
-            "musterId": musterId,
-            "primaryColor": primaryColor
+            "musterId": musterId
         ]
     }
     
@@ -60,8 +56,7 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
             let recipientName = dictionary["recipientName"] as? String,
             let senderName = dictionary["senderName"] as? String,
             let musterName = dictionary["musterName"] as? String,
-            let musterId = dictionary["musterId"] as? String,
-            let primaryColor = dictionary["primaryColor"] as? String
+            let musterId = dictionary["musterId"] as? String
         else {
             print("Initialization failed: Missing or invalid required fields.")
             return nil
@@ -73,7 +68,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         self.senderName = senderName
         self.musterName = musterName
         self.musterId = musterId
-        self.primaryColor = primaryColor
     }
     
     /// Initializes a `MusterInvite` instance with explicit parameters.
@@ -85,15 +79,13 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
     ///   - senderName: Name of the sender.
     ///   - musterName: Name of the muster.
     ///   - musterId: Identifier of the muster.
-    ///   - primaryColor: Primary color associated with the muster.
     public init(
         id: String,
         recipientId: String,
         recipientName: String,
         senderName: String,
         musterName: String,
-        musterId: String,
-        primaryColor: String
+        musterId: String
     ) {
         self.id = id
         self.recipientId = recipientId
@@ -101,7 +93,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         self.senderName = senderName
         self.musterName = musterName
         self.musterId = musterId
-        self.primaryColor = primaryColor
     }
     
     // MARK: - Default Initializer
@@ -115,7 +106,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         self.senderName = ""
         self.musterName = "New Muster"
         self.musterId = ""
-        self.primaryColor = "blue" // Default color
     }
     
     // MARK: - Codable Conformance
@@ -128,7 +118,6 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         case senderName
         case musterName
         case musterId
-        case primaryColor
     }
     
     // MARK: - Hashable Conformance
@@ -145,8 +134,7 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
             lhs.recipientName == rhs.recipientName &&
             lhs.senderName == rhs.senderName &&
             lhs.musterName == rhs.musterName &&
-            lhs.musterId == rhs.musterId &&
-            lhs.primaryColor == rhs.primaryColor
+            lhs.musterId == rhs.musterId
     }
     
     /// Generates a hash value for the `MusterInvite` instance by combining its properties.
@@ -159,6 +147,5 @@ public struct MusterInvite: Identifiable, Codable, Hashable {
         hasher.combine(senderName)
         hasher.combine(musterName)
         hasher.combine(musterId)
-        hasher.combine(primaryColor)
     }
 }

@@ -28,7 +28,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    // MARK: - Methods
+    // MARK: - Helper: Create Sample Deliveries
 
     /// Creates multiple sample deliveries with random babies.
     ///
@@ -53,7 +53,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
                 
                 // Generate delivery ID
                 let deliveryId = UUID().uuidString
-                
+
                 // Generate user ID
                 let userId = UUID().uuidString
 
@@ -82,7 +82,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
                     date: randomDate,
                     babies: babies,
                     babyCount: babies.count,
-                    deliveryMethod: deliveryMethods.randomElement() ?? DeliveryMethod.vaginal,
+                    deliveryMethod: deliveryMethods.randomElement() ?? .vaginal,
                     epiduralUsed: true
                 )
 
@@ -92,31 +92,60 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
 
         return sampleDeliveries.sorted { $0.date > $1.date }
     }
-    
 
-    // MARK: - CRUD Methods
-    
-    public func createDelivery(delivery: Delivery) async throws {
+    // MARK: - CRUD Methods (Updated Return Types)
+
+    /// Creates a new delivery and returns the newly created `Delivery`.
+    ///
+    /// - Parameter delivery: The `Delivery` object to create.
+    /// - Returns: The newly created `Delivery`.
+    /// - Throws: `DeliveryError.creationFailed` if a delivery with the same ID already exists.
+    public func createDelivery(delivery: Delivery) async throws -> Delivery {
         if deliveries.contains(where: { $0.id == delivery.id }) {
             throw DeliveryError.creationFailed("Delivery with ID \(delivery.id) already exists.")
         }
         deliveries.append(delivery)
+        return delivery
     }
 
-    public func updateDelivery(delivery: Delivery) async throws {
+    /// Updates an existing delivery and returns the updated `Delivery`.
+    ///
+    /// - Parameter delivery: The `Delivery` object with updated data.
+    /// - Returns: The updated `Delivery`.
+    /// - Throws: `DeliveryError.notFound` if no delivery with the given ID exists.
+    public func updateDelivery(delivery: Delivery) async throws -> Delivery {
         guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
             throw DeliveryError.notFound("Delivery with ID \(delivery.id) not found.")
         }
         deliveries[index] = delivery
+        return delivery
     }
 
-    public func getDelivery(byId id: String) async throws -> Delivery? {
+    /// Fetches a delivery by its unique ID.
+    ///
+    /// - Parameter id: The ID of the delivery to fetch.
+    /// - Returns: A `Delivery` object matching the specified ID.
+    /// - Throws: `DeliveryError.notFound` if no such delivery exists.
+    public func getDelivery(byId id: String) async throws -> Delivery {
         guard let delivery = deliveries.first(where: { $0.id == id }) else {
             throw DeliveryError.notFound("Delivery with ID \(id) not found.")
         }
         return delivery
     }
 
+    /// Lists deliveries based on optional filter criteria.
+    ///
+    /// - Parameters:
+    ///   - userId: Optional filter by user ID.
+    ///   - userFirstName: Optional filter by the user's first name.
+    ///   - hospitalId: Optional filter by hospital ID.
+    ///   - hospitalName: Optional filter by hospital name.
+    ///   - musterId: Optional filter by muster ID.
+    ///   - date: Optional filter by exact date (same day).
+    ///   - babyCount: Optional filter by baby count.
+    ///   - deliveryMethod: Optional filter by delivery method.
+    ///   - epiduralUsed: Optional filter by epidural usage.
+    /// - Returns: An array of `Delivery` objects matching the specified filters.
     public func listDeliveries(
         userId: String?,
         userFirstName: String?,
@@ -128,7 +157,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         deliveryMethod: DeliveryMethod?,
         epiduralUsed: Bool?
     ) async throws -> [Delivery] {
-        return deliveries.filter { delivery in
+        deliveries.filter { delivery in
             (userId == nil || delivery.userId == userId) &&
             (userFirstName == nil || delivery.userFirstName == userFirstName) &&
             (hospitalId == nil || delivery.hospitalId == hospitalId) &&
@@ -141,8 +170,10 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-
-
+    /// Deletes a delivery from the mock storage.
+    ///
+    /// - Parameter delivery: The `Delivery` object to delete.
+    /// - Throws: `DeliveryError.deletionFailed` if the delivery cannot be found in the mock storage.
     public func deleteDelivery(delivery: Delivery) async throws {
         guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
             throw DeliveryError.deletionFailed("Failed to delete delivery with ID \(delivery.id).")

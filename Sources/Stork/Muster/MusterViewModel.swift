@@ -28,8 +28,7 @@ public class MusterViewModel: ObservableObject {
         profileIds: [],
         primaryHospitalId: "",
         administratorProfileIds: [],
-        name: "",
-        primaryColor: ""
+        name: ""
     )
     @Published var showHospitalSelection: Bool = false
     @Published var creationFormValid: Bool = false
@@ -83,10 +82,9 @@ public class MusterViewModel: ObservableObject {
         
         newMuster.profileIds.append(profileId)
         newMuster.administratorProfileIds.append(profileId)
-        newMuster.primaryColor = currentMuster?.primaryColor ?? "red"
         
         do {
-            try await musterRepository.createMuster(muster: newMuster)
+            newMuster = try await musterRepository.createMuster(muster: newMuster)
             print("New muster successfully created")
             currentMuster = newMuster
             resetNewMuster()
@@ -102,8 +100,7 @@ public class MusterViewModel: ObservableObject {
             profileIds: [],
             primaryHospitalId: "",
             administratorProfileIds: [],
-            name: "",
-            primaryColor: "red" // Assuming primaryColor is a String
+            name: ""
         )
     }
     
@@ -131,7 +128,7 @@ public class MusterViewModel: ObservableObject {
         }
         
         do {
-            musterMembers = try await profileViewModel.searchProfilesByMuster(musterId: muster.id)
+            musterMembers = try await profileViewModel.listProfiles(musterId: muster.id)
         } catch {
             throw error
         }
@@ -187,8 +184,7 @@ public class MusterViewModel: ObservableObject {
     /// Updates the muster with the provided changes.
     private func updateMuster(muster: Muster) async throws {
         do {
-            try await musterRepository.updateMuster(muster: muster)
-            currentMuster = muster
+            currentMuster = try await musterRepository.updateMuster(muster: muster)
             print("Muster updated successfully")
         } catch {
             throw error
@@ -241,8 +237,7 @@ public class MusterViewModel: ObservableObject {
         muster.profileIds.append(profile.id)
         
         do {
-            try await musterRepository.updateMuster(muster: muster)
-            currentMuster = muster
+            currentMuster = try await musterRepository.updateMuster(muster: muster)
             
         } catch {
             throw error
@@ -326,8 +321,7 @@ public class MusterViewModel: ObservableObject {
         updatedMuster.administratorProfileIds.append(userId)
         
         do {
-            try await musterRepository.updateMuster(muster: updatedMuster)
-            currentMuster = updatedMuster
+            currentMuster = try await musterRepository.updateMuster(muster: updatedMuster)
             print("Admin assigned to user ID: \(userId)")
         } catch {
             throw error
@@ -342,7 +336,6 @@ public class MusterViewModel: ObservableObject {
         invite?.recipientId = profile.id
         invite?.musterName = muster.name
         invite?.senderName = currentUser.firstName
-        invite?.primaryColor = muster.primaryColor
         invite?.recipientName = profile.firstName
     }
     
@@ -354,8 +347,7 @@ public class MusterViewModel: ObservableObject {
             recipientName: "",
             senderName: "",
             musterName: "",
-            musterId: "",
-            primaryColor: ""
+            musterId: ""
         )
     }
 }

@@ -64,7 +64,7 @@ class DeliveryViewModel: ObservableObject {
         }
         
         do {
-            try await deliveryRepository.createDelivery(delivery: newDelivery)
+            newDelivery = try await deliveryRepository.createDelivery(delivery: newDelivery)
             print("New delivery successfully submitted")
             self.deliveries.append(newDelivery)
             currentDeliveryCount += 1

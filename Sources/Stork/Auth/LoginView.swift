@@ -10,36 +10,28 @@ import StorkModel
 
 struct LoginView: View {
     @AppStorage("errorMessage") var errorMessage: String = ""
-    @AppStorage("appState") var appState: AppState = .register
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
 
-
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    @StateObject private var viewModel: LoginViewModel
     
     @State private var isPasswordResetPresented = false
     
-    var profileRepository: ProfileRepositoryInterface
     var onAuthenticated: () -> Void
     
     public init(
-        profileRepository: ProfileRepositoryInterface = DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource()),
         onAuthenticated: @escaping () -> Void
     ) {
-        self.profileRepository = profileRepository
         self.onAuthenticated = onAuthenticated
-        
-        _viewModel = StateObject(wrappedValue: LoginViewModel(profileRepository: profileRepository))
     }
 
     var body: some View {
         ZStack {
             VStack() {
-                CustomTextfieldView(text: $viewModel.profile.email, hintText: "Email Address", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
+                CustomTextfieldView(text: $profileViewModel.profile.email, hintText: "Email Address", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
                     .padding(.bottom, 5)
                     .padding(.horizontal)
                 
-                CustomTextfieldView(text: $viewModel.password, hintText: "Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.red)
+                CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.red)
                     .padding(.bottom)
                     .onSubmit {
                         Task {
@@ -52,7 +44,7 @@ struct LoginView: View {
                     }
                     .padding(.horizontal)
                 
-                if (viewModel.isWorking) {
+                if (profileViewModel.isWorking) {
                     ProgressView()
                         .tint(.indigo)
                         .frame(height: 40)
@@ -79,7 +71,7 @@ struct LoginView: View {
                          .foregroundStyle(.red)
                  })
                  .padding()
-                 .opacity(viewModel.isWorking ? 0.0 : 1.0)
+                 .opacity(profileViewModel.isWorking ? 0.0 : 1.0)
                 
                 Spacer()
                     .frame(height: 50)
@@ -88,14 +80,14 @@ struct LoginView: View {
         }
 
         .sheet(isPresented: $isPasswordResetPresented) {
-            PasswordResetSheetView(viewModel: viewModel, isPasswordResetPresented: $isPasswordResetPresented, email: $viewModel.profile.email)
+            PasswordResetSheetView(isPasswordResetPresented: $isPasswordResetPresented, email: $profileViewModel.profile.email)
                 .presentationDetents([PresentationDetent.medium])
         }
     }
     
     private func signIn() async throws {
         do {
-            try await viewModel.signInWithEmail()
+            try await profileViewModel.signInWithEmail()
             onAuthenticated()
         } catch {
             errorMessage = error.localizedDescription

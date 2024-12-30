@@ -24,17 +24,19 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
 
     // MARK: - Create a New Muster Record
 
-    /// Creates a new muster record in Firestore.
+    /// Creates a new muster record in Firestore and returns the newly created `Muster`.
     ///
     /// - Parameter muster: The `Muster` object to create.
-    /// - Returns: The same 'Muster' object to confirm creation
+    /// - Returns: The newly created `Muster` (optionally re-fetched if you need server-updated fields).
     /// - Throws:
-    ///   - `MusterError.firebaseError`: If an error occurs while creating the muster.
-    public func createMuster(muster: Muster) async throws {
+    ///   - `MusterError.creationFailed`: If an error occurs while creating the muster.
+    public func createMuster(muster: Muster) async throws -> Muster {
         do {
-            print(muster.id)
+            // Convert muster to dictionary and write to Firestore
             let data = muster.dictionary
             try await db.collection("Muster").document(muster.id).setData(data)
+            
+            return muster
         } catch {
             throw MusterError.creationFailed("Failed to create muster: \(error.localizedDescription)")
         }
@@ -42,19 +44,23 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
 
     // MARK: - Update an Existing Muster Record
 
-    /// Updates an existing muster record in Firestore.
+    /// Updates an existing muster record in Firestore and returns the updated `Muster`.
     ///
     /// - Parameter muster: The `Muster` object containing updated data.
+    /// - Returns: The updated `Muster` (optionally re-fetched if you need server-updated fields).
     /// - Throws:
-    ///   - `MusterError.firebaseError`: If an error occurs while updating the muster.
-    public func updateMuster(muster: Muster) async throws {
+    ///   - `MusterError.updateFailed`: If an error occurs while updating the muster.
+    public func updateMuster(muster: Muster) async throws -> Muster {
         do {
             let data = muster.dictionary
             try await db.collection("Muster").document(muster.id).updateData(data)
+
+            return muster
         } catch {
             throw MusterError.updateFailed("Failed to update muster: \(error.localizedDescription)")
         }
     }
+
     /// Fetches a single muster by its unique ID.
     ///
     /// - Parameter id: The unique ID of the muster to fetch.
@@ -64,7 +70,6 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     ///   - `MusterError.firebaseError`: If an error occurs while fetching the muster.
     public func getMuster(byId id: String) async throws -> Muster {
         do {
-            print("MusterId: \(id)")
             let document = try await db.collection("Muster").document(id).getDocument()
 
             // Safely unwrap the optional data
@@ -94,16 +99,14 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     ///   - primaryHospitalId: An optional filter for the primary hospital ID associated with the muster.
     ///   - administratorProfileIds: An optional filter for the administrator profile IDs.
     ///   - name: An optional filter for the muster name.
-    ///   - primaryColor: An optional filter for the muster’s primary color.
     /// - Returns: An array of `Muster` objects matching the specified filters.
     /// - Throws:
-    ///   - `MusterError.firebaseError`: If an error occurs while fetching the musters.
+    ///   - `MusterError.notFound`: If none are found or Firestore errors occur.
     public func listMusters(
         profileIds: [String]? = nil,
         primaryHospitalId: String? = nil,
         administratorProfileIds: [String]? = nil,
-        name: String? = nil,
-        primaryColor: String? = nil
+        name: String? = nil
     ) async throws -> [Muster] {
         do {
             var query: Query = db.collection("Muster")
@@ -120,19 +123,17 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
             if let name = name {
                 query = query.whereField("name", isEqualTo: name)
             }
-            if let primaryColor = primaryColor {
-                query = query.whereField("primaryColor", isEqualTo: primaryColor)
-            }
 
             // Fetch documents that match the query
             let snapshot = try await query.getDocuments()
-            var musters = snapshot.documents.compactMap { document in
-                Muster(from: document.data(), id: document.documentID)
+            var musters = snapshot.documents.compactMap {
+                Muster(from: $0.data(), id: $0.documentID)
             }
 
-            // Manually filter by `profileIds` if provided
+            // Manually filter by `profileIds` if provided (if your query logic requires it)
             if let profileIds = profileIds {
                 musters = musters.filter { muster in
+                    // Ensure that for each ID in `profileIds`, `muster.profileIds` contains that ID
                     profileIds.allSatisfy { muster.profileIds.contains($0) }
                 }
             }
@@ -149,7 +150,7 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
     ///
     /// - Parameter muster: The `Muster` object to delete.
     /// - Throws:
-    ///   - `MusterError.firebaseError`: If an error occurs while deleting the muster.
+    ///   - `MusterError.deletionFailed`: If an error occurs while deleting the muster.
     public func deleteMuster(muster: Muster) async throws {
         do {
             try await db.collection("Muster").document(muster.id).delete()
@@ -158,67 +159,78 @@ public class FirebaseMusterDataSource: MusterRemoteDataSourceInterface {
         }
     }
     
-    // MARK: - Invite a user to a muster
+    // MARK: - Invite a User to a Muster
     
-    /// Sends a profile an invite to join a muster
+    /// Sends a profile an invite to join a muster.
     ///
-    /// - Parameter invite: The `MusterInvite` object defining the invitation
-    /// - Parameter userId: The id of the user that is being invited
-    /// - Throws:
+    /// - Parameter invite: The `MusterInvite` object defining the invitation.
+    /// - Parameter userId: The ID of the user being invited.
+    /// - Throws: `MusterError.invitationFailed` if sending fails.
     public func sendMusterInvite(invite: MusterInvite, userId: String) async throws {
         do {
             let data = invite.dictionary
             try await db.collection("MusterInvite").document(invite.id).setData(data)
-
         } catch {
             throw MusterError.invitationFailed(error.localizedDescription)
         }
     }
-    
+
+    /// Collects all muster invitations for a user.
+    ///
+    /// - Parameter userId: The user ID associated with potential muster invites.
+    /// - Returns: An array of `MusterInvite` objects for the specified user.
+    /// - Throws: `MusterError.failedToCollectInvitations` if fetching fails.
     public func collectUserMusterInvites(userId: String) async throws -> [MusterInvite] {
         do {
-            let query: Query = db.collection("MusterInvite").whereField("recipientId", isEqualTo: userId)
-
-            // Fetch documents that match the query
+            let query = db.collection("MusterInvite").whereField("recipientId", isEqualTo: userId)
             let snapshot = try await query.getDocuments()
-            let invitations = snapshot.documents.compactMap { document in
-                MusterInvite(from: document.data(), id: document.documentID)
+            let invitations = snapshot.documents.compactMap {
+                MusterInvite(from: $0.data(), id: $0.documentID)
             }
-
             return invitations
         } catch {
             throw MusterError.failedToCollectInvitations(error.localizedDescription)
         }
     }
-    
+
+    /// Collects all muster invitations for a specific muster.
+    ///
+    /// - Parameter musterId: The ID of the muster whose invitations should be fetched.
+    /// - Returns: An array of `MusterInvite` objects for the specified muster.
+    /// - Throws: `MusterError.failedToCollectInvitations` if fetching fails.
     public func collectInvitesForMuster(musterId: String) async throws -> [MusterInvite] {
         do {
-            let query: Query = db.collection("MusterInvite").whereField("musterId", isEqualTo: musterId)
-            
+            let query = db.collection("MusterInvite").whereField("musterId", isEqualTo: musterId)
             let snapshot = try await query.getDocuments()
-            let invitations = snapshot.documents.compactMap { document in
-                MusterInvite(from: document.data(), id: document.documentID)
+            let invitations = snapshot.documents.compactMap {
+                MusterInvite(from: $0.data(), id: $0.documentID)
             }
-            
             return invitations
         } catch {
             throw MusterError.failedToCollectInvitations(error.localizedDescription)
         }
     }
-    
+
+    /// Deletes all muster invitations associated with a given muster.
+    ///
+    /// - Parameter musterId: The ID of the muster whose invitations should be deleted.
+    /// - Throws: `MusterError.failedToCollectInvitations` if fetching fails, or other errors during deletion.
     public func deleteMusterInvites(musterId: String) async throws {
-        let query: Query = db.collection("MusterInvite").whereField("musterId", isEqualTo: musterId)
-        
+        let query = db.collection("MusterInvite").whereField("musterId", isEqualTo: musterId)
         let snapshot = try await query.getDocuments()
-        let invitations = snapshot.documents.compactMap { document in
-            MusterInvite(from: document.data(), id: document.documentID)
+        let invitations = snapshot.documents.compactMap {
+            MusterInvite(from: $0.data(), id: $0.documentID)
         }
         
         for musterInvite in invitations {
             try await db.collection("MusterInvite").document(musterInvite.id).delete()
         }
     }
-    
+
+    /// Cancels a previously sent muster invitation by deleting its Firestore document.
+    ///
+    /// - Parameter invitationId: The ID of the invitation to cancel.
+    /// - Throws: `MusterError.failedToCancelInvite` if deletion fails.
     public func cancelMusterInvite(invitationId: String) async throws {
         do {
             try await db.collection("MusterInvite").document(invitationId).delete()

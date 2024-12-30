@@ -185,12 +185,9 @@ struct DeliveryAdditionView: View {
                 
                 Task {
                     if hospitalViewModel.primaryHospital == nil {
-                        print(hospitalViewModel.primaryHospital)
                         try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
                     }
-                    
-                    print(hospitalViewModel.selectedHospital)
-                    
+                                    
                     selectedHospital = hospitalViewModel.primaryHospital
                 }
             }
