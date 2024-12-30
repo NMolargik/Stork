@@ -35,7 +35,7 @@ struct HospitalListView: View {
                     }
                 
                 if (hospitalViewModel.searchEnabled) {
-                    CustomButtonView(text: "Search", width: 80, height: 55, color: Color.indigo, isEnabled: $hospitalViewModel.searchEnabled, onTapAction: {
+                    CustomButtonView(text: "Search", width: 80, height: 55, color: Color.indigo, isEnabled: hospitalViewModel.searchEnabled, onTapAction: {
                         Task {
                             try await hospitalViewModel.searchHospitals()
                         }

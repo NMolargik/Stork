@@ -83,7 +83,7 @@ struct ProfileRowView: View {
             height: 50,
             color: color,
             icon: nil,
-            isEnabled: .constant(isEnabled),
+            isEnabled: isEnabled,
             onTapAction: { withAnimation { action() } }
         )
     }

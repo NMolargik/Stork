@@ -66,7 +66,6 @@ public protocol ProfileRepositoryInterface {
     ///   - primaryHospital: An optional filter for the profile's primary hospital ID.
     ///   - joinDate: An optional filter for the profile's join date.
     ///   - musterId: An optional filter for the muster ID associated with the profile.
-    ///   - isAdmin: An optional filter for whether the profile has admin privileges.
     /// - Returns: An array of `Profile` objects matching the specified filters.
     /// - Throws: `ProfileError` if the operation fails.
     func listProfiles(
@@ -78,8 +77,7 @@ public protocol ProfileRepositoryInterface {
         role: ProfileRole?,
         primaryHospital: String?,
         joinDate: Date?,
-        musterId: String?,
-        isAdmin: Bool?
+        musterId: String?
     ) async throws -> [Profile]
 
     // MARK: - Deleting Profiles

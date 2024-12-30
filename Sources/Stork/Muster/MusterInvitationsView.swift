@@ -50,7 +50,7 @@ struct MusterInvitationsView: View {
                                     .foregroundStyle(.black)
                                 
                                 HStack {
-                                    CustomButtonView(text: "Accept", width: 100, height: 40, color: Color.blue, isEnabled: .constant(true), onTapAction: {
+                                    CustomButtonView(text: "Accept", width: 100, height: 40, color: Color.blue, isEnabled: true, onTapAction: {
                                         
                                         Task {
                                             try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: true, profileViewModel: profileViewModel)
@@ -72,7 +72,7 @@ struct MusterInvitationsView: View {
                                         }
                                     })
                                     
-                                    CustomButtonView(text: "Decline", width: 100, height: 40, color: Color.red, isEnabled: .constant(true), onTapAction: {
+                                    CustomButtonView(text: "Decline", width: 100, height: 40, color: Color.red, isEnabled: true, onTapAction: {
                                         
                                         Task {
                                             try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: false, profileViewModel: profileViewModel)

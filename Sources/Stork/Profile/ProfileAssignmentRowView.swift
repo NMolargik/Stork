@@ -1,6 +1,7 @@
 //
 //  ProfileAssignmentRowView.swift
 //
+//
 //  Created by Nick Molargik on 12/11/24.
 //
 
@@ -10,7 +11,14 @@ import StorkModel
 struct ProfileAssignmentRowView: View {
     @AppStorage("errorMessage") private var errorMessage: String = ""
     
+    /// The `Profile` displayed in this row.
     var profile: Profile
+    
+    /// A list (or set) of user IDs who are admins in the muster.
+    /// We check whether `profile.id` is in this list to see if they're already an admin.
+    var adminProfileIds: Set<String>
+    
+    /// Called when we want to assign admin privileges to this user.
     var onAssign: () -> Void
     
     private static let dateFormatter: DateFormatter = {
@@ -49,8 +57,14 @@ struct ProfileAssignmentRowView: View {
     
     // MARK: - Action Button
     private var actionButton: some View {
-        actionButton(text: profile.isAdmin ? "Admin" : "Assign", color: profile.isAdmin ? .gray : .blue, isEnabled: !profile.isAdmin) {
-            if !profile.isAdmin {
+        let isAdmin = adminProfileIds.contains(profile.id)
+        
+        return actionButton(
+            text: isAdmin ? "Admin" : "Assign",
+            color: isAdmin ? .gray : .blue,
+            isEnabled: !isAdmin
+        ) {
+            if !isAdmin {
                 onAssign()
             } else {
                 errorMessage = "User is already an admin."
@@ -66,7 +80,7 @@ struct ProfileAssignmentRowView: View {
             height: 50,
             color: color,
             icon: nil,
-            isEnabled: .constant(isEnabled),
+            isEnabled: isEnabled,
             onTapAction: { withAnimation { action() } }
         )
     }
@@ -75,6 +89,7 @@ struct ProfileAssignmentRowView: View {
 #Preview {
     ProfileAssignmentRowView(
         profile: Profile(),
+        adminProfileIds: ["123", "abc"],
         onAssign: {}
     )
 }

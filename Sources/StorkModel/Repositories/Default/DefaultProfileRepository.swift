@@ -114,7 +114,6 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
     ///   - primaryHospital: An optional filter for the profile's primary hospital ID.
     ///   - joinDate: An optional filter for the profile's join date.
     ///   - musterId: An optional filter for the muster ID associated with the profile.
-    ///   - isAdmin: An optional filter for whether the profile has admin privileges.
     /// - Returns: An array of `Profile` objects matching the specified filters.
     /// - Throws: `ProfileError` if the operation fails.
     public func listProfiles(
@@ -126,8 +125,7 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
         role: ProfileRole? = nil,
         primaryHospital: String? = nil,
         joinDate: Date? = nil,
-        musterId: String? = nil,
-        isAdmin: Bool? = nil
+        musterId: String? = nil
     ) async throws -> [Profile] {
         do {
             return try await remoteDataSource.listProfiles(
@@ -139,8 +137,7 @@ public class DefaultProfileRepository: ProfileRepositoryInterface {
                 role: role,
                 primaryHospital: primaryHospital,
                 joinDate: joinDate,
-                musterId: musterId,
-                isAdmin: isAdmin
+                musterId: musterId
             )
         } catch let error as ProfileError {
             throw error

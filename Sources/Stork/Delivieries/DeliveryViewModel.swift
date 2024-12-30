@@ -12,13 +12,11 @@ import SwiftUI
 class DeliveryViewModel: ObservableObject {
     @Published var deliveries: [Delivery] = []
     @Published var groupedDeliveries: [(key: String, value: [Delivery])] = []
-    
     @Published var newDelivery: Delivery = Delivery(sample: true)
     @Published var epiduralUsed: Bool = false
     @Published var deliveryMethod: DeliveryMethod = .vaginal
     @Published var addToMuster: Bool = false
     @Published var selectedHospital: Hospital? = nil
-    @Published var submitEnabled: Bool = false
     @Published var possibleDuplicates: [Delivery] = []
     @Published var isWorking: Bool = false
     @Published var isSelectingHospital: Bool = false
@@ -29,6 +27,9 @@ class DeliveryViewModel: ObservableObject {
     private var timer: Timer?
     
     var deliveryRepository: DeliveryRepositoryInterface
+    var canSubmitDelivery: Bool {
+        return !newDelivery.babies.isEmpty && selectedHospital != nil
+    }
 
     // MARK: - Initializer
     @MainActor
@@ -132,6 +133,11 @@ class DeliveryViewModel: ObservableObject {
         )
     }
     
+    func addBaby() {
+        let newBaby = Baby(deliveryId: UUID().uuidString, nurseCatch: false, sex: Sex.male)
+        newDelivery.babies.append(newBaby)
+    }
+    
     func getUserDeliveries(profile: Profile) async throws {
         do {
             let fetchedDeliveries = try await deliveryRepository.listDeliveries(
@@ -155,17 +161,14 @@ class DeliveryViewModel: ObservableObject {
     }
     
     func searchForDuplicates(musterId: String) async -> [Delivery] {
-        self.submitEnabled = false
         self.isWorking = true
         
         do {
             let duplicates = try await deliveryRepository.listDeliveries(userId: nil, userFirstName: nil, hospitalId: selectedHospital?.id, hospitalName: nil, musterId: musterId, date: self.currentDate, babyCount: self.selectedHospital?.babyCount, deliveryMethod: self.deliveryMethod, epiduralUsed: self.epiduralUsed)
             
-            self.submitEnabled = true
             self.isWorking = false
             return duplicates
         } catch {
-            self.submitEnabled = true
             self.isWorking = false
             return []
         }

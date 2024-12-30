@@ -69,7 +69,7 @@ struct SplashView: View {
                 Text("Don't have an account yet?")
                     .padding()
                 
-                CustomButtonView(text: "Sign Up", width: 100, height: 40, color: Color.orange, isEnabled: .constant(true), onTapAction: {
+                CustomButtonView(text: "Sign Up", width: 100, height: 40, color: Color.orange, isEnabled: true, onTapAction: {
                         withAnimation {
                             profileViewModel.resetTempProfile()
                             showRegistration = true

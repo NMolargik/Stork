@@ -38,9 +38,6 @@ public struct Profile: Identifiable, Codable, Hashable {
     /// Role of the user within the application.
     public var role: ProfileRole
     
-    /// Indicates whether the user has administrative privileges.
-    public var isAdmin: Bool
-    
     /// Predefined date formatter for standardizing date formats.
     public static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -68,7 +65,6 @@ public struct Profile: Identifiable, Codable, Hashable {
             let joinDateString = dictionary["joinDate"] as? String,
             let roleString = dictionary["role"] as? String,
             let role = ProfileRole(rawValue: roleString),
-            let isAdmin = dictionary["isAdmin"] as? Bool,
             let birthday = formatter.date(from: birthdayString)
         else {
             print("Missing or invalid required fields")
@@ -86,9 +82,8 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.lastName = lastName
         self.email = email
         self.birthday = birthday
-        self.joinDate = joinDateString // Keeping as a string
+        self.joinDate = joinDateString
         self.role = role
-        self.isAdmin = isAdmin
     }
     
     /// Initializes a `Profile` instance with explicit parameters.
@@ -102,7 +97,6 @@ public struct Profile: Identifiable, Codable, Hashable {
     ///   - birthday: Birthday date.
     ///   - joinDate: Join date as a string.
     ///   - role: User role.
-    ///   - isAdmin: Administrative status.
     public init(
         id: String,
         primaryHospitalId: String,
@@ -112,8 +106,7 @@ public struct Profile: Identifiable, Codable, Hashable {
         email: String,
         birthday: Date,
         joinDate: String,
-        role: ProfileRole,
-        isAdmin: Bool
+        role: ProfileRole
     ) {
         self.id = id
         self.primaryHospitalId = primaryHospitalId
@@ -124,7 +117,6 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.birthday = birthday
         self.joinDate = joinDate
         self.role = role
-        self.isAdmin = isAdmin
     }
     
     /// Initializes a `Profile` instance with default values.
@@ -138,7 +130,6 @@ public struct Profile: Identifiable, Codable, Hashable {
         self.birthday = Date()
         self.joinDate = Profile.dateFormatter.string(from: Date())
         self.role = .nurse
-        self.isAdmin = false
     }
     
     // MARK: - Computed Properties
@@ -154,8 +145,7 @@ public struct Profile: Identifiable, Codable, Hashable {
             "email": email,
             "birthday": Profile.dateFormatter.string(from: birthday),
             "joinDate": joinDate,
-            "role": role.rawValue,
-            "isAdmin": isAdmin
+            "role": role.rawValue
         ]
     }
     
@@ -163,7 +153,7 @@ public struct Profile: Identifiable, Codable, Hashable {
     
     /// Specifies the coding keys for encoding and decoding.
     private enum CodingKeys: String, CodingKey {
-        case id, primaryHospitalId, musterId, firstName, lastName, email, birthday, joinDate, role, isAdmin
+        case id, primaryHospitalId, musterId, firstName, lastName, email, birthday, joinDate, role
     }
     
     // MARK: - Hashable Conformance
@@ -177,8 +167,7 @@ public struct Profile: Identifiable, Codable, Hashable {
             lhs.email == rhs.email &&
             lhs.birthday == rhs.birthday &&
             lhs.joinDate == rhs.joinDate &&
-            lhs.role == rhs.role &&
-            lhs.isAdmin == rhs.isAdmin
+            lhs.role == rhs.role
     }
     
     public func hash(into hasher: inout Hasher) {
@@ -191,6 +180,5 @@ public struct Profile: Identifiable, Codable, Hashable {
         hasher.combine(birthday)
         hasher.combine(joinDate)
         hasher.combine(role)
-        hasher.combine(isAdmin)
     }
 }

@@ -18,6 +18,8 @@ public class ProfileViewModel: ObservableObject {
     // MARK: - AppStorage
     @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("loggedIn") var loggedIn = false
+    @AppStorage("useMetric") private var useMetric: Bool = false
+    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     
     // MARK: - Published Core State
     @Published var profile: Profile
@@ -56,54 +58,59 @@ public class ProfileViewModel: ObservableObject {
     @MainActor
     public func fetchCurrentProfile() async throws {
         isWorking = true
+        defer { isWorking = false }
+        
         do {
             let fetchedProfile = try await profileRepository.getCurrentProfile()
             self.profile = fetchedProfile
         } catch {
             self.errorMessage = "Failed to load profile: \(error.localizedDescription)"
+            // Sign out if fetching fails, to clear state
             self.signOut()
-            isWorking = false
             throw error
         }
-        isWorking = false
     }
     
     // MARK: - Register / Create Profile
     @MainActor
     public func registerWithEmail() async throws {
-        // Validate entire registration form first
+        // 1) Validate entire registration form
         validateRegistrationForm()
         guard isFormValid else {
             throw ProfileError.creationFailed("Details are invalid. Please correct the form.")
         }
         
+        // 2) Show loading indicator
         isWorking = true
+        defer { isWorking = false }
         
         do {
+            // Step A) Register user with email/password
             let newProfile = try await profileRepository.registerWithEmail(
                 profile: tempProfile,
                 password: passwordText
             )
             
-            // Update local state with the newly returned Profile
+            // Step B) Overwrite self.profile with returned profile
             self.profile = newProfile
             
+            // Step C) Also explicitly create the profile in Firestore (if your logic requires it)
             self.profile = try await profileRepository.createProfile(profile: profile)
+            
+            // Mark user as logged in
             self.loggedIn = true
             
         } catch {
             self.errorMessage = "Registration failed: \(error.localizedDescription)"
-            isWorking = false
             throw error
         }
         
+        // Clear sensitive fields
         self.passwordText = ""
         self.confirmPassword = ""
-        isWorking = false
     }
     
-    
-    // MARK: - Fetch profiles
+    // MARK: - Fetch Profiles (Generic List)
     @MainActor
     public func listProfiles(
         id: String? = nil,
@@ -114,14 +121,13 @@ public class ProfileViewModel: ObservableObject {
         role: ProfileRole? = nil,
         primaryHospital: String? = nil,
         joinDate: Date? = nil,
-        musterId: String? = nil,
-        isAdmin: Bool? = nil
+        musterId: String? = nil
     ) async throws -> [Profile] {
+        isWorking = true
+        defer { isWorking = false }
+        
         do {
-            isWorking = true
-            defer { isWorking = false }
-            
-            let results = try await profileRepository.listProfiles(
+            return try await profileRepository.listProfiles(
                 id: id,
                 firstName: firstName,
                 lastName: lastName,
@@ -130,11 +136,8 @@ public class ProfileViewModel: ObservableObject {
                 role: role,
                 primaryHospital: primaryHospital,
                 joinDate: joinDate,
-                musterId: musterId,
-                isAdmin: isAdmin
+                musterId: musterId
             )
-            
-            return results
         } catch {
             self.errorMessage = "Failed to fetch profiles: \(error.localizedDescription)"
             throw error
@@ -144,6 +147,7 @@ public class ProfileViewModel: ObservableObject {
     // MARK: - Login
     @MainActor
     public func signInWithEmail() async throws {
+        // Basic validation
         guard !profile.email.isEmpty else {
             throw ProfileError.authenticationFailed("Email was not provided.")
         }
@@ -152,65 +156,56 @@ public class ProfileViewModel: ObservableObject {
         }
         
         isWorking = true
+        defer { isWorking = false }
         
         do {
-            let signedInProfile = try await profileRepository.signInWithEmail(
-                profile: profile,
-                password: passwordText
-            )
+            // Step 1) Sign in with email/password
+            let signedInProfile = try await profileRepository.signInWithEmail(profile: profile, password: passwordText)
             self.profile = signedInProfile
             self.loggedIn = true
-        } catch {
-            self.errorMessage = "Failed to sign in: \(error.localizedDescription)"
-            isWorking = false
-            throw error
-        }
-        
-        // Attempt to fetch the user’s full profile
-        do {
+            
+            // Step 2) Attempt to fetch the user’s full profile (if separate)
             let currentProfile = try await profileRepository.getCurrentProfile()
             self.profile = currentProfile
+            
         } catch {
-            // If we fail to fetch the full profile, sign out
-            try await profileRepository.signOut()
-            self.errorMessage = "Unable to load profile after sign in."
-            isWorking = false
+            // If sign-in fails or fetching the full profile fails, sign out to clear state
+            self.errorMessage = "Failed to sign in: \(error.localizedDescription)"
+            try? await profileRepository.signOut()
             throw error
         }
-        
-        isWorking = false
     }
     
     // MARK: - Password Reset
     @MainActor
     public func sendPasswordReset() async throws {
+        // Ensure we have an email in tempProfile
         guard !tempProfile.email.isEmpty else {
             throw ProfileError.passwordResetFailed("No email to send reset.")
         }
+        
         isWorking = true
+        defer { isWorking = false }
         
         do {
             try await profileRepository.sendPasswordReset(email: tempProfile.email)
         } catch {
             self.errorMessage = "Password reset failed: \(error.localizedDescription)"
-            isWorking = false
             throw error
         }
-        
-        isWorking = false
     }
     
-    // MARK: - Update Profiles
+    // MARK: - Update Profile
     @MainActor
     public func updateProfile() async throws {
         isWorking = true
+        defer { isWorking = false }
         
         do {
-            // Validate the form if this is an “editing profile” scenario
+            // If editing, validate the form
             if editingProfile {
                 validateProfileForm(tempProfile)
                 guard isFormValid else {
-                    isWorking = false
                     throw ProfileError.updateFailed("Invalid form data.")
                 }
             }
@@ -218,73 +213,73 @@ public class ProfileViewModel: ObservableObject {
             // Actually update the profile
             let updated = try await profileRepository.updateProfile(profile: tempProfile)
             self.profile = updated
+            
         } catch {
             self.errorMessage = "Failed to update profile: \(error.localizedDescription)"
-            isWorking = false
             throw error
         }
-        
-        isWorking = false
     }
     
+    /// Example of an “admin status” update call. If you need more logic, it can go here.
     @MainActor
     public func updateProfileAdminStatus(profile: Profile) async throws {
         isWorking = true
+        defer { isWorking = false }
         
         do {
             _ = try await profileRepository.updateProfile(profile: tempProfile)
         } catch {
             self.errorMessage = "Failed to assign admin: \(error.localizedDescription)"
-            isWorking = false
             throw error
         }
-        
-        isWorking = false
     }
     
     // MARK: - Delete / Terminate
     @MainActor
     public func deleteProfile(password: String) async throws {
         isWorking = true
+        defer { isWorking = false }
         
         do {
+            // Delete the user’s profile
             try await profileRepository.deleteProfile(profile: profile)
-            // Also terminates the user’s Auth account
-            //try await profileRepository.terminateUser(password: password)
+            
+            // If you also want to terminate the Auth user, uncomment:
+            // try await profileRepository.terminateUser(password: password)
+            
             resetTempProfile()
+            isOnboardingComplete = false
             reset()
             signOut()
+            
         } catch {
             self.errorMessage = "Failed to delete profile: \(error.localizedDescription)"
-            isWorking = false
             throw error
         }
-        
-        isWorking = false
     }
     
-//    @MainActor
-//    public func terminateUser(password: String) async throws {
-//        isWorking = true
-//        do {
-//            try await profileRepository.terminateUser(password: password)
-//            resetTempProfile()
-//            reset()
-//            signOut()
-//        } catch {
-//            self.errorMessage = "Failed to terminate user: \(error.localizedDescription)"
-//            isWorking = false
-//            throw error
-//        }
-//        isWorking = false
-//    }
+    //    @MainActor
+    //    public func terminateUser(password: String) async throws {
+    //        isWorking = true
+    //        do {
+    //            try await profileRepository.terminateUser(password: password)
+    //            resetTempProfile()
+    //            reset()
+    //            signOut()
+    //        } catch {
+    //            self.errorMessage = "Failed to terminate user: \(error.localizedDescription)"
+    //            isWorking = false
+    //            throw error
+    //        }
+    //        isWorking = false
+    //    }
     
     // MARK: - Signing Out
     @MainActor
     public func signOut() {
         isWorking = true
-        
         Task {
+            defer { isWorking = false }
             do {
                 try await profileRepository.signOut()
                 self.passwordText = ""
@@ -296,7 +291,6 @@ public class ProfileViewModel: ObservableObject {
             } catch {
                 self.errorMessage = "Failed to sign out: \(error.localizedDescription)"
             }
-            self.isWorking = false
         }
     }
     
@@ -344,8 +338,7 @@ public class ProfileViewModel: ObservableObject {
             email: "",
             birthday: Date(),
             joinDate: Date().description,
-            role: .nurse,
-            isAdmin: false
+            role: .nurse
         )
     }
     

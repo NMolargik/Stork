@@ -151,7 +151,6 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     ///   - primaryHospital: An optional filter for the profile's primary hospital ID.
     ///   - joinDate: An optional filter for the profile's join date.
     ///   - musterId: An optional filter for the muster ID associated with the profile.
-    ///   - isAdmin: An optional filter for whether the profile has admin privileges.
     /// - Returns: An array of `Profile` objects matching the specified filters.
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If an error occurs while fetching profiles.
@@ -164,8 +163,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
         role: ProfileRole? = nil,
         primaryHospital: String? = nil,
         joinDate: Date? = nil,
-        musterId: String? = nil,
-        isAdmin: Bool? = nil
+        musterId: String? = nil
     ) async throws -> [Profile] {
         do {
             var query: Query = db.collection("Profile")
@@ -186,7 +184,6 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
             if let joinDate = joinDate {
                 query = query.whereField("joinDate", isEqualTo: joinDate.timeIntervalSince1970)
             }
-            if let isAdmin = isAdmin { query = query.whereField("isAdmin", isEqualTo: isAdmin) }
             
             // Fetch documents
             let snapshot = try await query.getDocuments()

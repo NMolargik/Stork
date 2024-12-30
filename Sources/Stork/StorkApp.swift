@@ -3,7 +3,7 @@ import OSLog
 import SwiftUI
 import StorkModel
 
-let logger: Logger = Logger(subsystem: "com.nickclements.stork", category: "Stork")
+let logger: Logger = Logger(subsystem: "com.nickmolargik.stork", category: "Stork")
 
 /// The Android SDK number we are running against, or `nil` if not running on Android
 let androidSDK = ProcessInfo.processInfo.environment["android.os.Build.VERSION.SDK_INT"].flatMap({ Int($0) })

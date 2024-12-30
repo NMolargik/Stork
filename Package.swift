@@ -15,12 +15,12 @@ let package = Package(
         .library(name: "StorkModel", type: .dynamic, targets: ["StorkModel"]),
     ],
     dependencies: [
-        .package(url: "https://source.skip.tools/skip.git", from: "1.1.18"),
-        .package(url: "https://source.skip.tools/skip-ui.git", from: "1.0.0"),
-        .package(url: "https://source.skip.tools/skip-kit.git", from: "0.1.4"),
+        .package(url: "https://source.skip.tools/skip.git", from: "1.2.16"),
+        .package(url: "https://source.skip.tools/skip-ui.git", from: "1.16.3"),
+        .package(url: "https://source.skip.tools/skip-kit.git", from: "0.1.5"),
         .package(url: "https://source.skip.tools/skip-firebase.git", branch: "main"),
-        .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.0.0"),
-        .package(url: "https://source.skip.tools/skip-model.git", from: "1.0.0")
+        .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.2.3"),
+        .package(url: "https://source.skip.tools/skip-model.git", from: "1.4.0")
     ],
     targets: [
         .target(name: "Stork", dependencies: ["StorkModel", .product(name: "SkipUI", package: "skip-ui"), .product(name: "SkipModel", package: "skip-model"), .product(name: "SkipKit", package: "skip-kit"), .product(name: "SkipFirebaseMessaging", package: "skip-firebase"), .product(name: "SkipFirebaseStorage", package: "skip-firebase")], resources: [.process("Resources")], plugins: [.plugin(name: "skipstone", package: "skip")]),

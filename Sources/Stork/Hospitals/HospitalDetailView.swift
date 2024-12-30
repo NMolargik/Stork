@@ -208,7 +208,7 @@ struct HospitalDetailView: View {
             Spacer()
             
             HStack {
-                CustomButtonView(text: "Back", width: 100, height: 40, color: Color.orange, icon: Image(systemName: "arrow.left"), isEnabled: .constant(true), onTapAction: {
+                CustomButtonView(text: "Back", width: 100, height: 40, color: Color.orange, icon: Image(systemName: "arrow.left"), isEnabled: true, onTapAction: {
                     withAnimation {
                         dismiss()
                     }
@@ -216,7 +216,7 @@ struct HospitalDetailView: View {
                 
                 Spacer()
                 
-                CustomButtonView(text: (profileViewModel.profile.primaryHospitalId == hospital.id) ? "Remove From Default" : "Set As Default", width: 200, height: 40, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
+                CustomButtonView(text: (profileViewModel.profile.primaryHospitalId == hospital.id) ? "Remove From Default" : "Set As Default", width: 200, height: 40, color: Color.indigo, isEnabled: true, onTapAction: {
                     withAnimation {
                         managePrimaryHospital()
                     }

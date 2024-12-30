@@ -85,9 +85,7 @@ struct MusterTabView: View {
                 // Admin sheets
                 .sheet(isPresented: $musterViewModel.showInviteUserSheet) {
                     MusterAdminInviteUserView()
-#if !SKIP
                         .interactiveDismissDisabled(true)
-#endif
                 }
                 .sheet(isPresented: $musterViewModel.showAssignAdminSheet) {
                     MusterAdminAssignAdminView()

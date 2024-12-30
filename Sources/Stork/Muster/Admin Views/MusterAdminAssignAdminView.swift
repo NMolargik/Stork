@@ -18,8 +18,11 @@ struct MusterAdminAssignAdminView: View {
                 ForEach(musterViewModel.musterMembers, id: \.id) { profile in
                     ProfileAssignmentRowView(
                         profile: profile,
+                        adminProfileIds: Set(musterViewModel.currentMuster?.administratorProfileIds ?? []),
                         onAssign: {
-                            assignUser(profile: profile)
+                            Task {
+                                try await musterViewModel.assignAdmin(userId: profile.id)
+                            }
                         }
                     )
                 }
@@ -31,25 +34,6 @@ struct MusterAdminAssignAdminView: View {
                         .foregroundStyle(.red)
                 }
             }
-        }
-    }
-
-    // Update the profile locally in musterMembers
-    private func updateProfileLocally(profileId: String) {
-        if let index = musterViewModel.musterMembers.firstIndex(where: { $0.id == profileId }) {
-            musterViewModel.musterMembers[index].isAdmin = true
-        }
-    }
-    
-    private func assignUser(profile: Profile) {
-        Task {
-            var tempProfile = profile
-            tempProfile.isAdmin = true
-            
-            try await musterViewModel.assignAdmin(userId: tempProfile.id)
-            updateProfileLocally(profileId: tempProfile.id)
-            
-            try await profileViewModel.updateProfileAdminStatus(profile: tempProfile)
         }
     }
 }

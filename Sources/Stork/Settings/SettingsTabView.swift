@@ -94,6 +94,18 @@ struct SettingsTabView: View {
                             .foregroundColor(.blue)
                             .underline(false)
                     }
+                    
+                    HStack {
+                        Text("Multiplatform Technology")
+                        
+                        Spacer()
+                        
+                        Link(destination: URL(string: "https://skip.tools")!, label: {
+                            Text("Skip")
+                                .foregroundColor(.blue)
+                        })
+
+                    }
                 }
             }
             .navigationTitle("Settings")

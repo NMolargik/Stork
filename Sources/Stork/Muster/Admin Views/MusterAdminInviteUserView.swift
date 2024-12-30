@@ -76,7 +76,7 @@ struct MusterAdminInviteUserView: View {
                 width: 80,
                 height: 55,
                 color: .indigo,
-                isEnabled: $searchEnabled,
+                isEnabled: searchEnabled,
                 onTapAction: { withAnimation { searchUsers() } }
             )
         }
@@ -119,8 +119,7 @@ struct MusterAdminInviteUserView: View {
                     role: nil,
                     primaryHospital: nil,
                     joinDate: nil,
-                    musterId: nil,
-                    isAdmin: nil
+                    musterId: nil
                 )
                 print("Profiles found: \(profiles)")
             } catch {

@@ -53,9 +53,9 @@ struct DeliveryAdditionView: View {
                                 height: 50,
                                 color: Color.indigo,
                                 icon: nil,
-                                isEnabled: .constant(true),
+                                isEnabled: true,
                                 onTapAction: {
-                                    addBaby()
+                                    deliveryViewModel.addBaby()
                                 }
                             )
                             
@@ -117,7 +117,7 @@ struct DeliveryAdditionView: View {
                             .font(.headline)
                             .multilineTextAlignment(.center)
                         
-                        CustomButtonView(text: "Select A Hospital", width: 250, height: 40, color: Color.black, icon: Image(systemName: "building"), isEnabled: .constant(true), onTapAction: {
+                        CustomButtonView(text: "Select A Hospital", width: 250, height: 40, color: Color.black, icon: Image(systemName: "building"), isEnabled: true, onTapAction: {
                             deliveryViewModel.isSelectingHospital = true
                         })
                     }
@@ -142,7 +142,7 @@ struct DeliveryAdditionView: View {
                             width: 250,
                             height: 40,
                             color: Color.indigo,
-                            isEnabled: $deliveryViewModel.submitEnabled,
+                            isEnabled: deliveryViewModel.canSubmitDelivery,
                             onTapAction: {
                                 Task {
                                     deliveryViewModel.isWorking = true
@@ -180,23 +180,11 @@ struct DeliveryAdditionView: View {
         .onAppear {
             withAnimation {
                 if (deliveryViewModel.newDelivery.babies.count == 0) {
-                    addBaby()
+                    deliveryViewModel.addBaby()
                 }
                 
-                Task {
-                    if hospitalViewModel.primaryHospital == nil {
-                        try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
-                    }
-                                    
-                    selectedHospital = hospitalViewModel.primaryHospital
-                }
+                initializeHospital()
             }
-        }
-        .onChange(of: deliveryViewModel.newDelivery.babies.count) { newCount in
-            deliveryViewModel.submitEnabled = newCount > 0 && self.selectedHospital != nil
-        }
-        .onChange(of: selectedHospital) { _ in
-            deliveryViewModel.submitEnabled = deliveryViewModel.newDelivery.babies.count > 0 && self.selectedHospital != nil
         }
         .sheet(isPresented: $deliveryViewModel.isSelectingHospital) {
             HospitalListView(
@@ -214,10 +202,15 @@ struct DeliveryAdditionView: View {
             .environmentObject(profileViewModel)
         }
     }
-
-    private func addBaby() {
-        let newBaby = Baby(deliveryId: UUID().uuidString, nurseCatch: false, sex: Sex.male)
-        deliveryViewModel.newDelivery.babies.append(newBaby)
+    
+    private func initializeHospital() {
+        Task {
+            if hospitalViewModel.primaryHospital == nil {
+                try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
+            }
+                            
+            selectedHospital = hospitalViewModel.primaryHospital
+        }
     }
 }
 

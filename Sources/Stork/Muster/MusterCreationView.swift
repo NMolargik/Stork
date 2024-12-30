@@ -62,7 +62,7 @@ struct MusterCreationView: View {
                                 height: 40,
                                 color: Color.indigo,
                                 icon: Image(systemName: "building"),
-                                isEnabled: .constant(true),
+                                isEnabled: true,
                                 onTapAction: {
                                     musterViewModel.showHospitalSelection = true
                                 }
@@ -97,7 +97,7 @@ struct MusterCreationView: View {
                                 .frame(height: 70)
                                 .padding()
                         } else {
-                            CustomButtonView(text: "Muster Up!", width: 200, height: 70, color: Color.indigo, icon: nil, isEnabled: $musterViewModel.creationFormValid, onTapAction: {
+                            CustomButtonView(text: "Muster Up!", width: 200, height: 70, color: Color.indigo, icon: nil, isEnabled: musterViewModel.creationFormValid, onTapAction: {
                                 withAnimation {
                                     createMuster()
                                 }

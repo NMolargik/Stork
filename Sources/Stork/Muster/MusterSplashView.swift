@@ -39,7 +39,7 @@ struct MusterSplashView: View {
                         .font(.body)
                         .padding(.bottom, 25)
                     
-                    CustomButtonView(text: "Create New Muster", width: 300, height: 50, color: Color.indigo, icon: nil, isEnabled: .constant(true), onTapAction: {
+                    CustomButtonView(text: "Create New Muster", width: 300, height: 50, color: Color.indigo, icon: nil, isEnabled: true, onTapAction: {
                         musterViewModel.showCreateMusterSheet = true
                     })
                 }
@@ -82,15 +82,11 @@ struct MusterSplashView: View {
                     }
                 }
             )
-            #if !SKIP
-                .interactiveDismissDisabled(true)
-            #endif
+            .interactiveDismissDisabled(true)
         }
         .sheet(isPresented: $musterViewModel.showCreateMusterSheet) {
             MusterCreationView(showCreateMusterSheet: $musterViewModel.showCreateMusterSheet)
-        #if !SKIP
-            .interactiveDismissDisabled(true)
-        #endif
+                .interactiveDismissDisabled(true)
             
         }
     }

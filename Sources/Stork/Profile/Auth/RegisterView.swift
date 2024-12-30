@@ -126,7 +126,7 @@ struct RegisterView: View {
                                     width: 120,
                                     height: 40,
                                     color: Color.indigo,
-                                    isEnabled: $profileViewModel.isFormValid,
+                                    isEnabled: profileViewModel.isFormValid,
                                     onTapAction: {
                                         Task {
                                             do {

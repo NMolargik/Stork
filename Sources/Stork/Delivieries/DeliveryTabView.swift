@@ -82,9 +82,7 @@ struct DeliveryTabView: View {
                         }
                     }
             }
-            #if !SKIP
             .interactiveDismissDisabled()
-            #endif
         }
     }
 }

@@ -26,6 +26,7 @@ struct PasswordResetSheetView: View {
         VStack {
             Text("Forgot Your Password?")
                 .font(.title)
+                .fontWeight(.bold)
             
             Text("Provide an email address and we can send a password reset email.")
                 .font(.body)
@@ -41,32 +42,31 @@ struct PasswordResetSheetView: View {
                     .frame(height: 40)
                     .padding()
             } else {
-                
-                CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: $validEmail, onTapAction: {
-                    Task {
-                        do {
-                            try await profileViewModel.sendPasswordReset()
-                            isPasswordResetPresented = false
-                        } catch {
-                            errorMessage = error.localizedDescription
-                            throw error
+                HStack(spacing: 40) {
+                    CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: validEmail, onTapAction: {
+                        Task {
+                            do {
+                                try await profileViewModel.sendPasswordReset()
+                                isPasswordResetPresented = false
+                            } catch {
+                                errorMessage = error.localizedDescription
+                                throw error
+                            }
+                        }
+                    })
+                    .onChange(of: email) { email in
+                        withAnimation {
+                            validEmail = profileViewModel.isEmailValid(email)
                         }
                     }
-                })
-                .frame(width: 100)
-                .padding(.bottom, 30)
-                .onChange(of: email) { email in
-                    withAnimation {
-                        validEmail = profileViewModel.isEmailValid(email)
-                    }
+                    
+                    CustomButtonView(text: "Cancel", width: 120, height: 40, color: Color.red, isEnabled: true, onTapAction: {
+                        withAnimation {
+                            isPasswordResetPresented = false
+                        }
+                    })
                 }
             }
-                
-            CustomButtonView(text: "Cancel", width: 120, height: 40, color: Color.red, isEnabled: .constant(true), onTapAction: {
-                withAnimation {
-                    isPasswordResetPresented = false
-                }
-            })
         }
         .padding()
         .onChange(of: email) { _ in

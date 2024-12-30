@@ -13,7 +13,7 @@ struct CustomButtonView: View {
     var height: CGFloat
     var color: Color
     var icon: Image?
-    @Binding var isEnabled: Bool
+    @State var isEnabled: Bool
 
     var onTapAction: () -> Void
     
@@ -45,9 +45,9 @@ struct CustomButtonView: View {
 
 #Preview {
     VStack(spacing: 20) {
-        CustomButtonView(text: "Push Me", width: 200, height: 50, color: Color.indigo, icon: Image(systemName: "building"), isEnabled: .constant(true), onTapAction: {})
+        CustomButtonView(text: "Push Me", width: 200, height: 50, color: Color.indigo, icon: Image(systemName: "building"), isEnabled: true, onTapAction: {})
         
-        CustomButtonView(text: "No, Push Me!", width: 300, height: 50, color: Color.blue, isEnabled: .constant(false), onTapAction: {})
+        CustomButtonView(text: "No, Push Me!", width: 300, height: 50, color: Color.blue, isEnabled: false, onTapAction: {})
     }
     .padding()
 }

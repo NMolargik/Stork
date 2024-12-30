@@ -43,7 +43,7 @@ struct HomeTabView: View {
                 
                 Spacer()
                 
-                CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: .constant(true), onTapAction: {
+                CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: true, onTapAction: {
                     withAnimation {
                         deliveryViewModel.startNewDelivery()
 
@@ -67,9 +67,7 @@ struct HomeTabView: View {
             }
             .sheet(isPresented: $showProfileView, content: {
                 ProfileView()
-                #if !SKIP
                     .interactiveDismissDisabled()
-                #endif
                     .presentationDetents(profileViewModel.editingProfile ? [.fraction(0.75)] : [.fraction(0.3)])
             })
         }

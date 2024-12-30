@@ -12,7 +12,7 @@
 		496BDBEE2B8A7E9C00C09264 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 496BDBED2B8A7E9C00C09264 /* Localizable.xcstrings */; };
 		499CD43B2AC5B799001AE8D8 /* StorkAppMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F90C2B2A52156200F06D93 /* StorkAppMain.swift */; };
 		499CD4402AC5B799001AE8D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49F90C2F2A52156300F06D93 /* Assets.xcassets */; };
-		EB99A13C2CF7EB6B00E3C6FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB99A13B2CF7EB6B00E3C6FB /* GoogleService-Info.plist */; };
+		EB56129A2D234B250057EAC3 /* GoogleService-Info.plist in Sources */ = {isa = PBXBuildFile; fileRef = EB5612992D234B250057EAC3 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,7 +41,7 @@
 		49F90C2B2A52156200F06D93 /* StorkAppMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StorkAppMain.swift; path = Sources/StorkAppMain.swift; sourceTree = SOURCE_ROOT; };
 		49F90C2F2A52156300F06D93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49F90C312A52156300F06D93 /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Entitlements.plist; sourceTree = "<group>"; };
-		EB99A13B2CF7EB6B00E3C6FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EB5612992D234B250057EAC3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 		49F90C1F2A52156200F06D93 = {
 			isa = PBXGroup;
 			children = (
-				EB99A13B2CF7EB6B00E3C6FB /* GoogleService-Info.plist */,
+				EB5612992D234B250057EAC3 /* GoogleService-Info.plist */,
 				496EB72F2A6AE4DE00C1253C /* README.md */,
 				496EB72F2A6AE4DE00C1253A /* Skip.env */,
 				496EB72F2A6AE4DE00C1253B /* Stork.xcconfig */,
@@ -161,7 +161,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB99A13C2CF7EB6B00E3C6FB /* GoogleService-Info.plist in Resources */,
 				499CD4402AC5B799001AE8D8 /* Assets.xcassets in Resources */,
 				496BDBEE2B8A7E9C00C09264 /* Localizable.xcstrings in Resources */,
 			);
@@ -196,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB56129A2D234B250057EAC3 /* GoogleService-Info.plist in Sources */,
 				499CD43B2AC5B799001AE8D8 /* StorkAppMain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

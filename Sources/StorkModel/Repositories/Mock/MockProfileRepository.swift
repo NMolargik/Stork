@@ -97,7 +97,6 @@ public class MockProfileRepository: ProfileRepositoryInterface {
     ///   - primaryHospital: An optional filter for the profile's primary hospital ID.
     ///   - joinDate: An optional filter for the profile's join date.
     ///   - musterId: An optional filter for the muster ID associated with the profile.
-    ///   - isAdmin: An optional filter for whether the profile has admin privileges.
     /// - Returns: An array of `Profile` objects matching the specified filters (currently unchanged for the mock).
     public func listProfiles(
         id: String? = nil,
@@ -108,8 +107,7 @@ public class MockProfileRepository: ProfileRepositoryInterface {
         role: ProfileRole? = nil,
         primaryHospital: String? = nil,
         joinDate: Date? = nil,
-        musterId: String? = nil,
-        isAdmin: Bool? = nil
+        musterId: String? = nil
     ) async throws -> [Profile] {
         // In a real implementation, you'd filter based on parameters.
         // For the mock, we simply return the entire list.

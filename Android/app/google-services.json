@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1006376360104:android:1bf50798d0b80f14250a9d",
+        "mobilesdk_app_id": "1:1006376360104:android:23d29ff2441db009250a9d",
         "android_client_info": {
-          "package_name": "com.nickclements.stork"
+          "package_name": "com.nickmolargik.stork"
         }
       },
       "oauth_client": [],

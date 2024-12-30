@@ -122,6 +122,7 @@ public struct AppStateControllerView: View {
                 }
             } else {
                 if (isOnboardingComplete) {
+                    selectedTab = .home
                     appState = .main
                 } else {
                     appState = .onboard

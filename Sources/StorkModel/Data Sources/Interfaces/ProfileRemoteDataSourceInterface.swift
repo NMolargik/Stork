@@ -62,7 +62,6 @@ public protocol ProfileRemoteDataSourceInterface {
     ///   - primaryHospital: An optional filter for the profile's primary hospital ID.
     ///   - joinDate: An optional filter for the profile's join date.
     ///   - musterId: An optional filter for the muster ID associated with the profile.
-    ///   - isAdmin: An optional filter for whether the profile has admin privileges.
     /// - Returns: An array of `Profile` objects matching the specified filters.
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If the Firestore operation fails.
@@ -76,8 +75,7 @@ public protocol ProfileRemoteDataSourceInterface {
         role: ProfileRole?,
         primaryHospital: String?,
         joinDate: Date?,
-        musterId: String?,
-        isAdmin: Bool?
+        musterId: String?
     ) async throws -> [Profile]
 
     /// Registers a new user account with an email and password, returning the newly registered `Profile`.
