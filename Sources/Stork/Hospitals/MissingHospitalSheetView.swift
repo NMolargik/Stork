@@ -38,47 +38,34 @@ struct MissingHospitalSheetView: View {
                     .padding(.bottom)
             }
 
-            Button(action: {
-                Task {
-                    isSubmitting = true
-                    errorMessage = nil
-                    do {
-                        try await onSubmit(hospitalName)
+            if (isSubmitting) {
+                ProgressView()
+                    .frame(height: 40)
+                    .padding()
+            } else {
+                HStack {
+                    CustomButtonView(text: "Submit", width: 150, height: 40, color: hospitalName.isEmpty ? Color.gray : Color.indigo, isEnabled: !hospitalName.isEmpty, onTapAction: {
+                        Task {
+                            isSubmitting = true
+                            errorMessage = nil
+                            do {
+                                try await onSubmit(hospitalName)
+                                dismiss()
+                            } catch {
+                                errorMessage = "Failed to add hospital: \(error.localizedDescription)"
+                            }
+                            isSubmitting = false
+                        }
+                    })
+                    
+                    CustomButtonView(text: "Cancel", width: 150, height: 40, color: Color.red, isEnabled: true, onTapAction: {
                         dismiss()
-                    } catch {
-                        errorMessage = "Failed to add hospital: \(error.localizedDescription)"
-                    }
-                    isSubmitting = false
-                }
-            }) {
-                if isSubmitting {
-                    ProgressView()
-                        .frame(height: 40)
-                        .padding()
-                } else {
-                    Text("Submit")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(hospitalName.isEmpty ? Color.gray : Color.indigo)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                        .frame(height: 40)
-                        .padding()
+                    })
                 }
             }
-            .disabled(hospitalName.isEmpty || isSubmitting)
-            .padding()
 
             Spacer()
         }
         .padding()
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
-                    dismiss()
-                }
-                .foregroundStyle(.red)
-            }
-        }
     }
 }

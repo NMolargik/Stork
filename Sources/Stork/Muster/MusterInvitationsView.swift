@@ -107,6 +107,7 @@ struct MusterInvitationsView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
+                        triggerHaptic()
                         showMusterInvitations = false
                         dismiss()
                     }
@@ -114,6 +115,14 @@ struct MusterInvitationsView: View {
                 }
             }
         } 
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

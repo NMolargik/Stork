@@ -47,6 +47,8 @@ struct HospitalDetailView: View {
                         Spacer()
 
                         Button(action: {
+                            triggerHaptic()
+                            
                             withAnimation {
                                 managePrimaryHospital()
                             }
@@ -226,6 +228,7 @@ struct HospitalDetailView: View {
         }
         .toolbar(.hidden)
         .onAppear {
+            triggerHaptic()
             Task {
                 let address = makeAddress()
                 let location = try await hospitalViewModel.locationProvider.geocodeAddress(address)
@@ -233,6 +236,14 @@ struct HospitalDetailView: View {
                 
             }
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
     
     func makeAddress() -> String {
@@ -247,7 +258,6 @@ struct HospitalDetailView: View {
         }
         
         profileViewModel.tempProfile = profileViewModel.profile
-        profileViewModel.tempProfile.primaryHospitalId = hospital.id
         
         Task {
             do {

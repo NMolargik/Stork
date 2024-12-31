@@ -178,6 +178,20 @@ struct DeliveryDetailView: View {
             .font(.system(size: 10))
         }
         .navigationTitle(delivery.date.formatted(date: .long, time: .omitted))
+        .onAppear {
+            triggerHaptic()
+        }
+        .onDisappear {
+            triggerHaptic()
+        }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 
     // Computed property to format weight based on useMetric

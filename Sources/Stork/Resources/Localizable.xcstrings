@@ -423,6 +423,9 @@
     "Missing?" : {
 
     },
+    "Multiplatform Technology" : {
+
+    },
     "Muster" : {
 
     },
@@ -537,6 +540,9 @@
     "Save" : {
 
     },
+    "Saving..." : {
+
+    },
     "Screen %lld" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -613,6 +619,9 @@
 
     },
     "Sign Up" : {
+
+    },
+    "Skip" : {
 
     },
     "Skip Onboarding" : {

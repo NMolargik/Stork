@@ -27,6 +27,7 @@ struct SplashView: View {
                     
                     Button(action: {
                         withAnimation {
+                            triggerHaptic()
                             isInfoPresented = true
                         }
                     }, label: {
@@ -100,6 +101,14 @@ struct SplashView: View {
                 .transition(.scale.combined(with: .opacity))
                 .presentationDetents([.fraction(0.3)])
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

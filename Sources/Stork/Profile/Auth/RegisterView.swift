@@ -150,6 +150,7 @@ struct RegisterView: View {
                 .toolbar(content: {
                     Button(action: {
                         withAnimation {
+                            triggerHaptic()
                             showRegistration = false
                             appState = AppState.splash
                         }
@@ -180,11 +181,20 @@ struct RegisterView: View {
             profileViewModel.validateRegistrationForm()
         }
         .onChange(of: profileViewModel.tempProfile.role) { _ in
+            triggerHaptic()
             profileViewModel.validateRegistrationForm()
         }
         .onAppear {
             profileViewModel.validateRegistrationForm()
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

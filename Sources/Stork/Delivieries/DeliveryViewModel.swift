@@ -20,6 +20,7 @@ class DeliveryViewModel: ObservableObject {
     @Published var possibleDuplicates: [Delivery] = []
     @Published var isWorking: Bool = false
     @Published var isSelectingHospital: Bool = false
+    @Published var canSubmitDelivery: Bool = false
     @Published private(set) var currentDeliveryCount: Int = 0
     
     private var currentDate: Date = Date()
@@ -27,9 +28,6 @@ class DeliveryViewModel: ObservableObject {
     private var timer: Timer?
     
     var deliveryRepository: DeliveryRepositoryInterface
-    var canSubmitDelivery: Bool {
-        return !newDelivery.babies.isEmpty && selectedHospital != nil
-    }
 
     // MARK: - Initializer
     @MainActor
@@ -41,15 +39,10 @@ class DeliveryViewModel: ObservableObject {
         groupDeliveriesByMonth()
     }
     
-    deinit {
-        //TODO: this will reset with app close, need to reset at midnight always!
-        timer?.invalidate()
-    }
-    
     // MARK: - Delivery Management
-    func submitDelivery(profile: Profile) async throws {        
-        guard currentDeliveryCount < dailyLimit else {
-            throw DeliveryError.creationFailed("You have reached the daily limit of \(dailyLimit) deliveries.")
+    func submitDelivery(profile: Profile, dailyResetManager: DailyResetManager) async throws {
+        guard dailyResetManager.canSubmitDelivery() else {
+            throw DeliveryError.creationFailed("You have reached the daily limit of 8 deliveries.")
         }
         
         guard self.selectedHospital != nil else {
@@ -68,7 +61,6 @@ class DeliveryViewModel: ObservableObject {
             newDelivery = try await deliveryRepository.createDelivery(delivery: newDelivery)
             print("New delivery successfully submitted")
             self.deliveries.append(newDelivery)
-            currentDeliveryCount += 1
             groupDeliveriesByMonth()
             
         } catch {
@@ -76,6 +68,10 @@ class DeliveryViewModel: ObservableObject {
         }
         
         // TODO: post-release add to new muster timeline feature if chosen. remember to implement duplicate prevention system
+        
+        dailyResetManager.incrementDeliveryCount()  // increment after success
+        print("New delivery successfully submitted")
+        
         
         self.startNewDelivery()
     }
@@ -211,6 +207,11 @@ class DeliveryViewModel: ObservableObject {
             self?.resetDailyLimit()
             self?.startDailyResetTimer() // Schedule the next reset
         }
+    }
+    
+    func additionPropertiesChanged() {
+        self.canSubmitDelivery = !newDelivery.babies.isEmpty && selectedHospital != nil
+        print(canSubmitDelivery)
     }
     
     private func resetDailyLimit() {

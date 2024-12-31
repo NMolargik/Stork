@@ -49,6 +49,8 @@ struct MusterSplashView: View {
             .toolbar {
                 ToolbarItem {
                     Button(action: {
+                        triggerHaptic()
+                        
                         Task {
                             do {
                                 try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
@@ -89,6 +91,14 @@ struct MusterSplashView: View {
                 .interactiveDismissDisabled(true)
             
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

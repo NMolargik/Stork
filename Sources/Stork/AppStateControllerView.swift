@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 enum AppState: String, Hashable {
-    case splash, register, onboard, main
+    case splash, register, onboard, paywall, main
 }
 
 public struct AppStateControllerView: View {
@@ -17,6 +17,7 @@ public struct AppStateControllerView: View {
     @AppStorage("errorMessage") private var errorMessage: String = ""
     @AppStorage("selectedTab") var selectedTab = Tab.hospitals
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
+    @AppStorage("isPaywallComplete") private var isPaywallComplete: Bool = false
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     
     @StateObject private var profileViewModel: ProfileViewModel
@@ -67,21 +68,23 @@ public struct AppStateControllerView: View {
                             withAnimation {
                                 self.loggedIn = true
                                 self.showRegistration = false
-                                self.appState = self.isOnboardingComplete ? .main : .onboard
+                                
+                                if (self.isOnboardingComplete) {
+                                    if (self.isPaywallComplete) {
+                                        appState = AppState.main
+                                    } else {
+                                        appState = AppState.paywall
+                                    }
+                                } else {
+                                    appState = AppState.onboard
+                                }
                             }
                         }
                     )
+                case .paywall:
+                    PaywallView()
                 case .onboard:
-                    Button(action: {
-                        withAnimation {
-                            isOnboardingComplete = true
-                            selectedTab = .home
-                            appState = .main
-                        }
-                    }, label: {
-                        Text("Skip Onboarding")
-                            .foregroundStyle(.blue)
-                    })
+                    OnboardingView()
                 case .main:
                     MainView()
                 }

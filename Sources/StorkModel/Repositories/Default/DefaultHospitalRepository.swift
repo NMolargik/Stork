@@ -43,7 +43,7 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
                 zip_code: "",
                 countyparish: "",
                 telephone_number: "",
-                hospital_type: "",
+                hospital_type: "MISSING",
                 hospital_ownership: "",
                 emergency_services: false,
                 meets_criteria_for_birthing_friendly_designation: false,

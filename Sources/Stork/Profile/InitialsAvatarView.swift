@@ -59,3 +59,8 @@ struct InitialsAvatarView: View {
         }
     }
 }
+
+
+#Preview {
+    InitialsAvatarView(firstName: "Nicholas", lastName: "Molargik", size: 25.0, font: .largeTitle)
+}

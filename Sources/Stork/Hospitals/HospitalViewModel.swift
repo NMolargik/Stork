@@ -13,7 +13,7 @@ import StorkModel
 class HospitalViewModel: ObservableObject {
     // MARK: - AppStorage
     @AppStorage("errorMessage") var errorMessage: String = ""
-
+    
     // MARK: - Published Properties
     @Published var hospitals: [Hospital] = []
     @Published var primaryHospital: Hospital?
@@ -28,7 +28,7 @@ class HospitalViewModel: ObservableObject {
     // MARK: - Dependencies
     let hospitalRepository: HospitalRepositoryInterface
     let locationProvider: LocationProviderInterface
-
+    
     // MARK: - Initializer
     public init(hospitalRepository: HospitalRepositoryInterface,
                 locationProvider: LocationProviderInterface)
@@ -68,7 +68,7 @@ class HospitalViewModel: ObservableObject {
             throw error
         }
     }
-
+    
     // MARK: - Search Hospitals by Partial Name
     /// Searches hospitals by a partial name.
     public func searchHospitals() async throws {
@@ -83,6 +83,11 @@ class HospitalViewModel: ObservableObject {
             errorMessage = error.localizedDescription
             throw error
         }
+    }
+    
+    // Mark: - Create a missing hospital
+    public func createMissingHospital(name: String) async throws -> Hospital {
+        return try await hospitalRepository.createHospital(name: name)
     }
     
     // MARK: - Fetch User's Primary Hospital

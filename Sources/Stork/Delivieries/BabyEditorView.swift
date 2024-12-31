@@ -57,6 +57,9 @@ struct BabyEditorView: View {
                     .foregroundStyle(colorScheme == .dark ? .black : .clear)
                     .cornerRadius(10)
             }
+            .onChange(of: baby.sex) { _ in
+                triggerHaptic()
+            }
             
             // MARK: - Weight
             if useMetric {
@@ -67,6 +70,7 @@ struct BabyEditorView: View {
                     
                     // Minus Button
                     Button {
+                        triggerHaptic()
                         let newKg = weightInKg - 0.1
                         if newKg >= minWeightInKg {
                             weightInOunces = newKg / ounceToKg
@@ -87,6 +91,7 @@ struct BabyEditorView: View {
                     
                     // Plus Button
                     Button {
+                        triggerHaptic()
                         let newKg = weightInKg + 0.1
                         if newKg <= maxWeightInKg {
                             weightInOunces = newKg / ounceToKg
@@ -114,6 +119,7 @@ struct BabyEditorView: View {
                     // --- Pounds Stepper ---
                     HStack(spacing: 4) {
                         Button {
+                            triggerHaptic()
                             let newPounds = pounds - 1
                             // Convert that to total ounces
                             let total = Double(newPounds * 16 + ounces)
@@ -135,6 +141,7 @@ struct BabyEditorView: View {
 
                         
                         Button {
+                            triggerHaptic()
                             let newPounds = pounds + 1
                             let total = Double(newPounds * 16 + ounces)
                             if total <= maxWeightInOunces {
@@ -152,6 +159,7 @@ struct BabyEditorView: View {
                     // --- Ounces Stepper ---
                     HStack(spacing: 4) {
                         Button {
+                            triggerHaptic()
                             let newOunces = ounces - 1
                             let total = Double(pounds * 16 + newOunces)
                             if newOunces >= 0, total >= minWeightInOunces {
@@ -170,6 +178,7 @@ struct BabyEditorView: View {
                             .fontWeight(.semibold)
                         
                         Button {
+                            triggerHaptic()
                             let newOunces = ounces + 1
                             let total = Double(pounds * 16 + newOunces)
                             // Don’t exceed 15 oz (since 16 oz = 1 lb)
@@ -200,6 +209,7 @@ struct BabyEditorView: View {
                 HStack(spacing: 20) {
                     // Minus
                     Button {
+                        triggerHaptic()
                         let newCm = lengthInCm - 0.1
                         if newCm >= minLengthInCm {
                             lengthInInches = newCm / cmPerInch
@@ -218,6 +228,7 @@ struct BabyEditorView: View {
                     
                     // Plus
                     Button {
+                        triggerHaptic()
                         let newCm = lengthInCm + 0.1
                         if newCm <= maxLengthInCm {
                             lengthInInches = newCm / cmPerInch
@@ -243,6 +254,7 @@ struct BabyEditorView: View {
                 HStack(spacing: 20) {
                     // Minus
                     Button {
+                        triggerHaptic()
                         let newValue = lengthInInches - 0.1
                         if newValue >= minLengthInInches {
                             lengthInInches = newValue
@@ -261,6 +273,7 @@ struct BabyEditorView: View {
                     
                     // Plus
                     Button {
+                        triggerHaptic()
                         let newValue = lengthInInches + 0.1
                         if newValue <= maxLengthInInches {
                             lengthInInches = newValue
@@ -308,6 +321,7 @@ struct BabyEditorView: View {
             
             if (babyNumber > 1) {
                 Button(action: {
+                    triggerHaptic()
                     withAnimation {
                         removeBaby(baby.id)
                     }
@@ -319,6 +333,14 @@ struct BabyEditorView: View {
                 }
             }
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
     
     // MARK: - Computed Properties

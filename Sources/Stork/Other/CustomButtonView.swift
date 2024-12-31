@@ -13,12 +13,15 @@ struct CustomButtonView: View {
     var height: CGFloat
     var color: Color
     var icon: Image?
-    @State var isEnabled: Bool
+    var isEnabled: Bool
 
     var onTapAction: () -> Void
     
     var body: some View {
         Button(action: {
+            // Trigger haptic feedback when the button is pressed
+            triggerHaptic()
+            
             withAnimation {
                 onTapAction()
             }
@@ -41,13 +44,40 @@ struct CustomButtonView: View {
         })
         .disabled(!isEnabled)
     }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
+    }
 }
 
 #Preview {
     VStack(spacing: 20) {
-        CustomButtonView(text: "Push Me", width: 200, height: 50, color: Color.indigo, icon: Image(systemName: "building"), isEnabled: true, onTapAction: {})
+        CustomButtonView(
+            text: "Push Me",
+            width: 200,
+            height: 50,
+            color: Color.indigo,
+            icon: Image(systemName: "building"),
+            isEnabled: true,
+            onTapAction: {
+                print("Push Me button pressed")
+            }
+        )
         
-        CustomButtonView(text: "No, Push Me!", width: 300, height: 50, color: Color.blue, isEnabled: false, onTapAction: {})
+        CustomButtonView(
+            text: "No, Push Me!",
+            width: 300,
+            height: 50,
+            color: Color.blue,
+            isEnabled: false,
+            onTapAction: {
+                print("No, Push Me! button pressed")
+            }
+        )
     }
     .padding()
 }

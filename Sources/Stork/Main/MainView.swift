@@ -63,7 +63,7 @@ public struct MainView: View {
                 }
                 .tag(Tab.settings)
         }
-        .tint(colorScheme == .dark ? .white : .black)
+        .tint(.indigo)
         .onAppear {
             Task {
                 do {
@@ -83,6 +83,17 @@ public struct MainView: View {
                 }
             }
         }
+        .onChange(of: selectedTab) { _ in
+            triggerHaptic()
+        }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

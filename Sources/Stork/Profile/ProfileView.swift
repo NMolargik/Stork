@@ -113,6 +113,7 @@ struct ProfileView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     if (!profileViewModel.editingProfile) {
                         Button(action: {
+                            triggerHaptic()
                             dismiss()
                         }, label: {
                             Text("Close")
@@ -124,12 +125,12 @@ struct ProfileView: View {
                         Text("Editing Profile")
                             .font(.body)
                             .fontWeight(.bold)
-                            //.foregroundStyle(colorScheme == .dark ? .black : .white)
                     }
                 }
                 
                 ToolbarItem(placement: .topBarTrailing){
                     Button(action: {
+                        triggerHaptic()
                         withAnimation {
                             if profileViewModel.editingProfile {
                                 stopEditingProfile()
@@ -147,6 +148,14 @@ struct ProfileView: View {
                 }
             }
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
     
     private func startEditingProfile() {

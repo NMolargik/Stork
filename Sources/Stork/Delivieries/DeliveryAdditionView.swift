@@ -15,11 +15,10 @@ struct DeliveryAdditionView: View {
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
+    @EnvironmentObject var dailyResetManager: DailyResetManager
     
     @Binding var showingDeliveryAddition: Bool
     
-    @State private var selectedHospital: Hospital? = nil
-
     var body: some View {
         VStack {
             ScrollView {
@@ -102,6 +101,9 @@ struct DeliveryAdditionView: View {
                         }
                         .padding(.bottom)
                         .pickerStyle(.segmented)
+                        .onChange(of: deliveryViewModel.newDelivery.deliveryMethod) { _ in
+                            triggerHaptic()
+                        }
                         
                     }
                     .padding()
@@ -113,7 +115,7 @@ struct DeliveryAdditionView: View {
                     }
                     
                     VStack {
-                        Text(selectedHospital?.facility_name ?? "No Hospital Selected")
+                        Text(deliveryViewModel.selectedHospital?.facility_name ?? "No Hospital Selected")
                             .font(.headline)
                             .multilineTextAlignment(.center)
                         
@@ -153,13 +155,12 @@ struct DeliveryAdditionView: View {
                                     }
                                     
                                     do {
-                                        try await deliveryViewModel.submitDelivery(profile: profileViewModel.profile)
+                                        try await deliveryViewModel.submitDelivery(profile: profileViewModel.profile, dailyResetManager: dailyResetManager)
                                     } catch {
                                         deliveryViewModel.isWorking = false
                                         errorMessage = error.localizedDescription
                                     }
 
-                                    
                                     do {
                                         try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: deliveryViewModel.newDelivery.babies.count)
                                     } catch {
@@ -191,7 +192,6 @@ struct DeliveryAdditionView: View {
                 selectionMode: true,
                 onSelection: { selectedHospital in
                     print("selectedHospital: \(selectedHospital.facility_name)")
-                    self.selectedHospital = selectedHospital
                     deliveryViewModel.selectedHospital = selectedHospital
                     deliveryViewModel.newDelivery.hospitalId = selectedHospital.id
                     deliveryViewModel.newDelivery.hospitalName = selectedHospital.facility_name
@@ -201,6 +201,12 @@ struct DeliveryAdditionView: View {
             .environmentObject(hospitalViewModel)
             .environmentObject(profileViewModel)
         }
+        .onChange(of: deliveryViewModel.newDelivery.babies) { _ in
+            deliveryViewModel.additionPropertiesChanged()
+        }
+        .onChange(of: deliveryViewModel.selectedHospital) { _ in
+            deliveryViewModel.additionPropertiesChanged()
+        }
     }
     
     private func initializeHospital() {
@@ -209,8 +215,16 @@ struct DeliveryAdditionView: View {
                 try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
             }
                             
-            selectedHospital = hospitalViewModel.primaryHospital
+            deliveryViewModel.selectedHospital = hospitalViewModel.primaryHospital
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 
@@ -220,4 +234,5 @@ struct DeliveryAdditionView: View {
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
         .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
         .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
+        .environmentObject(DailyResetManager())
 }

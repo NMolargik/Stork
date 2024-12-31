@@ -64,6 +64,7 @@ struct LoginView: View {
                 
                  Button(action: {
                      withAnimation {
+                         triggerHaptic()
                          isPasswordResetPresented = true
                      }
                  }, label: {
@@ -71,7 +72,7 @@ struct LoginView: View {
                          .foregroundStyle(.red)
                  })
                  .padding()
-                 .opacity(profileViewModel.isWorking ? 0.0 : 1.0)
+                 .disabled(profileViewModel.isWorking)
                 
                 Spacer()
                     .frame(height: 50)
@@ -93,6 +94,14 @@ struct LoginView: View {
             errorMessage = error.localizedDescription
             throw error
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

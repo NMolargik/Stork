@@ -31,7 +31,6 @@ public class LocationProvider: NSObject, LocationProviderInterface {
     #endif
     }
     
-    //TODO: make throw
     public func fetch() async throws {
         let (latitude, longitude) = try await fetchCurrentLocation()
         location = Location(latitude: latitude, longitude: longitude)
@@ -41,7 +40,6 @@ public class LocationProvider: NSObject, LocationProviderInterface {
         self.state = state
     }
     
-    //TODO: make throw
     public func fetchCurrentLocation() async throws -> (latitude: Double, longitude: Double) {
     #if !SKIP
         return try await withCheckedThrowingContinuation { continuation in
@@ -61,7 +59,6 @@ public class LocationProvider: NSObject, LocationProviderInterface {
             requestLocationOrAuthorization()
         }
     #else
-        // For SKIP environments (e.g., Android)
         let context = ProcessInfo.processInfo.androidContext
         guard let (latitude, longitude) = fetchCurrentLocation(context) else {
             throw NSError(
@@ -90,7 +87,6 @@ public class LocationProvider: NSObject, LocationProviderInterface {
         }
         return (latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
     #else
-        // For SKIP environments (e.g., Android)
         let context = ProcessInfo.processInfo.androidContext
         guard let (latitude, longitude) = geocodeAddress(context, address) else {
             throw NSError(

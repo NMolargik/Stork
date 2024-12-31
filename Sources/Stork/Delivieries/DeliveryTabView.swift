@@ -72,6 +72,8 @@ struct DeliveryTabView: View {
                         
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: {
+                                triggerHaptic()
+                                
                                 withAnimation {
                                     showingDeliveryAddition = false
                                 }
@@ -84,6 +86,14 @@ struct DeliveryTabView: View {
             }
             .interactiveDismissDisabled()
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

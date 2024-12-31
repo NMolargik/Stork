@@ -39,6 +39,7 @@ struct MusterCreationView: View {
                                 hintText: "Enter Muster name",
                                 icon: Image(systemName: "tag.fill"),
                                 isSecure: false,
+                                iconColor: Color.indigo,
                                 characterLimit: 20
                             )
 
@@ -112,11 +113,12 @@ struct MusterCreationView: View {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button(action: {
+                            triggerHaptic()
                             showCreateMusterSheet = false
                             dismiss()
                         }, label: {
                             Text("Cancel")
-                                .foregroundStyle(.red)
+                                .foregroundStyle(.orange)
                         })
                         .disabled(musterViewModel.isWorking)
                     }
@@ -126,6 +128,14 @@ struct MusterCreationView: View {
                 musterViewModel.validateCreationForm()
             }
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 
     @MainActor

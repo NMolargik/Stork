@@ -99,6 +99,8 @@ struct HospitalListView: View {
                 } else {
                     ToolbarItem {
                         Button(action: {
+                            triggerHaptic()
+                            
                             withAnimation {
                                 hospitalViewModel.searchQuery = ""
                                 self.getNearbyHospitals()
@@ -112,6 +114,8 @@ struct HospitalListView: View {
                 
                 ToolbarItem {
                     Button(action: {
+                        triggerHaptic()
+                        
                         withAnimation {
                             hospitalViewModel.isMissingHospitalSheetPresented = true
                         }
@@ -130,10 +134,18 @@ struct HospitalListView: View {
         }
         .sheet(isPresented: $hospitalViewModel.isMissingHospitalSheetPresented, content: {
             MissingHospitalSheetView(onSubmit: { hospitalName in
-                onSelection(try await hospitalViewModel.hospitalRepository.createHospital(name: hospitalName))
-
+                onSelection(try await hospitalViewModel.createMissingHospital(name: hospitalName))
             })
+            .presentationDetents([PresentationDetent.medium])
         })
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
     
     private func getNearbyHospitals() {

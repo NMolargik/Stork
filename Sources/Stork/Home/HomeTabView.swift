@@ -57,6 +57,8 @@ struct HomeTabView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
+                        triggerHaptic()
+                        
                         withAnimation {
                             showProfileView = true
                         }
@@ -72,6 +74,14 @@ struct HomeTabView: View {
             })
         }
         .frame(maxWidth: .infinity)
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
 }
 

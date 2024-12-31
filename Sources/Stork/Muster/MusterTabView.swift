@@ -78,6 +78,7 @@ struct MusterTabView: View {
                     titleVisibility: .visible
                 ) {
                     Button("Leave", role: .destructive) {
+                        
                         leaveMuster()
                     }
                     Button("Cancel", role: .cancel) {}
@@ -94,6 +95,14 @@ struct MusterTabView: View {
                 MusterSplashView()
             }
         }
+    }
+    
+    private func triggerHaptic() {
+        #if !SKIP
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        #endif
     }
     
     private func leaveMuster() {
