@@ -27,9 +27,6 @@ struct OnboardingView: View {
                     .foregroundStyle(.blue)
             })
             
-            
-
-            
             Spacer()
         }
         .padding()

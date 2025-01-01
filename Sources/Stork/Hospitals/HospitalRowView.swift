@@ -10,7 +10,11 @@ import SwiftUI
 import StorkModel
 
 struct HospitalRowView: View {
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
+    
+    @Binding var selectionMode: Bool
+    
     let hospital: Hospital
     
     var body: some View {
@@ -18,6 +22,7 @@ struct HospitalRowView: View {
             VStack (alignment: .leading) {
                 Text(hospital.facility_name)
                     .font(.headline)
+                    .foregroundStyle(selectionMode ? .blue : (colorScheme == .dark ? .white : .black))
                 
                 Text("\(hospital.citytown), \(hospital.state)")
                     .font(.system(size: 12))
@@ -47,7 +52,7 @@ struct HospitalRowView: View {
 }
 
 #Preview {
-    HospitalRowView(hospital: Hospital(id: "1234523423542342342342342342342", facility_name: "Parkview Hospital", address: "1116 South Hamsher Street", citytown: "Garrett", state: "IN", zip_code: "46738", countyparish: "Dekalb", telephone_number: "260-357-6625", hospital_type: "Normal Type", hospital_ownership: "Molargik", emergency_services: true, meets_criteria_for_birthing_friendly_designation: true, deliveryCount: 10, babyCount: 12))
+    HospitalRowView(selectionMode: .constant(true), hospital: Hospital(id: "1234523423542342342342342342342", facility_name: "Parkview Hospital", address: "1116 South Hamsher Street", citytown: "Garrett", state: "IN", zip_code: "46738", countyparish: "Dekalb", telephone_number: "260-357-6625", hospital_type: "Normal Type", hospital_ownership: "Molargik", emergency_services: true, meets_criteria_for_birthing_friendly_designation: true, deliveryCount: 10, babyCount: 12))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 
 }

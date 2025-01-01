@@ -11,7 +11,9 @@ import SwiftUI
 
 class DeliveryViewModel: ObservableObject {
     @Published var deliveries: [Delivery] = []
+    @Published var musterDeliveries: [Delivery] = []
     @Published var groupedDeliveries: [(key: String, value: [Delivery])] = []
+    @Published var groupedMusterDeliveries: [(key: String, value: [Delivery])] = []
     @Published var newDelivery: Delivery = Delivery(sample: true)
     @Published var epiduralUsed: Bool = false
     @Published var deliveryMethod: DeliveryMethod = .vaginal
@@ -77,41 +79,78 @@ class DeliveryViewModel: ObservableObject {
     }
     
     func groupDeliveriesByMonth() {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMMM ''yy"
-            
-            let sortedDeliveries = deliveries.sorted(by: { $0.date > $1.date })
-            
-            var tempGroupedDeliveries: [(key: String, value: [Delivery])] = []
-            var currentKey: String? = nil
-            var currentGroup: [Delivery] = []
-            
-            for delivery in sortedDeliveries {
-                let key = dateFormatter.string(from: delivery.date)
-                if key != currentKey {
-                    if let existingKey = currentKey {
-                        tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
-                    }
-
-                    currentKey = key
-                    currentGroup = [delivery]
-                } else {
-                    currentGroup.append(delivery)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM ''yy"
+        
+        let sortedDeliveries = deliveries.sorted(by: { $0.date > $1.date })
+        
+        var tempGroupedDeliveries: [(key: String, value: [Delivery])] = []
+        var currentKey: String? = nil
+        var currentGroup: [Delivery] = []
+        
+        for delivery in sortedDeliveries {
+            let key = dateFormatter.string(from: delivery.date)
+            if key != currentKey {
+                if let existingKey = currentKey {
+                    tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
                 }
-            }
 
-            if let existingKey = currentKey {
-                tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
-            }
-            
-            DispatchQueue.main.async {
-                self.groupedDeliveries = tempGroupedDeliveries
-                print("Grouped Deliveries Updated:")
-                for group in self.groupedDeliveries {
-                    print("Month-Year: \(group.key), Deliveries Count: \(group.value.count)")
-                }
+                currentKey = key
+                currentGroup = [delivery]
+            } else {
+                currentGroup.append(delivery)
             }
         }
+
+        if let existingKey = currentKey {
+            tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
+        }
+        
+        DispatchQueue.main.async {
+            self.groupedDeliveries = tempGroupedDeliveries
+            print("Grouped Deliveries Updated:")
+            for group in self.groupedDeliveries {
+                print("Month-Year: \(group.key), Deliveries Count: \(group.value.count)")
+            }
+        }
+    }
+    
+    func groupMusterDeliveriesByMonth() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM ''yy"
+        
+        let sortedDeliveries = musterDeliveries.sorted(by: { $0.date > $1.date })
+        
+        var tempGroupedDeliveries: [(key: String, value: [Delivery])] = []
+        var currentKey: String? = nil
+        var currentGroup: [Delivery] = []
+        
+        for delivery in sortedDeliveries {
+            let key = dateFormatter.string(from: delivery.date)
+            if key != currentKey {
+                if let existingKey = currentKey {
+                    tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
+                }
+
+                currentKey = key
+                currentGroup = [delivery]
+            } else {
+                currentGroup.append(delivery)
+            }
+        }
+
+        if let existingKey = currentKey {
+            tempGroupedDeliveries.append((key: existingKey, value: currentGroup))
+        }
+        
+        DispatchQueue.main.async {
+            self.groupedMusterDeliveries = tempGroupedDeliveries
+            print("Muster Grouped Deliveries Updated:")
+            for group in self.groupedMusterDeliveries {
+                print("Month-Year: \(group.key), Deliveries Count: \(group.value.count)")
+            }
+        }
+    }
     
     func startNewDelivery() {
         self.newDelivery = Delivery(
@@ -153,6 +192,27 @@ class DeliveryViewModel: ObservableObject {
             }
         } catch {
             throw error
+        }
+    }
+    
+    func getMusterDeliveries(muster: Muster) async throws {
+        do {
+            let fetchedDeliveries = try await deliveryRepository.listDeliveries(
+                userId: nil,
+                userFirstName: nil,
+                hospitalId: nil,
+                hospitalName: nil,
+                musterId: muster.id,
+                date: nil,
+                babyCount: nil,
+                deliveryMethod: nil,
+                epiduralUsed: nil
+            )
+            
+            await MainActor.run {
+                self.musterDeliveries = fetchedDeliveries
+                groupMusterDeliveriesByMonth()
+            }
         }
     }
     

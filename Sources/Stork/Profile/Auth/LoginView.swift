@@ -51,7 +51,7 @@ struct LoginView: View {
                         .padding()
                     
                 } else {
-                    CustomButtonView(text: "Log In", width: 110, height: 40, color: Color.indigo, isEnabled: true, onTapAction: {
+                    CustomButtonView(text: "Log In", width: 120, height: 50, color: Color.indigo, isEnabled: true, onTapAction: {
                         Task {
                             do {
                                 try await self.signIn()

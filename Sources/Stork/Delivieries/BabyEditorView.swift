@@ -15,8 +15,8 @@ struct BabyEditorView: View {
     @Binding var baby: Baby
     
     // Internally store weight in ounces and length in inches
-    @State private var weightInOunces: Double = 112.0 // Default/initial
-    @State private var lengthInInches: Double = 19.0   // Default/initial
+    @State private var weightInOunces: Double = 112.0 // Default
+    @State private var lengthInInches: Double = 19.0   // Default
 
     var babyNumber: Int
     var removeBaby: (String) -> Void
@@ -40,7 +40,7 @@ struct BabyEditorView: View {
     private let cmPerInch = 2.54       // 1 in = 2.54 cm
     
     var body: some View {
-        VStack(alignment: .center, spacing: 15) {
+        VStack(alignment: .center, spacing: 10) {
             headerSection
             
             // MARK: - Sex Picker
@@ -51,11 +51,10 @@ struct BabyEditorView: View {
             }
             .foregroundStyle(colorScheme == .dark ? .black : .white)
             .pickerStyle(.segmented)
-            .padding(5)
             .background {
                 Rectangle()
-                    .foregroundStyle(colorScheme == .dark ? .black : .clear)
-                    .cornerRadius(10)
+                    .foregroundStyle(colorScheme == .dark ? .black.opacity(0.8) : .clear)
+                    .cornerRadius(8)
             }
             .onChange(of: baby.sex) { _ in
                 triggerHaptic()
@@ -108,88 +107,84 @@ struct BabyEditorView: View {
                 .background {
                     Rectangle()
                         .cornerRadius(10)
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.white.opacity(0.8))
                 }
+                .padding(.horizontal)
                 
             } else {
                 // -----------------------------------------------------------
                 // CUSTOM STEPPERS: Imperial Weight (lbs + oz)
                 // -----------------------------------------------------------
-                HStack {
-                    // --- Pounds Stepper ---
-                    HStack(spacing: 4) {
-                        Button {
-                            triggerHaptic()
-                            let newPounds = pounds - 1
-                            // Convert that to total ounces
-                            let total = Double(newPounds * 16 + ounces)
-                            // Check bounds
-                            if newPounds >= 0, total >= minWeightInOunces {
-                                weightInOunces = total
-                            }
-                        } label: {
-                            Image(systemName: "minus.circle.fill")
-                                .font(.title)
-                                .foregroundStyle(Color.black)
+                HStack(spacing: 2) {
+                    Button {
+                        triggerHaptic()
+                        let newPounds = pounds - 1
+                        // Convert that to total ounces
+                        let total = Double(newPounds * 16 + ounces)
+                        // Check bounds
+                        if newPounds >= 0, total >= minWeightInOunces {
+                            weightInOunces = total
                         }
-                        
-                        Text("\(pounds) lbs")
-                            .frame(minWidth: 60)
-                            .font(.title3)
+                    } label: {
+                        Image(systemName: "minus.circle.fill")
+                            .font(.title)
                             .foregroundStyle(Color.black)
-                            .fontWeight(.semibold)
-
-                        
-                        Button {
-                            triggerHaptic()
-                            let newPounds = pounds + 1
-                            let total = Double(newPounds * 16 + ounces)
-                            if total <= maxWeightInOunces {
-                                weightInOunces = total
-                            }
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title)
-                                .foregroundStyle(Color.black)
-                        }
                     }
                     
-                    Spacer().frame(width: 20)
+                    Text("\(pounds) lbs")
+                        .frame(minWidth: 60)
+                        .font(.title3)
+                        .foregroundStyle(Color.black)
+                        .fontWeight(.semibold)
+
                     
-                    // --- Ounces Stepper ---
-                    HStack(spacing: 4) {
-                        Button {
-                            triggerHaptic()
-                            let newOunces = ounces - 1
-                            let total = Double(pounds * 16 + newOunces)
-                            if newOunces >= 0, total >= minWeightInOunces {
-                                weightInOunces = total
-                            }
-                        } label: {
-                            Image(systemName: "minus.circle.fill")
-                                .font(.title)
-                                .foregroundStyle(Color.black)
+                    Button {
+                        triggerHaptic()
+                        let newPounds = pounds + 1
+                        let total = Double(newPounds * 16 + ounces)
+                        if total <= maxWeightInOunces {
+                            weightInOunces = total
                         }
-                        
-                        Text("\(ounces) oz")
-                            .frame(minWidth: 50)
-                            .font(.title3)
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title)
                             .foregroundStyle(Color.black)
-                            .fontWeight(.semibold)
-                        
-                        Button {
-                            triggerHaptic()
-                            let newOunces = ounces + 1
-                            let total = Double(pounds * 16 + newOunces)
-                            // Don’t exceed 15 oz (since 16 oz = 1 lb)
-                            if newOunces <= 15, total <= maxWeightInOunces {
-                                weightInOunces = total
-                            }
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title)
-                                .foregroundStyle(Color.black)
+                    }
+                    
+                    Spacer()
+                    
+                // --- Ounces Stepper ---
+                    Button {
+                        triggerHaptic()
+                        let newOunces = ounces - 1
+                        let total = Double(pounds * 16 + newOunces)
+                        if newOunces >= 0, total >= minWeightInOunces {
+                            weightInOunces = total
                         }
+                    } label: {
+                        Image(systemName: "minus.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(Color.black)
+                    }
+                    
+                    Text("\(ounces) oz")
+                        .frame(minWidth: 50)
+                        .font(.title3)
+                        .foregroundStyle(Color.black)
+                        .fontWeight(.semibold)
+                    
+                    Button {
+                        triggerHaptic()
+                        let newOunces = ounces + 1
+                        let total = Double(pounds * 16 + newOunces)
+                        // Don’t exceed 15 oz (since 16 oz = 1 lb)
+                        if newOunces <= 15, total <= maxWeightInOunces {
+                            weightInOunces = total
+                        }
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(Color.black)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -197,8 +192,9 @@ struct BabyEditorView: View {
                 .background {
                     Rectangle()
                         .cornerRadius(10)
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.white.opacity(0.8))
                 }
+                
             }
             
             // MARK: - Length
@@ -244,14 +240,14 @@ struct BabyEditorView: View {
                 .background {
                     Rectangle()
                         .cornerRadius(10)
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.white.opacity(0.8))
                 }
                 
             } else {
                 // -----------------------------------------------------------
                 // CUSTOM STEPPER: Imperial Length (inches)
                 // -----------------------------------------------------------
-                HStack(spacing: 20) {
+                HStack(spacing: 10) {
                     // Minus
                     Button {
                         triggerHaptic()
@@ -289,14 +285,21 @@ struct BabyEditorView: View {
                 .background {
                     Rectangle()
                         .cornerRadius(10)
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.white.opacity(0.8))
                 }
             }
             
+            
             Toggle("Nurse Catch", isOn: $baby.nurseCatch)
                 .fontWeight(.bold)
-                .foregroundStyle(colorScheme == .dark ? .black : .white)
+                .foregroundStyle(.black)
                 .tint(.green)
+                .padding()
+                .background {
+                    Rectangle()
+                        .cornerRadius(10)
+                        .foregroundStyle(Color.white.opacity(0.8))
+                }
         }
         .padding()
         .background(
@@ -317,6 +320,7 @@ struct BabyEditorView: View {
                 .foregroundStyle(colorScheme == .dark ? .black : .white)
                 .fontWeight(.bold)
             
+            
             Spacer()
             
             if (babyNumber > 1) {
@@ -326,13 +330,15 @@ struct BabyEditorView: View {
                         removeBaby(baby.id)
                     }
                 }) {
-                    Image(systemName: "trash.fill")
+                    Image(systemName: "minus")
+                        .fontWeight(.bold)
                         .padding(10)
-                        .foregroundStyle(.orange)
-                        .background(Circle().foregroundStyle(colorScheme == .dark ? .black : .white))
+                        .foregroundStyle(.white)
+                        .background(Circle().foregroundStyle(.red))
                 }
             }
         }
+        .frame(height: 40)
     }
     
     private func triggerHaptic() {
@@ -389,7 +395,8 @@ struct BabyEditorView: View {
 #Preview {
     BabyEditorView(
         baby: .constant(Baby(deliveryId: "", nurseCatch: true, sex: .male)),
-        babyNumber: 1,
+        babyNumber: 2,
         removeBaby: { _ in }
     )
+    .padding()
 }

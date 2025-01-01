@@ -61,7 +61,7 @@ struct MusterCreationView: View {
                                 text: "Select A Hospital",
                                 width: 250,
                                 height: 40,
-                                color: Color.indigo,
+                                color: Color.red,
                                 icon: Image(systemName: "building"),
                                 isEnabled: true,
                                 onTapAction: {

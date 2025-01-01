@@ -16,7 +16,7 @@ struct HospitalListView: View {
     
     @State private var navigationPath: [String] = []
     
-    var selectionMode: Bool = false
+    @State var selectionMode: Bool = false
     var onSelection: ((Hospital) -> Void)
 
     var body: some View {
@@ -64,16 +64,13 @@ struct HospitalListView: View {
                             onSelection(hospital)
                         }
                     }, label: {
-                        HospitalRowView(hospital: hospital)
+                        HospitalRowView(selectionMode: $selectionMode, hospital: hospital)
                     })
                 } else {
                     NavigationLink(destination: HospitalDetailView(hospital: hospital)) {
-                        HospitalRowView(hospital: hospital)
+                        HospitalRowView(selectionMode: $selectionMode, hospital: hospital)
                     }
                 }
-            }
-            .refreshable {
-                self.getNearbyHospitals()
             }
             .navigationTitle("Hospitals")
             .navigationDestination(for: String.self) { value in
@@ -89,11 +86,11 @@ struct HospitalListView: View {
                         HStack {
                             Spacer()
                             
-                            Text("Currently searching by location")
+                            Text("Searching by location")
+                                .fontWeight(.bold)
                             Image(systemName: "location.circle.fill")
                         }
                         .foregroundStyle(.blue)
-                        .font(.footnote)
                         .padding(.trailing)
                     }
                 } else {
@@ -107,6 +104,7 @@ struct HospitalListView: View {
                             }
                         }, label: {
                             Text("Use Location")
+                                .fontWeight(.bold)
                                 .foregroundStyle(.blue)
                         })
                     }

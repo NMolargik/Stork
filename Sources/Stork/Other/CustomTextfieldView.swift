@@ -19,10 +19,10 @@ struct CustomTextfieldView: View {
     var characterLimit: Int?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) { // Use VStack to allow space for error message
+        VStack(alignment: .leading, spacing: 2) {
             HStack {
                 icon
-                    .foregroundStyle(iconColor ?? .white) // Use iconColor if provided, else default to white
+                    .foregroundStyle(iconColor ?? .white)
                     .frame(width: 20)
                 
                 Group {
@@ -32,6 +32,7 @@ struct CustomTextfieldView: View {
                     } else {
                         TextField(hintText, text: $text)
                             .frame(height: 50)
+
                     }
                 }
                 .padding(.leading, 2)
@@ -46,10 +47,10 @@ struct CustomTextfieldView: View {
             }
             .padding(.leading)
             .background {
-                if colorScheme == .dark {
-                    Color.gray.opacity(0.5)
+                if (colorScheme == .dark) {
+                    Color.black
                         .cornerRadius(10)
-                        .shadow(radius: 2)
+                        .shadow(color: .white, radius: 2)
                 } else {
                     Color.white
                         .cornerRadius(10)
@@ -58,7 +59,6 @@ struct CustomTextfieldView: View {
             }
             .frame(height: 50)
             
-            // Optional: You can also display the remaining characters here
             if let limit = characterLimit {
                 Text("\(text.count)/\(limit)")
                     .font(.caption)
@@ -77,7 +77,7 @@ struct CustomTextfieldView: View {
             icon: Image(systemName: "envelope"),
             isSecure: false,
             iconColor: .blue,
-            characterLimit: 25 // Set character limit here
+            characterLimit: 25
         )
         
         CustomTextfieldView(
@@ -85,7 +85,7 @@ struct CustomTextfieldView: View {
             hintText: "Enter your password...",
             icon: Image(systemName: "key"),
             isSecure: true,
-            characterLimit: 20 // Example for secure field
+            characterLimit: 20
         )
     }
     .padding()

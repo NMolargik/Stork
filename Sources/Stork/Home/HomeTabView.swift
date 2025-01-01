@@ -17,30 +17,17 @@ struct HomeTabView: View {
     @Binding var showingDeliveryAddition: Bool
     
     @State private var showProfileView: Bool = false
+    @State private var graphTabIndex: Int = 0
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
                 Spacer()
                 
-                ZStack {
-                    Rectangle()
-                        .frame(width: 300, height: 200)
-                        .foregroundStyle(.gray)
+
+                HomeCarouselView()
                     
-                    Text("Jar and Marbles View")
-                        .foregroundStyle(.black)
-                }
-                
-                ZStack {
-                    Rectangle()
-                        .frame(width: 300, height: 200)
-                        .foregroundStyle(.gray)
-                    
-                    Text("Personal Stats Graph")
-                        .foregroundStyle(.black)
-                }
-                
+
                 Spacer()
                 
                 CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: true, onTapAction: {

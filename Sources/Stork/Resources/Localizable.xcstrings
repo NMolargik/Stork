@@ -49,6 +49,22 @@
         }
       }
     },
+    "%lld" : {
+
+    },
+    "%lld deliveries" : {
+
+    },
+    "%lld deliveries in %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld deliveries in %2$@"
+          }
+        }
+      }
+    },
     "%lld lbs" : {
 
     },
@@ -165,9 +181,6 @@
     "Close" : {
 
     },
-    "Confirm Deletion" : {
-
-    },
     "Confirm Password" : {
 
     },
@@ -181,9 +194,6 @@
 
     },
     "Create New Muster" : {
-
-    },
-    "Currently searching by location" : {
 
     },
     "Dark" : {
@@ -215,19 +225,37 @@
         }
       }
     },
+    "Day" : {
+
+    },
     "Delete" : {
 
     },
-    "Delete Account" : {
+    "Delete Profile" : {
 
     },
     "Deliveries" : {
 
     },
+    "Deliveries Per Day" : {
+
+    },
+    "Deliveries Per Month" : {
+
+    },
     "Deliveries: %lld" : {
 
     },
+    "Delivery Date: %@" : {
+
+    },
+    "Delivery ID: %@" : {
+
+    },
     "Delivery Method" : {
+
+    },
+    "Delivery Method: %@" : {
 
     },
     "Delivery not found" : {
@@ -237,9 +265,6 @@
 
     },
     "Don't have an account yet?" : {
-
-    },
-    "Edit" : {
 
     },
     "Edit Profile" : {
@@ -258,6 +283,9 @@
 
     },
     "Forgot Your Password?" : {
+
+    },
+    "Height: %@" : {
 
     },
     "Hello [%@](https://skip.tools)!" : {
@@ -317,6 +345,9 @@
         }
       }
     },
+    "Hospital Name: %@" : {
+
+    },
     "Hospitals" : {
 
     },
@@ -360,9 +391,6 @@
           }
         }
       }
-    },
-    "Jar and Marbles View" : {
-
     },
     "Join A Muster" : {
 
@@ -423,6 +451,9 @@
     "Missing?" : {
 
     },
+    "Month" : {
+
+    },
     "Multiplatform Technology" : {
 
     },
@@ -472,6 +503,12 @@
     "No deliveries recorded yet. Use the button above to get started!" : {
 
     },
+    "No delivery data available for the past seven days." : {
+
+    },
+    "No delivery data available for the past six months." : {
+
+    },
     "No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above." : {
 
     },
@@ -484,6 +521,9 @@
     "Nurse Catch" : {
 
     },
+    "Options" : {
+
+    },
     "Other View: %@" : {
 
     },
@@ -491,9 +531,6 @@
 
     },
     "Password" : {
-
-    },
-    "Personal Stats Graph" : {
 
     },
     "Powered by %@" : {
@@ -528,6 +565,9 @@
     "Profile" : {
 
     },
+    "Profile Deletion" : {
+
+    },
     "Provide an email address and we can send a password reset email." : {
 
     },
@@ -538,6 +578,9 @@
 
     },
     "Save" : {
+
+    },
+    "Save Changes" : {
 
     },
     "Saving..." : {
@@ -571,6 +614,9 @@
           }
         }
       }
+    },
+    "Searching by location" : {
+
     },
     "Select Birthday" : {
 
@@ -610,6 +656,9 @@
       }
     },
     "Sex" : {
+
+    },
+    "Sex Distribution" : {
 
     },
     "Shared Profile View" : {
@@ -677,9 +726,6 @@
     "This will remove all your personal data and cannot be undone." : {
 
     },
-    "Units" : {
-
-    },
     "Use Location" : {
 
     },
@@ -690,6 +736,9 @@
 
     },
     "Version" : {
+
+    },
+    "Weight: %@" : {
 
     },
     "Welcome" : {
@@ -720,9 +769,6 @@
           }
         }
       }
-    },
-    "Welcome!" : {
-
     },
     "You can submit up to 8 deliveries per day" : {
 

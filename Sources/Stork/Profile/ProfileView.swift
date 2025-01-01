@@ -139,7 +139,7 @@ struct ProfileView: View {
                             }
                         }
                     }, label: {
-                        Text(profileViewModel.editingProfile ? "Save" : "Edit")
+                        Text(profileViewModel.editingProfile ? "Save Changes" : "Edit Profile")
                             .font(.body)
                             .fontWeight(.bold)
                             .foregroundStyle(.orange)

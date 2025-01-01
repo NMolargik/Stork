@@ -9,21 +9,24 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryAdditionView: View {
+    // MARK: - AppStorage
     @AppStorage("errorMessage") var errorMessage: String = ""
 
+    // MARK: - Environment Objects
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var dailyResetManager: DailyResetManager
-    
+
+    // MARK: - Binding
     @Binding var showingDeliveryAddition: Bool
-    
+
     var body: some View {
         VStack {
             ScrollView {
-                LazyVStack(spacing: 20) {
-                    // Baby Editor Views
+                VStack(spacing: 20) {
+                    // MARK: - Baby Editor Views with Enhanced Transitions
                     ForEach($deliveryViewModel.newDelivery.babies) { $baby in
                         let babyIndex = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0
                         let babyNumber = babyIndex + 1
@@ -32,65 +35,57 @@ struct DeliveryAdditionView: View {
                             baby: $baby,
                             babyNumber: babyNumber,
                             removeBaby: { babyId in
-                                withAnimation {
+                                withAnimation(.spring()) {
                                     deliveryViewModel.newDelivery.babies.removeAll { $0.id == babyId }
-                                    print("Removed baby with id \(babyId)")
                                 }
                             }
                         )
                         .id(baby.id)
+                        .transition(.scale.combined(with: .opacity))
                     }
                     
-                    // Delivery Options Section
-                    VStack(alignment: .center, spacing: 8) {
-                        HStack {
-                            Spacer()
-                            
-                            CustomButtonView(
-                                text: "Add A Baby",
-                                width: 250,
-                                height: 50,
-                                color: Color.indigo,
-                                icon: nil,
-                                isEnabled: true,
-                                onTapAction: {
-                                    deliveryViewModel.addBaby()
-                                }
-                            )
-                            
-                            Spacer()
+                    // MARK: - Add A Baby Button Positioned Below ScrollView
+                    CustomButtonView(
+                        text: "Add A Baby",
+                        width: 250,
+                        height: 50,
+                        color: Color.indigo,
+                        icon: nil,
+                        isEnabled: true,
+                        onTapAction: {
+                            withAnimation(.spring()) {
+                                deliveryViewModel.addBaby()
+                            }
                         }
-                    }
-                    .padding()
-                    .padding(.bottom, 10)
+                    )
+                    .padding(.bottom)
                     
-                    VStack {
-                        Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
+                    Divider()
+                    
+                    // MARK: - Epidural Used Toggle
+                    Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
+                        .padding()
+                        .fontWeight(.bold)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.orange.opacity(0.2))
+                        )
+                        .tint(.green)
+                    
+                    // MARK: - Add To Muster Toggle (Conditional)
+                    if !profileViewModel.profile.musterId.isEmpty {
+                        Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
                             .padding()
                             .fontWeight(.bold)
-                            .background {
-                                Color.indigo
-                                    .opacity(0.2)
-                                    .cornerRadius(10)
-                            }
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.orange.opacity(0.2))
+                            )
                             .tint(.green)
                     }
                     
-                    if (profileViewModel.profile.musterId != "") {
-                        VStack {
-                            Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
-                                .padding()
-                                .fontWeight(.bold)
-                                .background {
-                                    Color.indigo
-                                        .opacity(0.2)
-                                        .cornerRadius(10)
-                                }
-                                .tint(.green)
-                        }
-                    }
-                    
-                    VStack {
+                    // MARK: - Delivery Method Picker
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("Delivery Method")
                             .font(.headline)
                         
@@ -99,41 +94,48 @@ struct DeliveryAdditionView: View {
                                 Text(method.description).tag(method)
                             }
                         }
-                        .padding(.bottom)
-                        .pickerStyle(.segmented)
+                        #if !SKIP
+                        .pickerStyle(SegmentedPickerStyle())
+                        #endif
                         .onChange(of: deliveryViewModel.newDelivery.deliveryMethod) { _ in
                             triggerHaptic()
                         }
-                        
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background {
-                        Color.indigo
-                            .opacity(0.2)
-                            .cornerRadius(10)
-                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.orange.opacity(0.2))
+                    )
                     
-                    VStack {
+                    // MARK: - Select Hospital Section
+                    VStack(alignment: .center, spacing: 10) {
                         Text(deliveryViewModel.selectedHospital?.facility_name ?? "No Hospital Selected")
                             .font(.headline)
                             .multilineTextAlignment(.center)
                         
-                        CustomButtonView(text: "Select A Hospital", width: 250, height: 40, color: Color.black, icon: Image(systemName: "building"), isEnabled: true, onTapAction: {
-                            deliveryViewModel.isSelectingHospital = true
-                        })
+                        CustomButtonView(
+                            text: "Select A Hospital",
+                            width: 250,
+                            height: 50,
+                            color: Color.red,
+                            icon: Image(systemName: "building"),
+                            isEnabled: true,
+                            onTapAction: {
+                                deliveryViewModel.isSelectingHospital = true
+                            }
+                        )
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background {
-                        Color.indigo
-                            .opacity(0.2)
-                            .cornerRadius(10)
-                    }
-                    
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.orange.opacity(0.2))
+                    )
                     
                     Spacer(minLength: 10)
                     
+                    // MARK: - Submit Delivery Button or ProgressView
                     if deliveryViewModel.isWorking {
                         ProgressView()
                             .frame(height: 40)
@@ -142,34 +144,12 @@ struct DeliveryAdditionView: View {
                         CustomButtonView(
                             text: "Submit Delivery",
                             width: 250,
-                            height: 40,
-                            color: Color.indigo,
+                            height: 50,
+                            color: Color.green,
                             isEnabled: deliveryViewModel.canSubmitDelivery,
                             onTapAction: {
                                 Task {
-                                    deliveryViewModel.isWorking = true
-                                    guard let hospital = deliveryViewModel.selectedHospital else {
-                                        errorMessage = "No hospital selected"
-                                        deliveryViewModel.isWorking = false
-                                        throw DeliveryError.creationFailed("No hospital selected")
-                                    }
-                                    
-                                    do {
-                                        try await deliveryViewModel.submitDelivery(profile: profileViewModel.profile, dailyResetManager: dailyResetManager)
-                                    } catch {
-                                        deliveryViewModel.isWorking = false
-                                        errorMessage = error.localizedDescription
-                                    }
-
-                                    do {
-                                        try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: deliveryViewModel.newDelivery.babies.count)
-                                    } catch {
-                                        deliveryViewModel.isWorking = false
-                                        errorMessage = error.localizedDescription
-                                    }
-
-                                    deliveryViewModel.isWorking = false
-                                    showingDeliveryAddition = false
+                                    await submitDelivery()
                                 }
                             }
                         )
@@ -179,8 +159,8 @@ struct DeliveryAdditionView: View {
             }
         }
         .onAppear {
-            withAnimation {
-                if (deliveryViewModel.newDelivery.babies.count == 0) {
+            withAnimation(.spring()) {
+                if deliveryViewModel.newDelivery.babies.isEmpty {
                     deliveryViewModel.addBaby()
                 }
                 
@@ -209,22 +189,55 @@ struct DeliveryAdditionView: View {
         }
     }
     
+    // MARK: - Helper Functions
+    
+    /// Initializes the selected hospital when the view appears.
     private func initializeHospital() {
         Task {
             if hospitalViewModel.primaryHospital == nil {
                 try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
             }
-                            
+            
             deliveryViewModel.selectedHospital = hospitalViewModel.primaryHospital
         }
     }
     
+    /// Triggers haptic feedback for user interactions.
     private func triggerHaptic() {
         #if !SKIP
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.prepare()
         generator.impactOccurred()
         #endif
+    }
+    
+    // MARK: - Submit Delivery Function
+    
+    @MainActor
+    private func submitDelivery() async {
+        deliveryViewModel.isWorking = true
+        defer { deliveryViewModel.isWorking = false }
+        
+        guard let hospital = deliveryViewModel.selectedHospital else {
+            errorMessage = "No hospital selected"
+            return
+        }
+        
+        do {
+            try await deliveryViewModel.submitDelivery(profile: profileViewModel.profile, dailyResetManager: dailyResetManager)
+        } catch {
+            errorMessage = error.localizedDescription
+            return
+        }
+        
+        do {
+            try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: deliveryViewModel.newDelivery.babies.count)
+        } catch {
+            errorMessage = error.localizedDescription
+            return
+        }
+        
+        showingDeliveryAddition = false
     }
 }
 

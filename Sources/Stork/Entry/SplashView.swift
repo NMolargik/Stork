@@ -9,14 +9,20 @@ import SwiftUI
 import StorkModel
 
 struct SplashView: View {
+    // MARK: App Storage Variables
     @AppStorage("appState") private var appState: AppState = AppState.splash
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     
+    // MARK: Environment Variables
     @EnvironmentObject var profileViewModel: ProfileViewModel
-
-    @StateObject private var viewModel = SplashViewModel()
+    
+    // MARK: Bindings
     @Binding var showRegistration: Bool
+    
+    // MARK: Local State Variables
+    @State private var isAnimating = false
+    @State private var showMore = false
     @State private var isInfoPresented = false
     
     var body: some View {
@@ -43,10 +49,10 @@ struct SplashView: View {
                 Text("Stork")
                     .font(.system(size: 50))
                     .fontWeight(.bold)
-                    .opacity(viewModel.isAnimating ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 1.5), value: viewModel.isAnimating)
+                    .opacity(isAnimating ? 1.0 : 0.0)
+                    .animation(.easeInOut(duration: 1.5), value: isAnimating)
                 
-                if viewModel.showMore {
+                if showMore {
                     Text("a labor and delivery app")
                         .font(.headline)
                         .fontWeight(.bold)
@@ -60,7 +66,7 @@ struct SplashView: View {
                         appState = (isOnboardingComplete) ? .main : .onboard
                     }
                 })
-                .opacity(viewModel.showMore && !loggedIn ? 1.0 : 0.0)
+                .opacity(showMore && !loggedIn ? 1.0 : 0.0)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             
                 Divider()
@@ -70,7 +76,7 @@ struct SplashView: View {
                 Text("Don't have an account yet?")
                     .padding()
                 
-                CustomButtonView(text: "Sign Up", width: 100, height: 40, color: Color.orange, isEnabled: true, onTapAction: {
+                CustomButtonView(text: "Sign Up", width: 120, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
                         withAnimation {
                             profileViewModel.resetTempProfile()
                             showRegistration = true
@@ -96,6 +102,9 @@ struct SplashView: View {
             }
             .frame(maxWidth: .infinity)
         }
+        .onAppear {
+            startAnimation()
+        }
         .sheet(isPresented: $isInfoPresented) {
             SplashInfoView()
                 .transition(.scale.combined(with: .opacity))
@@ -109,6 +118,15 @@ struct SplashView: View {
         generator.prepare()
         generator.impactOccurred()
         #endif
+    }
+        
+    private func startAnimation() {
+        isAnimating = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+            withAnimation(.easeIn(duration: 0.5)) {
+                self.showMore = true
+            }
+        }
     }
 }
 

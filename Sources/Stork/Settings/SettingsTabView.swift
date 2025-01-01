@@ -61,7 +61,7 @@ struct SettingsTabView: View {
 
                             showingDeleteConfirmation = true
                         }) {
-                            Text("Delete Account")
+                            Text("Delete Profile")
                                 .fontWeight(.bold)
                                 .foregroundStyle(.red)
                         }
@@ -74,7 +74,7 @@ struct SettingsTabView: View {
                     }
                 }
                 
-                Section(header: Text("Units")) {
+                Section(header: Text("Options")) {
                     Toggle("Use Metric Units", isOn: $useMetric)
                         .tint(.green)
                 }
@@ -136,6 +136,8 @@ struct SettingsTabView: View {
                         deleteAccount()
                     }
                 )
+                .interactiveDismissDisabled()
+                .presentationDetents([.medium])
             }
         }
     }

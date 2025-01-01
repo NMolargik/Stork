@@ -8,10 +8,14 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryListView: View {
-    @Environment(\.colorScheme) var colorScheme
+    // MARK: - App Storage Variables
     @AppStorage("leftHanded") var leftHanded: Bool = false
+
+    // MARK: - Environment Variables
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
+    // MARK: - Bindings
     @Binding var showingDeliveryAddition: Bool
     
     var body: some View {

@@ -18,7 +18,6 @@ struct DeliveryTabView: View {
     
     @Binding var showingDeliveryAddition: Bool
     
-    // Single untyped path for all main flow navigation
     @State private var navigationPath = NavigationPath()
     
     var body: some View {
@@ -35,7 +34,6 @@ struct DeliveryTabView: View {
                     }
                 }
                 .navigationTitle("Deliveries")
-                // Matches NavigationLink(value: delivery) calls in DeliveryListView
                 .navigationDestination(for: Delivery.self) { delivery in
                     if let index = deliveryViewModel.deliveries.firstIndex(where: { $0.id == delivery.id }) {
                         DeliveryDetailView(delivery: $deliveryViewModel.deliveries[index])
@@ -47,6 +45,7 @@ struct DeliveryTabView: View {
                     ToolbarItem {
                         Button(action: {
                             withAnimation {
+                                triggerHaptic()
                                 self.showingDeliveryAddition = true
                             }
                         }, label: {
@@ -59,7 +58,6 @@ struct DeliveryTabView: View {
             
             Spacer()
         }
-        // Present DeliveryAdditionView via sheet when showingDeliveryAddition is flipped
         .sheet(isPresented: $showingDeliveryAddition) {
             NavigationStack {
                 DeliveryAdditionView(showingDeliveryAddition: $showingDeliveryAddition)

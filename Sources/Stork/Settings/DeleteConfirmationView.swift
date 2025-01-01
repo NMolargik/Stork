@@ -28,24 +28,16 @@ struct DeleteConfirmationView: View {
                         .padding([.leading, .trailing])
                     
                     HStack(spacing: 40) {
-                        Button(action: {
-                            // Cancel deletion
+                        CustomButtonView(text: "Cancel", width: 120, height: 50, color: Color.blue, isEnabled: true, onTapAction: {
                             triggerHaptic()
                             showing = false
                             step = 1
-                        }) {
-                            Text("Cancel")
-                                .foregroundColor(.red)
-                        }
+                        })
                         
-                        Button(action: {
-                            // Proceed to step 2
+                        CustomButtonView(text: "Continue", width: 120, height: 50, color: Color.red, isEnabled: true, onTapAction: {
                             triggerHaptic()
                             step = 2
-                        }) {
-                            Text("Continue")
-                                .foregroundColor(.blue)
-                        }
+                        })
                     }
                 } else if step == 2 {
                     Text("Are you absolutely sure you want to delete your account?")
@@ -60,33 +52,25 @@ struct DeleteConfirmationView: View {
                         .padding([.leading, .trailing])
                     
                     HStack(spacing: 40) {
-                        Button(action: {
-                            // Cancel deletion
+                        CustomButtonView(text: "Cancel", width: 120, height: 50, color: Color.blue, isEnabled: true, onTapAction: {
                             triggerHaptic()
                             showing = false
                             step = 1
-                        }) {
-                            Text("Cancel")
-                                .foregroundColor(.red)
-                        }
+                        })
                         
-                        Button(action: {
-                            // Confirm deletion
+                        CustomButtonView(text: "Delete", width: 120, height: 50, color: Color.red, isEnabled: true, onTapAction: {
                             triggerHaptic()
                             onDelete()
                             showing = false
                             step = 1
-                        }) {
-                            Text("Delete")
-                                .foregroundColor(.red)
-                        }
+                        })
                     }
                 }
                 
                 Spacer()
             }
             .padding()
-            .navigationTitle("Confirm Deletion")
+            .navigationTitle("Profile Deletion")
         }
     }
     
@@ -100,5 +84,5 @@ struct DeleteConfirmationView: View {
 }
 
 #Preview {
-    DeleteConfirmationView(step: .constant(1), showing: .constant(true), onDelete: {})
+    DeleteConfirmationView(step: .constant(2), showing: .constant(true), onDelete: {})
 }
