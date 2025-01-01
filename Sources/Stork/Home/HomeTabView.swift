@@ -22,9 +22,12 @@ struct HomeTabView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
+                
+                //TODO: Jar View
+                
+                
                 Spacer()
                 
-
                 HomeCarouselView()
                     
 

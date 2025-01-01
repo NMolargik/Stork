@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HomeCarouselView: View {
-    
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
     // Current index of the carousel
@@ -21,7 +21,7 @@ struct HomeCarouselView: View {
     // Threshold to determine card transition
     private let threshold: CGFloat = 100.0
     
-    private var graphsShown = 3
+    private var graphsShown = 4
     
     var body: some View {
         GeometryReader { geometry in
@@ -30,17 +30,53 @@ struct HomeCarouselView: View {
                     // HStack containing all carousel cards
                     HStack(spacing: 0) {
                         #if !SKIP
-                        DeliveriesPerDay(deliveries: $deliveryViewModel.deliveries)
-                            .frame(width: geometry.size.width, height: geometry.size.height * 0.6)
+                        DeliveriesThisWeek(deliveries: $deliveryViewModel.deliveries)
+                            .frame(width: geometry.size.width - 20, height: geometry.size.height * 0.6)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                    .cornerRadius(10)
+                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                    .padding(5)
+                            }
+                            .padding(.leading, 25)
                         
-                        DeliveriesPerMonth(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
-                            .frame(width: geometry.size.width, height: geometry.size.height * 0.6)
+                        DeliveriesLastSix(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                            .frame(width: geometry.size.width - 20, height: geometry.size.height * 0.6)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                    .cornerRadius(10)
+                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                    .padding(5)
+                            }
+                            .padding(.leading, 20)
                         
-                        Text("Sex Distribution")
+                        BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                            .frame(width: geometry.size.width - 20, height: geometry.size.height * 0.6)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                    .cornerRadius(10)
+                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                    .padding(5)
+                            }
+                            .padding(.leading, 20)
+                        
+                        TotalWeightAndLength(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                            .frame(width: geometry.size.width - 20, height: geometry.size.height * 0.6)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                    .cornerRadius(10)
+                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                    .padding(5)
+                            }
+                            .padding(.leading, 20)
                         #endif
                     }
-                    .frame(width: geometry.size.width * CGFloat(graphsShown), alignment: .leading)
-                    .offset(x: -CGFloat(currentIndex) * geometry.size.width + dragOffset + geometry.size.width)
+                    .frame(width: geometry.size.width * CGFloat(graphsShown) - 50, alignment: .leading)
+                    .offset(x: -CGFloat(currentIndex) * geometry.size.width + dragOffset + geometry.size.width + 160)
                     .gesture(
                         DragGesture()
                             .onChanged { value in
@@ -74,10 +110,11 @@ struct HomeCarouselView: View {
                             .frame(width: 10, height: 10)
                     }
                 }
-                .padding(.top, 10)
+                .padding(.top, 5)
             }
+
         }
-        .frame(height: 250) // Adjust the overall carousel height as needed
+        .frame(height: 300) // Adjust the overall carousel height as needed
     }
 }
 

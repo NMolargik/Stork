@@ -4,6 +4,9 @@
     "[ muhs-ter ] - noun\nA group of storks" : {
 
     },
+    "/" : {
+
+    },
     "%@" : {
 
     },
@@ -49,21 +52,18 @@
         }
       }
     },
-    "%lld" : {
-
-    },
-    "%lld deliveries" : {
-
-    },
-    "%lld deliveries in %@" : {
+    "%@: %lld" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$lld deliveries in %2$@"
+            "value" : "%1$@: %2$lld"
           }
         }
       }
+    },
+    "%lld" : {
+
     },
     "%lld lbs" : {
 
@@ -100,6 +100,12 @@
           }
         }
       }
+    },
+    "6 Month Distribution" : {
+
+    },
+    "6 Month Stats" : {
+
     },
     "a labor and delivery app" : {
 
@@ -237,10 +243,10 @@
     "Deliveries" : {
 
     },
-    "Deliveries Per Day" : {
+    "Deliveries In The Last Six Months" : {
 
     },
-    "Deliveries Per Month" : {
+    "Deliveries This Week" : {
 
     },
     "Deliveries: %lld" : {
@@ -656,9 +662,6 @@
       }
     },
     "Sex" : {
-
-    },
-    "Sex Distribution" : {
 
     },
     "Shared Profile View" : {

@@ -1,5 +1,5 @@
 //
-//  DeliveriesPerMonth.swift
+//  DeliveriesLastSix.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 01/01/25.
@@ -19,21 +19,21 @@ struct DeliveryGraphMonthData: Identifiable {
     let count: Int         // Number of deliveries in the month
 }
 
-// MARK: - DeliveriesPerMonth View
+// MARK: - DeliveriesLastSix View
 /// A SwiftUI view that displays a line chart of deliveries per month for the last six months.
-struct DeliveriesPerMonth: View {
+struct DeliveriesLastSix: View {
     // MARK: - Properties
     
     /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
     @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
     
     /// Processed data ready for plotting, containing the last six months.
-    @State private var deliveriesLastSixMonths: [DeliveryGraphMonthData] = []
+    @State private var deliveriesLastSix: [DeliveryGraphMonthData] = []
     
     /// DateFormatter to parse the month-year keys in `groupedDeliveries`.
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM ''yy" // Matches the format "December '24"
+        formatter.dateFormat = "MMMM ''yy"
         formatter.locale = Locale.current
         return formatter
     }()
@@ -41,31 +41,36 @@ struct DeliveriesPerMonth: View {
     // MARK: - Body
     var body: some View {
         VStack {
-            if deliveriesLastSixMonths.isEmpty {
-                // Display a message when there's no data for the last six months.
+            if deliveriesLastSix.isEmpty {
                 Text("No delivery data available for the past six months.")
                     .font(.headline)
                     .foregroundColor(.gray)
                     .padding()
                     .accessibilityLabel("No delivery data available for the past six months.")
             } else {
-                // Title for the chart
-                Text("Deliveries Per Month")
-                    .font(.title2)
+                Text("Deliveries In The Last Six Months")
                     .fontWeight(.bold)
+                    .foregroundStyle(.gray)
+                    .offset(y: 25)
+                    .frame(height: 10)
                     .padding(.bottom, 10)
                 
                 // MARK: - Line Chart
-                Chart(deliveriesLastSixMonths) { monthlyData in
-                    // LineMark represents the trend of deliveries over the months.
+                Chart(deliveriesLastSix) { monthlyData in
+                    AreaMark(
+                        x: .value("Month", monthlyData.date, unit: .month),
+                        y: .value("Deliveries", monthlyData.count)
+                    )
+                    .interpolationMethod(.linear)
+                    .foregroundStyle(LinearGradient(colors: [Color.indigo, .clear], startPoint: .top, endPoint: .bottom))
+                    
                     LineMark(
                         x: .value("Month", monthlyData.date, unit: .month),
                         y: .value("Deliveries", monthlyData.count)
                     )
-                    .interpolationMethod(.catmullRom) // Smooth curve
-                    .foregroundStyle(Color.blue)
+                    .interpolationMethod(.linear)
+                    .foregroundStyle(Color.indigo)
                     
-                    // PointMark represents individual data points.
                     PointMark(
                         x: .value("Month", monthlyData.date, unit: .month),
                         y: .value("Deliveries", monthlyData.count)
@@ -74,29 +79,25 @@ struct DeliveriesPerMonth: View {
                     .symbolSize(100)
                     .annotation(position: .top) {
                         Text("\(monthlyData.count)")
+                            .fontWeight(.bold)
                             .font(.caption)
                             .foregroundColor(.primary)
-                            .accessibilityLabel("\(monthlyData.count) deliveries in \(monthlyData.month)")
                     }
                 }
-                .chartYAxis {
-                    // Configures the Y-axis to display delivery counts.
-                    AxisMarks(position: .leading)
-                }
+                .chartYAxis(.hidden)
                 .chartXAxis {
-                    // Configures the X-axis to display abbreviated month names.
                     AxisMarks(values: .stride(by: .month, count: 1)) { date in
                         AxisGridLine()
                         AxisTick()
-                        AxisValueLabel(format: .dateTime.month(.abbreviated))
+                        AxisValueLabel(format: .dateTime.month(.narrow))
                     }
                 }
-                .frame(height: 200) // Adjust the height as needed
                 .padding()
             }
             
             Spacer()
         }
+        .frame(height: 200)
         .onAppear {
             aggregateMonthlyDeliveries()
         }
@@ -112,7 +113,6 @@ struct DeliveriesPerMonth: View {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         
-        // Generate the last six months' keys and corresponding first-of-month dates.
         var lastSixMonthsKeys: [String] = []
         var lastSixMonthsDates: [Date] = []
         
@@ -121,7 +121,6 @@ struct DeliveriesPerMonth: View {
                 let key = dateFormatter.string(from: date)
                 lastSixMonthsKeys.append(key)
                 
-                // Get the first day of the month for accurate plotting.
                 let components = calendar.dateComponents([.year, .month], from: date)
                 if let firstOfMonth = calendar.date(from: components) {
                     lastSixMonthsDates.append(firstOfMonth)
@@ -129,11 +128,9 @@ struct DeliveriesPerMonth: View {
             }
         }
         
-        // Reverse to have chronological order from oldest to newest.
         lastSixMonthsKeys.reverse()
         lastSixMonthsDates.reverse()
         
-        // Initialize the aggregated data array.
         var tempAggregatedData: [DeliveryGraphMonthData] = []
         
         for (index, key) in lastSixMonthsKeys.enumerated() {
@@ -143,7 +140,6 @@ struct DeliveriesPerMonth: View {
                 let monthData = DeliveryGraphMonthData(month: key, date: date, count: count)
                 tempAggregatedData.append(monthData)
             } else {
-                // If no deliveries for the month, count is 0.
                 let date = lastSixMonthsDates[index]
                 let monthData = DeliveryGraphMonthData(month: key, date: date, count: 0)
                 tempAggregatedData.append(monthData)
@@ -151,14 +147,14 @@ struct DeliveriesPerMonth: View {
         }
         
         // Assign to the state variable.
-        self.deliveriesLastSixMonths = tempAggregatedData
+        self.deliveriesLastSix = tempAggregatedData
     }
 }
 
 // MARK: - Preview
-struct DeliveriesPerMonth_Previews: PreviewProvider {
+struct DeliveriesLastSix_Previews: PreviewProvider {
     static var previews: some View {
-        DeliveriesPerMonth(groupedDeliveries: .constant([
+        DeliveriesLastSix(groupedDeliveries: .constant([
             // Sample data for preview purposes
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Calendar.current.date(byAdding: .month, value: -5, to: Date())!, babies: [], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true),
@@ -179,12 +175,6 @@ struct DeliveriesPerMonth_Previews: PreviewProvider {
             ])
         ]))
     }
-}
-
-
-// MARK: - Preview
-#Preview {
-    DeliveriesPerMonth(groupedDeliveries: .constant([]))
 }
 
 #endif

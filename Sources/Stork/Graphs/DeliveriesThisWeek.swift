@@ -1,5 +1,5 @@
 //
-//  DeliveriesPerDay.swift
+//  DeliveriesThisWeek.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 12/31/24.
@@ -17,8 +17,8 @@ struct DeliveryGraphData: Identifiable {
     let count: Int
 }
 
-// MARK: - DeliveriesPerDay View
-struct DeliveriesPerDay: View {
+// MARK: - DeliveriesThisWeek View
+struct DeliveriesThisWeek: View {
     // MARK: - Properties
     @Binding var deliveries: [Delivery]
     
@@ -28,7 +28,7 @@ struct DeliveriesPerDay: View {
     /// Date Formatter for X-Axis Labels
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "E" // e.g., Mon, Tue
+        formatter.dateFormat = "E"
         return formatter
     }()
     
@@ -38,33 +38,43 @@ struct DeliveriesPerDay: View {
                 Text("No delivery data available for the past seven days.")
                     .font(.headline)
                     .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
                     .padding()
-                    .accessibilityLabel("No delivery data available for the past seven days.")
             } else {
-                
-                Text("Deliveries Per Day")
+                Text("Deliveries This Week")
                     .fontWeight(.bold)
+                    .foregroundStyle(.gray)
+                    .offset(y: 25)
+                    .frame(height: 10)
+                    .padding(.bottom, 10)
                 
                 // MARK: - Line Chart
                 Chart(deliveriesLastSevenDays) { dailyDelivery in
+                    AreaMark(
+                        x: .value("Day", dailyDelivery.date, unit: .day),
+                        y: .value("Deliveries", dailyDelivery.count)
+                    )
+                    .interpolationMethod(.linear)
+                    .foregroundStyle(LinearGradient(colors: [Color.indigo, .clear], startPoint: .top, endPoint: .bottom))
+                    
                     LineMark(
                         x: .value("Day", dailyDelivery.date, unit: .day),
                         y: .value("Deliveries", dailyDelivery.count)
                     )
                     .interpolationMethod(.linear)
-                    .foregroundStyle(Color.orange)
+                    .foregroundStyle(Color.indigo)
                     
                     PointMark(
                         x: .value("Day", dailyDelivery.date, unit: .day),
                         y: .value("Deliveries", dailyDelivery.count)
                     )
-                    .foregroundStyle(Color.indigo)
+                    .foregroundStyle(Color.orange)
                     .symbolSize(100)
                     .annotation(position: .top) {
                         Text("\(dailyDelivery.count)")
+                            .fontWeight(.bold)
                             .font(.caption)
                             .foregroundColor(.primary)
-                            .accessibilityLabel("\(dailyDelivery.count) deliveries")
                     }
                 }
                 .chartYAxis(.hidden)
@@ -80,8 +90,7 @@ struct DeliveriesPerDay: View {
             
             Spacer()
         }
-        .frame(width: 300, height: 175)
-
+        .frame(height: 200)
         .onAppear {
             aggregateDeliveries()
         }
@@ -125,9 +134,9 @@ struct DeliveriesPerDay: View {
 }
 
 // MARK: - Preview
-struct DeliveriesPerDay_Previews: PreviewProvider {
+struct DeliveriesThisWeek_Previews: PreviewProvider {
     static var previews: some View {
-        DeliveriesPerDay(deliveries: .constant([]))
+        DeliveriesThisWeek(deliveries: .constant([]))
             .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
     }
 }

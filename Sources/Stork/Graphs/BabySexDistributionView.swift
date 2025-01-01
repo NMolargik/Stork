@@ -1,0 +1,154 @@
+//
+//  BabySexDistributionView.swift
+//  skipapp-stork
+//
+//  Created by Nick Molargik on 01/01/25.
+//
+
+#if !SKIP
+import SwiftUI
+import StorkModel
+
+// MARK: - BabySexDistributionView
+/// A SwiftUI view that displays the distribution of baby sexes in a pie chart.
+struct BabySexDistributionView: View {
+    // MARK: - Properties
+    
+    /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
+    @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
+    
+    /// Aggregated counts of each baby sex category.
+    @State private var distributionData: [BabySexDistributionData] = []
+    
+    // MARK: - Body
+    var body: some View {
+        HStack {
+            // MARK: - Totals Display
+            VStack(alignment: .leading, spacing: 10) {
+                Text("6 Month Distribution")
+                    .fontWeight(.bold)
+                    .foregroundStyle(.gray)
+                
+                ForEach(distributionData) { data in
+                    HStack {
+                        Circle()
+                            .fill(data.color)
+                            .frame(width: 10, height: 10)
+                        
+                        Text("\(data.category): \(data.count)")
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                    }
+                }
+            }
+            .padding()
+            
+            // MARK: - Pie Chart
+            GeometryReader { geometry in
+                ZStack {
+                    ForEach(0..<distributionData.count, id: \.self) { index in
+                        let startAngle = angle(at: index, in: distributionData)
+                        let endAngle = angle(at: index + 1, in: distributionData)
+                        
+                        Path { path in
+                            let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                            let radius = min(geometry.size.width, geometry.size.height) / 2
+                            
+                            path.move(to: center)
+                            path.addArc(
+                                center: center,
+                                radius: radius,
+                                startAngle: Angle(degrees: startAngle),
+                                endAngle: Angle(degrees: endAngle),
+                                clockwise: false
+                            )
+                        }
+                        .fill(distributionData[index].color)
+                        .shadow(color: distributionData[index].color, radius: 5)
+                    }
+                }
+            }
+            .aspectRatio(1, contentMode: .fit)
+            .scaleEffect(0.9)
+            .padding()
+        }
+        .frame(height: 200)
+        .onAppear {
+            aggregateBabySexData()
+        }
+        .onChange(of: groupedDeliveries.count) { _ in
+            aggregateBabySexData()
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    /// Calculates the cumulative angle for a given index based on the data.
+    private func angle(at index: Int, in data: [BabySexDistributionData]) -> Double {
+        let total = data.map { $0.count }.reduce(0, +)
+        let cumulative = data.prefix(index).map { $0.count }.reduce(0, +)
+        return (Double(cumulative) / Double(total)) * 360.0
+    }
+    
+    /// Aggregates baby sex data from the last six months of deliveries.
+    private func aggregateBabySexData() {
+        var maleCount = 0
+        var femaleCount = 0
+        var lossCount = 0
+        
+        // Tally up baby sexes from the deliveries.
+        for (_, deliveries) in groupedDeliveries {
+            for delivery in deliveries {
+                for baby in delivery.babies {
+                    switch baby.sex {
+                    case .male:
+                        maleCount += 1
+                    case .female:
+                        femaleCount += 1
+                    case .loss:
+                        lossCount += 1
+                    }
+                }
+            }
+        }
+        
+        // Update the state with the aggregated data.
+        distributionData = [
+            BabySexDistributionData(category: "Male", count: maleCount, color: .blue),
+            BabySexDistributionData(category: "Female", count: femaleCount, color: .pink),
+            BabySexDistributionData(category: "Loss", count: lossCount, color: .purple)
+        ]
+    }
+}
+
+// MARK: - Preview
+struct BabySexDistributionView_Previews: PreviewProvider {
+    static var previews: some View {
+        BabySexDistributionView(groupedDeliveries: .constant([
+            // Sample grouped deliveries data
+            (key: "July '24", value: [
+                Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
+                    Baby(deliveryId: "1", nurseCatch: true, sex: .male),
+                    Baby(deliveryId: "1", nurseCatch: false, sex: .female)
+                ], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
+            ]),
+            (key: "August '24", value: [
+                Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Date(), babies: [
+                    Baby(deliveryId: "2", nurseCatch: false, sex: .male),
+                    Baby(deliveryId: "2", nurseCatch: true, sex: .loss)
+                ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
+            ])
+        ]))
+    }
+}
+
+// MARK: - BabySexDistributionData Model
+/// Represents a data point in the pie chart.
+struct BabySexDistributionData: Identifiable {
+    let id = UUID()
+    let category: String
+    let count: Int
+    let color: Color
+}
+
+#endif
