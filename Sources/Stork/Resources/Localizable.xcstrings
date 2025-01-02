@@ -4,7 +4,7 @@
     "[ muhs-ter ] - noun\nA group of storks" : {
 
     },
-    "/" : {
+    "&" : {
 
     },
     "%@" : {
@@ -238,6 +238,9 @@
 
     },
     "Delete Profile" : {
+
+    },
+    "Delivered" : {
 
     },
     "Deliveries" : {
@@ -501,6 +504,9 @@
 
     },
     "Nick Molargik" : {
+
+    },
+    "No data available" : {
 
     },
     "No deliveries found" : {

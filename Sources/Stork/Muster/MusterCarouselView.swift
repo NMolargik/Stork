@@ -1,5 +1,5 @@
 //
-//  HomeCarouselView.swift
+//  MusterCarouselView.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 12/31/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import StorkModel
 
-struct HomeCarouselView: View {
+struct MusterCarouselView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
@@ -30,7 +30,7 @@ struct HomeCarouselView: View {
                     // HStack containing all carousel cards
                     HStack(spacing: 0) {
                         #if !SKIP
-                        DeliveriesThisWeek(deliveries: $deliveryViewModel.deliveries)
+                        DeliveriesThisWeek(deliveries: $deliveryViewModel.musterDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -39,10 +39,9 @@ struct HomeCarouselView: View {
                                     .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
                                     .padding(5)
                             }
-
                             .padding(.leading, 25)
                         
-                        DeliveriesLastSix(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                        DeliveriesLastSix(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -53,7 +52,7 @@ struct HomeCarouselView: View {
                             }
                             .padding(.leading, 20)
                         
-                        BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                        BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -64,7 +63,7 @@ struct HomeCarouselView: View {
                             }
                             .padding(.leading, 20)
                         
-                        TotalWeightAndLength(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                        TotalWeightAndLength(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -119,6 +118,6 @@ struct HomeCarouselView: View {
 }
 
 #Preview {
-    HomeCarouselView()
+    MusterCarouselView()
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
 }

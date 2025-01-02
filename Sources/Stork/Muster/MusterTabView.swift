@@ -23,7 +23,7 @@ struct MusterTabView: View {
         NavigationStack(path: $navigationPath) {
             
             if let muster = musterViewModel.currentMuster {
-                ScrollView {
+                VStack {
                     // Show muster statistics or info
                     Text("Statistics for \(muster.name)")
                         .font(.title)
@@ -65,6 +65,12 @@ struct MusterTabView: View {
                         musterViewModel.showLeaveConfirmation = true
                     }
                     .padding(.bottom)
+                    
+                    MusterCarouselView()
+                        .background {
+                            Color.blue
+                        }
+                    
                 }
                 .refreshable {
                     Task {

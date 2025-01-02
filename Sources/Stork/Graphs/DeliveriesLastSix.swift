@@ -97,7 +97,6 @@ struct DeliveriesLastSix: View {
             
             Spacer()
         }
-        .frame(height: 200)
         .onAppear {
             aggregateMonthlyDeliveries()
         }

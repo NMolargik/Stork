@@ -29,15 +29,21 @@ struct BabySexDistributionView: View {
                     .fontWeight(.bold)
                     .foregroundStyle(.gray)
                 
-                ForEach(distributionData) { data in
-                    HStack {
-                        Circle()
-                            .fill(data.color)
-                            .frame(width: 10, height: 10)
-                        
-                        Text("\(data.category): \(data.count)")
-                            .font(.headline)
-                            .foregroundColor(.primary)
+                if distributionData.isEmpty {
+                    Text("No data available")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(distributionData) { data in
+                        HStack {
+                            Circle()
+                                .fill(data.color)
+                                .frame(width: 10, height: 10)
+                            
+                            Text("\(data.category): \(data.count)")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                        }
                     }
                 }
             }
@@ -46,25 +52,31 @@ struct BabySexDistributionView: View {
             // MARK: - Pie Chart
             GeometryReader { geometry in
                 ZStack {
-                    ForEach(0..<distributionData.count, id: \.self) { index in
-                        let startAngle = angle(at: index, in: distributionData)
-                        let endAngle = angle(at: index + 1, in: distributionData)
-                        
-                        Path { path in
-                            let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                            let radius = min(geometry.size.width, geometry.size.height) / 2
+                    if distributionData.isEmpty {
+                        Circle()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.9)
+                    } else {
+                        ForEach(0..<distributionData.count, id: \.self) { index in
+                            let startAngle = angle(at: index, in: distributionData)
+                            let endAngle = angle(at: index + 1, in: distributionData)
                             
-                            path.move(to: center)
-                            path.addArc(
-                                center: center,
-                                radius: radius,
-                                startAngle: Angle(degrees: startAngle),
-                                endAngle: Angle(degrees: endAngle),
-                                clockwise: false
-                            )
+                            Path { path in
+                                let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                                let radius = min(geometry.size.width, geometry.size.height) / 2
+                                
+                                path.move(to: center)
+                                path.addArc(
+                                    center: center,
+                                    radius: radius,
+                                    startAngle: Angle(degrees: startAngle),
+                                    endAngle: Angle(degrees: endAngle),
+                                    clockwise: false
+                                )
+                            }
+                            .fill(distributionData[index].color)
+                            .shadow(color: distributionData[index].color, radius: 5)
                         }
-                        .fill(distributionData[index].color)
-                        .shadow(color: distributionData[index].color, radius: 5)
                     }
                 }
             }
@@ -72,7 +84,6 @@ struct BabySexDistributionView: View {
             .scaleEffect(0.9)
             .padding()
         }
-        .frame(height: 200)
         .onAppear {
             aggregateBabySexData()
         }
@@ -117,7 +128,7 @@ struct BabySexDistributionView: View {
             BabySexDistributionData(category: "Male", count: maleCount, color: .blue),
             BabySexDistributionData(category: "Female", count: femaleCount, color: .pink),
             BabySexDistributionData(category: "Loss", count: lossCount, color: .purple)
-        ]
+        ].filter { $0.count > 0 }
     }
 }
 

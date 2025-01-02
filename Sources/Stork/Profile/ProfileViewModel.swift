@@ -58,11 +58,13 @@ public class ProfileViewModel: ObservableObject {
     // MARK: - Fetch Current Profile
     @MainActor
     public func fetchCurrentProfile() async throws {
+        print("Fetching profile")
         isWorking = true
         defer { isWorking = false }
         
         do {
             let fetchedProfile = try await profileRepository.getCurrentProfile()
+            print("Done fetching profile")
             self.profile = fetchedProfile
         } catch {
             self.errorMessage = "Failed to load profile: \(error.localizedDescription)"

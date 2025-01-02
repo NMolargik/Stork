@@ -26,7 +26,9 @@ struct TotalWeightAndLength: View {
     
     // MARK: - Body
     var body: some View {
-        VStack(spacing: 20) {
+        VStack {
+            Spacer()
+            
             Text("6 Month Stats")
                 .fontWeight(.bold)
                 .foregroundStyle(.gray)
@@ -40,7 +42,7 @@ struct TotalWeightAndLength: View {
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("/")
+                Text("&")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
@@ -51,9 +53,14 @@ struct TotalWeightAndLength: View {
                     .foregroundColor(.primary)
             }
             .padding()
+            
+            Text("Delivered")
+                .fontWeight(.bold)
+                .foregroundStyle(.gray)
+                .padding(.bottom, 10)
+            
+            Spacer()
         }
-        .frame(height: 200)
-        .padding()
         .onAppear {
             calculateTotalStats()
         }
@@ -67,10 +74,10 @@ struct TotalWeightAndLength: View {
     /// A formatted string for the total weight.
     private var weightString: String {
         if useMetric {
-            let totalWeightKg = (totalWeight / 16) * 0.453592 // Convert ounces to pounds, then to kilograms
+            let totalWeightKg = (totalWeight / 16) * 0.453592
             return "\(Int(round(totalWeightKg))) kg"
         } else {
-            let totalWeightLbs = totalWeight / 16 // Convert ounces to pounds
+            let totalWeightLbs = totalWeight / 16
             return "\(Int(round(totalWeightLbs))) lbs"
         }
     }
@@ -78,7 +85,7 @@ struct TotalWeightAndLength: View {
     /// A formatted string for the total length.
     private var lengthString: String {
         if useMetric {
-            let totalLengthCm = totalLength * 2.54 // Convert inches to centimeters
+            let totalLengthCm = totalLength * 2.54
             return "\(Int(round(totalLengthCm))) cm"
         } else {
             return "\(Int(round(totalLength))) in"
@@ -92,7 +99,6 @@ struct TotalWeightAndLength: View {
         var weightSum: Double = 0.0 // In ounces
         var lengthSum: Double = 0.0 // In inches
         
-        // Loop through all deliveries and tally up weights and lengths
         for (_, deliveries) in groupedDeliveries {
             for delivery in deliveries {
                 for baby in delivery.babies {
@@ -111,7 +117,6 @@ struct TotalWeightAndLength: View {
 struct TotalWeightAndLength_Previews: PreviewProvider {
     static var previews: some View {
         TotalWeightAndLength(groupedDeliveries: .constant([
-            // Sample grouped deliveries data
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
                     Baby(deliveryId: "1", nurseCatch: true, sex: .male, weight: 120.0, height: 20.5), // 120 oz (7.5 lbs)

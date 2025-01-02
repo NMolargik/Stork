@@ -84,6 +84,7 @@ struct MusterSplashView: View {
                     }
                 }
             )
+            .presentationDetents([.fraction(0.7)])
             .interactiveDismissDisabled(true)
         }
         .sheet(isPresented: $musterViewModel.showCreateMusterSheet) {

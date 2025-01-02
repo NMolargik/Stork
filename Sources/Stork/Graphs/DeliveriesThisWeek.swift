@@ -90,7 +90,6 @@ struct DeliveriesThisWeek: View {
             
             Spacer()
         }
-        .frame(height: 200)
         .onAppear {
             aggregateDeliveries()
         }

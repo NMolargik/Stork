@@ -29,10 +29,7 @@ struct HomeTabView: View {
                 Spacer()
                 
                 HomeCarouselView()
-                    
 
-                Spacer()
-                
                 CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: true, onTapAction: {
                     withAnimation {
                         deliveryViewModel.startNewDelivery()

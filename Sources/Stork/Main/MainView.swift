@@ -64,25 +64,6 @@ public struct MainView: View {
                 .tag(Tab.settings)
         }
         .tint(.indigo)
-        .onAppear {
-            Task {
-                do {
-                    if profileViewModel.profile.id.isEmpty {
-                        try await profileViewModel.fetchCurrentProfile()
-                    }
-
-                    if deliveryViewModel.deliveries.isEmpty {
-                        try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
-                    }
-
-                    if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
-                        try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
-                    }
-                } catch {
-                    errorMessage = error.localizedDescription
-                }
-            }
-        }
         .onChange(of: selectedTab) { _ in
             triggerHaptic()
         }

@@ -113,14 +113,21 @@ public struct AppStateControllerView: View {
                 Task {
                     do {
                         try await profileViewModel.fetchCurrentProfile()
-                        
-                        try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
-                        withAnimation {
-                            selectedTab = .home
-                            appState = .main
+
+                        if deliveryViewModel.deliveries.isEmpty {
+                            try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
+                        }
+
+                        print("Trying to retrieve muster")
+
+                        if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
+                            try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
+                        } else {
+                            print(profileViewModel.profile.musterId)
+                            print(musterViewModel.currentMuster)
                         }
                     } catch {
-                        errorMessage = "Failed to load profile: \(error.localizedDescription)"
+                        errorMessage = error.localizedDescription
                     }
                 }
             } else {
