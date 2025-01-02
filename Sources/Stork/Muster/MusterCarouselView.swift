@@ -75,7 +75,7 @@ struct MusterCarouselView: View {
                             .padding(.leading, 20)
                         #endif
                     }
-                    .frame(width: geometry.size.width * CGFloat(graphsShown) - 50, height: 200, alignment: .leading)
+                    .frame(width: geometry.size.width * CGFloat(graphsShown) - 50, height: 340, alignment: .leading)
                     .offset(x: -CGFloat(currentIndex) * geometry.size.width + dragOffset + geometry.size.width + 160)
                     .gesture(
                         DragGesture()
@@ -113,7 +113,7 @@ struct MusterCarouselView: View {
             }
 
         }
-        .frame(height: 220)
+        .frame(height: 360)
     }
 }
 

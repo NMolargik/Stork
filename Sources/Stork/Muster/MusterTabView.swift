@@ -24,59 +24,22 @@ struct MusterTabView: View {
             
             if let muster = musterViewModel.currentMuster {
                 VStack {
-                    // Show muster statistics or info
-                    Text("Statistics for \(muster.name)")
-                        .font(.title)
+                    //TODO: stacked profile view
+                    Rectangle()
+                        .cornerRadius(10)
+                        .foregroundStyle(.blue)
                         .padding()
-                    
-                    // Placeholder for stats
-                    Text("Muster Stats Go Here")
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Text("Members")
-                    
-                    ForEach(musterViewModel.musterMembers, id: \.self) { member in
-                        Text(member.firstName)
-                    }
-                    
-                    // If user is admin, show admin controls
-                    if musterViewModel.isUserAdmin(profile: profileViewModel.profile) {
-                        Divider()
-                        Text("Admin Controls")
-                            .font(.headline)
-                            .padding(.top)
-                        
-                        Button("Invite User") {
-                            musterViewModel.showInviteUserSheet = true
-                        }
-                        .padding(.top, 4)
-                        
-                        Button("Assign Admin") {
-                            musterViewModel.showAssignAdminSheet = true
-                        }
-                        .padding(.top, 4)
-                    }
-                    
-                    Spacer()
-                    
-                    Button("Leave Muster") {
-                        musterViewModel.showLeaveConfirmation = true
-                    }
-                    .padding(.bottom)
                     
                     MusterCarouselView()
-                        .background {
-                            Color.blue
-                        }
                     
+                    //TODO: user contribution distribution view
+                    Rectangle()
+                        .frame(height: 150)
+                        .cornerRadius(10)
+                        .foregroundStyle(.red)
+                        .padding()
                 }
-                .refreshable {
-                    Task {
-                        try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
-                    }
-                }
+
                 .navigationTitle(muster.name)
                 .confirmationDialog(
                     "Are you sure you want to leave this muster?",
@@ -84,7 +47,6 @@ struct MusterTabView: View {
                     titleVisibility: .visible
                 ) {
                     Button("Leave", role: .destructive) {
-                        
                         leaveMuster()
                     }
                     Button("Cancel", role: .cancel) {}
@@ -96,6 +58,40 @@ struct MusterTabView: View {
                 }
                 .sheet(isPresented: $musterViewModel.showAssignAdminSheet) {
                     MusterAdminAssignAdminView()
+                        .presentationDetents([.medium])
+                        .interactiveDismissDisabled(true)
+
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Menu {
+                            if musterViewModel.isUserAdmin(profile: profileViewModel.profile) {
+                                
+                                Button {
+                                    musterViewModel.showInviteUserSheet = true
+                                } label: {
+                                    Label("Invite User", systemImage: "person.badge.plus")
+                                }
+                                
+                                Button {
+                                    musterViewModel.showAssignAdminSheet = true
+                                } label: {
+                                    Label("Assign Admin", systemImage: "person.badge.shield.exclamationmark.fill")
+                                }
+                            }
+                            
+                            Button {
+                                leaveMuster()
+                            } label: {
+                                Label("Leave Muster", systemImage: "door.left.hand.open")
+                            }
+                            
+                        } label: {
+                            Image(systemName: "gear")
+                                .foregroundStyle(.orange)
+                                .fontWeight(.bold)
+                        }
+                    }
                 }
             } else {
                 MusterSplashView()

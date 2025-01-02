@@ -5,7 +5,6 @@
 //  Created by Nick Molargik on 01/01/25.
 //
 
-#if !SKIP
 import SwiftUI
 import StorkModel
 
@@ -132,14 +131,3 @@ struct TotalWeightAndLength_Previews: PreviewProvider {
         ]))
     }
 }
-
-// MARK: - Baby Extension for Preview Data
-extension Baby {
-    init(deliveryId: String, nurseCatch: Bool, sex: Sex, weight: Double, height: Double) {
-        self.init(deliveryId: deliveryId, nurseCatch: nurseCatch, sex: sex)
-        self.weight = weight
-        self.height = height
-    }
-}
-
-#endif

@@ -48,7 +48,7 @@ struct DeliveriesLastSix: View {
                     .padding()
                     .accessibilityLabel("No delivery data available for the past six months.")
             } else {
-                Text("Deliveries In The Last Six Months")
+                Text("Deliveries In The Last 6 Months")
                     .fontWeight(.bold)
                     .foregroundStyle(.gray)
                     .offset(y: 25)

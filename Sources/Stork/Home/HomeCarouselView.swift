@@ -52,6 +52,7 @@ struct HomeCarouselView: View {
                                     .padding(5)
                             }
                             .padding(.leading, 20)
+                        #endif
                         
                         BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                             .frame(width: geometry.size.width - 20)
@@ -74,7 +75,6 @@ struct HomeCarouselView: View {
                                     .padding(5)
                             }
                             .padding(.leading, 20)
-                        #endif
                     }
                     .frame(width: geometry.size.width * CGFloat(graphsShown) - 50, height: 200, alignment: .leading)
                     .offset(x: -CGFloat(currentIndex) * geometry.size.width + dragOffset + geometry.size.width + 160)

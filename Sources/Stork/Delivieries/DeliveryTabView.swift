@@ -77,7 +77,7 @@ struct DeliveryTabView: View {
                                 }
                             }) {
                                 Text("Cancel")
-                                    .foregroundStyle(.orange)
+                                    .foregroundStyle(.red)
                             }
                         }
                     }

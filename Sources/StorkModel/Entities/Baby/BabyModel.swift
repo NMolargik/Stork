@@ -119,6 +119,12 @@ public struct Baby: Identifiable, Codable, Hashable {
         self.sex = sex
     }
     
+    public init(deliveryId: String, nurseCatch: Bool, sex: Sex, weight: Double, height: Double) {
+        self.init(deliveryId: deliveryId, nurseCatch: nurseCatch, sex: sex)
+        self.weight = weight
+        self.height = height
+    }
+    
     /// Initializes a `Baby` instance with default values.
     /// Useful for creating placeholder or testing instances.
     ///

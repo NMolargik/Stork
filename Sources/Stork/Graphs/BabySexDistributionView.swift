@@ -5,9 +5,17 @@
 //  Created by Nick Molargik on 01/01/25.
 //
 
-#if !SKIP
 import SwiftUI
 import StorkModel
+
+// MARK: - BabySexDistributionData Model
+/// Represents a data point in the pie chart.
+struct BabySexDistributionData: Identifiable {
+    let id = UUID()
+    let category: String
+    let count: Int
+    let color: Color
+}
 
 // MARK: - BabySexDistributionView
 /// A SwiftUI view that displays the distribution of baby sexes in a pie chart.
@@ -22,73 +30,81 @@ struct BabySexDistributionView: View {
     
     // MARK: - Body
     var body: some View {
-        HStack {
-            // MARK: - Totals Display
-            VStack(alignment: .leading, spacing: 10) {
-                Text("6 Month Distribution")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.gray)
-                
-                if distributionData.isEmpty {
-                    Text("No data available")
-                        .font(.headline)
-                        .foregroundColor(.secondary)
-                } else {
-                    ForEach(distributionData) { data in
-                        HStack {
-                            Circle()
-                                .fill(data.color)
-                                .frame(width: 10, height: 10)
-                            
-                            Text("\(data.category): \(data.count)")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                        }
-                    }
-                }
-            }
-            .padding()
+        VStack {
+            Spacer()
             
-            // MARK: - Pie Chart
-            GeometryReader { geometry in
-                ZStack {
+            HStack {
+                // MARK: - Totals Display
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("6 Month Sex Distribution")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.gray)
+                    
                     if distributionData.isEmpty {
-                        Circle()
-                            .fill(Color.gray.opacity(0.2))
-                            .frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.9)
+                        Text("No data available")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
                     } else {
-                        ForEach(0..<distributionData.count, id: \.self) { index in
-                            let startAngle = angle(at: index, in: distributionData)
-                            let endAngle = angle(at: index + 1, in: distributionData)
-                            
-                            Path { path in
-                                let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                                let radius = min(geometry.size.width, geometry.size.height) / 2
+                        ForEach(distributionData) { data in
+                            HStack {
+                                Circle()
+                                    .fill(data.color)
+                                    .frame(width: 10, height: 10)
                                 
-                                path.move(to: center)
-                                path.addArc(
-                                    center: center,
-                                    radius: radius,
-                                    startAngle: Angle(degrees: startAngle),
-                                    endAngle: Angle(degrees: endAngle),
-                                    clockwise: false
-                                )
+                                Text("\(data.category): \(data.count)")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
                             }
-                            .fill(distributionData[index].color)
-                            .shadow(color: distributionData[index].color, radius: 5)
                         }
                     }
                 }
+                .padding()
+                
+                // MARK: - Pie Chart
+                GeometryReader { geometry in
+                    ZStack {
+                        if distributionData.isEmpty {
+                            Circle()
+                                .fill(Color.gray.opacity(0.2))
+                                .frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.9)
+                        } else {
+                            ForEach(0..<distributionData.count, id: \.self) { index in
+                                let startAngle = angle(at: index, in: distributionData)
+                                let endAngle = angle(at: index + 1, in: distributionData)
+                                
+                                Path { path in
+                                    let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                                    let radius = min(geometry.size.width, geometry.size.height) / 2
+                                    
+                                    path.move(to: center)
+                                    path.addArc(
+                                        center: center,
+                                        radius: radius,
+                                        startAngle: Angle(degrees: startAngle),
+                                        endAngle: Angle(degrees: endAngle),
+                                        clockwise: false
+                                    )
+                                }
+                                .fill(distributionData[index].color)
+                                .shadow(color: distributionData[index].color, radius: 5)
+                            }
+                        }
+                    }
+                }
+                .aspectRatio(1, contentMode: .fit)
+                .scaleEffect(0.9)
+                .padding()
+                .frame(width: 200)
+                
+                Spacer()
+                
             }
-            .aspectRatio(1, contentMode: .fit)
-            .scaleEffect(0.9)
-            .padding()
-        }
-        .onAppear {
-            aggregateBabySexData()
-        }
-        .onChange(of: groupedDeliveries.count) { _ in
-            aggregateBabySexData()
+            .onAppear {
+                aggregateBabySexData()
+            }
+            .onChange(of: groupedDeliveries.count) { _ in
+                aggregateBabySexData()
+            }
         }
     }
     
@@ -152,14 +168,3 @@ struct BabySexDistributionView_Previews: PreviewProvider {
         ]))
     }
 }
-
-// MARK: - BabySexDistributionData Model
-/// Represents a data point in the pie chart.
-struct BabySexDistributionData: Identifiable {
-    let id = UUID()
-    let category: String
-    let count: Int
-    let color: Color
-}
-
-#endif

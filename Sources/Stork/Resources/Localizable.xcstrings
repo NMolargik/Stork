@@ -101,7 +101,7 @@
         }
       }
     },
-    "6 Month Distribution" : {
+    "6 Month Sex Distribution" : {
 
     },
     "6 Month Stats" : {
@@ -117,9 +117,6 @@
 
     },
     "Added to your muster" : {
-
-    },
-    "Admin Controls" : {
 
     },
     "Appearance" : {
@@ -246,7 +243,7 @@
     "Deliveries" : {
 
     },
-    "Deliveries In The Last Six Months" : {
+    "Deliveries In The Last 6 Months" : {
 
     },
     "Deliveries This Week" : {
@@ -451,9 +448,6 @@
     "Map requires iOS 17" : {
 
     },
-    "Members" : {
-
-    },
     "Missing Hospital" : {
 
     },
@@ -467,9 +461,6 @@
 
     },
     "Muster" : {
-
-    },
-    "Muster Stats Go Here" : {
 
     },
     "Name" : {
@@ -686,9 +677,6 @@
 
     },
     "Sorry we are missing your hospital. Please provide its name and we will take it from there!" : {
-
-    },
-    "Statistics for %@" : {
 
     },
     "Stork" : {
