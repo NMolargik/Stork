@@ -54,7 +54,6 @@ public struct Baby: Identifiable, Codable, Hashable {
     /// - Parameter dictionary: A dictionary containing baby data fetched from Firestore.
     public init?(from dictionary: [String: Any]) {
         // Debugging: Print the incoming dictionary (consider removing in production)
-        print("Initializing Baby from dictionary: \(dictionary.description)")
         
         let isoFormatter = ISO8601DateFormatter()
         let fallbackFormatter = DateFormatter()

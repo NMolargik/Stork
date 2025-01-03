@@ -1,5 +1,5 @@
 //
-//  DeliveriesLastSix.swift
+//  DeliveriesLastSixMonthsView.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 01/01/25.
@@ -19,9 +19,9 @@ struct DeliveryGraphMonthData: Identifiable {
     let count: Int         // Number of deliveries in the month
 }
 
-// MARK: - DeliveriesLastSix View
+// MARK: - DeliveriesLastSixMonthsView View
 /// A SwiftUI view that displays a line chart of deliveries per month for the last six months.
-struct DeliveriesLastSix: View {
+struct DeliveriesLastSixMonthsView: View {
     // MARK: - Properties
     
     /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
@@ -151,9 +151,9 @@ struct DeliveriesLastSix: View {
 }
 
 // MARK: - Preview
-struct DeliveriesLastSix_Previews: PreviewProvider {
+struct DeliveriesLastSixMonthsView_Previews: PreviewProvider {
     static var previews: some View {
-        DeliveriesLastSix(groupedDeliveries: .constant([
+        DeliveriesLastSixMonthsView(groupedDeliveries: .constant([
             // Sample data for preview purposes
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Calendar.current.date(byAdding: .month, value: -5, to: Date())!, babies: [], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true),

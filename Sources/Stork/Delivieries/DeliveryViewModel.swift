@@ -61,9 +61,14 @@ class DeliveryViewModel: ObservableObject {
         
         do {
             newDelivery = try await deliveryRepository.createDelivery(delivery: newDelivery)
-            print("New delivery successfully submitted")
             self.deliveries.append(newDelivery)
+            
+            if (self.addToMuster) {
+                self.musterDeliveries.append(newDelivery)
+            }
+            
             groupDeliveriesByMonth()
+            groupMusterDeliveriesByMonth()
             
         } catch {
             throw DeliveryError.creationFailed("Failed to submit delivery: \(error.localizedDescription)")
@@ -71,7 +76,7 @@ class DeliveryViewModel: ObservableObject {
         
         // TODO: post-release add to new muster timeline feature if chosen. remember to implement duplicate prevention system
         
-        dailyResetManager.incrementDeliveryCount()  // increment after success
+        dailyResetManager.incrementDeliveryCount()
         print("New delivery successfully submitted")
         
         
@@ -108,10 +113,7 @@ class DeliveryViewModel: ObservableObject {
         
         DispatchQueue.main.async {
             self.groupedDeliveries = tempGroupedDeliveries
-            print("Grouped Deliveries Updated:")
-            for group in self.groupedDeliveries {
-                print("Month-Year: \(group.key), Deliveries Count: \(group.value.count)")
-            }
+            print("Grouped Deliveries Updated")
         }
     }
     
@@ -145,10 +147,7 @@ class DeliveryViewModel: ObservableObject {
         
         DispatchQueue.main.async {
             self.groupedMusterDeliveries = tempGroupedDeliveries
-            print("Muster Grouped Deliveries Updated:")
-            for group in self.groupedMusterDeliveries {
-                print("Month-Year: \(group.key), Deliveries Count: \(group.value.count)")
-            }
+            print("Muster Grouped Deliveries Updated")
         }
     }
     
@@ -197,6 +196,8 @@ class DeliveryViewModel: ObservableObject {
     
     func getMusterDeliveries(muster: Muster) async throws {
         do {
+            print("GETTING MUSTER DELIVERIES")
+            
             let fetchedDeliveries = try await deliveryRepository.listDeliveries(
                 userId: nil,
                 userFirstName: nil,

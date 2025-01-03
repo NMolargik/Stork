@@ -21,23 +21,39 @@ struct MusterTabView: View {
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            
             if let muster = musterViewModel.currentMuster {
-                VStack {
-                    //TODO: stacked profile view
-                    Rectangle()
-                        .cornerRadius(10)
-                        .foregroundStyle(.blue)
-                        .padding()
+                VStack(spacing: 0) {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 16) {
+                            ForEach(musterViewModel.musterMembers, id: \.id) { member in
+                                HStack(alignment: .center) {
+                                    if muster.administratorProfileIds.contains(member.id) {
+                                        Image(systemName: "crown.fill")
+                                            .foregroundColor(.yellow)
+                                    }
+                                    
+                                    Text("\(member.firstName) \(member.lastName.first.map { "\($0)." } ?? "")")
+                                        .fontWeight(.bold)
+
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(8)
+                            }
+                        }
+                        .padding(.horizontal)
+                        #if !SKIP
+                        .scrollIndicators(.hidden)
+                        #endif
+                    }
+                    .padding(.leading, -5)
+                    .frame(height: 30)
+                    .offset(y: -10)
                     
                     MusterCarouselView()
                     
-                    //TODO: user contribution distribution view
-                    Rectangle()
-                        .frame(height: 150)
-                        .cornerRadius(10)
-                        .foregroundStyle(.red)
-                        .padding()
+                    UserDeliveryDistributionView(profiles: musterViewModel.musterMembers, deliveries: deliveryViewModel.musterDeliveries)
                 }
 
                 .navigationTitle(muster.name)

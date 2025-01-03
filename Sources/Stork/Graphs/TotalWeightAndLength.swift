@@ -1,5 +1,5 @@
 //
-//  TotalBabyStatsView.swift
+//  TotalWeightAndLengthStatsView.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 01/01/25.
@@ -10,7 +10,7 @@ import StorkModel
 
 // MARK: - TotalWeightAndLength
 /// A SwiftUI view that displays the total weight and length of all babies recorded over the last six months.
-struct TotalWeightAndLength: View {
+struct TotalWeightAndLengthStatsView: View {
     // MARK: - Properties
     
     /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
@@ -113,9 +113,9 @@ struct TotalWeightAndLength: View {
 }
 
 // MARK: - Preview
-struct TotalWeightAndLength_Previews: PreviewProvider {
+struct TotalWeightAndLengthStatsView_Previews: PreviewProvider {
     static var previews: some View {
-        TotalWeightAndLength(groupedDeliveries: .constant([
+        TotalWeightAndLengthStatsView(groupedDeliveries: .constant([
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
                     Baby(deliveryId: "1", nurseCatch: true, sex: .male, weight: 120.0, height: 20.5), // 120 oz (7.5 lbs)

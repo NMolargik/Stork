@@ -118,13 +118,14 @@ public struct AppStateControllerView: View {
                             try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
                         }
 
-                        print("Trying to retrieve muster")
-
                         if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
                             try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
-                        } else {
-                            print(profileViewModel.profile.musterId)
-                            print(musterViewModel.currentMuster)
+                            
+                            
+                            if let muster = musterViewModel.currentMuster {
+                                try await deliveryViewModel.getMusterDeliveries(muster: muster)
+                            }
+
                         }
                     } catch {
                         errorMessage = error.localizedDescription

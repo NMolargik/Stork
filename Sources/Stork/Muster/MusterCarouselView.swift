@@ -30,7 +30,7 @@ struct MusterCarouselView: View {
                     // HStack containing all carousel cards
                     HStack(spacing: 0) {
                         #if !SKIP
-                        DeliveriesThisWeek(deliveries: $deliveryViewModel.musterDeliveries)
+                        DeliveriesThisWeekView(deliveries: $deliveryViewModel.musterDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -41,7 +41,7 @@ struct MusterCarouselView: View {
                             }
                             .padding(.leading, 25)
                         
-                        DeliveriesLastSix(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
+                        DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -52,18 +52,22 @@ struct MusterCarouselView: View {
                             }
                             .padding(.leading, 20)
                         
-                        BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
-                            .frame(width: geometry.size.width - 20)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
-                                    .padding(5)
-                            }
-                            .padding(.leading, 20)
+                        VStack {
+                            BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
+                            
+                            DeliveryMethodDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
+                        }
+                        .frame(width: geometry.size.width - 20)
+                        .background {
+                            Rectangle()
+                                .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                .cornerRadius(10)
+                                .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                .padding(5)
+                        }
+                        .padding(.leading, 20)
                         
-                        TotalWeightAndLength(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
+                        TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()

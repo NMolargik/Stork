@@ -1,5 +1,5 @@
 //
-//  DeliveriesThisWeek.swift
+//  DeliveriesThisWeekView.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 12/31/24.
@@ -18,7 +18,7 @@ struct DeliveryGraphData: Identifiable {
 }
 
 // MARK: - DeliveriesThisWeek View
-struct DeliveriesThisWeek: View {
+struct DeliveriesThisWeekView: View {
     // MARK: - Properties
     @Binding var deliveries: [Delivery]
     
@@ -133,9 +133,9 @@ struct DeliveriesThisWeek: View {
 }
 
 // MARK: - Preview
-struct DeliveriesThisWeek_Previews: PreviewProvider {
+struct DeliveriesThisWeekView_Previews: PreviewProvider {
     static var previews: some View {
-        DeliveriesThisWeek(deliveries: .constant([]))
+        DeliveriesThisWeekView(deliveries: .constant([]))
             .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
     }
 }

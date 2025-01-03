@@ -1,32 +1,33 @@
 //
-//  BabySexDistributionView.swift
+//  DeliveryMethodDistributionView.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 01/01/25.
 //
 
+#if !SKIP
 import SwiftUI
 import StorkModel
 
-// MARK: - BabySexDistributionData Model
-/// Represents a data point in the pie chart.
-struct BabySexDistributionData: Identifiable {
+// MARK: - DeliveryMethodDistributionData Model
+/// Represents a data point in the pie chart for delivery methods.
+struct DeliveryMethodDistributionData: Identifiable {
     let id = UUID()
     let category: String
     let count: Int
     let color: Color
 }
 
-// MARK: - BabySexDistributionView
-/// A SwiftUI view that displays the distribution of baby sexes in a pie chart.
-struct BabySexDistributionView: View {
+// MARK: - DeliveryMethodDistributionView
+/// A SwiftUI view that displays the distribution of delivery methods in a pie chart.
+struct DeliveryMethodDistributionView: View {
     // MARK: - Properties
     
     /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
     @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
     
-    /// Aggregated counts of each baby sex category.
-    @State private var distributionData: [BabySexDistributionData] = []
+    /// Aggregated counts of each delivery method category.
+    @State private var distributionData: [DeliveryMethodDistributionData] = []
     
     // MARK: - Body
     var body: some View {
@@ -36,7 +37,7 @@ struct BabySexDistributionView: View {
             HStack {
                 // MARK: - Totals Display
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("6 Month Sex Distribution")
+                    Text("Delivery Method Distribution")
                         .fontWeight(.bold)
                         .foregroundStyle(.gray)
                     
@@ -95,13 +96,12 @@ struct BabySexDistributionView: View {
                 .scaleEffect(0.9)
                 .padding()
                 .frame(width: 200)
-                
             }
             .onAppear {
-                aggregateBabySexData()
+                aggregateDeliveryMethodData()
             }
             .onChange(of: groupedDeliveries.count) { _ in
-                aggregateBabySexData()
+                aggregateDeliveryMethodData()
             }
             
             Spacer()
@@ -111,60 +111,58 @@ struct BabySexDistributionView: View {
     // MARK: - Helper Methods
     
     /// Calculates the cumulative angle for a given index based on the data.
-    private func angle(at index: Int, in data: [BabySexDistributionData]) -> Double {
+    private func angle(at index: Int, in data: [DeliveryMethodDistributionData]) -> Double {
         let total = data.map { $0.count }.reduce(0, +)
         let cumulative = data.prefix(index).map { $0.count }.reduce(0, +)
         return (Double(cumulative) / Double(total)) * 360.0
     }
     
-    /// Aggregates baby sex data from the last six months of deliveries.
-    private func aggregateBabySexData() {
-        var maleCount = 0
-        var femaleCount = 0
-        var lossCount = 0
+    /// Aggregates delivery method data from the last six months of deliveries.
+    private func aggregateDeliveryMethodData() {
+        var vaginalCount = 0
+        var cSectionCount = 0
+        var vBacCount = 0
         
-        // Tally up baby sexes from the deliveries.
+        // Tally up delivery methods from the deliveries.
         for (_, deliveries) in groupedDeliveries {
             for delivery in deliveries {
-                for baby in delivery.babies {
-                    switch baby.sex {
-                    case .male:
-                        maleCount += 1
-                    case .female:
-                        femaleCount += 1
-                    case .loss:
-                        lossCount += 1
-                    }
+                switch delivery.deliveryMethod {
+                case .vaginal:
+                    vaginalCount += 1
+                case .cSection:
+                    cSectionCount += 1
+                case .vBac:
+                    vBacCount += 1
                 }
             }
         }
         
         // Update the state with the aggregated data.
         distributionData = [
-            BabySexDistributionData(category: "Male", count: maleCount, color: .blue),
-            BabySexDistributionData(category: "Female", count: femaleCount, color: .pink),
-            BabySexDistributionData(category: "Loss", count: lossCount, color: .purple)
+            DeliveryMethodDistributionData(category: "Vaginal", count: vaginalCount, color: .blue),
+            DeliveryMethodDistributionData(category: "C-Section", count: cSectionCount, color: .orange),
+            DeliveryMethodDistributionData(category: "VBAC", count: vBacCount, color: .green)
         ].filter { $0.count > 0 }
     }
 }
 
 // MARK: - Preview
-struct BabySexDistributionView_Previews: PreviewProvider {
+struct DeliveryMethodDistributionView_Previews: PreviewProvider {
     static var previews: some View {
-        BabySexDistributionView(groupedDeliveries: .constant([
+        DeliveryMethodDistributionView(groupedDeliveries: .constant([
             // Sample grouped deliveries data
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
-                    Baby(deliveryId: "1", nurseCatch: true, sex: .male),
-                    Baby(deliveryId: "1", nurseCatch: false, sex: .female)
-                ], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
+                    Baby(deliveryId: "1", nurseCatch: true, sex: .male)
+                ], babyCount: 1, deliveryMethod: .vaginal, epiduralUsed: true)
             ]),
             (key: "August '24", value: [
                 Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Date(), babies: [
-                    Baby(deliveryId: "2", nurseCatch: false, sex: .male),
-                    Baby(deliveryId: "2", nurseCatch: true, sex: .loss)
-                ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
+                    Baby(deliveryId: "2", nurseCatch: false, sex: .female)
+                ], babyCount: 1, deliveryMethod: .cSection, epiduralUsed: false)
             ])
         ]))
     }
 }
+
+#endif

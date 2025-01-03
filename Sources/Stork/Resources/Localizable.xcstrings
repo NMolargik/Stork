@@ -10,6 +10,16 @@
     "%@" : {
 
     },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "%@ %@ %@" : {
       "localizations" : {
         "en" : {
@@ -63,6 +73,12 @@
       }
     },
     "%lld" : {
+
+    },
+    "%lld Babies" : {
+
+    },
+    "%lld Deliveries" : {
 
     },
     "%lld lbs" : {
@@ -259,6 +275,9 @@
 
     },
     "Delivery Method" : {
+
+    },
+    "Delivery Method Distribution" : {
 
     },
     "Delivery Method: %@" : {
@@ -572,6 +591,9 @@
 
     },
     "Provide an email address and we can send a password reset email." : {
+
+    },
+    "Recorded" : {
 
     },
     "Restart Onboarding" : {

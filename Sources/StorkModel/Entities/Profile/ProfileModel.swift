@@ -181,4 +181,10 @@ public struct Profile: Identifiable, Codable, Hashable {
         hasher.combine(joinDate)
         hasher.combine(role)
     }
+    
+    public var initials: String {
+        let firstInitial = firstName.first.map { String($0).uppercased() } ?? ""
+        let lastInitial = lastName.first.map { String($0).uppercased() } ?? ""
+        return firstInitial + lastInitial
+    }
 }

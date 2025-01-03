@@ -22,9 +22,9 @@ struct HomeTabView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
-                
-                //TODO: Jar View
-                
+                #if !SKIP
+                ParticleView()
+                #endif
                 
                 Spacer()
                 

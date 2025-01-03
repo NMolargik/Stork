@@ -30,7 +30,7 @@ struct HomeCarouselView: View {
                     // HStack containing all carousel cards
                     HStack(spacing: 0) {
                         #if !SKIP
-                        DeliveriesThisWeek(deliveries: $deliveryViewModel.deliveries)
+                        DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -42,7 +42,7 @@ struct HomeCarouselView: View {
 
                             .padding(.leading, 25)
                         
-                        DeliveriesLastSix(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                        DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
@@ -65,7 +65,7 @@ struct HomeCarouselView: View {
                             }
                             .padding(.leading, 20)
                         
-                        TotalWeightAndLength(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                        TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
