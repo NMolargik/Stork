@@ -194,6 +194,9 @@
     "Birthing Center" : {
 
     },
+    "Boys: %lld" : {
+
+    },
     "Cancel" : {
 
     },
@@ -308,6 +311,9 @@
 
     },
     "Forgot Your Password?" : {
+
+    },
+    "Girls: %lld" : {
 
     },
     "Height: %@" : {
@@ -462,6 +468,9 @@
 
     },
     "Log In Instead" : {
+
+    },
+    "Losses: %lld" : {
 
     },
     "Map requires iOS 17" : {

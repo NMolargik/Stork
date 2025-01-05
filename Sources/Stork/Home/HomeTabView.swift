@@ -22,9 +22,33 @@ struct HomeTabView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
-                #if !SKIP
-                ParticleView()
-                #endif
+                HStack {
+                    JarView(deliveries: $deliveryViewModel.deliveries)
+                    
+                    Spacer()
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        // Display the current week range
+                        if let weekRange = getCurrentWeekRange() {
+                            Text(weekRange)
+                                .font(.headline)
+                        }
+
+                        // Display boys count
+                        Text("Boys: \(countBabies(of: .male))")
+                            .font(.subheadline)
+
+                        // Display girls count
+                        Text("Girls: \(countBabies(of: .female))")
+                            .font(.subheadline)
+
+                        // Display loss count
+                        Text("Losses: \(countBabies(of: .loss))")
+                            .font(.subheadline)
+                    }
+                    .padding(.horizontal)
+                }
+                .padding() 
                 
                 Spacer()
                 
@@ -39,7 +63,7 @@ struct HomeTabView: View {
                     }
                 })
             }
-            .padding(.bottom, 20)
+
             .navigationTitle("Stork")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -69,6 +93,50 @@ struct HomeTabView: View {
         generator.prepare()
         generator.impactOccurred()
         #endif
+    }
+    
+    private func countBabies(of sex: Sex) -> Int {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start and end of the current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return 0
+        }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+            return 0
+        }
+
+        // Filter deliveries for the current week
+        let weekDeliveries = deliveryViewModel.deliveries.filter { delivery in
+            delivery.date >= weekStart && delivery.date <= weekEnd
+        }
+
+        // Count babies of the specified sex
+        return weekDeliveries.reduce(0) { count, delivery in
+            count + delivery.babies.filter { $0.sex == sex }.count
+        }
+    }
+    
+    private func getCurrentWeekRange() -> String? {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start and end of the current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return nil
+        }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+            return nil
+        }
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d" // Example: "Aug 9"
+
+        let startDate = formatter.string(from: weekStart)
+        let endDate = formatter.string(from: weekEnd)
+
+        return "\(startDate) - \(endDate)"
     }
 }
 
