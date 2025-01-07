@@ -22,7 +22,7 @@ struct ErrorToastView: View {
             .padding()
             .background {
                 Color.primary
-                    .cornerRadius(15)
+                    .cornerRadius(20)
                     .shadow(color: .red, radius: 10)
             }
             .onTapGesture {

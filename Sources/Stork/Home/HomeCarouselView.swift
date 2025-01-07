@@ -31,48 +31,48 @@ struct HomeCarouselView: View {
                     HStack(spacing: 0) {
                         #if !SKIP
                         DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
+                            .padding(5)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
                                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
-                                    .padding(5)
+                                    .cornerRadius(20)
+                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
                             }
 
                             .padding(.leading, 25)
                         
                         DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                            .padding(5)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
                                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
-                                    .padding(5)
+                                    .cornerRadius(20)
+                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
                             }
                             .padding(.leading, 20)
                         #endif
                         
                         BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                            .padding(5)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
                                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
-                                    .padding(5)
+                                    .cornerRadius(20)
+                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
                             }
                             .padding(.leading, 20)
                         
                         TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                            .padding(5)
                             .frame(width: geometry.size.width - 20)
                             .background {
                                 Rectangle()
                                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
-                                    .padding(5)
+                                    .cornerRadius(20)
+                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
                             }
                             .padding(.leading, 20)
                     }

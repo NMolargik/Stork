@@ -52,7 +52,11 @@ struct ProfileAssignmentRowView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color.white.cornerRadius(15).shadow(radius: 5))
+        .background(
+            Color.white
+                .cornerRadius(20)
+                .shadow(radius: 2)
+        )
     }
     
     // MARK: - Action Button

@@ -50,8 +50,8 @@ struct HospitalListView: View {
                     .multilineTextAlignment(.center)
                     .background {
                         Color.white
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
+                            .cornerRadius(20)
+                            .shadow(radius: 2)
                     }
                     .padding()
             }

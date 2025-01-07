@@ -84,8 +84,8 @@ struct EditProfileView: View {
                         .ignoresSafeArea()
                     ProgressView("Saving...")
                         .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
-                        .shadow(radius: 10)
+                        .background(RoundedRectangle(cornerRadius: 20).fill(Color.white))
+                        .shadow(radius: 2)
                 } else {
                     Button("Save") {
                         triggerHaptic()

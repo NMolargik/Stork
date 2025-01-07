@@ -35,8 +35,8 @@ struct MusterCarouselView: View {
                             .background {
                                 Rectangle()
                                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                    .cornerRadius(20)
+                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 2)
                                     .padding(5)
                             }
                             .padding(.leading, 25)
@@ -46,8 +46,8 @@ struct MusterCarouselView: View {
                             .background {
                                 Rectangle()
                                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                    .cornerRadius(20)
+                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 2)
                                     .padding(5)
                             }
                             .padding(.leading, 20)
@@ -61,8 +61,8 @@ struct MusterCarouselView: View {
                         .background {
                             Rectangle()
                                 .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                .cornerRadius(10)
-                                .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                .cornerRadius(20)
+                                .shadow(color: colorScheme == .dark ? .gray : .black, radius: 2)
                                 .padding(5)
                         }
                         .padding(.leading, 20)
@@ -72,8 +72,8 @@ struct MusterCarouselView: View {
                             .background {
                                 Rectangle()
                                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(10)
-                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 5)
+                                    .cornerRadius(20)
+                                    .shadow(color: colorScheme == .dark ? .gray : .black, radius: 2)
                                     .padding(5)
                             }
                             .padding(.leading, 20)

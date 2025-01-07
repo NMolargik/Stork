@@ -24,6 +24,7 @@ struct DeliveriesThisWeekView: View {
     
     /// Aggregated deliveries for the last seven days
     @State private var deliveriesLastSevenDays: [DeliveryGraphData] = []
+    @State private var animatedDeliveries: [DeliveryGraphData] = []
     
     /// Date Formatter for X-Axis Labels
     private let dateFormatter: DateFormatter = {
@@ -49,7 +50,7 @@ struct DeliveriesThisWeekView: View {
                     .padding(.bottom, 10)
                 
                 // MARK: - Line Chart
-                Chart(deliveriesLastSevenDays) { dailyDelivery in
+                Chart(animatedDeliveries) { dailyDelivery in
                     AreaMark(
                         x: .value("Day", dailyDelivery.date, unit: .day),
                         y: .value("Deliveries", dailyDelivery.count)
@@ -97,9 +98,10 @@ struct DeliveriesThisWeekView: View {
             aggregateDeliveries()
         }
     }
+    
     // MARK: - Data Aggregation
     
-    /// Aggregates the number of deliveries per day for the last seven days.
+    /// Aggregates the number of deliveries per day for the last seven days and animates the graph update.
     private func aggregateDeliveries() {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -127,8 +129,14 @@ struct DeliveriesThisWeekView: View {
         }
         
         // Convert the dictionary to an array of DeliveryData, sorted by date
-        deliveriesLastSevenDays = counts.map { DeliveryGraphData(date: $0.key, count: $0.value) }
-                                         .sorted { $0.date < $1.date }
+        let updatedData = counts.map { DeliveryGraphData(date: $0.key, count: $0.value) }
+                                .sorted { $0.date < $1.date }
+        
+        // Update the state variables with animation
+        withAnimation(.easeInOut(duration: 1.0)) {
+            deliveriesLastSevenDays = updatedData
+            animatedDeliveries = updatedData
+        }
     }
 }
 

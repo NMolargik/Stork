@@ -49,11 +49,11 @@ struct CustomTextfieldView: View {
             .background {
                 if (colorScheme == .dark) {
                     Color.black
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .shadow(color: .gray, radius: 2)
                 } else {
                     Color.white
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .shadow(radius: 2)
                 }
             }

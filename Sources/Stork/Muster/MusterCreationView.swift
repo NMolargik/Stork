@@ -73,8 +73,8 @@ struct MusterCreationView: View {
                         .padding()
                         .background {
                             Color.white
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
+                                .cornerRadius(20)
+                                .shadow(radius: 2)
                         }
 
                         Spacer()
@@ -86,8 +86,8 @@ struct MusterCreationView: View {
                             .fontWeight(.semibold)
                             .background {
                                 Color.white
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
+                                    .cornerRadius(20)
+                                    .shadow(radius: 2)
                             }
 
                         Spacer()

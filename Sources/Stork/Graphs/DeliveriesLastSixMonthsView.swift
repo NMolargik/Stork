@@ -24,13 +24,11 @@ struct DeliveryGraphMonthData: Identifiable {
 struct DeliveriesLastSixMonthsView: View {
     // MARK: - Properties
     
-    /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
     @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
     
-    /// Processed data ready for plotting, containing the last six months.
     @State private var deliveriesLastSix: [DeliveryGraphMonthData] = []
+    @State private var animatedDeliveries: [DeliveryGraphMonthData] = []
     
-    /// DateFormatter to parse the month-year keys in `groupedDeliveries`.
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM ''yy"
@@ -56,13 +54,19 @@ struct DeliveriesLastSixMonthsView: View {
                     .padding(.bottom, 10)
                 
                 // MARK: - Line Chart
-                Chart(deliveriesLastSix) { monthlyData in
+                Chart(animatedDeliveries) { monthlyData in
                     AreaMark(
                         x: .value("Month", monthlyData.date, unit: .month),
                         y: .value("Deliveries", monthlyData.count)
                     )
                     .interpolationMethod(.linear)
-                    .foregroundStyle(LinearGradient(colors: [Color.indigo, .clear], startPoint: .top, endPoint: .bottom))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.indigo, .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                     
                     LineMark(
                         x: .value("Month", monthlyData.date, unit: .month),
@@ -106,8 +110,6 @@ struct DeliveriesLastSixMonthsView: View {
     }
     
     // MARK: - Data Aggregation
-    
-    /// Aggregates the number of deliveries per month for the last six months.
     private func aggregateMonthlyDeliveries() {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -147,6 +149,11 @@ struct DeliveriesLastSixMonthsView: View {
         
         // Assign to the state variable.
         self.deliveriesLastSix = tempAggregatedData
+        
+        // Animate the data
+        withAnimation(.easeInOut(duration: 1.5)) {
+            self.animatedDeliveries = tempAggregatedData
+        }
     }
 }
 

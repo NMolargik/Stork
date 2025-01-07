@@ -9,6 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HomeTabView: View {
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
@@ -23,45 +24,109 @@ struct HomeTabView: View {
         NavigationStack(path: $navigationPath) {
             VStack {
                 HStack {
-                    JarView(deliveries: $deliveryViewModel.deliveries)
+                    ZStack {
+                        JarView(
+                            deliveries: Binding<[Delivery]>.constant(deliveriesForCurrentWeek()),
+                            headerText: getCurrentWeekRange() ?? ""
+                        )
+                        .frame(width: 180)
+
+                        VStack {
+                            if let weekRange = getCurrentWeekRange() {
+                                Text(weekRange)
+                                    .padding(8)
+                                    .foregroundStyle(.gray)
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                    .background {
+                                        Rectangle()
+                                            .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                            .cornerRadius(20)
+                                            .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+                                    }
+                                    .padding(.top, 20)
+                            }
+                            
+                            Spacer()
+                        }
+                    }
                     
                     Spacer()
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        // Display the current week range
-                        if let weekRange = getCurrentWeekRange() {
-                            Text(weekRange)
-                                .font(.headline)
+                    
+                    VStack {
+                        VStack {
+                            Text("Your Jar")
+                            
+                            Divider()
+                                .padding(.horizontal)
+                            
+                            HStack {
+                                Text("\(countBabies(of: .male))")
+                                
+                                Text("Boy\(countBabies(of: .male) == 1 ? "" : "s")")
+                                    .frame(width: 100)
+                            }
+                            
+                            HStack {
+                                Text("\(countBabies(of: .female))")
+                                
+                                Text("Girl\(countBabies(of: .female) == 1 ? "" : "s")")
+                                    .frame(width: 100)
+                            }
+                            
+                            HStack {
+                                Text("\(countBabies(of: .loss))")
+                                
+                                Text("Loss\(countBabies(of: .loss) == 1 ? "" : "es")")
+                                    .frame(width: 100)
+                            }
                         }
+                        .padding(.vertical)
+                        .frame(maxWidth: .infinity)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.gray.opacity(0.5))
+                        .background {
+                            Rectangle()
+                                .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                .cornerRadius(20)
+                                .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            withAnimation {
+                                triggerHaptic()
+                                deliveryViewModel.startNewDelivery()
 
-                        // Display boys count
-                        Text("Boys: \(countBabies(of: .male))")
-                            .font(.subheadline)
-
-                        // Display girls count
-                        Text("Girls: \(countBabies(of: .female))")
-                            .font(.subheadline)
-
-                        // Display loss count
-                        Text("Losses: \(countBabies(of: .loss))")
-                            .font(.subheadline)
+                                showingDeliveryAddition = true
+                                selectedTab = .deliveries
+                            }
+                        }, label: {
+                            Image(systemName: "plus")
+                                .foregroundStyle(.white)
+                                .fontWeight(.bold)
+                                .padding(.vertical, 20)
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Rectangle()
+                                        .cornerRadius(20)
+                                        .foregroundStyle(.indigo)
+                                        .shadow(radius: 2)
+                                }
+                        })
                     }
-                    .padding(.horizontal)
+                    .padding(.leading, 8)
                 }
-                .padding() 
+                .padding()
+                .frame(height: 320)
+
+                HomeCarouselView()
+                    .padding(.top, 25)
                 
                 Spacer()
                 
-                HomeCarouselView()
-
-                CustomButtonView(text: "Start A New Delivery", width: 250, height: 50, color: Color.indigo, isEnabled: true, onTapAction: {
-                    withAnimation {
-                        deliveryViewModel.startNewDelivery()
-
-                        showingDeliveryAddition = true
-                        selectedTab = .deliveries
-                    }
-                })
             }
 
             .navigationTitle("Stork")
@@ -78,13 +143,12 @@ struct HomeTabView: View {
                     })
                 }
             }
-            .sheet(isPresented: $showProfileView, content: {
-                ProfileView()
-                    .interactiveDismissDisabled()
-                    .presentationDetents(profileViewModel.editingProfile ? [.fraction(0.75)] : [.fraction(0.3)])
-            })
         }
-        .frame(maxWidth: .infinity)
+        .sheet(isPresented: $showProfileView, content: {
+            ProfileView()
+                .interactiveDismissDisabled()
+                .presentationDetents(profileViewModel.editingProfile ? [.fraction(0.75)] : [.fraction(0.3)])
+        })
     }
     
     private func triggerHaptic() {
@@ -137,6 +201,24 @@ struct HomeTabView: View {
         let endDate = formatter.string(from: weekEnd)
 
         return "\(startDate) - \(endDate)"
+    }
+    
+    private func deliveriesForCurrentWeek() -> [Delivery] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start and end of the current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return []
+        }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+            return []
+        }
+
+        // Filter deliveries within the week range
+        return deliveryViewModel.deliveries.filter { delivery in
+            delivery.date >= weekStart && delivery.date <= weekEnd
+        }
     }
 }
 

@@ -31,42 +31,46 @@ struct MusterSplashView: View {
             }
             .frame(maxWidth: .infinity)
 
+            if (musterViewModel.isWorking) {
+                ProgressView()
+            } else {
                 
-            Section {
-                VStack {
-                    Text("Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors.")
-                        .multilineTextAlignment(.center)
-                        .font(.body)
-                        .padding(.bottom, 25)
-                    
-                    CustomButtonView(text: "Create New Muster", width: 300, height: 50, color: Color.indigo, icon: nil, isEnabled: true, onTapAction: {
-                        musterViewModel.showCreateMusterSheet = true
-                    })
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-            }
-            .toolbar {
-                ToolbarItem {
-                    Button(action: {
-                        triggerHaptic()
+                Section {
+                    VStack {
+                        Text("Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors.")
+                            .multilineTextAlignment(.center)
+                            .font(.body)
+                            .padding(.bottom, 25)
                         
-                        Task {
-                            do {
-                                try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
-                                musterViewModel.showMusterInvitations = true
-                            } catch {
-                                errorMessage = error.localizedDescription
-                                throw error
-                            }
-                        }
-                    }, label: {
-                        Text("Invitations")
-                            .fontWeight(.bold)
-                            .foregroundStyle(.orange)
-
-                    })
+                        CustomButtonView(text: "Create New Muster", width: 300, height: 50, color: Color.indigo, icon: nil, isEnabled: true, onTapAction: {
+                            musterViewModel.showCreateMusterSheet = true
+                        })
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
                 }
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                Button(action: {
+                    triggerHaptic()
+                    
+                    Task {
+                        do {
+                            try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
+                            musterViewModel.showMusterInvitations = true
+                        } catch {
+                            errorMessage = error.localizedDescription
+                            throw error
+                        }
+                    }
+                }, label: {
+                    Text("Invitations")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.orange)
+
+                })
             }
         }
         .sheet(isPresented: $musterViewModel.showMusterInvitations) {

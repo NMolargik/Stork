@@ -67,7 +67,7 @@ struct DeliveryAdditionView: View {
                         .padding()
                         .fontWeight(.bold)
                         .background(
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 20)
                                 .fill(Color.orange.opacity(0.2))
                         )
                         .tint(.green)
@@ -78,7 +78,7 @@ struct DeliveryAdditionView: View {
                             .padding()
                             .fontWeight(.bold)
                             .background(
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: 20)
                                     .fill(Color.orange.opacity(0.2))
                             )
                             .tint(.green)
@@ -104,7 +104,7 @@ struct DeliveryAdditionView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 20)
                             .fill(Color.orange.opacity(0.2))
                     )
                     
@@ -129,7 +129,7 @@ struct DeliveryAdditionView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 20)
                             .fill(Color.orange.opacity(0.2))
                     )
                     

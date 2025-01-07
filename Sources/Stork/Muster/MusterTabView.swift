@@ -39,7 +39,7 @@ struct MusterTabView: View {
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 8)
                                 .background(Color.gray.opacity(0.2))
-                                .cornerRadius(8)
+                                .cornerRadius(20)
                             }
                         }
                         .padding(.horizontal)

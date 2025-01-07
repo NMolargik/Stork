@@ -22,7 +22,7 @@ struct DeliveryRowView: View {
                     .background {
                         Rectangle()
                             .foregroundStyle(.white)
-                            .cornerRadius(5)
+                            .cornerRadius(20)
                             .opacity(0.8)
                     }
                 
@@ -50,8 +50,8 @@ struct DeliveryRowView: View {
                         .foregroundStyle(.white)
                         .opacity(0.1)
                 }
-                .cornerRadius(8)
-                .shadow(radius: 5)
+                .cornerRadius(20)
+                .shadow(radius: 2)
         }
     }
     

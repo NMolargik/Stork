@@ -21,12 +21,9 @@ struct BabySexDistributionData: Identifiable {
 /// A SwiftUI view that displays the distribution of baby sexes in a pie chart.
 struct BabySexDistributionView: View {
     // MARK: - Properties
-    
-    /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
     @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
-    
-    /// Aggregated counts of each baby sex category.
     @State private var distributionData: [BabySexDistributionData] = []
+    @State private var sliceAngles: [Double] = [] // Store the end angles of slices for animation
     
     // MARK: - Body
     var body: some View {
@@ -34,7 +31,6 @@ struct BabySexDistributionView: View {
             Spacer()
             
             HStack {
-                // MARK: - Totals Display
                 VStack(alignment: .leading, spacing: 10) {
                     Text("6 Month Sex Distribution")
                         .fontWeight(.bold)
@@ -60,7 +56,6 @@ struct BabySexDistributionView: View {
                 }
                 .padding()
                 
-                // MARK: - Pie Chart
                 GeometryReader { geometry in
                     ZStack {
                         if distributionData.isEmpty {
@@ -69,8 +64,8 @@ struct BabySexDistributionView: View {
                                 .frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.9)
                         } else {
                             ForEach(0..<distributionData.count, id: \.self) { index in
-                                let startAngle = angle(at: index, in: distributionData)
-                                let endAngle = angle(at: index + 1, in: distributionData)
+                                let startAngle = index == 0 ? 0.0 : sliceAngles[index - 1]
+                                let endAngle = sliceAngles[index]
                                 
                                 Path { path in
                                     let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
@@ -95,7 +90,6 @@ struct BabySexDistributionView: View {
                 .scaleEffect(0.9)
                 .padding()
                 .frame(width: 200)
-                
             }
             .onAppear {
                 aggregateBabySexData()
@@ -109,21 +103,11 @@ struct BabySexDistributionView: View {
     }
     
     // MARK: - Helper Methods
-    
-    /// Calculates the cumulative angle for a given index based on the data.
-    private func angle(at index: Int, in data: [BabySexDistributionData]) -> Double {
-        let total = data.map { $0.count }.reduce(0, +)
-        let cumulative = data.prefix(index).map { $0.count }.reduce(0, +)
-        return (Double(cumulative) / Double(total)) * 360.0
-    }
-    
-    /// Aggregates baby sex data from the last six months of deliveries.
     private func aggregateBabySexData() {
         var maleCount = 0
         var femaleCount = 0
         var lossCount = 0
         
-        // Tally up baby sexes from the deliveries.
         for (_, deliveries) in groupedDeliveries {
             for delivery in deliveries {
                 for baby in delivery.babies {
@@ -139,12 +123,26 @@ struct BabySexDistributionView: View {
             }
         }
         
-        // Update the state with the aggregated data.
-        distributionData = [
+        let newData = [
             BabySexDistributionData(category: "Male", count: maleCount, color: .blue),
             BabySexDistributionData(category: "Female", count: femaleCount, color: .pink),
             BabySexDistributionData(category: "Loss", count: lossCount, color: .purple)
         ].filter { $0.count > 0 }
+        
+        withAnimation(.easeInOut(duration: 1.0)) {
+            distributionData = newData
+            updateSliceAngles()
+        }
+    }
+    
+    private func updateSliceAngles() {
+        let total = distributionData.map { $0.count }.reduce(0, +)
+        var cumulativeAngle: Double = 0
+        sliceAngles = distributionData.map { data in
+            let angle = cumulativeAngle + (Double(data.count) / Double(total)) * 360.0
+            defer { cumulativeAngle = angle }
+            return angle
+        }
     }
 }
 

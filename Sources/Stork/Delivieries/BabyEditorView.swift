@@ -106,7 +106,7 @@ struct BabyEditorView: View {
                 .frame(maxWidth: .infinity)
                 .background {
                     Rectangle()
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .foregroundStyle(Color.white.opacity(0.8))
                 }
                 .padding(.horizontal)
@@ -191,7 +191,7 @@ struct BabyEditorView: View {
                 .padding()
                 .background {
                     Rectangle()
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .foregroundStyle(Color.white.opacity(0.8))
                 }
                 
@@ -239,7 +239,7 @@ struct BabyEditorView: View {
                 .padding()
                 .background {
                     Rectangle()
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .foregroundStyle(Color.white.opacity(0.8))
                 }
                 
@@ -284,7 +284,7 @@ struct BabyEditorView: View {
                 .padding()
                 .background {
                     Rectangle()
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .foregroundStyle(Color.white.opacity(0.8))
                 }
             }
@@ -297,7 +297,7 @@ struct BabyEditorView: View {
                 .padding()
                 .background {
                     Rectangle()
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .foregroundStyle(Color.white.opacity(0.8))
                 }
         }
@@ -308,8 +308,8 @@ struct BabyEditorView: View {
                 baby.sex.color.opacity(0.4)
             }
         )
-        .cornerRadius(10)
-        .shadow(radius: 3)
+        .cornerRadius(20)
+        .shadow(radius: 2)
     }
     
     // MARK: - Header (Trash Button)

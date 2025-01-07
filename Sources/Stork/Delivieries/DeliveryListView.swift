@@ -96,7 +96,7 @@ struct DeliveryListView: View {
             .background {
                 Rectangle()
                     .foregroundStyle(colorScheme == .dark ? .black : .white)
-                    .cornerRadius(10)
+                    .cornerRadius(20)
                     .shadow(radius: 2)
             }
         }

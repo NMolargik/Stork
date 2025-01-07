@@ -39,8 +39,8 @@ struct HospitalDetailView: View {
                             .background {
                                 Rectangle()
                                     .foregroundStyle(.black)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
+                                    .cornerRadius(20)
+                                    .shadow(radius: 2)
                                     .opacity(0.9)
                             }
                         
@@ -60,8 +60,8 @@ struct HospitalDetailView: View {
                                 .background {
                                     Rectangle()
                                         .foregroundStyle(.black)
-                                        .cornerRadius(10)
-                                        .shadow(radius: 5)
+                                        .cornerRadius(20)
+                                        .shadow(radius: 2)
                                         .opacity(0.9)
                                 }
                         })
@@ -144,9 +144,9 @@ struct HospitalDetailView: View {
             .padding()
             .background {
                 Rectangle()
-                    .cornerRadius(10)
+                    .cornerRadius(20)
                     .foregroundStyle(.white)
-                    .shadow(radius: 5)
+                    .shadow(radius: 2)
                     .opacity(0.9)
             }
             .padding(.horizontal)
@@ -166,9 +166,9 @@ struct HospitalDetailView: View {
             .padding()
             .background {
                 Rectangle()
-                    .cornerRadius(10)
+                    .cornerRadius(20)
                     .foregroundStyle(.white)
-                    .shadow(radius: 5)
+                    .shadow(radius: 2)
                     .opacity(0.9)
             }
             .padding(.horizontal)
@@ -200,9 +200,9 @@ struct HospitalDetailView: View {
             .padding()
             .background {
                 Rectangle()
-                    .cornerRadius(10)
+                    .cornerRadius(20)
                     .foregroundStyle(.white)
-                    .shadow(radius: 5)
+                    .shadow(radius: 2)
                     .opacity(0.9)
             }
             .padding(.horizontal)

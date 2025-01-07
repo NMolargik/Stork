@@ -9,9 +9,13 @@ import SwiftUI
 import StorkModel
 
 struct JarView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     /// The deliveries coming in from elsewhere in the app
     @Binding var deliveries: [Delivery]
     
+    var headerText: String
+
     // Marble simulation states
     @State private var marbles: [Marble] = []
     @State private var gravity: CGFloat = 1.0          // Slightly increased gravity for stronger settling
@@ -39,79 +43,74 @@ struct JarView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // The marbles
+                Rectangle()
+                    .foregroundColor(colorScheme == .dark ? .black : .white)
+                    .cornerRadius(20)
+                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+                
+                VStack {
+                    Text(headerText)
+                        .padding(8)
+                        .foregroundStyle(.gray)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .background {
+                            Rectangle()
+                                .foregroundStyle(Color.white)
+                                .cornerRadius(20)
+                                .shadow(radius: 2)
+                        }
+                        .padding(.top, 20)
+                    
+                    Spacer()
+                }
+                
                 ForEach(marbles) { marble in
                     Circle()
-                        // Radial gradient for 3D effect
                         .fill(
                             RadialGradient(
                                 gradient: Gradient(
                                     colors: [
-                                        marble.color.opacity(0.6),  // Near the center
-                                        marble.color               // Toward the edges
+                                        marble.color.opacity(0.6),
+                                        marble.color
                                     ]
                                 ),
-                                center: .init(x: 0.35, y: 0.35),  // Shift to simulate light source
+                                center: .init(x: 0.35, y: 0.35),
                                 startRadius: 5,
                                 endRadius: marble.diameter / 2
                             )
                         )
-                        // Subtle shadow
                         .shadow(color: Color.black.opacity(0.3), radius: 3, x: 2, y: 2)
-
-                        // Optional: Add border for visual debugging
-                        //.overlay(
-                        //    Circle()
-                        //        .stroke(Color.red, lineWidth: 1)
-                        //        .allowsHitTesting(false)
-                        //)
-                        // Size & position
                         .frame(width: marble.diameter, height: marble.diameter)
                         .position(marble.position)
                 }
-                
-                // The "glass" rectangle
-                Rectangle()
-                    .strokeBorder(Color.white.opacity(0.5), lineWidth: 20)
-                    .shadow(radius: 10, x: 0, y: 5)
-                    .cornerRadius(20)
-                
             }
             .onAppear {
-                // When the view appears, start adding any pending marbles
                 addPendingMarblesSequentially()
             }
             .onChange(of: deliveries) { newValue in
-                // If deliveries change, figure out if there are new babies for this month
                 let monthDeliveries = deliveriesForCurrentMonth(newValue)
-                
-                // For each baby, if we haven't displayed it yet and max count not reached, create a marble
+
                 for delivery in monthDeliveries {
                     for baby in delivery.babies {
                         if !displayedBabyIDs.contains(baby.id) && marbles.count + pendingMarbles.count < maxMarbleCount {
-                            // Create a marble for this baby and add to pending
                             let newMarble = createMarble(
                                 in: geometry.size,
                                 color: baby.sex.color
                             )
                             
-                            // Mark as displayed so we don't duplicate
                             displayedBabyIDs.insert(baby.id)
-                            
-                            // Buffer these marbles
                             pendingMarbles.append(newMarble)
                         }
                     }
                 }
                 
-                // Start adding marbles if not already doing so
                 addPendingMarblesSequentially()
             }
             .onReceive(timer) { _ in
                 updateMarbles(in: geometry.size)
             }
         }
-        .frame(width: 200, height: 300)
     }
     
     // MARK: - Marble Addition Logic
@@ -382,7 +381,7 @@ struct JarView_Previews: PreviewProvider {
     static var previews: some View {
         // Example usage: Pass in an @State for deliveries
         StatefulPreviewWrapper(Delivery.sampleDeliveries()) { $deliveries in
-            JarView(deliveries: $deliveries)
+            JarView(deliveries: $deliveries, headerText: "Test Jar")
         }
     }
 }

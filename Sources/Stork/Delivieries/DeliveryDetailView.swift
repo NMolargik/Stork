@@ -46,9 +46,9 @@ struct DeliveryDetailView: View {
                     }
                     .padding()
                     .background(
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 20)
                             .fill(Color.white)
-                            .shadow(radius: 5)
+                            .shadow(radius: 2)
                             .opacity(0.9)
                     )
                     .padding(.horizontal)
@@ -106,9 +106,9 @@ struct DeliveryDetailView: View {
                     }
                     .padding()
                     .background(
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 20)
                             .fill(Color.white)
-                            .shadow(radius: 5)
+                            .shadow(radius: 2)
                             .opacity(0.9)
                     )
                     .padding(.horizontal)
@@ -165,9 +165,9 @@ struct DeliveryDetailView: View {
                         }
                         .padding()
                         .background(
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 20)
                                 .fill(Color.white)
-                                .shadow(radius: 5)
+                                .shadow(radius: 2)
                                 .opacity(0.9)
                         )
                         .padding(.horizontal)

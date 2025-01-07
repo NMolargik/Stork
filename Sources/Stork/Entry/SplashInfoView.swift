@@ -22,7 +22,7 @@ struct SplashInfoView: View {
         }
         .padding()
         .frame(width: 300)
-        .cornerRadius(15)
+        .cornerRadius(20)
     }
 }
 

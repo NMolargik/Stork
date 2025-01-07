@@ -38,8 +38,8 @@ struct CustomButtonView: View {
             .frame(width: width - 5, height: height - 5)
             .background {
                 (isEnabled ? color : Color.gray)
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
+                    .cornerRadius(20)
+                    .shadow(radius: 2)
             }
         })
         .disabled(!isEnabled)
