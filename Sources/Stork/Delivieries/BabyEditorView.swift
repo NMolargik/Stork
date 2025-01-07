@@ -62,233 +62,17 @@ struct BabyEditorView: View {
             
             // MARK: - Weight
             if useMetric {
-                // -----------------------------------------------------------
-                // CUSTOM STEPPER: Metric Weight (kg) in 0.1 increments
-                // -----------------------------------------------------------
-                HStack(spacing: 20) {
-                    
-                    // Minus Button
-                    Button {
-                        triggerHaptic()
-                        let newKg = weightInKg - 0.1
-                        if newKg >= minWeightInKg {
-                            weightInOunces = newKg / ounceToKg
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-
-                    }
-                    
-                    // Display
-                    Text("\(String(format: "%.2f", weightInKg)) kg")
-                        .frame(minWidth: 70)
-                        .font(.title3)
-                        .foregroundStyle(Color.black)
-                        .fontWeight(.semibold)
-                    
-                    // Plus Button
-                    Button {
-                        triggerHaptic()
-                        let newKg = weightInKg + 0.1
-                        if newKg <= maxWeightInKg {
-                            weightInOunces = newKg / ounceToKg
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-
-                    }
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background {
-                    Rectangle()
-                        .cornerRadius(20)
-                        .foregroundStyle(Color.white.opacity(0.8))
-                }
-                .padding(.horizontal)
-                
+                metricWeightStepper
             } else {
-                // -----------------------------------------------------------
-                // CUSTOM STEPPERS: Imperial Weight (lbs + oz)
-                // -----------------------------------------------------------
-                HStack(spacing: 2) {
-                    Button {
-                        triggerHaptic()
-                        let newPounds = pounds - 1
-                        // Convert that to total ounces
-                        let total = Double(newPounds * 16 + ounces)
-                        // Check bounds
-                        if newPounds >= 0, total >= minWeightInOunces {
-                            weightInOunces = total
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                    
-                    Text("\(pounds) lbs")
-                        .frame(minWidth: 60)
-                        .font(.title3)
-                        .foregroundStyle(Color.black)
-                        .fontWeight(.semibold)
-
-                    
-                    Button {
-                        triggerHaptic()
-                        let newPounds = pounds + 1
-                        let total = Double(newPounds * 16 + ounces)
-                        if total <= maxWeightInOunces {
-                            weightInOunces = total
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                    
-                    Spacer()
-                    
-                // --- Ounces Stepper ---
-                    Button {
-                        triggerHaptic()
-                        let newOunces = ounces - 1
-                        let total = Double(pounds * 16 + newOunces)
-                        if newOunces >= 0, total >= minWeightInOunces {
-                            weightInOunces = total
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                    
-                    Text("\(ounces) oz")
-                        .frame(minWidth: 50)
-                        .font(.title3)
-                        .foregroundStyle(Color.black)
-                        .fontWeight(.semibold)
-                    
-                    Button {
-                        triggerHaptic()
-                        let newOunces = ounces + 1
-                        let total = Double(pounds * 16 + newOunces)
-                        // Don’t exceed 15 oz (since 16 oz = 1 lb)
-                        if newOunces <= 15, total <= maxWeightInOunces {
-                            weightInOunces = total
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background {
-                    Rectangle()
-                        .cornerRadius(20)
-                        .foregroundStyle(Color.white.opacity(0.8))
-                }
-                
+                imperialWeightStepper
             }
             
             // MARK: - Length
             if useMetric {
-                // -----------------------------------------------------------
-                // CUSTOM STEPPER: Metric Length (cm)
-                // -----------------------------------------------------------
-                HStack(spacing: 20) {
-                    // Minus
-                    Button {
-                        triggerHaptic()
-                        let newCm = lengthInCm - 0.1
-                        if newCm >= minLengthInCm {
-                            lengthInInches = newCm / cmPerInch
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                    
-                    Text("\(String(format: "%.1f", lengthInCm)) cm")
-                        .frame(minWidth: 70)
-                        .font(.title3)
-                        .foregroundStyle(Color.black)
-                        .fontWeight(.semibold)
-                    
-                    // Plus
-                    Button {
-                        triggerHaptic()
-                        let newCm = lengthInCm + 0.1
-                        if newCm <= maxLengthInCm {
-                            lengthInInches = newCm / cmPerInch
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background {
-                    Rectangle()
-                        .cornerRadius(20)
-                        .foregroundStyle(Color.white.opacity(0.8))
-                }
-                
+                metricLengthStepper
             } else {
-                // -----------------------------------------------------------
-                // CUSTOM STEPPER: Imperial Length (inches)
-                // -----------------------------------------------------------
-                HStack(spacing: 10) {
-                    // Minus
-                    Button {
-                        triggerHaptic()
-                        let newValue = lengthInInches - 0.1
-                        if newValue >= minLengthInInches {
-                            lengthInInches = newValue
-                        }
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                    
-                    Text("\(String(format: "%.1f", lengthInInches)) in")
-                        .frame(minWidth: 70)
-                        .font(.title3)
-                        .foregroundStyle(Color.black)
-                        .fontWeight(.semibold)
-                    
-                    // Plus
-                    Button {
-                        triggerHaptic()
-                        let newValue = lengthInInches + 0.1
-                        if newValue <= maxLengthInInches {
-                            lengthInInches = newValue
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background {
-                    Rectangle()
-                        .cornerRadius(20)
-                        .foregroundStyle(Color.white.opacity(0.8))
-                }
+                imperialLengthStepper
             }
-            
             
             Toggle("Nurse Catch", isOn: $baby.nurseCatch)
                 .fontWeight(.bold)
@@ -310,6 +94,219 @@ struct BabyEditorView: View {
         )
         .cornerRadius(20)
         .shadow(radius: 2)
+        .onAppear {
+            weightInOunces = baby.weight
+            lengthInInches = baby.height
+        }
+        .onChange(of: weightInOunces) { newValue in
+            baby.weight = newValue
+        }
+        .onChange(of: lengthInInches) { newValue in
+            baby.height = newValue
+        }
+    }
+    
+    // MARK: - Steppers
+
+    private var metricWeightStepper: some View {
+        HStack(spacing: 20) {
+            Button {
+                triggerHaptic()
+                let newKg = weightInKg - 0.1
+                if newKg >= minWeightInKg {
+                    weightInOunces = newKg / ounceToKg
+                }
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+            
+            Text("\(String(format: "%.2f", weightInKg)) kg")
+                .frame(minWidth: 70)
+                .font(.title3)
+                .foregroundStyle(Color.black)
+                .fontWeight(.semibold)
+            
+            Button {
+                triggerHaptic()
+                let newKg = weightInKg + 0.1
+                if newKg <= maxWeightInKg {
+                    weightInOunces = newKg / ounceToKg
+                }
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background {
+            Rectangle()
+                .cornerRadius(20)
+                .foregroundStyle(Color.white.opacity(0.8))
+        }
+        .padding(.horizontal)
+    }
+
+    private var imperialWeightStepper: some View {
+        HStack(spacing: 2) {
+            Button {
+                triggerHaptic()
+                let newPounds = pounds - 1
+                let total = Double(newPounds * 16 + ounces)
+                if newPounds >= 0, total >= minWeightInOunces {
+                    weightInOunces = total
+                }
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+            
+            Text("\(pounds) lbs")
+                .frame(minWidth: 60)
+                .font(.title3)
+                .foregroundStyle(Color.black)
+                .fontWeight(.semibold)
+            
+            Button {
+                triggerHaptic()
+                let newPounds = pounds + 1
+                let total = Double(newPounds * 16 + ounces)
+                if total <= maxWeightInOunces {
+                    weightInOunces = total
+                }
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+            
+            Spacer()
+            
+            Button {
+                triggerHaptic()
+                let newOunces = ounces - 1
+                let total = Double(pounds * 16 + newOunces)
+                if newOunces >= 0, total >= minWeightInOunces {
+                    weightInOunces = total
+                }
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+            
+            Text("\(ounces) oz")
+                .frame(minWidth: 50)
+                .font(.title3)
+                .foregroundStyle(Color.black)
+                .fontWeight(.semibold)
+            
+            Button {
+                triggerHaptic()
+                let newOunces = ounces + 1
+                let total = Double(pounds * 16 + newOunces)
+                if newOunces <= 15, total <= maxWeightInOunces {
+                    weightInOunces = total
+                }
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background {
+            Rectangle()
+                .cornerRadius(20)
+                .foregroundStyle(Color.white.opacity(0.8))
+        }
+    }
+
+    private var metricLengthStepper: some View {
+        HStack(spacing: 20) {
+            Button {
+                triggerHaptic()
+                let newCm = lengthInCm - 0.1
+                if newCm >= minLengthInCm {
+                    lengthInInches = newCm / cmPerInch
+                }
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+            
+            Text("\(String(format: "%.1f", lengthInCm)) cm")
+                .frame(minWidth: 70)
+                .font(.title3)
+                .foregroundStyle(Color.black)
+                .fontWeight(.semibold)
+            
+            Button {
+                triggerHaptic()
+                let newCm = lengthInCm + 0.1
+                if newCm <= maxLengthInCm {
+                    lengthInInches = newCm / cmPerInch
+                }
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background {
+            Rectangle()
+                .cornerRadius(20)
+                .foregroundStyle(Color.white.opacity(0.8))
+        }
+    }
+
+    private var imperialLengthStepper: some View {
+        HStack(spacing: 10) {
+            Button {
+                triggerHaptic()
+                let newValue = lengthInInches - 0.1
+                if newValue >= minLengthInInches {
+                    lengthInInches = newValue
+                }
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+            
+            Text("\(String(format: "%.1f", lengthInInches)) in")
+                .frame(minWidth: 70)
+                .font(.title3)
+                .foregroundStyle(Color.black)
+                .fontWeight(.semibold)
+            
+            Button {
+                triggerHaptic()
+                let newValue = lengthInInches + 0.1
+                if newValue <= maxLengthInInches {
+                    lengthInInches = newValue
+                }
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(Color.black)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background {
+            Rectangle()
+                .cornerRadius(20)
+                .foregroundStyle(Color.white.opacity(0.8))
+        }
     }
     
     // MARK: - Header (Trash Button)
@@ -319,7 +316,6 @@ struct BabyEditorView: View {
                 .font(.title2)
                 .foregroundStyle(colorScheme == .dark ? .black : .white)
                 .fontWeight(.bold)
-            
             
             Spacer()
             
@@ -351,42 +347,20 @@ struct BabyEditorView: View {
     
     // MARK: - Computed Properties
     
-    /// Current weight in kg (derived from ounces)
     private var weightInKg: Double {
         weightInOunces * ounceToKg
     }
     
-    /// Extract pounds from total ounces (integer division)
     private var pounds: Int {
         Int(weightInOunces) / 16
     }
     
-    /// Extract remainder ounces from total ounces
     private var ounces: Int {
         Int(weightInOunces) % 16
     }
     
-    /// Display text for weight
-    private var weightText: String {
-        if useMetric {
-            return "\(String(format: "%.2f", weightInKg)) kg"
-        } else {
-            return "\(pounds) lbs \(ounces) oz"
-        }
-    }
-    
-    /// Computed length in cm (derived from inches)
     private var lengthInCm: Double {
         lengthInInches * cmPerInch
-    }
-    
-    /// Display text for length
-    private var displayedLength: String {
-        if useMetric {
-            return "\(String(format: "%.1f", lengthInCm)) cm"
-        } else {
-            return "\(String(format: "%.1f", lengthInInches)) inches"
-        }
     }
 }
 

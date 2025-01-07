@@ -247,6 +247,9 @@
         }
       }
     },
+    "Dark Mode" : {
+
+    },
     "Day" : {
 
     },
@@ -549,9 +552,6 @@
     "Nurse Catch" : {
 
     },
-    "Options" : {
-
-    },
     "Other View: %@" : {
 
     },
@@ -589,6 +589,9 @@
           }
         }
       }
+    },
+    "Preferences" : {
+
     },
     "Profile" : {
 

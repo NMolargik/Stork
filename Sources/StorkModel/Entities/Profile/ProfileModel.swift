@@ -41,10 +41,8 @@ public struct Profile: Identifiable, Codable, Hashable {
     /// Predefined date formatter for standardizing date formats.
     public static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        #if !SKIP
         formatter.dateFormat = "MM/dd/yyyy"
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        #endif
         return formatter
     }()
     
@@ -67,7 +65,8 @@ public struct Profile: Identifiable, Codable, Hashable {
             let role = ProfileRole(rawValue: roleString),
             let birthday = formatter.date(from: birthdayString)
         else {
-            print("Missing or invalid required fields")
+            print("Profile initialization failed due to missing or invalid required fields.")
+            print("Received dictionary: \(dictionary)")
             return nil
         }
         
@@ -75,6 +74,7 @@ public struct Profile: Identifiable, Codable, Hashable {
         let primaryHospitalId = dictionary["primaryHospitalId"] as? String ?? ""
         let musterId = dictionary["musterId"] as? String ?? ""
         
+        // Assign all values.
         self.id = id
         self.primaryHospitalId = primaryHospitalId
         self.musterId = musterId

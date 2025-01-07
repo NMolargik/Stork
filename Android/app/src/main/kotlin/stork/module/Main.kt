@@ -20,7 +20,6 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 
 internal val logger: SkipLogger = SkipLogger(subsystem = "stork.module", category = "Stork")
-internal val notificationsDelegate = NotificationDelegate() // Defined in FireSideApp.swift
 
 /// AndroidAppMain is the `android.app.Application` entry point, and must match `application android:name` in the AndroidMainfest.xml file.
 open class AndroidAppMain: Application {
@@ -33,8 +32,6 @@ open class AndroidAppMain: Application {
         ProcessInfo.launch(applicationContext)
         
         FirebaseApp.configure()
-        UNUserNotificationCenter.current().delegate = notificationsDelegate
-        Messaging.messaging().delegate = notificationsDelegate
     }
 
     companion object {

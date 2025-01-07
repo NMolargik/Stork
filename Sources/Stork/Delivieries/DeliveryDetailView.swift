@@ -24,6 +24,7 @@ struct DeliveryDetailView: View {
                     // MARK: - Delivery Date
                     Text(delivery.date.formatted(date: .omitted, time: .shortened))
                         .font(.title2)
+                        .fontWeight(.bold)
                         .padding(.leading)
                         .accessibilityLabel("Delivery Date: \(delivery.date.formatted(date: .omitted, time: .shortened))")
                     
@@ -90,7 +91,7 @@ struct DeliveryDetailView: View {
                         if !delivery.musterId.isEmpty {
                             HStack {
                                 Image(systemName: "person.3.fill")
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(.red)
                                     .font(.body)
                                     .frame(width: 30)
                                     .accessibilityHidden(true)
@@ -175,7 +176,7 @@ struct DeliveryDetailView: View {
                         .animation(.easeInOut, value: delivery.babies)
                     }
                 }
-                .padding()
+                .padding([.horizontal, .bottom])
             }
                 
             Spacer()

@@ -12,6 +12,8 @@ let androidSDK = ProcessInfo.processInfo.environment["android.os.Build.VERSION.S
 ///
 /// The default implementation merely loads the `ContentView` for the app and logs a message.
 public struct RootView : View {
+    @AppStorage("useDarkMode") private var useDarkMode: Bool = false
+
     @StateObject var dailyResetManager = DailyResetManager()
 
     public init() {
@@ -19,6 +21,7 @@ public struct RootView : View {
 
     public var body: some View {
         AppStateControllerView()
+            .preferredColorScheme(useDarkMode ? .dark : .light)
             .task {
                 logger.log("Welcome to Skip on \(androidSDK != nil ? "Android" : "Darwin")!")
                 logger.warning("Skip app logs are viewable in the Xcode console for iOS; Android logs can be viewed in Studio or using adb logcat")

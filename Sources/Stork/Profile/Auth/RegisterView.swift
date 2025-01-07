@@ -156,6 +156,7 @@ struct RegisterView: View {
                         }
                     }, label: {
                         Text("Log In Instead")
+                            .fontWeight(.bold)
                             .foregroundStyle(.orange)
                     })
                 })

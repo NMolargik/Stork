@@ -10,6 +10,7 @@ import StorkModel
 
 struct SettingsTabView: View {
     @AppStorage("useMetric") private var useMetric: Bool = false
+    @AppStorage("useDarkMode") private var useDarkMode: Bool = false
     @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     @AppStorage("errorMessage") var errorMessage: String = ""
@@ -74,8 +75,11 @@ struct SettingsTabView: View {
                     }
                 }
                 
-                Section(header: Text("Options")) {
+                Section(header: Text("Preferences")) {
                     Toggle("Use Metric Units", isOn: $useMetric)
+                        .tint(.green)
+                    
+                    Toggle("Dark Mode", isOn: $useDarkMode)
                         .tint(.green)
                 }
                 

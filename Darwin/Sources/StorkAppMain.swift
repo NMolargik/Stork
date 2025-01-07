@@ -1,6 +1,5 @@
 import SwiftUI
 import Stork
-import FirebaseMessaging
 import FirebaseCore
 
 /// The entry point to the app simply loads the App implementation from SPM module.
@@ -15,18 +14,8 @@ import FirebaseCore
 ///
 /// See Main.kt for the equivalent Android functionality.
 class FireSideAppDelegate : NSObject, UIApplicationDelegate {
-    let notificationsDelegate = NotificationDelegate()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
-
-        UNUserNotificationCenter.current().delegate = notificationsDelegate
-        Messaging.messaging().delegate = notificationsDelegate
-
-        // Ask for permissions at a time appropriate for your app
-        //notificationsDelegate.requestPermission()
-
-        //application.registerForRemoteNotifications()
         return true
     }
 }

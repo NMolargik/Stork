@@ -59,6 +59,8 @@ class DeliveryViewModel: ObservableObject {
             newDelivery.musterId = profile.musterId
         }
         
+        print("Delivery: \(newDelivery)")
+        
         do {
             newDelivery = try await deliveryRepository.createDelivery(delivery: newDelivery)
             self.deliveries.append(newDelivery)

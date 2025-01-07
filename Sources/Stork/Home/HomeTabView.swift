@@ -85,7 +85,7 @@ struct HomeTabView: View {
                         .frame(maxWidth: .infinity)
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundStyle(.gray.opacity(0.5))
+                        .foregroundStyle(.gray)
                         .background {
                             Rectangle()
                                 .foregroundStyle(colorScheme == .dark ? .black : .white)
@@ -106,6 +106,7 @@ struct HomeTabView: View {
                         }, label: {
                             Image(systemName: "plus")
                                 .foregroundStyle(.white)
+                                .font(.title)
                                 .fontWeight(.bold)
                                 .padding(.vertical, 20)
                                 .frame(maxWidth: .infinity)
