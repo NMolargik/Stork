@@ -11,110 +11,92 @@ import StorkModel
 struct HomeCarouselView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
-    
-    // Current index of the carousel
+
     @State private var currentIndex: Int = 0
-    
-    // Offset during dragging
     @State private var dragOffset: CGFloat = 0.0
-    
-    // Threshold to determine card transition
     private let threshold: CGFloat = 100.0
-    
-    private var graphsShown = 4
-    
+    private let numberOfCards = 4 // Update this if you add or remove graphs
+
     var body: some View {
         GeometryReader { geometry in
+            let cardWidth = geometry.size.width * 0.95 // Consistent card width
+            let spacing: CGFloat = 10
+            let totalCardWidth = cardWidth + spacing
+
             VStack {
                 ZStack {
-                    // HStack containing all carousel cards
-                    HStack(spacing: 0) {
-                        #if !SKIP
-                        DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
-                            .padding(5)
-                            .frame(width: geometry.size.width - 20)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(20)
-                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                            }
-
-                            .padding(.leading, 25)
-                        
-                        DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
-                            .padding(5)
-                            .frame(width: geometry.size.width - 20)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(20)
-                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                            }
-                            .padding(.leading, 20)
-                        #endif
-                        
-                        BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
-                            .padding(5)
-                            .frame(width: geometry.size.width - 20)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(20)
-                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                            }
-                            .padding(.leading, 20)
-                        
-                        TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
-                            .padding(5)
-                            .frame(width: geometry.size.width - 20)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(20)
-                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                            }
-                            .padding(.leading, 20)
+                    ForEach(0..<numberOfCards, id: \.self) { index in
+                        carouselCard(for: index)
+                            .frame(width: cardWidth) // Consistent card size
+                            .offset(x: calculateCardOffset(for: index, totalCardWidth: totalCardWidth))
+                            .animation(.easeInOut, value: currentIndex) // Smooth animation when changing index
                     }
-                    .frame(width: geometry.size.width * CGFloat(graphsShown) - 50, height: 200, alignment: .leading)
-                    .offset(x: -CGFloat(currentIndex) * geometry.size.width + dragOffset + geometry.size.width + 160)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                // Update dragOffset based on user drag
-                                dragOffset = value.translation.width
-                            }
-                            .onEnded { value in
-                                withAnimation(.easeInOut) {
-                                    // Determine if the drag exceeds the threshold
-                                    if value.translation.width < -threshold && currentIndex < graphsShown - 1 {
-                                        // Swipe Left - Next Card
-                                        currentIndex += 1
-                                    } else if value.translation.width > threshold && currentIndex > 0 {
-                                        // Swipe Right - Previous Card
-                                        currentIndex -= 1
-                                    }
-                                    // Reset dragOffset after gesture ends
-                                    dragOffset = 0
-                                }
-                            }
-                    )
                 }
-                .frame(width: geometry.size.width)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            dragOffset = value.translation.width
+                        }
+                        .onEnded { value in
+                            withAnimation(.easeInOut) {
+                                if value.translation.width < -threshold && currentIndex < numberOfCards - 1 {
+                                    currentIndex += 1
+                                } else if value.translation.width > threshold && currentIndex > 0 {
+                                    currentIndex -= 1
+                                }
+                                dragOffset = 0
+                            }
+                        }
+                )
+                .frame(width: geometry.size.width) // Restrict visible area
                 .clipped()
-                
+
                 // Dot Indicators
                 HStack(spacing: 8) {
-                    ForEach(0..<graphsShown, id: \.self) { index in
+                    ForEach(0..<numberOfCards, id: \.self) { index in
                         Circle()
                             .fill(currentIndex == index ? Color.primary : Color.secondary.opacity(0.5))
                             .frame(width: 10, height: 10)
                     }
                 }
+                .padding(.top, 8)
             }
-
         }
         .frame(height: 220)
+        .onAppear {
+            currentIndex = 0
+            dragOffset = 0
+        }
+    }
+
+    // MARK: - Helper Methods
+    private func calculateCardOffset(for index: Int, totalCardWidth: CGFloat) -> CGFloat {
+        // Offset each card based on its position and the current index
+        let centeredIndexOffset = CGFloat(index - currentIndex) * totalCardWidth
+        return centeredIndexOffset + dragOffset
+    }
+
+    private func carouselCard(for index: Int) -> some View {
+        ZStack {
+            Group {
+                if index == 0 {
+                    #if !SKIP
+                    DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
+                    #endif
+                } else if index == 1 {
+                    #if !SKIP
+                    DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                    #endif
+                } else if index == 2 {
+                    BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                } else if index == 3 {
+                    TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensure consistent card content size
+            .backgroundCard(colorScheme: colorScheme) // Consistent card styling
+            .padding(.vertical, 5)
+        }
     }
 }
 

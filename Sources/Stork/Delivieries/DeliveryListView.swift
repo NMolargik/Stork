@@ -40,7 +40,6 @@ struct DeliveryListView: View {
                             ForEach(deliveries, id: \.id) { delivery in
                                 NavigationLink(value: delivery) {
                                     DeliveryRowView(delivery: delivery)
-                                        .padding(.vertical, 4)
                                 }
                                 .listRowSeparator(.hidden)
                             }

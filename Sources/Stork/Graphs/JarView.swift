@@ -18,27 +18,18 @@ struct JarView: View {
 
     // Marble simulation states
     @State private var marbles: [Marble] = []
-    @State private var gravity: CGFloat = 1.0          // Slightly increased gravity for stronger settling
-    @State private var damping: CGFloat = 0.98        // Maintained damping for smooth bounces
-    @State private var friction: CGFloat = 0.85        // Further increased friction to slow marbles faster
-    
-    // Maximum number of marbles to prevent overcrowding
-    @State private var maxMarbleCount: Int = 100
-    
-    // Track which babies have been displayed
-    @State private var displayedBabyIDs: Set<String> = []
-    
-    // Buffer newly arrived marbles until user re-enters the view
     @State private var pendingMarbles: [Marble] = []
-    
-    // Track if marbles are currently being added
+    @State private var displayedBabyIDs: Set<String> = []
     @State private var isAddingMarbles: Bool = false
     
-    let collisionIterations = 15
-    
-    let marbleRadius: CGFloat = 12
-    
-    let timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect()
+    private let maxMarbleCount = 100
+    private let marbleRadius: CGFloat = 12
+    private let collisionIterations = 15
+    private let gravity: CGFloat = 1.0
+    private let damping: CGFloat = 0.98
+    private let friction: CGFloat = 0.85
+
+    private let timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect()
     
     var body: some View {
         GeometryReader { geometry in
@@ -86,32 +77,38 @@ struct JarView: View {
                 }
             }
             .onAppear {
-                addPendingMarblesSequentially()
+                refreshMarbles(in: geometry.size)
             }
-            .onChange(of: deliveries) { newValue in
-                let monthDeliveries = deliveriesForCurrentMonth(newValue)
-
-                for delivery in monthDeliveries {
-                    for baby in delivery.babies {
-                        if !displayedBabyIDs.contains(baby.id) && marbles.count + pendingMarbles.count < maxMarbleCount {
-                            let newMarble = createMarble(
-                                in: geometry.size,
-                                color: baby.sex.color
-                            )
-                            
-                            displayedBabyIDs.insert(baby.id)
-                            pendingMarbles.append(newMarble)
-                        }
-                    }
-                }
-                
-                addPendingMarblesSequentially()
+            .onChange(of: deliveries) { _ in
+                refreshMarbles(in: geometry.size)
             }
             .onReceive(timer) { _ in
                 updateMarbles(in: geometry.size)
             }
         }
     }
+    
+    private func refreshMarbles(in size: CGSize) {
+        let monthDeliveries = deliveriesForCurrentMonth(deliveries)
+
+        // Filter babies not already displayed
+        let newBabies = monthDeliveries.flatMap { $0.babies }.filter {
+            !displayedBabyIDs.contains($0.id)
+        }
+        
+        // Add new marbles to pending list
+        for baby in newBabies {
+            if marbles.count + pendingMarbles.count < maxMarbleCount {
+                let newMarble = createMarble(in: size, color: baby.sex.color)
+                pendingMarbles.append(newMarble)
+                displayedBabyIDs.insert(baby.id)
+            }
+        }
+        
+        // Add pending marbles sequentially
+        addPendingMarblesSequentially()
+    }
+    
     
     // MARK: - Marble Addition Logic
     

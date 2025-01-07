@@ -109,34 +109,35 @@ public struct AppStateControllerView: View {
     
     func checkAppState() {
         if loggedIn {
-            if profileViewModel.profile.email.isEmpty {
-                Task {
-                    do {
-                        try await profileViewModel.fetchCurrentProfile()
-
-                        if deliveryViewModel.deliveries.isEmpty {
-                            try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
-                        }
-
-                        if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
-                            try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
+            withAnimation {
+                if profileViewModel.profile.email.isEmpty {
+                    Task {
+                        do {
+                            try await profileViewModel.fetchCurrentProfile()
                             
-                            
-                            if let muster = musterViewModel.currentMuster {
-                                try await deliveryViewModel.getMusterDeliveries(muster: muster)
+                            if deliveryViewModel.deliveries.isEmpty {
+                                try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
                             }
-
+                            
+                            if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
+                                try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
+                                
+                                
+                                if let muster = musterViewModel.currentMuster {
+                                    try await deliveryViewModel.getMusterDeliveries(muster: muster)
+                                }
+                            }
+                        } catch {
+                            errorMessage = error.localizedDescription
                         }
-                    } catch {
-                        errorMessage = error.localizedDescription
                     }
-                }
-            } else {
-                if (isOnboardingComplete) {
-                    selectedTab = .home
-                    appState = .main
                 } else {
-                    appState = .onboard
+                    if (isOnboardingComplete) {
+                        selectedTab = .home
+                        appState = .main
+                    } else {
+                        appState = .onboard
+                    }
                 }
             }
         } else {

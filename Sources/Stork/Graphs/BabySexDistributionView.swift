@@ -32,7 +32,8 @@ struct BabySexDistributionView: View {
             
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("6 Month Sex Distribution")
+                    Text("6 Month Sex \nDistribution")
+                        .multilineTextAlignment(.leading)
                         .fontWeight(.bold)
                         .foregroundStyle(.gray)
                     

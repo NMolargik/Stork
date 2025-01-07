@@ -117,7 +117,7 @@
         }
       }
     },
-    "6 Month Sex Distribution" : {
+    "6 Month Sex \nDistribution" : {
 
     },
     "6 Month Stats" : {
@@ -278,9 +278,6 @@
 
     },
     "Delivery Method" : {
-
-    },
-    "Delivery Method Distribution" : {
 
     },
     "Delivery Method: %@" : {

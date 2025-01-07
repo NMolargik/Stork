@@ -123,7 +123,6 @@ struct HomeTabView: View {
                 .frame(height: 320)
 
                 HomeCarouselView()
-                    .padding(.top, 25)
                 
                 Spacer()
                 

@@ -9,12 +9,12 @@ import SwiftUI
 import StorkModel
 
 struct MusterTabView: View {
+    @Environment(\.colorScheme) var colorScheme
     @AppStorage("errorMessage") var errorMessage: String = ""
 
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
-    @EnvironmentObject var hospitalViewModel: HospitalViewModel
     
     @State private var showingMusterInvitations: Bool = false
     @State private var navigationPath = NavigationPath()
@@ -43,13 +43,36 @@ struct MusterTabView: View {
                             }
                         }
                         .padding(.horizontal)
-                        #if !SKIP
-                        .scrollIndicators(.hidden)
-                        #endif
                     }
                     .padding(.leading, -5)
                     .frame(height: 30)
-                    .offset(y: -10)
+                    
+                    ZStack {
+                        JarView(
+                            deliveries: Binding<[Delivery]>.constant(deliveriesForCurrentWeek()),
+                            headerText: getCurrentWeekRange() ?? ""
+                        )
+
+                        VStack {
+                            if let weekRange = getCurrentWeekRange() {
+                                Text(weekRange)
+                                    .padding(8)
+                                    .foregroundStyle(.gray)
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                    .background {
+                                        Rectangle()
+                                            .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                            .cornerRadius(20)
+                                            .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+                                    }
+                                    .padding(.top, 20)
+                            }
+                            
+                            Spacer()
+                        }
+                    }
+                    .padding()
                     
                     MusterCarouselView()
                     
@@ -121,6 +144,68 @@ struct MusterTabView: View {
         generator.prepare()
         generator.impactOccurred()
         #endif
+    }
+    
+    private func countBabies(of sex: Sex) -> Int {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start and end of the current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return 0
+        }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+            return 0
+        }
+
+        // Filter deliveries for the current week
+        let weekDeliveries = deliveryViewModel.musterDeliveries.filter { delivery in
+            delivery.date >= weekStart && delivery.date <= weekEnd
+        }
+
+        // Count babies of the specified sex
+        return weekDeliveries.reduce(0) { count, delivery in
+            count + delivery.babies.filter { $0.sex == sex }.count
+        }
+    }
+    
+    private func getCurrentWeekRange() -> String? {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start and end of the current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return nil
+        }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+            return nil
+        }
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d" // Example: "Aug 9"
+
+        let startDate = formatter.string(from: weekStart)
+        let endDate = formatter.string(from: weekEnd)
+
+        return "\(startDate) - \(endDate)"
+    }
+    
+    private func deliveriesForCurrentWeek() -> [Delivery] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start and end of the current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return []
+        }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+            return []
+        }
+
+        // Filter deliveries within the week range
+        return deliveryViewModel.musterDeliveries.filter { delivery in
+            delivery.date >= weekStart && delivery.date <= weekEnd
+        }
     }
     
     private func leaveMuster() {

@@ -28,7 +28,7 @@ struct UserDeliveryDistributionView: View {
     
     // MARK: - Body
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 10) {
             userListView
             
             distributionBarView

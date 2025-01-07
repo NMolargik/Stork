@@ -164,6 +164,10 @@ struct DeliveryAdditionView: View {
                     deliveryViewModel.addBaby()
                 }
                 
+                if !profileViewModel.profile.musterId.isEmpty {
+                    deliveryViewModel.addToMuster = true
+                }
+                
                 initializeHospital()
             }
         }
