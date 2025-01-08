@@ -15,6 +15,7 @@
 		EB0CEAD92D2D85250011E63B /* LaunchScreen.storyboard in Sources */ = {isa = PBXBuildFile; fileRef = EB0CEAD82D2D85250011E63B /* LaunchScreen.storyboard */; };
 		EB0CEADB2D2D875F0011E63B /* storkicon.png in Resources */ = {isa = PBXBuildFile; fileRef = EB0CEADA2D2D875F0011E63B /* storkicon.png */; };
 		EB1F1A1D2D2D8F8000558B6B /* google-services.json in Sources */ = {isa = PBXBuildFile; fileRef = EB1F1A1C2D2D8F8000558B6B /* google-services.json */; };
+		EB1F1A1F2D2DC23900558B6B /* keystore.jks in Sources */ = {isa = PBXBuildFile; fileRef = EB1F1A1E2D2DC23900558B6B /* keystore.jks */; };
 		EB56129A2D234B250057EAC3 /* GoogleService-Info.plist in Sources */ = {isa = PBXBuildFile; fileRef = EB5612992D234B250057EAC3 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,7 @@
 		EB0CEAD82D2D85250011E63B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB0CEADA2D2D875F0011E63B /* storkicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storkicon.png; sourceTree = "<group>"; };
 		EB1F1A1C2D2D8F8000558B6B /* google-services.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "google-services.json"; path = "../Android/app/google-services.json"; sourceTree = "<group>"; };
+		EB1F1A1E2D2DC23900558B6B /* keystore.jks */ = {isa = PBXFileReference; lastKnownFileType = file; name = keystore.jks; path = ../Android/app/keystore.jks; sourceTree = "<group>"; };
 		EB5612992D234B250057EAC3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB9BBF0F2D246BD600C008C6 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,6 +84,7 @@
 		49F90C1F2A52156200F06D93 = {
 			isa = PBXGroup;
 			children = (
+				EB1F1A1E2D2DC23900558B6B /* keystore.jks */,
 				EB1F1A1C2D2D8F8000558B6B /* google-services.json */,
 				EB0CEAD82D2D85250011E63B /* LaunchScreen.storyboard */,
 				EB5612992D234B250057EAC3 /* GoogleService-Info.plist */,
@@ -207,6 +210,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB1F1A1F2D2DC23900558B6B /* keystore.jks in Sources */,
 				EB1F1A1D2D2D8F8000558B6B /* google-services.json in Sources */,
 				EB0CEAD92D2D85250011E63B /* LaunchScreen.storyboard in Sources */,
 				EB56129A2D234B250057EAC3 /* GoogleService-Info.plist in Sources */,
