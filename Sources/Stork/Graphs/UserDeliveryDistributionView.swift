@@ -35,10 +35,6 @@ struct UserDeliveryDistributionView: View {
             distributionBarView
                 .frame(height: 24)
                 .cornerRadius(20)
-//                .overlay(
-//                    RoundedRectangle(cornerRadius: 12)
-//                        .stroke(Color.primary.opacity(0.3), lineWidth: 1)
-//                )
         }
         .padding()
         .onAppear {

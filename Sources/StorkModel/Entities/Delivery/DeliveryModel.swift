@@ -165,6 +165,28 @@ public struct Delivery: Identifiable, Codable, Hashable {
         self.epiduralUsed = true
     }
     
+    static func sampleDeliveries() -> [Delivery] {
+        return [
+            Delivery(
+                id: "1",
+                userId: "user1",
+                userFirstName: "Alice",
+                hospitalId: "hospital1",
+                hospitalName: "City Hospital",
+                musterId: "muster1",
+                date: Date(), // Current date
+                babies: [
+                    Baby(deliveryId: "1", nurseCatch: true, sex: .male, weight: 7.5, height: 20),
+                    Baby(deliveryId: "1", nurseCatch: false, sex: .female, weight: 6.8, height: 19)
+                ],
+                babyCount: 2,
+                deliveryMethod: .vaginal,
+                epiduralUsed: true
+            ),
+            // Add more sample deliveries as needed
+        ]
+    }
+    
     // MARK: - Codable Conformance
     
     /// Specifies the coding keys for encoding and decoding.

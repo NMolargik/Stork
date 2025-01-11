@@ -49,7 +49,7 @@ struct MusterTabView: View {
                     
                     ZStack {
                         JarView(
-                            deliveries: Binding<[Delivery]>.constant(deliveriesForCurrentWeek()),
+                            deliveries: $deliveryViewModel.musterDeliveries,
                             headerText: getCurrentWeekRange() ?? ""
                         )
 

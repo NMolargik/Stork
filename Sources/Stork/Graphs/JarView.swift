@@ -13,8 +13,7 @@ struct JarView: View {
 
     /// The deliveries coming in from elsewhere in the app
     @Binding var deliveries: [Delivery]
-    
-    var headerText: String
+    let headerText: String
 
     // Marble simulation states
     @State private var marbles: [Marble] = []
@@ -89,11 +88,26 @@ struct JarView: View {
     }
     
     private func refreshMarbles(in size: CGSize) {
+        // DEBUG: Print how many deliveries JarView is actually receiving.
+        print("DEBUG: JarView received deliveries: \(deliveries.count)")
+
         let monthDeliveries = deliveriesForCurrentMonth(deliveries)
+        
+        // DEBUG: Print the filtered deliveries for the current month.
+        print("DEBUG: monthDeliveries count = \(monthDeliveries.count)")
+        for d in monthDeliveries {
+            print("DEBUG:   - Delivery ID: \(d.id), date: \(d.date)")
+        }
 
         // Filter babies not already displayed
         let newBabies = monthDeliveries.flatMap { $0.babies }.filter {
             !displayedBabyIDs.contains($0.id)
+        }
+
+        // DEBUG: Print how many *new* babies we found (i.e., not in displayedBabyIDs).
+        print("DEBUG: newBabies count = \(newBabies.count)")
+        for baby in newBabies {
+            print("DEBUG:   - Baby ID: \(baby.id), sex: \(baby.sex)")
         }
         
         // Add new marbles to pending list
@@ -168,6 +182,24 @@ struct JarView: View {
         }
     }
     
+    private func deliveriesForCurrentWeek() -> [Delivery] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start and end of the current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return []
+        }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+            return []
+        }
+
+        // Filter deliveries within the week range
+        return deliveries.filter { delivery in
+            delivery.date >= weekStart && delivery.date <= weekEnd
+        }
+    }
+    
     /// Creates a marble with random x-position and velocity, ensuring no initial overlap.
     /// Positions it in the top half of the container so it can fall down.
     /// - Parameters:
@@ -195,7 +227,7 @@ struct JarView: View {
                 let dx = existingMarble.position.x - position.x
                 let dy = existingMarble.position.y - position.y
                 let distance = sqrt(dx*dx + dy*dy)
-                return distance < (existingMarble.marbleRadius + marbleRadius + 2) // Small buffer to prevent immediate overlap
+                return distance < (existingMarble.marbleRadius + marbleRadius + 2)
             }
             
             attempts += 1
@@ -364,62 +396,3 @@ struct Marble: Identifiable {
     }
 }
 
-struct Velocity {
-    var dx: CGFloat
-    var dy: CGFloat
-    
-    static var zero: Velocity {
-        Velocity(dx: 0, dy: 0)
-    }
-}
-
-// MARK: - Preview
-struct JarView_Previews: PreviewProvider {
-    static var previews: some View {
-        // Example usage: Pass in an @State for deliveries
-        StatefulPreviewWrapper(Delivery.sampleDeliveries()) { $deliveries in
-            JarView(deliveries: $deliveries, headerText: "Test Jar")
-        }
-    }
-}
-
-/// A small helper to create a preview that has a mutable @State value.
-struct StatefulPreviewWrapper<Value, Content: View>: View {
-    @State var value: Value
-    var content: (Binding<Value>) -> Content
-
-    init(_ initialValue: Value, content: @escaping (Binding<Value>) -> Content) {
-        _value = State(wrappedValue: initialValue)
-        self.content = content
-    }
-    
-    var body: some View {
-        content($value)
-    }
-}
-
-// MARK: - Delivery Sample Data
-extension Delivery {
-    /// Generates sample deliveries for preview purposes.
-    static func sampleDeliveries() -> [Delivery] {
-        return [
-            Delivery(
-                id: "1",
-                userId: "user1",
-                userFirstName: "Alice",
-                hospitalId: "hospital1",
-                hospitalName: "City Hospital",
-                musterId: "muster1",
-                date: Date(), // Current date
-                babies: [
-                    Baby(deliveryId: "1", nurseCatch: true, sex: .male, weight: 7.5, height: 20),
-                    Baby(deliveryId: "1", nurseCatch: false, sex: .female, weight: 6.8, height: 19)
-                ],
-                babyCount: 2,
-                deliveryMethod: .vaginal,
-                epiduralUsed: true
-            ),
-            // Add more sample deliveries as needed
-        ]
-    }
-}

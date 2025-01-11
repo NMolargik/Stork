@@ -26,7 +26,7 @@ struct HomeTabView: View {
                 HStack {
                     ZStack {
                         JarView(
-                            deliveries: Binding<[Delivery]>.constant(deliveriesForCurrentWeek()),
+                            deliveries: $deliveryViewModel.deliveries,
                             headerText: getCurrentWeekRange() ?? ""
                         )
                         .frame(width: 180)
@@ -54,44 +54,7 @@ struct HomeTabView: View {
                     Spacer()
                     
                     VStack {
-                        VStack {
-                            Text("Your Jar")
-                            
-                            Divider()
-                                .padding(.horizontal)
-                            
-                            HStack {
-                                Text("\(countBabies(of: .male))")
-                                
-                                Text("Boy\(countBabies(of: .male) == 1 ? "" : "s")")
-                                    .frame(width: 100)
-                            }
-                            
-                            HStack {
-                                Text("\(countBabies(of: .female))")
-                                
-                                Text("Girl\(countBabies(of: .female) == 1 ? "" : "s")")
-                                    .frame(width: 100)
-                            }
-                            
-                            HStack {
-                                Text("\(countBabies(of: .loss))")
-                                
-                                Text("Loss\(countBabies(of: .loss) == 1 ? "" : "es")")
-                                    .frame(width: 100)
-                            }
-                        }
-                        .padding(.vertical)
-                        .frame(maxWidth: .infinity)
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.gray)
-                        .background {
-                            Rectangle()
-                                .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                .cornerRadius(20)
-                                .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                        }
+                        YourJarView(deliveries: $deliveryViewModel.deliveries)
                         
                         Spacer()
                         
@@ -159,29 +122,6 @@ struct HomeTabView: View {
         #endif
     }
     
-    private func countBabies(of sex: Sex) -> Int {
-        let calendar = Calendar.current
-        let now = Date()
-
-        // Get start and end of the current week
-        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
-            return 0
-        }
-        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
-            return 0
-        }
-
-        // Filter deliveries for the current week
-        let weekDeliveries = deliveryViewModel.deliveries.filter { delivery in
-            delivery.date >= weekStart && delivery.date <= weekEnd
-        }
-
-        // Count babies of the specified sex
-        return weekDeliveries.reduce(0) { count, delivery in
-            count + delivery.babies.filter { $0.sex == sex }.count
-        }
-    }
-    
     private func getCurrentWeekRange() -> String? {
         let calendar = Calendar.current
         let now = Date()
@@ -201,24 +141,6 @@ struct HomeTabView: View {
         let endDate = formatter.string(from: weekEnd)
 
         return "\(startDate) - \(endDate)"
-    }
-    
-    private func deliveriesForCurrentWeek() -> [Delivery] {
-        let calendar = Calendar.current
-        let now = Date()
-
-        // Get start and end of the current week
-        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
-            return []
-        }
-        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
-            return []
-        }
-
-        // Filter deliveries within the week range
-        return deliveryViewModel.deliveries.filter { delivery in
-            delivery.date >= weekStart && delivery.date <= weekEnd
-        }
     }
 }
 

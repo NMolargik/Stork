@@ -15,7 +15,7 @@ enum AppState: String, Hashable {
 public struct AppStateControllerView: View {
     @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("errorMessage") private var errorMessage: String = ""
-    @AppStorage("selectedTab") var selectedTab = Tab.hospitals
+    @AppStorage("selectedTab") var selectedTab = Tab.home
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     @AppStorage("isPaywallComplete") private var isPaywallComplete: Bool = false
     @AppStorage("loggedIn") private var loggedIn: Bool = false
