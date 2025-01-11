@@ -1,75 +1,51 @@
-## User settings
+# ----
+# Xcode / macOS / Swift
+# ----
 
-# vi
-.*.swp
-.*.swo
-
-# macOS
-.DS_Store
-
-# gradle properties
-local.properties
-.gradle/
-.android/
-.kotlin/
-Android/app/keystore.jks
-Android/app/keystore.properties
-
-# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
-# hence it is not needed unless you have added a package configuration file to your project
-.swiftpm
-.build/
+# Build products
+*.app
+*.app.dSYM
+*.ipa
+*.dSYM
+*.xcarchive
+*.xcuserstate
 build/
 DerivedData/
-xcuserdata/
-xcodebuild*.log
-.idea/
+.xcscmblueprint
+.xcuserdatad/
+*.xcworkspace/xcuserdata/
 
-*.moved-aside
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-*.xcscmblueprint
-*.xccheckout
-
-## Obj-C/Swift specific
-*.hmap
-
-## App packaging
-*.ipa
-*.dSYM.zip
-*.dSYM
-
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
-
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-Packages/
-Package.pins
+# SwiftPM
+/.build/
+.swiftpm/xcode/package.xcworkspace/
 Package.resolved
-#*.xcodeproj
 
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
 Carthage/Build/
+Carthage/Checkouts/
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
+# Misc
+*.DS_Store
+*.swp
+*.swo
+*~
+*.swm
 
-**/fastlane/apikey.json
-**/fastlane/report.xml
-**/fastlane/README.md
-**/fastlane/Preview.html
-**/fastlane/screenshots/**/*.png
-**/fastlane/metadata/android/*/images/**/*.png
-**/fastlane/test_output
+# ----
+# Firebase / Google Services
+# ----
+google-services.json
+GoogleService-Info.plist
+
+# ----
+# Your Custom Constants
+# ----
+Constants.swift
+
+# ----
+# End of file
+# ----
