@@ -9,7 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct UserDeliveryDistributionView: View {
-    
+    @Environment(\.colorScheme) var colorScheme
+
     // MARK: - Input Data
     
     /// All users in the muster (following `Profile` model).
@@ -74,14 +75,28 @@ struct UserDeliveryDistributionView: View {
                         Circle()
                             .fill(userColors[profile.id] ?? .gray)
                             .frame(width: 12, height: 12)
+                            .padding(1)
+                            .background {
+                                Circle()
+                                    .foregroundStyle(.white)
+                            }
                         
                         Text(profile.initials)
+                            .foregroundStyle(colorScheme == .dark ? .black : .white)
                             .font(.body)
+                            .fontWeight(.bold)
                     }
                     .padding(.horizontal, 4)
                 }
             }
-            .padding(.vertical, 8)
+            .padding(4)
+            .background {
+                Rectangle()
+                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                    .cornerRadius(10)
+                    .shadow(radius: 2)
+            }
+            .padding(.vertical, 4)
         }
     }
     

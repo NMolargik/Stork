@@ -182,6 +182,7 @@ struct DeliveryAdditionView: View {
                     deliveryViewModel.isSelectingHospital = false
                 }
             )
+            .interactiveDismissDisabled()
             .environmentObject(hospitalViewModel)
             .environmentObject(profileViewModel)
         }
@@ -227,6 +228,8 @@ struct DeliveryAdditionView: View {
             return
         }
         
+        let babyCount = deliveryViewModel.newDelivery.babies.count
+        
         do {
             try await deliveryViewModel.submitDelivery(profile: profileViewModel.profile, dailyResetManager: dailyResetManager)
         } catch {
@@ -235,7 +238,7 @@ struct DeliveryAdditionView: View {
         }
         
         do {
-            try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: deliveryViewModel.newDelivery.babies.count)
+            try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: babyCount)
         } catch {
             errorMessage = error.localizedDescription
             return

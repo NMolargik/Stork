@@ -72,6 +72,7 @@ struct HospitalListView: View {
                     }
                 }
             }
+
             .navigationTitle("Hospitals")
             .navigationDestination(for: String.self) { value in
                 if value == "ProfileView" {
@@ -135,6 +136,7 @@ struct HospitalListView: View {
                 onSelection(try await hospitalViewModel.createMissingHospital(name: hospitalName))
             })
             .presentationDetents([PresentationDetent.medium])
+            .interactiveDismissDisabled()
         })
     }
     

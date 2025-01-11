@@ -34,14 +34,13 @@ struct HospitalDetailView: View {
                         Text(hospital.facility_name)
                             .font(.title2)
                             .fontWeight(.bold)
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.black)
                             .padding(10)
                             .background {
                                 Rectangle()
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.white)
                                     .cornerRadius(20)
                                     .shadow(radius: 2)
-                                    .opacity(0.9)
                             }
                         
                         Spacer()
@@ -54,13 +53,13 @@ struct HospitalDetailView: View {
                             }
                         }, label: {
                             Image(systemName: profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star")
+                                .fontWeight(.heavy)
                                 .foregroundStyle(.yellow)
                                 .font(.title2)
                                 .padding(10)
                                 .background {
-                                    Rectangle()
-                                        .foregroundStyle(.black)
-                                        .cornerRadius(20)
+                                    Circle()
+                                        .foregroundStyle(.white)
                                         .shadow(radius: 2)
                                         .opacity(0.9)
                                 }

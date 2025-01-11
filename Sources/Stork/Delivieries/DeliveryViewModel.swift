@@ -9,6 +9,7 @@ import Foundation
 import StorkModel
 import SwiftUI
 
+@MainActor
 class DeliveryViewModel: ObservableObject {
     @Published var deliveries: [Delivery] = []
     @Published var musterDeliveries: [Delivery] = []
@@ -266,9 +267,11 @@ class DeliveryViewModel: ObservableObject {
         let timeInterval = adjustedResetDate.timeIntervalSince(now)
 
         // Schedule the timer
-        timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { [weak self] _ in
-            self?.resetDailyLimit()
-            self?.startDailyResetTimer() // Schedule the next reset
+        DispatchQueue.main.async {
+            self.timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { [weak self] _ in
+                self?.resetDailyLimit()
+                self?.startDailyResetTimer() // Schedule the next reset
+            }
         }
     }
     
