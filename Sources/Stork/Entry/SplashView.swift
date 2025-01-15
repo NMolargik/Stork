@@ -11,9 +11,6 @@ import StorkModel
 struct SplashView: View {
     // MARK: App Storage Variables
     @AppStorage("appState") private var appState: AppState = AppState.splash
-    @AppStorage("loggedIn") private var loggedIn: Bool = false
-    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-    
     // MARK: Environment Variables
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
@@ -25,83 +22,78 @@ struct SplashView: View {
     @State private var showMore = false
     @State private var isInfoPresented = false
     
+    var onAuthenticated: () -> Void
+    
     var body: some View {
-        ZStack {
-            VStack {
-                HStack {
-                    Spacer()
-                    
-                    Button(action: {
-                        withAnimation {
-                            triggerHaptic()
-                            isInfoPresented = true
-                        }
-                    }, label: {
-                        Image(systemName: "info.circle.fill")
-                            .foregroundStyle(.orange)
-                            .font(.title)
-                    })
-                }
-                .padding(.trailing)
-                
+        VStack {
+            HStack {
                 Spacer()
                 
-                Text("Stork")
-                    .font(.system(size: 50))
-                    .fontWeight(.bold)
-                    .opacity(isAnimating ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 1.5), value: isAnimating)
-                
-                if showMore {
-                    Text("a labor and delivery app")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .padding(.bottom)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-                
-                LoginView(onAuthenticated: {
+                Button(action: {
                     withAnimation {
-                        self.loggedIn = true
-                        appState = (isOnboardingComplete) ? .main : .onboard
+                        triggerHaptic()
+                        isInfoPresented = true
                     }
+                }, label: {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundStyle(.orange)
+                        .font(.title)
                 })
-                .opacity(showMore && !loggedIn ? 1.0 : 0.0)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+            .padding(.trailing)
             
-                Divider()
-                    .scaleEffect(y: 4)
-                    .padding(.horizontal)
+            Spacer()
+            
+            Text("Stork")
+                .font(.system(size: 50))
+                .fontWeight(.bold)
+                .opacity(isAnimating ? 1.0 : 0.0)
+                .animation(.easeInOut(duration: 1.5), value: isAnimating)
+            
+            if showMore {
+                Text("a labor and delivery app")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .padding(.bottom)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+            
+            LoginView(onAuthenticated: {
+                self.onAuthenticated()
+            })
+            .opacity(showMore ? 1.0 : 0.0)
+            .transition(.move(edge: .bottom).combined(with: .opacity))
+        
+            Divider()
+                .scaleEffect(y: 4)
+                .padding(.horizontal)
 
-                Text("Don't have an account yet?")
-                    .padding()
-                
-                CustomButtonView(text: "Sign Up", width: 120, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
-                        withAnimation {
-                            profileViewModel.resetTempProfile()
-                            showRegistration = true
-                            appState = AppState.register
-                        }
-                })
-                
-                Spacer()
-            }
-            .toolbar {
-                if (!loggedIn) {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            isInfoPresented = !isInfoPresented
-                        }) {
-                            Image(systemName: "info.circle")
-                                .font(.title2)
-                                .foregroundColor(.indigo)
-                        }
-                        .shadow(radius: 5)
+            Text("Don't have an account yet?")
+                .padding()
+            
+            CustomButtonView(text: "Sign Up", width: 120, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
+                    withAnimation {
+                        profileViewModel.resetTempProfile()
+                        showRegistration = true
+                        appState = AppState.register
                     }
-                }
-            }
-            .frame(maxWidth: .infinity)
+            })
+            
+            Spacer()
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    isInfoPresented = !isInfoPresented
+                }) {
+                    Image(systemName: "info.circle")
+                        .font(.title2)
+                        .foregroundColor(.indigo)
+                }
+                .shadow(radius: 5)
+            }
+        }
+        .frame(maxWidth: .infinity)
         .onAppear {
             startAnimation()
         }
@@ -131,6 +123,6 @@ struct SplashView: View {
 }
 
 #Preview {
-    SplashView(showRegistration: .constant(false))
+    SplashView(showRegistration: .constant(false), onAuthenticated: {})
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
 }

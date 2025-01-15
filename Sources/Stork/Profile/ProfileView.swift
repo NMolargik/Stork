@@ -39,7 +39,7 @@ struct ProfileView: View {
                     DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
                         .tint(.indigo)
                     #if !SKIP
-                        .datePickerStyle(WheelDatePickerStyle())
+                        .datePickerStyle(.wheel)
                     #endif
                         .labelsHidden()
                         .environment(\.locale, Locale(identifier: "en_US"))

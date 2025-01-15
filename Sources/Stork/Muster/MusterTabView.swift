@@ -103,6 +103,15 @@ struct MusterTabView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            Task {
+                                try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
+                            }
+                        } label: {
+                            Label("Refresh", systemImage: "arrow.2.squarepath")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
                         Menu {
                             if musterViewModel.isUserAdmin(profile: profileViewModel.profile) {
                                 
@@ -213,7 +222,7 @@ struct MusterTabView: View {
             musterViewModel.isWorking = true
 
             do {
-                try await musterViewModel.leaveMuster(profileViewModel: profileViewModel)
+                try await musterViewModel.leaveMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
                 
                 profileViewModel.tempProfile = profileViewModel.profile
                 profileViewModel.tempProfile.musterId = ""

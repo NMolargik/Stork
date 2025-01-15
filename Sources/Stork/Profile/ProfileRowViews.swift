@@ -33,6 +33,8 @@ struct ProfileRowView: View {
                 
                 HStack(spacing: 4) {
                     Image(systemName: "birthday.cake.fill")
+                        .foregroundStyle(.indigo)
+                    
                     Text(Self.dateFormatter.string(from: profile.birthday))
                         .foregroundColor(.gray)
                 }

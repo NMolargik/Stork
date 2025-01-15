@@ -6,6 +6,7 @@
 
 import Foundation
 import SwiftUI
+import SkipRevenueCat
 import StorkModel
 
 enum AppState: String, Hashable {
@@ -60,25 +61,47 @@ public struct AppStateControllerView: View {
             Group {
                 switch appState {
                 case .splash:
-                    SplashView(showRegistration: $showRegistration)
+                    SplashView(showRegistration: $showRegistration, onAuthenticated: {
+                        self.loggedIn = true
+                        
+                        // TODO: check paywall
+                        
+                        
+                        if (isOnboardingComplete) {
+                            if (isPaywallComplete) {
+                                appState = .main
+                            } else {
+                                appState = .paywall
+                            }
+                        } else {
+                            appState = .onboard
+                        }
+                    })
                 case .register:
                     RegisterView(
                         showRegistration: $showRegistration,
                         onAuthenticated: {
-                            withAnimation {
-                                self.loggedIn = true
-                                self.showRegistration = false
+                            //withAnimation {
+                            self.loggedIn = true
+                            self.showRegistration = false
+                            
+                            if (self.isOnboardingComplete) {
+                                //#if !SKIP
                                 
-                                if (self.isOnboardingComplete) {
-                                    if (self.isPaywallComplete) {
-                                        appState = AppState.main
-                                    } else {
-                                        appState = AppState.paywall
-                                    }
+                                print("Starting purchase login with id: \(profileViewModel.profile.id)")
+                                Purchases.sharedInstance.logIn(newAppUserID: profileViewModel.profile.id, onError: {_ in }, onSuccess: { _,_  in})
+                                    // customerInfo updated for my_app_user_id
+                                
+                                if (self.isPaywallComplete) {
+                                    appState = AppState.main
                                 } else {
-                                    appState = AppState.onboard
+                                    print("heading on paywall")
+                                    appState = AppState.paywall
                                 }
+                            } else {
+                                appState = AppState.onboard
                             }
+                            //}
                         }
                     )
                 case .paywall:
@@ -109,35 +132,47 @@ public struct AppStateControllerView: View {
     
     func checkAppState() {
         if loggedIn {
-            withAnimation {
-                if profileViewModel.profile.email.isEmpty {
-                    Task {
-                        do {
-                            try await profileViewModel.fetchCurrentProfile()
-                            
-                            if deliveryViewModel.deliveries.isEmpty {
-                                try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
-                            }
-                            
-                            if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
-                                try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
-                                
-                                
-                                if let muster = musterViewModel.currentMuster {
-                                    try await deliveryViewModel.getMusterDeliveries(muster: muster)
-                                }
-                            }
-                        } catch {
-                            errorMessage = error.localizedDescription
+            Task {
+                do {
+                    // Fetch profile
+                    if profileViewModel.profile.email.isEmpty {
+                        try await profileViewModel.fetchCurrentProfile()
+                    }
+                    
+                    // Fetch deliveries
+                    if deliveryViewModel.deliveries.isEmpty {
+                        try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
+                    }
+                    
+                    // Fetch muster and associated deliveries
+                    if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
+                        try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
+                        
+                        if let muster = musterViewModel.currentMuster {
+                            try await deliveryViewModel.getMusterDeliveries(muster: muster)
                         }
                     }
-                } else {
-                    if (isOnboardingComplete) {
-                        selectedTab = .home
-                        appState = .main
+                    
+                    // Onboarding and paywall checks
+                    if isOnboardingComplete {
+                        print("Starting purchase login with id: \(profileViewModel.profile.id)")
+                        Purchases.sharedInstance.logIn(
+                            newAppUserID: profileViewModel.profile.id,
+                            onError: { _ in },
+                            onSuccess: { _, _ in }
+                        )
+                        
+                        if isPaywallComplete {
+                            appState = AppState.main
+                        } else {
+                            print("heading to paywall")
+                            appState = AppState.paywall
+                        }
                     } else {
-                        appState = .onboard
+                        appState = AppState.onboard
                     }
+                } catch {
+                    errorMessage = error.localizedDescription
                 }
             }
         } else {

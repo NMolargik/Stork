@@ -25,11 +25,16 @@
                                 </constraints>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                             </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="6Dr-t1-8er">
+                                <rect key="frame" x="186.66666666666666" y="636" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6Dr-t1-8er" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="5hJ-yU-EmB"/>
                             <constraint firstItem="5oT-uH-QUt" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="MGO-au-WZ9"/>
+                            <constraint firstItem="6Dr-t1-8er" firstAttribute="top" secondItem="5oT-uH-QUt" secondAttribute="bottom" constant="60" id="Tqt-6p-bec"/>
                             <constraint firstItem="5oT-uH-QUt" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="n9x-zK-Ssx"/>
                         </constraints>
                     </view>

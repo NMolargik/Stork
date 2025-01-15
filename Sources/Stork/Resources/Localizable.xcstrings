@@ -52,6 +52,9 @@
     "%@ kg" : {
 
     },
+    "%@,\nSpread Your Wings Today!" : {
+
+    },
     "%@, %@" : {
       "localizations" : {
         "en" : {
@@ -133,6 +136,9 @@
 
     },
     "Added to your muster" : {
+
+    },
+    "Annual access for just $4.99/yr" : {
 
     },
     "Appearance" : {
@@ -311,6 +317,9 @@
 
     },
     "Forgot Your Password?" : {
+
+    },
+    "Get access to Stork's labor and delivery statistics tracking features, muster grouping, and your marble jar for one annual payment. Cancel anytime!" : {
 
     },
     "Girl%@" : {
@@ -552,6 +561,9 @@
     "Nurse Catch" : {
 
     },
+    "Old Members" : {
+
+    },
     "Other View: %@" : {
 
     },
@@ -559,6 +571,9 @@
 
     },
     "Password" : {
+
+    },
+    "Plus, a 1 week free trial!" : {
 
     },
     "Powered by %@" : {
@@ -605,7 +620,13 @@
     "Recorded" : {
 
     },
+    "Refresh" : {
+
+    },
     "Restart Onboarding" : {
+
+    },
+    "Restore Purchases" : {
 
     },
     "Role" : {
@@ -693,6 +714,9 @@
 
     },
     "Shared Profile View" : {
+
+    },
+    "Sign Me Up!" : {
 
     },
     "Sign Out" : {

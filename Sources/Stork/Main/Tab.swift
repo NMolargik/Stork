@@ -31,6 +31,7 @@ public enum Tab: String, Hashable {
         case .hospitals: return "Hospitals"
         case .muster: return "Muster"
         case .settings: return "Settings"
+
         }
     }
 

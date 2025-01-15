@@ -13,6 +13,7 @@ struct MusterInvitationsView: View {
     
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
+    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
     @Environment(\.dismiss) var dismiss
     
@@ -45,7 +46,7 @@ struct MusterInvitationsView: View {
                     ScrollView {
                         ForEach(musterViewModel.invites) { invite in
                             VStack(alignment: .leading) {
-                                Text(invite.senderName + " invited you to join " + invite.musterName)
+                                Text(invite.senderName + " invited you to " + invite.musterName)
                                     .font(.headline)
                                     .foregroundStyle(.black)
                                 
@@ -62,7 +63,7 @@ struct MusterInvitationsView: View {
                                             
                                             print("New profile musterID: \(profileViewModel.profile.musterId)")
                                             
-                                            try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel)
+                                            try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
                                             
                                             musterViewModel.isWorking = false
                                             musterViewModel.invites.removeAll(where: { $0.musterId == invite.musterId })
@@ -133,4 +134,5 @@ struct MusterInvitationsView: View {
     )
     .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
     .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+    .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
 }

@@ -88,26 +88,10 @@ struct JarView: View {
     }
     
     private func refreshMarbles(in size: CGSize) {
-        // DEBUG: Print how many deliveries JarView is actually receiving.
-        print("DEBUG: JarView received deliveries: \(deliveries.count)")
-
         let monthDeliveries = deliveriesForCurrentMonth(deliveries)
         
-        // DEBUG: Print the filtered deliveries for the current month.
-        print("DEBUG: monthDeliveries count = \(monthDeliveries.count)")
-        for d in monthDeliveries {
-            print("DEBUG:   - Delivery ID: \(d.id), date: \(d.date)")
-        }
-
-        // Filter babies not already displayed
         let newBabies = monthDeliveries.flatMap { $0.babies }.filter {
             !displayedBabyIDs.contains($0.id)
-        }
-
-        // DEBUG: Print how many *new* babies we found (i.e., not in displayedBabyIDs).
-        print("DEBUG: newBabies count = \(newBabies.count)")
-        for baby in newBabies {
-            print("DEBUG:   - Baby ID: \(baby.id), sex: \(baby.sex)")
         }
         
         // Add new marbles to pending list

@@ -104,7 +104,7 @@ public class MusterViewModel: ObservableObject {
     // MARK: - Muster Management
     
     /// Loads the current muster based on the provided `ProfileViewModel`.
-    func loadCurrentMuster(profileViewModel: ProfileViewModel) async throws {
+    func loadCurrentMuster(profileViewModel: ProfileViewModel, deliveryViewModel: DeliveryViewModel) async throws {
         isWorking = true
         defer { isWorking = false }
         
@@ -121,8 +121,15 @@ public class MusterViewModel: ObservableObject {
             return
         }
         
+        
         guard let muster = currentMuster else {
             throw MusterError.updateFailed("Could not load muster")
+        }
+        
+        do {
+            try await deliveryViewModel.getMusterDeliveries(muster: muster)
+        } catch {
+            throw DeliveryError.notFound("Could not collect muster deliveries. Please refresh.")
         }
         
         musterMembers = try await profileViewModel.listProfiles(musterId: muster.id)
@@ -134,11 +141,11 @@ public class MusterViewModel: ObservableObject {
     }
     
     /// Allows a user to leave the current muster.
-    func leaveMuster(profileViewModel: ProfileViewModel) async throws {
+    func leaveMuster(profileViewModel: ProfileViewModel, deliveryViewModel: DeliveryViewModel) async throws {
         isWorking = true
         defer { isWorking = false }
         
-        try await loadCurrentMuster(profileViewModel: profileViewModel)
+        try await loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
         
         var muster = try requireMuster()  // Unwrap or throw
         

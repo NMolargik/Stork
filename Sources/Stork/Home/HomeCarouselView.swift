@@ -12,70 +12,36 @@ struct HomeCarouselView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
 
-    @State private var currentIndex: Int = 0
-    @State private var dragOffset: CGFloat = 0.0
-    private let threshold: CGFloat = 100.0
     private let numberOfCards = 4 // Update this if you add or remove graphs
 
     var body: some View {
-        GeometryReader { geometry in
-            let cardWidth = geometry.size.width * 0.95 // Consistent card width
-            let spacing: CGFloat = 10
-            let totalCardWidth = cardWidth + spacing
-
-            VStack {
-                ZStack {
-                    ForEach(0..<numberOfCards, id: \.self) { index in
-                        carouselCard(for: index)
-                            .frame(width: cardWidth) // Consistent card size
-                            .offset(x: calculateCardOffset(for: index, totalCardWidth: totalCardWidth))
-                            .animation(.easeInOut, value: currentIndex) // Smooth animation when changing index
-                    }
+        VStack {
+            TabView {
+                ForEach(0..<numberOfCards, id: \.self) { index in
+                    carouselCard(for: index)
                 }
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            dragOffset = value.translation.width
-                        }
-                        .onEnded { value in
-                            withAnimation(.easeInOut) {
-                                if value.translation.width < -threshold && currentIndex < numberOfCards - 1 {
-                                    currentIndex += 1
-                                } else if value.translation.width > threshold && currentIndex > 0 {
-                                    currentIndex -= 1
-                                }
-                                dragOffset = 0
-                            }
-                        }
-                )
-                .frame(width: geometry.size.width) // Restrict visible area
-                .clipped()
-
-                // Dot Indicators
-                HStack(spacing: 8) {
-                    ForEach(0..<numberOfCards, id: \.self) { index in
-                        Circle()
-                            .fill(currentIndex == index ? Color.primary : Color.secondary.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                    }
-                }
-                .padding(.top, 8)
             }
+            .tabViewStyle(.page) // Carousel style with page dots
+            .frame(height: 220) // Consistent height for carousel
+
+            // Dot Indicators (if you want to customize instead of relying on default)
+            /*
+            HStack(spacing: 8) {
+                ForEach(0..<numberOfCards, id: \.self) { index in
+                    Circle()
+                        .fill(currentIndex == index ? Color.primary : Color.secondary.opacity(0.5))
+                        .frame(width: 10, height: 10)
+                }
+            }
+            .padding(.top, 8)
+            */
         }
-        .frame(height: 220)
         .onAppear {
-            currentIndex = 0
-            dragOffset = 0
+            // Additional initialization if needed
         }
     }
 
     // MARK: - Helper Methods
-    private func calculateCardOffset(for index: Int, totalCardWidth: CGFloat) -> CGFloat {
-        // Offset each card based on its position and the current index
-        let centeredIndexOffset = CGFloat(index - currentIndex) * totalCardWidth
-        return centeredIndexOffset + dragOffset
-    }
-
     private func carouselCard(for index: Int) -> some View {
         ZStack {
             Group {

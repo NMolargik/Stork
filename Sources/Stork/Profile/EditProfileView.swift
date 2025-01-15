@@ -54,9 +54,7 @@ struct EditProfileView: View {
                         Text(role.description).tag(role)
                     }
                 }
-                #if !SKIP
-                .pickerStyle(SegmentedPickerStyle())
-                #endif
+                .pickerStyle(.segmented)
                 .onChange(of: role) { _ in
                     triggerHaptic()
                 }

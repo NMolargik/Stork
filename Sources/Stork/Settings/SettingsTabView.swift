@@ -18,7 +18,8 @@ struct SettingsTabView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
-    
+    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+
     @State private var showingDeleteConfirmation = false
     @State private var deleteConfirmationStep = 1
     @State private var passwordString: String = ""
@@ -162,7 +163,7 @@ struct SettingsTabView: View {
             // Leave Muster
             if (!profileViewModel.profile.musterId.isEmpty) {
                 do {
-                    try await musterViewModel.leaveMuster(profileViewModel: profileViewModel)
+                    try await musterViewModel.leaveMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
                 } catch {
                     profileViewModel.isWorking = false
                     errorMessage = error.localizedDescription
@@ -185,4 +186,5 @@ struct SettingsTabView: View {
     SettingsTabView()
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
+        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
 }

@@ -12,6 +12,7 @@ struct OnboardingView: View {
     @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("selectedTab") var selectedTab = Tab.hospitals
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
+    @AppStorage("isPaywallComplete") private var isPaywallComplete: Bool = false
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     
     var body: some View {
@@ -20,7 +21,8 @@ struct OnboardingView: View {
                 withAnimation {
                     isOnboardingComplete = true
                     selectedTab = .home
-                    appState = .main
+                    appState = isPaywallComplete ? .main : .paywall
+
                 }
             }, label: {
                 Text("Skip Onboarding")

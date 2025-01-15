@@ -72,10 +72,6 @@ struct YourJarView: View {
         self.maleCount = countBabies(of: .male)
         self.femaleCount = countBabies(of: .female)
         self.lossCount = countBabies(of: .loss)
-        
-        print(maleCount)
-        print(femaleCount)
-        print(lossCount)
     }
     
     private func countBabies(of sex: Sex) -> Int {

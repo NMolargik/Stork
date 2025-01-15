@@ -94,9 +94,7 @@ struct DeliveryAdditionView: View {
                                 Text(method.description).tag(method)
                             }
                         }
-                        #if !SKIP
-                        .pickerStyle(SegmentedPickerStyle())
-                        #endif
+                        .pickerStyle(.segmented)
                         .onChange(of: deliveryViewModel.newDelivery.deliveryMethod) { _ in
                             triggerHaptic()
                         }

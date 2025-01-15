@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 import StorkModel
+import SkipRevenueCat
 
 #if SKIP
 import java.util.regex.Pattern
@@ -254,6 +255,7 @@ public class ProfileViewModel: ObservableObject {
             isOnboardingComplete = false
             isPaywallComplete = false
             reset()
+            let _ = try await Purchases.sharedInstance.logOut(onError: {_ in }, onSuccess: {_ in }) // TODO: does this need saved?
             signOut()
             
         } catch {
@@ -291,6 +293,7 @@ public class ProfileViewModel: ObservableObject {
                 self.resetTempProfile()
                 self.reset()
                 self.isPaywallComplete = false
+                self.isOnboardingComplete = false
                 self.loggedIn = false
                 self.appState = .splash
             } catch {
