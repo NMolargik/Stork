@@ -1,93 +1,94 @@
 //
 //  CustomPaywall.swift
-//  skip-revenuecat-app
+//  skipapp-stork
 //
-//  Created by Alexey Duryagin on 15/01/2025.
+//  Created by Nick Molargik on 1/15/25.
 //
 
+import Foundation
 import SwiftUI
-import SkipRevenueCat
 
 struct CustomPaywall: View {
-    @State private var isPurchasing = false
-    @State private var error: String?
-    @State private var displayError: Bool = false
+    @EnvironmentObject var profileViewModel: ProfileViewModel
     
-    @Binding private var isPresented: Bool
-    
-    public init(isPresented: Binding<Bool>) {
-        self._isPresented = isPresented
+    var body: some View {
+        self.content
     }
     
-    public var body: some View {
-        let package = Store.shared.offerings?.current?.getPackage(identifier: StoreConstants.packageID)
-        
-        Button {
-            Task {
-                isPurchasing = true
-
-                Purchases.sharedInstance.purchase(
-                    packageToPurchase: package!,
-                    onError: { error, userCancelled in
-                        // No purchase
-                        
-                        self.error = error.underlyingErrorMessage ?? error.message
-                        self.displayError = true
-                        
-                        isPurchasing = false
-                    },
-                    onSuccess: { storeTransaction, customerInfo in
-                        let entitlement = customerInfo.entitlements.get(s: StoreConstants.entitlementID)
-                        Store.shared.subscriptionActive = entitlement?.isActive == true
-
-                        isPurchasing = false
-                    },
-                    isPersonalizedPrice: false,
-                    // If [storeProduct] represents a non-subscription, [oldProductId] and [replacementMode] will be ignored.
-                    oldProductId: nil,
-                    replacementMode: nil
-                )
-            }
-        } label: {
-            let offerings = Store.shared.offerings
-            
-            if (offerings == nil) {
-                ProgressView()
-            } else {
-                HStack {
-                    VStack {
-                        HStack {
-                            Text(package?.storeProduct.title ?? "")
-                                .font(.title3)
-                                .bold()
-                            
-                            if (isPurchasing) { ProgressView() }
-
-                            Spacer()
-                        }
+    @ViewBuilder
+    private var content: some View {
+        VStack(alignment: .center, spacing: 0) {
+            ZStack {
+                Image("storkicon")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 250)
+                    .background {
+                        Circle()
+                            .foregroundStyle(Color.indigo)
                     }
-                    .padding([.top, .bottom], 8.0)
-
+                
+                VStack {
                     Spacer()
-
-                    Text(package?.storeProduct.price.formatted ?? "")
+                    
+                    Text("1 Year")
                         .font(.title3)
-                        .bold()
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .fontWeight(.bold)
+                        .background {
+                            Rectangle()
+                                .cornerRadius(5)
+                                .foregroundStyle(.yellow)
+                                .shadow(radius: 2)
+                        }
                 }
-                #if os(iOS)
-                .contentShape(Rectangle())
-                #endif
             }
+            .frame(height: 290)
+            
+            Text("Spread Your Wings!")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.top)
+            
+            Text("Purchase a year's worth of Stork to access our labor and delivery statistic services!\n\nYour contribution directly enables us to keep Stork's services alive and kicking.")
+                .multilineTextAlignment(.center)
+                .padding()
+            
+            Spacer()
+            
+            CustomButtonView(text: "Sign Out", width: 120, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
+                profileViewModel.signOut()
+            })
+            
         }
-        // SKIP NOWARN
-        .alert(self.error ?? "", isPresented: $displayError) {
-            Button("OK") {
-                displayError = false
-            }
-        }
-#if os(iOS)
-        .buttonStyle(.plain)
-        #endif
+        .frame(maxWidth: .infinity)
     }
     
+    @ViewBuilder
+    private func feature(
+        icon: String,
+        title: LocalizedStringKey,
+        description: LocalizedStringKey,
+        warning: LocalizedStringKey? = nil
+    ) -> some View {
+        HStack(alignment: .top, spacing: 15) {
+            Image(systemName: icon)
+                .font(
+                    .system(
+                        size: 18
+                    )
+                )
+                .frame(width: 30)
+                .offset(y: 2)
+            
+            VStack(alignment: .leading, spacing: 5) {
+                Text(title)
+                    .font(.system(size: 18, weight: .semibold))
+                Text(description)
+                    .font(.system(size: 16))
+            }
+        }.padding(.horizontal)
+    }
 }
