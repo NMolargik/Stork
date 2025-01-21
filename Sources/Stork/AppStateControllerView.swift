@@ -18,7 +18,6 @@ public struct AppStateControllerView: View {
     @AppStorage("errorMessage") private var errorMessage: String = ""
     @AppStorage("selectedTab") var selectedTab = Tab.home
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-    @AppStorage("isPaywallComplete") private var isPaywallComplete: Bool = false
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     
     @StateObject private var profileViewModel: ProfileViewModel
@@ -27,6 +26,7 @@ public struct AppStateControllerView: View {
     @StateObject private var musterViewModel: MusterViewModel
     
     @State private var showRegistration: Bool = false
+    @State private var paywallPresented: Bool = false
     
     // Repositories
     private let deliveryRepository: DeliveryRepositoryInterface
@@ -35,7 +35,7 @@ public struct AppStateControllerView: View {
     private let musterRepository: MusterRepositoryInterface
     private let locationProvider: LocationProviderInterface
     
-    // Initializer
+    // MARK: - Initializer
     public init(
         deliveryRepository: DeliveryRepositoryInterface = DefaultDeliveryRepository(remoteDataSource: FirebaseDeliveryDataSource()),
         hospitalRepository: HospitalRepositoryInterface = DefaultHospitalRepository(remoteDataSource: FirebaseHospitalDatasource()),
@@ -56,64 +56,55 @@ public struct AppStateControllerView: View {
         _musterViewModel = StateObject(wrappedValue: MusterViewModel(musterRepository: musterRepository))
     }
     
+    // MARK: - Body
     public var body: some View {
         ZStack {
             Group {
                 switch appState {
                 case .splash:
-                    SplashView(showRegistration: $showRegistration, onAuthenticated: {
-                        self.loggedIn = true
-                        
-                        // TODO: check paywall
-                        
-                        
-                        if (isOnboardingComplete) {
-                            if (isPaywallComplete) {
-                                appState = .main
-                            } else {
-                                appState = .paywall
-                            }
-                        } else {
-                            appState = .onboard
+                    SplashView(
+                        showRegistration: $showRegistration,
+                        onAuthenticated: {
+                            // User is now logged in
+                            print("SplashView -> onAuthenticated: logged in")
+                            self.loggedIn = true
+                            // Let checkAppState() handle subscription + onboarding
+                            checkAppState()
                         }
-                    })
+                    )
+                    
                 case .register:
                     RegisterView(
                         showRegistration: $showRegistration,
                         onAuthenticated: {
-                            //withAnimation {
+                            print("SplashView -> onAuthenticated: registered")
                             self.loggedIn = true
                             self.showRegistration = false
-                            
-                            if (self.isOnboardingComplete) {
-                                //#if !SKIP
-                                
-                                print("Starting purchase login with id: \(profileViewModel.profile.id)")
-                                Purchases.sharedInstance.logIn(newAppUserID: profileViewModel.profile.id, onError: {_ in }, onSuccess: { _,_  in})
-                                    // customerInfo updated for my_app_user_id
-                                
-                                if (self.isPaywallComplete) {
-                                    appState = AppState.main
-                                } else {
-                                    print("heading on paywall")
-                                    appState = AppState.paywall
-                                }
-                            } else {
-                                appState = AppState.onboard
-                            }
-                            //}
+                            checkAppState()
                         }
                     )
+                    
                 case .paywall:
-                    PaywallView()
+                    PaywallView(isPresented: $paywallPresented)
+                        .onChange(of: paywallPresented) { newValue in
+                            print("Paywall showing?: \(newValue)")
+                            // If user closes or completes paywall, re-check state
+                            checkAppState()
+                        }
+                    
                 case .onboard:
-                    OnboardingView()
+                    OnboardingView {
+                        // Onboarding done, re-check where to go next
+                        print("Onboarding complete")
+                        checkAppState()
+                    }
+                    
                 case .main:
                     MainView()
                 }
             }
             .onAppear {
-                print("Started")
+                // Always check state when view appears
                 checkAppState()
             }
             
@@ -122,6 +113,7 @@ public struct AppStateControllerView: View {
             }
         }
         .onChange(of: appState) { _ in
+            // If something sets appState externally, re-check
             checkAppState()
         }
         .environmentObject(profileViewModel)
@@ -130,58 +122,97 @@ public struct AppStateControllerView: View {
         .environmentObject(musterViewModel)
     }
     
+    // MARK: - Main Decision Logic
     func checkAppState() {
+        print("Checking app state...")
         if loggedIn {
             Task {
                 do {
-                    // Fetch profile
-                    if profileViewModel.profile.email.isEmpty {
-                        try await profileViewModel.fetchCurrentProfile()
-                    }
+                    // Fetch any needed data
+                    try await fetchDataIfNeeded()
                     
-                    // Fetch deliveries
-                    if deliveryViewModel.deliveries.isEmpty {
-                        try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
-                    }
+                    // Attempt RevenueCat login using profile ID (if not empty)
+                    try await handlePurchasesLogin()
                     
-                    // Fetch muster and associated deliveries
-                    if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil {
-                        try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
-                        
-                        if let muster = musterViewModel.currentMuster {
-                            try await deliveryViewModel.getMusterDeliveries(muster: muster)
-                        }
-                    }
+                    // Decide the next state
+                    appState = computeNextAppState()
                     
-                    // Onboarding and paywall checks
-                    if isOnboardingComplete {
-                        print("Starting purchase login with id: \(profileViewModel.profile.id)")
-                        Purchases.sharedInstance.logIn(
-                            newAppUserID: profileViewModel.profile.id,
-                            onError: { _ in },
-                            onSuccess: { _, _ in }
-                        )
-                        
-                        if isPaywallComplete {
-                            appState = AppState.main
-                        } else {
-                            print("heading to paywall")
-                            appState = AppState.paywall
-                        }
-                    } else {
-                        appState = AppState.onboard
-                    }
                 } catch {
                     errorMessage = error.localizedDescription
                 }
             }
         } else {
+            // If not logged in, decide between splash or register
             appState = showRegistration ? .register : .splash
+        }
+    }
+    
+    // MARK: - Compute Next AppState
+    /// Centralized logic for deciding which screen to show next.
+    private func computeNextAppState() -> AppState {
+        // If not logged in, either we are registering or showing splash
+        guard loggedIn else {
+            return showRegistration ? .register : .splash
+        }
+        
+        // Logged in, so check onboarding and subscription
+        if !isOnboardingComplete {
+            return .onboard
+        }
+        
+        if !Store.shared.subscriptionActive {
+            return .paywall
+        }
+        
+        return .main
+    }
+    
+    // MARK: - Fetch Data
+    /// Retrieves Profile, Deliveries, and (optionally) the current Muster
+    private func fetchDataIfNeeded() async throws {
+        // Fetch profile if we don’t have it
+        if profileViewModel.profile.email.isEmpty {
+            try await profileViewModel.fetchCurrentProfile()
+        }
+        
+        // Fetch deliveries if empty
+        if deliveryViewModel.deliveries.isEmpty {
+            try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
+        }
+        
+        // Fetch muster if needed
+        if !profileViewModel.profile.musterId.isEmpty, musterViewModel.currentMuster == nil {
+            try await musterViewModel.loadCurrentMuster(
+                profileViewModel: profileViewModel,
+                deliveryViewModel: deliveryViewModel
+            )
+            if let muster = musterViewModel.currentMuster {
+                try await deliveryViewModel.getMusterDeliveries(muster: muster)
+            }
+        }
+    }
+    
+    // MARK: - Purchases / RevenueCat
+    /// Logs into RevenueCat if we have a valid user ID
+    private func handlePurchasesLogin() async throws {
+        let userId = profileViewModel.profile.id
+        guard !userId.isEmpty else { return }
+        
+        try await withCheckedThrowingContinuation { continuation in
+            Purchases.sharedInstance.logIn(
+                newAppUserID: userId,
+                onError: { error in
+                    continuation.resume(throwing: PurchaseError.purchaseLogInError(error.message))
+                },
+                onSuccess: { _, _ in
+                    continuation.resume(returning: ())
+                }
+            )
         }
     }
 }
 
-// Preview with mock repositories
+// MARK: - Preview with mock repositories
 #Preview {
     AppStateControllerView(
         deliveryRepository: MockDeliveryRepository(),

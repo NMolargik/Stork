@@ -48,7 +48,7 @@ extension PurchasesDelegateHandler: PurchasesDelegate {
             transaction, customerInfo in
             logger.log("\(customerInfo.description)")
             Store.shared.customerInfo = customerInfo
-            
+            print("PURCHASE SUCCESSFUL 2")
             return KotlinUnit()
         }
         #endif

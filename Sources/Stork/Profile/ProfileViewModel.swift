@@ -21,7 +21,6 @@ public class ProfileViewModel: ObservableObject {
     @AppStorage("loggedIn") var loggedIn = false
     @AppStorage("useMetric") private var useMetric: Bool = false
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-    @AppStorage("isPaywallComplete") private var isPaywallComplete: Bool = false
     
     // MARK: - Published Core State
     @Published var profile: Profile
@@ -253,7 +252,6 @@ public class ProfileViewModel: ObservableObject {
             
             resetTempProfile()
             isOnboardingComplete = false
-            isPaywallComplete = false
             reset()
             let _ = try await Purchases.sharedInstance.logOut(onError: {_ in }, onSuccess: {_ in }) // TODO: does this need saved?
             signOut()
@@ -292,7 +290,6 @@ public class ProfileViewModel: ObservableObject {
                 self.confirmPassword = ""
                 self.resetTempProfile()
                 self.reset()
-                self.isPaywallComplete = false
                 self.isOnboardingComplete = false
                 self.loggedIn = false
                 self.appState = .splash

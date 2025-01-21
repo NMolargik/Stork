@@ -18,9 +18,7 @@ import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 
 public struct PaywallView: View {
     @ObservedObject var storeViewModel = Store.shared
-    
-    public init() {
-    }
+    @Binding var isPresented: Bool
 
     public var body: some View {
         #if SKIP
@@ -30,12 +28,12 @@ public struct PaywallView: View {
         #endif
 
         #if !SKIP && os(iOS)
-        CustomPaywall()
+        CustomPaywall(isPresented: $isPresented)
             .paywallFooter()
         #elseif SKIP
         ComposeView { context in
             PaywallFooter(options) { _ in
-                CustomPaywall()
+                CustomPaywall(isPresented: $isPresented)
                     .Compose(context: context.content())
             }
         }

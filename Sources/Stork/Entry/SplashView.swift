@@ -72,11 +72,11 @@ struct SplashView: View {
                 .padding()
             
             CustomButtonView(text: "Sign Up", width: 120, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
-                    withAnimation {
-                        profileViewModel.resetTempProfile()
-                        showRegistration = true
-                        appState = AppState.register
-                    }
+                withAnimation {
+                    profileViewModel.resetTempProfile()
+                    showRegistration = true
+                    appState = AppState.register
+                }
             })
             
             Spacer()
