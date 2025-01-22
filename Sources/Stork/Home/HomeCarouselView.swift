@@ -12,56 +12,27 @@ struct HomeCarouselView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
 
-    private let numberOfCards = 4 // Update this if you add or remove graphs
+    private let numberOfCards = HomeCarouselCard.allCases.count
 
     var body: some View {
         VStack {
             TabView {
-                ForEach(0..<numberOfCards, id: \.self) { index in
-                    carouselCard(for: index)
+                ForEach(HomeCarouselCard.allCases, id: \.self) { card in
+                    carouselCard(for: card)
                 }
             }
-            .tabViewStyle(.page) // Carousel style with page dots
-            .frame(height: 220) // Consistent height for carousel
-
-            // Dot Indicators (if you want to customize instead of relying on default)
-            /*
-            HStack(spacing: 8) {
-                ForEach(0..<numberOfCards, id: \.self) { index in
-                    Circle()
-                        .fill(currentIndex == index ? Color.primary : Color.secondary.opacity(0.5))
-                        .frame(width: 10, height: 10)
-                }
-            }
-            .padding(.top, 8)
-            */
-        }
-        .onAppear {
-            // Additional initialization if needed
+            .tabViewStyle(.page)
+            .frame(height: 220)
         }
     }
 
     // MARK: - Helper Methods
-    private func carouselCard(for index: Int) -> some View {
+    private func carouselCard(for card: HomeCarouselCard) -> some View {
         ZStack {
-            Group {
-                if index == 0 {
-                    #if !SKIP
-                    DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
-                    #endif
-                } else if index == 1 {
-                    #if !SKIP
-                    DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
-                    #endif
-                } else if index == 2 {
-                    BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
-                } else if index == 3 {
-                    TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensure consistent card content size
-            .backgroundCard(colorScheme: colorScheme) // Consistent card styling
-            .padding(.vertical, 5)
+            card.view(deliveryViewModel: deliveryViewModel)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .backgroundCard(colorScheme: colorScheme)
+                .padding(.vertical, 5)
         }
     }
 }

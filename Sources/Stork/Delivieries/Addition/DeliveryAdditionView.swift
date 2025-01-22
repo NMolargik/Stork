@@ -205,15 +205,6 @@ struct DeliveryAdditionView: View {
         }
     }
     
-    /// Triggers haptic feedback for user interactions.
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
-    }
-    
     // MARK: - Submit Delivery Function
     
     @MainActor

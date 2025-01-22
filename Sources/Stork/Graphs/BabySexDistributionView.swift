@@ -21,7 +21,7 @@ struct BabySexDistributionData: Identifiable {
 /// A SwiftUI view that displays the distribution of baby sexes in a pie chart.
 struct BabySexDistributionView: View {
     // MARK: - Properties
-    @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
+    @State var groupedDeliveries: [(key: String, value: [Delivery])]
     @State private var distributionData: [BabySexDistributionData] = []
     @State private var sliceAngles: [Double] = [] // Store the end angles of slices for animation
     
@@ -150,7 +150,7 @@ struct BabySexDistributionView: View {
 // MARK: - Preview
 struct BabySexDistributionView_Previews: PreviewProvider {
     static var previews: some View {
-        BabySexDistributionView(groupedDeliveries: .constant([
+        BabySexDistributionView(groupedDeliveries: [
             // Sample grouped deliveries data
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
@@ -164,6 +164,6 @@ struct BabySexDistributionView_Previews: PreviewProvider {
                     Baby(deliveryId: "2", nurseCatch: true, sex: .loss)
                 ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
             ])
-        ]))
+        ])
     }
 }

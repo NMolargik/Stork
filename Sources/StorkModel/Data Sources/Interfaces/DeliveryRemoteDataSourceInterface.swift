@@ -30,20 +30,27 @@ public protocol DeliveryRemoteDataSourceInterface {
     /// - Throws: `DeliveryError` if the delivery cannot be found or another error occurs.
     func getDelivery(byId id: String) async throws -> Delivery
 
-    /// Lists deliveries based on optional filters.
+    /// Lists deliveries based on optional filters (including **date range** and **limit** for pagination).
     ///
     /// - Parameters:
-    ///   - userId: An optional filter for id of the user associated with the delivery.
-    ///   - userFirstName: An optional filter for the first name of the user associated with the delivery.
-    ///   - hospitalId: An optional filter for the hospital ID associated with the delivery. If nil, this filter is ignored.
-    ///   - hospitalName: An optional filter for the hospital name. If nil, this filter is ignored.
-    ///   - musterId: An optional filter for the muster ID associated with the delivery. If nil, this filter is ignored.
-    ///   - date: An optional filter for the delivery date. If nil, this filter is ignored.
-    ///   - babyCount: An optional filter for the number of babies in the delivery. If nil, this filter is ignored.
-    ///   - deliveryMethod: An optional filter for the delivery method (e.g., vaginal, c-section). If nil, this filter is ignored.
-    ///   - epiduralUsed: An optional filter for whether an epidural was used. If nil, this filter is ignored.
+    ///   - userId: An optional filter for the user ID associated with the delivery.
+    ///   - userFirstName: An optional filter for the first name of the user.
+    ///   - hospitalId: An optional filter for the hospital ID.
+    ///   - hospitalName: An optional filter for the hospital name.
+    ///   - musterId: An optional filter for the muster ID.
+    ///   - date: An optional filter for a specific delivery date.
+    ///   - babyCount: An optional filter for the number of babies in the delivery.
+    ///   - deliveryMethod: An optional filter (e.g., vaginal, c-section).
+    ///   - epiduralUsed: An optional filter for whether an epidural was used.
+    ///   - startAt: (Pagination) An optional start date/time for the query. If provided, only deliveries on/after this date are included.
+    ///   - endAt: (Pagination) An optional end date/time for the query. If provided, only deliveries before this date are included.
+    ///
     /// - Returns: An array of `Delivery` objects matching the specified filters.
-    /// - Throws: `DeliveryError` if the operation fails or no deliveries are found.
+    /// - Throws: `DeliveryError` if the operation fails (e.g., connectivity issues).
+    ///
+    /// - Note: If both `startAt` and `endAt` are provided, only deliveries in `[startAt, endAt)` are returned.
+    ///         If `limit` is provided, it restricts the maximum documents returned (like a page size).
+    ///         You can combine these parameters to implement custom pagination schemes (e.g., 6-month intervals).
     func listDeliveries(
         userId: String?,
         userFirstName: String?,
@@ -53,7 +60,9 @@ public protocol DeliveryRemoteDataSourceInterface {
         date: Date?,
         babyCount: Int?,
         deliveryMethod: DeliveryMethod?,
-        epiduralUsed: Bool?
+        epiduralUsed: Bool?,
+        startAt: Date?,        // Added for date-based pagination
+        endAt: Date?          // Added for date-based pagination
     ) async throws -> [Delivery]
 
     /// Deletes an existing delivery record.

@@ -28,40 +28,25 @@ public struct MainView: View {
 
     public var body: some View {
         TabView(selection: $selectedTab) {
-            // HOME
-            HomeTabView(navigationPath: $navigationPath, selectedTab: $selectedTab, showingDeliveryAddition: $showingDeliveryAddition)
-                .tabItem {
-                    Label(Tab.home.title, systemImage: Tab.home.icon)
-                }
-                .tag(Tab.home)
-
-            // Deliveries
-            DeliveryTabView(showingDeliveryAddition: $showingDeliveryAddition)
-                .tabItem {
-                    Label(Tab.deliveries.title, systemImage: Tab.deliveries.icon)
-                }
-                .tag(Tab.deliveries)
-
-            // Hospitals
-            HospitalListView(onSelection: { _ in })
-                .tabItem {
-                    Label(Tab.hospitals.title, systemImage: Tab.hospitals.icon)
-                }
-                .tag(Tab.hospitals)
-
-            // Muster
-            MusterTabView()
-                .tabItem {
-                    Label(Tab.muster.title, systemImage: Tab.muster.icon)
-                }
-                .tag(Tab.muster)
-
-            // Settings
-            SettingsTabView()
-                .tabItem {
-                    Label(Tab.settings.title, systemImage: Tab.settings.icon)
-                }
-                .tag(Tab.settings)
+            tabItem(for: .home) {
+                HomeTabView(navigationPath: $navigationPath, selectedTab: $selectedTab, showingDeliveryAddition: $showingDeliveryAddition)
+            }
+            
+            tabItem(for: .deliveries) {
+                DeliveryTabView(showingDeliveryAddition: $showingDeliveryAddition)
+            }
+            
+            tabItem(for: .hospitals) {
+                HospitalListView(onSelection: { _ in })
+            }
+            
+            tabItem(for: .muster) {
+                MusterTabView()
+            }
+            
+            tabItem(for: .settings) {
+                SettingsTabView()
+            }
         }
         .tint(.indigo)
         .onChange(of: selectedTab) { _ in
@@ -69,19 +54,28 @@ public struct MainView: View {
         }
     }
     
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
+    func tabItem<Content: View>(for tab: Tab, @ViewBuilder content: () -> Content) -> some View {
+        content()
+            .tabItem {
+                Label(tab.title, systemImage: tab.icon)
+            }
+            .tag(tab)
     }
 }
 
+// MARK: - Preview
 #Preview {
     MainView()
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
-        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-        .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
+        .withMockEnvironmentObjects()
+}
+
+// MARK: - Environment Object Injection
+private extension View {
+    func withMockEnvironmentObjects() -> some View {
+        self
+            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+            .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+            .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
+            .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
+    }
 }

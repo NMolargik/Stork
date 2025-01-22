@@ -1,7 +1,6 @@
 //
 //  DeliveryTabView.swift
 //
-//
 //  Created by Nick Molargik on 11/30/24.
 //
 
@@ -10,92 +9,64 @@ import StorkModel
 
 @MainActor
 struct DeliveryTabView: View {
+    // MARK: - AppStorage
     @AppStorage("errorMessage") var errorMessage: String = ""
     @AppStorage("leftHanded") var leftHanded: Bool = false
-    
+
+    // MARK: - Environment Objects
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
-    
+
+    // MARK: - Binding
     @Binding var showingDeliveryAddition: Bool
-    
+
+    // MARK: - State
     @State private var navigationPath = NavigationPath()
-    
+
     var body: some View {
         NavigationStack(path: $navigationPath) {
             DeliveryListView(showingDeliveryAddition: $showingDeliveryAddition)
-                .refreshable {
-                    Task {
-                        do {
-                            try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
-                        } catch {
-                            errorMessage = error.localizedDescription
-                            throw error
-                        }
-                    }
-                }
+                .refreshable { refreshDeliveries() }
                 .navigationTitle("Deliveries")
                 .navigationDestination(for: Delivery.self) { delivery in
-                    if let index = deliveryViewModel.deliveries.firstIndex(where: { $0.id == delivery.id }) {
-                        DeliveryDetailView(delivery: $deliveryViewModel.deliveries[index])
+                    if let foundDelivery = deliveryViewModel.findDelivery(by: delivery.id) {
+                        DeliveryDetailView(delivery: foundDelivery)
                     } else {
                         Text("Delivery not found")
                     }
                 }
                 .toolbar {
-                    ToolbarItem {
+                    ToolbarItem(placement: .navigationBarTrailing) { // ✅ Placement defined here
                         Button(action: {
                             withAnimation {
                                 triggerHaptic()
-                                self.showingDeliveryAddition = true
+                                showingDeliveryAddition = true
                             }
-                        }, label: {
+                        }) {
                             Text("New Delivery")
                                 .foregroundStyle(.orange)
                                 .fontWeight(.bold)
-                        })
+                        }
                     }
                 }
-            
             Spacer()
         }
         .sheet(isPresented: $showingDeliveryAddition) {
-            NavigationStack {
-                DeliveryAdditionView(showingDeliveryAddition: $showingDeliveryAddition)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Text("New Delivery")
-                                .fontWeight(.bold)
-
-                        }
-                        
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {
-                                triggerHaptic()
-                                
-                                withAnimation {
-                                    showingDeliveryAddition = false
-                                }
-                            }) {
-                                Text("Cancel")
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.red)
-                            }
-                        }
-                    }
-            }
-            .interactiveDismissDisabled()
+            DeliveryAdditionSheet(showingDeliveryAddition: $showingDeliveryAddition)
         }
     }
-    
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
+
+    // MARK: - Functions
+
+    private func refreshDeliveries() {
+        Task {
+            deliveryViewModel.currentPage = 0
+            try? await deliveryViewModel.fetchDeliveriesForCurrentPage(profile: profileViewModel.profile)
+        }
     }
 }
 
+// MARK: - Preview
 #Preview {
     DeliveryTabView(showingDeliveryAddition: .constant(false))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))

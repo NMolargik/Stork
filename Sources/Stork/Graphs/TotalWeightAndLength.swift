@@ -14,7 +14,7 @@ struct TotalWeightAndLengthStatsView: View {
     // MARK: - Properties
     
     /// Bindings to the grouped deliveries data, where each key is a month-year string and the value is an array of `Delivery` objects.
-    @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
+    @State var groupedDeliveries: [(key: String, value: [Delivery])]
     
     /// Whether to display the stats in metric units (kilograms and centimeters).
     @AppStorage("useMetric") private var useMetric: Bool = false
@@ -115,7 +115,7 @@ struct TotalWeightAndLengthStatsView: View {
 // MARK: - Preview
 struct TotalWeightAndLengthStatsView_Previews: PreviewProvider {
     static var previews: some View {
-        TotalWeightAndLengthStatsView(groupedDeliveries: .constant([
+        TotalWeightAndLengthStatsView(groupedDeliveries: [
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
                     Baby(deliveryId: "1", nurseCatch: true, sex: .male, weight: 120.0, height: 20.5), // 120 oz (7.5 lbs)
@@ -128,6 +128,6 @@ struct TotalWeightAndLengthStatsView_Previews: PreviewProvider {
                     Baby(deliveryId: "2", nurseCatch: true, sex: .loss, weight: 37.0, height: 14.7) // 37 oz (2.31 lbs)
                 ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
             ])
-        ]))
+        ])
     }
 }

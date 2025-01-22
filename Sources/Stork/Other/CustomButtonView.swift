@@ -14,43 +14,29 @@ struct CustomButtonView: View {
     var color: Color
     var icon: Image?
     var isEnabled: Bool
-
     var onTapAction: () -> Void
-    
+
     var body: some View {
         Button(action: {
-            // Trigger haptic feedback when the button is pressed
             triggerHaptic()
-            
             withAnimation {
                 onTapAction()
             }
-        }, label: {
+        }) {
             HStack {
-                if let icon = icon { // Safely unwrap icon
+                if let icon = icon {
                     icon
                 }
-                
                 Text(text)
             }
-            .foregroundStyle(.white)
+            .foregroundColor(.white)
             .fontWeight(.bold)
-            .frame(width: width - 5, height: height - 5)
-            .background {
-                (isEnabled ? color : Color.gray)
-                    .cornerRadius(20)
-                    .shadow(radius: 2)
-            }
-        })
+            .frame(width: width, height: height)
+        }
+        .background(isEnabled ? color : Color.gray)
+        .cornerRadius(20)
+        .shadow(radius: 2)
         .disabled(!isEnabled)
-    }
-    
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
     }
 }
 

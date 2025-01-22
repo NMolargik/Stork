@@ -20,7 +20,7 @@ struct DeliveryGraphData: Identifiable {
 // MARK: - DeliveriesThisWeek View
 struct DeliveriesThisWeekView: View {
     // MARK: - Properties
-    @Binding var deliveries: [Delivery]
+    @State var deliveries: [Delivery]
     
     /// Aggregated deliveries for the last seven days
     @State private var deliveriesLastSevenDays: [DeliveryGraphData] = []
@@ -143,7 +143,7 @@ struct DeliveriesThisWeekView: View {
 // MARK: - Preview
 struct DeliveriesThisWeekView_Previews: PreviewProvider {
     static var previews: some View {
-        DeliveriesThisWeekView(deliveries: .constant([]))
+        DeliveriesThisWeekView(deliveries: [])
             .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
     }
 }

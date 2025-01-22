@@ -150,14 +150,6 @@ struct ProfileView: View {
         }
     }
     
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
-    }
-    
     private func startEditingProfile() {
         profileViewModel.editingProfile = true
         profileViewModel.tempProfile = profileViewModel.profile

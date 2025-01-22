@@ -40,32 +40,34 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
 
         var sampleDeliveries: [Delivery] = []
 
-        for monthOffset in 0..<6 { // Generate deliveries for the last 6 months
-            guard let monthDate = calendar.date(byAdding: .month, value: -monthOffset, to: currentDate) else { continue }
-            let numberOfDeliveries = Int.random(in: 1...5) // Randomize number of deliveries per month
+        // Generate deliveries for the last 6 months
+        for monthOffset in 0..<6 {
+            guard let monthDate = calendar.date(byAdding: .month, value: -monthOffset, to: currentDate) else {
+                continue
+            }
+            // Randomize number of deliveries for each month
+            let numberOfDeliveries = Int.random(in: 1...5)
 
             for _ in 0..<numberOfDeliveries {
+                // Pick a random day in that month
                 let randomDate: Date = {
-                    var components = Calendar.current.dateComponents([.year, .month], from: monthDate)
-                    components.day = Int.random(in: 1...28) // Random day in the range
-                    return Calendar.current.date(from: components) ?? monthDate
+                    var components = calendar.dateComponents([.year, .month], from: monthDate)
+                    components.day = Int.random(in: 1...28)
+                    return calendar.date(from: components) ?? monthDate
                 }()
-                
-                // Generate delivery ID
+
                 let deliveryId = UUID().uuidString
-
-                // Generate user ID
                 let userId = UUID().uuidString
-
-                // Generate babies for the delivery
                 let babyCount = Int.random(in: 1...4)
+
+                // Create babies for the delivery
                 let babies = (0..<babyCount).map { _ in
                     Baby(
                         id: UUID().uuidString,
                         deliveryId: deliveryId,
                         birthday: randomDate,
-                        height: Double.random(in: 17.0...22.0), // Height in inches
-                        weight: Double.random(in: 5.0...9.0),   // Weight in pounds
+                        height: Double.random(in: 17.0...22.0),
+                        weight: Double.random(in: 5.0...9.0),
                         nurseCatch: true,
                         sex: .male
                     )
@@ -90,13 +92,13 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
             }
         }
 
+        // Sort descending by date
         return sampleDeliveries.sorted { $0.date > $1.date }
     }
 
-    // MARK: - CRUD Methods (Updated Return Types)
+    // MARK: - CRUD Methods
 
     /// Creates a new delivery and returns the newly created `Delivery`.
-    ///
     /// - Parameter delivery: The `Delivery` object to create.
     /// - Returns: The newly created `Delivery`.
     /// - Throws: `DeliveryError.creationFailed` if a delivery with the same ID already exists.
@@ -109,7 +111,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
     }
 
     /// Updates an existing delivery and returns the updated `Delivery`.
-    ///
     /// - Parameter delivery: The `Delivery` object with updated data.
     /// - Returns: The updated `Delivery`.
     /// - Throws: `DeliveryError.notFound` if no delivery with the given ID exists.
@@ -122,7 +123,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
     }
 
     /// Fetches a delivery by its unique ID.
-    ///
     /// - Parameter id: The ID of the delivery to fetch.
     /// - Returns: A `Delivery` object matching the specified ID.
     /// - Throws: `DeliveryError.notFound` if no such delivery exists.
@@ -133,8 +133,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         return delivery
     }
 
-    /// Lists deliveries based on optional filter criteria.
-    ///
+    /// Lists deliveries based on optional filter criteria **and** optional pagination parameters.
     /// - Parameters:
     ///   - userId: Optional filter by user ID.
     ///   - userFirstName: Optional filter by the user's first name.
@@ -145,19 +144,25 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
     ///   - babyCount: Optional filter by baby count.
     ///   - deliveryMethod: Optional filter by delivery method.
     ///   - epiduralUsed: Optional filter by epidural usage.
+    ///   - startAt: (Pagination) Optional start date/time; only returns deliveries on/after this date.
+    ///   - endAt: (Pagination) Optional end date/time; only returns deliveries before this date.
+    ///
     /// - Returns: An array of `Delivery` objects matching the specified filters.
     public func listDeliveries(
-        userId: String?,
-        userFirstName: String?,
-        hospitalId: String?,
-        hospitalName: String?,
-        musterId: String?,
-        date: Date?,
-        babyCount: Int?,
-        deliveryMethod: DeliveryMethod?,
-        epiduralUsed: Bool?
+        userId: String? = nil,
+        userFirstName: String? = nil,
+        hospitalId: String? = nil,
+        hospitalName: String? = nil,
+        musterId: String? = nil,
+        date: Date? = nil,
+        babyCount: Int? = nil,
+        deliveryMethod: DeliveryMethod? = nil,
+        epiduralUsed: Bool? = nil,
+        startAt: Date? = nil,   // ✅ New optional parameter
+        endAt: Date? = nil     // ✅ New optional parameter
     ) async throws -> [Delivery] {
-        deliveries.filter { delivery in
+        // 1) Apply existing filters
+        var filtered = deliveries.filter { delivery in
             (userId == nil || delivery.userId == userId) &&
             (userFirstName == nil || delivery.userFirstName == userFirstName) &&
             (hospitalId == nil || delivery.hospitalId == hospitalId) &&
@@ -168,10 +173,20 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
             (deliveryMethod == nil || delivery.deliveryMethod == deliveryMethod) &&
             (epiduralUsed == nil || delivery.epiduralUsed == epiduralUsed)
         }
+
+        // 2) Apply new date-based filters (pagination)
+        if let startAt = startAt {
+            filtered = filtered.filter { $0.date >= startAt }
+        }
+        if let endAt = endAt {
+            filtered = filtered.filter { $0.date < endAt }
+        }
+
+        // Return the filtered/paginated deliveries
+        return filtered
     }
 
     /// Deletes a delivery from the mock storage.
-    ///
     /// - Parameter delivery: The `Delivery` object to delete.
     /// - Throws: `DeliveryError.deletionFailed` if the delivery cannot be found in the mock storage.
     public func deleteDelivery(delivery: Delivery) async throws {

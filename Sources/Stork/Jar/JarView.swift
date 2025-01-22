@@ -11,16 +11,17 @@ import StorkModel
 struct JarView: View {
     @Environment(\.colorScheme) var colorScheme
 
-    /// The deliveries coming in from elsewhere in the app
-    @Binding var deliveries: [Delivery]
+    /// The deliveries coming in from elsewhere in the app (optional for test mode)
+    @Binding var deliveries: [Delivery]?
     let headerText: String
+    let isTestMode: Bool // 🔹 Test mode flag
 
     // Marble simulation states
     @State private var marbles: [Marble] = []
     @State private var pendingMarbles: [Marble] = []
     @State private var displayedBabyIDs: Set<String> = []
     @State private var isAddingMarbles: Bool = false
-    
+
     private let maxMarbleCount = 100
     private let marbleRadius: CGFloat = 12
     private let collisionIterations = 15
@@ -29,7 +30,7 @@ struct JarView: View {
     private let friction: CGFloat = 0.85
 
     private let timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect()
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -37,7 +38,7 @@ struct JarView: View {
                     .foregroundColor(colorScheme == .dark ? .black : .white)
                     .cornerRadius(20)
                     .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                
+
                 VStack {
                     Text(headerText)
                         .padding(8)
@@ -51,10 +52,10 @@ struct JarView: View {
                                 .shadow(radius: 2)
                         }
                         .padding(.top, 20)
-                    
+
                     Spacer()
                 }
-                
+
                 ForEach(marbles) { marble in
                     Circle()
                         .fill(
@@ -76,25 +77,32 @@ struct JarView: View {
                 }
             }
             .onAppear {
-                refreshMarbles(in: geometry.size)
+                if isTestMode {
+                    addTestMarbles(in: geometry.size) // 🔹 Test mode: Add 35 marbles
+                } else {
+                    refreshMarbles(in: geometry.size)
+                }
             }
             .onChange(of: deliveries) { _ in
-                refreshMarbles(in: geometry.size)
+                if !isTestMode {
+                    refreshMarbles(in: geometry.size)
+                }
             }
             .onReceive(timer) { _ in
                 updateMarbles(in: geometry.size)
             }
         }
     }
-    
+
     private func refreshMarbles(in size: CGSize) {
+        guard let deliveries = deliveries else { return } // Ignore if nil (non-test mode)
+
         let monthDeliveries = deliveriesForCurrentMonth(deliveries)
-        
+
         let newBabies = monthDeliveries.flatMap { $0.babies }.filter {
             !displayedBabyIDs.contains($0.id)
         }
-        
-        // Add new marbles to pending list
+
         for baby in newBabies {
             if marbles.count + pendingMarbles.count < maxMarbleCount {
                 let newMarble = createMarble(in: size, color: baby.sex.color)
@@ -102,11 +110,26 @@ struct JarView: View {
                 displayedBabyIDs.insert(baby.id)
             }
         }
-        
-        // Add pending marbles sequentially
+
         addPendingMarblesSequentially()
     }
-    
+
+    // 🔹 Test Mode: Instantly adds 35 marbles
+    private func addTestMarbles(in size: CGSize) {
+        Task {
+            let testColors: [Color] = [.blue, .pink, .purple]
+            for _ in 0..<25 {
+                let testMarble = createMarble(
+                    in: size,
+                    color: testColors.randomElement() ?? .gray
+                )
+                await MainActor.run {
+                    marbles.append(testMarble)
+                }
+                try? await Task.sleep(nanoseconds: 30_000_000) // Stagger slightly (0.03s delay)
+            }
+        }
+    }
     
     // MARK: - Marble Addition Logic
     
@@ -178,6 +201,9 @@ struct JarView: View {
             return []
         }
 
+        guard let deliveries = deliveries else {
+            return []
+        }
         // Filter deliveries within the week range
         return deliveries.filter { delivery in
             delivery.date >= weekStart && delivery.date <= weekEnd
@@ -224,10 +250,7 @@ struct JarView: View {
         return Marble(
             id: UUID(),
             position: position,
-            velocity: Velocity(
-                dx: .random(in: -1.0...1.0),
-                dy: .random(in: -1.0...1.0)
-            ),
+            velocity: CGPoint(x: .random(in: -1.0...1.0), y: .random(in: -1.0...1.0)),
             marbleRadius: marbleRadius,
             color: color
         )
@@ -237,17 +260,17 @@ struct JarView: View {
     private func updateMarbles(in size: CGSize) {
         // Gravity & friction
         for i in marbles.indices {
-            marbles[i].velocity.dy += gravity
-            marbles[i].velocity.dx *= friction
-            marbles[i].velocity.dy *= friction
-            marbles[i].velocity.dx = min(max(marbles[i].velocity.dx, -3.0), 3.0)
-            marbles[i].velocity.dy = min(max(marbles[i].velocity.dy, -3.0), 3.0)
+            marbles[i].velocity.y += gravity
+            marbles[i].velocity.x *= friction
+            marbles[i].velocity.y *= friction
+            marbles[i].velocity.x = min(max(marbles[i].velocity.x, -3.0), 3.0)
+            marbles[i].velocity.y = min(max(marbles[i].velocity.y, -3.0), 3.0)
         }
 
         // Move marbles
         for i in marbles.indices {
-            marbles[i].position.x += marbles[i].velocity.dx
-            marbles[i].position.y += marbles[i].velocity.dy
+            marbles[i].position.x += marbles[i].velocity.x
+            marbles[i].position.y += marbles[i].velocity.y
         }
 
         // Collision resolution
@@ -268,18 +291,18 @@ struct JarView: View {
             let r = marbles[i].marbleRadius
             if marbles[i].position.x < r {
                 marbles[i].position.x = r
-                marbles[i].velocity.dx *= -damping
+                marbles[i].velocity.x *= -damping
             } else if marbles[i].position.x > size.width - r {
                 marbles[i].position.x = size.width - r
-                marbles[i].velocity.dx *= -damping
+                marbles[i].velocity.x *= -damping
             }
 
             if marbles[i].position.y < r {
                 marbles[i].position.y = r
-                marbles[i].velocity.dy *= -damping
+                marbles[i].velocity.y *= -damping
             } else if marbles[i].position.y > size.height - r {
                 marbles[i].position.y = size.height - r
-                marbles[i].velocity.dy *= -damping
+                marbles[i].velocity.y *= -damping
             }
         }
 
@@ -291,8 +314,8 @@ struct JarView: View {
         // Stop jittering marbles
         let velocityThreshold: CGFloat = 0.1
         for i in marbles.indices {
-            if abs(marbles[i].velocity.dx) < velocityThreshold &&
-               abs(marbles[i].velocity.dy) < velocityThreshold {
+            if abs(marbles[i].velocity.x) < velocityThreshold &&
+               abs(marbles[i].velocity.y) < velocityThreshold {
                 marbles[i].velocity = .zero
             }
         }
@@ -321,8 +344,8 @@ struct JarView: View {
             }
 
             // Velocity adjustments
-            let relativeVelocityX = m1.velocity.dx - m2.velocity.dx
-            let relativeVelocityY = m1.velocity.dy - m2.velocity.dy
+            let relativeVelocityX = m1.velocity.x - m2.velocity.x
+            let relativeVelocityY = m1.velocity.y - m2.velocity.y
             let velAlongNormal = relativeVelocityX * nx + relativeVelocityY * ny
             if velAlongNormal > 0 { return }
 
@@ -331,10 +354,10 @@ struct JarView: View {
 
             let impulseX = impulse * nx
             let impulseY = impulse * ny
-            m1.velocity.dx += impulseX
-            m1.velocity.dy += impulseY
-            m2.velocity.dx -= impulseX
-            m2.velocity.dy -= impulseY
+            m1.velocity.x += impulseX
+            m1.velocity.y += impulseY
+            m2.velocity.x -= impulseX
+            m2.velocity.y -= impulseY
         }
     }
     
@@ -342,7 +365,7 @@ struct JarView: View {
         for i in marbles.indices {
             if marbles[i].position.y > size.height - marbles[i].marbleRadius * 2 {
                 marbles[i].position.y = size.height - marbles[i].marbleRadius * 2
-                marbles[i].velocity.dy = 0
+                marbles[i].velocity.y = 0
             }
         }
     }
@@ -352,7 +375,7 @@ struct JarView: View {
         for i in marbles.indices {
             if marbles[i].position.y > bottomThreshold {
                 // Apply resistance to downward velocity
-                marbles[i].velocity.dy *= 0.5
+                marbles[i].velocity.y *= 0.5
             }
         }
     }
@@ -360,23 +383,9 @@ struct JarView: View {
     private func applyDynamicFriction(for size: CGSize) {
         for i in marbles.indices {
             if marbles[i].position.y > size.height * 0.8 {
-                marbles[i].velocity.dx *= 0.9  // Increase friction horizontally
-                marbles[i].velocity.dy *= 0.9  // Increase friction vertically
+                marbles[i].velocity.x *= 0.9  // Increase friction horizontally
+                marbles[i].velocity.y *= 0.9  // Increase friction vertically
             }
         }
     }
 }
-
-// MARK: - Marble & Velocity
-struct Marble: Identifiable {
-    let id: UUID
-    var position: CGPoint
-    var velocity: Velocity
-    var marbleRadius: CGFloat
-    var color: Color
-    
-    var diameter: CGFloat {
-        marbleRadius * 2
-    }
-}
-

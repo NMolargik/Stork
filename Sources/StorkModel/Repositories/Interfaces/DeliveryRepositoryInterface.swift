@@ -27,19 +27,24 @@ public protocol DeliveryRepositoryInterface {
     ///           Other `DeliveryError` if the fetch fails.
     func getDelivery(byId id: String) async throws -> Delivery
 
-    /// Lists deliveries based on optional filters.
+    /// Lists deliveries based on optional filters **and optional pagination parameters**.
     /// - Parameters:
-    ///   - userId: An optional filter for id of the user associated with the delivery
-    ///   - userFirstName: An optional filter for first name of the user associated with the delivery
+    ///   - userId: An optional filter for the ID of the user associated with the delivery.
+    ///   - userFirstName: An optional filter for the first name of the user.
     ///   - hospitalId: An optional hospital ID filter.
     ///   - hospitalName: An optional hospital name filter.
     ///   - musterId: An optional muster ID filter.
-    ///   - date: An optional date filter.
+    ///   - date: An optional date filter (for a specific day).
     ///   - babyCount: An optional baby count filter.
-    ///   - deliveryMethod: An optional delivery method filter.
+    ///   - deliveryMethod: An optional delivery method filter (e.g., vaginal, c-section).
     ///   - epiduralUsed: An optional epidural usage filter.
+    ///   - startAt: (Pagination) An optional start date/time for the query.
+    ///   - endAt: (Pagination) An optional end date/time for the query.
     /// - Returns: A list of `Delivery` objects matching the filters.
     /// - Throws: `DeliveryError` if the query fails.
+    ///
+    /// **Backward compatibility**: Existing code can omit `startAt`, `endAt`, and `limit`
+    /// to continue using the old behavior.
     func listDeliveries(
         userId: String?,
         userFirstName: String?,
@@ -49,7 +54,9 @@ public protocol DeliveryRepositoryInterface {
         date: Date?,
         babyCount: Int?,
         deliveryMethod: DeliveryMethod?,
-        epiduralUsed: Bool?
+        epiduralUsed: Bool?,
+        startAt: Date?,   // New optional date-based pagination
+        endAt: Date?     // New optional date-based pagination
     ) async throws -> [Delivery]
 
     /// Deletes an existing delivery record.

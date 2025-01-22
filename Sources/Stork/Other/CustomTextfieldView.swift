@@ -11,54 +11,49 @@ struct CustomTextfieldView: View {
     @Environment(\.colorScheme) var colorScheme
 
     @Binding var text: String
-    
     var hintText: String
     var icon: Image
     var isSecure: Bool
     var iconColor: Color?
     var characterLimit: Int?
-    
+
+    private var trimmedText: Binding<String> {
+        Binding(
+            get: { text },
+            set: { newValue in
+                if let limit = characterLimit {
+                    text = String(newValue.prefix(limit))
+                } else {
+                    text = newValue
+                }
+            }
+        )
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
                 icon
                     .foregroundStyle(iconColor ?? .white)
                     .frame(width: 20)
-                
+
                 Group {
                     if isSecure {
-                        SecureField(hintText, text: $text)
-                            .frame(height: 50)
+                        SecureField(hintText, text: trimmedText)
                     } else {
-                        TextField(hintText, text: $text)
-                            .frame(height: 50)
-
+                        TextField(hintText, text: trimmedText)
                     }
                 }
-                .padding(.leading, 2)
-                .padding(.trailing, 5)
+                .frame(height: 50)
+                .padding(.horizontal, 5)
                 .textInputAutocapitalization(.never)
-
-                .onChange(of: text) { newValue in
-                    if let limit = characterLimit, newValue.count > limit {
-                        text = String(newValue.prefix(limit))
-                    }
-                }
             }
             .padding(.leading)
-            .background {
-                if (colorScheme == .dark) {
-                    Color.black
-                        .cornerRadius(20)
-                        .shadow(color: .gray, radius: 2)
-                } else {
-                    Color.white
-                        .cornerRadius(20)
-                        .shadow(radius: 2)
-                }
-            }
+            .background(colorScheme == .dark ? Color.black : Color.white)
+            .cornerRadius(20)
+            .shadow(color: colorScheme == .dark ? .gray : .black, radius: 2)
             .frame(height: 50)
-            
+
             if let limit = characterLimit {
                 Text("\(text.count)/\(limit)")
                     .font(.caption)
@@ -79,7 +74,7 @@ struct CustomTextfieldView: View {
             iconColor: .blue,
             characterLimit: 25
         )
-        
+
         CustomTextfieldView(
             text: .constant("Password"),
             hintText: "Enter your password...",

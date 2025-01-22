@@ -49,8 +49,9 @@ struct MusterTabView: View {
                     
                     ZStack {
                         JarView(
-                            deliveries: $deliveryViewModel.musterDeliveries,
-                            headerText: getCurrentWeekRange() ?? ""
+                            deliveries: Binding(get: { deliveryViewModel.musterDeliveries }, set: { deliveryViewModel.musterDeliveries = $0 ?? [] }),
+                            headerText: getCurrentWeekRange() ?? "",
+                            isTestMode: false
                         )
 
                         VStack {
@@ -145,14 +146,6 @@ struct MusterTabView: View {
                 MusterSplashView()
             }
         }
-    }
-    
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
     }
     
     private func countBabies(of sex: Sex) -> Int {

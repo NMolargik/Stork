@@ -60,7 +60,6 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         do {
             let data = delivery.dictionary
             try await db.collection("Delivery").document(delivery.id).updateData(data)
-            
             return delivery
         } catch {
             throw DeliveryError.firebaseError("Failed to update delivery: \(error.localizedDescription)")
@@ -86,7 +85,9 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
             }
 
             guard let delivery = Delivery(from: data, id: document.documentID) else {
-                throw DeliveryError.firebaseError("Failed to parse data into Delivery model (ID: \(document.documentID))")
+                throw DeliveryError.firebaseError(
+                    "Failed to parse data into Delivery model (ID: \(document.documentID))"
+                )
             }
             return delivery
         } catch let error as DeliveryError {
@@ -96,9 +97,9 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         }
     }
 
-    // MARK: - List Deliveries with Filters
+    // MARK: - List Deliveries with Filters & Pagination
 
-    /// Lists deliveries based on optional filters.
+    /// Lists deliveries based on optional filters (including pagination parameters).
     ///
     /// - Parameters:
     ///   - userId: An optional filter for the ID of the user associated with the delivery.
@@ -110,6 +111,9 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     ///   - babyCount: An optional filter for the number of babies in the delivery.
     ///   - deliveryMethod: An optional filter for the delivery method (e.g., vaginal, c-section).
     ///   - epiduralUsed: An optional filter for whether an epidural was used.
+    ///   - startAt: (Pagination) An optional start date/time for the query. If provided, only deliveries on/after this date are included.
+    ///   - endAt: (Pagination) An optional end date/time for the query. If provided, only deliveries before this date are included.
+    ///
     /// - Returns: An array of `Delivery` objects matching the specified filters.
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If an error occurs while fetching the deliveries.
@@ -122,41 +126,56 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         date: Date? = nil,
         babyCount: Int? = nil,
         deliveryMethod: DeliveryMethod? = nil,
-        epiduralUsed: Bool? = nil
+        epiduralUsed: Bool? = nil,
+        startAt: Date? = nil,        // ✅ Added for date-based pagination
+        endAt: Date? = nil          // ✅ Added for date-based pagination
     ) async throws -> [Delivery] {
         do {
             var query: Query = db.collection("Delivery")
 
-            if let userId = userId {
+            // MARK: - Filter Conditions
+            if let userId {
                 query = query.whereField("userId", isEqualTo: userId)
             }
-            if let userFirstName = userFirstName {
+            if let userFirstName {
                 query = query.whereField("userFirstName", isEqualTo: userFirstName)
             }
-            if let hospitalId = hospitalId {
+            if let hospitalId {
                 query = query.whereField("hospitalId", isEqualTo: hospitalId)
             }
-            if let hospitalName = hospitalName {
+            if let hospitalName {
                 query = query.whereField("hospitalName", isEqualTo: hospitalName)
             }
-            if let musterId = musterId {
+            if let musterId {
                 query = query.whereField("musterId", isEqualTo: musterId)
             }
-            if let date = date {
+            if let date {
                 // Convert date to a Firestore-friendly format (timestamp in seconds)
                 query = query.whereField("date", isEqualTo: date.timeIntervalSince1970)
             }
-            if let babyCount = babyCount {
+            if let babyCount {
                 query = query.whereField("babyCount", isEqualTo: babyCount)
             }
-            if let deliveryMethod = deliveryMethod {
+            if let deliveryMethod {
                 query = query.whereField("deliveryMethod", isEqualTo: deliveryMethod.rawValue)
             }
-            if let epiduralUsed = epiduralUsed {
+            if let epiduralUsed {
                 query = query.whereField("epiduralUsed", isEqualTo: epiduralUsed)
             }
 
-            // Fetch documents that match the query
+            // MARK: - Pagination Logic
+            if let startAt {
+                // Get deliveries >= startAt
+                let timestamp = startAt.timeIntervalSince1970
+                query = query.whereField("date", isGreaterThanOrEqualTo: timestamp)
+            }
+            if let endAt {
+                // Get deliveries < endAt (or ≤, depending on your logic)
+                let timestamp = endAt.timeIntervalSince1970
+                query = query.whereField("date", isLessThan: timestamp)
+            }
+
+            // MARK: - Fetch Documents
             let snapshot = try await query.getDocuments()
             return snapshot.documents.compactMap { document in
                 let data = document.data()

@@ -13,117 +13,100 @@ import StorkModel
 class HospitalViewModel: ObservableObject {
     // MARK: - AppStorage
     @AppStorage("errorMessage") var errorMessage: String = ""
-    
+
     // MARK: - Published Properties
-    @Published var hospitals: [Hospital] = []
-    @Published var primaryHospital: Hospital?
-    
+    @Published private(set) var hospitals: [Hospital] = []
+    @Published private(set) var primaryHospital: Hospital?
+
     @Published var isWorking: Bool = false
     @Published var searchQuery: String = ""
     @Published var searchEnabled: Bool = true
     @Published var usingLocation: Bool = true
     @Published var selectedHospital: Hospital?
     @Published var isMissingHospitalSheetPresented: Bool = false
-    
+
     // MARK: - Dependencies
-    let hospitalRepository: HospitalRepositoryInterface
+    private let hospitalRepository: HospitalRepositoryInterface
     let locationProvider: LocationProviderInterface
-    
+
     // MARK: - Initializer
-    public init(hospitalRepository: HospitalRepositoryInterface,
-                locationProvider: LocationProviderInterface)
+    init(hospitalRepository: HospitalRepositoryInterface,
+         locationProvider: LocationProviderInterface)
     {
         self.hospitalRepository = hospitalRepository
         self.locationProvider = locationProvider
-        
-        Task {
-            do {
-                try await fetchHospitalsNearby()
-            } catch {
-                // Error handling is done within `fetchHospitalsNearby()`
-            }
-        }
     }
-    
+
     // MARK: - Fetch Hospitals Nearby
     /// Fetches hospitals near the user's current location.
-    public func fetchHospitalsNearby() async throws {
-        searchQuery = ""
-        usingLocation = true
-        isWorking = true
-        defer { isWorking = false }
-        
-        do {
-            let location = try await locationProvider.fetchCurrentLocation()
-            let cityState = try await locationProvider.fetchCityAndState(
+    public func fetchHospitalsNearby() async {
+        resetSearch()
+        await executeAsync {
+            let location = try await self.locationProvider.fetchCurrentLocation()
+            let cityState = try await self.locationProvider.fetchCityAndState(
                 from: Location(latitude: location.latitude, longitude: location.longitude)
             )
-            
-            self.hospitals = try await hospitalRepository.getHospitals(
+
+            self.hospitals = try await self.hospitalRepository.getHospitals(
                 byCity: cityState.city ?? "San Francisco",
                 andState: cityState.state ?? "CA"
             )
-        } catch {
-            errorMessage = error.localizedDescription
-            throw error
         }
     }
-    
+
     // MARK: - Search Hospitals by Partial Name
     /// Searches hospitals by a partial name.
-    public func searchHospitals() async throws {
+    public func searchHospitals() async {
         usingLocation = false
-        isWorking = true
-        defer { isWorking = false }
-        
-        do {
-            let results = try await hospitalRepository.searchHospitals(byPartialName: searchQuery)
-            self.hospitals = results
-        } catch {
-            errorMessage = error.localizedDescription
-            throw error
+        await executeAsync {
+            self.hospitals = try await self.hospitalRepository.searchHospitals(byPartialName: self.searchQuery)
         }
     }
-    
-    // Mark: - Create a missing hospital
+
+    // MARK: - Create a Missing Hospital
     public func createMissingHospital(name: String) async throws -> Hospital {
-        return try await hospitalRepository.createHospital(name: name)
+        try await hospitalRepository.createHospital(name: name)
     }
-    
+
     // MARK: - Fetch User's Primary Hospital
     /// Loads the primary hospital for a given profile, if it exists.
-    public func getUserPrimaryHospital(profile: Profile) async throws {
-        guard !profile.primaryHospitalId.isEmpty else {
-            return
-        }
-        do {
-            self.primaryHospital = try await hospitalRepository.getHospital(byId: profile.primaryHospitalId)
-        } catch {
-            errorMessage = error.localizedDescription
-            throw error
+    public func getUserPrimaryHospital(profile: Profile) async {
+        guard !profile.primaryHospitalId.isEmpty else { return }
+        await executeAsync {
+            self.primaryHospital = try await self.hospitalRepository.getHospital(byId: profile.primaryHospitalId)
         }
     }
-    
+
     // MARK: - Update Hospital with a New Delivery
     /// Updates hospital stats (deliveryCount, babyCount) after a new delivery.
-    public func updateHospitalWithNewDelivery(hospital: Hospital, babyCount: Int) async throws {
-        isWorking = true
-        defer { isWorking = false }
-        
-        do {
-            let updatedHospital = try await hospitalRepository.updateHospitalStats(
+    public func updateHospitalWithNewDelivery(hospital: Hospital, babyCount: Int) async {
+        await executeAsync {
+            let updatedHospital = try await self.hospitalRepository.updateHospitalStats(
                 hospital: hospital,
                 additionalDeliveryCount: 1, // Hard-coded to 1 extra delivery
                 additionalBabyCount: babyCount
             )
-            
-            // Replace the existing hospital in the local array
-            if let index = hospitals.firstIndex(where: { $0.id == hospital.id }) {
-                hospitals[index] = updatedHospital
-            }
+
+            // Update hospital in local array
+            self.hospitals = self.hospitals.map { $0.id == hospital.id ? updatedHospital : $0 }
+        }
+    }
+
+    // MARK: - Private Helper Methods
+    private func resetSearch() {
+        searchQuery = ""
+        usingLocation = true
+    }
+
+    /// Handles async tasks with error management.
+    private func executeAsync(_ task: @escaping () async throws -> Void) async {
+        isWorking = true
+        defer { isWorking = false }
+
+        do {
+            try await task()
         } catch {
             errorMessage = error.localizedDescription
-            throw error
         }
     }
 }

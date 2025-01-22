@@ -103,15 +103,7 @@ struct SplashView: View {
                 .presentationDetents([.fraction(0.3)])
         }
     }
-    
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
-    }
-        
+
     private func startAnimation() {
         isAnimating = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in

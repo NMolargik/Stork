@@ -81,16 +81,16 @@ struct MusterCarouselView: View {
             Group {
                 if index == 0 {
                     #if !SKIP
-                    DeliveriesThisWeekView(deliveries: $deliveryViewModel.musterDeliveries)
+                    DeliveriesThisWeekView(deliveries: deliveryViewModel.musterDeliveries)
                     #endif
                 } else if index == 1 {
                     #if !SKIP
-                    DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
+                    DeliveriesLastSixMonthsView(groupedDeliveries: deliveryViewModel.groupedMusterDeliveries)
                     #endif
                 } else if index == 2 {
-                    BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
+                    BabySexDistributionView(groupedDeliveries: deliveryViewModel.groupedMusterDeliveries)
                 } else if index == 3 {
-                    TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
+                    TotalWeightAndLengthStatsView(groupedDeliveries: deliveryViewModel.groupedMusterDeliveries)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensure consistent card content size

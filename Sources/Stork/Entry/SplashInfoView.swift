@@ -15,7 +15,7 @@ struct SplashInfoView: View {
                 .font(.title2)
                 .fontWeight(.bold)
             
-            Text("Stork is a labor and delivery app designed to assist healthcare providers in managing weekly delivery statistics.")
+            Text("Stork is a labor and delivery app designed to assist nurses and doctors in managing weekly delivery statistics.")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .padding()

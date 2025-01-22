@@ -9,6 +9,14 @@ import SwiftUI
 import SkipRevenueCat
 import StorkModel
 
+func triggerHaptic(style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) {
+    #if !SKIP
+    let generator = UIImpactFeedbackGenerator(style: style)
+    generator.prepare()
+    generator.impactOccurred()
+    #endif
+}
+
 enum AppState: String, Hashable {
     case splash, register, onboard, paywall, main
 }
@@ -85,7 +93,7 @@ public struct AppStateControllerView: View {
                     )
                     
                 case .paywall:
-                    PaywallView(isPresented: $paywallPresented)
+                    PaywallParentView(isPresented: $paywallPresented)
                         .onChange(of: paywallPresented) { newValue in
                             print("Paywall showing?: \(newValue)")
                             // If user closes or completes paywall, re-check state
@@ -177,7 +185,7 @@ public struct AppStateControllerView: View {
         
         // Fetch deliveries if empty
         if deliveryViewModel.deliveries.isEmpty {
-            try await deliveryViewModel.getUserDeliveries(profile: profileViewModel.profile)
+            try await deliveryViewModel.fetchDeliveriesForCurrentPage(profile: profileViewModel.profile)
         }
         
         // Fetch muster if needed
@@ -187,7 +195,9 @@ public struct AppStateControllerView: View {
                 deliveryViewModel: deliveryViewModel
             )
             if let muster = musterViewModel.currentMuster {
-                try await deliveryViewModel.getMusterDeliveries(muster: muster)
+                deliveryViewModel.currentPage = 0
+                
+                try await deliveryViewModel.fetchMusterDeliveriesForCurrentPage(muster: muster)
             }
         }
     }

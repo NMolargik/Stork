@@ -127,7 +127,8 @@ public class MusterViewModel: ObservableObject {
         }
         
         do {
-            try await deliveryViewModel.getMusterDeliveries(muster: muster)
+            deliveryViewModel.currentPage = 0
+            try await deliveryViewModel.fetchMusterDeliveriesForCurrentPage(muster: muster)
         } catch {
             throw DeliveryError.notFound("Could not collect muster deliveries. Please refresh.")
         }

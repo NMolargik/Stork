@@ -84,9 +84,6 @@
     "%lld lbs" : {
 
     },
-    "%lld oz" : {
-
-    },
     "%lld reported bab%@" : {
       "localizations" : {
         "en" : {
@@ -283,9 +280,6 @@
     "Delivery Method" : {
 
     },
-    "Delivery Method: %@" : {
-
-    },
     "Delivery not found" : {
 
     },
@@ -310,6 +304,9 @@
     "Epidural Used" : {
 
     },
+    "Female" : {
+
+    },
     "First Name" : {
 
     },
@@ -319,7 +316,7 @@
     "Girl%@" : {
 
     },
-    "Height: %@" : {
+    "Have questions or feedback? Reach out via email or social media. Your feature requests are top priority for me." : {
 
     },
     "Hello [%@](https://skip.tools)!" : {
@@ -379,9 +376,6 @@
         }
       }
     },
-    "Hospital Name: %@" : {
-
-    },
     "Hospitals" : {
 
     },
@@ -438,6 +432,9 @@
     "Leave Muster" : {
 
     },
+    "Let's Connect!" : {
+
+    },
     "Light" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -473,7 +470,13 @@
     "Log In Instead" : {
 
     },
+    "Loss" : {
+
+    },
     "Loss%@" : {
+
+    },
+    "Male" : {
 
     },
     "Map requires iOS 17" : {
@@ -534,9 +537,6 @@
     "No data available" : {
 
     },
-    "No deliveries found" : {
-
-    },
     "No deliveries recorded yet. Use the button above to get started!" : {
 
     },
@@ -562,12 +562,6 @@
 
     },
     "Old Members" : {
-
-    },
-    "Onboarding Step %lld" : {
-
-    },
-    "Other View: %@" : {
 
     },
     "Owned by: %@" : {
@@ -615,9 +609,6 @@
 
     },
     "Provide an email address and we can send a password reset email." : {
-
-    },
-    "Purchase a year's worth of Stork to access our labor and delivery statistic services!\n\nYour contribution directly enables us to keep Stork's services in the air." : {
 
     },
     "Recorded" : {
@@ -713,9 +704,6 @@
     "Sex" : {
 
     },
-    "Shared Profile View" : {
-
-    },
     "Sign Out" : {
 
     },
@@ -728,19 +716,19 @@
     "Sorry we are missing your hospital. Please provide its name and we will take it from there!" : {
 
     },
-    "Spread Your Wings!" : {
-
-    },
     "Stork" : {
 
     },
-    "Stork Annual" : {
+    "Stork allows users to track trends in labor and delivery. This includes sex, weight, monthly totals, and more!\n\nYour delivery jar will fill up with colored marbles that each represent a baby delivered in the last week." : {
 
     },
-    "Stork is a labor and delivery app designed to assist healthcare providers in managing weekly delivery statistics." : {
+    "Stork is a labor and delivery app designed to assist nurses and doctors in managing weekly delivery statistics." : {
 
     },
     "Submit" : {
+
+    },
+    "Support Development" : {
 
     },
     "System" : {
@@ -775,10 +763,10 @@
     "This action will permanently delete all your personal information and your deliveries." : {
 
     },
-    "This is some descriptive text for this step of onboarding. Customize and add more visuals or instructions as needed." : {
+    "This will remove all your personal data and cannot be undone." : {
 
     },
-    "This will remove all your personal data and cannot be undone." : {
+    "Upgrade to premium" : {
 
     },
     "Use Location" : {
@@ -791,9 +779,6 @@
 
     },
     "Version" : {
-
-    },
-    "Weight: %@" : {
 
     },
     "Welcome" : {
@@ -825,13 +810,22 @@
         }
       }
     },
+    "Welcome to Stork" : {
+
+    },
     "You can submit up to 8 deliveries per day" : {
+
+    },
+    "You're subscribed!" : {
 
     },
     "Your Invitations" : {
 
     },
     "Your Jar" : {
+
+    },
+    "Your subscribtions help me to keep the continuous improvement and growth of the app." : {
 
     }
   },

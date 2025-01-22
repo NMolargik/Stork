@@ -81,7 +81,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    /// Lists deliveries based on optional filter criteria.
+    /// Lists deliveries based on optional filter criteria **and optional pagination parameters**.
     ///
     /// - Parameters:
     ///   - userId: An optional filter for the ID of the user associated with the delivery.
@@ -93,9 +93,14 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     ///   - babyCount: An optional filter for the number of babies in the delivery.
     ///   - deliveryMethod: An optional filter for the delivery method (e.g., vaginal, c-section).
     ///   - epiduralUsed: An optional filter for whether an epidural was used.
+    ///   - startAt: An optional start date/time for the query (for pagination).
+    ///   - endAt: An optional end date/time for the query (for pagination).
+    ///
     /// - Returns: An array of `Delivery` objects matching the specified filters.
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If the operation fails due to a Firestore-related issue.
+    ///
+    /// - Note: Existing code can omit `startAt`, `endAt`, and `limit` to continue using the old behavior.
     public func listDeliveries(
         userId: String? = nil,
         userFirstName: String? = nil,
@@ -105,7 +110,9 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         date: Date? = nil,
         babyCount: Int? = nil,
         deliveryMethod: DeliveryMethod? = nil,
-        epiduralUsed: Bool? = nil
+        epiduralUsed: Bool? = nil,
+        startAt: Date? = nil,  // ✅ New optional parameter
+        endAt: Date? = nil    // ✅ New optional parameter
     ) async throws -> [Delivery] {
         do {
             return try await remoteDataSource.listDeliveries(
@@ -117,7 +124,9 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
                 date: date,
                 babyCount: babyCount,
                 deliveryMethod: deliveryMethod,
-                epiduralUsed: epiduralUsed
+                epiduralUsed: epiduralUsed,
+                startAt: startAt,   // ✅ Pass through
+                endAt: endAt       // ✅ Pass through
             )
         } catch let error as DeliveryError {
             throw error

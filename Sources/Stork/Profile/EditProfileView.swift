@@ -100,14 +100,6 @@ struct EditProfileView: View {
         }
     }
     
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
-    }
-    
     // MARK: - Helper Functions
     
     /// Loads the current profile data into the editable fields.

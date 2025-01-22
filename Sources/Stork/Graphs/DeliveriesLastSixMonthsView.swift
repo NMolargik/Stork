@@ -24,7 +24,7 @@ struct DeliveryGraphMonthData: Identifiable {
 struct DeliveriesLastSixMonthsView: View {
     // MARK: - Properties
     
-    @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
+    @State var groupedDeliveries: [(key: String, value: [Delivery])]
     
     @State private var deliveriesLastSix: [DeliveryGraphMonthData] = []
     @State private var animatedDeliveries: [DeliveryGraphMonthData] = []
@@ -160,7 +160,7 @@ struct DeliveriesLastSixMonthsView: View {
 // MARK: - Preview
 struct DeliveriesLastSixMonthsView_Previews: PreviewProvider {
     static var previews: some View {
-        DeliveriesLastSixMonthsView(groupedDeliveries: .constant([
+        DeliveriesLastSixMonthsView(groupedDeliveries: [
             // Sample data for preview purposes
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Calendar.current.date(byAdding: .month, value: -5, to: Date())!, babies: [], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true),
@@ -179,7 +179,7 @@ struct DeliveriesLastSixMonthsView_Previews: PreviewProvider {
             (key: "December '24", value: [
                 Delivery(id: "6", userId: "U6", userFirstName: "Fiona", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M6", date: Date(), babies: [], babyCount: 1, deliveryMethod: .vaginal, epiduralUsed: false)
             ])
-        ]))
+        ])
     }
 }
 

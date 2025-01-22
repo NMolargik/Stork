@@ -1,5 +1,5 @@
 //
-//  YourJarView.swift
+//  JarSummaryView.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 1/11/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import StorkModel
 
-struct YourJarView: View {
+struct JarSummaryView: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var deliveries: [Delivery]
     

@@ -97,14 +97,6 @@ struct MusterSplashView: View {
             
         }
     }
-    
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
-    }
 }
 
 #Preview {

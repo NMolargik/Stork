@@ -129,14 +129,6 @@ struct MusterCreationView: View {
             }
         }
     }
-    
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
-    }
 
     @MainActor
     private func createMuster() {

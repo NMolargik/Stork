@@ -189,14 +189,6 @@ struct RegisterView: View {
             profileViewModel.validateRegistrationForm()
         }
     }
-    
-    private func triggerHaptic() {
-        #if !SKIP
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.prepare()
-        generator.impactOccurred()
-        #endif
-    }
 }
 
 #Preview {
