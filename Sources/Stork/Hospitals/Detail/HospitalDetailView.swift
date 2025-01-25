@@ -11,6 +11,7 @@ import StorkModel
 
 struct HospitalDetailView: View {
     @AppStorage("errorMessage") var errorMessage: String = ""
+    @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
@@ -24,24 +25,19 @@ struct HospitalDetailView: View {
         VStack(alignment: .leading, spacing: 15) {
             hospitalMapView
             
+            actionButtons
+            
             hospitalDetailsView
             
-            HospitalStatView(
-                icon: "figure.child",
-                text: "\(hospital.deliveryCount) reported deliver\(hospital.deliveryCount == 1 ? "y" : "ies")",
-                color: .indigo
-            )
-            
-            HospitalStatView(
-                icon: "figure.child",
-                text: "\(hospital.babyCount) reported bab\(hospital.babyCount == 1 ? "y" : "ies")",
-                color: .purple,
-                extraIcons: ["figure.child": .pink, "figure.child": .blue]
-            )
+            HStack {
+                HospitalStatView(
+                    text: "\(hospital.deliveryCount) deliver\(hospital.deliveryCount == 1 ? "y" : "ies"), \(hospital.babyCount) bab\(hospital.babyCount == 1 ? "y" : "ies")"
+                )
+                
+                Spacer()
+            }
             
             Spacer()
-            
-            actionButtons
         }
         .toolbar(.hidden)
         .onAppear(perform: fetchLocation)
@@ -61,19 +57,20 @@ private extension HospitalDetailView {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     Text(hospital.facility_name)
-                        .hospitalTitleStyle()
+                        .hospitalTitleStyle(colorScheme: colorScheme)
                     
                     Spacer()
 
                     Button(action: togglePrimaryHospital) {
                         Image(systemName: profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star")
-                            .hospitalStarStyle()
+                            .hospitalStarStyle(colorScheme: colorScheme)
                     }
                 }
                 
                 Spacer()
             }
             .padding(.horizontal)
+
         }
         .frame(height: 250)
     }
@@ -86,8 +83,6 @@ private extension HospitalDetailView {
             
             HospitalInfoRow(icon: "info.square.fill", text: hospital.hospital_type, color: Color.blue)
             
-            HospitalInfoRow(icon: "dollarsign.square.fill", text: "Owned by: \(hospital.hospital_ownership)", color: Color.orange)
-            
             if hospital.meets_criteria_for_birthing_friendly_designation {
                 HospitalInfoRow(icon: "figure.child", text: "Birthing Center", color: Color.indigo)
             }
@@ -96,7 +91,9 @@ private extension HospitalDetailView {
                 HospitalInfoRow(icon: "cross.fill", text: "Emergency Services", color: Color.red)
             }
         }
-        .hospitalInfoBackground()
+        .frame(maxWidth: .infinity)
+        .padding()
+        .backgroundCard(colorScheme: colorScheme)
         .padding(.horizontal)
     }
     
@@ -123,7 +120,7 @@ private extension HospitalDetailView {
                 onTapAction: { withAnimation { togglePrimaryHospital() } }
             )
         }
-        .padding()
+        .padding(.horizontal)
     }
 }
 
@@ -158,48 +155,5 @@ private extension HospitalDetailView {
                 errorMessage = error.localizedDescription
             }
         }
-    }
-}
-
-// MARK: - Modifiers
-extension View {
-    func hospitalInfoBackground() -> some View {
-        self
-            .padding()
-            .background {
-                Rectangle()
-                    .cornerRadius(20)
-                    .foregroundStyle(.white)
-                    .shadow(radius: 2)
-                    .opacity(0.9)
-            }
-    }
-    
-    func hospitalTitleStyle() -> some View {
-        self
-            .font(.title2)
-            .fontWeight(.bold)
-            .foregroundStyle(.black)
-            .padding(10)
-            .background {
-                Rectangle()
-                    .foregroundStyle(.white)
-                    .cornerRadius(20)
-                    .shadow(radius: 2)
-            }
-    }
-    
-    func hospitalStarStyle() -> some View {
-        self
-            .fontWeight(.heavy)
-            .foregroundStyle(.yellow)
-            .font(.title2)
-            .padding(10)
-            .background {
-                Circle()
-                    .foregroundStyle(.white)
-                    .shadow(radius: 2)
-                    .opacity(0.9)
-            }
     }
 }

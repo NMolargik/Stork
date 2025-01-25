@@ -8,36 +8,40 @@
 import SwiftUI
 
 struct HospitalStatView: View {
-    let icon: String
+    @Environment(\.colorScheme) var colorScheme
+
     let text: String
-    let color: Color
-    var extraIcons: [String: Color] = [:]
 
     var body: some View {
         HStack {
             ZStack {
-                Image(systemName: icon)
-                    .foregroundStyle(color)
+                Image(systemName: "figure.child")
+                    .foregroundStyle(.purple)
+                    .shadow(radius: 2)
+                    .offset(x: 0)
                 
-                ForEach(Array(extraIcons.keys.enumerated()), id: \.offset) { index, iconName in
-                    Image(systemName: iconName)
-                        .foregroundStyle(extraIcons[iconName] ?? .black)
-                        .shadow(radius: 2)
-                        .offset(x: CGFloat((index + 1) * 8))
-                }
+                Image(systemName: "figure.child")
+                    .foregroundStyle(.pink)
+                    .shadow(radius: 2)
+                    .offset(x: 8)
+                
+                Image(systemName: "figure.child")
+                    .foregroundStyle(.blue)
+                    .shadow(radius: 2)
+                    .offset(x: 16)
             }
-            .offset(x: -5)
+            .offset(x: -8)
             .frame(width: 30)
 
             Text(text)
-                .foregroundStyle(.black)
                 .fontWeight(.semibold)
         }
-        .hospitalInfoBackground()
-        .padding(Edge.Set.horizontal)
+        .padding()
+        .backgroundCard(colorScheme: colorScheme)
+        .padding(.horizontal)
     }
 }
 
 #Preview {
-    HospitalStatView(icon: "building.fill", text: "1234567890", color: Color.red)
+    HospitalStatView(text: "1234567890")
 }

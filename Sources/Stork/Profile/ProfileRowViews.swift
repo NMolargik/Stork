@@ -9,7 +9,8 @@ import StorkModel
 
 struct ProfileRowView: View {
     @AppStorage("errorMessage") private var errorMessage: String = ""
-    
+    @Environment(\.colorScheme) var colorScheme
+
     @Binding var existingInvitations: [MusterInvite]
     
     var profile: Profile
@@ -47,11 +48,8 @@ struct ProfileRowView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(
-            Color.white
-                .cornerRadius(20)
-                .shadow(radius: 2)
-        )
+        .backgroundCard(colorScheme: colorScheme)
+
     }
     
     // MARK: - Action Button Group

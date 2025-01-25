@@ -84,26 +84,6 @@
     "%lld lbs" : {
 
     },
-    "%lld reported bab%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld reported bab%2$@"
-          }
-        }
-      }
-    },
-    "%lld reported deliver%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld reported deliver%2$@"
-          }
-        }
-      }
-    },
     "%lld/%lld" : {
       "localizations" : {
         "en" : {
@@ -167,7 +147,7 @@
     "Are you sure you want to delete your account?" : {
 
     },
-    "Are you sure you want to leave this muster?" : {
+    "Are you sure you want to leave this muster? This action cannot be undone." : {
 
     },
     "Assign" : {
@@ -210,9 +190,6 @@
 
     },
     "Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors." : {
-
-    },
-    "Create New Muster" : {
 
     },
     "Dark" : {
@@ -316,7 +293,7 @@
     "Girl%@" : {
 
     },
-    "Have questions or feedback? Reach out via email or social media. Your feature requests are top priority for me." : {
+    "Group up with your coworkers to contribute to a larger set of delivery trend data." : {
 
     },
     "Hello [%@](https://skip.tools)!" : {
@@ -382,9 +359,6 @@
     "ID: %@" : {
 
     },
-    "Invitations" : {
-
-    },
     "Invite User" : {
 
     },
@@ -432,7 +406,7 @@
     "Leave Muster" : {
 
     },
-    "Let's Connect!" : {
+    "Leave Muster?" : {
 
     },
     "Light" : {
@@ -497,6 +471,9 @@
     "Muster" : {
 
     },
+    "Muster Up!" : {
+
+    },
     "Name" : {
       "localizations" : {
         "es" : {
@@ -534,6 +511,9 @@
     "Nick Molargik" : {
 
     },
+    "NICU" : {
+
+    },
     "No data available" : {
 
     },
@@ -541,9 +521,6 @@
 
     },
     "No delivery data available for the past seven days." : {
-
-    },
-    "No delivery data available for the past six months." : {
 
     },
     "No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above." : {
@@ -558,13 +535,13 @@
     "Nurse Catch" : {
 
     },
-    "OK" : {
-
-    },
     "Old Members" : {
 
     },
-    "Owned by: %@" : {
+    "Page 2" : {
+
+    },
+    "Page 3" : {
 
     },
     "Password" : {
@@ -614,9 +591,6 @@
     "Recorded" : {
 
     },
-    "Refresh" : {
-
-    },
     "Restart Onboarding" : {
 
     },
@@ -662,6 +636,9 @@
       }
     },
     "Searching by location" : {
+
+    },
+    "See your deliveries at a glance with your jar, or dive deeper into statistics or details from a particular delivery." : {
 
     },
     "Select Birthday" : {
@@ -716,19 +693,22 @@
     "Sorry we are missing your hospital. Please provide its name and we will take it from there!" : {
 
     },
+    "Spread Your Wings!" : {
+
+    },
     "Stork" : {
 
     },
     "Stork allows users to track trends in labor and delivery. This includes sex, weight, monthly totals, and more!\n\nYour delivery jar will fill up with colored marbles that each represent a baby delivered in the last week." : {
 
     },
+    "Stork Annual" : {
+
+    },
     "Stork is a labor and delivery app designed to assist nurses and doctors in managing weekly delivery statistics." : {
 
     },
     "Submit" : {
-
-    },
-    "Support Development" : {
 
     },
     "System" : {
@@ -766,7 +746,7 @@
     "This will remove all your personal data and cannot be undone." : {
 
     },
-    "Upgrade to premium" : {
+    "Track Your Deliveries!" : {
 
     },
     "Use Location" : {
@@ -816,16 +796,10 @@
     "You can submit up to 8 deliveries per day" : {
 
     },
-    "You're subscribed!" : {
-
-    },
     "Your Invitations" : {
 
     },
     "Your Jar" : {
-
-    },
-    "Your subscribtions help me to keep the continuous improvement and growth of the app." : {
 
     }
   },

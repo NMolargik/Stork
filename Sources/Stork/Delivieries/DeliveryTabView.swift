@@ -26,7 +26,9 @@ struct DeliveryTabView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             DeliveryListView(showingDeliveryAddition: $showingDeliveryAddition)
-                .refreshable { refreshDeliveries() }
+                .refreshable {
+                    await refreshDeliveries()
+                }
                 .navigationTitle("Deliveries")
                 .navigationDestination(for: Delivery.self) { delivery in
                     if let foundDelivery = deliveryViewModel.findDelivery(by: delivery.id) {
@@ -36,7 +38,7 @@ struct DeliveryTabView: View {
                     }
                 }
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) { // ✅ Placement defined here
+                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             withAnimation {
                                 triggerHaptic()
@@ -56,12 +58,18 @@ struct DeliveryTabView: View {
         }
     }
 
-    // MARK: - Functions
+    // MARK: - Refresh Deliveries
+    private func refreshDeliveries() async {
+        deliveryViewModel.currentPage = 0
+        deliveryViewModel.deliveries.removeAll()
+        deliveryViewModel.groupedDeliveries.removeAll()
+        deliveryViewModel.hasMorePages = true
+        deliveryViewModel.lastFetchedEndDate = nil
 
-    private func refreshDeliveries() {
-        Task {
-            deliveryViewModel.currentPage = 0
-            try? await deliveryViewModel.fetchDeliveriesForCurrentPage(profile: profileViewModel.profile)
+        do {
+            try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
+        } catch {
+            errorMessage = "Failed to refresh deliveries: \(error.localizedDescription)"
         }
     }
 }

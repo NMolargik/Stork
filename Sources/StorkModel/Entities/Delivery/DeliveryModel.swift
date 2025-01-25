@@ -89,7 +89,7 @@ public struct Delivery: Identifiable, Codable, Hashable {
             print("Initialization failed: Missing or invalid required fields.")
             return nil
         }
-        
+
         self.id = id
         self.userId = userId
         self.userFirstName = userFirstName
@@ -156,9 +156,9 @@ public struct Delivery: Identifiable, Codable, Hashable {
         self.musterId = "5678"
         self.date = Date()
         self.babies = [
-            Baby(deliveryId: "12345", nurseCatch: true, sex: Sex.male),
-            Baby(deliveryId: "12345", nurseCatch: false, sex: Sex.female),
-            Baby(deliveryId: "12345", nurseCatch: false, sex: Sex.loss)
+            Baby(deliveryId: "12345", nurseCatch: true, nicuStay: false, sex: Sex.male),
+            Baby(deliveryId: "12345", nurseCatch: false, nicuStay: true, sex: Sex.female),
+            Baby(deliveryId: "12345", nurseCatch: false, nicuStay: false, sex: Sex.loss)
         ]
         self.babyCount = 3
         self.deliveryMethod = .vaginal
@@ -176,8 +176,8 @@ public struct Delivery: Identifiable, Codable, Hashable {
                 musterId: "muster1",
                 date: Date(), // Current date
                 babies: [
-                    Baby(deliveryId: "1", nurseCatch: true, sex: .male, weight: 7.5, height: 20),
-                    Baby(deliveryId: "1", nurseCatch: false, sex: .female, weight: 6.8, height: 19)
+                    Baby(deliveryId: "1", nurseCatch: true, nicuStay: true, sex: .male, weight: 7.5, height: 20),
+                    Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female, weight: 6.8, height: 19)
                 ],
                 babyCount: 2,
                 deliveryMethod: .vaginal,

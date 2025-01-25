@@ -50,13 +50,7 @@ struct JarSummaryView: View {
         .frame(maxWidth: .infinity)
         .font(.title2)
         .fontWeight(.bold)
-        .foregroundStyle(.gray)
-        .background {
-            Rectangle()
-                .foregroundStyle(colorScheme == .dark ? .black : .white)
-                .cornerRadius(20)
-                .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-        }
+        .backgroundCard(colorScheme: colorScheme)
         .onAppear {
             updateCount()
         }

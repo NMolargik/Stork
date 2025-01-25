@@ -9,44 +9,75 @@ import SwiftUI
 import StorkModel
 
 struct BabyInfoCard: View {
+    @Environment(\.colorScheme) var colorScheme
+
     let baby: Baby
     let useMetric: Bool
 
     var body: some View {
-        HStack {
-            Image(systemName: "figure.child")
-                .foregroundStyle(baby.sex.color)
-                .font(.title)
-                .frame(width: 30)
-                .shadow(radius: 1)
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: 8) {
+        VStack {
+            HStack(spacing: 10) {
+                Image(systemName: "figure.child")
+                    .foregroundStyle(baby.sex.color)
+                    .font(.title)
+                    .frame(width: 30)
+                    .shadow(radius: 1)
+                    .accessibilityHidden(true)
+                
                 InfoRowView(
                     icon: Image(systemName: "scalemass.fill"),
                     text: formattedWeight,
-                    iconColor: .orange
+                    iconColor: Color.orange
                 )
-
+                
                 InfoRowView(
                     icon: Image(systemName: "ruler.fill"),
                     text: formattedHeight,
-                    iconColor: .green
+                    iconColor: Color.green
                 )
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
 
-            if baby.nurseCatch {
-                Text("Nurse Catch")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.black)
-                    .lineLimit(1)
-                    .accessibilityLabel("Nurse Catch")
+            }
+
+            if (baby.nurseCatch || baby.nicuStay) {
+                HStack(spacing: 30) {
+                    if baby.nurseCatch {
+                        Text("Nurse Catch")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.black)
+                            .lineLimit(1)
+                            .accessibilityLabel("Nurse Catch")
+                            .padding(5)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(.white)
+                                    .cornerRadius(20)
+                                    .shadow(radius: 2)
+                            }
+                    }
+                    
+                    if baby.nicuStay {
+                        Text("NICU")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.black)
+                            .lineLimit(1)
+                            .accessibilityLabel("NICU")
+                            .padding(5)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(.white)
+                                    .cornerRadius(20)
+                                    .shadow(radius: 2)
+                            }
+                    }
+                    
+                    Spacer()
+                }
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 20).fill(Color.white).shadow(radius: 2).opacity(0.9))
+        .backgroundCard(colorScheme: colorScheme)
         .padding(.horizontal)
     }
 
@@ -63,5 +94,5 @@ struct BabyInfoCard: View {
 }
 
 #Preview {
-    BabyInfoCard(baby: Baby(deliveryId: "123", nurseCatch: true, sex: Sex.male), useMetric: false)
+    BabyInfoCard(baby: Baby(deliveryId: "123", nurseCatch: true, nicuStay: true, sex: Sex.male), useMetric: false)
 }

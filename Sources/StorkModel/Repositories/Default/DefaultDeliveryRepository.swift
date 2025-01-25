@@ -34,8 +34,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     ///   - `DeliveryError.creationFailed`: If the operation fails to create the delivery.
     public func createDelivery(delivery: Delivery) async throws -> Delivery {
         do {
-            let createdDelivery = try await remoteDataSource.createDelivery(delivery: delivery)
-            return createdDelivery
+            return try await remoteDataSource.createDelivery(delivery: delivery)
         } catch let error as DeliveryError {
             throw error
         } catch {
@@ -53,8 +52,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     ///   - `DeliveryError.updateFailed`: If the operation fails to update the delivery.
     public func updateDelivery(delivery: Delivery) async throws -> Delivery {
         do {
-            let updatedDelivery = try await remoteDataSource.updateDelivery(delivery: delivery)
-            return updatedDelivery
+            return try await remoteDataSource.updateDelivery(delivery: delivery)
         } catch let error as DeliveryError {
             throw error
         } catch {
@@ -81,7 +79,7 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         }
     }
 
-    /// Lists deliveries based on optional filter criteria **and optional pagination parameters**.
+    /// Lists deliveries based on optional filter criteria, supporting **6-month interval pagination**.
     ///
     /// - Parameters:
     ///   - userId: An optional filter for the ID of the user associated with the delivery.
@@ -93,14 +91,18 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
     ///   - babyCount: An optional filter for the number of babies in the delivery.
     ///   - deliveryMethod: An optional filter for the delivery method (e.g., vaginal, c-section).
     ///   - epiduralUsed: An optional filter for whether an epidural was used.
-    ///   - startAt: An optional start date/time for the query (for pagination).
-    ///   - endAt: An optional end date/time for the query (for pagination).
+    ///   - startDate: The **start date of the 6-month range** for pagination.
+    ///   - endDate: The **end date of the 6-month range** for pagination.
     ///
-    /// - Returns: An array of `Delivery` objects matching the specified filters.
+    /// - Returns: An array of `Delivery` objects matching the specified filters within the given 6-month period.
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If the operation fails due to a Firestore-related issue.
     ///
-    /// - Note: Existing code can omit `startAt`, `endAt`, and `limit` to continue using the old behavior.
+    /// **Pagination Behavior:**
+    /// - If both `startDate` and `endDate` are provided, only deliveries within that range will be returned.
+    /// - If only `startDate` is provided, results will include deliveries from that date onward.
+    /// - If only `endDate` is provided, results will include deliveries before that date.
+    /// - If neither is provided, the **most recent 6-month period** will be used.
     public func listDeliveries(
         userId: String? = nil,
         userFirstName: String? = nil,
@@ -111,8 +113,8 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         babyCount: Int? = nil,
         deliveryMethod: DeliveryMethod? = nil,
         epiduralUsed: Bool? = nil,
-        startAt: Date? = nil,  // ✅ New optional parameter
-        endAt: Date? = nil    // ✅ New optional parameter
+        startDate: Date? = nil,   // ✅ Updated parameter name
+        endDate: Date? = nil      // ✅ Updated parameter name
     ) async throws -> [Delivery] {
         do {
             return try await remoteDataSource.listDeliveries(
@@ -125,8 +127,8 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
                 babyCount: babyCount,
                 deliveryMethod: deliveryMethod,
                 epiduralUsed: epiduralUsed,
-                startAt: startAt,   // ✅ Pass through
-                endAt: endAt       // ✅ Pass through
+                startDate: startDate,   // ✅ Renamed from `startAt`
+                endDate: endDate        // ✅ Renamed from `endAt`
             )
         } catch let error as DeliveryError {
             throw error

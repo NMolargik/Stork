@@ -16,8 +16,12 @@ struct MusterTabView: View {
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
+    @Binding var showingDeliveryAddition: Bool
+    @Binding var selectedTab: Tab
+    
     @State private var showingMusterInvitations: Bool = false
     @State private var navigationPath = NavigationPath()
+    @State private var showLeaveMusterSheet = false
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -76,21 +80,12 @@ struct MusterTabView: View {
                     .padding()
                     
                     MusterCarouselView()
+                        .padding(.horizontal)
                     
                     UserDeliveryDistributionView(profiles: musterViewModel.musterMembers, deliveries: deliveryViewModel.musterDeliveries)
                 }
 
                 .navigationTitle(muster.name)
-                .confirmationDialog(
-                    "Are you sure you want to leave this muster?",
-                    isPresented: $musterViewModel.showLeaveConfirmation,
-                    titleVisibility: .visible
-                ) {
-                    Button("Leave", role: .destructive) {
-                        leaveMuster()
-                    }
-                    Button("Cancel", role: .cancel) {}
-                }
                 // Admin sheets
                 .sheet(isPresented: $musterViewModel.showInviteUserSheet) {
                     MusterAdminInviteUserView()
@@ -103,15 +98,6 @@ struct MusterTabView: View {
 
                 }
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            Task {
-                                try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
-                            }
-                        } label: {
-                            Label("Refresh", systemImage: "arrow.2.squarepath")
-                        }
-                    }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Menu {
                             if musterViewModel.isUserAdmin(profile: profileViewModel.profile) {
@@ -130,7 +116,7 @@ struct MusterTabView: View {
                             }
                             
                             Button {
-                                leaveMuster()
+                                showLeaveMusterSheet = true // ✅ Show confirmation sheet
                             } label: {
                                 Label("Leave Muster", systemImage: "door.left.hand.open")
                             }
@@ -141,10 +127,67 @@ struct MusterTabView: View {
                                 .fontWeight(.bold)
                         }
                     }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            Task {
+                                try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
+                            }
+                        } label: {
+                            Image(systemName: "arrow.2.squarepath")
+                                .foregroundStyle(.green)
+                                .fontWeight(.bold)
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            withAnimation {
+                                triggerHaptic()
+                                deliveryViewModel.startNewDelivery()
+                                showingDeliveryAddition = true
+                                selectedTab = .deliveries
+                            }
+                        } label: {
+                            Image(systemName: "plus")
+                                .foregroundStyle(.indigo)
+                                .fontWeight(.bold)
+                        }
+                    }
                 }
             } else {
                 MusterSplashView()
             }
+        }
+        .sheet(isPresented: $showLeaveMusterSheet) {
+            VStack(spacing: 20) {
+                Text("Leave Muster?")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.primary)
+
+                Text("Are you sure you want to leave this muster? This action cannot be undone.")
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal)
+
+                HStack {
+                    CustomButtonView(text: "Cancel", width: 150, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
+                        showLeaveMusterSheet = false
+
+                    })
+                    .padding(.horizontal, 5)
+                    
+                    CustomButtonView(text: "Leave", width: 150, height: 50, color: Color.red, isEnabled: true, onTapAction: {
+                        showLeaveMusterSheet = false
+                        leaveMuster()
+                    })
+                    .padding(.horizontal, 5)
+
+                }
+            }
+            .padding()
+            .presentationDetents([.fraction(0.4)])
         }
     }
     
@@ -233,7 +276,7 @@ struct MusterTabView: View {
 }
 
 #Preview {
-    MusterTabView()
+    MusterTabView(showingDeliveryAddition: .constant(false), selectedTab: .constant(.muster))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
 }

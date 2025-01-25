@@ -9,6 +9,7 @@ import StorkModel
 
 struct MusterCreationView: View {
     @AppStorage("errorMessage") var errorMessage: String = ""
+    @Environment(\.colorScheme) var colorScheme
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var profileViewModel: ProfileViewModel
@@ -31,23 +32,21 @@ struct MusterCreationView: View {
         } else {
             NavigationStack {
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack() {
                         // Muster Name Input
-                        Group {
-                            CustomTextfieldView(
-                                text: $musterViewModel.newMuster.name,
-                                hintText: "Enter Muster name",
-                                icon: Image(systemName: "tag.fill"),
-                                isSecure: false,
-                                iconColor: Color.indigo,
-                                characterLimit: 20
-                            )
+                        CustomTextfieldView(
+                            text: $musterViewModel.newMuster.name,
+                            hintText: "Enter Muster name",
+                            icon: Image(systemName: "tag.fill"),
+                            isSecure: false,
+                            iconColor: Color.indigo,
+                            characterLimit: 20
+                        )
 
-                            if let error = musterViewModel.nameError {
-                                Text(error)
-                                    .foregroundStyle(.gray)
-                                    .font(.footnote)
-                            }
+                        if let error = musterViewModel.nameError {
+                            Text(error)
+                                .foregroundStyle(.gray)
+                                .font(.footnote)
                         }
 
                         // Hospital Selection
@@ -71,11 +70,8 @@ struct MusterCreationView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background {
-                            Color.white
-                                .cornerRadius(20)
-                                .shadow(radius: 2)
-                        }
+                        .backgroundCard(colorScheme: colorScheme)
+
 
                         Spacer()
 
@@ -84,25 +80,22 @@ struct MusterCreationView: View {
                             .padding()
                             .multilineTextAlignment(.center)
                             .fontWeight(.semibold)
-                            .background {
-                                Color.white
-                                    .cornerRadius(20)
-                                    .shadow(radius: 2)
-                            }
+                            .backgroundCard(colorScheme: colorScheme)
+
 
                         Spacer()
 
                         if (musterViewModel.isWorking) {
                             ProgressView()
                                 .tint(.indigo)
-                                .frame(height: 70)
-                                .padding()
+                                .frame(height: 50)
                         } else {
-                            CustomButtonView(text: "Muster Up!", width: 200, height: 70, color: Color.indigo, icon: nil, isEnabled: musterViewModel.creationFormValid, onTapAction: {
+                            CustomButtonView(text: "Muster Up!", width: 200, height: 50, color: Color.indigo, icon: nil, isEnabled: musterViewModel.creationFormValid, onTapAction: {
                                 withAnimation {
                                     createMuster()
                                 }
                             })
+                            .padding(.top)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -119,6 +112,7 @@ struct MusterCreationView: View {
                         }, label: {
                             Text("Cancel")
                                 .foregroundStyle(.orange)
+                                .bold()
                         })
                         .disabled(musterViewModel.isWorking)
                     }

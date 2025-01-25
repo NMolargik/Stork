@@ -69,6 +69,7 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
                         height: Double.random(in: 17.0...22.0),
                         weight: Double.random(in: 5.0...9.0),
                         nurseCatch: true,
+                        nicuStay: true,
                         sex: .male
                     )
                 }
@@ -98,10 +99,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
 
     // MARK: - CRUD Methods
 
-    /// Creates a new delivery and returns the newly created `Delivery`.
-    /// - Parameter delivery: The `Delivery` object to create.
-    /// - Returns: The newly created `Delivery`.
-    /// - Throws: `DeliveryError.creationFailed` if a delivery with the same ID already exists.
     public func createDelivery(delivery: Delivery) async throws -> Delivery {
         if deliveries.contains(where: { $0.id == delivery.id }) {
             throw DeliveryError.creationFailed("Delivery with ID \(delivery.id) already exists.")
@@ -110,10 +107,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         return delivery
     }
 
-    /// Updates an existing delivery and returns the updated `Delivery`.
-    /// - Parameter delivery: The `Delivery` object with updated data.
-    /// - Returns: The updated `Delivery`.
-    /// - Throws: `DeliveryError.notFound` if no delivery with the given ID exists.
     public func updateDelivery(delivery: Delivery) async throws -> Delivery {
         guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
             throw DeliveryError.notFound("Delivery with ID \(delivery.id) not found.")
@@ -122,10 +115,6 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         return delivery
     }
 
-    /// Fetches a delivery by its unique ID.
-    /// - Parameter id: The ID of the delivery to fetch.
-    /// - Returns: A `Delivery` object matching the specified ID.
-    /// - Throws: `DeliveryError.notFound` if no such delivery exists.
     public func getDelivery(byId id: String) async throws -> Delivery {
         guard let delivery = deliveries.first(where: { $0.id == id }) else {
             throw DeliveryError.notFound("Delivery with ID \(id) not found.")
@@ -133,7 +122,10 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         return delivery
     }
 
-    /// Lists deliveries based on optional filter criteria **and** optional pagination parameters.
+    // MARK: - List Deliveries (6-Month Pagination)
+
+    /// Lists deliveries based on optional filter criteria **and** 6-month pagination.
+    ///
     /// - Parameters:
     ///   - userId: Optional filter by user ID.
     ///   - userFirstName: Optional filter by the user's first name.
@@ -144,10 +136,10 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
     ///   - babyCount: Optional filter by baby count.
     ///   - deliveryMethod: Optional filter by delivery method.
     ///   - epiduralUsed: Optional filter by epidural usage.
-    ///   - startAt: (Pagination) Optional start date/time; only returns deliveries on/after this date.
-    ///   - endAt: (Pagination) Optional end date/time; only returns deliveries before this date.
+    ///   - startDate: (Pagination) The **start date of the 6-month range**.
+    ///   - endDate: (Pagination) The **end date of the 6-month range**.
     ///
-    /// - Returns: An array of `Delivery` objects matching the specified filters.
+    /// - Returns: An array of `Delivery` objects matching the specified filters within the given 6-month period.
     public func listDeliveries(
         userId: String? = nil,
         userFirstName: String? = nil,
@@ -158,8 +150,8 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
         babyCount: Int? = nil,
         deliveryMethod: DeliveryMethod? = nil,
         epiduralUsed: Bool? = nil,
-        startAt: Date? = nil,   // ✅ New optional parameter
-        endAt: Date? = nil     // ✅ New optional parameter
+        startDate: Date? = nil,   // ✅ Updated parameter name
+        endDate: Date? = nil      // ✅ Updated parameter name
     ) async throws -> [Delivery] {
         // 1) Apply existing filters
         var filtered = deliveries.filter { delivery in
@@ -174,21 +166,18 @@ public class MockDeliveryRepository: DeliveryRepositoryInterface {
             (epiduralUsed == nil || delivery.epiduralUsed == epiduralUsed)
         }
 
-        // 2) Apply new date-based filters (pagination)
-        if let startAt = startAt {
-            filtered = filtered.filter { $0.date >= startAt }
+        // 2) Apply 6-month pagination filters
+        if let startDate {
+            filtered = filtered.filter { $0.date >= startDate }
         }
-        if let endAt = endAt {
-            filtered = filtered.filter { $0.date < endAt }
+        if let endDate {
+            filtered = filtered.filter { $0.date < endDate }
         }
 
-        // Return the filtered/paginated deliveries
+        // Return filtered deliveries
         return filtered
     }
 
-    /// Deletes a delivery from the mock storage.
-    /// - Parameter delivery: The `Delivery` object to delete.
-    /// - Throws: `DeliveryError.deletionFailed` if the delivery cannot be found in the mock storage.
     public func deleteDelivery(delivery: Delivery) async throws {
         guard let index = deliveries.firstIndex(where: { $0.id == delivery.id }) else {
             throw DeliveryError.deletionFailed("Failed to delete delivery with ID \(delivery.id).")

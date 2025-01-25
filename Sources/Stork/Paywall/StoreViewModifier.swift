@@ -11,7 +11,6 @@ import SkipRevenueCat
 import OSLog
 
 struct StoreViewModifier: ViewModifier {
-    
     func body(content: Content) -> some View {
         content
         .task {
@@ -27,3 +26,4 @@ struct StoreViewModifier: ViewModifier {
         }
     }
 }
+

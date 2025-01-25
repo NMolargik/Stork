@@ -117,9 +117,9 @@ struct DeliveryRowView: View {
         musterId: "Muster1",
         date: Date(),
         babies: [
-            Baby(id: "1", deliveryId: "1", birthday: Date(), height: 20.0, weight: 7.5, nurseCatch: true, sex: .male),
-            Baby(id: "2", deliveryId: "1", birthday: Date(), height: 19.5, weight: 7.0, nurseCatch: false, sex: .female),
-            Baby(id: "3", deliveryId: "1", birthday: Date(), height: 19.0, weight: 6.5, nurseCatch: true, sex: .female)
+            Baby(id: "1", deliveryId: "1", birthday: Date(), height: 20.0, weight: 7.5, nurseCatch: true, nicuStay: false, sex: .male),
+            Baby(id: "2", deliveryId: "1", birthday: Date(), height: 19.5, weight: 7.0, nurseCatch: false, nicuStay: true, sex: .female),
+            Baby(id: "3", deliveryId: "1", birthday: Date(), height: 19.0, weight: 6.5, nurseCatch: true, nicuStay: false, sex: .female)
         ],
         babyCount: 3,
         deliveryMethod: .vaginal,

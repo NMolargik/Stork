@@ -22,13 +22,13 @@ struct DeliveryDetailView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
                     DeliveryHeaderView(delivery: delivery)
-                    HospitalInfoView(hospitalName: delivery.hospitalName)
-                    DetailsView(delivery: delivery)
 
                     // MARK: - Babies Information
                     ForEach(delivery.babies, id: \.id) { baby in
                         BabyInfoCard(baby: baby, useMetric: useMetric)
                     }
+                    
+                    DetailsView(delivery: delivery)
                 }
                 .padding([.horizontal, .bottom])
             }

@@ -1,0 +1,55 @@
+//
+//  ViewExtensions.swift
+//  skipapp-stork
+//
+//  Created by Nick Molargik on 1/24/25.
+//
+
+import Foundation
+import SwiftUI
+import StorkModel
+
+public extension View {
+    func backgroundCard(colorScheme: ColorScheme) -> some View {
+        self.padding(5)
+            .background {
+                Rectangle()
+                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                    .cornerRadius(20)
+                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+                
+            }
+            .padding(.horizontal, 5)
+    }
+    
+    func withMockEnvironmentObjects() -> some View {
+        self
+            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+            .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+            .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
+            .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
+    }
+    
+    func hospitalTitleStyle(colorScheme: ColorScheme) -> some View {
+        self
+            .font(.title2)
+            .fontWeight(.bold)
+            .padding(10)
+            .backgroundCard(colorScheme: colorScheme)
+    }
+    
+    func hospitalStarStyle(colorScheme: ColorScheme) -> some View {
+        self
+            .fontWeight(.heavy)
+            .foregroundStyle(.yellow)
+            .font(.title2)
+            .padding(10)
+            .background {
+                Circle()
+                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                    .cornerRadius(20)
+                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+                    .opacity(0.9)
+            }
+    }
+}

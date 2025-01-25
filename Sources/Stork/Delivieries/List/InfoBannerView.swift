@@ -24,11 +24,7 @@ struct InfoBannerView: View {
             Spacer()
         }
         .padding(8)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(colorScheme == .dark ? Color.black : Color.white)
-                .shadow(radius: 2)
-        )
+        .backgroundCard(colorScheme: colorScheme)
     }
 }
 

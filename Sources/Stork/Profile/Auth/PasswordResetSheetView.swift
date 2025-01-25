@@ -39,8 +39,7 @@ struct PasswordResetSheetView: View {
             if (profileViewModel.isWorking) {
                 ProgressView()
                     .tint(.indigo)
-                    .frame(height: 40)
-                    .padding()
+                    .frame(height: 50)
             } else {
                 HStack(spacing: 40) {
                     CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: validEmail, onTapAction: {

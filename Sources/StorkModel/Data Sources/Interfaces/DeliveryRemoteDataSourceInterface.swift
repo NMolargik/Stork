@@ -9,6 +9,7 @@ import Foundation
 
 /// A protocol defining the interface for remote data source interactions related to deliveries.
 public protocol DeliveryRemoteDataSourceInterface {
+    
     /// Creates a new delivery record and returns the newly created `Delivery`.
     ///
     /// - Parameter delivery: The `Delivery` object to create.
@@ -30,7 +31,7 @@ public protocol DeliveryRemoteDataSourceInterface {
     /// - Throws: `DeliveryError` if the delivery cannot be found or another error occurs.
     func getDelivery(byId id: String) async throws -> Delivery
 
-    /// Lists deliveries based on optional filters (including **date range** and **limit** for pagination).
+    /// Lists deliveries based on optional filters, supporting pagination in **6-month intervals**.
     ///
     /// - Parameters:
     ///   - userId: An optional filter for the user ID associated with the delivery.
@@ -42,15 +43,16 @@ public protocol DeliveryRemoteDataSourceInterface {
     ///   - babyCount: An optional filter for the number of babies in the delivery.
     ///   - deliveryMethod: An optional filter (e.g., vaginal, c-section).
     ///   - epiduralUsed: An optional filter for whether an epidural was used.
-    ///   - startAt: (Pagination) An optional start date/time for the query. If provided, only deliveries on/after this date are included.
-    ///   - endAt: (Pagination) An optional end date/time for the query. If provided, only deliveries before this date are included.
+    ///   - startDate: (Pagination) The **start date of the 6-month range**. If provided, only deliveries on/after this date are included.
+    ///   - endDate: (Pagination) The **end date of the 6-month range**. If provided, only deliveries before this date are included.
     ///
-    /// - Returns: An array of `Delivery` objects matching the specified filters.
+    /// - Returns: An array of `Delivery` objects matching the specified filters within the given 6-month range.
     /// - Throws: `DeliveryError` if the operation fails (e.g., connectivity issues).
     ///
-    /// - Note: If both `startAt` and `endAt` are provided, only deliveries in `[startAt, endAt)` are returned.
-    ///         If `limit` is provided, it restricts the maximum documents returned (like a page size).
-    ///         You can combine these parameters to implement custom pagination schemes (e.g., 6-month intervals).
+    /// - Note:
+    ///   - Pagination is based on **6-month intervals**, so each query fetches deliveries within a 6-month range.
+    ///   - If both `startDate` and `endDate` are provided, only deliveries in `[startDate, endDate)` are returned.
+    ///   - This approach allows users to **scroll through time-based groups** rather than arbitrary document limits.
     func listDeliveries(
         userId: String?,
         userFirstName: String?,
@@ -61,10 +63,10 @@ public protocol DeliveryRemoteDataSourceInterface {
         babyCount: Int?,
         deliveryMethod: DeliveryMethod?,
         epiduralUsed: Bool?,
-        startAt: Date?,        // Added for date-based pagination
-        endAt: Date?          // Added for date-based pagination
+        startDate: Date?,  // Defines the start of the 6-month range
+        endDate: Date?     // Defines the end of the 6-month range
     ) async throws -> [Delivery]
-
+    
     /// Deletes an existing delivery record.
     ///
     /// - Parameter delivery: The `Delivery` object to delete.

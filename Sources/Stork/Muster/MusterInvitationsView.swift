@@ -10,12 +10,12 @@ import StorkModel
 
 struct MusterInvitationsView: View {
     @AppStorage("errorMessage") var errorMessage: String = ""
-    
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
+
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
-    
-    @Environment(\.dismiss) var dismiss
     
     @Binding var showMusterInvitations: Bool
     
@@ -27,6 +27,7 @@ struct MusterInvitationsView: View {
                 if (musterViewModel.isWorking) {
                     ProgressView()
                         .tint(.indigo)
+                        .frame(height: 50)
                 } else if (musterViewModel.invites.count == 0) {
                     
                     VStack {
@@ -85,11 +86,7 @@ struct MusterInvitationsView: View {
                                 }
                             }
                             .padding()
-                            .background {
-                                Color.white
-                                    .cornerRadius(20)
-                                    .shadow(radius: 2)
-                            }
+                            .backgroundCard(colorScheme: colorScheme)
                             .padding(5)
                         }
                     }
@@ -113,6 +110,7 @@ struct MusterInvitationsView: View {
                         dismiss()
                     }
                     .foregroundStyle(.red)
+                    .bold()
                 }
             }
         } 

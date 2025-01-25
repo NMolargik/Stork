@@ -17,44 +17,60 @@ struct DeliveryListView: View {
     @Binding var showingDeliveryAddition: Bool
 
     var body: some View {
-        List {
-            // MARK: - Empty State
-            if deliveryViewModel.deliveries.isEmpty {
-                EmptyStateView()
-                    .listRowBackground(Color.clear)
-                #if !SKIP
-                    .listRowInsets(.none)
-                #endif
-            } else {
-                // MARK: - Sections for Each Month
-                ForEach(deliveryViewModel.groupedDeliveries, id: \.key) { (monthYear, deliveries) in
-                    Section(header: SectionHeader(title: monthYear)) {
-                        ForEach(deliveries, id: \.id) { delivery in
-                            NavigationLink(value: delivery) {
-                                DeliveryRowView(delivery: delivery)
+        ZStack {
+            List {
+                // MARK: - Empty State
+                if deliveryViewModel.deliveries.isEmpty {
+                    EmptyStateView()
+                        .listRowBackground(Color.clear)
+#if !SKIP
+                        .listRowInsets(.none)
+#endif
+                } else {
+                    // MARK: - Sections for Each Month
+                    ForEach(deliveryViewModel.groupedDeliveries, id: \.key) { (monthYear, deliveries) in
+                        Section(header: SectionHeader(title: monthYear)) {
+                            ForEach(deliveries, id: \.id) { delivery in
+                                NavigationLink(value: delivery) {
+                                    DeliveryRowView(delivery: delivery)
+                                }
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
                             }
-                            .listRowSeparator(.hidden)
                         }
                     }
                 }
-
-                // MARK: - Load More Button (Last Row)
-                CustomButtonView(text: "Load More", width: 200, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
-                    loadMoreDeliveries()
-                })
-                .padding(.vertical)
-                .listRowBackground(Color.clear)
+            }
+            
+            if deliveryViewModel.hasMorePages {
+                VStack {
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        if (deliveryViewModel.isWorking) {
+                            ProgressView()
+                                .frame(height: 50)
+                                .tint(.indigo)
+                        } else {
+                            CustomButtonView(text: "Load More", width: 200, height: 50, color: Color.indigo, isEnabled: true, onTapAction: {
+                                loadMoreDeliveries()
+                            })
+                        }
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: 60)
+                    .padding(.vertical)
+                }
             }
         }
-        .scrollContentBackground(.hidden)
     }
 
+    // MARK: - Load More Deliveries
     private func loadMoreDeliveries() {
         Task {
             do {
-                // Increment the page, then fetch the next 6-month interval
-                deliveryViewModel.currentPage += 1
-                try await deliveryViewModel.fetchDeliveriesForCurrentPage(profile: profileViewModel.profile)
+                try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
             } catch {
                 print("Error loading more deliveries: \(error.localizedDescription)")
             }

@@ -12,7 +12,6 @@ struct OnboardingView: View {
     @AppStorage("appState") private var appState: AppState = .splash
     @AppStorage("selectedTab") var selectedTab = Tab.hospitals
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-    @AppStorage("isPaywallComplete") private var isPaywallComplete: Bool = false
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     
     @State private var currentPage: Int = 0
@@ -20,7 +19,6 @@ struct OnboardingView: View {
 
     private let totalPages = 3
     private var isLastPage: Bool { currentPage == totalPages - 1 }
-
 
     var body: some View {
         VStack {
@@ -74,7 +72,7 @@ struct OnboardingView: View {
         withAnimation {
             isOnboardingComplete = true
             selectedTab = .home
-            appState = isPaywallComplete ? .main : .paywall
+            appState = Store.shared.subscriptionActive ? .main : .paywall
             onComplete()
         }
     }

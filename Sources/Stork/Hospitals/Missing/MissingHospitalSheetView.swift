@@ -35,8 +35,8 @@ struct MissingHospitalSheetView: View {
 
             if isSubmitting {
                 ProgressView()
-                    .frame(height: 40)
-                    .padding()
+                    .tint(.orange)
+                    .frame(height: 50)
             } else {
                 MissingHospitalActionsView(
                     hospitalName: $hospitalName,

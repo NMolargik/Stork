@@ -13,24 +13,21 @@ struct InfoRowView: View {
     let iconColor: Color
 
     var body: some View {
-        HStack {
+        HStack(spacing: 10) {
             icon
                 .foregroundStyle(iconColor)
                 .font(.title2)
-                .frame(width: 30)
+                .frame(width: 40)
                 .accessibilityHidden(true)
 
             Text(text)
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .foregroundColor(.black)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
                 .accessibilityLabel(text)
+                .frame(minWidth: 50)
         }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 20).fill(Color.white).shadow(radius: 2).opacity(0.9))
-        .padding(.horizontal)
     }
 }
 

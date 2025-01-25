@@ -1,5 +1,5 @@
 //
-//  Color+fromString.swift
+//  ColorExtensions.swift
 //  skipapp-stork
 //
 //  Created by Nick Molargik on 12/26/24.

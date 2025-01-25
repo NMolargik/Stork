@@ -39,8 +39,8 @@ struct MusterAdminInviteUserView: View {
                 } else if profileViewModel.isWorking {
                     Spacer()
                     ProgressView()
-                        .tint(.indigo)
-                        .padding()
+                        .tint(.orange)
+                        .frame(height: 50)
                     Spacer()
                 } else {
                     profilesListView
@@ -51,6 +51,7 @@ struct MusterAdminInviteUserView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }
                         .foregroundStyle(.red)
+                        .fontWeight(.bold)
                 }
             }
             .onAppear {

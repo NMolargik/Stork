@@ -24,7 +24,7 @@ struct DeliveryGraphMonthData: Identifiable {
 struct DeliveriesLastSixMonthsView: View {
     // MARK: - Properties
     
-    @State var groupedDeliveries: [(key: String, value: [Delivery])]
+    @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
     
     @State private var deliveriesLastSix: [DeliveryGraphMonthData] = []
     @State private var animatedDeliveries: [DeliveryGraphMonthData] = []
@@ -39,67 +39,57 @@ struct DeliveriesLastSixMonthsView: View {
     // MARK: - Body
     var body: some View {
         VStack {
-            if deliveriesLastSix.isEmpty {
-                Text("No delivery data available for the past six months.")
-                    .font(.headline)
-                    .foregroundColor(.gray)
-                    .padding()
-                    .accessibilityLabel("No delivery data available for the past six months.")
-            } else {
-                Text("Deliveries In The Last 6 Months")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.gray)
-                    .offset(y: 25)
-                    .frame(height: 10)
-                    .padding(.bottom, 10)
-                
-                // MARK: - Line Chart
-                Chart(animatedDeliveries) { monthlyData in
-                    AreaMark(
-                        x: .value("Month", monthlyData.date, unit: .month),
-                        y: .value("Deliveries", monthlyData.count)
-                    )
-                    .interpolationMethod(.linear)
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [Color.indigo, .clear],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    
-                    LineMark(
-                        x: .value("Month", monthlyData.date, unit: .month),
-                        y: .value("Deliveries", monthlyData.count)
-                    )
-                    .interpolationMethod(.linear)
-                    .foregroundStyle(Color.indigo)
-                    
-                    PointMark(
-                        x: .value("Month", monthlyData.date, unit: .month),
-                        y: .value("Deliveries", monthlyData.count)
-                    )
-                    .foregroundStyle(Color.orange)
-                    .symbolSize(100)
-                    .annotation(position: .top) {
-                        Text("\(monthlyData.count)")
-                            .fontWeight(.bold)
-                            .font(.caption)
-                            .foregroundColor(.primary)
-                    }
-                }
-                .chartYAxis(.hidden)
-                .chartXAxis {
-                    AxisMarks(values: .stride(by: .month, count: 1)) { date in
-                        AxisGridLine()
-                        AxisTick()
-                        AxisValueLabel(format: .dateTime.month(.narrow))
-                    }
-                }
-                .padding()
-            }
+            Text("Deliveries In The Last 6 Months")
+                .fontWeight(.bold)
+                .foregroundStyle(.gray)
+                .offset(y: 25)
+                .frame(height: 10)
+                .padding(.bottom, 10)
             
-            Spacer()
+            // MARK: - Line Chart
+            Chart(animatedDeliveries) { monthlyData in
+                AreaMark(
+                    x: .value("Month", monthlyData.date, unit: .month),
+                    y: .value("Deliveries", monthlyData.count)
+                )
+                .interpolationMethod(.linear)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [Color.indigo, .clear],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                
+                LineMark(
+                    x: .value("Month", monthlyData.date, unit: .month),
+                    y: .value("Deliveries", monthlyData.count)
+                )
+                .interpolationMethod(.linear)
+                .foregroundStyle(Color.indigo)
+                
+                PointMark(
+                    x: .value("Month", monthlyData.date, unit: .month),
+                    y: .value("Deliveries", monthlyData.count)
+                )
+                .foregroundStyle(Color.orange)
+                .symbolSize(100)
+                .annotation(position: .top) {
+                    Text("\(monthlyData.count)")
+                        .fontWeight(.bold)
+                        .font(.caption)
+                        .foregroundColor(.primary)
+                }
+            }
+            .chartYAxis(.hidden)
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .month, count: 1)) { date in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel(format: .dateTime.month(.narrow))
+                }
+            }
+            .padding()
         }
         .onAppear {
             aggregateMonthlyDeliveries()
@@ -160,7 +150,7 @@ struct DeliveriesLastSixMonthsView: View {
 // MARK: - Preview
 struct DeliveriesLastSixMonthsView_Previews: PreviewProvider {
     static var previews: some View {
-        DeliveriesLastSixMonthsView(groupedDeliveries: [
+        DeliveriesLastSixMonthsView(groupedDeliveries: .constant([
             // Sample data for preview purposes
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Calendar.current.date(byAdding: .month, value: -5, to: Date())!, babies: [], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true),
@@ -179,7 +169,7 @@ struct DeliveriesLastSixMonthsView_Previews: PreviewProvider {
             (key: "December '24", value: [
                 Delivery(id: "6", userId: "U6", userFirstName: "Fiona", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M6", date: Date(), babies: [], babyCount: 1, deliveryMethod: .vaginal, epiduralUsed: false)
             ])
-        ])
+        ]))
     }
 }
 

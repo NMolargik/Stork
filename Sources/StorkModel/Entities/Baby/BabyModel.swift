@@ -29,8 +29,12 @@ public struct Baby: Identifiable, Codable, Hashable {
     /// Indicates whether the baby was part of a nurse catch.
     public var nurseCatch: Bool
     
+    /// Indicates whether the baby went to NICU
+    public var nicuStay: Bool
+    
     /// Sex of the baby.
     public var sex: Sex
+    
     
     /// Converts the `Baby` instance into a dictionary format suitable for Firestore storage.
     ///
@@ -43,6 +47,7 @@ public struct Baby: Identifiable, Codable, Hashable {
             "weight": weight,
             "sex": sex.rawValue,
             "deliveryId": deliveryId,
+            "nicuStay": nicuStay,
             "nurseCatch": nurseCatch
         ]
     }
@@ -67,6 +72,7 @@ public struct Baby: Identifiable, Codable, Hashable {
             let height = dictionary["height"] as? Double,
             let weight = dictionary["weight"] as? Double,
             let nurseCatch = dictionary["nurseCatch"] as? Bool,
+            let nicuStay = dictionary["nicuStay"] as? Bool,
             let sexRawValue = dictionary["sex"] as? String,
             let sex = Sex(rawValue: sexRawValue)
         else {
@@ -87,6 +93,7 @@ public struct Baby: Identifiable, Codable, Hashable {
         self.height = height
         self.weight = weight
         self.nurseCatch = nurseCatch
+        self.nicuStay = nicuStay
         self.sex = sex
     }
     
@@ -99,6 +106,7 @@ public struct Baby: Identifiable, Codable, Hashable {
     ///   - height: Height of the baby.
     ///   - weight: Weight of the baby.
     ///   - nurseCatch: Indicates if the baby was part of a nurse catch.
+    ///   - nicuStay: Indicates if the baby stayed in NICU
     ///   - sex: Sex of the baby.
     public init(
         id: String,
@@ -107,6 +115,7 @@ public struct Baby: Identifiable, Codable, Hashable {
         height: Double,
         weight: Double,
         nurseCatch: Bool,
+        nicuStay: Bool,
         sex: Sex
     ) {
         self.id = id
@@ -115,11 +124,12 @@ public struct Baby: Identifiable, Codable, Hashable {
         self.height = height
         self.weight = weight
         self.nurseCatch = nurseCatch
+        self.nicuStay = nicuStay
         self.sex = sex
     }
     
-    public init(deliveryId: String, nurseCatch: Bool, sex: Sex, weight: Double, height: Double) {
-        self.init(deliveryId: deliveryId, nurseCatch: nurseCatch, sex: sex)
+    public init(deliveryId: String, nurseCatch: Bool, nicuStay: Bool, sex: Sex, weight: Double, height: Double) {
+        self.init(deliveryId: deliveryId, nurseCatch: nurseCatch, nicuStay: nicuStay, sex: sex)
         self.weight = weight
         self.height = height
     }
@@ -131,13 +141,14 @@ public struct Baby: Identifiable, Codable, Hashable {
     ///   - deliveryId: Identifier of the associated delivery.
     ///   - nurseCatch: Indicates if the baby was part of a nurse catch.
     ///   - sex: Sex of the baby.
-    public init(deliveryId: String, nurseCatch: Bool, sex: Sex) {
+    public init(deliveryId: String, nurseCatch: Bool, nicuStay: Bool, sex: Sex) {
         self.id = UUID().uuidString
         self.deliveryId = deliveryId
         self.birthday = Date() // Defaults to current date; consider adjusting as needed.
         self.height = 16.0      // Default height; adjust based on unit settings.
         self.weight = 112.0     // Default weight; adjust based on unit settings.
         self.nurseCatch = nurseCatch
+        self.nicuStay = nicuStay
         self.sex = sex
     }
     
@@ -151,6 +162,7 @@ public struct Baby: Identifiable, Codable, Hashable {
         case height
         case weight
         case nurseCatch
+        case nicuStay
         case sex
     }
     
@@ -169,6 +181,7 @@ public struct Baby: Identifiable, Codable, Hashable {
             lhs.height == rhs.height &&
             lhs.weight == rhs.weight &&
             lhs.nurseCatch == rhs.nurseCatch &&
+            lhs.nicuStay == rhs.nicuStay &&
             lhs.sex == rhs.sex
     }
     
@@ -182,6 +195,7 @@ public struct Baby: Identifiable, Codable, Hashable {
         hasher.combine(height)
         hasher.combine(weight)
         hasher.combine(nurseCatch)
+        hasher.combine(nicuStay)
         hasher.combine(sex)
     }
 }

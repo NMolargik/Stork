@@ -41,7 +41,10 @@ public struct MainView: View {
             }
             
             tabItem(for: .muster) {
-                MusterTabView()
+                MusterTabView(
+                    showingDeliveryAddition: $showingDeliveryAddition,
+                    selectedTab: $selectedTab
+                )
             }
             
             tabItem(for: .settings) {
@@ -67,15 +70,4 @@ public struct MainView: View {
 #Preview {
     MainView()
         .withMockEnvironmentObjects()
-}
-
-// MARK: - Environment Object Injection
-private extension View {
-    func withMockEnvironmentObjects() -> some View {
-        self
-            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-            .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
-            .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-            .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
-    }
 }

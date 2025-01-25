@@ -32,6 +32,7 @@ struct MusterAdminAssignAdminView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }
                         .foregroundStyle(.red)
+                        .fontWeight(.bold)
                 }
             }
         }

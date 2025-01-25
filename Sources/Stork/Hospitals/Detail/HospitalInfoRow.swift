@@ -19,8 +19,12 @@ struct HospitalInfoRow: View {
                 .frame(width: 30)
 
             Text(text)
-                .foregroundStyle(.black)
                 .fontWeight(.semibold)
+                .lineLimit(nil) // Allow unlimited lines
+                .multilineTextAlignment(.leading) // Ensure text aligns properly
+#if !SKIP
+                .fixedSize(horizontal: false, vertical: true) // Prevent horizontal shrinking, force vertical expansion
+            #endif
         }
     }
 }

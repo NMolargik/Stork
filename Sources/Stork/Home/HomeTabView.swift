@@ -31,6 +31,7 @@ struct HomeTabView: View {
             }
             .navigationTitle("Stork")
             .toolbar { profileButton }
+            .padding()
         }
         .sheet(isPresented: $showProfileView, content: {
             ProfileView()
@@ -71,7 +72,6 @@ private extension HomeTabView {
             }
             .padding(.leading, 8)
         }
-        .padding()
         .frame(height: 320)
     }
 }

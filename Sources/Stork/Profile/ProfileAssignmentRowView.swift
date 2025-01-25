@@ -10,6 +10,7 @@ import StorkModel
 
 struct ProfileAssignmentRowView: View {
     @AppStorage("errorMessage") private var errorMessage: String = ""
+    @Environment(\.colorScheme) var colorScheme
     
     /// The `Profile` displayed in this row.
     var profile: Profile
@@ -52,11 +53,7 @@ struct ProfileAssignmentRowView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(
-            Color.white
-                .cornerRadius(20)
-                .shadow(radius: 2)
-        )
+        .backgroundCard(colorScheme: colorScheme)
     }
     
     // MARK: - Action Button

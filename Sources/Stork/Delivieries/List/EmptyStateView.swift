@@ -36,10 +36,10 @@ struct EmptyStateView: View {
                 .font(.title3)
                 .fontWeight(.semibold)
                 .padding(.top, 8)
+                .backgroundCard(colorScheme: colorScheme)
 
-            Spacer(minLength: 300)
+            Spacer(minLength: 200)
 
-            // MARK: - Info Banner
             InfoBannerView()
         }
         .padding()

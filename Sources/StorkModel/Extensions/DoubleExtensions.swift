@@ -1,5 +1,5 @@
 //
-//  Double+toRadians.swift
+//  DoubleExtensions.swift
 //
 //  Created by Nick Molargik on 11/30/24.
 //
@@ -7,7 +7,7 @@
 import Foundation
 
 /// A `Double` extension that provides utility methods for angle conversions.
-extension Double {
+public extension Double {
     
     // MARK: - Computed Properties
     

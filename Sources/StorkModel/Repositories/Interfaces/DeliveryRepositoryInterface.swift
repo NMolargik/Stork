@@ -7,7 +7,9 @@
 
 import Foundation
 
+/// A protocol defining the interface for accessing delivery data.
 public protocol DeliveryRepositoryInterface {
+    
     /// Creates a new delivery record.
     /// - Parameter delivery: The `Delivery` object to create.
     /// - Returns: The newly created `Delivery` (including its generated ID).
@@ -27,7 +29,8 @@ public protocol DeliveryRepositoryInterface {
     ///           Other `DeliveryError` if the fetch fails.
     func getDelivery(byId id: String) async throws -> Delivery
 
-    /// Lists deliveries based on optional filters **and optional pagination parameters**.
+    /// Lists deliveries based on optional filters, supporting **6-month interval pagination**.
+    ///
     /// - Parameters:
     ///   - userId: An optional filter for the ID of the user associated with the delivery.
     ///   - userFirstName: An optional filter for the first name of the user.
@@ -38,13 +41,17 @@ public protocol DeliveryRepositoryInterface {
     ///   - babyCount: An optional baby count filter.
     ///   - deliveryMethod: An optional delivery method filter (e.g., vaginal, c-section).
     ///   - epiduralUsed: An optional epidural usage filter.
-    ///   - startAt: (Pagination) An optional start date/time for the query.
-    ///   - endAt: (Pagination) An optional end date/time for the query.
-    /// - Returns: A list of `Delivery` objects matching the filters.
+    ///   - startDate: (Pagination) The **start date of the 6-month range**.
+    ///   - endDate: (Pagination) The **end date of the 6-month range**.
+    ///
+    /// - Returns: A list of `Delivery` objects matching the filters within the specified 6-month period.
     /// - Throws: `DeliveryError` if the query fails.
     ///
-    /// **Backward compatibility**: Existing code can omit `startAt`, `endAt`, and `limit`
-    /// to continue using the old behavior.
+    /// **Pagination Behavior:**
+    /// - If `startDate` and `endDate` are both provided, only deliveries **between** those dates will be returned.
+    /// - If only `startDate` is provided, results will include deliveries **from that date onward**.
+    /// - If only `endDate` is provided, results will include deliveries **before that date**.
+    /// - If neither is provided, the **most recent 6-month interval** will be used.
     func listDeliveries(
         userId: String?,
         userFirstName: String?,
@@ -55,8 +62,8 @@ public protocol DeliveryRepositoryInterface {
         babyCount: Int?,
         deliveryMethod: DeliveryMethod?,
         epiduralUsed: Bool?,
-        startAt: Date?,   // New optional date-based pagination
-        endAt: Date?     // New optional date-based pagination
+        startDate: Date?,   // Updated to match Firestore logic
+        endDate: Date?      // Updated to match Firestore logic
     ) async throws -> [Delivery]
 
     /// Deletes an existing delivery record.

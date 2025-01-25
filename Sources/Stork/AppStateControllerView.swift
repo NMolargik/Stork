@@ -93,12 +93,17 @@ public struct AppStateControllerView: View {
                     )
                     
                 case .paywall:
-                    PaywallParentView(isPresented: $paywallPresented)
-                        .onChange(of: paywallPresented) { newValue in
-                            print("Paywall showing?: \(newValue)")
-                            // If user closes or completes paywall, re-check state
+                    PaywallMainView(
+                        onCompleted: {
+                            print("Paywall dismissed")
+                            checkAppState()
+                        },
+                        signOut: {
+                            print("User signed out from paywall")
+                            profileViewModel.signOut()
                             checkAppState()
                         }
+                    )
                     
                 case .onboard:
                     OnboardingView {
@@ -143,7 +148,7 @@ public struct AppStateControllerView: View {
                     try await handlePurchasesLogin()
                     
                     // Decide the next state
-                    appState = computeNextAppState()
+                    appState = await computeNextAppState()
                     
                 } catch {
                     errorMessage = error.localizedDescription
@@ -157,23 +162,46 @@ public struct AppStateControllerView: View {
     
     // MARK: - Compute Next AppState
     /// Centralized logic for deciding which screen to show next.
-    private func computeNextAppState() -> AppState {
+    private func computeNextAppState() async -> AppState {
         // If not logged in, either we are registering or showing splash
         guard loggedIn else {
             return showRegistration ? .register : .splash
         }
-        
+
         // Logged in, so check onboarding and subscription
         if !isOnboardingComplete {
             return .onboard
         }
-        
+
+        #if !SKIP
+        // Wait for RevenueCat to complete before proceeding
+        await fetchCustomerInfo()
+        #endif
+
         if !Store.shared.subscriptionActive {
             return .paywall
         }
-        
+
         return .main
     }
+
+    #if !SKIP
+    // MARK: - Fetch Customer Info from RevenueCat
+    /// Ensures RevenueCat's customer info is retrieved before proceeding.
+    private func fetchCustomerInfo() async {
+        await withCheckedContinuation { continuation in
+            Purchases.sharedInstance.getCustomerInfo(
+                fetchPolicy: ModelsCacheFetchPolicy.cachedOrFetched,
+                onError: { _ in
+                    continuation.resume()
+                },
+                onSuccess: { _ in
+                    continuation.resume()
+                }
+            )
+        }
+    }
+    #endif
     
     // MARK: - Fetch Data
     /// Retrieves Profile, Deliveries, and (optionally) the current Muster
@@ -182,22 +210,30 @@ public struct AppStateControllerView: View {
         if profileViewModel.profile.email.isEmpty {
             try await profileViewModel.fetchCurrentProfile()
         }
-        
-        // Fetch deliveries if empty
-        if deliveryViewModel.deliveries.isEmpty {
-            try await deliveryViewModel.fetchDeliveriesForCurrentPage(profile: profileViewModel.profile)
+
+        if hospitalViewModel.hospitals.isEmpty {
+            await hospitalViewModel.fetchHospitalsNearby()
         }
-        
+
+        // Reset pagination before fetching deliveries
+        deliveryViewModel.currentPage = 0
+        deliveryViewModel.hasMorePages = true
+
+        // Fetch deliveries if empty
+        if deliveryViewModel.groupedDeliveries.isEmpty {
+            try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
+        }
+
         // Fetch muster if needed
         if !profileViewModel.profile.musterId.isEmpty, musterViewModel.currentMuster == nil {
             try await musterViewModel.loadCurrentMuster(
                 profileViewModel: profileViewModel,
                 deliveryViewModel: deliveryViewModel
             )
+            
             if let muster = musterViewModel.currentMuster {
-                deliveryViewModel.currentPage = 0
-                
-                try await deliveryViewModel.fetchMusterDeliveriesForCurrentPage(muster: muster)
+                // Fetch only the last 6 months of muster deliveries
+                try await deliveryViewModel.fetchMusterDeliveries(muster: muster)
             }
         }
     }
@@ -206,6 +242,9 @@ public struct AppStateControllerView: View {
     /// Logs into RevenueCat if we have a valid user ID
     private func handlePurchasesLogin() async throws {
         let userId = profileViewModel.profile.id
+        
+        print("UserID: \(userId)")
+        
         guard !userId.isEmpty else { return }
         
         try await withCheckedThrowingContinuation { continuation in

@@ -15,7 +15,7 @@ struct SectionHeader: View {
             .font(.title)
             .foregroundStyle(.primary)
             .fontWeight(.bold)
-            .opacity(0.2)
+            .opacity(0.4)
             .offset(x: -15)
     }
 }

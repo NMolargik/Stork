@@ -23,8 +23,8 @@ struct JarView: View {
     @State private var isAddingMarbles: Bool = false
 
     private let maxMarbleCount = 100
-    private let marbleRadius: CGFloat = 12
-    private let collisionIterations = 15
+    private let marbleRadius: CGFloat = 15
+    private let collisionIterations = 14
     private let gravity: CGFloat = 1.0
     private let damping: CGFloat = 0.98
     private let friction: CGFloat = 0.85
@@ -75,6 +75,7 @@ struct JarView: View {
                         .frame(width: marble.diameter, height: marble.diameter)
                         .position(marble.position)
                 }
+                .offset(y: 10)
             }
             .onAppear {
                 if isTestMode {

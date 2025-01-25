@@ -90,14 +90,14 @@ struct TotalDeliveryAndBabyStatsView_Previews: PreviewProvider {
         TotalDeliveryAndBabyStatsView(groupedDeliveries: .constant([
             (key: "July '24", value: [
                 Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
-                    Baby(deliveryId: "1", nurseCatch: true, sex: .male, weight: 120.0, height: 20.5), // Baby 1
-                    Baby(deliveryId: "1", nurseCatch: false, sex: .female, weight: 108.0, height: 19.8)  // Baby 2
+                    Baby(deliveryId: "1", nurseCatch: true, nicuStay: false, sex: .male, weight: 120.0, height: 20.5), // Baby 1
+                    Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female, weight: 108.0, height: 19.8)  // Baby 2
                 ], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
             ]),
             (key: "August '24", value: [
                 Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Date(), babies: [
-                    Baby(deliveryId: "2", nurseCatch: false, sex: .male, weight: 132.0, height: 21.2),  // Baby 3
-                    Baby(deliveryId: "2", nurseCatch: true, sex: .loss, weight: 37.0, height: 14.7)      // Baby 4
+                    Baby(deliveryId: "2", nurseCatch: false, nicuStay: false, sex: .male, weight: 132.0, height: 21.2),  // Baby 3
+                    Baby(deliveryId: "2", nurseCatch: true, nicuStay: false, sex: .loss, weight: 37.0, height: 14.7)      // Baby 4
                 ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
             ])
         ]))

@@ -37,6 +37,8 @@ class DeliveryViewModel: ObservableObject {
     /// page 0 = last 6 months, page 1 = 6–12 months ago, etc.
     @Published var currentPage: Int = 0
     private let monthsPerPage: Int = 6
+    var lastFetchedEndDate: Date?
+    @Published var hasMorePages: Bool = true
 
     // MARK: - Repository
     var deliveryRepository: DeliveryRepositoryInterface
@@ -88,103 +90,177 @@ class DeliveryViewModel: ObservableObject {
         startNewDelivery()
     }
     
-    // MARK: - Paginated Fetch for User Deliveries
-    /// Loads deliveries for this user, using 6-month page ranges.
-    /// page 0 = last 6 months, page 1 = 6–12 months ago, etc.
-    /// - Throws: DeliveryError or other if fetching fails.
-    func fetchDeliveriesForCurrentPage(profile: Profile) async throws {
-        isWorking = true
-        defer { isWorking = false }
-
-        guard let (startAt, endAt) = pageDates(for: currentPage) else {
-            print("Could not calculate date range for page \(currentPage).")
+    // MARK: - Fetch Next Page of Deliveries
+    func fetchNextDeliveries(profile: Profile) async throws {
+        guard hasMorePages else {
+            print("No more pages to load.")
             return
         }
 
-        // Provide all required parameters, including startAt/endAt
-        deliveries = try await deliveryRepository.listDeliveries(
-            userId: profile.id,
-            userFirstName: nil,
-            hospitalId: nil,
-            hospitalName: nil,
-            musterId: nil,
-            date: nil,
-            babyCount: nil,
-            deliveryMethod: nil,
-            epiduralUsed: nil,
-            startAt: startAt,
-            endAt: endAt
-        )
-
-        groupDeliveries()
-        print("Fetched \(deliveries.count) user deliveries for page \(currentPage).")
-    }
-
-    // MARK: - Paginated Fetch for Muster Deliveries
-    /// Loads muster deliveries for this muster, also using 6-month page ranges.
-    /// - Throws: DeliveryError or other if fetching fails.
-    func fetchMusterDeliveriesForCurrentPage(muster: Muster) async throws {
         isWorking = true
-        defer { isWorking = false }
 
-        guard let (startAt, endAt) = pageDates(for: currentPage) else {
-            print("Could not calculate date range for muster page \(currentPage).")
+        guard let (startDate, endDate) = calculateNextPageDates() else {
+            print("Could not calculate date range for page \(currentPage + 1).")
+            isWorking = false
             return
         }
 
-        musterDeliveries = try await deliveryRepository.listDeliveries(
-            userId: nil,
-            userFirstName: nil,
-            hospitalId: nil,
-            hospitalName: nil,
-            musterId: muster.id,
-            date: nil,
-            babyCount: nil,
-            deliveryMethod: nil,
-            epiduralUsed: nil,
-            startAt: startAt,
-            endAt: endAt
-        )
+        print("Fetching deliveries from Firestore...")
+        print("Query Start Date: \(startDate)")
+        print("Query End Date: \(endDate)")
+        print("User ID: \(profile.id)")
 
-        groupMusterDeliveries()
-        print("Fetched \(musterDeliveries.count) muster deliveries for page \(currentPage).")
+        do {
+            let newDeliveries = try await deliveryRepository.listDeliveries(
+                userId: profile.id,
+                userFirstName: nil,
+                hospitalId: nil,
+                hospitalName: nil,
+                musterId: nil,
+                date: nil,
+                babyCount: nil,
+                deliveryMethod: nil,
+                epiduralUsed: nil,
+                startDate: startDate,
+                endDate: endDate
+            )
+            
+            if !newDeliveries.isEmpty {
+                self.deliveries.append(contentsOf: newDeliveries)
+                lastFetchedEndDate = endDate  // ✅ Update the last fetched date for pagination
+                currentPage += 1  // ✅ Increment page count
+                print("Updated lastFetchedEndDate to \(lastFetchedEndDate!) for next pagination step.")
+            } else {
+                hasMorePages = false  // ✅ Stop paginating if no more data
+                print("No more deliveries found. Stopping pagination.")
+            }
+            
+            groupDeliveries()
+            print("Fetched \(newDeliveries.count) deliveries.")
+        } catch {
+            print("Error fetching deliveries: \(error.localizedDescription)")
+            isWorking = false
+        }
+        
+        isWorking = false
     }
 
-    /// Computes (startAt, endAt) for the requested page.
-    private func pageDates(for page: Int) -> (Date, Date)? {
+    // MARK: - Fetch Muster Deliveries (Last 6 Months Only)
+    func fetchMusterDeliveries(muster: Muster) async throws {
+        isWorking = true
+
+        guard let (startDate, endDate) = calculateInitialDateRange() else {
+            print("Could not calculate date range for muster deliveries.")
+            isWorking = false
+            return
+        }
+        
+        print("Fetching muster deliveries from Firestore...")
+        print("Muster Query Start Date: \(startDate)")
+        print("Muster Query End Date: \(endDate)")
+
+
+        do {
+            let newMusterDeliveries = try await deliveryRepository.listDeliveries(
+                userId: nil,
+                userFirstName: nil,
+                hospitalId: nil,
+                hospitalName: nil,
+                musterId: muster.id,
+                date: nil,
+                babyCount: nil,
+                deliveryMethod: nil,
+                epiduralUsed: nil,
+                startDate: startDate,
+                endDate: endDate
+            )
+            
+            self.musterDeliveries = newMusterDeliveries
+            groupMusterDeliveries()
+            print("Fetched \(musterDeliveries.count) muster deliveries.")
+        } catch {
+            isWorking = false
+            print("Error fetching muster deliveries: \(error.localizedDescription)")
+        }
+        
+        isWorking = false
+    }
+    
+    // MARK: - Date Calculation for Pagination
+    /// **Initial Range:** First day of the upcoming month to the first day of 6 months ago.
+    private func calculateInitialDateRange() -> (startDate: Date, endDate: Date)? {
+        let calendar = Calendar.current
         let now = Date()
 
-        guard let endAt = Calendar.current.date(byAdding: .month, value: -monthsPerPage * page, to: now),
-              let startAt = Calendar.current.date(byAdding: .month, value: -monthsPerPage * (page + 1), to: now)
-        else {
+        // Calculate the first day of the upcoming month (endDate)
+        guard let nextMonth = calendar.date(byAdding: .month, value: 1, to: now),
+              let firstOfNextMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: nextMonth)) else {
+            return nil
+        }
+        
+        // Calculate the first day of 6 months ago (startDate)
+        guard let sixMonthsAgo = calendar.date(byAdding: .month, value: -6, to: firstOfNextMonth),
+              let firstOfSixMonthsAgo = calendar.date(from: calendar.dateComponents([.year, .month], from: sixMonthsAgo)) else {
             return nil
         }
 
-        // We want deliveries in [startAt, endAt).
-        return (startAt, endAt)
+        return (firstOfSixMonthsAgo, firstOfNextMonth)
+    }
+
+    /// **Next Page:** First request fetches from upcoming month to 6 months ago.
+    /// Subsequent pages shift back by 6 months.
+    private func calculateNextPageDates() -> (startDate: Date, endDate: Date)? {
+        let calendar = Calendar.current
+
+        // If this is the first request, use the initial date range.
+        if lastFetchedEndDate == nil {
+            return calculateInitialDateRange()
+        }
+
+        guard let lastEndDate = lastFetchedEndDate else {
+            return nil
+        }
+
+        // Calculate new endDate (first day of the month, 6 months before last endDate)
+        guard let newEndDate = calendar.date(byAdding: .month, value: -6, to: lastEndDate),
+              let firstOfNewEndMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: newEndDate)) else {
+            return nil
+        }
+
+        // Calculate new startDate (first day of the month, 6 months before newEndDate)
+        guard let newStartDate = calendar.date(byAdding: .month, value: -6, to: firstOfNewEndMonth),
+              let firstOfNewStartMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: newStartDate)) else {
+            return nil
+        }
+
+        return (firstOfNewStartMonth, firstOfNewEndMonth)
     }
     
     // MARK: - Searching for Duplicates
-    /// Example: If you still want to pass explicit startAt/endAt for duplicates, do so here.
-    /// For now, we just pass nil to the new pagination parameters to indicate "full range" if you want:
+    /// Searches for possible duplicate deliveries in the last 6 months.
+    /// The search is scoped to a specific `musterId` and the selected hospital.
     func searchForDuplicates(musterId: String) async -> [Delivery] {
         isWorking = true
         defer { isWorking = false }
 
+        guard let (startDate, endDate) = calculateInitialDateRange() else {
+            print("Could not calculate date range for duplicate search.")
+            return []
+        }
+
         do {
-            // Minimal or no pagination logic? Just pass explicit nil for startAt/endAt if you want everything.
             return try await deliveryRepository.listDeliveries(
                 userId: nil,
                 userFirstName: nil,
                 hospitalId: selectedHospital?.id,
                 hospitalName: nil,
                 musterId: musterId,
-                date: currentDate,
+                date: currentDate,  // Searching for possible duplicates on the same date
                 babyCount: selectedHospital?.babyCount,
                 deliveryMethod: deliveryMethod,
                 epiduralUsed: epiduralUsed,
-                startAt: nil, // or define a date range if you prefer
-                endAt: nil
+                startDate: startDate,  // Use last 6 months as the default range
+                endDate: endDate
             )
         } catch {
             print("Error searching for duplicates: \(error.localizedDescription)")
@@ -253,6 +329,7 @@ class DeliveryViewModel: ObservableObject {
         let newBaby = Baby(
             deliveryId: UUID().uuidString,
             nurseCatch: false,
+            nicuStay: false,
             sex: .male
         )
         newDelivery.babies.append(newBaby)

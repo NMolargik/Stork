@@ -44,12 +44,14 @@ struct BabyEditorView: View {
             weightStepper
             lengthStepper
             nurseCatchToggle
+            nicuToggle 
         }
         .padding()
         .background(
             ZStack {
                 Color.white
                 baby.sex.color.opacity(0.4)
+                    .animation(.easeInOut(duration: 0.3), value: baby.sex) // Animate background color change
             }
         )
         .cornerRadius(20)
@@ -93,7 +95,12 @@ struct BabyEditorView: View {
         }
         .foregroundStyle(colorScheme == .dark ? .black : .white)
         .pickerStyle(.segmented)
-        .background(Rectangle().cornerRadius(8).opacity(colorScheme == .dark ? 0.8 : 0.0))
+        .background {
+            Rectangle()
+                .cornerRadius(8)
+                .foregroundStyle(.indigo)
+                .opacity(colorScheme == .dark ? 0.8 : 0.3)
+        }
         .onChange(of: baby.sex) { _ in triggerHaptic() }
     }
     
@@ -103,8 +110,7 @@ struct BabyEditorView: View {
             decrement: { adjustWeight(-0.1) },
             increment: { adjustWeight(0.1) },
             range: useMetric ? weightRangeMetric : weightRangeImperial
-        )
-    }
+        )    }
     
     private var lengthStepper: some View {
         StepperView(
@@ -121,7 +127,28 @@ struct BabyEditorView: View {
             .foregroundStyle(.black)
             .tint(.green)
             .padding()
-            .background(Rectangle().cornerRadius(20).foregroundStyle(Color.white.opacity(0.8)))
+            .background(
+                Rectangle()
+                    .foregroundStyle(Color.white.opacity(0.8))
+                    .overlay(baby.nurseCatch ? Color.green.opacity(0.2) : Color.clear)
+                    .animation(.easeInOut(duration: 0.3), value: baby.nurseCatch) // Animate color change
+                    .cornerRadius(20)
+            )
+    }
+
+    private var nicuToggle: some View {
+        Toggle("NICU", isOn: $baby.nicuStay)
+            .fontWeight(.bold)
+            .foregroundStyle(.black)
+            .tint(.green)
+            .padding()
+            .background(
+                Rectangle()
+                    .foregroundStyle(Color.white.opacity(0.8))
+                    .overlay(baby.nicuStay ? Color.green.opacity(0.2) : Color.clear)
+                    .animation(.easeInOut(duration: 0.3), value: baby.nicuStay) // Animate color change
+                    .cornerRadius(20)
+            )
     }
 
     // MARK: - Computed Properties
@@ -154,7 +181,7 @@ struct BabyEditorView: View {
 
 #Preview {
     BabyEditorView(
-        baby: .constant(Baby(deliveryId: "", nurseCatch: true, sex: .male)),
+        baby: .constant(Baby(deliveryId: "", nurseCatch: true, nicuStay: false, sex: .male)),
         babyNumber: 2,
         removeBaby: { _ in }
     )

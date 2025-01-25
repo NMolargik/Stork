@@ -11,29 +11,52 @@ import StorkModel
 struct HomeCarouselView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    
+    @State private var selectedIndex: Int = 0
 
-    private let numberOfCards = HomeCarouselCard.allCases.count
-
+    #if !SKIP
+    init() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color.indigo)
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.gray
+       }
+    #endif
+    
     var body: some View {
         VStack {
-            TabView {
-                ForEach(HomeCarouselCard.allCases, id: \.self) { card in
-                    carouselCard(for: card)
-                }
+            TabView(selection: $selectedIndex) {
+#if !SKIP
+                DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .backgroundCard(colorScheme: colorScheme)
+                    .padding(.vertical, 5)
+                    .tag(0)
+                
+                DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .backgroundCard(colorScheme: colorScheme)
+                    .padding(.vertical, 5)
+                    .tag(1)
+#endif
+                
+                BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .backgroundCard(colorScheme: colorScheme)
+                    .padding(.vertical, 5)
+                    .tag(2)
+                
+                TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .backgroundCard(colorScheme: colorScheme)
+                    .padding(.vertical, 5)
+                    .tag(3)
             }
-            .tabViewStyle(.page)
-            .frame(height: 220)
-        }
-    }
-
-    // MARK: - Helper Methods
-    private func carouselCard(for card: HomeCarouselCard) -> some View {
-        ZStack {
-            card.view(deliveryViewModel: deliveryViewModel)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .backgroundCard(colorScheme: colorScheme)
-                .padding(.vertical, 5)
-        }
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.horizontal, -5)
+            
+            Spacer()
+        } // ✅ Allows indicators to go outside content
+        .ignoresSafeArea(edges: .bottom)
     }
 }
 

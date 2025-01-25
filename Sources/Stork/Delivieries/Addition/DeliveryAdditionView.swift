@@ -113,7 +113,7 @@ struct DeliveryAdditionView: View {
                             .multilineTextAlignment(.center)
                         
                         CustomButtonView(
-                            text: "Select A Hospital",
+                            text: "Change Hospital",
                             width: 250,
                             height: 50,
                             color: Color.red,
@@ -136,8 +136,7 @@ struct DeliveryAdditionView: View {
                     // MARK: - Submit Delivery Button or ProgressView
                     if deliveryViewModel.isWorking {
                         ProgressView()
-                            .frame(height: 40)
-                            .padding()
+                            .frame(height: 50)
                     } else {
                         CustomButtonView(
                             text: "Submit Delivery",
@@ -198,7 +197,7 @@ struct DeliveryAdditionView: View {
     private func initializeHospital() {
         Task {
             if hospitalViewModel.primaryHospital == nil {
-                try await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
+                await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
             }
             
             deliveryViewModel.selectedHospital = hospitalViewModel.primaryHospital
@@ -216,6 +215,8 @@ struct DeliveryAdditionView: View {
             errorMessage = "No hospital selected"
             return
         }
+        deliveryViewModel.newDelivery.hospitalName = hospital.facility_name
+        deliveryViewModel.newDelivery.hospitalId = hospital.id
         
         let babyCount = deliveryViewModel.newDelivery.babies.count
         
@@ -226,12 +227,7 @@ struct DeliveryAdditionView: View {
             return
         }
         
-        do {
-            try await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: babyCount)
-        } catch {
-            errorMessage = error.localizedDescription
-            return
-        }
+        await hospitalViewModel.updateHospitalWithNewDelivery(hospital: hospital, babyCount: babyCount)
         
         showingDeliveryAddition = false
     }

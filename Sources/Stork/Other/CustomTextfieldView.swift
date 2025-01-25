@@ -51,7 +51,7 @@ struct CustomTextfieldView: View {
             .padding(.leading)
             .background(colorScheme == .dark ? Color.black : Color.white)
             .cornerRadius(20)
-            .shadow(color: colorScheme == .dark ? .gray : .black, radius: 2)
+            .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
             .frame(height: 50)
 
             if let limit = characterLimit {
@@ -61,6 +61,7 @@ struct CustomTextfieldView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
+        .padding(.horizontal, 5)
     }
 }
 

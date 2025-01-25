@@ -8,23 +8,19 @@
 import SwiftUI
 
 struct ErrorToastView: View {
+    @Environment(\.colorScheme) var colorScheme
     @AppStorage("errorMessage") private var errorMessage: String = ""
     
     var body: some View {
         VStack {
             HStack {
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.red)
+                    .foregroundStyle(.yellow)
                 
                 Text(errorMessage)
-                    .foregroundStyle(.red)
             }
             .padding()
-            .background {
-                Color.primary
-                    .cornerRadius(20)
-                    .shadow(color: .red, radius: 10)
-            }
+            .backgroundCard(colorScheme: colorScheme)
             .onTapGesture {
                 withAnimation {
                     errorMessage = ""                }

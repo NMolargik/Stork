@@ -97,26 +97,25 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         }
     }
 
-    // MARK: - List Deliveries with Filters & Pagination
+    // MARK: - List Deliveries with Filters & 6-Month Pagination
 
-    /// Lists deliveries based on optional filters (including pagination parameters).
+    /// Lists deliveries based on optional filters, supporting pagination in **6-month intervals**.
     ///
     /// - Parameters:
-    ///   - userId: An optional filter for the ID of the user associated with the delivery.
-    ///   - userFirstName: An optional filter for the first name of the user associated with the delivery.
-    ///   - hospitalId: An optional filter for the hospital ID associated with the delivery.
+    ///   - userId: An optional filter for the user ID associated with the delivery.
+    ///   - userFirstName: An optional filter for the first name of the user.
+    ///   - hospitalId: An optional filter for the hospital ID.
     ///   - hospitalName: An optional filter for the hospital name.
-    ///   - musterId: An optional filter for the muster ID associated with the delivery.
-    ///   - date: An optional filter for the delivery date.
+    ///   - musterId: An optional filter for the muster ID.
+    ///   - date: An optional filter for a specific delivery date.
     ///   - babyCount: An optional filter for the number of babies in the delivery.
-    ///   - deliveryMethod: An optional filter for the delivery method (e.g., vaginal, c-section).
+    ///   - deliveryMethod: An optional filter (e.g., vaginal, c-section).
     ///   - epiduralUsed: An optional filter for whether an epidural was used.
-    ///   - startAt: (Pagination) An optional start date/time for the query. If provided, only deliveries on/after this date are included.
-    ///   - endAt: (Pagination) An optional end date/time for the query. If provided, only deliveries before this date are included.
+    ///   - startDate: (Pagination) The **start date of the 6-month range**. If provided, only deliveries on/after this date are included.
+    ///   - endDate: (Pagination) The **end date of the 6-month range**. If provided, only deliveries before this date are included.
     ///
-    /// - Returns: An array of `Delivery` objects matching the specified filters.
-    /// - Throws:
-    ///   - `DeliveryError.firebaseError`: If an error occurs while fetching the deliveries.
+    /// - Returns: An array of `Delivery` objects matching the specified filters within the given 6-month range.
+    /// - Throws: `DeliveryError.firebaseError` if the operation fails.
     public func listDeliveries(
         userId: String? = nil,
         userFirstName: String? = nil,
@@ -127,60 +126,47 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         babyCount: Int? = nil,
         deliveryMethod: DeliveryMethod? = nil,
         epiduralUsed: Bool? = nil,
-        startAt: Date? = nil,        // ✅ Added for date-based pagination
-        endAt: Date? = nil          // ✅ Added for date-based pagination
+        startDate: Date?,
+        endDate: Date?
     ) async throws -> [Delivery] {
         do {
-            var query: Query = db.collection("Delivery")
+            var query: Query = db.collection("Delivery").order(by: "date", descending: true)
 
-            // MARK: - Filter Conditions
-            if let userId {
-                query = query.whereField("userId", isEqualTo: userId)
-            }
-            if let userFirstName {
-                query = query.whereField("userFirstName", isEqualTo: userFirstName)
-            }
-            if let hospitalId {
-                query = query.whereField("hospitalId", isEqualTo: hospitalId)
-            }
-            if let hospitalName {
-                query = query.whereField("hospitalName", isEqualTo: hospitalName)
-            }
-            if let musterId {
-                query = query.whereField("musterId", isEqualTo: musterId)
-            }
-            if let date {
-                // Convert date to a Firestore-friendly format (timestamp in seconds)
-                query = query.whereField("date", isEqualTo: date.timeIntervalSince1970)
-            }
-            if let babyCount {
-                query = query.whereField("babyCount", isEqualTo: babyCount)
-            }
-            if let deliveryMethod {
-                query = query.whereField("deliveryMethod", isEqualTo: deliveryMethod.rawValue)
-            }
-            if let epiduralUsed {
-                query = query.whereField("epiduralUsed", isEqualTo: epiduralUsed)
-            }
+            // MARK: - Apply Filters
+            if let userId { query = query.whereField("userId", isEqualTo: userId) }
+            if let musterId { query = query.whereField("musterId", isEqualTo: musterId) }
+            if let hospitalId { query = query.whereField("hospitalId", isEqualTo: hospitalId) }
+            if let deliveryMethod { query = query.whereField("deliveryMethod", isEqualTo: deliveryMethod.rawValue) }
+            if let epiduralUsed { query = query.whereField("epiduralUsed", isEqualTo: epiduralUsed) }
+            if let babyCount { query = query.whereField("babyCount", isEqualTo: babyCount) }
 
-            // MARK: - Pagination Logic
-            if let startAt {
-                // Get deliveries >= startAt
-                let timestamp = startAt.timeIntervalSince1970
+            // MARK: - Pagination (6-month intervals)
+            if let startDate {
+                let timestamp = startDate.timeIntervalSince1970
                 query = query.whereField("date", isGreaterThanOrEqualTo: timestamp)
             }
-            if let endAt {
-                // Get deliveries < endAt (or ≤, depending on your logic)
-                let timestamp = endAt.timeIntervalSince1970
+            if let endDate {
+                let timestamp = endDate.timeIntervalSince1970
                 query = query.whereField("date", isLessThan: timestamp)
             }
 
             // MARK: - Fetch Documents
             let snapshot = try await query.getDocuments()
-            return snapshot.documents.compactMap { document in
-                let data = document.data()
-                return Delivery(from: data, id: document.documentID)
+            print("Retrieved \(snapshot.documents.count) documents from Firestore.")
+
+            let deliveries: [Delivery] = snapshot.documents.compactMap { document in
+                do {
+                    let delivery = Delivery(from: document.data(), id: document.documentID)
+                    print("Loaded delivery with ID: \(delivery?.id)")
+                    return delivery
+                } catch {
+                    print("Error decoding delivery document \(document.documentID): \(error.localizedDescription)")
+                    return nil
+                }
             }
+
+            print("Collected Deliveries: \(deliveries.count)")
+            return deliveries
         } catch {
             throw DeliveryError.firebaseError("Failed to fetch deliveries: \(error.localizedDescription)")
         }
