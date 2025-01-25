@@ -35,9 +35,11 @@ struct SplashView: View {
                         isInfoPresented = true
                     }
                 }, label: {
-                    Image(systemName: "info.circle.fill")
-                        .foregroundStyle(.orange)
-                        .font(.title)
+                    Image("info.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color("storkOrange"))
                 })
             }
             .padding(.trailing)
@@ -71,7 +73,7 @@ struct SplashView: View {
             Text("Don't have an account yet?")
                 .padding()
             
-            CustomButtonView(text: "Sign Up", width: 120, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
+            CustomButtonView(text: "Sign Up", width: 120, height: 50, color: Color("storkOrange"), isEnabled: true, onTapAction: {
                 withAnimation {
                     profileViewModel.resetTempProfile()
                     showRegistration = true
@@ -86,9 +88,11 @@ struct SplashView: View {
                 Button(action: {
                     isInfoPresented = !isInfoPresented
                 }) {
-                    Image(systemName: "info.circle")
-                        .font(.title2)
-                        .foregroundColor(.indigo)
+                    Image("info.circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(Color("storkIndigo"))
                 }
                 .shadow(radius: 5)
             }

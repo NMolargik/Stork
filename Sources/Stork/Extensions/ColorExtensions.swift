@@ -16,15 +16,15 @@ public extension Color {
         case "red":
             return .red
         case "orange":
-            return .orange
+            return Color("storkOrange")
         case "yellow":
             return .yellow
         case "green":
             return .green
         case "blue":
-            return .blue
+            return Color("storkBlue")
         case "purple":
-            return .purple
+            return Color("storkPurple")
         default:
             return .gray // Default color if no match found
         }

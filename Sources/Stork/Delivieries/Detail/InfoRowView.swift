@@ -15,10 +15,10 @@ struct InfoRowView: View {
     var body: some View {
         HStack(spacing: 10) {
             icon
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 24)
                 .foregroundStyle(iconColor)
-                .font(.title2)
-                .frame(width: 40)
-                .accessibilityHidden(true)
 
             Text(text)
                 .font(.subheadline)
@@ -32,5 +32,5 @@ struct InfoRowView: View {
 }
 
 #Preview {
-    InfoRowView(icon: Image(systemName: "info"), text: "Info", iconColor: Color.blue)
+    InfoRowView(icon: Image("info"), text: "Info", iconColor: Color("storkBlue"))
 }

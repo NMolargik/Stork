@@ -56,20 +56,20 @@ struct DeliveriesThisWeekView: View {
                         y: .value("Deliveries", dailyDelivery.count)
                     )
                     .interpolationMethod(.linear)
-                    .foregroundStyle(LinearGradient(colors: [Color.indigo, .clear], startPoint: .top, endPoint: .bottom))
+                    .foregroundStyle(LinearGradient(colors: [Color("storkIndigo"), .clear], startPoint: .top, endPoint: .bottom))
                     
                     LineMark(
                         x: .value("Day", dailyDelivery.date, unit: .day),
                         y: .value("Deliveries", dailyDelivery.count)
                     )
                     .interpolationMethod(.linear)
-                    .foregroundStyle(Color.indigo)
+                    .foregroundStyle(Color("storkIndigo"))
                     
                     PointMark(
                         x: .value("Day", dailyDelivery.date, unit: .day),
                         y: .value("Deliveries", dailyDelivery.count)
                     )
-                    .foregroundStyle(Color.orange)
+                    .foregroundStyle(Color("storkOrange"))
                     .symbolSize(100)
                     .annotation(position: .top) {
                         Text("\(dailyDelivery.count)")

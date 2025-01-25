@@ -15,18 +15,27 @@ struct HospitalStatView: View {
     var body: some View {
         HStack {
             ZStack {
-                Image(systemName: "figure.child")
-                    .foregroundStyle(.purple)
+                Image("figure.child")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(Color("storkPurple"))
                     .shadow(radius: 2)
                     .offset(x: 0)
                 
-                Image(systemName: "figure.child")
-                    .foregroundStyle(.pink)
+                Image("figure.child")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(Color("storkPink"))
                     .shadow(radius: 2)
                     .offset(x: 8)
                 
-                Image(systemName: "figure.child")
-                    .foregroundStyle(.blue)
+                Image("figure.child")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(Color("storkBlue"))
                     .shadow(radius: 2)
                     .offset(x: 16)
             }

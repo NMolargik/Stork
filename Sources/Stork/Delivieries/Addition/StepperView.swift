@@ -19,7 +19,7 @@ struct StepperView: View {
         HStack(spacing: 20) {
             Spacer()
             
-            CustomStepperButton(systemName: "minus.circle.fill") {
+            CustomStepperButton(iconName: "minus.circle.fill") {
                 animateShrink()
                 decrement()
             }
@@ -30,7 +30,7 @@ struct StepperView: View {
                 .foregroundStyle(Color.black)
                 .fontWeight(.semibold)
             
-            CustomStepperButton(systemName: "plus.circle.fill") {
+            CustomStepperButton(iconName: "plus.circle.fill") {
                 animateBounce()
                 increment()
             }

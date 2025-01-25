@@ -247,13 +247,10 @@ public class ProfileViewModel: ObservableObject {
             // Delete the user’s profile
             try await profileRepository.deleteProfile(profile: profile)
             
-            // If you also want to terminate the Auth user, uncomment:
-            // try await profileRepository.terminateUser(password: password)
-            
             resetTempProfile()
             isOnboardingComplete = false
             reset()
-            let _ = try await Purchases.sharedInstance.logOut(onError: {_ in }, onSuccess: {_ in }) // TODO: does this need saved?
+            let _ = Purchases.sharedInstance.logOut(onError: {_ in }, onSuccess: {_ in })
             signOut()
             
         } catch {
@@ -261,22 +258,6 @@ public class ProfileViewModel: ObservableObject {
             throw error
         }
     }
-    
-    //    @MainActor
-    //    public func terminateUser(password: String) async throws {
-    //        isWorking = true
-    //        do {
-    //            try await profileRepository.terminateUser(password: password)
-    //            resetTempProfile()
-    //            reset()
-    //            signOut()
-    //        } catch {
-    //            self.errorMessage = "Failed to terminate user: \(error.localizedDescription)"
-    //            isWorking = false
-    //            throw error
-    //        }
-    //        isWorking = false
-    //    }
     
     // MARK: - Signing Out
     @MainActor

@@ -51,7 +51,7 @@ public struct MainView: View {
                 SettingsTabView()
             }
         }
-        .tint(.indigo)
+        .tint(Color("storkIndigo"))
         .onChange(of: selectedTab) { _ in
             triggerHaptic()
         }

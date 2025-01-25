@@ -34,8 +34,10 @@ struct CustomTextfieldView: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 icon
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
                     .foregroundStyle(iconColor ?? .white)
-                    .frame(width: 20)
 
                 Group {
                     if isSecure {
@@ -70,16 +72,16 @@ struct CustomTextfieldView: View {
         CustomTextfieldView(
             text: .constant("Email"),
             hintText: "Enter your email...",
-            icon: Image(systemName: "envelope"),
+            icon: Image("envelope"),
             isSecure: false,
-            iconColor: .blue,
+            iconColor: Color("storkBlue"),
             characterLimit: 25
         )
 
         CustomTextfieldView(
             text: .constant("Password"),
             hintText: "Enter your password...",
-            icon: Image(systemName: "key"),
+            icon: Image("key"),
             isSecure: true,
             characterLimit: 20
         )

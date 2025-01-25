@@ -62,7 +62,8 @@ private extension HospitalDetailView {
                     Spacer()
 
                     Button(action: togglePrimaryHospital) {
-                        Image(systemName: profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star")
+                        Image(profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star")
+                            .resizable()
                             .hospitalStarStyle(colorScheme: colorScheme)
                     }
                 }
@@ -81,10 +82,10 @@ private extension HospitalDetailView {
             
             HospitalInfoRow(icon: "phone.fill", text: hospital.telephone_number, color: Color.green)
             
-            HospitalInfoRow(icon: "info.square.fill", text: hospital.hospital_type, color: Color.blue)
+            HospitalInfoRow(icon: "info.square.fill", text: hospital.hospital_type, color: .blue)
             
             if hospital.meets_criteria_for_birthing_friendly_designation {
-                HospitalInfoRow(icon: "figure.child", text: "Birthing Center", color: Color.indigo)
+                HospitalInfoRow(icon: "figure.child", text: "Birthing Center", color: Color("storkIndigo"))
             }
             
             if hospital.emergency_services {
@@ -103,8 +104,8 @@ private extension HospitalDetailView {
                 text: "Back",
                 width: 100,
                 height: 40,
-                color: .orange,
-                icon: Image(systemName: "arrow.left"),
+                color: Color("storkOrange"),
+                icon: Image("arrow.left"),
                 isEnabled: true,
                 onTapAction: { withAnimation { dismiss() } }
             )
@@ -115,7 +116,7 @@ private extension HospitalDetailView {
                 text: profileViewModel.profile.primaryHospitalId == hospital.id ? "Remove From Default" : "Set As Default",
                 width: 200,
                 height: 40,
-                color: .indigo,
+                color: Color("storkIndigo"),
                 isEnabled: true,
                 onTapAction: { withAnimation { togglePrimaryHospital() } }
             )

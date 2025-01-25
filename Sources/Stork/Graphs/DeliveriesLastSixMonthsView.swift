@@ -55,7 +55,7 @@ struct DeliveriesLastSixMonthsView: View {
                 .interpolationMethod(.linear)
                 .foregroundStyle(
                     LinearGradient(
-                        colors: [Color.indigo, .clear],
+                        colors: [Color("storkIndigo"), .clear],
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -66,13 +66,13 @@ struct DeliveriesLastSixMonthsView: View {
                     y: .value("Deliveries", monthlyData.count)
                 )
                 .interpolationMethod(.linear)
-                .foregroundStyle(Color.indigo)
+                .foregroundStyle(Color("storkIndigo"))
                 
                 PointMark(
                     x: .value("Month", monthlyData.date, unit: .month),
                     y: .value("Deliveries", monthlyData.count)
                 )
-                .foregroundStyle(Color.orange)
+                .foregroundStyle(Color("storkOrange"))
                 .symbolSize(100)
                 .annotation(position: .top) {
                     Text("\(monthlyData.count)")

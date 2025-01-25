@@ -122,7 +122,12 @@ public struct AppStateControllerView: View {
             }
             
             if !errorMessage.isEmpty {
-                ErrorToastView()
+                HStack {
+                    ErrorToastView()
+                    
+                    Spacer()
+                }
+                .padding(.leading)
             }
         }
         .onChange(of: appState) { _ in
@@ -206,22 +211,30 @@ public struct AppStateControllerView: View {
     // MARK: - Fetch Data
     /// Retrieves Profile, Deliveries, and (optionally) the current Muster
     private func fetchDataIfNeeded() async throws {
+        profileViewModel.isWorking = true
+        hospitalViewModel.isWorking = true
+        deliveryViewModel.isWorking = true
+        musterViewModel.isWorking = true
+        
         // Fetch profile if we don’t have it
         if profileViewModel.profile.email.isEmpty {
             try await profileViewModel.fetchCurrentProfile()
+            profileViewModel.isWorking = false
         }
 
+        // Fetch hospitals if we don’t have any
         if hospitalViewModel.hospitals.isEmpty {
             await hospitalViewModel.fetchHospitalsNearby()
+            hospitalViewModel.isWorking = false
         }
-
-        // Reset pagination before fetching deliveries
-        deliveryViewModel.currentPage = 0
-        deliveryViewModel.hasMorePages = true
-
+        
         // Fetch deliveries if empty
         if deliveryViewModel.groupedDeliveries.isEmpty {
+            deliveryViewModel.currentPage = 0
+            deliveryViewModel.hasMorePages = true
+            
             try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
+            deliveryViewModel.isWorking = false
         }
 
         // Fetch muster if needed
@@ -235,7 +248,13 @@ public struct AppStateControllerView: View {
                 // Fetch only the last 6 months of muster deliveries
                 try await deliveryViewModel.fetchMusterDeliveries(muster: muster)
             }
+            musterViewModel.isWorking = false
         }
+        
+        profileViewModel.isWorking = false
+        hospitalViewModel.isWorking = false
+        deliveryViewModel.isWorking = false
+        musterViewModel.isWorking = false
     }
     
     // MARK: - Purchases / RevenueCat

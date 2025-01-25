@@ -16,28 +16,28 @@ struct DetailsView: View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
                 InfoRowView(
-                    icon: Image(systemName: "building.fill"),
+                    icon: Image("building.fill"),
                     text: delivery.hospitalName,
-                    iconColor: Color.orange
+                    iconColor: Color("storkOrange")
                 )
                 
                 if delivery.epiduralUsed {
                     InfoRowView(
-                        icon: Image(systemName: "syringe.fill"),
+                        icon: Image("syringe.fill"),
                         text: "Epidural Used",
                         iconColor: Color.green
                     )
                 }
                 
                 InfoRowView(
-                    icon: Image(systemName: "shippingbox.fill"),
+                    icon: Image("shippingbox.fill"),
                     text: "\(delivery.deliveryMethod.description) Delivery",
-                    iconColor: Color.indigo
+                    iconColor: Color("storkIndigo")
                 )
                 
                 if !delivery.musterId.isEmpty {
                     InfoRowView(
-                        icon: Image(systemName: "person.3.fill"),
+                        icon: Image("person.3.fill"),
                         text: "Added to your muster",
                         iconColor: Color.red
                     )

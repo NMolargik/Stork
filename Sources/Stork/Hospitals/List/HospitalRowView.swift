@@ -22,7 +22,7 @@ struct HospitalRowView: View {
             VStack (alignment: .leading) {
                 Text(hospital.facility_name)
                     .font(.headline)
-                    .foregroundStyle(selectionMode ? .blue : (colorScheme == .dark ? .white : .black))
+                    .foregroundStyle(selectionMode ? Color("storkBlue") : (colorScheme == .dark ? .white : .black))
                 
                 Text("\(hospital.citytown), \(hospital.state)")
                     .font(.system(size: 12))
@@ -43,8 +43,10 @@ struct HospitalRowView: View {
             Spacer()
             
             if (profileViewModel.profile.primaryHospitalId == hospital.id) {
-                Image(systemName: "star.fill")
-                    .frame(width: 15)
+                Image("star.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
                     .foregroundStyle(.yellow)
             }
         }

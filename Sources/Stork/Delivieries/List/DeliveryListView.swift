@@ -41,39 +41,6 @@ struct DeliveryListView: View {
                     }
                 }
             }
-            
-            if deliveryViewModel.hasMorePages {
-                VStack {
-                    Spacer()
-                    
-                    HStack {
-                        Spacer()
-                        if (deliveryViewModel.isWorking) {
-                            ProgressView()
-                                .frame(height: 50)
-                                .tint(.indigo)
-                        } else {
-                            CustomButtonView(text: "Load More", width: 200, height: 50, color: Color.indigo, isEnabled: true, onTapAction: {
-                                loadMoreDeliveries()
-                            })
-                        }
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: 60)
-                    .padding(.vertical)
-                }
-            }
-        }
-    }
-
-    // MARK: - Load More Deliveries
-    private func loadMoreDeliveries() {
-        Task {
-            do {
-                try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
-            } catch {
-                print("Error loading more deliveries: \(error.localizedDescription)")
-            }
         }
     }
 }

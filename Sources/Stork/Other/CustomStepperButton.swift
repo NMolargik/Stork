@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct CustomStepperButton: View {
-    var systemName: String
+    var iconName: String
     var action: () -> Void
     
     var body: some View {
         Button(action: action) {
-            Image(systemName: systemName)
-                .font(.title)
-                .foregroundStyle(Color.black)
+            Image(iconName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+                .foregroundStyle(Color("storkOrange").opacity(0.7))
         }
     }
 }
 
 #Preview {
-    CustomStepperButton(systemName: "plus", action: {})
+    CustomStepperButton(iconName: "plus", action: {})
 }

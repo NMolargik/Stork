@@ -127,8 +127,8 @@ class DeliveryViewModel: ObservableObject {
             
             if !newDeliveries.isEmpty {
                 self.deliveries.append(contentsOf: newDeliveries)
-                lastFetchedEndDate = endDate  // ✅ Update the last fetched date for pagination
-                currentPage += 1  // ✅ Increment page count
+                lastFetchedEndDate = endDate
+                currentPage += 1
                 print("Updated lastFetchedEndDate to \(lastFetchedEndDate!) for next pagination step.")
             } else {
                 hasMorePages = false  // ✅ Stop paginating if no more data

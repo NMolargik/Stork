@@ -23,6 +23,7 @@ public class MusterViewModel: ObservableObject {
     // Admin Sheets
     @Published var showInviteUserSheet = false
     @Published var showAssignAdminSheet = false
+    @Published var showRenameSheet = false
     
     // Creation
     @Published var newMuster: Muster = Muster(
@@ -32,16 +33,17 @@ public class MusterViewModel: ObservableObject {
         administratorProfileIds: [],
         name: ""
     )
+    @Published var nameError: String? = nil
+
     @Published var showHospitalSelection: Bool = false
     @Published var creationFormValid: Bool = false
-    @Published var nameError: String? = nil
     @Published var musterMembers: [Profile] = []
     
     // Invitation
     @Published var invite: MusterInvite? = nil
     
     // Predefined Colors
-    let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple]
+    let colors: [Color] = [.red, Color("storkOrange"), .yellow, .green, Color("storkBlue"), Color("storkPurple")]
     
     // MARK: - Dependencies
     
@@ -56,15 +58,15 @@ public class MusterViewModel: ObservableObject {
     
     /// Validates the creation form and updates the form's validity state.
     func validateCreationForm() {
-        if newMuster.name.count > 25 {
-            nameError = "Muster name cannot exceed 25 characters"
+        if newMuster.name.count > 30 {
+            nameError = "Muster name cannot exceed 30 characters"
         } else {
             nameError = nil
         }
         
         creationFormValid =
             !newMuster.name.isEmpty &&
-            newMuster.name.count <= 25 &&
+            newMuster.name.count <= 30 &&
             !newMuster.primaryHospitalId.isEmpty
     }
     
@@ -90,6 +92,26 @@ public class MusterViewModel: ObservableObject {
         resetNewMuster()
     }
     
+    func updateMuster() async throws {
+        guard let muster = currentMuster else {
+            throw MusterError.updateFailed("No existing muster")
+        }
+        
+        guard !muster.name.isEmpty else {
+            throw MusterError.updateFailed("Muster must have a name!")
+        }
+        
+        isWorking = true
+        defer { isWorking = false }
+        
+        do {
+            let currentMuster = try await musterRepository.updateMuster(muster: muster)
+            self.currentMuster = currentMuster
+        } catch {
+            throw MusterError.updateFailed(error.localizedDescription)
+        }
+    }
+    
     /// Resets the `newMuster` to its default state.
     private func resetNewMuster() {
         newMuster = Muster(
@@ -105,6 +127,7 @@ public class MusterViewModel: ObservableObject {
     
     /// Loads the current muster based on the provided `ProfileViewModel`.
     func loadCurrentMuster(profileViewModel: ProfileViewModel, deliveryViewModel: DeliveryViewModel) async throws {
+        musterMembers = []
         isWorking = true
         defer { isWorking = false }
         
@@ -165,6 +188,8 @@ public class MusterViewModel: ObservableObject {
         }
         
         clearCurrentMuster()
+        musterMembers = []
+        currentMuster = nil
     }
     
     /// Deletes the muster if no members are left.

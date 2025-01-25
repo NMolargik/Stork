@@ -33,16 +33,16 @@ struct PasswordResetSheetView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            CustomTextfieldView(text: $email, hintText: "Enter your email address...", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
+            CustomTextfieldView(text: $email, hintText: "Enter your email address...", icon: Image("envelope"), isSecure: false, iconColor: Color("storkBlue"))
                 .padding(.bottom)
             
             if (profileViewModel.isWorking) {
                 ProgressView()
-                    .tint(.indigo)
+                    .tint(Color("storkIndigo"))
                     .frame(height: 50)
             } else {
                 HStack(spacing: 40) {
-                    CustomButtonView(text: "Send", width: 120, height: 40, color: Color.indigo, isEnabled: validEmail, onTapAction: {
+                    CustomButtonView(text: "Send", width: 120, height: 40, color: Color("storkIndigo"), isEnabled: validEmail, onTapAction: {
                         Task {
                             do {
                                 try await profileViewModel.sendPasswordReset()

@@ -38,7 +38,7 @@ struct DeliveryTabView: View {
                     }
                 }
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarItem(placement: .topBarTrailing) {
                         Button(action: {
                             withAnimation {
                                 triggerHaptic()
@@ -46,15 +46,28 @@ struct DeliveryTabView: View {
                             }
                         }) {
                             Text("New Delivery")
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color("storkOrange"))
                                 .fontWeight(.bold)
                         }
                     }
+                    
+                    if deliveryViewModel.hasMorePages {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button(action: {
+                                withAnimation {
+                                    loadMoreDeliveries()
+                                }
+                            }, label: {
+                                Text("Load 6 More Months")
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(Color("storkIndigo"))
+                            })
+                        }
+                    }
                 }
-            Spacer()
-        }
-        .sheet(isPresented: $showingDeliveryAddition) {
-            DeliveryAdditionSheet(showingDeliveryAddition: $showingDeliveryAddition)
+                .sheet(isPresented: $showingDeliveryAddition) {
+                    DeliveryAdditionSheet(showingDeliveryAddition: $showingDeliveryAddition)
+                }
         }
     }
 
@@ -70,6 +83,26 @@ struct DeliveryTabView: View {
             try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
         } catch {
             errorMessage = "Failed to refresh deliveries: \(error.localizedDescription)"
+        }
+    }
+                                                              
+   // MARK: - Load More Deliveries
+    private func loadMoreDeliveries() {
+        Task {
+            do {
+                let initialCount = deliveryViewModel.deliveries.count // Track before fetch
+                try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
+
+                // Animate only if new items were added
+                let newCount = deliveryViewModel.deliveries.count
+                if newCount > initialCount {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        deliveryViewModel.groupDeliveries() // Ensure UI updates smoothly
+                    }
+                }
+            } catch {
+                print("Error loading more deliveries: \(error.localizedDescription)")
+            }
         }
     }
 }

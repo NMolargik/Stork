@@ -125,9 +125,9 @@ struct BabySexDistributionView: View {
         }
         
         let newData = [
-            BabySexDistributionData(category: "Male", count: maleCount, color: .blue),
-            BabySexDistributionData(category: "Female", count: femaleCount, color: .pink),
-            BabySexDistributionData(category: "Loss", count: lossCount, color: .purple)
+            BabySexDistributionData(category: "Male", count: maleCount, color: Color("storkBlue")),
+            BabySexDistributionData(category: "Female", count: femaleCount, color: Color("storkPink")),
+            BabySexDistributionData(category: "Loss", count: lossCount, color: Color("storkPurple"))
         ].filter { $0.count > 0 }
         
         withAnimation(.easeInOut(duration: 1.0)) {

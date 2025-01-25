@@ -11,17 +11,17 @@ public enum DeliveryError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notFound(let message):
-            return "Delivery Not Found: \(message)"
+            return "Delivery not found"
         case .creationFailed(let message):
-            return "Delivery Creation Failed: \(message)"
+            return "Delivery creation failed. Please try again!"
         case .updateFailed(let message):
-            return "Delivery Update Failed: \(message)"
+            return "Delivery update failed. Please try again!"
         case .deletionFailed(let message):
-            return "Delivery Deletion Failed: \(message)"
+            return "Delivery deletion failed. Please try again!"
         case .firebaseError(let message):
-            return "Firebase Error: \(message)"
+            return "Network error. Please try again!"
         case .unknown(let message):
-            return "Unknown Delivery Error: \(message)"
+            return "Unknown delivery error"
         }
     }
 }

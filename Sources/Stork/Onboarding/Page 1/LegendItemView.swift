@@ -21,5 +21,5 @@ struct LegendItemView: View {
 }
 
 #Preview {
-    LegendItemView(color: .blue, label: "Male")
+    LegendItemView(color: Color("storkBlue"), label: "Male")
 }

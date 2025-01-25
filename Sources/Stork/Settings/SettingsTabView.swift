@@ -51,7 +51,7 @@ struct SettingsTabView: View {
                     Button(action: signOut) {
                         Text("Sign Out")
                             .fontWeight(.bold)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color("storkOrange"))
                     }
                 }
             }

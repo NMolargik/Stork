@@ -13,7 +13,7 @@ struct ProfileView: View {
         NavigationStack {
             VStack {
                 if (profileViewModel.editingProfile) {
-                    CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image(systemName: "1.square"), isSecure: false, iconColor: Color.green)
+                    CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square"), isSecure: false, iconColor: Color.green)
                     
                     if let firstNameError = profileViewModel.firstNameError {
                         Text(firstNameError)
@@ -23,7 +23,7 @@ struct ProfileView: View {
                             .padding(.top, -5)
                     }
                     
-                    CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image(systemName: "2.square"), isSecure: false, iconColor: Color.green)
+                    CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square"), isSecure: false, iconColor: Color.green)
                     
                     if let lastNameError = profileViewModel.lastNameError {
                         Text(lastNameError)
@@ -37,7 +37,7 @@ struct ProfileView: View {
                     Text("Select Your Birthday")
                     
                     DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
-                        .tint(.indigo)
+                        .tint(Color("storkIndigo"))
                     #if !SKIP
                         .datePickerStyle(.wheel)
                     #endif
@@ -86,7 +86,11 @@ struct ProfileView: View {
                                 .multilineTextAlignment(.leading)
                             
                             HStack {
-                                Image(systemName: "birthday.cake.fill")
+                                Image("birthday.cake.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                                
                                 Text(Profile.dateFormatter.string(from: profileViewModel.profile.birthday))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
@@ -142,7 +146,7 @@ struct ProfileView: View {
                         Text(profileViewModel.editingProfile ? "Save Changes" : "Edit Profile")
                             .font(.body)
                             .fontWeight(.bold)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color("storkOrange"))
                     })
                     .disabled(profileViewModel.isWorking || (profileViewModel.editingProfile && !profileViewModel.isFormValid))
                 }

@@ -33,8 +33,11 @@ struct ProfileRowView: View {
                     .foregroundColor(.black)
                 
                 HStack(spacing: 4) {
-                    Image(systemName: "birthday.cake.fill")
-                        .foregroundStyle(.indigo)
+                    Image("birthday.cake.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color("storkIndigo"))
                     
                     Text(Self.dateFormatter.string(from: profile.birthday))
                         .foregroundColor(.gray)
@@ -72,7 +75,7 @@ struct ProfileRowView: View {
                     errorMessage = "User already invited to muster"
                 }
             } else {
-                actionButton(text: "Invite", color: .blue, isEnabled: true) {
+                actionButton(text: "Invite", color: Color("storkBlue"), isEnabled: true) {
                     onInvite()
                 }
             }

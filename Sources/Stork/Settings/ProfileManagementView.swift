@@ -18,14 +18,16 @@ struct ProfileManagementView: View {
                 Button(action: restartOnboarding) {
                     Text("Restart Onboarding")
                         .fontWeight(.bold)
-                        .foregroundStyle(.indigo)
+                        .foregroundStyle(Color("storkIndigo"))
                 }
 
                 Spacer()
 
-                Image(systemName: "book.fill")
-                    .foregroundStyle(.indigo)
-                    .frame(width: 30)
+                Image("book.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(Color("storkIndigo"))
             }
 
             HStack {
@@ -40,9 +42,11 @@ struct ProfileManagementView: View {
 
                 Spacer()
 
-                Image(systemName: "trash.fill")
+                Image("trash.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
                     .foregroundStyle(.red)
-                    .frame(width: 30)
             }
         }
     }

@@ -38,7 +38,10 @@ struct ProfileAssignmentRowView: View {
                     .foregroundColor(.black)
                 
                 HStack(spacing: 4) {
-                    Image(systemName: "birthday.cake.fill")
+                    Image("birthday.cake.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
                         .foregroundColor(.gray)
 
                     Text(Self.dateFormatter.string(from: profile.birthday))
@@ -62,7 +65,7 @@ struct ProfileAssignmentRowView: View {
         
         return actionButton(
             text: isAdmin ? "Admin" : "Assign",
-            color: isAdmin ? .gray : .blue,
+            color: isAdmin ? .gray : Color("storkBlue"),
             isEnabled: !isAdmin
         ) {
             if !isAdmin {

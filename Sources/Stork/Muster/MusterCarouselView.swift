@@ -16,7 +16,7 @@ struct MusterCarouselView: View {
     
     #if !SKIP
     init() {
-        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color.indigo)
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color("storkIndigo"))
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.gray
        }
     #endif

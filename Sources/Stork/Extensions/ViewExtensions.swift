@@ -40,16 +40,15 @@ public extension View {
     
     func hospitalStarStyle(colorScheme: ColorScheme) -> some View {
         self
-            .fontWeight(.heavy)
             .foregroundStyle(.yellow)
-            .font(.title2)
+            .scaledToFit()
+            .frame(width: 24, height: 24)
             .padding(10)
             .background {
                 Circle()
                     .foregroundStyle(colorScheme == .dark ? .black : .white)
                     .cornerRadius(20)
                     .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                    .opacity(0.9)
             }
     }
 }

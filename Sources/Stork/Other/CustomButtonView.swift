@@ -23,10 +23,15 @@ struct CustomButtonView: View {
                 onTapAction()
             }
         }) {
-            HStack {
+            HStack(spacing: 5) {
                 if let icon = icon {
                     icon
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(.white)
                 }
+                
                 Text(text)
             }
             .foregroundColor(.white)
@@ -46,8 +51,8 @@ struct CustomButtonView: View {
             text: "Push Me",
             width: 200,
             height: 50,
-            color: Color.indigo,
-            icon: Image(systemName: "building"),
+            color: Color("storkIndigo"),
+            icon: Image("building"),
             isEnabled: true,
             onTapAction: {
                 print("Push Me button pressed")
@@ -58,7 +63,7 @@ struct CustomButtonView: View {
             text: "No, Push Me!",
             width: 300,
             height: 50,
-            color: Color.blue,
+            color: Color("storkBlue"),
             isEnabled: false,
             onTapAction: {
                 print("No, Push Me! button pressed")

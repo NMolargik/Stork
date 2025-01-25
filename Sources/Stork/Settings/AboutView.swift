@@ -22,7 +22,7 @@ struct AboutView: View {
                 Text("Developer")
                 Spacer()
                 Link("Nick Molargik", destination: URL(string: "https://www.nickmolargik.tech")!)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color("storkBlue"))
                     .underline(false)
             }
 
@@ -30,7 +30,7 @@ struct AboutView: View {
                 Text("Multiplatform Technology")
                 Spacer()
                 Link("Skip", destination: URL(string: "https://skip.tools")!)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color("storkBlue"))
             }
         }
     }

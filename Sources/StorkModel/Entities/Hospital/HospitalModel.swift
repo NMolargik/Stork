@@ -8,39 +8,52 @@
 import Foundation
 
 public struct Hospital: Identifiable, Codable, Hashable {
-    public var id: String                       // Unique identifier for the hospital
-    public var facility_name: String                     // Name of the hospital
-    public var address: String                  // Hospital's street address
-    public var citytown: String                     // City where the hospital is located
-    public var state: String                    // State abbreviation (e.g., IN)
-    public var zip_code: String                  // ZIP code of the hospital
-    public var countyparish: String                   // County where the hospital is located
+    public var id: String
+    public var facility_name: String // Formatted hospital name
+    public var address: String // Formatted address
+    public var citytown: String // Formatted city/town
+    public var state: String // Formatted state abbreviation
+    public var zip_code: String
+    public var countyparish: String
     public var telephone_number: String
-    public var hospital_type: String                     // Type of hospital (e.g., Acute Care)
-    public var hospital_ownership: String                // Ownership type of the hospital
-    public var emergency_services: Bool          // Whether the hospital provides emergency services
-    public var meets_criteria_for_birthing_friendly_designation: Bool           // Whether it meets the birthing-friendly criteria
-    public var deliveryCount: Int               // Total deliveries recorded at the hospital
-    public var babyCount: Int                   // Total babies born at the hospital
+    public var hospital_type: String
+    public var hospital_ownership: String
+    public var emergency_services: Bool
+    public var meets_criteria_for_birthing_friendly_designation: Bool
+    public var deliveryCount: Int
+    public var babyCount: Int
 
-    // Init from dictionary
-    var dictionary: [String: Any] {
-        return [
-            "facility_name": facility_name,
-            "address": address,
-            "citytown": citytown,
-            "state": state,
-            "zip_code": zip_code,
-            "countyparish": countyparish,
-            "telephone_number": telephone_number,
-            "hospital_type": hospital_type,
-            "hospital_ownership": hospital_ownership,
-            "emergency_services": emergency_services,
-            "meets_criteria_for_birthing_friendly_designation": meets_criteria_for_birthing_friendly_designation,
-            "deliveryCount": deliveryCount,
-            "babyCount": babyCount
-        ]
+    // MARK: - Formatting Functions
+
+    /// Formats a string to lowercase with each word capitalized.
+    private static func formatTitleCase(_ text: String) -> String {
+        return text
+            .lowercased()
+            .split(separator: " ")
+            .map { $0.prefix(1).uppercased() + $0.dropFirst() }
+            .joined(separator: " ")
     }
+
+    /// Formats an address while preserving numbers.
+    private static func formatAddress(_ address: String) -> String {
+        return address
+            .split(separator: " ")
+            .map { word in
+                if Double(word) != nil {
+                    return String(word)
+                } else {
+                    return word.prefix(1).uppercased() + word.dropFirst().lowercased()
+                }
+            }
+            .joined(separator: " ")
+    }
+
+    /// Formats state as uppercase (e.g., "IN", "NY", "CA").
+    private static func formatState(_ state: String) -> String {
+        return state.uppercased()
+    }
+
+    // MARK: - Initializers
 
     init?(from dictionary: [String: Any], id: String?) {
         guard
@@ -63,10 +76,10 @@ public struct Hospital: Identifiable, Codable, Hashable {
         }
 
         self.id = id
-        self.facility_name = facility_name
-        self.address = address
-        self.citytown = citytown
-        self.state = state
+        self.facility_name = Hospital.formatTitleCase(facility_name)
+        self.address = Hospital.formatAddress(address)
+        self.citytown = Hospital.formatTitleCase(citytown)
+        self.state = Hospital.formatState(state)
         self.zip_code = zip_code
         self.countyparish = countyparish
         self.telephone_number = telephone_number
@@ -95,10 +108,10 @@ public struct Hospital: Identifiable, Codable, Hashable {
         babyCount: Int = 0
     ) {
         self.id = id
-        self.facility_name = facility_name
-        self.address = address
-        self.citytown = citytown
-        self.state = state
+        self.facility_name = Hospital.formatTitleCase(facility_name)
+        self.address = Hospital.formatAddress(address)
+        self.citytown = Hospital.formatTitleCase(citytown)
+        self.state = Hospital.formatState(state)
         self.zip_code = zip_code
         self.countyparish = countyparish
         self.telephone_number = telephone_number

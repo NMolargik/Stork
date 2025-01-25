@@ -9,6 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryAdditionView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     // MARK: - AppStorage
     @AppStorage("errorMessage") var errorMessage: String = ""
 
@@ -49,7 +51,7 @@ struct DeliveryAdditionView: View {
                         text: "Add A Baby",
                         width: 250,
                         height: 50,
-                        color: Color.indigo,
+                        color: Color("storkIndigo"),
                         icon: nil,
                         isEnabled: true,
                         onTapAction: {
@@ -66,10 +68,7 @@ struct DeliveryAdditionView: View {
                     Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
                         .padding()
                         .fontWeight(.bold)
-                        .background(
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.orange.opacity(0.2))
-                        )
+                        .backgroundCard(colorScheme: colorScheme)
                         .tint(.green)
                     
                     // MARK: - Add To Muster Toggle (Conditional)
@@ -77,10 +76,7 @@ struct DeliveryAdditionView: View {
                         Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
                             .padding()
                             .fontWeight(.bold)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color.orange.opacity(0.2))
-                            )
+                            .backgroundCard(colorScheme: colorScheme)
                             .tint(.green)
                     }
                     
@@ -101,10 +97,7 @@ struct DeliveryAdditionView: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.orange.opacity(0.2))
-                    )
+                    .backgroundCard(colorScheme: colorScheme)
                     
                     // MARK: - Select Hospital Section
                     VStack(alignment: .center, spacing: 10) {
@@ -117,7 +110,7 @@ struct DeliveryAdditionView: View {
                             width: 250,
                             height: 50,
                             color: Color.red,
-                            icon: Image(systemName: "building"),
+                            icon: Image("building"),
                             isEnabled: true,
                             onTapAction: {
                                 deliveryViewModel.isSelectingHospital = true
@@ -126,10 +119,7 @@ struct DeliveryAdditionView: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.orange.opacity(0.2))
-                    )
+                    .backgroundCard(colorScheme: colorScheme)
                     
                     Spacer(minLength: 10)
                     

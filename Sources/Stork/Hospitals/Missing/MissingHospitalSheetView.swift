@@ -23,9 +23,9 @@ struct MissingHospitalSheetView: View {
             CustomTextfieldView(
                 text: $hospitalName,
                 hintText: "Missing hospital name...",
-                icon: Image(systemName: "building"),
+                icon: Image("building"),
                 isSecure: false,
-                iconColor: Color.orange
+                iconColor: Color("storkOrange")
             )
             .padding()
 
@@ -35,7 +35,7 @@ struct MissingHospitalSheetView: View {
 
             if isSubmitting {
                 ProgressView()
-                    .tint(.orange)
+                    .tint(Color("storkOrange"))
                     .frame(height: 50)
             } else {
                 MissingHospitalActionsView(

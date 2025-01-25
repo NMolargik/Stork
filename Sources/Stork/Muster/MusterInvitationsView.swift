@@ -26,18 +26,21 @@ struct MusterInvitationsView: View {
             Group {
                 if (musterViewModel.isWorking) {
                     ProgressView()
-                        .tint(.indigo)
+                        .tint(Color("storkIndigo"))
                         .frame(height: 50)
                 } else if (musterViewModel.invites.count == 0) {
                     
                     VStack {
-                        Image(systemName: "exclamationmark.magnifyingglass")
-                            .font(.largeTitle)
+                        Image("exclamationmark.magnifyingglass")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
                             .padding()
                         
                         Text("No invitations found. Ask a muster admin to send you an invitation!")
                             .multilineTextAlignment(.center)
                             .font(.title3)
+                            .padding(.horizontal)
 
                     }
                     .padding()
@@ -52,7 +55,7 @@ struct MusterInvitationsView: View {
                                     .foregroundStyle(.black)
                                 
                                 HStack {
-                                    CustomButtonView(text: "Accept", width: 100, height: 40, color: Color.blue, isEnabled: true, onTapAction: {
+                                    CustomButtonView(text: "Accept", width: 100, height: 40, color: Color("storkBlue"), isEnabled: true, onTapAction: {
                                         
                                         Task {
                                             try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: true, profileViewModel: profileViewModel)

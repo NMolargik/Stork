@@ -26,7 +26,7 @@ struct MissingHospitalActionsView: View {
             text: "Submit",
             width: 150,
             height: 40,
-            color: hospitalName.isEmpty || isSubmitting ? .gray : .indigo,
+            color: hospitalName.isEmpty || isSubmitting ? .gray : Color("storkIndigo"),
             isEnabled: !hospitalName.isEmpty && !isSubmitting,
             onTapAction: handleSubmit
         )
@@ -45,7 +45,7 @@ struct MissingHospitalActionsView: View {
 
     private func handleSubmit() {
         Task {
-            guard !isSubmitting else { return }  // Prevent multiple submissions
+            guard !isSubmitting else { return }
             isSubmitting = true
             errorMessage = nil
             

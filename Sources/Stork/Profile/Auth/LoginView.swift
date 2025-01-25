@@ -15,7 +15,6 @@ struct LoginView: View {
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
     @State private var isPasswordResetPresented = false
-    @State private var keyboardHeight: CGFloat = 0 // Tracks keyboard height
     
     var onAuthenticated: () -> Void
     
@@ -29,9 +28,9 @@ struct LoginView: View {
                 CustomTextfieldView(
                     text: $profileViewModel.profile.email,
                     hintText: "Email Address",
-                    icon: Image(systemName: "envelope"),
+                    icon: Image("envelope"),
                     isSecure: false,
-                    iconColor: Color.blue
+                    iconColor: Color("storkBlue")
                 )
                 .padding(.bottom, 5)
                 .padding(.horizontal)
@@ -39,7 +38,7 @@ struct LoginView: View {
                 CustomTextfieldView(
                     text: $profileViewModel.passwordText,
                     hintText: "Password",
-                    icon: Image(systemName: "key"),
+                    icon: Image("key"),
                     isSecure: true,
                     iconColor: Color.red
                 )
@@ -49,14 +48,14 @@ struct LoginView: View {
                 
                 if profileViewModel.isWorking {
                     ProgressView()
-                        .tint(.indigo)
+                        .tint(Color("storkIndigo"))
                         .frame(height: 50)
                 } else {
                     CustomButtonView(
                         text: "Log In",
                         width: 120,
                         height: 50,
-                        color: Color.indigo,
+                        color: Color("storkIndigo"),
                         isEnabled: true,
                         onTapAction: handleLogin
                     )
@@ -75,18 +74,9 @@ struct LoginView: View {
                 .disabled(profileViewModel.isWorking)
                 
                 Spacer()
-                #if !SKIP
-                    .frame(height: keyboardHeight > 0 ? 10 : 50) // Adjusts based on keyboard
-                #endif
             }
             .padding(.horizontal)
-            .padding(.bottom, keyboardHeight / 3) // Moves view up when keyboard appears
-            .animation(.easeInOut(duration: 0.3), value: keyboardHeight)
         }
-        #if !SKIP
-        .onAppear { observeKeyboard() }
-        .onDisappear { NotificationCenter.default.removeObserver(self) }
-        #endif
 
         .sheet(isPresented: $isPasswordResetPresented) {
             PasswordResetSheetView(isPasswordResetPresented: $isPasswordResetPresented, email: $profileViewModel.profile.email)
@@ -105,22 +95,6 @@ struct LoginView: View {
             }
         }
     }
-    
-#if !SKIP
-    /// Listens for keyboard notifications and updates view padding
-    private func observeKeyboard() {
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
-            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                self.keyboardHeight = keyboardFrame.height - 40 // Adjust spacing to prevent overlapping
-            }
-        }
-
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
-            self.keyboardHeight = 0
-        }
-    }
-#endif
-
 }
 
 #Preview {

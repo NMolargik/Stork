@@ -14,9 +14,11 @@ struct HospitalInfoRow: View {
 
     var body: some View {
         HStack {
-            Image(systemName: icon)
+            Image(icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
                 .foregroundStyle(color)
-                .frame(width: 30)
 
             Text(text)
                 .fontWeight(.semibold)
@@ -30,5 +32,5 @@ struct HospitalInfoRow: View {
 }
 
 #Preview {
-    HospitalInfoRow(icon: "figure.child", text: "Child Info", color: Color.indigo)
+    HospitalInfoRow(icon: "figure.child", text: "Child Info", color: Color("storkIndigo"))
 }

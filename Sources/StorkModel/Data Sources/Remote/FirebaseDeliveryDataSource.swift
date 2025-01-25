@@ -152,20 +152,12 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
 
             // MARK: - Fetch Documents
             let snapshot = try await query.getDocuments()
-            print("Retrieved \(snapshot.documents.count) documents from Firestore.")
 
             let deliveries: [Delivery] = snapshot.documents.compactMap { document in
-                do {
-                    let delivery = Delivery(from: document.data(), id: document.documentID)
-                    print("Loaded delivery with ID: \(delivery?.id)")
-                    return delivery
-                } catch {
-                    print("Error decoding delivery document \(document.documentID): \(error.localizedDescription)")
-                    return nil
-                }
+                let delivery = Delivery(from: document.data(), id: document.documentID)
+                return delivery
             }
 
-            print("Collected Deliveries: \(deliveries.count)")
             return deliveries
         } catch {
             throw DeliveryError.firebaseError("Failed to fetch deliveries: \(error.localizedDescription)")

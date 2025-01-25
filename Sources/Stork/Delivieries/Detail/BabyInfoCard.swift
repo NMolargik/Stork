@@ -17,21 +17,22 @@ struct BabyInfoCard: View {
     var body: some View {
         VStack {
             HStack(spacing: 10) {
-                Image(systemName: "figure.child")
+                Image("figure.child")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
                     .foregroundStyle(baby.sex.color)
-                    .font(.title)
-                    .frame(width: 30)
                     .shadow(radius: 1)
                     .accessibilityHidden(true)
                 
                 InfoRowView(
-                    icon: Image(systemName: "scalemass.fill"),
+                    icon: Image("scalemass.fill"),
                     text: formattedWeight,
-                    iconColor: Color.orange
+                    iconColor: Color("storkOrange")
                 )
                 
                 InfoRowView(
-                    icon: Image(systemName: "ruler.fill"),
+                    icon: Image("ruler.fill"),
                     text: formattedHeight,
                     iconColor: Color.green
                 )

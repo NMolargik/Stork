@@ -37,10 +37,10 @@ struct MusterCreationView: View {
                         CustomTextfieldView(
                             text: $musterViewModel.newMuster.name,
                             hintText: "Enter Muster name",
-                            icon: Image(systemName: "tag.fill"),
+                            icon: Image("tag.fill"),
                             isSecure: false,
-                            iconColor: Color.indigo,
-                            characterLimit: 20
+                            iconColor: Color("storkIndigo"),
+                            characterLimit: 30
                         )
 
                         if let error = musterViewModel.nameError {
@@ -54,14 +54,13 @@ struct MusterCreationView: View {
                             Text(self.selectedHospital?.facility_name ?? "Select A Primary Hospital")
                                 .font(.headline)
                                 .multilineTextAlignment(.center)
-                                .foregroundStyle(.black)
 
                             CustomButtonView(
                                 text: "Select A Hospital",
                                 width: 250,
                                 height: 40,
                                 color: Color.red,
-                                icon: Image(systemName: "building"),
+                                icon: Image("building"),
                                 isEnabled: true,
                                 onTapAction: {
                                     musterViewModel.showHospitalSelection = true
@@ -76,7 +75,6 @@ struct MusterCreationView: View {
                         Spacer()
 
                         Text("It's that easy!\n\nYou'll be able to add members to your muster after creation.")
-                            .foregroundStyle(.black)
                             .padding()
                             .multilineTextAlignment(.center)
                             .fontWeight(.semibold)
@@ -87,10 +85,10 @@ struct MusterCreationView: View {
 
                         if (musterViewModel.isWorking) {
                             ProgressView()
-                                .tint(.indigo)
+                                .tint(Color("storkIndigo"))
                                 .frame(height: 50)
                         } else {
-                            CustomButtonView(text: "Muster Up!", width: 200, height: 50, color: Color.indigo, icon: nil, isEnabled: musterViewModel.creationFormValid, onTapAction: {
+                            CustomButtonView(text: "Muster Up!", width: 200, height: 50, color: Color("storkIndigo"), icon: nil, isEnabled: musterViewModel.creationFormValid, onTapAction: {
                                 withAnimation {
                                     createMuster()
                                 }
@@ -111,7 +109,7 @@ struct MusterCreationView: View {
                             dismiss()
                         }, label: {
                             Text("Cancel")
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color("storkOrange"))
                                 .bold()
                         })
                         .disabled(musterViewModel.isWorking)

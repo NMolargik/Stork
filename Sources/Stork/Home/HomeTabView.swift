@@ -19,18 +19,48 @@ struct HomeTabView: View {
     
     @State private var showProfileView: Bool = false
     @State private var graphTabIndex: Int = 0
+    @State private var currentDate = Date()
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
+                HStack {
+                    Text("Stork")
+                        .font(.largeTitle).fontWeight(.bold)
+                        .padding(.trailing, 5)
+
+                    
+                    Spacer()
+                    
+                    Button {
+                        triggerHaptic()
+                        withAnimation { showProfileView = true }
+                    } label: {
+                        InitialsAvatarView(
+                            firstName: profileViewModel.profile.firstName,
+                            lastName: profileViewModel.profile.lastName
+                        )
+                    }
+                    
+                }
+                
+                HStack {
+                    Text("\(formattedDate)")
+                        .font(.footnote)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.gray)
+                        .onAppear(perform: startTimer)
+                    
+                    Spacer()
+                }
+                .offset(y: -4)
+                
                 headerSection
                 
                 HomeCarouselView()
                 
                 Spacer()
             }
-            .navigationTitle("Stork")
-            .toolbar { profileButton }
             .padding()
         }
         .sheet(isPresented: $showProfileView, content: {
@@ -38,6 +68,18 @@ struct HomeTabView: View {
                 .interactiveDismissDisabled()
                 .presentationDetents(profileViewModel.editingProfile ? [.fraction(0.75)] : [.fraction(0.3)])
         })
+    }
+    
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, h:mm:ss a" // Example: "Jan 24, 3:45:23 PM"
+        return formatter.string(from: currentDate)
+    }
+
+    private func startTimer() {
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            currentDate = Date()
+        }
     }
 }
 
@@ -78,20 +120,6 @@ private extension HomeTabView {
 
 // MARK: - Computed Properties
 private extension HomeTabView {
-    var profileButton: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button {
-                triggerHaptic()
-                withAnimation { showProfileView = true }
-            } label: {
-                InitialsAvatarView(
-                    firstName: profileViewModel.profile.firstName,
-                    lastName: profileViewModel.profile.lastName
-                )
-            }
-        }
-    }
-    
     var currentWeekRange: String {
         let calendar = Calendar.current
         let now = Date()

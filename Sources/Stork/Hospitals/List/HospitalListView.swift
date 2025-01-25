@@ -79,9 +79,14 @@ private extension HospitalListView {
     var locationSearchIndicator: some View {
         HStack {
             Spacer()
+            
             Text("Searching by location")
                 .fontWeight(.bold)
-            Image(systemName: "location.circle.fill")
+            
+            Image("location.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
         }
         .foregroundColor(.blue)
         .padding(.trailing)
@@ -109,7 +114,7 @@ private extension HospitalListView {
             }
         }) {
             Text("Missing?")
-                .foregroundColor(.orange)
+                .foregroundColor(Color("storkOrange"))
                 .fontWeight(.bold)
         }
     }
@@ -125,12 +130,7 @@ private extension HospitalListView {
 
     func fetchNearbyHospitals() {
         Task {
-            do {
-                try await hospitalViewModel.fetchHospitalsNearby()
-            } catch {
-                errorMessage = error.localizedDescription
-                throw error
-            }
+            await hospitalViewModel.fetchHospitalsNearby()
         }
     }
 }

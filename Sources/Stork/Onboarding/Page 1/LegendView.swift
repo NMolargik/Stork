@@ -10,9 +10,9 @@ import SwiftUI
 struct LegendView: View {
     var body: some View {
         VStack(alignment: .leading) {
-            LegendItemView(color: .blue, label: "Male")
-            LegendItemView(color: .pink, label: "Female")
-            LegendItemView(color: .purple, label: "Loss")
+            LegendItemView(color: Color("storkPink"), label: "Female")
+            LegendItemView(color: Color("storkPink"), label: "Female")
+            LegendItemView(color: Color("storkPurple"), label: "Loss")
         }
         .frame(width: 120)
         .padding(.leading, 5)

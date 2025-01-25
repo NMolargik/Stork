@@ -11,14 +11,15 @@ struct BabyEditorView: View {
     @Environment(\.colorScheme) var colorScheme
     @AppStorage("useMetric") private var useMetric: Bool = false
     
+    // MARK: - Properties
     @Binding var baby: Baby
-    
-    // Internally store weight in ounces and length in inches
-    @State private var weightInOunces: Double
-    @State private var lengthInInches: Double
-
     var babyNumber: Int
     var removeBaby: (String) -> Void
+    var sampleMode: Bool = false
+
+    // Internal state for weight and length
+    @State private var weightInOunces: Double
+    @State private var lengthInInches: Double
 
     // MARK: - Constants
     private let ounceToKg = 0.0283495
@@ -29,14 +30,19 @@ struct BabyEditorView: View {
     private let lengthRangeImperial: ClosedRange<Double> = 8.0...24.0   // Inches
     private let lengthRangeMetric: ClosedRange<Double> = 20.3...61.0    // Centimeters
 
-    init(baby: Binding<Baby>, babyNumber: Int, removeBaby: @escaping (String) -> Void) {
+    // MARK: - Initializer
+    init(baby: Binding<Baby>, babyNumber: Int, removeBaby: @escaping (String) -> Void, sampleMode: Bool = false) {
         self._baby = baby
         self.babyNumber = babyNumber
         self.removeBaby = removeBaby
-        self._weightInOunces = State(initialValue: baby.wrappedValue.weight)
-        self._lengthInInches = State(initialValue: baby.wrappedValue.height)
+        self.sampleMode = sampleMode
+
+        let initialBaby = sampleMode ? Baby(deliveryId: "", nurseCatch: false, nicuStay: false, sex: .male) : baby.wrappedValue
+        self._weightInOunces = State(initialValue: initialBaby.weight)
+        self._lengthInInches = State(initialValue: initialBaby.height)
     }
     
+    // MARK: - Body
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
             headerSection
@@ -44,20 +50,20 @@ struct BabyEditorView: View {
             weightStepper
             lengthStepper
             nurseCatchToggle
-            nicuToggle 
+            nicuToggle
         }
         .padding()
         .background(
             ZStack {
                 Color.white
                 baby.sex.color.opacity(0.4)
-                    .animation(.easeInOut(duration: 0.3), value: baby.sex) // Animate background color change
+                    .animation(.easeInOut(duration: 0.3), value: baby.sex)
             }
         )
         .cornerRadius(20)
         .shadow(radius: 2)
-        .onChange(of: weightInOunces) { baby.weight = $0 }
-        .onChange(of: lengthInInches) { baby.height = $0 }
+        .onChange(of: weightInOunces) { if !sampleMode { baby.weight = $0 } }
+        .onChange(of: lengthInInches) { if !sampleMode { baby.height = $0 } }
     }
 
     // MARK: - UI Components
@@ -71,13 +77,15 @@ struct BabyEditorView: View {
 
             Spacer()
 
-            if babyNumber > 1 {
+            if babyNumber > 1 && !sampleMode {
                 Button {
                     triggerHaptic()
                     withAnimation { removeBaby(baby.id) }
                 } label: {
-                    Image(systemName: "minus")
-                        .fontWeight(.bold)
+                    Image("minus")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
                         .padding(10)
                         .foregroundStyle(.white)
                         .background(Circle().foregroundStyle(.red))
@@ -98,7 +106,7 @@ struct BabyEditorView: View {
         .background {
             Rectangle()
                 .cornerRadius(8)
-                .foregroundStyle(.indigo)
+                .foregroundStyle(Color("storkOrange"))
                 .opacity(colorScheme == .dark ? 0.8 : 0.3)
         }
         .onChange(of: baby.sex) { _ in triggerHaptic() }
@@ -110,7 +118,8 @@ struct BabyEditorView: View {
             decrement: { adjustWeight(-0.1) },
             increment: { adjustWeight(0.1) },
             range: useMetric ? weightRangeMetric : weightRangeImperial
-        )    }
+        )
+    }
     
     private var lengthStepper: some View {
         StepperView(
@@ -131,7 +140,7 @@ struct BabyEditorView: View {
                 Rectangle()
                     .foregroundStyle(Color.white.opacity(0.8))
                     .overlay(baby.nurseCatch ? Color.green.opacity(0.2) : Color.clear)
-                    .animation(.easeInOut(duration: 0.3), value: baby.nurseCatch) // Animate color change
+                    .animation(.easeInOut(duration: 0.3), value: baby.nurseCatch)
                     .cornerRadius(20)
             )
     }
@@ -146,7 +155,7 @@ struct BabyEditorView: View {
                 Rectangle()
                     .foregroundStyle(Color.white.opacity(0.8))
                     .overlay(baby.nicuStay ? Color.green.opacity(0.2) : Color.clear)
-                    .animation(.easeInOut(duration: 0.3), value: baby.nicuStay) // Animate color change
+                    .animation(.easeInOut(duration: 0.3), value: baby.nicuStay)
                     .cornerRadius(20)
             )
     }
@@ -177,13 +186,13 @@ struct BabyEditorView: View {
     }
 }
 
-// MARK: - Preview
-
+// MARK: - Sample Usage
 #Preview {
     BabyEditorView(
         baby: .constant(Baby(deliveryId: "", nurseCatch: true, nicuStay: false, sex: .male)),
-        babyNumber: 2,
-        removeBaby: { _ in }
+        babyNumber: 1,
+        removeBaby: { _ in },
+        sampleMode: true
     )
     .padding()
 }

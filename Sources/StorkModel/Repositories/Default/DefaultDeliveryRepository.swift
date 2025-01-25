@@ -113,8 +113,8 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
         babyCount: Int? = nil,
         deliveryMethod: DeliveryMethod? = nil,
         epiduralUsed: Bool? = nil,
-        startDate: Date? = nil,   // ✅ Updated parameter name
-        endDate: Date? = nil      // ✅ Updated parameter name
+        startDate: Date? = nil,
+        endDate: Date? = nil
     ) async throws -> [Delivery] {
         do {
             return try await remoteDataSource.listDeliveries(
@@ -127,8 +127,8 @@ public class DefaultDeliveryRepository: DeliveryRepositoryInterface {
                 babyCount: babyCount,
                 deliveryMethod: deliveryMethod,
                 epiduralUsed: epiduralUsed,
-                startDate: startDate,   // ✅ Renamed from `startAt`
-                endDate: endDate        // ✅ Renamed from `endAt`
+                startDate: startDate,
+                endDate: endDate
             )
         } catch let error as DeliveryError {
             throw error

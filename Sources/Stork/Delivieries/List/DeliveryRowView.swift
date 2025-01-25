@@ -9,6 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryRowView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     var delivery: Delivery
 
     var body: some View {
@@ -16,22 +18,17 @@ struct DeliveryRowView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(delivery.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.headline)
-                    .foregroundColor(.black)
+                    .fontWeight(.bold)
                     .padding(.horizontal, 5)
                     .padding(.vertical, 3)
-                    .background {
-                        Rectangle()
-                            .foregroundStyle(.white)
-                            .cornerRadius(20)
-                            .opacity(0.8)
-                    }
+                    .backgroundCard(colorScheme: colorScheme)
                 
                 // Baby summary
                 Text(babySummary(for: delivery.babies))
                     .font(.subheadline)
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding(.leading, 6)
+                    .foregroundStyle(.white)
+                    .padding(.leading)
             }
             .padding(8)
             
@@ -100,9 +97,9 @@ struct DeliveryRowView: View {
     private func gradientColors(for babies: [Baby]) -> [Color] {
         // Group and sort colors by sex
         var colors: [Color] = []
-        colors.append(contentsOf: Array(repeating: Color.blue, count: babies.filter { $0.sex == Sex.male }.count))
-        colors.append(contentsOf: Array(repeating: Color.pink, count: babies.filter { $0.sex == Sex.female }.count))
-        colors.append(contentsOf: Array(repeating: Color.purple, count: babies.filter { $0.sex == Sex.loss }.count))
+        colors.append(contentsOf: Array(repeating: Color("storkBlue"), count: babies.filter { $0.sex == Sex.male }.count))
+        colors.append(contentsOf: Array(repeating: Color("storkPink"), count: babies.filter { $0.sex == Sex.female }.count))
+        colors.append(contentsOf: Array(repeating: Color("storkPurple"), count: babies.filter { $0.sex == Sex.loss }.count))
         return colors
     }
 }

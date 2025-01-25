@@ -18,7 +18,7 @@ struct DeleteConfirmationButtons: View {
                 text: "Cancel",
                 width: 120,
                 height: 50,
-                color: .blue,
+                color: Color("storkBlue"),
                 isEnabled: true,
                 onTapAction: {
                     triggerHaptic()

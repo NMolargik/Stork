@@ -49,7 +49,7 @@ struct InitialsAvatarView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(.orange)
+                .fill(Color("storkOrange"))
                 .frame(width: size, height: size)
             
             Text(initials)

@@ -10,15 +10,15 @@ public enum HospitalError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notFound(let message):
-            return "Hospital Not Found: \(message)"
+            return "Hospital not found. Adjust your search!"
         case .creationFailed(let message):
-            return "Hospital Creation Failed: \(message)"
+            return "Hospital creation failed. Please try again!"
         case .updateFailed(let message):
-            return "Hospital Update Failed: \(message)"
+            return "Hospital update failed. Please try again!"
         case .deletionFailed(let message):
-            return "Hospital Deletion Failed: \(message)"
+            return "Hospital deletion failed. Please try again!"
         case .unknown(let message):
-            return "Unknown Hospital Error: \(message)"
+            return "Unknown hospital error."
         }
     }
 }

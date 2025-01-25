@@ -15,9 +15,9 @@ struct SearchBarView: View {
             CustomTextfieldView(
                 text: $hospitalViewModel.searchQuery,
                 hintText: "Search by name",
-                icon: Image(systemName: hospitalViewModel.usingLocation ? "location.fill" : "magnifyingglass"),
+                icon: Image(hospitalViewModel.usingLocation ? "location.fill" : "magnifyingglass"),
                 isSecure: false,
-                iconColor: hospitalViewModel.usingLocation ? Color.blue : Color.orange
+                iconColor: hospitalViewModel.usingLocation ? .blue : Color("storkOrange")
             )
             .onChange(of: hospitalViewModel.searchQuery) { query in
                 withAnimation {
@@ -33,7 +33,7 @@ struct SearchBarView: View {
                     text: "Search",
                     width: 80,
                     height: 55,
-                    color: .indigo,
+                    color: Color("storkIndigo"),
                     isEnabled: hospitalViewModel.searchEnabled,
                     onTapAction: {
                         Task {

@@ -18,9 +18,11 @@ struct MusterSplashView: View {
     var body: some View {
         VStack {
             HStack {
-                Image(systemName: "person.3")
-                    .font(.system(size: 50))
-                    .navigationTitle("Join A Muster")                
+                Image("person.3")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .navigationTitle("Join A Muster")
                 
                 Text("[ muhs-ter ] - noun\nA group of storks")
                     .multilineTextAlignment(.center)
@@ -41,12 +43,12 @@ struct MusterSplashView: View {
                 
             Spacer()
             
-            CustomButtonView(text: "Create A New Muster", width: 300, height: 50, color: Color.indigo, icon: Image(systemName: "plus"), isEnabled: true, onTapAction: {
+            CustomButtonView(text: "Create A New Muster", width: 300, height: 50, color: Color("storkIndigo"), icon: nil, isEnabled: true, onTapAction: {
                 musterViewModel.showCreateMusterSheet = true
             })
             .padding(.bottom, 5)
 
-            CustomButtonView(text: "View Your Invitations", width: 300, height: 50, color: Color.orange, icon: Image(systemName: "envelope.fill"), isEnabled: true, onTapAction: {
+            CustomButtonView(text: "View Your Invitations", width: 300, height: 50, color: Color("storkOrange"), icon: nil, isEnabled: true, onTapAction: {
                 triggerHaptic()
                 
                 Task {

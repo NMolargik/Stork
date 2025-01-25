@@ -14,7 +14,8 @@ struct JarView: View {
     /// The deliveries coming in from elsewhere in the app (optional for test mode)
     @Binding var deliveries: [Delivery]?
     let headerText: String
-    let isTestMode: Bool // 🔹 Test mode flag
+    let isTestMode: Bool
+    let isMusterTest: Bool
 
     // Marble simulation states
     @State private var marbles: [Marble] = []
@@ -118,8 +119,8 @@ struct JarView: View {
     // 🔹 Test Mode: Instantly adds 35 marbles
     private func addTestMarbles(in size: CGSize) {
         Task {
-            let testColors: [Color] = [.blue, .pink, .purple]
-            for _ in 0..<25 {
+            let testColors: [Color] = [Color("storkBlue"), Color("storkPink"), Color("storkPurple")]
+            for _ in 0..<(isMusterTest ? 120 : 25) {
                 let testMarble = createMarble(
                     in: size,
                     color: testColors.randomElement() ?? .gray

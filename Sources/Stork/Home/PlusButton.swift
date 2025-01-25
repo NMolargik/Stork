@@ -12,22 +12,28 @@ struct PlusButton: View {
     
     var body: some View {
         Button(action: action) {
-            Image(systemName: "plus")
-                .foregroundStyle(.white)
-                .font(.title)
-                .fontWeight(.bold)
-                .padding(.vertical, 20)
-                .frame(maxWidth: .infinity)
-                .background {
-                    Rectangle()
-                        .cornerRadius(20)
-                        .foregroundStyle(.indigo)
-                        .shadow(radius: 2)
-                }
+            ZStack {
+                Rectangle()
+                    .foregroundStyle(Color("storkIndigo"))
+                    .cornerRadius(20)
+                    .shadow(radius: 2)
+
+                Image("plus")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 35 )
+                    .foregroundStyle(.white)
+            }
+            .frame(maxWidth: .infinity, minHeight: 60)
         }
+        .frame(maxWidth: .infinity)
+        .frame(height: 60)
+        
+        .padding(.horizontal, 5)
     }
 }
 
 #Preview {
     PlusButton(action: {})
+        .padding()
 }

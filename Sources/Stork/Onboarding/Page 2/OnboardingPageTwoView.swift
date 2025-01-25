@@ -6,16 +6,25 @@
 //
 
 import SwiftUI
+import StorkModel
 
 struct OnboardingPageTwoView: View {
     @Environment(\.colorScheme) var colorScheme
+    @State private var sampleBaby = Baby(deliveryId: "", nurseCatch: true, nicuStay: false, sex: .male)
 
     var body: some View {
         VStack {
-            Text("Page 2")
-                .font(.title)
-                .fontWeight(.bold)
-                .padding(.vertical)
+            BabyEditorView(
+                baby: $sampleBaby,
+                babyNumber: 1,
+                removeBaby: { _ in },
+                sampleMode: true
+            )
+            .padding()
+            
+            Text("Add deliveries simply by adding babies and filling out a few additional options.\n\nYour deliveries are all backed up and detailed history is available.")
+                .padding()
+                .fontWeight(.semibold)
         }
     }
 }

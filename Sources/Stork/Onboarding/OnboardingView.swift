@@ -41,7 +41,7 @@ struct OnboardingView: View {
                 CustomButtonView(
                     text: "Skip Onboarding",
                     width: 170, height: 50,
-                    color: .orange, isEnabled: true,
+                    color: Color("storkOrange"), isEnabled: true,
                     onTapAction: finishOnboarding
                 )
 
@@ -50,7 +50,7 @@ struct OnboardingView: View {
                 CustomButtonView(
                     text: isLastPage ? "Done" : "Next",
                     width: 110, height: 50,
-                    color: .indigo, isEnabled: true,
+                    color: Color("storkIndigo"), isEnabled: true,
                     onTapAction: nextPage
                 )
             }

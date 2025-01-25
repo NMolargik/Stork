@@ -14,23 +14,23 @@ public enum ProfileError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notFound(let message):
-            return "Profile Not Found: \(message)"
+            return "Profile not found"
         case .creationFailed(let message):
-            return "Profile Creation Failed: \(message)"
+            return "Profile creation failed. Please try again!"
         case .updateFailed(let message):
-            return "Profile Update Failed: \(message)"
+            return "Profile update failed. Please try again!"
         case .deletionFailed(let message):
-            return "Profile Deletion Failed: \(message)"
+            return "Profile deletion failed. Please try again!"
         case .authenticationFailed(let message):
-            return "Authentication Failed: \(message)"
+            return "Authentication failed. Please try again!"
         case .passwordResetFailed(let message):
-            return "Password Reset Failed: \(message)"
+            return "Password Reset failed. Please try again!"
         case .fetchFailed(let message):
-            return "Profile fetch failed: \(message)"
+            return "Failed to get profile."
         case .signOutFailed(let message):
-            return "Profile sign out failed: \(message)"
+            return "Sign out failed. Please try again!"
         case .unknown(let message):
-            return "Unknown Error: \(message)"
+            return "Unknown profile error."
         }
     }
 }

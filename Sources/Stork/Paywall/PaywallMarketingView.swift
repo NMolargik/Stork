@@ -34,7 +34,7 @@ struct PaywallMarketingView: View {
                             Rectangle()
                                 .cornerRadius(20)
                                 .shadow(radius: 2)
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color("storkOrange"))
                             
                         }
                         .offset(y: 140)
@@ -48,7 +48,7 @@ struct PaywallMarketingView: View {
                     .padding(.top, 30)
                 
                 HStack(alignment: .top, spacing: 15) {
-                    SampleMarbleView(color: .blue)
+                    SampleMarbleView(color: Color("storkBlue"))
                         .frame(width: 30)
                         .offset(y: 2)
                         .frame(width: 20)
@@ -64,11 +64,12 @@ struct PaywallMarketingView: View {
                 .padding(.horizontal)
                 
                 HStack(alignment: .top, spacing: 15) {
-                    Image(systemName: "person.3.fill")
-                        .foregroundStyle(.indigo)
-                        .fontWeight(.bold)
+                    Image("person.3.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color("storkIndigo"))
                         .shadow(radius: 2)
-                        .frame(width: 20)
                     
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Muster Up!")
@@ -90,7 +91,7 @@ struct PaywallMarketingView: View {
                         signOut()
                     }) {
                         Text("Sign Out")
-                            .foregroundColor(.orange)
+                            .foregroundColor(Color("storkOrange"))
                             .font(.footnote)
                             .fontWeight(.bold)
                             .padding()
@@ -112,13 +113,10 @@ struct PaywallMarketingView: View {
         warning: LocalizedStringKey? = nil
     ) -> some View {
         HStack(alignment: .top, spacing: 15) {
-            Image(systemName: icon)
-                .font(
-                    .system(
-                        size: 18
-                    )
-                )
-                .frame(width: 30)
+            Image(icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
                 .offset(y: 2)
             
             VStack(alignment: .leading, spacing: 5) {

@@ -26,5 +26,5 @@ struct SampleMarbleView: View {
 }
 
 #Preview {
-    SampleMarbleView(color: .blue)
+    SampleMarbleView(color: Color("storkBlue"))
 }

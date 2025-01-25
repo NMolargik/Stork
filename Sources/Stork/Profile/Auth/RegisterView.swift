@@ -33,7 +33,7 @@ struct RegisterView: View {
             NavigationStack {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        CustomTextfieldView(text: $profileViewModel.tempProfile.email, hintText: "Email Address", icon: Image(systemName: "envelope"), isSecure: false, iconColor: Color.blue)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.email, hintText: "Email Address", icon: Image("envelope"), isSecure: false, iconColor: Color("storkBlue"))
                         
                         if let emailError = profileViewModel.emailError {
                             Text(emailError)
@@ -42,7 +42,7 @@ struct RegisterView: View {
                                 .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
+                        CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
                         
                         if let passwordError = profileViewModel.passwordError {
                             Text(passwordError)
@@ -51,7 +51,7 @@ struct RegisterView: View {
                                 .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.confirmPassword, hintText: "Confirm Password", icon: Image(systemName: "key"), isSecure: true, iconColor: Color.orange)
+                        CustomTextfieldView(text: $profileViewModel.confirmPassword, hintText: "Confirm Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
                         
                         if let confirmPasswordError = profileViewModel.confirmPasswordError {
                             Text(confirmPasswordError)
@@ -60,7 +60,7 @@ struct RegisterView: View {
                                 .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image(systemName: "1.square"), isSecure: false, iconColor: Color.green)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square"), isSecure: false, iconColor: Color.green)
                         
                         if let firstNameError = profileViewModel.firstNameError {
                             Text(firstNameError)
@@ -70,7 +70,7 @@ struct RegisterView: View {
                                 .padding(.top, -5)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image(systemName: "2.square"), isSecure: false, iconColor: Color.green)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square"), isSecure: false, iconColor: Color.green)
                         
                         if let lastNameError = profileViewModel.lastNameError {
                             Text(lastNameError)
@@ -84,7 +84,7 @@ struct RegisterView: View {
                         Text("Select Your Birthday")
                         
                         DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
-                            .tint(.indigo)
+                            .tint(Color("storkIndigo"))
                         #if !SKIP
                             .datePickerStyle(.wheel)
                         #endif
@@ -117,14 +117,14 @@ struct RegisterView: View {
 
                             if (profileViewModel.isWorking) {
                                 ProgressView()
-                                    .tint(.indigo)
+                                    .tint(Color("storkIndigo"))
                                     .frame(height: 50)
                             } else {
                                 CustomButtonView(
                                     text: "Sign Up",
                                     width: 120,
                                     height: 40,
-                                    color: Color.indigo,
+                                    color: Color("storkIndigo"),
                                     isEnabled: profileViewModel.isFormValid,
                                     onTapAction: {
                                         Task {
@@ -156,7 +156,7 @@ struct RegisterView: View {
                     }, label: {
                         Text("Log In Instead")
                             .fontWeight(.bold)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color("storkOrange"))
                     })
                 })
                 .frame(maxWidth: .infinity)

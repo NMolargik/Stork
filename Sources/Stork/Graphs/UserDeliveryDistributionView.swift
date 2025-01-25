@@ -61,7 +61,7 @@ struct UserDeliveryDistributionView: View {
                             .background(Circle().foregroundStyle(.white))
 
                         Text(profile.initials)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(colorScheme == .dark ? .white : .black )
                             .font(.body)
                             .fontWeight(.bold)
                     }
@@ -77,7 +77,6 @@ struct UserDeliveryDistributionView: View {
                         .background(Circle().foregroundStyle(.white))
 
                     Text("Old Members")
-                        .foregroundStyle(.black)
                         .font(.body)
                         .fontWeight(.bold)
                 }

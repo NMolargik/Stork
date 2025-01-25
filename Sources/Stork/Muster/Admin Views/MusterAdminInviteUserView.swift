@@ -18,6 +18,7 @@ struct MusterAdminInviteUserView: View {
     @State private var searchText = ""
     @State private var searchEnabled = false
     @State private var profiles: [Profile] = []
+    @State private var searchPerformed = false
     
     var body: some View {
         NavigationStack {
@@ -25,22 +26,30 @@ struct MusterAdminInviteUserView: View {
                 searchBar
                     .padding(.horizontal)
 
-                if profiles.isEmpty && !profileViewModel.isWorking {
+                if profiles.isEmpty && !profileViewModel.isWorking && searchPerformed {
                     Spacer()
+                    
                     VStack {
-                        Image(systemName: "person.crop.badge.magnifyingglass")
+                        Image("person.crop.badge.magnifyingglass")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
                             .foregroundStyle(.red)
+                            .padding()
                         
                         Text("No users found with that last name")
                             .multilineTextAlignment(.center)
                             .font(.title3)
                     }
+                    
                     Spacer()
                 } else if profileViewModel.isWorking {
                     Spacer()
+                    
                     ProgressView()
-                        .tint(.orange)
+                        .tint(Color("storkOrange"))
                         .frame(height: 50)
+                    
                     Spacer()
                 } else {
                     profilesListView
@@ -67,16 +76,16 @@ struct MusterAdminInviteUserView: View {
             CustomTextfieldView(
                 text: $searchText,
                 hintText: "Search by last name",
-                icon: Image(systemName: "magnifyingglass"),
+                icon: Image("magnifyingglass"),
                 isSecure: false,
-                iconColor: Color.blue
+                iconColor: Color("storkBlue")
             )
             
             CustomButtonView(
                 text: "Search",
                 width: 80,
                 height: 55,
-                color: .indigo,
+                color: Color("storkIndigo"),
                 isEnabled: searchEnabled,
                 onTapAction: { withAnimation { searchUsers() } }
             )
@@ -109,6 +118,8 @@ struct MusterAdminInviteUserView: View {
         guard !profileViewModel.isWorking else { return }
         
         profileViewModel.isWorking = true
+        searchPerformed = true
+
         Task {
             do {
                 profiles = try await profileViewModel.listProfiles(

@@ -145,8 +145,8 @@ public struct Baby: Identifiable, Codable, Hashable {
         self.id = UUID().uuidString
         self.deliveryId = deliveryId
         self.birthday = Date() // Defaults to current date; consider adjusting as needed.
-        self.height = 16.0      // Default height; adjust based on unit settings.
-        self.weight = 112.0     // Default weight; adjust based on unit settings.
+        self.height = 19.0      // Default height; adjust based on unit settings.
+        self.weight = 121.6     // Default weight; adjust based on unit settings.
         self.nurseCatch = nurseCatch
         self.nicuStay = nicuStay
         self.sex = sex

@@ -16,20 +16,32 @@ struct EmptyStateView: View {
 
             // MARK: - Animated Icon
             HStack(spacing: 16) {
-                Image(systemName: "figure.child")
-                    .foregroundStyle(.purple)
-                
-                Image(systemName: "figure.child")
-                    .foregroundStyle(.pink)
+                Image("figure.child")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+                    .foregroundStyle(Color("storkPurple"))
                     .shadow(radius: 2)
 
-                Image(systemName: "figure.child")
-                    .foregroundStyle(.blue)
+                
+                Image("figure.child")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+                    .foregroundStyle(Color("storkPink"))
+                    .shadow(radius: 2)
+
+                Image("figure.child")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+                    .foregroundStyle(Color("storkBlue"))
                     .shadow(radius: 2)
             }
             .font(.largeTitle)
             .offset(x: -5)
             .frame(width: 50)
+            .padding(.bottom)
 
             Text("No deliveries recorded yet. Use the button above to get started!")
                 .multilineTextAlignment(.center)

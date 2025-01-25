@@ -27,13 +27,94 @@ struct MusterTabView: View {
         NavigationStack(path: $navigationPath) {
             if let muster = musterViewModel.currentMuster {
                 VStack(spacing: 0) {
+                    HStack (spacing: 20) {
+                        Spacer()
+                        
+                        Menu {
+                            if musterViewModel.isUserAdmin(profile: profileViewModel.profile) {
+                                
+                                Button {
+                                    musterViewModel.showInviteUserSheet = true
+                                } label: {
+                                    Label("Invite User", systemImage: "person.badge.plus")
+                                }
+                                
+                                Button {
+                                    musterViewModel.showAssignAdminSheet = true
+                                } label: {
+                                    Label("Assign Admin", systemImage: "person.badge.shield.exclamationmark.fill")
+                                }
+                                
+                                Button {
+                                    musterViewModel.showRenameSheet = true
+                                } label: {
+                                    Label("Rename Muster", systemImage: "tag.fill")
+                                }
+                            }
+                            
+                            Button {
+                                showLeaveMusterSheet = true
+                            } label: {
+                                Label("Leave Muster", systemImage: "door.left.hand.open")
+                            }
+                            
+                        } label: {
+                            Image("gear")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(Color("storkOrange"))
+                        }
+
+                        Button {
+                            Task {
+                                try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
+                            }
+                        } label: {
+                            Image("arrow.2.squarepath")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.green)
+                        }
+                        
+                        Button {
+                            withAnimation {
+                                triggerHaptic()
+                                deliveryViewModel.startNewDelivery()
+                                showingDeliveryAddition = true
+                                selectedTab = .deliveries
+                            }
+                        } label: {
+                            Image("plus")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(Color("storkIndigo"))
+                        }
+                    }
+                    .padding()
+                    
+                    HStack {
+                        Text(muster.name)
+                            .font(.title2).fontWeight(.bold)
+                        
+                        Spacer()
+                    }
+                    .padding([.leading, .bottom])
+                    
                     ScrollView(.horizontal) {
                         HStack(spacing: 16) {
                             ForEach(musterViewModel.musterMembers, id: \.id) { member in
                                 HStack(alignment: .center) {
                                     if muster.administratorProfileIds.contains(member.id) {
-                                        Image(systemName: "crown.fill")
+                                        Image("crown.fill")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 24, height: 24)
                                             .foregroundColor(.yellow)
+                                        
                                     }
                                     
                                     Text("\(member.firstName) \(member.lastName.first.map { "\($0)." } ?? "")")
@@ -48,7 +129,6 @@ struct MusterTabView: View {
                         }
                         .padding(.horizontal)
                     }
-                    .padding(.leading, -5)
                     .frame(height: 30)
                     
                     ZStack {
@@ -84,9 +164,6 @@ struct MusterTabView: View {
                     
                     UserDeliveryDistributionView(profiles: musterViewModel.musterMembers, deliveries: deliveryViewModel.musterDeliveries)
                 }
-
-                .navigationTitle(muster.name)
-                // Admin sheets
                 .sheet(isPresented: $musterViewModel.showInviteUserSheet) {
                     MusterAdminInviteUserView()
                         .interactiveDismissDisabled(true)
@@ -95,65 +172,11 @@ struct MusterTabView: View {
                     MusterAdminAssignAdminView()
                         .presentationDetents([.medium])
                         .interactiveDismissDisabled(true)
-
                 }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Menu {
-                            if musterViewModel.isUserAdmin(profile: profileViewModel.profile) {
-                                
-                                Button {
-                                    musterViewModel.showInviteUserSheet = true
-                                } label: {
-                                    Label("Invite User", systemImage: "person.badge.plus")
-                                }
-                                
-                                Button {
-                                    musterViewModel.showAssignAdminSheet = true
-                                } label: {
-                                    Label("Assign Admin", systemImage: "person.badge.shield.exclamationmark.fill")
-                                }
-                            }
-                            
-                            Button {
-                                showLeaveMusterSheet = true // ✅ Show confirmation sheet
-                            } label: {
-                                Label("Leave Muster", systemImage: "door.left.hand.open")
-                            }
-                            
-                        } label: {
-                            Image(systemName: "gear")
-                                .foregroundStyle(.orange)
-                                .fontWeight(.bold)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            Task {
-                                try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
-                            }
-                        } label: {
-                            Image(systemName: "arrow.2.squarepath")
-                                .foregroundStyle(.green)
-                                .fontWeight(.bold)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            withAnimation {
-                                triggerHaptic()
-                                deliveryViewModel.startNewDelivery()
-                                showingDeliveryAddition = true
-                                selectedTab = .deliveries
-                            }
-                        } label: {
-                            Image(systemName: "plus")
-                                .foregroundStyle(.indigo)
-                                .fontWeight(.bold)
-                        }
-                    }
+                .sheet(isPresented: $musterViewModel.showRenameSheet) {
+                    MusterAdminRenameView()
+                        .presentationDetents([.fraction(0.45)])
+                        .interactiveDismissDisabled(true)
                 }
             } else {
                 MusterSplashView()
@@ -172,7 +195,7 @@ struct MusterTabView: View {
                     .padding(.horizontal)
 
                 HStack {
-                    CustomButtonView(text: "Cancel", width: 150, height: 50, color: Color.orange, isEnabled: true, onTapAction: {
+                    CustomButtonView(text: "Cancel", width: 150, height: 50, color: Color("storkOrange"), isEnabled: true, onTapAction: {
                         showLeaveMusterSheet = false
 
                     })
@@ -269,6 +292,9 @@ struct MusterTabView: View {
                 errorMessage = error.localizedDescription
                 throw error
             }
+            
+            deliveryViewModel.musterDeliveries.removeAll()
+            deliveryViewModel.groupedMusterDeliveries.removeAll()
             
             musterViewModel.isWorking = false
         }

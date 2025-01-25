@@ -14,23 +14,23 @@ public enum MusterError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notFound(let message):
-            return "Muster Not Found: \(message)"
+            return "Muster Nnt found."
         case .creationFailed(let message):
-            return "Muster Creation Failed: \(message)"
+            return "Muster creation failed. Please try again!"
         case .updateFailed(let message):
-            return "Muster Update Failed: \(message)"
+            return "Muster update failed. Please try again!"
         case .deletionFailed(let message):
-            return "Muster Deletion Failed: \(message)"
+            return "Muster deletion failed. Please try again!"
         case .unknown(let message):
-            return "Unknown Muster Error: \(message)"
+            return "Unknown muster error."
         case .invitationFailed(let message):
-            return "Invitation Failed To Send: \(message)"
+            return "Invitation failed to send. Please try again!"
         case .invitationResponseFailed(let message):
-            return "Failed to respond to invitation: \(message)"
+            return "Invitation response failed. Please try again!"
         case .failedToCollectInvitations(let message):
-            return "Failed to collect invitations: \(message)"
+            return "Failed to collect invitations. Please try again!"
         case .failedToCancelInvite(let message):
-            return "Failed to cancel invitation: \(message)"
+            return "Failed to cancel invitation. Please try again!"
         }
     }
 }

@@ -13,9 +13,10 @@ struct InfoBannerView: View {
     var body: some View {
         HStack {
             Spacer()
-            Image(systemName: "exclamationmark.circle")
-                .font(.title)
-                .foregroundStyle(.blue)
+            Image("exclamationmark.circle")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)                .foregroundStyle(Color("storkBlue"))
                 .padding(.trailing)
 
             Text("You can submit up to 8 deliveries per day")
