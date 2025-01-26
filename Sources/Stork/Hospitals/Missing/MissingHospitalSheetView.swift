@@ -23,7 +23,7 @@ struct MissingHospitalSheetView: View {
             CustomTextfieldView(
                 text: $hospitalName,
                 hintText: "Missing hospital name...",
-                icon: Image("building"),
+                icon: Image("building.fill"),
                 isSecure: false,
                 iconColor: Color("storkOrange")
             )

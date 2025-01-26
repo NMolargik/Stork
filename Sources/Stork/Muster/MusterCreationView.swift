@@ -60,7 +60,7 @@ struct MusterCreationView: View {
                                 width: 250,
                                 height: 40,
                                 color: Color.red,
-                                icon: Image("building"),
+                                icon: Image("building.fill"),
                                 isEnabled: true,
                                 onTapAction: {
                                     musterViewModel.showHospitalSelection = true

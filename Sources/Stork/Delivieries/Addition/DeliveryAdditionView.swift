@@ -29,13 +29,12 @@ struct DeliveryAdditionView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     // MARK: - Baby Editor Views with Enhanced Transitions
-                    ForEach($deliveryViewModel.newDelivery.babies) { $baby in
-                        let babyIndex = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0
-                        let babyNumber = babyIndex + 1
-                        
+                    ForEach(deliveryViewModel.newDelivery.babies, id: \.id) { baby in
+                        let babyBinding = binding(for: baby)
+
                         BabyEditorView(
-                            baby: $baby,
-                            babyNumber: babyNumber,
+                            baby: babyBinding,
+                            babyNumber: (deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0) + 1,
                             removeBaby: { babyId in
                                 withAnimation(.spring()) {
                                     deliveryViewModel.newDelivery.babies.removeAll { $0.id == babyId }
@@ -110,7 +109,7 @@ struct DeliveryAdditionView: View {
                             width: 250,
                             height: 50,
                             color: Color.red,
-                            icon: Image("building"),
+                            icon: Image("building.fill"),
                             isEnabled: true,
                             onTapAction: {
                                 deliveryViewModel.isSelectingHospital = true
@@ -137,6 +136,8 @@ struct DeliveryAdditionView: View {
                             onTapAction: {
                                 Task {
                                     await submitDelivery()
+                                    
+                                    deliveryViewModel.startNewDelivery()
                                 }
                             }
                         )
@@ -221,7 +222,15 @@ struct DeliveryAdditionView: View {
         
         showingDeliveryAddition = false
     }
+    
+    private func binding(for baby: Baby) -> Binding<Baby> {
+        guard let index = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) else {
+            return .constant(baby)
+        }
+        return $deliveryViewModel.newDelivery.babies[index]
+    }
 }
+
 
 #Preview {
     DeliveryAdditionView(showingDeliveryAddition: .constant(true))

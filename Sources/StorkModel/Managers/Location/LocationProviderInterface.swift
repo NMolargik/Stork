@@ -8,6 +8,8 @@
 import Foundation
 
 public protocol LocationProviderInterface {
+    func isAuthorized() -> Bool
+    
     /// Fetches the current latitude and longitude.
     func fetchCurrentLocation() async throws -> (latitude: Double, longitude: Double)
 

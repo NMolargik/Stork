@@ -13,8 +13,8 @@ class DeliveryViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var deliveries: [Delivery] = []
     @Published var musterDeliveries: [Delivery] = []
-    @Published var groupedDeliveries: [(key: String, value: [Delivery])] = []
-    @Published var groupedMusterDeliveries: [(key: String, value: [Delivery])] = []
+    @Published var groupedDeliveries: [GroupedDeliveries] = []
+    @Published var groupedMusterDeliveries: [GroupedDeliveries] = []
 
     @Published var newDelivery: Delivery = Delivery(sample: true)
     @Published var epiduralUsed: Bool = false
@@ -50,9 +50,6 @@ class DeliveryViewModel: ObservableObject {
         // Daily limit logic
         resetCountIfNeeded()
         startDailyResetTimer()
-
-        // Start a fresh new delivery
-        startNewDelivery()
     }
 
     // MARK: - Submit Delivery
@@ -77,8 +74,20 @@ class DeliveryViewModel: ObservableObject {
             if addToMuster {
                 musterDeliveries.append(newDelivery)
             }
-            groupDeliveries()
-            groupMusterDeliveries()
+            do {
+                newDelivery = try await deliveryRepository.createDelivery(delivery: newDelivery)
+                deliveries.append(newDelivery)
+                if addToMuster {
+                    musterDeliveries.append(newDelivery)
+                }
+
+                DispatchQueue.main.async {
+                    self.groupDeliveries()
+                    self.groupMusterDeliveries()
+                }
+            } catch {
+                throw DeliveryError.creationFailed("Failed to submit delivery: \(error.localizedDescription)")
+            }
         } catch {
             throw DeliveryError.creationFailed("Failed to submit delivery: \(error.localizedDescription)")
         }
@@ -87,7 +96,9 @@ class DeliveryViewModel: ObservableObject {
         print("New delivery successfully submitted.")
         
         // Reset for the next new delivery
-        startNewDelivery()
+        DispatchQueue.main.async {
+            self.startNewDelivery()
+        }
     }
     
     // MARK: - Fetch Next Page of Deliveries
@@ -275,25 +286,58 @@ class DeliveryViewModel: ObservableObject {
     }
 
     func groupMusterDeliveries() {
-        self.groupedMusterDeliveries = groupDeliveriesByMonth(musterDeliveries)
-        print("Muster Grouped Deliveries Updated.")
-    }
+        print("⚡ Before Updating groupedMusterDeliveries: \(groupedMusterDeliveries.count) groups")
 
-    private func groupDeliveriesByMonth(_ deliveries: [Delivery]) -> [(key: String, value: [Delivery])] {
+        guard !musterDeliveries.isEmpty else {
+            print("🚨 Muster deliveries are empty. Skipping grouping to prevent crash.")
+            return
+        }
+
+        let safeCopy = musterDeliveries // ✅ Prevent mutation during iteration
+
+        DispatchQueue.main.async {
+            let newGroups = self.groupDeliveriesByMonth(safeCopy)
+            
+            // ✅ Prevent invalid array updates
+            guard !newGroups.isEmpty else {
+                print("🚨 No muster deliveries were grouped. Skipping update.")
+                return
+            }
+
+            self.groupedMusterDeliveries = newGroups
+            print("✅ After Updating groupedMusterDeliveries: \(self.groupedMusterDeliveries.count) groups")
+        }
+    }
+    
+    private func groupDeliveriesByMonth(_ deliveries: [Delivery]) -> [GroupedDeliveries] {
+        guard !deliveries.isEmpty else {
+            print("🚨 groupDeliveriesByMonth received an empty list!")
+            return []
+        }
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM ''yy"
 
         let sorted = deliveries.sorted { $0.date > $1.date }
         
-        var results: [(String, [Delivery])] = []
+        // ✅ Ensure sorted list isn't empty before proceeding
+        guard !sorted.isEmpty else {
+            print("🚨 Sorted deliveries list is empty. Skipping grouping.")
+            return []
+        }
+
+        print("✅ Sorted \(sorted.count) deliveries by date.")
+
+        var results: [GroupedDeliveries] = []
         var currentKey: String?
         var currentGroup: [Delivery] = []
 
         for delivery in sorted {
             let key = dateFormatter.string(from: delivery.date)
+
             if key != currentKey {
-                if let existingKey = currentKey {
-                    results.append((existingKey, currentGroup))
+                if let existingKey = currentKey, !currentGroup.isEmpty {
+                    results.append(GroupedDeliveries(key: existingKey, deliveries: currentGroup))
                 }
                 currentKey = key
                 currentGroup = [delivery]
@@ -301,10 +345,13 @@ class DeliveryViewModel: ObservableObject {
                 currentGroup.append(delivery)
             }
         }
-        
-        if let existingKey = currentKey {
-            results.append((existingKey, currentGroup))
+
+        // ✅ Only append if there's valid data
+        if let existingKey = currentKey, !currentGroup.isEmpty {
+            results.append(GroupedDeliveries(key: existingKey, deliveries: currentGroup))
         }
+
+        print("✅ Grouped deliveries into \(results.count) groups.")
         return results
     }
 

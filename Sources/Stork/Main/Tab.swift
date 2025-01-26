@@ -19,9 +19,14 @@ public enum Tab: String, Hashable, CaseIterable {
         Tab.titles[self] ?? ""
     }
 
-    /// The SF Symbol name used for the tab's icon.
-    var icon: String {
-        Tab.icons[self] ?? "questionmark"
+    var customIconName: String {
+        switch self {
+        case .home: return "house.tab"  // Replace with your actual asset name
+        case .deliveries: return "figure.child.tab"
+        case .hospitals: return "building.fill.tab"
+        case .muster: return "person.3.fill.tab"
+        case .settings: return "gear.tab"
+        }
     }
 
     // MARK: - Private Mappings
@@ -31,13 +36,5 @@ public enum Tab: String, Hashable, CaseIterable {
         .hospitals: "Hospitals",
         .muster: "Muster",
         .settings: "Settings"
-    ]
-
-    private static let icons: [Tab: String] = [
-        .home: "house",
-        .deliveries: "figure.child",
-        .hospitals: "building",
-        .muster: "person.3",
-        .settings: "gear"
     ]
 }

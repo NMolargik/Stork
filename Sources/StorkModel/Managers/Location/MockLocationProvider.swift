@@ -24,6 +24,10 @@ public class MockLocationProvider: LocationProviderInterface {
         self.mockCity = mockCity
         self.mockState = mockState
     }
+    
+    public func isAuthorized() -> Bool {
+        return true
+    }
 
     public func fetchCurrentLocation() async throws -> (latitude: Double, longitude: Double) {
         // Simulate a delay for realism, if necessary

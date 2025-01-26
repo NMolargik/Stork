@@ -48,7 +48,7 @@ struct JarSummaryView: View {
         }
         .padding(.vertical)
         .frame(maxWidth: .infinity)
-        .font(.title2)
+        .font(.title3)
         .fontWeight(.bold)
         .foregroundStyle(.gray)
         .backgroundCard(colorScheme: colorScheme)

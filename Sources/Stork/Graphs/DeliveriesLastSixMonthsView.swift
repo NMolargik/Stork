@@ -24,8 +24,7 @@ struct DeliveryGraphMonthData: Identifiable {
 struct DeliveriesLastSixMonthsView: View {
     // MARK: - Properties
     
-    @Binding var groupedDeliveries: [(key: String, value: [Delivery])]
-    
+    @Binding var groupedDeliveries: [GroupedDeliveries]
     @State private var deliveriesLastSix: [DeliveryGraphMonthData] = []
     @State private var animatedDeliveries: [DeliveryGraphMonthData] = []
     
@@ -125,8 +124,7 @@ struct DeliveriesLastSixMonthsView: View {
         var tempAggregatedData: [DeliveryGraphMonthData] = []
         
         for (index, key) in lastSixMonthsKeys.enumerated() {
-            if let deliveriesInMonth = groupedDeliveries.first(where: { $0.key == key })?.value {
-                let count = deliveriesInMonth.count
+            if let deliveriesInMonth = groupedDeliveries.first(where: { $0.key == key })?.deliveries {                let count = deliveriesInMonth.count
                 let date = lastSixMonthsDates[index]
                 let monthData = DeliveryGraphMonthData(month: key, date: date, count: count)
                 tempAggregatedData.append(monthData)
@@ -147,30 +145,15 @@ struct DeliveriesLastSixMonthsView: View {
     }
 }
 
-// MARK: - Preview
-struct DeliveriesLastSixMonthsView_Previews: PreviewProvider {
-    static var previews: some View {
-        DeliveriesLastSixMonthsView(groupedDeliveries: .constant([
-            // Sample data for preview purposes
-            (key: "July '24", value: [
-                Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Calendar.current.date(byAdding: .month, value: -5, to: Date())!, babies: [], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true),
-                Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Calendar.current.date(byAdding: .month, value: -5, to: Date())!, babies: [], babyCount: 1, deliveryMethod: .vaginal, epiduralUsed: false)
-            ]),
-            (key: "August '24", value: [
-                Delivery(id: "3", userId: "U3", userFirstName: "Charlie", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M3", date: Calendar.current.date(byAdding: .month, value: -4, to: Date())!, babies: [], babyCount: 3, deliveryMethod: .cSection, epiduralUsed: true)
-            ]),
-            (key: "September '24", value: [
-                Delivery(id: "4", userId: "U4", userFirstName: "Diana", hospitalId: "H3", hospitalName: "County Hospital", musterId: "M4", date: Calendar.current.date(byAdding: .month, value: -3, to: Date())!, babies: [], babyCount: 1, deliveryMethod: .vBac, epiduralUsed: false)
-            ]),
-            (key: "October '24", value: [
-                Delivery(id: "5", userId: "U5", userFirstName: "Ethan", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M5", date: Calendar.current.date(byAdding: .month, value: -2, to: Date())!, babies: [], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: true)
-            ]),
-            (key: "November '24", value: []),
-            (key: "December '24", value: [
-                Delivery(id: "6", userId: "U6", userFirstName: "Fiona", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M6", date: Date(), babies: [], babyCount: 1, deliveryMethod: .vaginal, epiduralUsed: false)
-            ])
-        ]))
-    }
-}
-
 #endif
+
+#Preview {
+    DeliveriesLastSixMonthsView(groupedDeliveries: .constant([
+        GroupedDeliveries(key: "July '24", deliveries: [
+            Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Calendar.current.date(byAdding: .month, value: -5, to: Date())!, babies: [], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
+        ]),
+        GroupedDeliveries(key: "August '24", deliveries: [
+            Delivery(id: "3", userId: "U3", userFirstName: "Charlie", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M3", date: Calendar.current.date(byAdding: .month, value: -4, to: Date())!, babies: [], babyCount: 3, deliveryMethod: .cSection, epiduralUsed: true)
+        ])
+    ]))
+}

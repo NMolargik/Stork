@@ -60,7 +60,11 @@ public struct MainView: View {
     func tabItem<Content: View>(for tab: Tab, @ViewBuilder content: () -> Content) -> some View {
         content()
             .tabItem {
-                Label(tab.title, systemImage: tab.icon)
+                VStack {
+                    Image(tab.customIconName)
+                    
+                    Text(tab.title)
+                }
             }
             .tag(tab)
     }

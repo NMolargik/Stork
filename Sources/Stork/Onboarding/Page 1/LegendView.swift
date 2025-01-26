@@ -10,7 +10,7 @@ import SwiftUI
 struct LegendView: View {
     var body: some View {
         VStack(alignment: .leading) {
-            LegendItemView(color: Color("storkPink"), label: "Female")
+            LegendItemView(color: Color("storkBlue"), label: "Male")
             LegendItemView(color: Color("storkPink"), label: "Female")
             LegendItemView(color: Color("storkPurple"), label: "Loss")
         }

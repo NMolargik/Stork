@@ -16,11 +16,14 @@ struct DeliveryListView: View {
     // MARK: - Binding
     @Binding var showingDeliveryAddition: Bool
 
+    // MARK: - State to Hold a Stable Snapshot
+    @State private var groupedDeliveriesSnapshot: [GroupedDeliveries] = []
+
     var body: some View {
         ZStack {
             List {
                 // MARK: - Empty State
-                if deliveryViewModel.deliveries.isEmpty {
+                if groupedDeliveriesSnapshot.isEmpty {
                     EmptyStateView()
                         .listRowBackground(Color.clear)
 #if !SKIP
@@ -28,9 +31,9 @@ struct DeliveryListView: View {
 #endif
                 } else {
                     // MARK: - Sections for Each Month
-                    ForEach(deliveryViewModel.groupedDeliveries, id: \.key) { (monthYear, deliveries) in
-                        Section(header: SectionHeader(title: monthYear)) {
-                            ForEach(deliveries, id: \.id) { delivery in
+                    ForEach(Array(groupedDeliveriesSnapshot.enumerated()), id: \.element.key) { _, section in
+                        Section(header: SectionHeader(title: section.key)) {
+                            ForEach(section.deliveries, id: \.id) { delivery in
                                 NavigationLink(value: delivery) {
                                     DeliveryRowView(delivery: delivery)
                                 }
@@ -41,6 +44,12 @@ struct DeliveryListView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            groupedDeliveriesSnapshot = deliveryViewModel.groupedDeliveries
+        }
+        .onChange(of: deliveryViewModel.groupedDeliveries) { newValue in
+            groupedDeliveriesSnapshot = newValue
         }
     }
 }

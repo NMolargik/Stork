@@ -76,6 +76,7 @@ struct SplashView: View {
             CustomButtonView(text: "Sign Up", width: 120, height: 50, color: Color("storkOrange"), isEnabled: true, onTapAction: {
                 withAnimation {
                     profileViewModel.resetTempProfile()
+                    profileViewModel.passwordText = ""
                     showRegistration = true
                     appState = AppState.register
                 }
@@ -97,6 +98,7 @@ struct SplashView: View {
                 .shadow(radius: 5)
             }
         }
+        .padding(.top)
         .frame(maxWidth: .infinity)
         .onAppear {
             startAnimation()

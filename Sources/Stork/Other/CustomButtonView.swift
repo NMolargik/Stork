@@ -52,7 +52,7 @@ struct CustomButtonView: View {
             width: 200,
             height: 50,
             color: Color("storkIndigo"),
-            icon: Image("building"),
+            icon: Image("building.fill"),
             isEnabled: true,
             onTapAction: {
                 print("Push Me button pressed")

@@ -118,16 +118,19 @@ public struct AppStateControllerView: View {
             }
             .onAppear {
                 // Always check state when view appears
+                
+                if !locationProvider.isAuthorized() {
+                    Task {
+                        try await locationProvider.fetchCurrentLocation()
+                    }
+                }
+
                 checkAppState()
             }
             
             if !errorMessage.isEmpty {
-                HStack {
-                    ErrorToastView()
-                    
-                    Spacer()
-                }
-                .padding(.leading)
+                ErrorToastView()
+                    .padding(.top, 50)
             }
         }
         .onChange(of: appState) { _ in
@@ -227,7 +230,7 @@ public struct AppStateControllerView: View {
             }
 
             // Fetch deliveries next
-            if deliveryViewModel.groupedDeliveries.isEmpty {
+            if deliveryViewModel.groupedDeliveries.isEmpty && appState == .main {
                 await MainActor.run {
                     deliveryViewModel.currentPage = 0
                     deliveryViewModel.hasMorePages = true
@@ -239,7 +242,7 @@ public struct AppStateControllerView: View {
             }
 
             // Fetch hospitals
-            if hospitalViewModel.hospitals.isEmpty {
+            if hospitalViewModel.hospitals.isEmpty && appState == .main {
                 await hospitalViewModel.fetchHospitalsNearby()
             }
             await MainActor.run {
@@ -247,7 +250,7 @@ public struct AppStateControllerView: View {
             }
 
             // Fetch muster info
-            if !profileViewModel.profile.musterId.isEmpty, musterViewModel.currentMuster == nil {
+            if !profileViewModel.profile.musterId.isEmpty && musterViewModel.currentMuster == nil && appState == .main {
                 try await musterViewModel.loadCurrentMuster(
                     profileViewModel: profileViewModel,
                     deliveryViewModel: deliveryViewModel
@@ -264,6 +267,8 @@ public struct AppStateControllerView: View {
             print("Error fetching data: \(error.localizedDescription)")
             throw error
         }
+        
+        musterViewModel.isWorking = true
     }
     
     // MARK: - Purchases / RevenueCat

@@ -31,6 +31,14 @@ public class LocationProvider: NSObject, LocationProviderInterface {
     #endif
     }
     
+    public func isAuthorized() -> Bool {
+        #if !SKIP
+        return self.locationManager.authorizationStatus == .authorizedWhenInUse
+        #else
+        return true
+        #endif
+    }
+    
     public func fetch() async throws {
         let (latitude, longitude) = try await fetchCurrentLocation()
         location = Location(latitude: latitude, longitude: longitude)
@@ -41,34 +49,47 @@ public class LocationProvider: NSObject, LocationProviderInterface {
     }
     
     public func fetchCurrentLocation() async throws -> (latitude: Double, longitude: Double) {
-    #if !SKIP
-        return try await withCheckedThrowingContinuation { continuation in
-            self.completion = { result in
-                // Ensure continuation is only called once
-                guard self.completion != nil else { return }
+        #if !SKIP
+            requestLocationOrAuthorization()
+
+            return try await withCheckedThrowingContinuation { continuation in
+                self.completion = { result in
+                    // Ensure continuation is only called once
+                    guard self.completion != nil else { return }
+                    self.completion = nil // Clear completion to prevent reuse
+                    
+                    switch result {
+                    case .success(let location):
+                        continuation.resume(returning: location)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
                 
-                self.completion = nil // Clear the completion to prevent reuse
-                
-                switch result {
-                case .success(let location):
-                    continuation.resume(returning: location)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
+                // **Safety Timeout**: Ensure continuation doesn't leak
+                Task {
+                    try await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
+                    if self.completion != nil {
+                        self.completion = nil
+                        continuation.resume(throwing: NSError(
+                            domain: "LocationError",
+                            code: 2,
+                            userInfo: [NSLocalizedDescriptionKey: "Location request timed out."]
+                        ))
+                    }
                 }
             }
-            requestLocationOrAuthorization()
-        }
-    #else
-        let context = ProcessInfo.processInfo.androidContext
-        guard let (latitude, longitude) = fetchCurrentLocation(context) else {
-            throw NSError(
-                domain: "LocationError",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Failed to fetch location in SKIP context."]
-            )
-        }
-        return (latitude, longitude)
-    #endif
+        #else
+            let context = ProcessInfo.processInfo.androidContext
+            guard let (latitude, longitude) = fetchCurrentLocation(context) else {
+                throw NSError(
+                    domain: "LocationError",
+                    code: 1,
+                    userInfo: [NSLocalizedDescriptionKey: "Failed to fetch location in SKIP context."]
+                )
+            }
+            return (latitude, longitude)
+        #endif
     }
     
     public func geocodeAddress(_ address: String) async throws -> (latitude: Double, longitude: Double) {
