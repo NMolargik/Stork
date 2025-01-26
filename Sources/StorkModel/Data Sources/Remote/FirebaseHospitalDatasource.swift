@@ -273,7 +273,6 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
             let deliveryCount = data["deliveryCount"] as? Int,
             let babyCount = data["babyCount"] as? Int
         else {
-            print("mapping failed")
             throw HospitalError.unknown("Failed to map hospital data.")
         }
         

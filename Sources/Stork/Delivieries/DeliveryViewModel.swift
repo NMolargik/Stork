@@ -338,7 +338,6 @@ class DeliveryViewModel: ObservableObject {
     // MARK: - UI State Management
     func additionPropertiesChanged() {
         canSubmitDelivery = !newDelivery.babies.isEmpty && selectedHospital != nil
-        print(canSubmitDelivery)
     }
 
     // MARK: - Daily Limit Handling

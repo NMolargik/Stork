@@ -58,7 +58,7 @@ struct DeliveryTabView: View {
                                     loadMoreDeliveries()
                                 }
                             }, label: {
-                                Text("Load 6 More Months")
+                                Text("Load More")
                                     .fontWeight(.bold)
                                     .foregroundStyle(Color("storkIndigo"))
                             })

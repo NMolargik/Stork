@@ -66,7 +66,6 @@ public struct Profile: Identifiable, Codable, Hashable {
             let birthday = formatter.date(from: birthdayString)
         else {
             print("Profile initialization failed due to missing or invalid required fields.")
-            print("Received dictionary: \(dictionary)")
             return nil
         }
         

@@ -18,8 +18,9 @@ struct BabyEditorView: View {
     var sampleMode: Bool = false
 
     // Internal state for weight and length
-    @State private var weightInOunces: Double
-    @State private var lengthInInches: Double
+    @State private var pounds: Int
+    @State private var ounces: Int
+    @State private var lengthInCm: Double
 
     // MARK: - Constants
     private let ounceToKg = 0.0283495
@@ -38,8 +39,9 @@ struct BabyEditorView: View {
         self.sampleMode = sampleMode
 
         let initialBaby = sampleMode ? Baby(deliveryId: "", nurseCatch: false, nicuStay: false, sex: .male) : baby.wrappedValue
-        self._weightInOunces = State(initialValue: initialBaby.weight)
-        self._lengthInInches = State(initialValue: initialBaby.height)
+        self._pounds = State(initialValue: Int(initialBaby.weight) / 16) // Convert stored ounces to pounds
+        self._ounces = State(initialValue: Int(initialBaby.weight) % 16) // Get remaining ounces
+        self._lengthInCm = State(initialValue: initialBaby.height * cmPerInch) // Convert inches to cm
     }
     
     // MARK: - Body
@@ -62,12 +64,18 @@ struct BabyEditorView: View {
         )
         .cornerRadius(20)
         .shadow(radius: 2)
-        .onChange(of: weightInOunces) { if !sampleMode { baby.weight = $0 } }
-        .onChange(of: lengthInInches) { if !sampleMode { baby.height = $0 } }
+        .onChange(of: baby.weight) { _ in
+            updateWeightFromModel()
+        }
+        .onChange(of: baby.height) { _ in
+            updateHeightFromModel()
+        }
+        .onChange(of: useMetric) { newMetric in
+            updateUnits(toMetric: newMetric)
+        }
     }
 
     // MARK: - UI Components
-    
     private var headerSection: some View {
         HStack {
             Text("Baby \(babyNumber)")
@@ -114,16 +122,20 @@ struct BabyEditorView: View {
     
     private var weightStepper: some View {
         StepperView(
-            label: useMetric ? "\(String(format: "%.2f", weightInKg)) kg" : "\(pounds) lbs \(ounces) oz",
-            decrement: { adjustWeight(-0.1) },
-            increment: { adjustWeight(0.1) },
+            label: useMetric
+                ? "\(String(format: "%.2f", baby.weight * ounceToKg)) kg"  // ✅ Show 2 decimal places for kg
+                : "\(pounds) lbs \(ounces) oz", // ✅ No decimal for lbs, separate ounces
+            decrement: { adjustWeight(-1) },
+            increment: { adjustWeight(1) },
             range: useMetric ? weightRangeMetric : weightRangeImperial
         )
     }
     
     private var lengthStepper: some View {
         StepperView(
-            label: useMetric ? "\(String(format: "%.1f", lengthInCm)) cm" : "\(String(format: "%.1f", lengthInInches)) in",
+            label: useMetric
+                ? "\(String(format: "%.1f", lengthInCm)) cm"   // ✅ Show 1 decimal place for cm
+                : "\(String(format: "%.1f", baby.height)) in", // ✅ Show 1 decimal place for inches
             decrement: { adjustLength(-0.1) },
             increment: { adjustLength(0.1) },
             range: useMetric ? lengthRangeMetric : lengthRangeImperial
@@ -160,38 +172,84 @@ struct BabyEditorView: View {
             )
     }
 
-    // MARK: - Computed Properties
-    
-    private var weightInKg: Double { weightInOunces * ounceToKg }
-    private var pounds: Int { Int(weightInOunces) / 16 }
-    private var ounces: Int { Int(weightInOunces) % 16 }
-    private var lengthInCm: Double { lengthInInches * cmPerInch }
-
     // MARK: - Helper Functions
+    private func updateUnits(toMetric: Bool) {
+        triggerHaptic()
+
+        if toMetric {
+            // Convert ounces to kilograms and round to the nearest kg
+            let weightKg = (baby.weight * ounceToKg).rounded()
+            baby.weight = weightKg / ounceToKg // Convert back to ounces for storage
+
+            // Convert inches to centimeters and round to the nearest cm
+            lengthInCm = (baby.height * cmPerInch).rounded()
+            baby.height = lengthInCm / cmPerInch // Convert back to inches for storage
+        } else {
+            // Convert kilograms to ounces and round to the nearest full ounce
+            let weightOunces = (baby.weight * ounceToKg).rounded(.toNearestOrEven)
+            baby.weight = weightOunces
+
+            // Convert centimeters to inches and round to the nearest inch
+            let heightInches = (lengthInCm / cmPerInch).rounded()
+            baby.height = heightInches
+            lengthInCm = heightInches * cmPerInch // Convert back to cm for display
+        }
+
+        print("🔄 Units switched. Weight: \(baby.weight) oz, Length: \(baby.height) in")
+    }
     
-    private func adjustWeight(_ delta: Double) {
+    private func adjustWeight(_ delta: Int) {
         triggerHaptic()
         
         if useMetric {
-            let newWeightKg = weightInKg + delta
-            let newWeightOunces = newWeightKg / ounceToKg
-            if weightRangeImperial.contains(newWeightOunces) {
-                weightInOunces = newWeightOunces
+            let newWeightKg = (baby.weight * ounceToKg) + (Double(delta) * 0.1) // ✅ Increment by 0.1 kg
+            let newWeightOunces = newWeightKg / ounceToKg // Convert back to ounces
+
+            print("📏 Metric Mode - Proposed Weight: \(newWeightKg) kg (\(newWeightOunces) oz)")
+
+            if weightRangeMetric.contains(newWeightKg) {
+                baby.weight = newWeightOunces // ✅ Save weight as ounces
+                print("✅ Metric Mode: Updated baby.weight to \(baby.weight) oz (\(newWeightKg) kg)")
+            } else {
+                print("❌ Metric Mode: \(newWeightKg) kg is OUT OF RANGE")
             }
         } else {
-            let newWeightOunces = weightInOunces + delta // ✅ Change `delta * 16` to just `delta`
-            if weightRangeImperial.contains(newWeightOunces) {
-                weightInOunces = newWeightOunces
+            ounces += delta
+
+            if ounces >= 16 {
+                pounds += 1
+                ounces -= 16
+            } else if ounces < 0 {
+                pounds -= 1
+                ounces += 16
             }
+
+            baby.weight = Double((pounds * 16) + ounces)
+            print("✅ Imperial Mode: Updated baby.weight to \(baby.weight) oz")
         }
     }
-
+    
     private func adjustLength(_ delta: Double) {
         triggerHaptic()
-        let newLength = useMetric ? lengthInCm + delta : lengthInInches + delta
-        if lengthRangeImperial.contains(newLength * (useMetric ? 1.0 / cmPerInch : 1.0)) {
-            lengthInInches = newLength * (useMetric ? 1.0 / cmPerInch : 1.0)
+
+        if useMetric {
+            lengthInCm += delta // ✅ Adjust by 0.1 cm
+        } else {
+            lengthInCm += delta * cmPerInch // ✅ Adjust by 0.1 inches
         }
+
+        baby.height = lengthInCm / cmPerInch // ✅ Always store height in inches
+        print("📏 Length Updated: \(lengthInCm) cm (\(baby.height) in)")
+    }
+    
+    private func updateWeightFromModel() {
+        let totalOunces = Int(baby.weight)
+        pounds = totalOunces / 16
+        ounces = totalOunces % 16
+    }
+
+    private func updateHeightFromModel() {
+        lengthInCm = baby.height * cmPerInch
     }
 }
 
