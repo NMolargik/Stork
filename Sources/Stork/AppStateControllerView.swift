@@ -32,7 +32,7 @@ public struct AppStateControllerView: View {
     @StateObject private var hospitalViewModel: HospitalViewModel
     @StateObject private var deliveryViewModel: DeliveryViewModel
     @StateObject private var musterViewModel: MusterViewModel
-    
+        
     @State private var showRegistration: Bool = false
     @State private var paywallPresented: Bool = false
     
@@ -143,6 +143,7 @@ public struct AppStateControllerView: View {
     // MARK: - Main Decision Logic
     func checkAppState() {
         print("Checking app state...")
+        
         if loggedIn {
             Task {
                 do {
@@ -215,46 +216,54 @@ public struct AppStateControllerView: View {
         hospitalViewModel.isWorking = true
         deliveryViewModel.isWorking = true
         musterViewModel.isWorking = true
-        
-        // Fetch profile if we don’t have it
-        if profileViewModel.profile.email.isEmpty {
-            try await profileViewModel.fetchCurrentProfile()
-            profileViewModel.isWorking = false
-        }
 
-        // Fetch hospitals if we don’t have any
-        if hospitalViewModel.hospitals.isEmpty {
-            await hospitalViewModel.fetchHospitalsNearby()
-            hospitalViewModel.isWorking = false
-        }
-        
-        // Fetch deliveries if empty
-        if deliveryViewModel.groupedDeliveries.isEmpty {
-            deliveryViewModel.currentPage = 0
-            deliveryViewModel.hasMorePages = true
-            
-            try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
-            deliveryViewModel.isWorking = false
-        }
-
-        // Fetch muster if needed
-        if !profileViewModel.profile.musterId.isEmpty, musterViewModel.currentMuster == nil {
-            try await musterViewModel.loadCurrentMuster(
-                profileViewModel: profileViewModel,
-                deliveryViewModel: deliveryViewModel
-            )
-            
-            if let muster = musterViewModel.currentMuster {
-                // Fetch only the last 6 months of muster deliveries
-                try await deliveryViewModel.fetchMusterDeliveries(muster: muster)
+        do {
+            // Fetch profile first
+            if profileViewModel.profile.email.isEmpty {
+                try await profileViewModel.fetchCurrentProfile()
             }
-            musterViewModel.isWorking = false
+            await MainActor.run {
+                profileViewModel.isWorking = false
+            }
+
+            // Fetch deliveries next
+            if deliveryViewModel.groupedDeliveries.isEmpty {
+                await MainActor.run {
+                    deliveryViewModel.currentPage = 0
+                    deliveryViewModel.hasMorePages = true
+                }
+                try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
+            }
+            await MainActor.run {
+                deliveryViewModel.isWorking = false
+            }
+
+            // Fetch hospitals
+            if hospitalViewModel.hospitals.isEmpty {
+                await hospitalViewModel.fetchHospitalsNearby()
+            }
+            await MainActor.run {
+                hospitalViewModel.isWorking = false
+            }
+
+            // Fetch muster info
+            if !profileViewModel.profile.musterId.isEmpty, musterViewModel.currentMuster == nil {
+                try await musterViewModel.loadCurrentMuster(
+                    profileViewModel: profileViewModel,
+                    deliveryViewModel: deliveryViewModel
+                )
+                if let muster = musterViewModel.currentMuster {
+                    try await deliveryViewModel.fetchMusterDeliveries(muster: muster)
+                }
+            }
+            await MainActor.run {
+                musterViewModel.isWorking = false
+            }
+
+        } catch {
+            print("Error fetching data: \(error.localizedDescription)")
+            throw error
         }
-        
-        profileViewModel.isWorking = false
-        hospitalViewModel.isWorking = false
-        deliveryViewModel.isWorking = false
-        musterViewModel.isWorking = false
     }
     
     // MARK: - Purchases / RevenueCat

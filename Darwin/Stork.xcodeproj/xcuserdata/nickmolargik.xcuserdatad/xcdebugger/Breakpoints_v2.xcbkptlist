@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "DCF16307-B222-4C7B-B331-46C268AFCA4A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Stork/Delivieries/DeliveryAdditionView.swift"
@@ -23,128 +23,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E2BC1EE5-A694-498C-9266-E91434F31A3A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Sources/Stork/Hospitals/HospitalViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "updateHospitalWithNewDelivery(hospital:babyCount:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E2BC1EE5-A694-498C-9266-E91434F31A3A - 27651f1062a519e4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Stork.HospitalViewModel.updateHospitalWithNewDelivery(hospital: StorkModel.Hospital, babyCount: Swift.Int) async throws -&gt; ()"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Hospitals/HospitalViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "121"
-                  endingLineNumber = "121">
-               </Location>
-               <Location
-                  uuid = "E2BC1EE5-A694-498C-9266-E91434F31A3A - ce442694b30f61c4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (StorkModel.Hospital) -&gt; Swift.Bool in Stork.HospitalViewModel.updateHospitalWithNewDelivery(hospital: StorkModel.Hospital, babyCount: Swift.Int) async throws -&gt; ()"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Hospitals/HospitalViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "121"
-                  endingLineNumber = "121">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "35C3ED2B-C507-47C3-9EF9-3762862862E3"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Sources/Stork/Hospitals/HospitalViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
-            landmarkName = "updateHospitalWithNewDelivery(hospital:babyCount:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "35C3ED2B-C507-47C3-9EF9-3762862862E3 - 560c9fa103a3db09"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Stork.HospitalViewModel.updateHospitalWithNewDelivery(hospital: StorkModel.Hospital, babyCount: Swift.Int) async throws -&gt; ()"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Hospitals/HospitalViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "114"
-                  endingLineNumber = "114">
-               </Location>
-               <Location
-                  uuid = "35C3ED2B-C507-47C3-9EF9-3762862862E3 - 2d671812929fa6a1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for Stork.HospitalViewModel.updateHospitalWithNewDelivery(hospital: StorkModel.Hospital, babyCount: Swift.Int) async throws -&gt; ()"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Hospitals/HospitalViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "114"
-                  endingLineNumber = "114">
-               </Location>
-               <Location
-                  uuid = "35C3ED2B-C507-47C3-9EF9-3762862862E3 - 27651f1062a518cf"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Stork.HospitalViewModel.updateHospitalWithNewDelivery(hospital: StorkModel.Hospital, babyCount: Swift.Int) async throws -&gt; ()"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Hospitals/HospitalViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "114"
-                  endingLineNumber = "114">
-               </Location>
-               <Location
-                  uuid = "35C3ED2B-C507-47C3-9EF9-3762862862E3 - 9c31dcdb12263eec"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for Stork.HospitalViewModel.updateHospitalWithNewDelivery(hospital: StorkModel.Hospital, babyCount: Swift.Int) async throws -&gt; ()"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Hospitals/HospitalViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "114"
-                  endingLineNumber = "114">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "42498599-A881-492F-8DEC-755AC414747B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Sources/Stork/Delivieries/DeliveryAdditionView.swift"
@@ -154,66 +34,118 @@
             endingLineNumber = "20"
             landmarkName = "DeliveryAdditionView"
             landmarkType = "14">
-            <Locations>
-               <Location
-                  uuid = "42498599-A881-492F-8DEC-755AC414747B - c1782f1116227af9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Stork.DeliveryAdditionView.dailyResetManager.getter : Stork.DailyResetManager"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Delivieries/DeliveryAdditionView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0">
-               </Location>
-               <Location
-                  uuid = "42498599-A881-492F-8DEC-755AC414747B - 2309c15ebeccf8f0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Stork.DeliveryAdditionView.$dailyResetManager.getter : SwiftUI.EnvironmentObject&lt;Stork.DailyResetManager&gt;.Wrapper"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Delivieries/DeliveryAdditionView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0">
-               </Location>
-               <Location
-                  uuid = "42498599-A881-492F-8DEC-755AC414747B - f291204614adebb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "default argument 5 of Stork.DeliveryAdditionView.init(errorMessage: Swift.String, profileViewModel: SwiftUI.EnvironmentObject&lt;Stork.ProfileViewModel&gt;, deliveryViewModel: SwiftUI.EnvironmentObject&lt;Stork.DeliveryViewModel&gt;, hospitalViewModel: SwiftUI.EnvironmentObject&lt;Stork.HospitalViewModel&gt;, musterViewModel: SwiftUI.EnvironmentObject&lt;Stork.MusterViewModel&gt;, dailyResetManager: SwiftUI.EnvironmentObject&lt;Stork.DailyResetManager&gt;, showingDeliveryAddition: SwiftUI.Binding&lt;Swift.Bool&gt;) -&gt; Stork.DeliveryAdditionView"
-                  moduleName = "StorkApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nickmolargik/Developer/Stork/skipapp-stork/Sources/Stork/Delivieries/DeliveryAdditionView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "05753C5F-B917-40F1-85D3-37DF591144C7"
+            uuid = "CD837044-A0A0-4C7D-AE9D-BE26392FF165"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Sources/Stork/Hospitals/HospitalViewModel.swift"
+            filePath = "../Sources/Stork/Entry/PaywallParentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "updateHospitalWithNewDelivery(hospital:babyCount:)"
-            landmarkType = "7">
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B5B3292D-5ABE-42B1-8A92-53844A32FE10"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Stork/Entry/PaywallParentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "73415243-C60A-43AF-B138-0722418F670C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Stork/Entry/PaywallParentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "38D227A8-B265-44C3-B9DA-9687292A425B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Stork/Hospitals/Detail/HospitalStatView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1"
+            endingLineNumber = "1"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E8257D0D-3344-4A7B-A640-D2EE3BAD7C6A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Stork/Entry/PaywallParentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C5757A04-AD0E-46FF-99E7-AB5F9FB53FAD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Stork/Entry/PaywallParentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4564EAF0-B879-47DC-8042-E2179AFB8FFA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Sources/Stork/Entry/PaywallParentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

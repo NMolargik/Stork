@@ -3,6 +3,17 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "DeliveryViewModel.additionPropertiesChanged():DeliveryViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.selectedHospital">
+            </PersistentString>
+            <PersistentString
+               value = "self.newDelivery.babies">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "HospitalDetailView.managePrimaryHospital():HospitalDetailView.swift">
          <PersistentStrings>
             <PersistentString
@@ -14,13 +25,18 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DeliveryViewModel.additionPropertiesChanged():DeliveryViewModel.swift">
+         contextName = "AppStateControllerView.fetchDataIfNeeded():AppStateControllerView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.selectedHospital">
+               value = "profileViewModel.profile">
             </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AppStateControllerView.handlePurchasesLogin():AppStateControllerView.swift">
+         <PersistentStrings>
             <PersistentString
-               value = "self.newDelivery.babies">
+               value = "profileViewModel.profile.id">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

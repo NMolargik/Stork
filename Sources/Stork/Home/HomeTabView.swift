@@ -90,7 +90,7 @@ private extension HomeTabView {
             ZStack {
                 JarView(deliveries: Binding(get: { deliveryViewModel.deliveries }, set: { deliveryViewModel.deliveries = $0 ?? [] }),
                         headerText: currentWeekRange,
-                        isTestMode: false)
+                        isTestMode: false, isMusterTest: false)
                     .frame(width: 180)
                 
                 WeekRangeView(weekRange: currentWeekRange, colorScheme: colorScheme)

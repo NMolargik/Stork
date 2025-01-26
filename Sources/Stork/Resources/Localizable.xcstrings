@@ -195,6 +195,9 @@
     "Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors." : {
 
     },
+    "Create or join a muster to share delivery statistics and trends with a whole group of your peers. Good luck filling this jar every week!" : {
+
+    },
     "Dark" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -398,6 +401,9 @@
       }
     },
     "Join A Muster" : {
+
+    },
+    "Join Your Peers!" : {
 
     },
     "Last Name" : {

@@ -135,7 +135,7 @@ struct MusterTabView: View {
                         JarView(
                             deliveries: Binding(get: { deliveryViewModel.musterDeliveries }, set: { deliveryViewModel.musterDeliveries = $0 ?? [] }),
                             headerText: getCurrentWeekRange() ?? "",
-                            isTestMode: false
+                            isTestMode: false, isMusterTest: false
                         )
 
                         VStack {

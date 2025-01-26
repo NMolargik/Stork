@@ -13,15 +13,16 @@ struct OnboardingPageThreeView: View {
 
     var body: some View {
         VStack {
-            BabyEditorView(
-                baby: .constant(Baby(deliveryId: "", nurseCatch: true, nicuStay: false, sex: .male)),
-                babyNumber: 1,
-                removeBaby: { _ in },
-                sampleMode: true
-            )
-            .padding()
+            Text("Join Your Peers!")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding()
             
-            Text("Add deliveries simply by adding babies and filling out a few additional options.\n\nYour deliveries are all backed up and detailed history is available.")
+            JarView(deliveries: Binding.constant(nil), headerText: "Delivery Jar", isTestMode: true, isMusterTest: true)
+            .padding()
+            .frame(height: 300)
+            
+            Text("Create or join a muster to share delivery statistics and trends with a whole group of your peers. Good luck filling this jar every week!")
                 .padding()
                 .fontWeight(.semibold)
         }

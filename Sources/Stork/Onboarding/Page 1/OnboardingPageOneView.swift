@@ -18,7 +18,7 @@ struct OnboardingPageOneView: View {
                 .padding(.vertical)
 
             HStack {
-                JarView(deliveries: Binding.constant(nil), headerText: "Delivery Jar", isTestMode: true)
+                JarView(deliveries: Binding.constant(nil), headerText: "Delivery Jar", isTestMode: true, isMusterTest: false)
                 
                 LegendView()
                 

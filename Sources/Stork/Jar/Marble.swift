@@ -12,8 +12,9 @@ struct Marble: Identifiable {
     let id: UUID
     var position: CGPoint
     var velocity: CGPoint
-    var marbleRadius: CGFloat
-    var color: Color
+    let marbleRadius: CGFloat
+    let color: Color
+    var isActive: Bool = true
     
     var diameter: CGFloat {
         marbleRadius * 2
