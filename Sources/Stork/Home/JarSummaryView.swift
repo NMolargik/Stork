@@ -27,28 +27,22 @@ struct JarSummaryView: View {
 
             HStack {
                 Text("\(maleCount)")
-                
-                Text("Boy\(maleCount == 1 ? "" : "s")")
-                    .frame(width: 100)
+                ScalableText(text: "Boy\(maleCount == 1 ? "" : "s")", minWidth: 100)
             }
-            
+
             HStack {
                 Text("\(femaleCount)")
-                
-                Text("Girl\(femaleCount == 1 ? "" : "s")")
-                    .frame(width: 100)
+                ScalableText(text: "Girl\(femaleCount == 1 ? "" : "s")", minWidth: 100)
             }
-            
+
             HStack {
                 Text("\(lossCount)")
-                
-                Text("Loss\(lossCount == 1 ? "" : "es")")
-                    .frame(width: 100)
+                ScalableText(text: "Loss\(lossCount == 1 ? "" : "es")", minWidth: 100)
             }
         }
         .padding(.vertical)
         .frame(maxWidth: .infinity)
-        .font(.title3)
+        .font(.title2)
         .fontWeight(.bold)
         .foregroundStyle(.gray)
         .backgroundCard(colorScheme: colorScheme)
@@ -72,21 +66,32 @@ struct JarSummaryView: View {
     private func countBabies(of sex: Sex) -> Int {
         let calendar = Calendar.current
         let now = Date()
-
-        // Define the start as “7 days (6 full days) before now”
-        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: now) else {
-            return 0
-        }
-
-        // Filter deliveries for the last 7 days (from sevenDaysAgo up to now)
+        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: now) else { return 0 }
+        
         let last7DaysDeliveries = deliveries.filter { delivery in
             delivery.date >= sevenDaysAgo && delivery.date <= now
         }
-
-        // Count babies of the specified sex
+        
         return last7DaysDeliveries.reduce(0) { count, delivery in
             count + delivery.babies.filter { $0.sex == sex }.count
         }
+    }
+}
+
+// MARK: - Scalable Text Component
+struct ScalableText: View {
+    let text: String
+    let minWidth: CGFloat
+    let maxSize: CGFloat = 24 // ✅ Set a maximum font size to prevent excessive growth
+
+    var body: some View {
+        GeometryReader { geometry in
+            Text(text)
+                .font(.system(size: min(geometry.size.width * 0.5, maxSize))) // ✅ Dynamically adjust font size based on width
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .scaledToFit() // ✅ Ensures text shrinks within the frame
+        }
+        .frame(width: minWidth, height: 25) // Fixed height to avoid line wrapping
     }
 }
 

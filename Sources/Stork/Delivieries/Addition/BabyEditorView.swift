@@ -171,9 +171,18 @@ struct BabyEditorView: View {
     
     private func adjustWeight(_ delta: Double) {
         triggerHaptic()
-        let newWeight = useMetric ? weightInKg + delta : weightInOunces + (delta * 16)
-        if weightRangeImperial.contains(newWeight * (useMetric ? 1.0 / ounceToKg : 1.0)) {
-            weightInOunces = newWeight * (useMetric ? 1.0 / ounceToKg : 1.0)
+        
+        if useMetric {
+            let newWeightKg = weightInKg + delta
+            let newWeightOunces = newWeightKg / ounceToKg
+            if weightRangeImperial.contains(newWeightOunces) {
+                weightInOunces = newWeightOunces
+            }
+        } else {
+            let newWeightOunces = weightInOunces + delta // ✅ Change `delta * 16` to just `delta`
+            if weightRangeImperial.contains(newWeightOunces) {
+                weightInOunces = newWeightOunces
+            }
         }
     }
 

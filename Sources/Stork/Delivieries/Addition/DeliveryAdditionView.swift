@@ -29,12 +29,13 @@ struct DeliveryAdditionView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     // MARK: - Baby Editor Views with Enhanced Transitions
-                    ForEach(deliveryViewModel.newDelivery.babies, id: \.id) { baby in
-                        let babyBinding = binding(for: baby)
-
+                    ForEach($deliveryViewModel.newDelivery.babies) { $baby in
+                        let babyIndex = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0
+                        let babyNumber = babyIndex + 1
+                        
                         BabyEditorView(
-                            baby: babyBinding,
-                            babyNumber: (deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0) + 1,
+                            baby: $baby,
+                            babyNumber: babyNumber,
                             removeBaby: { babyId in
                                 withAnimation(.spring()) {
                                     deliveryViewModel.newDelivery.babies.removeAll { $0.id == babyId }
@@ -136,7 +137,6 @@ struct DeliveryAdditionView: View {
                             onTapAction: {
                                 Task {
                                     await submitDelivery()
-                                    
                                     deliveryViewModel.startNewDelivery()
                                 }
                             }
@@ -222,15 +222,7 @@ struct DeliveryAdditionView: View {
         
         showingDeliveryAddition = false
     }
-    
-    private func binding(for baby: Baby) -> Binding<Baby> {
-        guard let index = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) else {
-            return .constant(baby)
-        }
-        return $deliveryViewModel.newDelivery.babies[index]
-    }
 }
-
 
 #Preview {
     DeliveryAdditionView(showingDeliveryAddition: .constant(true))
