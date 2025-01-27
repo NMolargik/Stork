@@ -27,12 +27,12 @@ struct DeliveryAdditionView: View {
     // MARK: - Date Selection State
     @State private var selectedDate: Date
     @State private var selectedTime: Date
+    @State private var showingDatePicker = false
 
     private let calendar = Calendar.current
 
     init(showingDeliveryAddition: Binding<Bool>) {
         self._showingDeliveryAddition = showingDeliveryAddition
-
         let now = Date()
         self._selectedDate = State(initialValue: now)
         self._selectedTime = State(initialValue: now)
@@ -40,47 +40,70 @@ struct DeliveryAdditionView: View {
 
     var body: some View {
         VStack {
-            // MARK: - Date & Time Selection
-            HStack {
-                Text("Select Delivery Time")
-                    .foregroundStyle(.gray)
-                    .font(.footnote)
-                
-                Spacer()
-            }
-            .padding(.leading)
-            
-            HStack {
-                // Horizontal ScrollView for Date Selection (Last 5 Days)
-                HStack(spacing: 7) {
-                    ForEach(0..<5, id: \.self) { offset in
-                        let date = calendar.date(byAdding: .day, value: -offset, to: Date())!
-                        let isSelected = calendar.isDate(selectedDate, inSameDayAs: date)
-
-                        Text("\(calendar.component(.day, from: date))")
-                            .fontWeight(.bold)
-                            .frame(width: 40, height: 35)
-                            .background(RoundedRectangle(cornerRadius: 10)
-                                .fill(isSelected ? Color.red : Color.gray.opacity(0.3)))
-                            .foregroundColor(isSelected ? .white : .black)
-                            .onTapGesture {
-                                triggerHaptic()
-                                selectedDate = date
-                                updateDeliveryDate()
-                            }
-                    }
-                }
-                .padding(.horizontal, 10)
-
-                // Native Time Picker (Limited to Past)
-                DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
-                    .labelsHidden()
-                    .onChange(of: selectedTime) { _ in updateDeliveryDate() }
-            }
-            .padding()
-
             ScrollView {
                 VStack(spacing: 20) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Select Delivery Date & Time")
+                            .foregroundStyle(.gray)
+                            .font(.footnote)
+                            .padding(.leading)
+                        
+                        HStack {
+                            Spacer()
+                            
+                            // Date Selection Button (Expands Picker)
+                            Button(action: {
+                                triggerHaptic()
+                                withAnimation {
+                                    showingDatePicker = !showingDatePicker
+                                }
+                            }) {
+                                HStack {
+                                    Image(systemName: "calendar")
+                                    Text("\(formattedDate(selectedDate))")
+                                        .foregroundStyle(Color("storkIndigo"))
+                                        .padding(.trailing)
+                                }
+                                
+                                // Native Time Picker (Limited to Past)
+                                DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                                    .labelsHidden()
+                                    .onChange(of: selectedTime) { _ in updateDeliveryDate() }
+                            }
+                            .padding(.horizontal)
+                            
+                            Spacer()
+                        }
+                            
+                        // Inline Date Picker (Expands & Collapses)
+                        if showingDatePicker {
+                            VStack {
+                                DatePicker("Select Date", selection: $selectedDate, displayedComponents: [.date])
+                                    .onChange(of: selectedDate) { _ in updateDeliveryDate() } // ✅ Ensure date updates properly
+                                    .tint(Color("storkIndigo"))
+        #if !SKIP
+                                    .datePickerStyle(.wheel)
+        #endif
+                                    .labelsHidden()
+                                    .environment(\.locale, Locale(identifier: "en_US"))
+                                    .padding(.top, -15)
+                                
+                                // Done Button to Collapse Picker
+                                Button("Done") {
+                                    withAnimation {
+                                        showingDatePicker = false
+                                    }
+                                }
+                                .padding(.bottom)
+                            }
+                            .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.2)))
+                            .transition(.opacity.combined(with: .scale)) // Smooth expand/collapse animation
+                            .padding(.horizontal, 5)
+                        }
+                    }
+                    .padding(5)
+                    .backgroundCard(colorScheme: colorScheme)
+                    
                     // MARK: - Baby Editor Views with Enhanced Transitions
                     ForEach($deliveryViewModel.newDelivery.babies) { $baby in
                         let babyIndex = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0
@@ -99,13 +122,12 @@ struct DeliveryAdditionView: View {
                         .transition(.scale.combined(with: .opacity))
                     }
 
-                    // MARK: - Add A Baby Button Positioned Below ScrollView
+                    // MARK: - Add A Baby Button
                     CustomButtonView(
                         text: "Add A Baby",
                         width: 250,
                         height: 50,
                         color: Color("storkIndigo"),
-                        icon: nil,
                         isEnabled: true,
                         onTapAction: {
                             withAnimation(.spring()) {
@@ -123,15 +145,6 @@ struct DeliveryAdditionView: View {
                         .fontWeight(.bold)
                         .backgroundCard(colorScheme: colorScheme)
                         .tint(.green)
-
-                    // MARK: - Add To Muster Toggle (Conditional)
-                    if !profileViewModel.profile.musterId.isEmpty {
-                        Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
-                            .padding()
-                            .fontWeight(.bold)
-                            .backgroundCard(colorScheme: colorScheme)
-                            .tint(.green)
-                    }
 
                     // MARK: - Delivery Method Picker
                     VStack(alignment: .leading, spacing: 10) {
@@ -178,7 +191,7 @@ struct DeliveryAdditionView: View {
 
                     Spacer(minLength: 10)
 
-                    // MARK: - Submit Delivery Button or ProgressView
+                    // MARK: - Submit Delivery Button
                     if deliveryViewModel.isWorking {
                         ProgressView()
                             .frame(height: 50)
@@ -201,6 +214,10 @@ struct DeliveryAdditionView: View {
                 .padding()
             }
         }
+        .onAppear {
+            initializeHospital()
+            deliveryViewModel.addBaby()
+        }
         .sheet(isPresented: $deliveryViewModel.isSelectingHospital) {
             HospitalListView(
                 selectionMode: true,
@@ -216,69 +233,15 @@ struct DeliveryAdditionView: View {
             .environmentObject(hospitalViewModel)
             .environmentObject(profileViewModel)
         }
-        .onAppear { initializeHospital() }
         .onChange(of: deliveryViewModel.newDelivery.babies) { _ in
             deliveryViewModel.additionPropertiesChanged()
         }
         .onChange(of: deliveryViewModel.selectedHospital) { _ in
             deliveryViewModel.additionPropertiesChanged()
         }
-        .onChange(of: deliveryViewModel.isSelectingHospital) { isSelecting in
-            if isSelecting {
-                Task {
-                    await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
-                    if let selectedHospital = hospitalViewModel.primaryHospital {
-                        deliveryViewModel.selectedHospital = selectedHospital
-                        print("🏥 Hospital updated: \(selectedHospital.facility_name)")
-                    } else {
-                        print("❌ No hospital selected")
-                    }
-                }
-            }
-        }    }
+    }
 
     // MARK: - Helper Functions
-
-    private func updateDeliveryDate() {
-        var dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: selectedTime)
-
-        // Manually set hour and minute to the selected time
-        dateComponents.hour = timeComponents.hour
-        dateComponents.minute = timeComponents.minute
-        dateComponents.second = 0 // Ensure consistency
-
-        // Create the final date
-        if let combinedDateTime = calendar.date(from: dateComponents) {
-            deliveryViewModel.newDelivery.date = combinedDateTime
-            print("📅 Updated Delivery Date: \(combinedDateTime) → Epoch: \(combinedDateTime.timeIntervalSince1970)")
-        } else {
-            print("❌ Failed to create a valid delivery date")
-        }
-    }
-    
-    /// Initializes the selected hospital when the view appears.
-    private func initializeHospital() {
-        Task {
-            if hospitalViewModel.primaryHospital == nil {
-                await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
-            }
-            
-            deliveryViewModel.selectedHospital = hospitalViewModel.primaryHospital
-        }
-    }
-    
-    /// Updates the selected hospital when the user changes the selection.
-    private func updateHospitalSelection() {
-        if let selectedHospital = hospitalViewModel.primaryHospital {
-            deliveryViewModel.selectedHospital = selectedHospital
-            print("🏥 Hospital updated: \(selectedHospital.facility_name)")
-        } else {
-            print("❌ No hospital selected")
-        }
-    }
-    
-    // MARK: - Submit Delivery Function
     
     @MainActor
     private func submitDelivery() async {
@@ -305,13 +268,35 @@ struct DeliveryAdditionView: View {
         
         showingDeliveryAddition = false
     }
-}
 
-#Preview {
-    DeliveryAdditionView(showingDeliveryAddition: .constant(true))
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
-        .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
-        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-        .environmentObject(DailyResetManager())
+    private func updateDeliveryDate() {
+        var dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: selectedTime)
+
+        dateComponents.hour = timeComponents.hour
+        dateComponents.minute = timeComponents.minute
+        dateComponents.second = 0
+
+        if let combinedDateTime = calendar.date(from: dateComponents) {
+            deliveryViewModel.newDelivery.date = combinedDateTime
+            print("📅 Updated Delivery Date: \(combinedDateTime) → Epoch: \(combinedDateTime.timeIntervalSince1970)")
+        } else {
+            print("❌ Failed to create a valid delivery date")
+        }
+    }
+
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
+
+    private func initializeHospital() {
+        Task {
+            if hospitalViewModel.primaryHospital == nil {
+                await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
+            }
+            deliveryViewModel.selectedHospital = hospitalViewModel.primaryHospital
+        }
+    }
 }

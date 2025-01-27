@@ -112,9 +112,6 @@
     "Add deliveries simply by adding babies and filling out a few additional options.\n\nYour deliveries are all backed up and detailed history is available." : {
 
     },
-    "Add To Muster" : {
-
-    },
     "Added to your muster" : {
 
     },
@@ -656,7 +653,10 @@
     "Select Birthday" : {
 
     },
-    "Select Delivery Time" : {
+    "Select Date" : {
+
+    },
+    "Select Delivery Date & Time" : {
 
     },
     "Select Your Birthday" : {
