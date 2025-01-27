@@ -24,15 +24,68 @@ struct DeliveryAdditionView: View {
     // MARK: - Binding
     @Binding var showingDeliveryAddition: Bool
 
+    // MARK: - Date Selection State
+    @State private var selectedDate: Date
+    @State private var selectedTime: Date
+
+    private let calendar = Calendar.current
+
+    init(showingDeliveryAddition: Binding<Bool>) {
+        self._showingDeliveryAddition = showingDeliveryAddition
+
+        let now = Date()
+        self._selectedDate = State(initialValue: now)
+        self._selectedTime = State(initialValue: now)
+    }
+
     var body: some View {
         VStack {
+            // MARK: - Date & Time Selection
+            HStack {
+                Text("Select Delivery Time")
+                    .foregroundStyle(.gray)
+                    .font(.footnote)
+                
+                Spacer()
+            }
+            .padding(.leading)
+            
+            HStack {
+                // Horizontal ScrollView for Date Selection (Last 5 Days)
+                HStack(spacing: 7) {
+                    ForEach(0..<5, id: \.self) { offset in
+                        let date = calendar.date(byAdding: .day, value: -offset, to: Date())!
+                        let isSelected = calendar.isDate(selectedDate, inSameDayAs: date)
+
+                        Text("\(calendar.component(.day, from: date))")
+                            .fontWeight(.bold)
+                            .frame(width: 40, height: 35)
+                            .background(RoundedRectangle(cornerRadius: 10)
+                                .fill(isSelected ? Color.red : Color.gray.opacity(0.3)))
+                            .foregroundColor(isSelected ? .white : .black)
+                            .onTapGesture {
+                                triggerHaptic()
+                                selectedDate = date
+                                updateDeliveryDate()
+                            }
+                    }
+                }
+                .padding(.horizontal, 10)
+
+                // Native Time Picker (Limited to Past)
+                DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                    .labelsHidden()
+                    .onChange(of: selectedTime) { _ in updateDeliveryDate() }
+            }
+            .padding()
+
             ScrollView {
                 VStack(spacing: 20) {
                     // MARK: - Baby Editor Views with Enhanced Transitions
                     ForEach($deliveryViewModel.newDelivery.babies) { $baby in
                         let babyIndex = deliveryViewModel.newDelivery.babies.firstIndex(where: { $0.id == baby.id }) ?? 0
                         let babyNumber = babyIndex + 1
-                        
+
                         BabyEditorView(
                             baby: $baby,
                             babyNumber: babyNumber,
@@ -45,7 +98,7 @@ struct DeliveryAdditionView: View {
                         .id(baby.id)
                         .transition(.scale.combined(with: .opacity))
                     }
-                    
+
                     // MARK: - Add A Baby Button Positioned Below ScrollView
                     CustomButtonView(
                         text: "Add A Baby",
@@ -61,16 +114,16 @@ struct DeliveryAdditionView: View {
                         }
                     )
                     .padding(.bottom)
-                    
+
                     Divider()
-                    
+
                     // MARK: - Epidural Used Toggle
                     Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
                         .padding()
                         .fontWeight(.bold)
                         .backgroundCard(colorScheme: colorScheme)
                         .tint(.green)
-                    
+
                     // MARK: - Add To Muster Toggle (Conditional)
                     if !profileViewModel.profile.musterId.isEmpty {
                         Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
@@ -79,12 +132,12 @@ struct DeliveryAdditionView: View {
                             .backgroundCard(colorScheme: colorScheme)
                             .tint(.green)
                     }
-                    
+
                     // MARK: - Delivery Method Picker
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Delivery Method")
                             .font(.headline)
-                        
+
                         Picker("Delivery Method", selection: $deliveryViewModel.newDelivery.deliveryMethod) {
                             ForEach(DeliveryMethod.allCases, id: \.self) { method in
                                 Text(method.description).tag(method)
@@ -98,13 +151,13 @@ struct DeliveryAdditionView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .backgroundCard(colorScheme: colorScheme)
-                    
+
                     // MARK: - Select Hospital Section
                     VStack(alignment: .center, spacing: 10) {
                         Text(deliveryViewModel.selectedHospital?.facility_name ?? "No Hospital Selected")
                             .font(.headline)
                             .multilineTextAlignment(.center)
-                        
+
                         CustomButtonView(
                             text: "Change Hospital",
                             width: 250,
@@ -113,16 +166,18 @@ struct DeliveryAdditionView: View {
                             icon: Image("building.fill"),
                             isEnabled: true,
                             onTapAction: {
-                                deliveryViewModel.isSelectingHospital = true
+                                withAnimation {
+                                    deliveryViewModel.isSelectingHospital = !deliveryViewModel.isSelectingHospital
+                                }
                             }
                         )
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
                     .backgroundCard(colorScheme: colorScheme)
-                    
+
                     Spacer(minLength: 10)
-                    
+
                     // MARK: - Submit Delivery Button or ProgressView
                     if deliveryViewModel.isWorking {
                         ProgressView()
@@ -146,19 +201,6 @@ struct DeliveryAdditionView: View {
                 .padding()
             }
         }
-        .onAppear {
-            withAnimation(.spring()) {
-                if deliveryViewModel.newDelivery.babies.isEmpty {
-                    deliveryViewModel.addBaby()
-                }
-                
-                if !profileViewModel.profile.musterId.isEmpty {
-                    deliveryViewModel.addToMuster = true
-                }
-                
-                initializeHospital()
-            }
-        }
         .sheet(isPresented: $deliveryViewModel.isSelectingHospital) {
             HospitalListView(
                 selectionMode: true,
@@ -174,15 +216,46 @@ struct DeliveryAdditionView: View {
             .environmentObject(hospitalViewModel)
             .environmentObject(profileViewModel)
         }
+        .onAppear { initializeHospital() }
         .onChange(of: deliveryViewModel.newDelivery.babies) { _ in
             deliveryViewModel.additionPropertiesChanged()
         }
         .onChange(of: deliveryViewModel.selectedHospital) { _ in
             deliveryViewModel.additionPropertiesChanged()
         }
-    }
-    
+        .onChange(of: deliveryViewModel.isSelectingHospital) { isSelecting in
+            if isSelecting {
+                Task {
+                    await hospitalViewModel.getUserPrimaryHospital(profile: profileViewModel.profile)
+                    if let selectedHospital = hospitalViewModel.primaryHospital {
+                        deliveryViewModel.selectedHospital = selectedHospital
+                        print("🏥 Hospital updated: \(selectedHospital.facility_name)")
+                    } else {
+                        print("❌ No hospital selected")
+                    }
+                }
+            }
+        }    }
+
     // MARK: - Helper Functions
+
+    private func updateDeliveryDate() {
+        var dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: selectedTime)
+
+        // Manually set hour and minute to the selected time
+        dateComponents.hour = timeComponents.hour
+        dateComponents.minute = timeComponents.minute
+        dateComponents.second = 0 // Ensure consistency
+
+        // Create the final date
+        if let combinedDateTime = calendar.date(from: dateComponents) {
+            deliveryViewModel.newDelivery.date = combinedDateTime
+            print("📅 Updated Delivery Date: \(combinedDateTime) → Epoch: \(combinedDateTime.timeIntervalSince1970)")
+        } else {
+            print("❌ Failed to create a valid delivery date")
+        }
+    }
     
     /// Initializes the selected hospital when the view appears.
     private func initializeHospital() {
@@ -192,6 +265,16 @@ struct DeliveryAdditionView: View {
             }
             
             deliveryViewModel.selectedHospital = hospitalViewModel.primaryHospital
+        }
+    }
+    
+    /// Updates the selected hospital when the user changes the selection.
+    private func updateHospitalSelection() {
+        if let selectedHospital = hospitalViewModel.primaryHospital {
+            deliveryViewModel.selectedHospital = selectedHospital
+            print("🏥 Hospital updated: \(selectedHospital.facility_name)")
+        } else {
+            print("❌ No hospital selected")
         }
     }
     

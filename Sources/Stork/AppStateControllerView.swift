@@ -268,7 +268,7 @@ public struct AppStateControllerView: View {
             throw error
         }
         
-        musterViewModel.isWorking = true
+        musterViewModel.isWorking = false
     }
     
     // MARK: - Purchases / RevenueCat
