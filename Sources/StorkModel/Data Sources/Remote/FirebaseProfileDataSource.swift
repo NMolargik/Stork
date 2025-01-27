@@ -9,12 +9,10 @@ import Foundation
 import UIKit
 
 #if !SKIP
-import FirebaseStorage
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
 #else
-import SkipFirebaseStorage
 import SkipFirebaseCore
 import SkipFirebaseFirestore
 import SkipFirebaseAuth
@@ -31,16 +29,12 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// The Firebase Auth instance
     private let auth: Auth
     
-    /// The Firebase Storage instance
-    private let storage: Storage
-    
     // MARK: - Initialization
     
     /// Initializes the FirebaseProfileDataSource with Firestore, Auth, and Storage instances.
     public init() {
         self.db = Firestore.firestore()
         self.auth = Auth.auth()
-        self.storage = Storage.storage()
     }
     
     // MARK: - Create a New Profile
