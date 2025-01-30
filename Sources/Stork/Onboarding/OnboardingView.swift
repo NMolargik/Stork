@@ -15,6 +15,8 @@ struct OnboardingView: View {
     @AppStorage("loggedIn") private var loggedIn: Bool = false
     
     @State private var currentPage: Int = 0
+    @State private var isTransitioning: Bool = false // NEW: Track transition state
+    
     var onComplete: () -> Void
 
     private let totalPages = 3
@@ -36,7 +38,8 @@ struct OnboardingView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .padding()
-            
+            .opacity(isTransitioning ? 0.0 : 1.0)
+
             HStack {
                 CustomButtonView(
                     text: "Skip Onboarding",
@@ -48,7 +51,7 @@ struct OnboardingView: View {
                 Spacer()
 
                 CustomButtonView(
-                    text: isLastPage ? "Done" : "Next",
+                    text: isLastPage ? "Enter Stork" : "Next",
                     width: 110, height: 50,
                     color: Color("storkIndigo"), isEnabled: true,
                     onTapAction: nextPage
@@ -56,6 +59,7 @@ struct OnboardingView: View {
             }
             .padding([.horizontal, .bottom])
         }
+        .animation(.easeInOut(duration: 0.5), value: isTransitioning) // NEW: Smooth animation
     }
 
     private func nextPage() {
@@ -70,10 +74,15 @@ struct OnboardingView: View {
 
     private func finishOnboarding() {
         withAnimation {
-            isOnboardingComplete = true
-            selectedTab = .home
-            appState = Store.shared.subscriptionActive ? .main : .paywall
-            onComplete()
+            isTransitioning = true // Start fade out
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // Wait for animation
+            withAnimation {
+                isOnboardingComplete = true
+                selectedTab = .home
+                appState = Store.shared.subscriptionActive ? .main : .paywall
+                onComplete()
+            }
         }
     }
 }

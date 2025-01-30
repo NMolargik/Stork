@@ -24,7 +24,6 @@ struct OnboardingPageTwoView: View {
             
             Text("Add deliveries simply by adding babies and filling out a few additional options.\n\nYour deliveries are all backed up and detailed history is available.")
                 .padding()
-                .fontWeight(.semibold)
         }
     }
 }

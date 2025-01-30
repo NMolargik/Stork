@@ -24,7 +24,6 @@ struct OnboardingPageThreeView: View {
             
             Text("Create or join a muster to share delivery statistics and trends with a whole group of your peers. Good luck filling this jar every week!")
                 .padding()
-                .fontWeight(.semibold)
         }
     }
 }

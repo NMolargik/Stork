@@ -32,6 +32,7 @@ struct DeliveryAdditionSheet: View {
                     }
                 }
         }
+        .animation(.easeInOut, value: showingDeliveryAddition)
         .interactiveDismissDisabled()
     }
 }

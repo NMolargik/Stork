@@ -5,7 +5,6 @@ import skip.model.*
 import skip.foundation.*
 import skip.ui.*
 import skip.firebase.core.FirebaseApp
-import skip.firebase.messaging.Messaging
 
 import android.app.Application
 import androidx.activity.enableEdgeToEdge
@@ -68,9 +67,6 @@ open class MainActivity: AppCompatActivity {
         //let requestTag = 1
         //ActivityCompat.requestPermissions(self, permissions.toTypedArray(), requestTag)
         
-        Messaging.messaging().onActivityCreated(this)
-        // Ask for permissions at a time appropriate for your app
-        // notificationsDelegate.requestPermission()
     }
 
     override fun onSaveInstanceState(bundle: android.os.Bundle): Unit = super.onSaveInstanceState(bundle)

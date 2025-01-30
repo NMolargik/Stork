@@ -29,7 +29,6 @@ struct OnboardingPageOneView: View {
 
             Text("Stork allows users to track trends in labor and delivery. This includes sex, weight, monthly totals, and more!\n\nYour delivery jar will fill up with colored marbles that each represent a baby delivered in the last week.")
                 .padding()
-                .fontWeight(.semibold)
         }
     }
 }

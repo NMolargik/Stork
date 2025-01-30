@@ -34,6 +34,7 @@ struct MusterInvitationsView: View {
                         Image("exclamationmark.magnifyingglass")
                             .resizable()
                             .scaledToFit()
+                            .foregroundStyle(.orange)
                             .frame(width: 50, height: 50)
                             .padding()
                         

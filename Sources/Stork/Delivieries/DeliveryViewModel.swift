@@ -333,6 +333,8 @@ class DeliveryViewModel: ObservableObject {
             sex: .male
         )
         newDelivery.babies.append(newBaby)
+        objectWillChange.send() // Ensure UI updates
+
     }
 
     // MARK: - UI State Management

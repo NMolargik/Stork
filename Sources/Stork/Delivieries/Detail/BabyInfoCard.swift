@@ -58,19 +58,13 @@ struct BabyInfoCard: View {
                     }
                     
                     if baby.nicuStay {
-                        Text("NICU")
+                        Text("NICU Stay")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(.black)
                             .lineLimit(1)
                             .accessibilityLabel("NICU")
                             .padding(5)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(.white)
-                                    .cornerRadius(20)
-                                    .shadow(radius: 2)
-                            }
                     }
                     
                     Spacer()

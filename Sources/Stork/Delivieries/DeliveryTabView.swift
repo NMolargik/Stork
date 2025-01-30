@@ -67,7 +67,7 @@ struct DeliveryTabView: View {
                 }
                 .sheet(isPresented: $showingDeliveryAddition) {
                     DeliveryAdditionSheet(showingDeliveryAddition: $showingDeliveryAddition)
-                }
+            }
         }
     }
 

@@ -20,6 +20,7 @@ struct MusterSplashView: View {
             HStack {
                 Image("person.3")
                     .resizable()
+                    .foregroundStyle(Color("storkIndigo"))
                     .scaledToFit()
                     .frame(width: 60, height: 60)
                     .navigationTitle("Join A Muster")
