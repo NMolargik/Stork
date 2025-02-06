@@ -388,10 +388,24 @@ class DeliveryViewModel: ObservableObject {
 
     // MARK: - Delivery Lookup
     func findDelivery(by id: String) -> Binding<Delivery>? {
-        guard let index = deliveries.firstIndex(where: { $0.id == id }) else { return nil }
-        return Binding(
-            get: { self.deliveries[index] },
-            set: { self.deliveries[index] = $0 }
+        // Check that a delivery with this id exists at the moment.
+        guard deliveries.contains(where: { $0.id == id }) else { return nil }
+        
+        return Binding<Delivery>(
+            get: { [weak self] in
+                guard let self = self,
+                      let index = self.deliveries.firstIndex(where: { $0.id == id }) else {
+                    fatalError("Delivery not found when getting binding for id \(id)")
+                }
+                return self.deliveries[index]
+            },
+            set: { [weak self] newDelivery in
+                guard let self = self,
+                      let index = self.deliveries.firstIndex(where: { $0.id == id }) else {
+                    return
+                }
+                self.deliveries[index] = newDelivery
+            }
         )
     }
 }
