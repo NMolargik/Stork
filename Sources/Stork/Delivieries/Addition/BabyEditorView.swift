@@ -88,7 +88,9 @@ struct BabyEditorView: View {
             if babyNumber > 1 && !sampleMode {
                 Button {
                     triggerHaptic()
-                    withAnimation { removeBaby(baby.id) }
+                    withAnimation {
+                        removeBaby(baby.id)
+                    }
                 } label: {
                     Image("minus")
                         .resizable()
@@ -143,33 +145,11 @@ struct BabyEditorView: View {
     }
     
     private var nurseCatchToggle: some View {
-        Toggle("Nurse Catch", isOn: $baby.nurseCatch)
-            .fontWeight(.bold)
-            .foregroundStyle(.black)
-            .tint(.green)
-            .padding()
-            .background(
-                Rectangle()
-                    .foregroundStyle(Color.white.opacity(0.8))
-                    .overlay(baby.nurseCatch ? Color.green.opacity(0.2) : Color.clear)
-                    .animation(.easeInOut(duration: 0.3), value: baby.nurseCatch)
-                    .cornerRadius(20)
-            )
+        CustomToggle(isOn: $baby.nurseCatch, title: "Nurse Catch")
     }
 
     private var nicuToggle: some View {
-        Toggle("NICU", isOn: $baby.nicuStay)
-            .fontWeight(.bold)
-            .foregroundStyle(.black)
-            .tint(.green)
-            .padding()
-            .background(
-                Rectangle()
-                    .foregroundStyle(Color.white.opacity(0.8))
-                    .overlay(baby.nicuStay ? Color.green.opacity(0.2) : Color.clear)
-                    .animation(.easeInOut(duration: 0.3), value: baby.nicuStay)
-                    .cornerRadius(20)
-            )
+        CustomToggle(isOn: $baby.nicuStay, title: "NICU")
     }
 
     // MARK: - Helper Functions
@@ -262,4 +242,47 @@ struct BabyEditorView: View {
         sampleMode: true
     )
     .padding()
+}
+
+import SwiftUI
+
+/// A custom toggle view that displays a title and a sliding circle indicator.
+struct CustomToggle: View {
+    @Binding var isOn: Bool
+    var title: String
+    var onColor: Color = .green
+    var offColor: Color = Color.gray.opacity(0.2)
+    var textColor: Color = .black
+
+    var body: some View {
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isOn = !isOn
+                triggerHaptic()
+            }
+        }) {
+            HStack {
+                Text(title)
+                    .foregroundColor(textColor)
+                    .fontWeight(.bold)
+                Spacer()
+                ZStack(alignment: isOn ? .trailing : .leading) {
+                    // Background for the toggle "track"
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(isOn ? onColor : offColor)
+                        .frame(width: 50, height: 30)
+                    // The sliding "thumb"
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 26, height: 26)
+                        .padding(2)
+                }
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.white.opacity(0.8))
+            )
+        }
+    }
 }

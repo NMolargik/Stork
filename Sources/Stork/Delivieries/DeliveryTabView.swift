@@ -16,6 +16,7 @@ struct DeliveryTabView: View {
     // MARK: - Environment Objects
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     @EnvironmentObject var profileViewModel: ProfileViewModel
+    @EnvironmentObject var dailyResetManager: DailyResetManager
 
     // MARK: - Binding
     @Binding var showingDeliveryAddition: Bool
@@ -39,14 +40,20 @@ struct DeliveryTabView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: {
-                            withAnimation {
-                                triggerHaptic()
-                                showingDeliveryAddition = true
+                        if (dailyResetManager.canSubmitDelivery()) {
+                            Button(action: {
+                                withAnimation {
+                                    triggerHaptic()
+                                    showingDeliveryAddition = true
+                                }
+                            }) {
+                                Text("New Delivery")
+                                    .foregroundStyle(Color("storkOrange"))
+                                    .fontWeight(.bold)
                             }
-                        }) {
-                            Text("New Delivery")
-                                .foregroundStyle(Color("storkOrange"))
+                        } else {
+                            Text("Daily Limit Reached")
+                                .foregroundStyle(Color.red)
                                 .fontWeight(.bold)
                         }
                     }
@@ -112,4 +119,5 @@ struct DeliveryTabView: View {
     DeliveryTabView(showingDeliveryAddition: .constant(false))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+        .environmentObject(DailyResetManager())
 }

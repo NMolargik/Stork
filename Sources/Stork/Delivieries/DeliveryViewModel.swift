@@ -58,7 +58,7 @@ class DeliveryViewModel: ObservableObject {
     // MARK: - Submit Delivery
     func submitDelivery(profile: Profile, dailyResetManager: DailyResetManager) async throws {
         guard dailyResetManager.canSubmitDelivery() else {
-            throw DeliveryError.creationFailed("You have reached the daily limit of \(dailyLimit) deliveries.")
+            throw DeliveryError.limitReached("You have reached the daily limit of \(dailyLimit) deliveries.")
         }
         guard selectedHospital != nil else {
             throw DeliveryError.creationFailed("No hospital selected.")

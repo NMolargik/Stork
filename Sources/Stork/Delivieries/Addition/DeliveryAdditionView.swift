@@ -263,6 +263,7 @@ struct DeliveryAdditionView: View {
             try await deliveryViewModel.submitDelivery(profile: profileViewModel.profile, dailyResetManager: dailyResetManager)
         } catch {
             errorMessage = error.localizedDescription
+            showingDeliveryAddition = false
             return
         }
         
