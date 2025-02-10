@@ -17,7 +17,6 @@ struct HomeTabView: View {
     @Binding var selectedTab: Tab
     @Binding var showingDeliveryAddition: Bool
     
-    @State private var showProfileView: Bool = false
     @State private var graphTabIndex: Int = 0
     @State private var currentDate = Date()
     
@@ -29,18 +28,7 @@ struct HomeTabView: View {
                         .font(.largeTitle).fontWeight(.bold)
                         .padding(.trailing, 5)
 
-                    
                     Spacer()
-                    
-                    Button {
-                        triggerHaptic()
-                        withAnimation { showProfileView = true }
-                    } label: {
-                        InitialsAvatarView(
-                            firstName: profileViewModel.profile.firstName,
-                            lastName: profileViewModel.profile.lastName
-                        )
-                    }
                     
                 }
                 
@@ -63,11 +51,6 @@ struct HomeTabView: View {
             }
             .padding()
         }
-        .sheet(isPresented: $showProfileView, content: {
-            ProfileView()
-                .interactiveDismissDisabled()
-                .presentationDetents(profileViewModel.editingProfile ? [.fraction(0.75)] : [.fraction(0.3)])
-        })
     }
     
     private var formattedDate: String {
@@ -114,7 +97,7 @@ private extension HomeTabView {
             }
             .padding(.leading, 8)
         }
-        .frame(height: 320)
+        .frame(height: 300)
     }
 }
 

@@ -23,6 +23,7 @@ struct SettingsTabView: View {
     @State private var showingDeleteConfirmation = false
     @State private var deleteConfirmationStep = 1
     @State private var passwordString: String = ""
+    @State private var showingProfileEditor: Bool = false
 
     private var appInfo: (name: String, version: String) {
         let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ??
@@ -38,6 +39,7 @@ struct SettingsTabView: View {
                 ProfileManagementView(
                     isOnboardingComplete: $isOnboardingComplete,
                     appState: $appState,
+                    showingProfileEditor: $showingProfileEditor,
                     showingDeleteConfirmation: $showingDeleteConfirmation
                 )
 
@@ -55,6 +57,11 @@ struct SettingsTabView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingProfileEditor, content: {
+                ProfileView()
+                    .interactiveDismissDisabled()
+                    .presentationDetents([.fraction(0.75)])
+            })
             .sheet(isPresented: $showingDeleteConfirmation) {
                 DeleteConfirmationView(
                     step: $deleteConfirmationStep,

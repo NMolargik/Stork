@@ -14,6 +14,7 @@ struct RegisterView: View {
     @AppStorage("errorMessage") var errorMessage: String = ""
     @AppStorage("appState") var appState: AppState = .register
     
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
     @Binding var showRegistration: Bool
@@ -40,6 +41,7 @@ struct RegisterView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .padding(.top, -5)
+                                .padding(.leading)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
@@ -49,6 +51,7 @@ struct RegisterView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .padding(.top, -5)
+                                .padding(.leading)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.confirmPassword, hintText: "Confirm Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
@@ -58,6 +61,7 @@ struct RegisterView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .padding(.top, -5)
+                                .padding(.leading)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square"), isSecure: false, iconColor: Color.green)
@@ -68,6 +72,7 @@ struct RegisterView: View {
                                 .foregroundColor(.gray)
                                 .bold()
                                 .padding(.top, -5)
+                                .padding(.leading)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square"), isSecure: false, iconColor: Color.green)
@@ -77,26 +82,32 @@ struct RegisterView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .padding(.top, -5)
+                                .padding(.leading)
                         }
                         
                         Divider()
                         
-                        Text("Select Your Birthday")
-                        
-                        DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
-                            .tint(Color("storkIndigo"))
-                        #if !SKIP
-                            .datePickerStyle(.wheel)
-                        #endif
-                            .labelsHidden()
-                            .environment(\.locale, Locale(identifier: "en_US"))
-                            .padding(.top, -15)
+                        VStack {
+                            Text("Select Your Birthday")
+                            
+                            DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
+                                .tint(Color("storkIndigo"))
+        #if !SKIP
+                                .datePickerStyle(.wheel)
+        #endif
+                                .labelsHidden()
+                                .environment(\.locale, Locale(identifier: "en_US"))
+                                .padding(.top, -15)
+                            
+                        }
+                        .backgroundCard(colorScheme: colorScheme)
                         
                         if let birthdayError = profileViewModel.birthdayError {
                             Text(birthdayError)
                                 .font(.caption)
                                 .foregroundColor(.gray)
                                 .padding(.top, -5)
+                                .padding(.leading)
                         }
 
                         Divider()

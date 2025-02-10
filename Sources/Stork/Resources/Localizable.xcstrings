@@ -591,6 +591,9 @@
     "Preferences" : {
 
     },
+    "Privacy Policy" : {
+
+    },
     "Profile" : {
 
     },
@@ -760,6 +763,9 @@
           }
         }
       }
+    },
+    "Terms of Service" : {
+
     },
     "This action will permanently delete all your personal information and your deliveries." : {
 

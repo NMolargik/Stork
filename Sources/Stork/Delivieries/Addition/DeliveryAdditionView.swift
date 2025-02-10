@@ -59,7 +59,7 @@ struct DeliveryAdditionView: View {
                                 }
                             }) {
                                 HStack {
-                                    Image(systemName: "calendar")
+                                    Image("calendar")
                                         .foregroundStyle(.red)
                                     
                                     Text("\(formattedDate(selectedDate))")

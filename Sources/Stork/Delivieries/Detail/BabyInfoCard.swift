@@ -15,16 +15,16 @@ struct BabyInfoCard: View {
     let useMetric: Bool
 
     var body: some View {
-        VStack {
-            HStack(spacing: 10) {
-                Image("figure.child")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(baby.sex.color)
-                    .shadow(radius: 1)
-                    .accessibilityHidden(true)
-                
+        HStack(spacing: 10) {
+            Image("figure.child")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
+                .foregroundStyle(baby.sex.color)
+                .shadow(radius: 1)
+                .accessibilityHidden(true)
+            
+            VStack(alignment: .leading) {
                 InfoRowView(
                     icon: Image("scalemass.fill"),
                     text: formattedWeight,
@@ -36,44 +36,27 @@ struct BabyInfoCard: View {
                     text: formattedHeight,
                     iconColor: Color.green
                 )
-
-            }
-
-            if (baby.nurseCatch || baby.nicuStay) {
-                HStack(spacing: 30) {
-                    if baby.nurseCatch {
-                        Text("Nurse Catch")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.black)
-                            .lineLimit(1)
-                            .accessibilityLabel("Nurse Catch")
-                            .padding(5)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(.white)
-                                    .cornerRadius(20)
-                                    .shadow(radius: 2)
-                            }
-                    }
-                    
-                    if baby.nicuStay {
-                        Text("NICU Stay")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.black)
-                            .lineLimit(1)
-                            .accessibilityLabel("NICU")
-                            .padding(5)
-                    }
-                    
-                    Spacer()
+                
+                if baby.nurseCatch {
+                    InfoRowView(
+                        icon: Image("checkmark"),
+                        text: "Nurse Catch",
+                        iconColor: .teal
+                    )
                 }
+                    
+                if baby.nicuStay {
+                    InfoRowView(
+                        icon: Image("checkmark"),
+                        text: "NICU Stay",
+                        iconColor: .red
+                    )
+                }
+
             }
         }
         .padding()
         .backgroundCard(colorScheme: colorScheme)
-        .padding(.horizontal)
     }
 
     // MARK: - Computed Properties for Weight & Height

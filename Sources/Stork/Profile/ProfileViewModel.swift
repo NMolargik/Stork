@@ -165,10 +165,12 @@ public class ProfileViewModel: ObservableObject {
             // Step 1) Sign in with email/password
             let signedInProfile = try await profileRepository.signInWithEmail(profile: profile, password: passwordText)
             self.profile = signedInProfile
+            print("found profile: \(self.profile.id)")
             self.loggedIn = true
             
             // Step 2) Attempt to fetch the user’s full profile (if separate)
             let currentProfile = try await profileRepository.getCurrentProfile()
+            print("gathering full profile: \(self.profile.id)")
             self.profile = currentProfile
             
         } catch {
@@ -219,6 +221,7 @@ public class ProfileViewModel: ObservableObject {
             
         } catch {
             self.errorMessage = "Failed to update profile: \(error.localizedDescription)"
+            print("profile: \(self.profile.id)")
             throw error
         }
     }
@@ -300,7 +303,7 @@ public class ProfileViewModel: ObservableObject {
         confirmPasswordError = (passwordText == confirmPassword) ? nil : "Passwords do not match"
         firstNameError = isNameValid(tempProfile.firstName) ? nil : "First name cannot be empty"
         lastNameError = isNameValid(tempProfile.lastName) ? nil : "Last name cannot be empty"
-        birthdayError = isBirthdayValid(tempProfile.birthday) ? nil : "Must be at least 16 years old"
+        birthdayError = isBirthdayValid(tempProfile.birthday) ? nil : "You must be at least 16 years old to use Stork"
         
         withAnimation {
             isFormValid =

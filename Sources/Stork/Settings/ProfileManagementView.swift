@@ -10,14 +10,33 @@ import SwiftUI
 struct ProfileManagementView: View {
     @Binding var isOnboardingComplete: Bool
     @Binding var appState: AppState
+    @Binding var showingProfileEditor: Bool
     @Binding var showingDeleteConfirmation: Bool
+
 
     var body: some View {
         Section(header: Text("Profile")) {
             HStack {
+                Button(action: {
+                    withAnimation {
+                        showingProfileEditor = true
+                    }
+                }, label: {
+                    Text("Edit Profile")
+                        .foregroundStyle(Color("storkOrange"))
+                })
+                
+                Spacer()
+
+                Image("person.text.rectangle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(Color("storkOrange"))
+            }
+            HStack {
                 Button(action: restartOnboarding) {
                     Text("Restart Onboarding")
-                        .fontWeight(.bold)
                         .foregroundStyle(Color("storkIndigo"))
                 }
 
@@ -36,7 +55,6 @@ struct ProfileManagementView: View {
                     showingDeleteConfirmation = true
                 }) {
                     Text("Delete Profile")
-                        .fontWeight(.bold)
                         .foregroundStyle(.red)
                 }
 
@@ -61,5 +79,5 @@ struct ProfileManagementView: View {
 }
 
 #Preview {
-    ProfileManagementView(isOnboardingComplete: .constant(true), appState: .constant(.main), showingDeleteConfirmation: .constant(false))
+    ProfileManagementView(isOnboardingComplete: .constant(true), appState: .constant(.main), showingProfileEditor: .constant(false), showingDeleteConfirmation: .constant(false))
 }

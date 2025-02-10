@@ -21,7 +21,11 @@ struct DeliveryDetailView: View {
         VStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
-                    DeliveryHeaderView(delivery: delivery)
+                    Text(delivery.date.formatted(date: .omitted, time: .shortened))
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.leading)
+                        .accessibilityLabel("Delivery Date: \(delivery.date.formatted(date: .omitted, time: .shortened))")
 
                     // MARK: - Babies Information
                     ForEach(delivery.babies, id: \.id) { baby in
@@ -29,21 +33,18 @@ struct DeliveryDetailView: View {
                     }
                     
                     DetailsView(delivery: delivery)
+                    
+                    HStack {
+                        Text("ID: \(delivery.id)")
+                            .foregroundStyle(.gray)
+                            .font(.footnote)
+                            .accessibilityLabel("Delivery ID: \(delivery.id)")
+                        
+                        Spacer()
+                    }
                 }
                 .padding([.horizontal, .bottom])
             }
-
-            Spacer()
-
-            // MARK: - Delivery ID
-            HStack {
-                Spacer()
-                Text("ID: \(delivery.id)")
-                    .foregroundStyle(.gray)
-                    .font(.footnote)
-                    .accessibilityLabel("Delivery ID: \(delivery.id)")
-            }
-            .padding([.trailing, .bottom])
         }
         .navigationTitle(delivery.date.formatted(date: .long, time: .omitted))
         .onAppear { triggerHaptic() }

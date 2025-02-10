@@ -18,7 +18,7 @@ struct PaywallMarketingView: View {
                     Image("storkicon")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 300)
+                        .frame(width: 250)
                         .background {
                             Circle()
                                 .foregroundStyle(.black)
@@ -37,8 +37,7 @@ struct PaywallMarketingView: View {
                                 .foregroundStyle(Color("storkOrange"))
                             
                         }
-                        .offset(y: 140)
-                    
+                        .offset(y: 125)
                 }
                 
                 Text("Spread Your Wings!")
@@ -47,11 +46,10 @@ struct PaywallMarketingView: View {
                     .padding(.bottom, 30)
                     .padding(.top, 30)
                 
-                HStack(alignment: .top, spacing: 15) {
+                HStack(alignment: .top) {
                     SampleMarbleView(color: Color("storkBlue"))
                         .frame(width: 30)
                         .offset(y: 2)
-                        .frame(width: 20)
                     
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Track Your Deliveries!")
@@ -63,13 +61,13 @@ struct PaywallMarketingView: View {
                 }
                 .padding(.horizontal)
                 
-                HStack(alignment: .top, spacing: 15) {
+                HStack(alignment: .top) {
                     Image("person.3.fill")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 24, height: 24)
-                        .foregroundStyle(Color("storkIndigo"))
                         .shadow(radius: 2)
+                        .frame(width: 30)
+                        .foregroundStyle(Color("storkIndigo"))
                     
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Muster Up!")

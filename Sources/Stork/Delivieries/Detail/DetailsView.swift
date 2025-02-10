@@ -50,7 +50,6 @@ struct DetailsView: View {
         .frame(maxWidth: .infinity)
         .padding()
         .backgroundCard(colorScheme: colorScheme)
-        .padding(.horizontal)
     }
 }
 #Preview {

@@ -76,6 +76,22 @@ struct PaywallMainView: View {
                     }
                 }
 #endif
+                
+                HStack {
+                    Spacer()
+                    
+                    Link("Terms of Service", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                        .font(.footnote)
+                        .foregroundColor(Color("storkBlue"))
+                    
+                    Spacer()
+                    
+                    Link("Privacy Policy", destination: URL(string: "https://www.nickmolargik.tech/stork-privacy-policy")!)
+                        .font(.footnote)
+                        .foregroundColor(Color("storkBlue"))
+                    
+                    Spacer()
+                }
             }
         }
     }

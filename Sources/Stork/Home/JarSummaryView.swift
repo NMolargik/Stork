@@ -27,24 +27,41 @@ struct JarSummaryView: View {
 
             HStack {
                 Text("\(maleCount)")
+                    .foregroundStyle(Color("storkBlue"))
+                    .bold()
+                    .shadow(radius: 2)
+
                 ScalableText(text: "Boy\(maleCount == 1 ? "" : "s")", minWidth: 100)
+                    .foregroundStyle(.gray)
+
             }
 
             HStack {
                 Text("\(femaleCount)")
+                    .foregroundStyle(Color("storkPink"))
+                    .bold()
+                    .shadow(radius: 2)
+
                 ScalableText(text: "Girl\(femaleCount == 1 ? "" : "s")", minWidth: 100)
+                    .foregroundStyle(.gray)
+
             }
 
             HStack {
                 Text("\(lossCount)")
+                    .foregroundStyle(Color("storkPurple"))
+                    .bold()
+                    .shadow(radius: 2)
+
                 ScalableText(text: "Loss\(lossCount == 1 ? "" : "es")", minWidth: 100)
+                    .foregroundStyle(.gray)
+
             }
         }
         .padding(.vertical)
         .frame(maxWidth: .infinity)
         .font(.title2)
         .fontWeight(.bold)
-        .foregroundStyle(.gray)
         .backgroundCard(colorScheme: colorScheme)
         .onAppear {
             updateCount()
