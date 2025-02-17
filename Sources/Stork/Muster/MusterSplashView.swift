@@ -44,12 +44,12 @@ struct MusterSplashView: View {
                 
             Spacer()
             
-            CustomButtonView(text: "Create A New Muster", width: 300, height: 50, color: Color("storkIndigo"), icon: nil, isEnabled: !musterViewModel.isWorking, onTapAction: {
+            CustomButtonView(text: "Create A New Muster", width: 300, height: 50, color: Color("storkIndigo"), icon: nil, isEnabled: true, onTapAction: {
                 musterViewModel.showCreateMusterSheet = true
             })
             .padding(.bottom, 5)
 
-            CustomButtonView(text: "View Your Invitations", width: 300, height: 50, color: Color("storkOrange"), icon: nil, isEnabled: !musterViewModel.isWorking, onTapAction: {
+            CustomButtonView(text: "View Your Invitations", width: 300, height: 50, color: Color("storkOrange"), icon: nil, isEnabled: true, onTapAction: {
                 triggerHaptic()
                 
                 Task {
