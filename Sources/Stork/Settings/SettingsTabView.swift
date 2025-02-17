@@ -19,6 +19,7 @@ struct SettingsTabView: View {
     @EnvironmentObject var profileViewModel: ProfileViewModel
     @EnvironmentObject var musterViewModel: MusterViewModel
     @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    @EnvironmentObject var hospitalViewModel: HospitalViewModel
 
     @State private var showingDeleteConfirmation = false
     @State private var deleteConfirmationStep = 1
@@ -76,6 +77,11 @@ struct SettingsTabView: View {
     
     func signOut() {
         triggerHaptic()
+        
+        deliveryViewModel.reset()
+        hospitalViewModel.reset()
+        musterViewModel.reset()
+        
         withAnimation {
             profileViewModel.signOut()
         }
@@ -111,4 +117,5 @@ struct SettingsTabView: View {
         .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
         .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+        .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
 }

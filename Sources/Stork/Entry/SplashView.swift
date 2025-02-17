@@ -11,6 +11,8 @@ import StorkModel
 struct SplashView: View {
     // MARK: App Storage Variables
     @AppStorage("appState") private var appState: AppState = AppState.splash
+    @AppStorage("currentDeliveryCount") private var currentDeliveryCount: Int = 0
+
     // MARK: Environment Variables
     @EnvironmentObject var profileViewModel: ProfileViewModel
     
@@ -61,6 +63,7 @@ struct SplashView: View {
             }
             
             LoginView(onAuthenticated: {
+                currentDeliveryCount = 0
                 self.onAuthenticated()
             })
             .opacity(showMore ? 1.0 : 0.0)

@@ -22,6 +22,7 @@ struct HospitalListView: View {
         NavigationStack(path: $navigationPath) {
             VStack {
                 SearchBarView()
+                    .onAppear(perform: fetchHospitalsIfNeeded)
                 
                 if hospitalViewModel.hospitals.isEmpty && !hospitalViewModel.isWorking {
                     NoHospitalsFoundView()
@@ -44,7 +45,6 @@ struct HospitalListView: View {
                 }
             }
         }
-        .onAppear(perform: fetchHospitalsIfNeeded)
         .sheet(isPresented: $hospitalViewModel.isMissingHospitalSheetPresented) {
             MissingHospitalSheetView { hospitalName in
                 onSelection(try await hospitalViewModel.createMissingHospital(name: hospitalName))
@@ -123,12 +123,14 @@ private extension HospitalListView {
 // MARK: - Helper Methods
 private extension HospitalListView {
     func fetchHospitalsIfNeeded() {
-        if hospitalViewModel.hospitals.isEmpty {
+        if hospitalViewModel.hospitals.isEmpty && profileViewModel.loggedIn {
             fetchNearbyHospitals()
         }
     }
 
     func fetchNearbyHospitals() {
+        print("Fetching nearby hospitals")
+        
         Task {
             await hospitalViewModel.fetchHospitalsNearby()
         }

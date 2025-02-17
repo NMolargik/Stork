@@ -12,19 +12,26 @@ public enum DeliveryError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notFound(let message):
-            return "Delivery not found"
+            print("Delivery Error: \(message)")
+            return "Delivery not found. \(message)"
         case .limitReached(let message):
-            return "You have already reached your delivery limit for today!"
+            print("Delivery Error: \(message)")
+            return "You have already reached your delivery limit for today! \(message)"
         case .creationFailed(let message):
+            print("Delivery Error: \(message)")
             return "Delivery creation failed. \(message)"
         case .updateFailed(let message):
-            return "Delivery update failed. Please try again!"
+            print("Delivery Error: \(message)")
+            return "Delivery update failed. Please try again! \(message)"
         case .deletionFailed(let message):
-            return "Delivery deletion failed. Please try again!"
+            print("Delivery Error: \(message)")
+            return "Delivery deletion failed. Please try again! \(message)"
         case .firebaseError(let message):
-            return "Network error. Please try again!"
+            print("Delivery Error: \(message)")
+            return "Network error. Please try again! \(message)"
         case .unknown(let message):
-            return "Unknown delivery error"
+            print("Delivery Error: \(message)")
+            return "Unknown delivery error. \(message)"
         }
     }
 }

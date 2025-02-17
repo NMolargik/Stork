@@ -18,6 +18,8 @@ struct ProfileManagementView: View {
         Section(header: Text("Profile")) {
             HStack {
                 Button(action: {
+                    triggerHaptic()
+
                     withAnimation {
                         showingProfileEditor = true
                     }

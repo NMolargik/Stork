@@ -13,7 +13,8 @@ public enum PurchaseError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .purchaseLogInError(let message):
-            return "Purchase error \(message)"
+            print("Purchase Error: \(message)")
+            return "Purchase error. \(message)"
         }
     }
 }

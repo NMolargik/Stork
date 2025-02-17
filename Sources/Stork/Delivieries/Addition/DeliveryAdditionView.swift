@@ -140,6 +140,17 @@ struct DeliveryAdditionView: View {
                     .padding(.bottom)
 
                     Divider()
+                    
+                    if (profileViewModel.profile.musterId != "") {
+                        Toggle("Add To Muster", isOn: $deliveryViewModel.addToMuster)
+                            .padding()
+                            .fontWeight(.bold)
+                            .backgroundCard(colorScheme: colorScheme)
+                            .tint(.green)
+                            .onAppear {
+                                deliveryViewModel.addToMuster = true
+                            }
+                    }
 
                     // MARK: - Epidural Used Toggle
                     Toggle("Epidural Used", isOn: $deliveryViewModel.newDelivery.epiduralUsed)
@@ -218,6 +229,7 @@ struct DeliveryAdditionView: View {
         }
         .onAppear {
             initializeHospital()
+            print("User's musterId \(profileViewModel.profile.musterId)")
             deliveryViewModel.addBaby()
         }
         .sheet(isPresented: $deliveryViewModel.isSelectingHospital) {

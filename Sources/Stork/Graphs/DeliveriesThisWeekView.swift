@@ -99,40 +99,53 @@ struct DeliveriesThisWeekView: View {
         }
     }
     
-    // MARK: - Data Aggregation
-    
-    /// Aggregates the number of deliveries per day for the last seven days and animates the graph update.
     private func aggregateDeliveries() {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: today) else {
+        let now = Date()
+        let today = calendar.startOfDay(for: now)
+        let weekday = calendar.component(.weekday, from: now)
+        
+        // Determine the start of the week (most recent Sunday)
+        let daysSinceSunday = weekday - 1
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysSinceSunday, to: today) else {
             deliveriesLastSevenDays = []
             return
         }
         
-        // Initialize a dictionary to hold counts per day
-        var counts: [Date: Int] = [:]
+        // Compute the upcoming Saturday (6 days after Sunday) and get its end-of-day
+        guard let saturday = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
+            deliveriesLastSevenDays = []
+            return
+        }
+        let saturdayStart = calendar.startOfDay(for: saturday)
+        // Instead of using date(bySettingHour:minute:second:of:), we get the start of Sunday (day after Saturday) and subtract one second
+        guard let startOfNextSunday = calendar.date(byAdding: .day, value: 1, to: saturdayStart) else {
+            deliveriesLastSevenDays = []
+            return
+        }
+        let endOfWeek = startOfNextSunday.addingTimeInterval(-1)
         
-        // Initialize counts to zero for each day in the range
+        // Build a dictionary for each day in the week (Sunday through Saturday) with an initial count of 0.
+        var counts: [Date: Int] = [:]
         for offset in 0..<7 {
-            if let date = calendar.date(byAdding: .day, value: offset, to: sevenDaysAgo) {
+            if let date = calendar.date(byAdding: .day, value: offset, to: startOfWeek) {
                 counts[date] = 0
             }
         }
         
-        // Iterate through deliveries and count those within the last seven days
+        // Iterate through deliveries and count those within the week range.
         for delivery in deliveries {
             let deliveryDate = calendar.startOfDay(for: delivery.date)
-            if deliveryDate >= sevenDaysAgo && deliveryDate <= today {
+            if deliveryDate >= startOfWeek && deliveryDate <= endOfWeek {
                 counts[deliveryDate, default: 0] += 1
             }
         }
         
-        // Convert the dictionary to an array of DeliveryData, sorted by date
+        // Convert the dictionary into a sorted array of DeliveryGraphData.
         let updatedData = counts.map { DeliveryGraphData(date: $0.key, count: $0.value) }
-                                .sorted { $0.date < $1.date }
+                                 .sorted { $0.date < $1.date }
         
-        // Update the state variables with animation
+        // Animate the update.
         withAnimation(.easeInOut(duration: 1.0)) {
             deliveriesLastSevenDays = updatedData
             animatedDeliveries = updatedData

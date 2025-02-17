@@ -330,7 +330,7 @@ public class ProfileViewModel: ObservableObject {
             role: .nurse
         )
     }
-    
+
     func reset() {
         profile = Profile()
         errorMessage = nil

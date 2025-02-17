@@ -102,34 +102,9 @@ struct MusterTabView: View {
                         
                         Spacer()
                     }
-                    .padding([.leading, .bottom])
+                    .padding(.leading)
                     
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 16) {
-                            ForEach(musterViewModel.musterMembers, id: \.id) { member in
-                                HStack(alignment: .center) {
-                                    if muster.administratorProfileIds.contains(member.id) {
-                                        Image("crown.fill")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 24, height: 24)
-                                            .foregroundColor(.yellow)
-                                        
-                                    }
-                                    
-                                    Text("\(member.firstName) \(member.lastName.first.map { "\($0)." } ?? "")")
-                                        .fontWeight(.bold)
-
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(20)
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    .frame(height: 30)
+                    UserDeliveryDistributionView(deliveries: deliveryViewModel.musterDeliveries)
                     
                     ZStack {
                         JarView(
@@ -160,12 +135,12 @@ struct MusterTabView: View {
                     .padding()
                     
                     MusterCarouselView()
-                        .padding(.horizontal)
-                    
-                    UserDeliveryDistributionView(profiles: musterViewModel.musterMembers, deliveries: deliveryViewModel.musterDeliveries)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
                 }
                 .sheet(isPresented: $musterViewModel.showInviteUserSheet) {
                     MusterAdminInviteUserView()
+                        .presentationDetents([.fraction(0.5)])
                         .interactiveDismissDisabled(true)
                 }
                 .sheet(isPresented: $musterViewModel.showAssignAdminSheet) {

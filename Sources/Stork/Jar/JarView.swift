@@ -75,7 +75,6 @@ struct JarView: View {
                 .drawingGroup()
                 #endif
                 .offset(y: 10)
-                
             }
             .onAppear {
                 if isTestMode {
@@ -93,6 +92,19 @@ struct JarView: View {
             .onReceive(timer) { _ in
                 if timerActive || isTestMode {
                     updateMarbles(in: geometry.size)
+
+                    // Only stop the simulation if:
+                    // - There are no pending marbles, AND
+                    // - There are no marbles with significant velocity
+                    //   OR marbles with significant velocity are still in the upper part of the jar.
+                    if marbleViewModel.pendingMarbles.isEmpty &&
+                       !marbleViewModel.marbles.contains(where: {
+                           // A marble is considered "active" if its velocity is high AND it's above 80% of the jar height.
+                           let isActive = abs($0.velocity.x) > 0.05 || (abs($0.velocity.y) > 0.05 && $0.position.y < (geometry.size.height * 0.8))
+                           return isActive
+                       }) {
+                        timerActive = false
+                    }
                 }
             }
         }
@@ -102,15 +114,27 @@ struct JarView: View {
         guard let deliveries = deliveries else { return }
         timerActive = true
 
-        let newBabies = deliveriesForCurrentMonth(deliveries).flatMap { $0.babies }.filter {
-            !marbleViewModel.displayedBabyIDs.contains($0.id)
-        }
+        // Use the week-based filter here and filter out babies that already have a marble.
+        let newBabies = deliveriesForCurrentWeek(deliveries)
+            .flatMap { $0.babies }
+            .filter { !marbleViewModel.displayedBabyIDs.contains($0.id) }
 
         for baby in newBabies {
             if marbleViewModel.marbles.count + marbleViewModel.pendingMarbles.count < maxMarbleCount {
                 let newMarble = createMarble(in: size, color: baby.sex.color)
                 marbleViewModel.pendingMarbles.append(newMarble)
                 marbleViewModel.displayedBabyIDs.insert(baby.id)
+            }
+        }
+        
+        // If any marbles are stationary (likely because the view just regenerated), give them an initial velocity.
+        for i in marbleViewModel.marbles.indices {
+            let marble = marbleViewModel.marbles[i]
+            if abs(marble.velocity.x) < 0.01 && abs(marble.velocity.y) < 0.01 {
+                marbleViewModel.marbles[i].velocity = CGPoint(
+                    x: .random(in: -1.0...1.0),
+                    y: .random(in: 1.0...3.0) // a positive y velocity so they fall
+                )
             }
         }
 
@@ -207,24 +231,32 @@ struct JarView: View {
         }
     }
     
-    private func deliveriesForCurrentWeek() -> [Delivery] {
+    private func deliveriesForCurrentWeek(_ all: [Delivery]) -> [Delivery] {
         let calendar = Calendar.current
         let now = Date()
-
-        // Get start and end of the current week
-        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+        let today = calendar.startOfDay(for: now)
+        let weekday = calendar.component(.weekday, from: now)
+        
+        // Calculate the most recent Sunday.
+        let daysSinceSunday = weekday - 1
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysSinceSunday, to: today) else {
             return []
         }
-        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
+        
+        // Calculate the upcoming Saturday.
+        guard let saturday = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
             return []
         }
-
-        guard let deliveries = deliveries else {
+        let saturdayStart = calendar.startOfDay(for: saturday)
+        
+        // Get the start of next Sunday and subtract one second to get the end of Saturday (23:59:59).
+        guard let startOfNextSunday = calendar.date(byAdding: .day, value: 1, to: saturdayStart) else {
             return []
         }
-        // Filter deliveries within the week range
-        return deliveries.filter { delivery in
-            delivery.date >= weekStart && delivery.date <= weekEnd
+        let endOfWeek = startOfNextSunday.addingTimeInterval(-1)
+        
+        return all.filter { delivery in
+            delivery.date >= startOfWeek && delivery.date <= endOfWeek
         }
     }
     
@@ -254,21 +286,21 @@ struct JarView: View {
             isOverlapping = marbleViewModel.marbles.contains { existingMarble in
                 let dx = existingMarble.position.x - position.x
                 let dy = existingMarble.position.y - position.y
-                let distance = sqrt(dx*dx + dy*dy)
+                let distance = sqrt(dx * dx + dy * dy)
                 return distance < (existingMarble.marbleRadius + marbleRadius + 2)
             }
             
             attempts += 1
-            if attempts >= maxAttempts {
-                // If unable to find a non-overlapping position, proceed anyway
-                break
-            }
+            if attempts >= maxAttempts { break }
         } while isOverlapping
         
+        // Assign a stronger initial velocity
+        let initialVelocityX = CGFloat.random(in: -2.0...2.0)
+        let initialVelocityY = CGFloat.random(in: 1.0...3.0)  // positive so they fall
         return Marble(
             id: UUID(),
             position: position,
-            velocity: CGPoint(x: .random(in: -1.0...1.0), y: .random(in: -1.0...1.0)),
+            velocity: CGPoint(x: initialVelocityX, y: initialVelocityY),
             marbleRadius: marbleRadius,
             color: color
         )
@@ -276,23 +308,48 @@ struct JarView: View {
     
     /// Applies all the physics steps each frame
     private func updateMarbles(in size: CGSize) {
-        // Gravity & friction
-        for i in marbleViewModel.marbles.indices {
-            marbleViewModel.marbles[i].velocity.y += gravity
-            marbleViewModel.marbles[i].velocity.x *= friction
-            marbleViewModel.marbles[i].velocity.y *= friction
-            marbleViewModel.marbles[i].velocity.x = min(max(marbleViewModel.marbles[i].velocity.x, -3.0), 3.0)
-            marbleViewModel.marbles[i].velocity.y = min(max(marbleViewModel.marbles[i].velocity.y, -3.0), 3.0)
-        }
+        var allMarblesSettled = true // Track if all marbles are stationary
 
+        // Apply gravity and friction
+        for i in marbleViewModel.marbles.indices {
+            var marble = marbleViewModel.marbles[i]
+            
+            // Apply gravity and friction
+            marble.velocity.y += gravity
+            marble.velocity.x *= friction
+            marble.velocity.y *= friction
+            marble.velocity.x = min(max(marble.velocity.x, -3.0), 3.0)
+            marble.velocity.y = min(max(marble.velocity.y, -3.0), 3.0)
+            
+            // Check if any marble is still moving significantly
+            if abs(marble.velocity.x) > 0.05 || abs(marble.velocity.y) > 0.05 {
+                allMarblesSettled = false
+            }
+            
+            marbleViewModel.marbles[i] = marble
+        }
+        
+        // 🔥 Comment out the early termination so the simulation doesn't stop prematurely
+        /*
+        if allMarblesSettled {
+            timerActive = false
+            return
+        }
+        */
+        
         // Move marbles
         for i in marbleViewModel.marbles.indices {
             marbleViewModel.marbles[i].position.x += marbleViewModel.marbles[i].velocity.x
             marbleViewModel.marbles[i].position.y += marbleViewModel.marbles[i].velocity.y
         }
 
-        // Collision resolution
-        for _ in 0..<collisionIterations {
+        // Dynamically reduce collision iterations
+        let activeMarbles = marbleViewModel.marbles.filter {
+            abs($0.velocity.x) > 0.05 || abs($0.velocity.y) > 0.05
+        }
+        let dynamicCollisionIterations = max(3, min(14, activeMarbles.count / 5))
+
+        for _ in 0..<dynamicCollisionIterations {
             for i in 0..<marbleViewModel.marbles.count {
                 for j in (i + 1)..<marbleViewModel.marbles.count {
                     var m1 = marbleViewModel.marbles[i]
@@ -329,13 +386,25 @@ struct JarView: View {
         applyDynamicFriction(for: size)
         preventBottomOverlap(for: size)
 
-        // Stop jittering marbles
-        let velocityThreshold: CGFloat = 0.1
+        // Detect and stop small oscillations
+        let velocityThreshold: CGFloat = 0.05
+        let maxSettledFrames = 20  // Increased to allow more frames before freezing
+
         for i in marbleViewModel.marbles.indices {
-            if abs(marbleViewModel.marbles[i].velocity.x) < velocityThreshold &&
-                abs(marbleViewModel.marbles[i].velocity.y) < velocityThreshold {
-                marbleViewModel.marbles[i].velocity = .zero
+            var marble = marbleViewModel.marbles[i]
+
+            if abs(marble.velocity.x) < velocityThreshold && abs(marble.velocity.y) < velocityThreshold {
+                marble.settledFrames += 1
+            } else {
+                marble.settledFrames = 0
             }
+
+            // Only stop the marble if it has been moving very little for a while AND it's near the bottom.
+            if marble.settledFrames >= maxSettledFrames && marble.position.y > (size.height * 0.8) {
+                marble.velocity = .zero
+            }
+
+            marbleViewModel.marbles[i] = marble
         }
     }
     

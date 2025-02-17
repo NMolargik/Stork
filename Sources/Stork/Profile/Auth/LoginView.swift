@@ -40,7 +40,7 @@ struct LoginView: View {
                     hintText: "Password",
                     icon: Image("key"),
                     isSecure: true,
-                    iconColor: Color.red
+                    iconColor: Color("storkOrange")
                 )
                 .padding(.bottom)
                 .onSubmit { handleLogin() }

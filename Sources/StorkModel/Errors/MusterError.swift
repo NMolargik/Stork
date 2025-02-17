@@ -14,23 +14,32 @@ public enum MusterError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notFound(let message):
-            return "Muster Nnt found."
+            print("Muster Error: \(message)")
+            return "Muster not found. \(message)"
         case .creationFailed(let message):
-            return "Muster creation failed. Please try again!"
+            print("Muster Error: \(message)")
+            return "Muster creation failed. Please try again! \(message)"
         case .updateFailed(let message):
-            return "Muster update failed. Please try again!"
+            print("Muster Error: \(message)")
+            return "Muster update failed. Please try again! \(message)"
         case .deletionFailed(let message):
-            return "Muster deletion failed. Please try again!"
-        case .unknown(let message):
-            return "Unknown muster error."
+            print("Muster Error: \(message)")
+            return "Muster deletion failed. Please try again! \(message)"
         case .invitationFailed(let message):
-            return "Invitation failed to send. Please try again!"
+            print("Muster Error: \(message)")
+            return "Invitation failed to send. Please try again! \(message)"
         case .invitationResponseFailed(let message):
-            return "Invitation response failed. Please try again!"
+            print("Muster Error: \(message)")
+            return "Invitation response failed. Please try again! \(message)"
         case .failedToCollectInvitations(let message):
-            return "Failed to collect invitations. Please try again!"
+            print("Muster Error: \(message)")
+            return "Failed to collect invitations. Please try again! \(message)"
         case .failedToCancelInvite(let message):
-            return "Failed to cancel invitation. Please try again!"
+            print("Muster Error: \(message)")
+            return "Failed to cancel invitation. Please try again! \(message)"
+        case .unknown(let message):
+            print("Muster Error: \(message)")
+            return "Unknown muster error. \(message)"
         }
     }
 }

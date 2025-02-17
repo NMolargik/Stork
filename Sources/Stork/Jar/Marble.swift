@@ -15,8 +15,21 @@ struct Marble: Identifiable {
     let marbleRadius: CGFloat
     let color: Color
     var isActive: Bool = true
+    var settledFrames: Int = 0  // Tracks how long a marble has been nearly still
     
     var diameter: CGFloat {
         marbleRadius * 2
+    }
+
+    mutating func updateSettledState(velocityThreshold: CGFloat, maxSettledFrames: Int) {
+        if abs(velocity.x) < velocityThreshold && abs(velocity.y) < velocityThreshold {
+            settledFrames += 1
+        } else {
+            settledFrames = 0
+        }
+
+        if settledFrames >= maxSettledFrames {
+            velocity = .zero
+        }
     }
 }

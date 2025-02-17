@@ -21,6 +21,7 @@ struct JarSummaryView: View {
     var body: some View {
         VStack {
             Text("Your Jar")
+                .foregroundStyle(.gray)
             
             Divider()
                 .padding(.horizontal)
@@ -28,19 +29,25 @@ struct JarSummaryView: View {
             HStack {
                 Text("\(maleCount)")
                     .foregroundStyle(Color("storkBlue"))
+                    .lineLimit(1)
+                    .font(.title3)
                     .bold()
                     .shadow(radius: 2)
+                    .frame(width: 40)
 
                 ScalableText(text: "Boy\(maleCount == 1 ? "" : "s")", minWidth: 100)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(.gray )
 
             }
 
             HStack {
                 Text("\(femaleCount)")
                     .foregroundStyle(Color("storkPink"))
+                    .lineLimit(1)
+                    .font(.title3)
                     .bold()
                     .shadow(radius: 2)
+                    .frame(width: 40)
 
                 ScalableText(text: "Girl\(femaleCount == 1 ? "" : "s")", minWidth: 100)
                     .foregroundStyle(.gray)
@@ -50,8 +57,11 @@ struct JarSummaryView: View {
             HStack {
                 Text("\(lossCount)")
                     .foregroundStyle(Color("storkPurple"))
+                    .lineLimit(1)
+                    .font(.title3)
                     .bold()
                     .shadow(radius: 2)
+                    .frame(width: 40)
 
                 ScalableText(text: "Loss\(lossCount == 1 ? "" : "es")", minWidth: 100)
                     .foregroundStyle(.gray)
@@ -83,13 +93,33 @@ struct JarSummaryView: View {
     private func countBabies(of sex: Sex) -> Int {
         let calendar = Calendar.current
         let now = Date()
-        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: now) else { return 0 }
+        let today = calendar.startOfDay(for: now)
+        let weekday = calendar.component(.weekday, from: now)
         
-        let last7DaysDeliveries = deliveries.filter { delivery in
-            delivery.date >= sevenDaysAgo && delivery.date <= now
+        // Calculate the most recent Sunday
+        let daysSinceSunday = weekday - 1
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysSinceSunday, to: today) else {
+            return 0
         }
         
-        return last7DaysDeliveries.reduce(0) { count, delivery in
+        // Calculate the upcoming Saturday
+        guard let saturday = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
+            return 0
+        }
+        let saturdayStart = calendar.startOfDay(for: saturday)
+        // Get the start of the next Sunday and subtract one second to get the end-of-Saturday
+        guard let startOfNextSunday = calendar.date(byAdding: .day, value: 1, to: saturdayStart) else {
+            return 0
+        }
+        let endOfWeek = startOfNextSunday.addingTimeInterval(-1)
+        
+        // Filter deliveries that occurred within the full week (Sunday 00:00:00 to Saturday 23:59:59)
+        let weekDeliveries = deliveries.filter { delivery in
+            return delivery.date >= startOfWeek && delivery.date <= endOfWeek
+        }
+        
+        // Count the babies with the matching sex from the filtered deliveries
+        return weekDeliveries.reduce(0) { count, delivery in
             count + delivery.babies.filter { $0.sex == sex }.count
         }
     }
@@ -104,7 +134,7 @@ struct ScalableText: View {
     var body: some View {
         GeometryReader { geometry in
             Text(text)
-                .font(.system(size: min(geometry.size.width * 0.5, maxSize))) // ✅ Dynamically adjust font size based on width
+                .font(.system(size: min(geometry.size.width * 0.4, maxSize))) // ✅ Dynamically adjust font size based on width
                 .frame(width: geometry.size.width, height: geometry.size.height)
                 .scaledToFit() // ✅ Ensures text shrinks within the frame
         }

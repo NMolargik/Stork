@@ -10,9 +10,11 @@ import StorkModel
 
 struct UserDeliveryDistributionView: View {
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var musterViewModel: MusterViewModel
+
 
     // MARK: - Input Data
-    let profiles: [Profile]
     let deliveries: [Delivery]
 
     @StateObject private var colorsViewModel = UserColorsViewModel()
@@ -21,25 +23,24 @@ struct UserDeliveryDistributionView: View {
         Calendar.current.date(byAdding: .month, value: -6, to: Date()) ?? Date()
     }
 
-    init(profiles: [Profile], deliveries: [Delivery]) {
-        self.profiles = profiles
+    init(deliveries: [Delivery]) {
         self.deliveries = deliveries
     }
 
     // MARK: - Body
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 5) {
             userListView
 
             distributionBarView
                 .frame(height: 24)
                 .cornerRadius(20)
         }
-        .padding()
+        .padding(.horizontal)
         .onAppear {
-            colorsViewModel.generateUserColors(for: profiles)
+            colorsViewModel.generateUserColors(for: musterViewModel.musterMembers)
         }
-        .onChange(of: profiles) { newProfiles in
+        .onChange(of: musterViewModel.musterMembers) { newProfiles in
             colorsViewModel.generateUserColors(for: newProfiles)
         }
     }
@@ -50,44 +51,49 @@ struct UserDeliveryDistributionView: View {
         let sortedProfiles = sortedProfilesByDeliveryCount()
 
         return ScrollView(.horizontal) {
-            HStack(alignment: .center, spacing: 16) {
-                // Profiles
+            HStack(spacing: 16) {
                 ForEach(sortedProfiles, id: \.id) { profile in
-                    HStack(spacing: 8) {
+                    HStack(alignment: .center) {
+                        if (musterViewModel.currentMuster?.administratorProfileIds.contains(profile.id) == true) {                 
+                            Image("crown.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.yellow)
+                        }
+                        
+                        Text("\(profile.firstName) \(profile.lastName.first.map { "\($0)." } ?? "")")
+                        
                         Circle()
                             .fill(colorsViewModel.userColors[profile.id] ?? .gray)
                             .frame(width: 12, height: 12)
                             .padding(1)
                             .background(Circle().foregroundStyle(.white))
 
-                        Text(profile.initials)
-                            .foregroundStyle(colorScheme == .dark ? .white : .black )
-                            .font(.body)
-                            .fontWeight(.bold)
                     }
-                    .padding(.horizontal, 4)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(20)
+                
                 }
-
-                // Other
+                
                 HStack(spacing: 8) {
+                    Text("Old Members")
+                        .font(.body)
+                    
                     Circle()
                         .fill(colorsViewModel.userColors["Old Members"] ?? .gray)
                         .frame(width: 12, height: 12)
                         .padding(1)
                         .background(Circle().foregroundStyle(.white))
-
-                    Text("Old Members")
-                        .font(.body)
-                        .fontWeight(.bold)
                 }
-                .padding(.horizontal, 4)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(20)
             }
             .padding(4)
-            .background(Rectangle()
-                .foregroundStyle(.gray.opacity(0.2))
-                .cornerRadius(10)
-                .shadow(radius: 2))
-            .padding(.vertical, 4)
         }
     }
 
@@ -116,7 +122,7 @@ struct UserDeliveryDistributionView: View {
         var counts = [String: Int]()
         
         for delivery in recentDeliveries {
-            if let userId = profiles.first(where: { $0.id == delivery.userId })?.id {
+            if let userId = musterViewModel.musterMembers.first(where: { $0.id == delivery.userId })?.id {
                 counts[userId, default: 0] += 1
             } else {
                 counts["Old Members", default: 0] += 1
@@ -128,7 +134,7 @@ struct UserDeliveryDistributionView: View {
 
     private func sortedProfilesByDeliveryCount() -> [Profile] {
         let userDeliveryCounts = userDeliveryCounts()
-        return profiles.sorted {
+        return musterViewModel.musterMembers.sorted {
             let countA = userDeliveryCounts[$0.id] ?? 0
             let countB = userDeliveryCounts[$1.id] ?? 0
             return countA > countB

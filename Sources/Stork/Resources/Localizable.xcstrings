@@ -112,6 +112,9 @@
     "Add deliveries simply by adding babies and filling out a few additional options.\n\nYour deliveries are all backed up and detailed history is available." : {
 
     },
+    "Add To Muster" : {
+
+    },
     "Added to your muster" : {
 
     },
@@ -453,6 +456,9 @@
     "Load More" : {
 
     },
+    "Loading Your Muster..." : {
+
+    },
     "Log In" : {
 
     },
@@ -729,7 +735,7 @@
     "Stork Annual" : {
 
     },
-    "Stork is a labor and delivery app designed to assist nurses and doctors in managing weekly delivery statistics." : {
+    "Stork is a labor and delivery app designed to assist nurses and doctors in managing delivery statistics over time." : {
 
     },
     "Submit" : {

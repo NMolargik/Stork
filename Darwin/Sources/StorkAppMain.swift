@@ -5,7 +5,7 @@ import FirebaseCore
 /// The entry point to the app simply loads the App implementation from SPM module.
 @main struct AppMain: App, StorkApp {
     #if SKIP || !os(macOS)
-    @UIApplicationDelegateAdaptor(FireSideAppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(StorkAppDelegate.self) var appDelegate
     #endif
 }
 
@@ -13,7 +13,7 @@ import FirebaseCore
 /// iOS uses the app delegate to integrate push notifications.
 ///
 /// See Main.kt for the equivalent Android functionality.
-class FireSideAppDelegate : NSObject, UIApplicationDelegate {
+class StorkAppDelegate : NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         return true

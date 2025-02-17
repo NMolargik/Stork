@@ -5,24 +5,49 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
+//
+//  SplashInfoView.swift
+//
+//
+//  Created by Nick Molargik on 11/4/24.
+//
+
 import Foundation
 import SwiftUI
 
 struct SplashInfoView: View {
+    @Environment(\.dismiss) var dismiss // Allows dismissing the sheet
+
     var body: some View {
-        VStack {
-            Text("About Stork")
-                .font(.title2)
-                .fontWeight(.bold)
+        ZStack {
+            VStack {
+                Text("About Stork")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Text("Stork is a labor and delivery app designed to assist nurses and doctors in managing delivery statistics over time.")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .padding()
+            }
             
-            Text("Stork is a labor and delivery app designed to assist nurses and doctors in managing weekly delivery statistics.")
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .padding()
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        triggerHaptic()
+                        dismiss()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.orange)
+                            .font(.title2)
+                    }
+                }
+                
+                Spacer()
+            }
         }
         .padding()
-        .frame(width: 300)
-        .cornerRadius(20)
     }
 }
 

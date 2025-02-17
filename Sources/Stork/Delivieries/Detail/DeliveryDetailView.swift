@@ -42,6 +42,7 @@ struct DeliveryDetailView: View {
                         
                         Spacer()
                     }
+                    .padding(.leading)
                 }
                 .padding([.horizontal, .bottom])
             }

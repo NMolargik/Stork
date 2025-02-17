@@ -10,6 +10,8 @@ import SwiftUI
 
 @MainActor
 class DeliveryViewModel: ObservableObject {
+    @AppStorage("currentDeliveryCount") private var currentDeliveryCount: Int = 0
+    
     // MARK: - Published Properties
     @Published var deliveries: [Delivery] = []
     @Published var musterDeliveries: [Delivery] = []
@@ -27,7 +29,6 @@ class DeliveryViewModel: ObservableObject {
     @Published var canSubmitDelivery: Bool = false
 
     // MARK: - Daily Limit Logic
-    @Published private(set) var currentDeliveryCount: Int = 0
     private var currentDate: Date = Date()
     private var dailyLimit = 8
     private var timer: Timer?
@@ -53,6 +54,34 @@ class DeliveryViewModel: ObservableObject {
 
         // Start a fresh new delivery
         startNewDelivery()
+    }
+    
+    deinit {
+        timer?.invalidate()
+    }
+    
+    func reset() {
+        self.deliveries = []
+        self.musterDeliveries = []
+        self.groupedDeliveries = []
+        self.groupedMusterDeliveries = []
+        self.currentDeliveryCount = 0
+        self.currentPage = 0
+        self.lastFetchedEndDate = nil
+        self.hasMorePages = true
+
+        // Invalidate and clear the timer to stop any pending resets.
+        self.timer?.invalidate()
+        self.timer = nil
+
+        // Reset the current date so that the daily limit is tied to a fresh day.
+        self.currentDate = Date()
+
+        // Optionally, restart the daily reset timer.
+        startDailyResetTimer()
+        currentDeliveryCount = 0
+        
+        
     }
 
     // MARK: - Submit Delivery
@@ -184,6 +213,12 @@ class DeliveryViewModel: ObservableObject {
         }
         
         isWorking = false
+    }
+    
+    func refreshMusterDeliveries() {
+        let cachedDeliveries = self.groupedMusterDeliveries
+        self.groupedMusterDeliveries = []
+        self.groupedMusterDeliveries = cachedDeliveries
     }
     
     // MARK: - Date Calculation for Pagination
@@ -370,11 +405,15 @@ class DeliveryViewModel: ObservableObject {
 
         let timeInterval = adjustedResetDate.timeIntervalSince(now)
 
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
             self.timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { [weak self] _ in
-                Task { @MainActor in
-                    self?.resetDailyLimit()
-                    self?.startDailyResetTimer()
+                guard let self = self else { return }
+
+                Task {
+                    await self.resetDailyLimit()
+                    await self.startDailyResetTimer()
                 }
             }
         }

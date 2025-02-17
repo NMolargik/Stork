@@ -36,6 +36,14 @@ class HospitalViewModel: ObservableObject {
         self.hospitalRepository = hospitalRepository
         self.locationProvider = locationProvider
     }
+    
+    func reset() {
+        self.hospitals = []
+        self.primaryHospital = nil
+        self.selectedHospital = nil
+        self.searchQuery = ""
+        self.usingLocation = true
+    }
 
     // MARK: - Fetch Hospitals Nearby
     /// Fetches hospitals near the user's current location.
@@ -46,6 +54,10 @@ class HospitalViewModel: ObservableObject {
             let cityState = try await self.locationProvider.fetchCityAndState(
                 from: Location(latitude: location.latitude, longitude: location.longitude)
             )
+            
+            if cityState.city == "" || cityState.state == "" {
+                return
+            }
 
             self.hospitals = try await self.hospitalRepository.getHospitals(
                 byCity: cityState.city ?? "San Francisco",

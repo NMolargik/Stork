@@ -14,23 +14,32 @@ public enum ProfileError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notFound(let message):
-            return "Profile not found"
+            print("Profile Error: \(message)")
+            return "Profile not found. \(message)"
         case .creationFailed(let message):
-            return "Profile creation failed. Please try again!"
+            print("Profile Error: \(message)")
+            return "Profile creation failed. Please try again! \(message)"
         case .updateFailed(let message):
-            return "Profile update failed. Please try again!"
+            print("Profile Error: \(message)")
+            return "Profile update failed. Please try again! \(message)"
         case .deletionFailed(let message):
-            return "Profile deletion failed. Please try again!"
+            print("Profile Error: \(message)")
+            return "Profile deletion failed. Please try again! \(message)"
         case .authenticationFailed(let message):
-            return "Authentication failed. Please try again!"
+            print("Profile Error: \(message)")
+            return "Authentication failed. Please try again! \(message)"
         case .passwordResetFailed(let message):
-            return "Password Reset failed. Please try again!"
+            print("Profile Error: \(message)")
+            return "Password reset failed. Please try again! \(message)"
         case .fetchFailed(let message):
-            return "Failed to get profile."
+            print("Profile Error: \(message)")
+            return "Failed to get profile. \(message)"
         case .signOutFailed(let message):
-            return "Sign out failed. Please try again!"
+            print("Profile Error: \(message)")
+            return "Sign out failed. Please try again! \(message)"
         case .unknown(let message):
-            return "Unknown profile error."
+            print("Profile Error: \(message)")
+            return "Unknown profile error. \(message)"
         }
     }
 }

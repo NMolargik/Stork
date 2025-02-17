@@ -39,7 +39,8 @@ struct RegisterView: View {
                         if let emailError = profileViewModel.emailError {
                             Text(emailError)
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.red)
+                                .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
                         }
@@ -49,7 +50,8 @@ struct RegisterView: View {
                         if let passwordError = profileViewModel.passwordError {
                             Text(passwordError)
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.red)
+                                .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
                         }
@@ -59,7 +61,8 @@ struct RegisterView: View {
                         if let confirmPasswordError = profileViewModel.confirmPasswordError {
                             Text(confirmPasswordError)
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.red)
+                                .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
                         }
@@ -69,7 +72,7 @@ struct RegisterView: View {
                         if let firstNameError = profileViewModel.firstNameError {
                             Text(firstNameError)
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -80,7 +83,8 @@ struct RegisterView: View {
                         if let lastNameError = profileViewModel.lastNameError {
                             Text(lastNameError)
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.red)
+                                .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
                         }
@@ -105,7 +109,8 @@ struct RegisterView: View {
                         if let birthdayError = profileViewModel.birthdayError {
                             Text(birthdayError)
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.red)
+                                .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
                         }

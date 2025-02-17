@@ -22,7 +22,7 @@ public extension View {
             .padding(.horizontal, 5)
     }
     
-    func withMockEnvironmentObjects() -> some View {
+    @MainActor func withMockEnvironmentObjects() -> some View {
         self
             .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
             .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))

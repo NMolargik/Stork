@@ -54,6 +54,15 @@ public class MusterViewModel: ObservableObject {
         self.musterRepository = musterRepository
     }
     
+    // MARK: - Reset
+    
+    func reset() {
+        self.currentMuster = nil
+        self.invites = []
+        self.musterMembers = []
+        self.invite = nil
+    }
+    
     // MARK: - Creation Methods
     
     /// Validates the creation form and updates the form's validity state.
@@ -122,9 +131,7 @@ public class MusterViewModel: ObservableObject {
             name: ""
         )
     }
-    
-    // MARK: - Muster Management
-    
+        
     /// Loads the current muster based on the provided `ProfileViewModel`.
     func loadCurrentMuster(profileViewModel: ProfileViewModel, deliveryViewModel: DeliveryViewModel) async throws {
         musterMembers = []
@@ -132,11 +139,13 @@ public class MusterViewModel: ObservableObject {
         defer { isWorking = false }
         
         if profileViewModel.profile.musterId.isEmpty {
+            print("User is not in a muster")
             // The user is not in a muster
             return
         }
         
         do {
+            print("Fetching muster: \(profileViewModel.profile.musterId)")
             currentMuster = try await musterRepository.getMuster(byId: profileViewModel.profile.musterId)
         } catch {
             print("Records indicate user is not currently in a muster")
@@ -254,6 +263,7 @@ public class MusterViewModel: ObservableObject {
         
         // Update local profile musterId
         profileViewModel.profile.musterId = muster.id
+        print("Set profile's musterId to \(muster.id)")
     }
     
     /// Declines a muster invite.

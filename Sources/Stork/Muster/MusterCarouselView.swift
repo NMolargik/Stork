@@ -52,11 +52,18 @@ struct MusterCarouselView: View {
                     .padding(.vertical, 5)
                     .tag(3)
             }
-            .tabViewStyle(.page(indexDisplayMode: .always))
+            .tabViewStyle(.page(indexDisplayMode: .never)) // Hide built-in indicators
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.horizontal, -5)
             
-            Spacer()
+            // Custom page indicators (moves dots below the content)
+            HStack(spacing: 6) {
+                ForEach(0..<4, id: \.self) { index in
+                    Circle()
+                        .fill(index == selectedIndex ? Color("storkIndigo") : Color.gray.opacity(0.5))
+                        .frame(width: 8, height: 8)
+                        .animation(.easeInOut, value: selectedIndex)
+                }
+            }
         }
         .ignoresSafeArea(edges: .bottom)
     }
