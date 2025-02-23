@@ -22,25 +22,28 @@ struct HospitalDetailView: View {
     let hospital: Hospital
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            hospitalMapView
-            
-            actionButtons
-            
-            hospitalDetailsView
-            
-            HStack {
-                HospitalStatView(
-                    text: "\(hospital.deliveryCount) deliver\(hospital.deliveryCount == 1 ? "y" : "ies"), \(hospital.babyCount) bab\(hospital.babyCount == 1 ? "y" : "ies")"
-                )
+        ScrollView {
+            VStack(alignment: .leading, spacing: 15) {
+                hospitalMapView
+                
+                actionButtons
+                
+                hospitalDetailsView
+                
+                HStack {
+                    HospitalStatView(
+                        text: "\(hospital.deliveryCount) deliver\(hospital.deliveryCount == 1 ? "y" : "ies"), \(hospital.babyCount) bab\(hospital.babyCount == 1 ? "y" : "ies")"
+                    )
+                    
+                    Spacer()
+                }
                 
                 Spacer()
             }
-            
-            Spacer()
+            .toolbar(.hidden)
+            .onAppear(perform: fetchLocation)
         }
-        .toolbar(.hidden)
-        .onAppear(perform: fetchLocation)
+        .ignoresSafeArea()
     }
 }
 
@@ -70,7 +73,7 @@ private extension HospitalDetailView {
                 
                 Spacer()
             }
-            .padding(.horizontal)
+            .padding([.horizontal, .top])
 
         }
         .frame(height: 250)
