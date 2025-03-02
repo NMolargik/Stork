@@ -15,8 +15,8 @@ struct StoreConstants {
     static let apiKey = "appl_IJaUJSFJvADbJAclPsSrsHInYKP"
     #endif
     
-    static let entitlementID = "StorkAnnual"
-    static let packageID = "$rc_annual"
+    static let entitlementID = "Stork Monthly"
+    static let packageID = "$rc_monthly"
     
 }
 

@@ -14,7 +14,7 @@ struct PaywallMarketingView: View {
         GeometryReader { geometry in
             ZStack {
                 ScrollView {
-                    VStack(alignment: .center, spacing: 20) {
+                    VStack(alignment: .center, spacing: 5) {
                         ZStack {
                             Image("storkicon")
                                 .resizable()
@@ -36,20 +36,20 @@ struct PaywallMarketingView: View {
                                         .shadow(radius: 2)
                                         .foregroundStyle(Color("storkOrange"))
                                 }
-                                .offset(y: min(geometry.size.width * 0.2, 125)) // Scales offset
+                                .offset(y: min(geometry.size.width * 0.2, 125))
                         }
                         
                         Text("Spread Your Wings!")
                             .font(.title)
                             .fontWeight(.bold)
                             .multilineTextAlignment(.center)
-                            .padding(.vertical, 20)
+                            .padding(.bottom, 20)
                         #if !SKIP
-                            .minimumScaleFactor(0.8) // Allows shrinking for small screens
+                            .minimumScaleFactor(0.8)
                         #endif
                         
                         featureSection(
-                            icon: "storkBlue",
+                            icon: "shippingbox.fill",
                             title: "Track Your Deliveries!",
                             description: "See your deliveries at a glance with your jar, or dive deeper into statistics or details from a particular delivery."
                         )
@@ -60,7 +60,7 @@ struct PaywallMarketingView: View {
                             description: "Group up with your coworkers to contribute to a larger set of delivery trend data."
                         )
                     }
-                    .frame(maxWidth: .infinity) // Expands content properly
+                    .frame(maxWidth: .infinity)
                     .padding()
                 }
                 
@@ -98,7 +98,7 @@ struct PaywallMarketingView: View {
                 Text(title)
                     .font(.system(size: 18, weight: .semibold))
                 #if !SKIP
-                    .minimumScaleFactor(0.8) // Shrinks if needed
+                    .minimumScaleFactor(0.8)
                 #endif
                 
                 Text(description)

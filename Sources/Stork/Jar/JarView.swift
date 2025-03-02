@@ -95,12 +95,13 @@ struct JarView: View {
 
                     // Only stop the simulation if:
                     // - There are no pending marbles, AND
-                    // - There are no marbles with significant velocity
-                    //   OR marbles with significant velocity are still in the upper part of the jar.
+                    // - There are no marbles with significant velocity.
+                    // For marbles near the bottom (>=80% of the jar height), use a lower vertical threshold.
                     if marbleViewModel.pendingMarbles.isEmpty &&
                        !marbleViewModel.marbles.contains(where: {
-                           // A marble is considered "active" if its velocity is high AND it's above 80% of the jar height.
-                           let isActive = abs($0.velocity.x) > 0.05 || (abs($0.velocity.y) > 0.05 && $0.position.y < (geometry.size.height * 0.8))
+                           // Use a lower vertical threshold for marbles near the bottom.
+                           let verticalThreshold: CGFloat = $0.position.y < (geometry.size.height * 0.8) ? 0.02 : 0.005
+                           let isActive = abs($0.velocity.x) > 0.02 || (abs($0.velocity.y) > verticalThreshold)
                            return isActive
                        }) {
                         timerActive = false
