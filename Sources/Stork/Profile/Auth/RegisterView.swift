@@ -43,6 +43,8 @@ struct RegisterView: View {
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
+                                .transition(.opacity)
+                                .animation(.easeInOut(duration: 0.3), value: profileViewModel.emailError)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
@@ -54,6 +56,8 @@ struct RegisterView: View {
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
+                                .transition(.opacity)
+                                .animation(.easeInOut(duration: 0.3), value: profileViewModel.passwordError)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.confirmPassword, hintText: "Confirm Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
@@ -65,6 +69,8 @@ struct RegisterView: View {
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
+                                .transition(.opacity)
+                                .animation(.easeInOut(duration: 0.3), value: profileViewModel.confirmPasswordError)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square"), isSecure: false, iconColor: Color.green)
@@ -76,6 +82,8 @@ struct RegisterView: View {
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
+                                .transition(.opacity)
+                                .animation(.easeInOut(duration: 0.3), value: profileViewModel.firstNameError)
                         }
                         
                         CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square"), isSecure: false, iconColor: Color.green)
@@ -87,6 +95,8 @@ struct RegisterView: View {
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
+                                .transition(.opacity)
+                                .animation(.easeInOut(duration: 0.3), value: profileViewModel.lastNameError)
                         }
                         
                         Divider()
@@ -113,6 +123,8 @@ struct RegisterView: View {
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
+                                .transition(.opacity)
+                                .animation(.easeInOut(duration: 0.3), value: profileViewModel.birthdayError)
                         }
 
                         Divider()
@@ -141,7 +153,7 @@ struct RegisterView: View {
                                     width: 120,
                                     height: 40,
                                     color: Color("storkIndigo"),
-                                    isEnabled: profileViewModel.isFormValid,
+                                    isEnabled: true,
                                     onTapAction: {
                                         Task {
                                             do {
@@ -179,29 +191,45 @@ struct RegisterView: View {
             }
         }
         .onChange(of: profileViewModel.tempProfile.email) { _ in
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                profileViewModel.validateRegistrationForm()
+            }
         }
         .onChange(of: profileViewModel.passwordText) { _ in
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                profileViewModel.validateRegistrationForm()
+            }
         }
         .onChange(of: profileViewModel.confirmPassword) { _ in
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                profileViewModel.validateRegistrationForm()
+            }
         }
         .onChange(of: profileViewModel.tempProfile.firstName) { _ in
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                profileViewModel.validateRegistrationForm()
+            }
         }
         .onChange(of: profileViewModel.tempProfile.lastName) { _ in
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                profileViewModel.validateRegistrationForm()
+            }
         }
         .onChange(of: profileViewModel.tempProfile.birthday) { _ in
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                profileViewModel.validateRegistrationForm()
+            }
         }
         .onChange(of: profileViewModel.tempProfile.role) { _ in
-            triggerHaptic()
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                triggerHaptic()
+                profileViewModel.validateRegistrationForm()
+            }
         }
         .onAppear {
-            profileViewModel.validateRegistrationForm()
+            withAnimation {
+                profileViewModel.validateRegistrationForm()
+            }
         }
     }
 }

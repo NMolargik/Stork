@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PaywallMarketingView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     let signOut: () -> Void
     
     var body: some View {
@@ -25,7 +27,7 @@ struct PaywallMarketingView: View {
                                         .foregroundStyle(.black)
                                 }
                             
-                            Text("Stork Annual")
+                            Text("Stork Monthly")
                                 .font(.body)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.white)
@@ -48,17 +50,51 @@ struct PaywallMarketingView: View {
                             .minimumScaleFactor(0.8)
                         #endif
                         
-                        featureSection(
-                            icon: "shippingbox.fill",
-                            title: "Track Your Deliveries!",
-                            description: "See your deliveries at a glance with your jar, or dive deeper into statistics or details from a particular delivery."
-                        )
-                        
-                        featureSection(
-                            icon: "person.3.fill",
-                            title: "Muster Up!",
-                            description: "Group up with your coworkers to contribute to a larger set of delivery trend data."
-                        )
+                        HStack {
+                            VStack {
+                                Image("shippingbox.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundColor(Color("storkBlue"))
+                                    .frame(width: 24, height: 24)
+                                    .padding()
+                                    .padding(.bottom)
+                                
+                                Image("person.3.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundColor(Color("storkPurple"))
+                                    .frame(width: 24, height: 24)
+                                    .padding()
+                            }
+                            
+                            VStack (alignment: .leading){
+                                Text("Track Your Deliveries!")
+                                    .font(.system(size: 18, weight: .semibold))
+                                #if !SKIP
+                                    .minimumScaleFactor(0.8)
+                                #endif
+                                
+                                Text("See your deliveries at a glance with your jar, or dive deeper into statistics or details from a particular delivery.")
+                                    .font(.system(size: 16))
+                                #if !SKIP
+                                    .minimumScaleFactor(0.8)
+                                #endif
+                                    .padding(.bottom)
+                                
+                                Text("Muster Up!")
+                                    .font(.system(size: 18, weight: .semibold))
+                                #if !SKIP
+                                    .minimumScaleFactor(0.8)
+                                #endif
+                                
+                                Text("Group up with your coworkers to contribute to a larger set of delivery trend data.")
+                                    .font(.system(size: 16))
+                                #if !SKIP
+                                    .minimumScaleFactor(0.8)
+                                #endif
+                            }
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -83,33 +119,6 @@ struct PaywallMarketingView: View {
                 }
             }
         }
-    }
-    
-    @ViewBuilder
-    private func featureSection(icon: String, title: String, description: String) -> some View {
-        HStack(alignment: .top, spacing: 15) {
-            Image(icon)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-                .offset(y: 2)
-            
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.system(size: 18, weight: .semibold))
-                #if !SKIP
-                    .minimumScaleFactor(0.8)
-                #endif
-                
-                Text(description)
-                    .font(.system(size: 16))
-                #if !SKIP
-                    .minimumScaleFactor(0.8)
-                #endif
-                
-            }
-        }
-        .padding(.horizontal)
     }
 }
 

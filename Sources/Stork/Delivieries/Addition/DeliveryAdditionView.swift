@@ -63,7 +63,7 @@ struct DeliveryAdditionView: View {
                                         .foregroundStyle(.red)
                                     
                                     Text("\(formattedDate(selectedDate))")
-                                        .foregroundStyle(Color("storkIndigo"))
+                                        .foregroundStyle(.white)
                                         .padding(.trailing)
                                 }
                                 
@@ -180,7 +180,7 @@ struct DeliveryAdditionView: View {
 
                     // MARK: - Select Hospital Section
                     VStack(alignment: .center, spacing: 10) {
-                        Text(deliveryViewModel.selectedHospital?.facility_name ?? "No Hospital Selected")
+                        Text(deliveryViewModel.selectedHospital?.facility_name ?? "Please select a delivery location!")
                             .font(.headline)
                             .multilineTextAlignment(.center)
 
@@ -210,7 +210,7 @@ struct DeliveryAdditionView: View {
                             .frame(height: 50)
                     } else {
                         CustomButtonView(
-                            text: "Submit Delivery",
+                            text: deliveryViewModel.selectedHospital?.facility_name == nil ? "No Hospital Selected" : "Submit Delivery",
                             width: 250,
                             height: 50,
                             color: Color.green,

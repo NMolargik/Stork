@@ -44,10 +44,10 @@ struct EmptyStateView: View {
             .padding(.bottom)
 
             Text("No deliveries recorded yet. Use the button above to get started!")
+                .padding()
                 .multilineTextAlignment(.center)
                 .font(.title3)
                 .fontWeight(.semibold)
-                .padding(.top, 8)
                 .backgroundCard(colorScheme: colorScheme)
 
             Spacer(minLength: 200)

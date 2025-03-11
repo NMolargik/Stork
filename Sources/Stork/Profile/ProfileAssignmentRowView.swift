@@ -35,7 +35,7 @@ struct ProfileAssignmentRowView: View {
                 Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(.black)
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
                 
                 HStack(spacing: 4) {
                     Image("birthday.cake.fill")

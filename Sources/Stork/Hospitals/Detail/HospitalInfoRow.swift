@@ -24,7 +24,7 @@ struct HospitalInfoRow: View {
                 .fontWeight(.semibold)
                 .lineLimit(nil) // Allow unlimited lines
                 .multilineTextAlignment(.leading) // Ensure text aligns properly
-#if !SKIP
+            #if !SKIP
                 .fixedSize(horizontal: false, vertical: true) // Prevent horizontal shrinking, force vertical expansion
             #endif
         }

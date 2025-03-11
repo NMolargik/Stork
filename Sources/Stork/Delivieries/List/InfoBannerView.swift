@@ -20,6 +20,8 @@ struct InfoBannerView: View {
                 .padding(.trailing)
 
             Text("You can submit up to 8 deliveries per day")
+                .font(.title3)
+                .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
 
             Spacer()

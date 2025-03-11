@@ -10,13 +10,12 @@ import SwiftUI
 
 struct StoreConstants {
     #if SKIP
-    static let apiKey = "goog_wqAoIhKYjQVhKmaOMDLqZzldfIO"
+    static let apiKey = "goog_KGgJYlofTBhUUOkHTnuUbSrcgWi"
     #else
     static let apiKey = "appl_IJaUJSFJvADbJAclPsSrsHInYKP"
     #endif
     
     static let entitlementID = "Stork Monthly"
     static let packageID = "$rc_monthly"
-    
 }
 

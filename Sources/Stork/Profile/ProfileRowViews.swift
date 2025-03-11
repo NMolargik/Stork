@@ -30,17 +30,18 @@ struct ProfileRowView: View {
                 Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(.black)
+                    .foregroundStyle(colorScheme == .dark ? .white : .black)
                 
                 HStack(spacing: 4) {
                     Image("birthday.cake.fill")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
-                        .foregroundStyle(Color("storkIndigo"))
+                        .foregroundStyle(Color("storkPink"))
+                        .padding(.trailing)
                     
                     Text(Self.dateFormatter.string(from: profile.birthday))
-                        .foregroundColor(.gray)
+                        .foregroundStyle(colorScheme == .dark ? .white : .black)
                 }
             }
             

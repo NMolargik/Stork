@@ -184,11 +184,11 @@ struct BabyEditorView: View {
         if useMetric {
             let newWeightKg = (baby.weight * ounceToKg) + (Double(delta) * 0.1) // ✅ Increment by 0.1 kg
             let newWeightOunces = newWeightKg / ounceToKg // Convert back to ounces
-
+            
             print("📏 Metric Mode - Proposed Weight: \(newWeightKg) kg (\(newWeightOunces) oz)")
-
+            
             if weightRangeMetric.contains(newWeightKg) {
-                baby.weight = newWeightOunces // ✅ Save weight as ounces
+                baby.weight = max(newWeightOunces, 0.0) // ✅ Prevent negative values
                 print("✅ Metric Mode: Updated baby.weight to \(baby.weight) oz (\(newWeightKg) kg)")
             } else {
                 print("❌ Metric Mode: \(newWeightKg) kg is OUT OF RANGE")
@@ -200,11 +200,15 @@ struct BabyEditorView: View {
                 pounds += 1
                 ounces -= 16
             } else if ounces < 0 {
-                pounds -= 1
-                ounces += 16
+                if pounds > 0 {
+                    pounds -= 1
+                    ounces += 16
+                } else {
+                    ounces = 0 // ✅ Prevent weight from going negative
+                }
             }
 
-            baby.weight = Double((pounds * 16) + ounces)
+            baby.weight = max(Double((pounds * 16) + ounces), 0.0) // ✅ Ensure weight is never negative
             print("✅ Imperial Mode: Updated baby.weight to \(baby.weight) oz")
         }
     }
@@ -213,9 +217,11 @@ struct BabyEditorView: View {
         triggerHaptic()
 
         if useMetric {
-            lengthInCm += delta // ✅ Adjust by 0.1 cm
+            let newLength = lengthInCm + delta // ✅ Adjust by 0.1 cm
+            lengthInCm = max(newLength, 0.0) // ✅ Prevent negative length
         } else {
-            lengthInCm += delta * cmPerInch // ✅ Adjust by 0.1 inches
+            let newLength = lengthInCm + (delta * cmPerInch) // ✅ Adjust by 0.1 inches
+            lengthInCm = max(newLength, 0.0) // ✅ Prevent negative length
         }
 
         baby.height = lengthInCm / cmPerInch // ✅ Always store height in inches

@@ -60,9 +60,10 @@ class HospitalViewModel: ObservableObject {
             }
 
             self.hospitals = try await self.hospitalRepository.getHospitals(
-                byCity: cityState.city ?? "San Francisco",
-                andState: cityState.state ?? "CA"
+                state: cityState.state ?? "CA"
             )
+            
+            self.hospitals.sort { $0.facility_name < $1.facility_name }
         }
     }
 
@@ -71,7 +72,11 @@ class HospitalViewModel: ObservableObject {
     public func searchHospitals() async {
         usingLocation = false
         await executeAsync {
-            self.hospitals = try await self.hospitalRepository.searchHospitals(byPartialName: self.searchQuery)
+            do {
+                self.hospitals = try await self.hospitalRepository.searchHospitals(byPartialName: self.searchQuery)
+            } catch {
+                self.hospitals = []
+            }
         }
     }
 

@@ -53,8 +53,8 @@ struct MusterInvitationsView: View {
                             VStack(alignment: .leading) {
                                 Text(invite.senderName + " invited you to " + invite.musterName)
                                     .font(.headline)
-                                    .foregroundStyle(.black)
-                                
+                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+
                                 HStack {
                                     CustomButtonView(text: "Accept", width: 100, height: 40, color: Color("storkBlue"), isEnabled: true, onTapAction: {
                                         

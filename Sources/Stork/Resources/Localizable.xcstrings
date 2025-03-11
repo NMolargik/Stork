@@ -538,6 +538,9 @@
     "NICU Stay" : {
 
     },
+    "No address listed yet." : {
+
+    },
     "No data available" : {
 
     },
@@ -547,7 +550,7 @@
     "No delivery data available for the past seven days." : {
 
     },
-    "No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above." : {
+    "No hospitals found. Try changing your search criteria." : {
 
     },
     "No invitations found. Ask a muster admin to send you an invitation!" : {
@@ -732,10 +735,10 @@
     "Stork allows users to track trends in labor and delivery. This includes sex, weight, monthly totals, and more!\nYour delivery jar will fill up with colored marbles that each represent a baby delivered in the last week." : {
 
     },
-    "Stork Annual" : {
+    "Stork is a labor and delivery app designed to assist nurses and doctors in managing delivery statistics over time." : {
 
     },
-    "Stork is a labor and delivery app designed to assist nurses and doctors in managing delivery statistics over time." : {
+    "Stork Monthly" : {
 
     },
     "Submit" : {
@@ -780,6 +783,9 @@
 
     },
     "Track Your Deliveries!" : {
+
+    },
+    "Unknown Location" : {
 
     },
     "Use Location" : {

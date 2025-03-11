@@ -8,16 +8,23 @@
 import SwiftUI
 
 struct NoHospitalsFoundView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
-        Text("No hospitals found. Either Stork services are down, or you should change your search criteria.\n\nIf you feel your hospital is missing, report it using the button above.")
-            .padding()
-            .multilineTextAlignment(.center)
-            .background(
-                Color.white
-                    .cornerRadius(20)
-                    .shadow(radius: 2)
-            )
-            .padding()
+        VStack {
+            Image("exclamationmark.magnifyingglass")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 50, height: 50)
+                .foregroundStyle(Color("storkOrange"))
+                .shadow(radius: 2)
+            
+            Text("No hospitals found. Try changing your search criteria.")
+                .multilineTextAlignment(.center)
+                .frame(height: 70)
+        }
+        .padding()
+        .backgroundCard(colorScheme: colorScheme)
     }
 }
 

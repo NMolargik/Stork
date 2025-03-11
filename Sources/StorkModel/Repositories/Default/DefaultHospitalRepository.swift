@@ -53,6 +53,7 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
 
             // Call the remote data source to create it
             let createdHospital = try await remoteDataSource.createHospital(hospital: hospital)
+            
             return createdHospital
         } catch let error as HospitalError {
             throw error
@@ -130,20 +131,19 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
     /// Fetches hospitals located in a specific city and state.
     ///
     /// - Parameters:
-    ///   - city: The city to filter hospitals by.
     ///   - state: The state to filter hospitals by.
     /// - Returns: A list of `Hospital` objects matching the city and state.
     /// - Throws:
     ///   - `HospitalError.notFound`: If no hospitals are found.
     ///   - `HospitalError.firebaseError`: If Firestore fails.
     ///   - `HospitalError.unknown`: For any other error.
-    public func getHospitals(byCity city: String, andState state: String) async throws -> [Hospital] {
+    public func getHospitals(state: String) async throws -> [Hospital] {
         do {
-            return try await remoteDataSource.listHospitals(city: city, state: state)
+            return try await remoteDataSource.listHospitals(state: state)
         } catch let error as HospitalError {
             throw error
         } catch {
-            throw HospitalError.unknown("Failed to fetch hospitals in \(city), \(state): \(error.localizedDescription)")
+            throw HospitalError.unknown("Failed to fetch hospitals in \(state): \(error.localizedDescription)")
         }
     }
 
