@@ -30,12 +30,15 @@ struct BabySexDistributionView: View {
         VStack {
             Spacer()
             
+            Text("6 Month Sex Distribution")
+                .fontWeight(.bold)
+                .foregroundStyle(.gray)
+                .offset(y: 25)
+                .frame(height: 10)
+                .padding(.bottom, 10)
+            
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("6 Months")
-                        .multilineTextAlignment(.leading)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.gray)
                     
                     if distributionData.isEmpty {
                         Text("No data available")

@@ -11,7 +11,7 @@ import StorkModel
 struct UserDeliveryDistributionView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @EnvironmentObject var musterViewModel: MusterViewModel
+    @ObservedObject var musterViewModel: MusterViewModel
 
 
     // MARK: - Input Data
@@ -23,7 +23,8 @@ struct UserDeliveryDistributionView: View {
         Calendar.current.date(byAdding: .month, value: -6, to: Date()) ?? Date()
     }
 
-    init(deliveries: [Delivery]) {
+    init(musterViewModel: MusterViewModel, deliveries: [Delivery]) {
+        self.musterViewModel = musterViewModel
         self.deliveries = deliveries
     }
 

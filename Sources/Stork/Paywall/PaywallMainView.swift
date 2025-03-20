@@ -17,9 +17,9 @@ import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 #endif
 
 struct PaywallMainView: View {
-    @AppStorage("errorMessage") var errorMessage: String = ""
-    
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStateManager: AppStateManager
+
     @ObservedObject var storeViewModel = Store.shared
 
     let onCompleted: () -> Void  // Callback for closing the paywall
@@ -49,11 +49,15 @@ struct PaywallMainView: View {
                             
                         }, purchaseCancelled: {
                             print("Purchases: Purchase Cancelled")
-                            errorMessage = "Purchase Cancelled"
+                            withAnimation {
+                                appStateManager.errorMessage = "Purchase Cancelled"
+                            }
                             
                         }, restoreStarted: {
                             print("Purchases: Restore Started")
-                            errorMessage = "Searching for existing subscription..."
+                            withAnimation {
+                                appStateManager.errorMessage = "Searching for existing subscription..."
+                            }
                             
                         }, restoreCompleted: { completedHandler in
                             print("Purchases: Restore Completed")
@@ -62,11 +66,15 @@ struct PaywallMainView: View {
                             
                         }, purchaseFailure: { failureHandler in
                             print("Purchases: Purchase Failure")
-                            errorMessage = "Purchase failed. Please try again"
+                            withAnimation {
+                                appStateManager.errorMessage = "Purchase failed. Please try again"
+                            }
                             
                         }, restoreFailure: { restoreHandler in
                             print("Purchases: Restore Failed")
-                            errorMessage = "No existing subscription found"
+                            withAnimation {
+                                appStateManager.errorMessage = "No existing subscription found"
+                            }
                         }
                     )
 #elseif SKIP
@@ -110,4 +118,5 @@ struct PaywallMainView: View {
         onCompleted: {},
         signOut: {}
     )
+    .environmentObject(AppStateManager.shared)
 }

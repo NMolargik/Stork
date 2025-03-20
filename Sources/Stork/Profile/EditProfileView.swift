@@ -9,11 +9,11 @@ import SwiftUI
 import StorkModel
 
 struct EditProfileView: View {
-    // MARK: - Environment Objects
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var hospitalViewModel: HospitalViewModel
     @Environment(\.dismiss) var dismiss
+
+    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var hospitalViewModel: HospitalViewModel
     
     // MARK: - State Variables
     @State private var firstName: String = ""
@@ -57,7 +57,7 @@ struct EditProfileView: View {
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: role) { _ in
-                        triggerHaptic()
+                        HapticFeedback.trigger(style: .medium)
                     }
                 }
                 
@@ -68,12 +68,13 @@ struct EditProfileView: View {
                     }
                 }
             }
+            .padding(.bottom)
         }
         .navigationTitle("Edit Profile")
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading){
                 Button("Cancel") {
-                    triggerHaptic()
+                    HapticFeedback.trigger(style: .medium)
                     dismiss()
                 }
             }
@@ -88,7 +89,7 @@ struct EditProfileView: View {
                         .shadow(radius: 2)
                 } else {
                     Button("Save") {
-                        triggerHaptic()
+                        HapticFeedback.trigger(style: .medium)
                         Task {
                             await saveProfile()
                         }
@@ -147,4 +148,8 @@ struct EditProfileView: View {
         
         isSaving = false
     }
+}
+
+#Preview {
+    EditProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()), hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
 }

@@ -10,11 +10,9 @@ import StorkModel
 struct DeliveryListView: View {
     // MARK: - Environment
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-
-    // MARK: - Binding
-    @Binding var showingDeliveryAddition: Bool
+        
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
 
     var body: some View {
         ZStack {
@@ -23,13 +21,13 @@ struct DeliveryListView: View {
                 if deliveryViewModel.deliveries.isEmpty {
                     EmptyStateView()
                         .listRowBackground(Color.clear)
-#if !SKIP
+                        #if !SKIP
                         .listRowInsets(.none)
-#endif
+                        #endif
                 } else {
                     // MARK: - Sections for Each Month
                     ForEach(deliveryViewModel.groupedDeliveries, id: \.key) { (monthYear, deliveries) in
-                        Section(header: SectionHeader(title: monthYear)) {
+                        Section(header: SectionHeaderView(title: monthYear)) {
                             ForEach(deliveries, id: \.id) { delivery in
                                 NavigationLink(value: delivery) {
                                     DeliveryRowView(delivery: delivery)
@@ -45,9 +43,9 @@ struct DeliveryListView: View {
     }
 }
 
-// MARK: - Preview
 #Preview {
-    DeliveryListView(showingDeliveryAddition: .constant(false))
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+    DeliveryListView(
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()), 
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+    )
 }

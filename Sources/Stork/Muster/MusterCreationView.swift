@@ -8,13 +8,14 @@ import SwiftUI
 import StorkModel
 
 struct MusterCreationView: View {
-    @AppStorage("errorMessage") var errorMessage: String = ""
     @Environment(\.colorScheme) var colorScheme
-
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var hospitalViewModel: HospitalViewModel
+    
+    @EnvironmentObject var appStateManager: AppStateManager
+
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var hospitalViewModel: HospitalViewModel
 
     @Binding var showCreateMusterSheet: Bool
 
@@ -22,13 +23,17 @@ struct MusterCreationView: View {
 
     var body: some View {
         if (musterViewModel.showHospitalSelection) {
-            HospitalListView(selectionMode: true, onSelection: { hospital in
-                self.selectedHospital = hospital
-                musterViewModel.newMuster.primaryHospitalId = hospital.id
-                musterViewModel.showHospitalSelection = false
-                musterViewModel.validateCreationForm()
-
-            })
+            HospitalListView(
+                hospitalViewModel: hospitalViewModel,
+                profileViewModel: profileViewModel,
+                selectionMode: true,
+                onSelection: { hospital in
+                    self.selectedHospital = hospital
+                    musterViewModel.newMuster.primaryHospitalId = hospital.id
+                    musterViewModel.showHospitalSelection = false
+                    musterViewModel.validateCreationForm()
+                }
+            )
         } else {
             NavigationStack {
                 ScrollView {
@@ -104,7 +109,7 @@ struct MusterCreationView: View {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button(action: {
-                            triggerHaptic()
+                            HapticFeedback.trigger(style: .medium)
                             showCreateMusterSheet = false
                             dismiss()
                         }, label: {
@@ -138,8 +143,10 @@ struct MusterCreationView: View {
                         musterViewModel.musterMembers.append(profileViewModel.profile)
 
                     } catch {
-                        errorMessage = error.localizedDescription
-                        musterViewModel.isWorking = false
+                        withAnimation {
+                            appStateManager.errorMessage = error.localizedDescription
+                            musterViewModel.isWorking = false
+                        }
                         throw error
                     }
                 } else {
@@ -156,13 +163,12 @@ struct MusterCreationView: View {
     }
 }
 
-// MARK: - Preview
-
-struct MusterCreationView_Previews: PreviewProvider {
-    static var previews: some View {
-        MusterCreationView(showCreateMusterSheet: .constant(true))
-            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-            .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-            .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
-    }
+#Preview {
+    MusterCreationView(
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
+        showCreateMusterSheet: .constant(false)
+    )
+    .environmentObject(AppStateManager.shared)
 }

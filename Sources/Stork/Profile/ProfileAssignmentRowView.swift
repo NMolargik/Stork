@@ -9,8 +9,9 @@ import SwiftUI
 import StorkModel
 
 struct ProfileAssignmentRowView: View {
-    @AppStorage("errorMessage") private var errorMessage: String = ""
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStateManager: AppStateManager
     
     /// The `Profile` displayed in this row.
     var profile: Profile
@@ -71,7 +72,7 @@ struct ProfileAssignmentRowView: View {
             if !isAdmin {
                 onAssign()
             } else {
-                errorMessage = "User is already an admin."
+                appStateManager.errorMessage = "User is already an admin."
             }
         }
     }
@@ -96,4 +97,5 @@ struct ProfileAssignmentRowView: View {
         adminProfileIds: ["123", "abc"],
         onAssign: {}
     )
+    .environmentObject(AppStateManager.shared)
 }

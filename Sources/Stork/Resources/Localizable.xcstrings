@@ -97,10 +97,10 @@
         }
       }
     },
-    "6 Month Stats" : {
+    "6 Month Sex Distribution" : {
 
     },
-    "6 Months" : {
+    "6 Month Stats" : {
 
     },
     "a labor and delivery app" : {
@@ -177,9 +177,6 @@
     "Birthing Center" : {
 
     },
-    "Boy%@" : {
-
-    },
     "Cancel" : {
 
     },
@@ -187,6 +184,9 @@
 
     },
     "Confirm Password" : {
+
+    },
+    "Content" : {
 
     },
     "Continue" : {
@@ -300,9 +300,6 @@
 
     },
     "Forgot Your Password?" : {
-
-    },
-    "Girl%@" : {
 
     },
     "Group up with your coworkers to contribute to a larger set of delivery trend data." : {
@@ -466,9 +463,6 @@
 
     },
     "Loss" : {
-
-    },
-    "Loss%@" : {
 
     },
     "Male" : {
@@ -662,7 +656,7 @@
         }
       }
     },
-    "Searching by location" : {
+    "Searching by State" : {
 
     },
     "See your deliveries at a glance with your jar, or dive deeper into statistics or details from a particular delivery." : {

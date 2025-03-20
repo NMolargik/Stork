@@ -21,7 +21,7 @@ struct DeleteConfirmationButtons: View {
                 color: Color("storkBlue"),
                 isEnabled: true,
                 onTapAction: {
-                    triggerHaptic()
+                    HapticFeedback.trigger(style: .medium)
                     showing = false
                     step = 1
                 }
@@ -34,7 +34,7 @@ struct DeleteConfirmationButtons: View {
                 color: .red,
                 isEnabled: true,
                 onTapAction: {
-                    triggerHaptic()
+                    HapticFeedback.trigger(style: .medium)
                     if step == 1 {
                         step = 2
                     } else {

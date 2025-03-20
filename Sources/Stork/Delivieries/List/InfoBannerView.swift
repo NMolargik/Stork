@@ -1,8 +1,8 @@
 //
 //  InfoBannerView.swift
-//  skipapp-stork
 //
-//  Created by Nick Molargik on 1/22/25.
+//
+//  Created by Nick Molargik on 3/17/25.
 //
 
 import SwiftUI
@@ -10,16 +10,22 @@ import SwiftUI
 struct InfoBannerView: View {
     @Environment(\.colorScheme) var colorScheme
 
+    let icon: String
+    let text: String
+    let color: Color
+
     var body: some View {
         HStack {
             Spacer()
-            Image("exclamationmark.circle")
+
+            Image(systemName: icon)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 24, height: 24)                .foregroundStyle(Color("storkBlue"))
+                .frame(width: 24, height: 24)
+                .foregroundStyle(color)
                 .padding(.trailing)
 
-            Text("You can submit up to 8 deliveries per day")
+            Text(text)
                 .font(.title3)
                 .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
@@ -32,5 +38,5 @@ struct InfoBannerView: View {
 }
 
 #Preview {
-    InfoBannerView()
+    InfoBannerView(icon: "exclamationmark.triangle.fill", text: "info banner", color: Color.blue)
 }

@@ -10,15 +10,19 @@ import StorkModel
 
 struct MusterCarouselView: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
 
     @State private var selectedIndex: Int = 0
     
     #if !SKIP
-    init() {
+    init(deliveryViewModel: DeliveryViewModel) {
+        self.deliveryViewModel = deliveryViewModel
+        self._selectedIndex = State(initialValue: 0)
+        
         UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color("storkIndigo"))
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.gray
-       }
+    }
     #endif
     
     var body: some View {
@@ -30,15 +34,15 @@ struct MusterCarouselView: View {
                     .backgroundCard(colorScheme: colorScheme)
                     .padding(.vertical, 5)
                     .tag(0)
-#endif
+            #endif
                 
-#if !SKIP
+            #if !SKIP
                 DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundCard(colorScheme: colorScheme)
                     .padding(.vertical, 5)
                     .tag(1)
-#endif
+            #endif
                 
                 BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -70,6 +74,7 @@ struct MusterCarouselView: View {
 }
 
 #Preview {
-    MusterCarouselView()
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+    MusterCarouselView(
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository())
+    )
 }

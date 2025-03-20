@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct ProfileManagementView: View {
-    @Binding var isOnboardingComplete: Bool
-    @Binding var appState: AppState
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    @EnvironmentObject var appStateManager: AppStateManager
+
     @Binding var showingProfileEditor: Bool
     @Binding var showingDeleteConfirmation: Bool
-
 
     var body: some View {
         Section(header: Text("Profile")) {
             HStack {
                 Button(action: {
-                    triggerHaptic()
+                    HapticFeedback.trigger(style: .medium)
 
                     withAnimation {
                         showingProfileEditor = true
@@ -53,7 +53,7 @@ struct ProfileManagementView: View {
 
             HStack {
                 Button(action: {
-                    triggerHaptic()
+                    HapticFeedback.trigger(style: .medium)
                     showingDeleteConfirmation = true
                 }) {
                     Text("Delete Profile")
@@ -72,14 +72,19 @@ struct ProfileManagementView: View {
     }
 
     private func restartOnboarding() {
-        triggerHaptic()
+        HapticFeedback.trigger(style: .medium)
         withAnimation {
-            isOnboardingComplete = false
-            appState = .onboard
+            appStorageManager.isOnboardingComplete = false
+            appStateManager.currentAppScreen = .onboard
         }
     }
 }
 
 #Preview {
-    ProfileManagementView(isOnboardingComplete: .constant(true), appState: .constant(.main), showingProfileEditor: .constant(false), showingDeleteConfirmation: .constant(false))
+    ProfileManagementView(
+        showingProfileEditor: .constant(false),
+        showingDeleteConfirmation: .constant(false)
+    )
+    .environmentObject(AppStorageManager())
+    .environmentObject(AppStateManager.shared)
 }

@@ -9,11 +9,12 @@ import SwiftUI
 import StorkModel
 
 struct MusterAdminInviteUserView: View {
-    @AppStorage("errorMessage") private var errorMessage: String = ""
-    
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var profileViewModel: ProfileViewModel
     @Environment(\.dismiss) private var dismiss
+
+    @EnvironmentObject var appStateManager: AppStateManager
+    
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
     
     @State private var searchText = ""
     @State private var searchEnabled = false
@@ -136,7 +137,9 @@ struct MusterAdminInviteUserView: View {
                 )
                 print("Profiles found: \(profiles)")
             } catch {
-                errorMessage = "Failed to search for users. Please try again."
+                withAnimation {
+                    appStateManager.errorMessage = "Failed to search for users. Please try again."
+                }
             }
             profileViewModel.isWorking = false
         }
@@ -149,7 +152,9 @@ struct MusterAdminInviteUserView: View {
             do {
                 try await musterViewModel.getMusterInvitations(muster: muster)
             } catch {
-                errorMessage = error.localizedDescription
+                withAnimation {
+                    appStateManager.errorMessage = error.localizedDescription
+                }
             }
         }
     }
@@ -162,7 +167,9 @@ struct MusterAdminInviteUserView: View {
                 try await musterViewModel.inviteUserToMuster(profile: profile, currentUser: profileViewModel.profile)
                 refreshInvites()
             } catch {
-                errorMessage = error.localizedDescription
+                withAnimation {
+                    appStateManager.errorMessage = error.localizedDescription
+                }
             }
         }
     }
@@ -171,4 +178,12 @@ struct MusterAdminInviteUserView: View {
     private func updateSearchEnabled() {
         searchEnabled = !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+}
+
+#Preview {
+    MusterAdminInviteUserView(
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+    )
+    .environmentObject(AppStateManager.shared)
 }

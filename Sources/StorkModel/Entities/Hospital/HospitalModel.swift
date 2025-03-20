@@ -122,4 +122,24 @@ public struct Hospital: Identifiable, Codable, Hashable {
         self.deliveryCount = deliveryCount
         self.babyCount = babyCount
     }
+    // MARK: - Sample Data
+    
+    public static func sampleHospital() -> Hospital {
+        return Hospital(
+            id: UUID().uuidString,
+            facility_name: "Sample Medical Center",
+            address: "123 Main Street",
+            citytown: "Springfield",
+            state: "CA",
+            zip_code: "90210",
+            countyparish: "Los Angeles",
+            telephone_number: "555-123-4567",
+            hospital_type: "General Acute Care",
+            hospital_ownership: "Non-Profit",
+            emergency_services: true,
+            meets_criteria_for_birthing_friendly_designation: true,
+            deliveryCount: 150,
+            babyCount: 300
+        )
+    }
 }

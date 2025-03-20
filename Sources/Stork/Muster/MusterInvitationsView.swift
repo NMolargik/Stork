@@ -9,13 +9,14 @@ import SwiftUI
 import StorkModel
 
 struct MusterInvitationsView: View {
-    @AppStorage("errorMessage") var errorMessage: String = ""
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
+    
+    @EnvironmentObject var appStateManager: AppStateManager
 
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
     
     @Binding var showMusterInvitations: Bool
     
@@ -101,7 +102,9 @@ struct MusterInvitationsView: View {
                     do {
                         try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
                     } catch {
-                        errorMessage = error.localizedDescription
+                        withAnimation {
+                            appStateManager.errorMessage = error.localizedDescription
+                        }
                     }
                 }
             }
@@ -109,7 +112,7 @@ struct MusterInvitationsView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
-                        triggerHaptic()
+                        HapticFeedback.trigger(style: .medium)
                         showMusterInvitations = false
                         dismiss()
                     }
@@ -123,10 +126,11 @@ struct MusterInvitationsView: View {
 
 #Preview {
     MusterInvitationsView(
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         showMusterInvitations: .constant(true),
         onRespond: { _, _ in }
     )
-    .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-    .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-    .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+    .environmentObject(AppStateManager.shared)
 }

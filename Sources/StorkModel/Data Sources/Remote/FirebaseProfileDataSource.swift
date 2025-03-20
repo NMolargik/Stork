@@ -281,6 +281,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     public func signOut() async throws {
         do {
             try auth.signOut()
+            print("User signed out!")
         } catch {
             throw ProfileError.signOutFailed("Error signing out: \(error.localizedDescription)")
         }

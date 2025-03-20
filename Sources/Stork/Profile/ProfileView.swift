@@ -2,12 +2,12 @@ import SwiftUI
 import StorkModel
 
 struct ProfileView: View {
-    @AppStorage("errorMessage") var errorMessage: String = ""
-
-    // MARK: - Environment Objects
-    @EnvironmentObject var profileViewModel: ProfileViewModel
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStateManager: AppStateManager
+
+    @ObservedObject var profileViewModel: ProfileViewModel
 
     var body: some View {
         NavigationStack {
@@ -99,7 +99,7 @@ struct ProfileView: View {
                 
                 ToolbarItem(placement: .topBarTrailing){
                     Button(action: {
-                        triggerHaptic()
+                        HapticFeedback.trigger(style: .medium)
                         stopEditingProfile()
                     }, label: {
                         Text("Save Changes")
@@ -131,16 +131,15 @@ struct ProfileView: View {
 
             } catch {
                 profileViewModel.isWorking = false
-                errorMessage = error.localizedDescription
+                withAnimation {
+                    appStateManager.errorMessage = error.localizedDescription
+                }
             }
         }
     }
 }
 
-// MARK: - Preview
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-    }
+#Preview {
+    ProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()))
+        .environmentObject(AppStateManager.shared)
 }

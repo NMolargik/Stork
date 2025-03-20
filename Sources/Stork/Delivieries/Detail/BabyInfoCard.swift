@@ -25,34 +25,7 @@ struct BabyInfoCard: View {
                 .accessibilityHidden(true)
             
             VStack(alignment: .leading) {
-                InfoRowView(
-                    icon: Image("scalemass.fill"),
-                    text: formattedWeight,
-                    iconColor: Color("storkOrange")
-                )
-                
-                InfoRowView(
-                    icon: Image("ruler.fill"),
-                    text: formattedHeight,
-                    iconColor: Color.green
-                )
-                
-                if baby.nurseCatch {
-                    InfoRowView(
-                        icon: Image("checkmark"),
-                        text: "Nurse Catch",
-                        iconColor: .teal
-                    )
-                }
-                    
-                if baby.nicuStay {
-                    InfoRowView(
-                        icon: Image("checkmark"),
-                        text: "NICU Stay",
-                        iconColor: .red
-                    )
-                }
-
+                infoRows
             }
         }
         .padding()
@@ -60,14 +33,47 @@ struct BabyInfoCard: View {
     }
 
     // MARK: - Computed Properties for Weight & Height
+    private var infoRows: some View {
+        Group {
+            InfoRowView(
+                icon: Image("scalemass.fill"),
+                text: formattedWeight,
+                iconColor: Color("storkOrange")
+            )
+            
+            InfoRowView(
+                icon: Image("ruler.fill"),
+                text: formattedHeight,
+                iconColor: Color.green
+            )
+            
+            if baby.nurseCatch || baby.nicuStay {
+                InfoRowView(
+                    icon: Image("checkmark_stork"),
+                    text: baby.nurseCatch ? "Nurse Catch" : "NICU Stay",
+                    iconColor: baby.nurseCatch ? .teal : .red
+                )
+            }
+        }
+    }
+
     private var formattedWeight: String {
-        useMetric ? "\(String(format: "%.2f", baby.weight * 0.0283495)) kg" :
-            "\(Int(baby.weight) / 16) lbs \(Int(baby.weight) % 16) oz"
+        formatWeight(weight: baby.weight)
     }
 
     private var formattedHeight: String {
-        useMetric ? "\(String(format: "%.1f", baby.height * 2.54)) cm" :
-            "\(String(format: "%.1f", baby.height)) inches"
+        formatHeight(height: baby.height)
+    }
+    
+    // MARK: - Helper Methods
+    private func formatWeight(weight: Double) -> String {
+        useMetric ? "\(String(format: "%.2f", weight * 0.0283495)) kg" :
+            "\(Int(weight) / 16) lbs \(Int(weight) % 16) oz"
+    }
+    
+    private func formatHeight(height: Double) -> String {
+        useMetric ? "\(String(format: "%.1f", height * 2.54)) cm" :
+            "\(String(format: "%.1f", height)) inches"
     }
 }
 

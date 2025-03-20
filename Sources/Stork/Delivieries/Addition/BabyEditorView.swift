@@ -9,10 +9,11 @@ import StorkModel
 
 struct BabyEditorView: View {
     @Environment(\.colorScheme) var colorScheme
-    @AppStorage("useMetric") private var useMetric: Bool = false
     
-    // MARK: - Properties
+    @EnvironmentObject var appStorageManager: AppStorageManager
+
     @Binding var baby: Baby
+    
     var babyNumber: Int
     var removeBaby: (String) -> Void
     var sampleMode: Bool = false
@@ -25,6 +26,22 @@ struct BabyEditorView: View {
     // MARK: - Constants
     private let ounceToKg = 0.0283495
     private let cmPerInch = 2.54
+
+    private func ouncesToKg(_ ounces: Double) -> Double {
+        return ounces * ounceToKg
+    }
+
+    private func kgToOunces(_ kg: Double) -> Double {
+        return kg / ounceToKg
+    }
+
+    private func inchesToCm(_ inches: Double) -> Double {
+        return inches * cmPerInch
+    }
+
+    private func cmToInches(_ cm: Double) -> Double {
+        return cm / cmPerInch
+    }
 
     private let weightRangeImperial: ClosedRange<Double> = 12.0...240.0 // 12 oz - 15 lbs
     private let weightRangeMetric: ClosedRange<Double> = 0.34...6.8     // 0.34 kg - 6.8 kg
@@ -70,7 +87,7 @@ struct BabyEditorView: View {
         .onChange(of: baby.height) { _ in
             updateHeightFromModel()
         }
-        .onChange(of: useMetric) { newMetric in
+        .onChange(of: appStorageManager.useMetric) { newMetric in
             updateUnits(toMetric: newMetric)
         }
     }
@@ -87,7 +104,7 @@ struct BabyEditorView: View {
 
             if babyNumber > 1 && !sampleMode {
                 Button {
-                    triggerHaptic()
+                    HapticFeedback.trigger(style: .medium)
                     withAnimation {
                         removeBaby(baby.id)
                     }
@@ -119,79 +136,63 @@ struct BabyEditorView: View {
                 .foregroundStyle(Color("storkOrange"))
                 .opacity(colorScheme == .dark ? 0.8 : 0.3)
         }
-        .onChange(of: baby.sex) { _ in triggerHaptic() }
+        .onChange(of: baby.sex) { _ in HapticFeedback.trigger(style: .medium) }
     }
     
     private var weightStepper: some View {
-        StepperView(
-            label: useMetric
+        CustomStepperView(
+            label: appStorageManager.useMetric
                 ? "\(String(format: "%.2f", baby.weight * ounceToKg)) kg"  // ✅ Show 2 decimal places for kg
                 : "\(pounds) lbs \(ounces) oz", // ✅ No decimal for lbs, separate ounces
             decrement: { adjustWeight(-1) },
             increment: { adjustWeight(1) },
-            range: useMetric ? weightRangeMetric : weightRangeImperial
+            range: appStorageManager.useMetric ? weightRangeMetric : weightRangeImperial
         )
     }
     
     private var lengthStepper: some View {
-        StepperView(
-            label: useMetric
+        CustomStepperView(
+            label: appStorageManager.useMetric
                 ? "\(String(format: "%.1f", lengthInCm)) cm"   // ✅ Show 1 decimal place for cm
                 : "\(String(format: "%.1f", baby.height)) in", // ✅ Show 1 decimal place for inches
             decrement: { adjustLength(-0.1) },
             increment: { adjustLength(0.1) },
-            range: useMetric ? lengthRangeMetric : lengthRangeImperial
+            range: appStorageManager.useMetric ? lengthRangeMetric : lengthRangeImperial
         )
     }
     
     private var nurseCatchToggle: some View {
-        CustomToggle(isOn: $baby.nurseCatch, title: "Nurse Catch")
+        CustomToggleView(isOn: $baby.nurseCatch, title: "Nurse Catch")
     }
 
     private var nicuToggle: some View {
-        CustomToggle(isOn: $baby.nicuStay, title: "NICU")
+        CustomToggleView(isOn: $baby.nicuStay, title: "NICU")
     }
 
     // MARK: - Helper Functions
     private func updateUnits(toMetric: Bool) {
-        triggerHaptic()
-
+        HapticFeedback.trigger(style: .medium)
         if toMetric {
-            // Convert ounces to kilograms and round to the nearest kg
-            let weightKg = (baby.weight * ounceToKg).rounded()
-            baby.weight = weightKg / ounceToKg // Convert back to ounces for storage
-
-            // Convert inches to centimeters and round to the nearest cm
-            lengthInCm = (baby.height * cmPerInch).rounded()
-            baby.height = lengthInCm / cmPerInch // Convert back to inches for storage
+            let weightKg = ouncesToKg(baby.weight).rounded()
+            baby.weight = kgToOunces(weightKg)
+            lengthInCm = inchesToCm(baby.height).rounded()
+            baby.height = cmToInches(lengthInCm)
         } else {
-            // Convert kilograms to ounces and round to the nearest full ounce
-            let weightOunces = (baby.weight * ounceToKg).rounded(.toNearestOrEven)
+            let weightOunces = kgToOunces(ouncesToKg(baby.weight)).rounded(.toNearestOrEven)
             baby.weight = weightOunces
-
-            // Convert centimeters to inches and round to the nearest inch
-            let heightInches = (lengthInCm / cmPerInch).rounded()
+            let heightInches = cmToInches(lengthInCm).rounded()
             baby.height = heightInches
-            lengthInCm = heightInches * cmPerInch // Convert back to cm for display
+            lengthInCm = inchesToCm(heightInches)
         }
-
-        print("🔄 Units switched. Weight: \(baby.weight) oz, Length: \(baby.height) in")
     }
     
     private func adjustWeight(_ delta: Int) {
-        triggerHaptic()
+        HapticFeedback.trigger(style: .medium)
         
-        if useMetric {
-            let newWeightKg = (baby.weight * ounceToKg) + (Double(delta) * 0.1) // ✅ Increment by 0.1 kg
-            let newWeightOunces = newWeightKg / ounceToKg // Convert back to ounces
-            
-            print("📏 Metric Mode - Proposed Weight: \(newWeightKg) kg (\(newWeightOunces) oz)")
-            
+        if appStorageManager.useMetric {
+            let newWeightKg = ouncesToKg(baby.weight) + (Double(delta) * 0.1)
             if weightRangeMetric.contains(newWeightKg) {
-                baby.weight = max(newWeightOunces, 0.0) // ✅ Prevent negative values
-                print("✅ Metric Mode: Updated baby.weight to \(baby.weight) oz (\(newWeightKg) kg)")
-            } else {
-                print("❌ Metric Mode: \(newWeightKg) kg is OUT OF RANGE")
+                baby.weight = max(kgToOunces(newWeightKg), 0.0)
             }
         } else {
             ounces += delta
@@ -204,28 +205,22 @@ struct BabyEditorView: View {
                     pounds -= 1
                     ounces += 16
                 } else {
-                    ounces = 0 // ✅ Prevent weight from going negative
+                    ounces = 0
                 }
             }
 
-            baby.weight = max(Double((pounds * 16) + ounces), 0.0) // ✅ Ensure weight is never negative
-            print("✅ Imperial Mode: Updated baby.weight to \(baby.weight) oz")
+            baby.weight = max(Double((pounds * 16) + ounces), 0.0)
         }
     }
     
     private func adjustLength(_ delta: Double) {
-        triggerHaptic()
-
-        if useMetric {
-            let newLength = lengthInCm + delta // ✅ Adjust by 0.1 cm
-            lengthInCm = max(newLength, 0.0) // ✅ Prevent negative length
+        HapticFeedback.trigger(style: .medium)
+        if appStorageManager.useMetric {
+            lengthInCm = max(lengthInCm + delta, 0.0)
         } else {
-            let newLength = lengthInCm + (delta * cmPerInch) // ✅ Adjust by 0.1 inches
-            lengthInCm = max(newLength, 0.0) // ✅ Prevent negative length
+            lengthInCm = max(lengthInCm + (delta * cmPerInch), 0.0)
         }
-
-        baby.height = lengthInCm / cmPerInch // ✅ Always store height in inches
-        print("📏 Length Updated: \(lengthInCm) cm (\(baby.height) in)")
+        baby.height = cmToInches(lengthInCm)
     }
     
     private func updateWeightFromModel() {
@@ -248,47 +243,7 @@ struct BabyEditorView: View {
         sampleMode: true
     )
     .padding()
+    .environmentObject(AppStorageManager())
 }
 
-import SwiftUI
 
-/// A custom toggle view that displays a title and a sliding circle indicator.
-struct CustomToggle: View {
-    @Binding var isOn: Bool
-    var title: String
-    var onColor: Color = .green
-    var offColor: Color = Color.gray.opacity(0.2)
-    var textColor: Color = .black
-
-    var body: some View {
-        Button(action: {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                isOn = !isOn
-                triggerHaptic()
-            }
-        }) {
-            HStack {
-                Text(title)
-                    .foregroundColor(textColor)
-                    .fontWeight(.bold)
-                Spacer()
-                ZStack(alignment: isOn ? .trailing : .leading) {
-                    // Background for the toggle "track"
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(isOn ? onColor : offColor)
-                        .frame(width: 50, height: 30)
-                    // The sliding "thumb"
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 26, height: 26)
-                        .padding(2)
-                }
-            }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.white.opacity(0.8))
-            )
-        }
-    }
-}
