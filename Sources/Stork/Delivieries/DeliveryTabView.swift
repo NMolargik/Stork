@@ -9,71 +9,98 @@ import StorkModel
 
 @MainActor
 struct DeliveryTabView: View {
-    // MARK: - AppStorage
-    @AppStorage("errorMessage") var errorMessage: String = ""
-    @AppStorage("leftHanded") var leftHanded: Bool = false
-
-    // MARK: - Environment Objects
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var dailyResetManager: DailyResetManager
-
-    // MARK: - Binding
-    @Binding var showingDeliveryAddition: Bool
-
-    // MARK: - State
-    @State private var navigationPath = NavigationPath()
+    @EnvironmentObject var appStateManager: AppStateManager
+    
+    @StateObject private var dailyResetUtility = DailyResetUtility()
+    
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var hospitalViewModel: HospitalViewModel
+    @ObservedObject var musterViewModel: MusterViewModel
 
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            DeliveryListView(showingDeliveryAddition: $showingDeliveryAddition)
-                .refreshable {
-                    await refreshDeliveries()
+        NavigationStack(path: $appStateManager.navigationPath) {
+            DeliveryListView(
+                deliveryViewModel: deliveryViewModel,
+                profileViewModel: profileViewModel
+            )
+            .refreshable { await refreshDeliveries() }
+            .navigationTitle("Deliveries")
+            .navigationDestination(for: Delivery.self) { delivery in
+                if let foundDelivery = deliveryViewModel.findDelivery(by: delivery.id) {
+                    DeliveryDetailView(delivery: foundDelivery)
+                } else {
+                    Text("Delivery not found")
                 }
-                .navigationTitle("Deliveries")
-                .navigationDestination(for: Delivery.self) { delivery in
-                    if let foundDelivery = deliveryViewModel.findDelivery(by: delivery.id) {
-                        DeliveryDetailView(delivery: foundDelivery)
-                    } else {
-                        Text("Delivery not found")
-                    }
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if (dailyResetManager.canSubmitDelivery()) {
-                            Button(action: {
-                                withAnimation {
-                                    triggerHaptic()
-                                    showingDeliveryAddition = true
-                                }
-                            }) {
-                                Text("New Delivery")
-                                    .foregroundStyle(Color("storkOrange"))
-                                    .fontWeight(.bold)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if dailyResetUtility.canSubmitDelivery() {
+                        Button(action: {
+                            withAnimation {
+                                HapticFeedback.trigger(style: .medium)
+                                appStateManager.showingDeliveryAddition = true
                             }
-                        } else {
-                            Text("Daily Limit Reached")
-                                .foregroundStyle(Color.red)
+                        }) {
+                            Text("New Delivery")
+                                .foregroundStyle(Color("storkOrange"))
                                 .fontWeight(.bold)
                         }
-                    }
-                    
-                    if deliveryViewModel.hasMorePages {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button(action: {
-                                withAnimation {
-                                    loadMoreDeliveries()
-                                }
-                            }, label: {
-                                Text("Load More")
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(Color("storkIndigo"))
-                            })
-                        }
+                    } else {
+                        Text("Daily Limit Reached")
+                            .foregroundStyle(Color.red)
+                            .fontWeight(.bold)
                     }
                 }
-                .sheet(isPresented: $showingDeliveryAddition) {
-                    DeliveryAdditionSheet(showingDeliveryAddition: $showingDeliveryAddition)
+                ToolbarItem(placement: .topBarLeading) {
+                    if deliveryViewModel.hasMorePages {
+                        Button(action: {
+                            withAnimation {
+                                loadMoreDeliveries()
+                            }
+                        }, label: {
+                            Text("Load More")
+                                .fontWeight(.bold)
+                                .foregroundStyle(Color("storkIndigo"))
+                        })
+                    }
+                }
+            }
+            .sheet(isPresented: $appStateManager.showingDeliveryAddition) {
+                NavigationStack {
+                    DeliveryAdditionView(
+                        profileViewModel: profileViewModel,
+                        deliveryViewModel: deliveryViewModel,
+                        hospitalViewModel: hospitalViewModel,
+                        musterViewModel: musterViewModel,
+                        dailyResetUtility: dailyResetUtility
+                    )
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Text("New Delivery")
+                                    .fontWeight(.bold)
+                            }
+                            
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button(action: {
+                                    HapticFeedback.trigger(style: .medium)
+                                    withAnimation {
+                                        appStateManager.showingDeliveryAddition = false
+                                    }
+                                }) {
+                                    Text("Cancel")
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.red)
+                                }
+                            }
+                        }
+                        .environmentObject(dailyResetUtility)
+                }
+                .animation(.easeInOut, value: appStateManager.showingDeliveryAddition)
+                .interactiveDismissDisabled()
+            }
+            .onChange(of: appStateManager.showingDeliveryAddition) { newValue in
+                    print(newValue)
             }
         }
     }
@@ -89,22 +116,23 @@ struct DeliveryTabView: View {
         do {
             try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
         } catch {
-            errorMessage = "Failed to refresh deliveries: \(error.localizedDescription)"
+            withAnimation {
+                appStateManager.errorMessage = "Failed to refresh deliveries: \(error.localizedDescription)"
+            }
         }
     }
-                                                              
-   // MARK: - Load More Deliveries
+    
+    // MARK: - Load More Deliveries
     private func loadMoreDeliveries() {
         Task {
             do {
-                let initialCount = deliveryViewModel.deliveries.count // Track before fetch
+                let initialCount = deliveryViewModel.deliveries.count
                 try await deliveryViewModel.fetchNextDeliveries(profile: profileViewModel.profile)
-
-                // Animate only if new items were added
+                
                 let newCount = deliveryViewModel.deliveries.count
                 if newCount > initialCount {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        deliveryViewModel.groupDeliveries() // Ensure UI updates smoothly
+                        deliveryViewModel.groupDeliveries()
                     }
                 }
             } catch {
@@ -116,8 +144,11 @@ struct DeliveryTabView: View {
 
 // MARK: - Preview
 #Preview {
-    DeliveryTabView(showingDeliveryAddition: .constant(false))
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-        .environmentObject(DailyResetManager())
+    DeliveryTabView(
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository())
+    )
+    .environmentObject(AppStateManager.shared)
 }

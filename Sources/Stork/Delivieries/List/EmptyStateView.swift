@@ -14,33 +14,18 @@ struct EmptyStateView: View {
         VStack {
             Spacer()
 
-            // MARK: - Animated Icon
             HStack(spacing: 16) {
-                Image("figure.child")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                    .foregroundStyle(Color("storkPurple"))
-                    .shadow(radius: 2)
-
-                
-                Image("figure.child")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                    .foregroundStyle(Color("storkPink"))
-                    .shadow(radius: 2)
-
-                Image("figure.child")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                    .foregroundStyle(Color("storkBlue"))
-                    .shadow(radius: 2)
+                ForEach(["storkPurple", "storkPink", "storkBlue"], id: \.self) { color in
+                    Image("figure.child")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .foregroundStyle(Color(color))
+                        .shadow(radius: 2)
+                }
             }
             .font(.largeTitle)
             .offset(x: -5)
-            .frame(width: 50)
             .padding(.bottom)
 
             Text("No deliveries recorded yet. Use the button above to get started!")
@@ -52,11 +37,17 @@ struct EmptyStateView: View {
 
             Spacer(minLength: 200)
 
-            InfoBannerView()
+            InfoBannerView(
+                icon: "exclamationmark.circle",
+                text: "You can submit up to 8 deliveries per day",
+                color: Color("storkBlue")
+            )
         }
         .padding()
     }
 }
+
+
 
 #Preview {
     EmptyStateView()

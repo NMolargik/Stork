@@ -104,7 +104,7 @@ struct PaywallMarketingView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            triggerHaptic()
+                            HapticFeedback.trigger(style: .medium)
                             signOut()
                         }) {
                             Text("Sign Out")

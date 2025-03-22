@@ -62,7 +62,6 @@ struct DeleteConfirmationView: View {
     }
 }
 
-// MARK: - Preview
 #Preview {
     DeleteConfirmationView(step: .constant(2), showing: .constant(true), onDelete: {})
 }

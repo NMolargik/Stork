@@ -11,16 +11,16 @@ public enum HospitalError: Error, LocalizedError {
         switch self {
         case .notFound(let message):
             print("Hospital Error: \(message)")
-            return "Hospital not found. Adjust your search! \(message)"
+            return "Hospital not found. Adjust your search!"
         case .creationFailed(let message):
             print("Hospital Error: \(message)")
-            return "Hospital creation failed. Please try again! \(message)"
+            return "Missing hospital submission failed. Please try again!"
         case .updateFailed(let message):
             print("Hospital Error: \(message)")
-            return "Hospital update failed. Please try again! \(message)"
+            return "Hospital update failed. Please try again!"
         case .deletionFailed(let message):
             print("Hospital Error: \(message)")
-            return "Hospital deletion failed. Please try again! \(message)"
+            return "Hospital deletion failed. Please try again!"
         case .unknown(let message):
             print("Hospital Error: \(message)")
             return "Unknown hospital error. \(message)"

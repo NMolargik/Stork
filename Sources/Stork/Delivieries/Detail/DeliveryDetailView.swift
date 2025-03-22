@@ -8,13 +8,8 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryDetailView: View {
-    // MARK: - AppStorage
-    @AppStorage("useMetric") private var useMetric: Bool = false
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
-    // MARK: - Environment Objects
-    @EnvironmentObject var musterViewModel: MusterViewModel
-
-    // MARK: - Binding
     @Binding var delivery: Delivery
 
     var body: some View {
@@ -27,12 +22,11 @@ struct DeliveryDetailView: View {
                         .padding(.leading)
                         .accessibilityLabel("Delivery Date: \(delivery.date.formatted(date: .omitted, time: .shortened))")
 
-                    // MARK: - Babies Information
                     ForEach(delivery.babies, id: \.id) { baby in
-                        BabyInfoCard(baby: baby, useMetric: useMetric)
+                        BabyInfoCard(baby: baby, useMetric: appStorageManager.useMetric)
                     }
                     
-                    DetailsView(delivery: delivery)
+                    DeliveryDetailListView(delivery: delivery)
                     
                     HStack {
                         Text("ID: \(delivery.id)")
@@ -42,21 +36,18 @@ struct DeliveryDetailView: View {
                         
                         Spacer()
                     }
-                    .padding(.leading)
+                    .padding(.leading, 5)
                 }
                 .padding([.horizontal, .bottom])
             }
         }
         .navigationTitle(delivery.date.formatted(date: .long, time: .omitted))
-        .onAppear { triggerHaptic() }
-        .onDisappear { triggerHaptic() }
+        .onAppear { HapticFeedback.trigger(style: .medium) }
+        .onDisappear { HapticFeedback.trigger(style: .medium) }
     }
 }
 
-// MARK: - Preview
-struct DeliveryDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        DeliveryDetailView(delivery: .constant(Delivery(sample: true)))
-            .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-    }
+#Preview {
+    DeliveryDetailView(delivery: .constant(Delivery(sample: true)))
+        .environmentObject(AppStorageManager())
 }

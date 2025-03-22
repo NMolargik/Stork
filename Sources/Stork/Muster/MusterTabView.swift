@@ -10,21 +10,19 @@ import StorkModel
 
 struct MusterTabView: View {
     @Environment(\.colorScheme) var colorScheme
-    @AppStorage("errorMessage") var errorMessage: String = ""
 
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    @EnvironmentObject var appStateManager: AppStateManager
     
-    @Binding var showingDeliveryAddition: Bool
-    @Binding var selectedTab: Tab
+    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
+    @ObservedObject var hospitalViewModel: HospitalViewModel
     
     @State private var showingMusterInvitations: Bool = false
-    @State private var navigationPath = NavigationPath()
     @State private var showLeaveMusterSheet = false
     
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationStack(path: $appStateManager.navigationPath) {
             if let muster = musterViewModel.currentMuster {
                 VStack(spacing: 0) {
                     HStack (spacing: 20) {
@@ -67,7 +65,7 @@ struct MusterTabView: View {
                         }
 
                         Button {
-                            triggerHaptic()
+                            HapticFeedback.trigger(style: .medium)
 
                             Task {
                                 try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
@@ -83,10 +81,10 @@ struct MusterTabView: View {
                         
                         Button {
                             withAnimation {
-                                triggerHaptic()
+                                HapticFeedback.trigger(style: .medium)
                                 deliveryViewModel.startNewDelivery()
-                                showingDeliveryAddition = true
-                                selectedTab = .deliveries
+                                appStateManager.showingDeliveryAddition = true
+                                appStateManager.selectedTab = .deliveries
                             }
                         } label: {
                             Image("plus")
@@ -106,7 +104,10 @@ struct MusterTabView: View {
                     }
                     .padding(.leading)
                     
-                    UserDeliveryDistributionView(deliveries: deliveryViewModel.musterDeliveries)
+                    UserDeliveryDistributionView(
+                        musterViewModel: musterViewModel,
+                        deliveries: deliveryViewModel.musterDeliveries
+                    )
                     
                     ZStack {
                         JarView(
@@ -136,27 +137,41 @@ struct MusterTabView: View {
                     }
                     .padding()
                     
-                    MusterCarouselView()
+                    MusterCarouselView(deliveryViewModel: deliveryViewModel)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
                 }
                 .sheet(isPresented: $musterViewModel.showInviteUserSheet) {
-                    MusterAdminInviteUserView()
+                    MusterAdminInviteUserView(
+                        musterViewModel: musterViewModel,
+                        profileViewModel: profileViewModel
+                    )
                         .presentationDetents([.fraction(0.5)])
                         .interactiveDismissDisabled(true)
                 }
                 .sheet(isPresented: $musterViewModel.showAssignAdminSheet) {
-                    MusterAdminAssignAdminView()
+                    MusterAdminAssignAdminView(
+                        musterViewModel: musterViewModel,
+                        profileViewModel: profileViewModel
+                    )
                         .presentationDetents([.medium])
                         .interactiveDismissDisabled(true)
                 }
                 .sheet(isPresented: $musterViewModel.showRenameSheet) {
-                    MusterAdminRenameView()
+                    MusterAdminRenameView(
+                        musterViewModel: musterViewModel,
+                        profileViewModel: profileViewModel
+                    )
                         .presentationDetents([.fraction(0.45)])
                         .interactiveDismissDisabled(true)
                 }
             } else {
-                MusterSplashView()
+                MusterSplashView(
+                    musterViewModel: musterViewModel,
+                    profileViewModel: profileViewModel,
+                    deliveryViewModel: deliveryViewModel,
+                    hospitalViewModel: hospitalViewModel
+                )
             }
         }
         .sheet(isPresented: $showLeaveMusterSheet) {
@@ -265,8 +280,10 @@ struct MusterTabView: View {
                 
                 try await profileViewModel.updateProfile()
             } catch {
-                musterViewModel.isWorking = false
-                errorMessage = error.localizedDescription
+                withAnimation {
+                    musterViewModel.isWorking = false
+                    appStateManager.errorMessage = error.localizedDescription
+                }
                 throw error
             }
             
@@ -279,7 +296,11 @@ struct MusterTabView: View {
 }
 
 #Preview {
-    MusterTabView(showingDeliveryAddition: .constant(false), selectedTab: .constant(.muster))
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
+    MusterTabView(
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
+        hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
+    )
+    .environmentObject(AppStateManager.shared)
 }

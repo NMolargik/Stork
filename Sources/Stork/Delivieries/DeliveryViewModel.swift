@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor
 class DeliveryViewModel: ObservableObject {
-    @AppStorage("currentDeliveryCount") private var currentDeliveryCount: Int = 0
+    @AppStorage("dailyDeliveryCount") private var dailyDeliveryCount: Int = 0
     
     // MARK: - Published Properties
     @Published var deliveries: [Delivery] = []
@@ -27,6 +27,8 @@ class DeliveryViewModel: ObservableObject {
     @Published var isWorking: Bool = false
     @Published var isSelectingHospital: Bool = false
     @Published var canSubmitDelivery: Bool = false
+    @Published var isFetchingDeliveries: Bool = false
+    @Published var isFetchingMusterDeliveries: Bool = false
 
     // MARK: - Daily Limit Logic
     private var currentDate: Date = Date()
@@ -65,7 +67,7 @@ class DeliveryViewModel: ObservableObject {
         self.musterDeliveries = []
         self.groupedDeliveries = []
         self.groupedMusterDeliveries = []
-        self.currentDeliveryCount = 0
+        self.dailyDeliveryCount = 0
         self.currentPage = 0
         self.lastFetchedEndDate = nil
         self.hasMorePages = true
@@ -79,14 +81,12 @@ class DeliveryViewModel: ObservableObject {
 
         // Optionally, restart the daily reset timer.
         startDailyResetTimer()
-        currentDeliveryCount = 0
-        
-        
+        dailyDeliveryCount = 0
     }
 
     // MARK: - Submit Delivery
-    func submitDelivery(profile: Profile, dailyResetManager: DailyResetManager) async throws {
-        guard dailyResetManager.canSubmitDelivery() else {
+    func submitDelivery(profile: Profile, dailyResetUtility: DailyResetUtility) async throws {
+        guard dailyResetUtility.canSubmitDelivery() else {
             throw DeliveryError.limitReached("You have reached the daily limit of \(dailyLimit) deliveries.")
         }
         guard selectedHospital != nil else {
@@ -112,7 +112,7 @@ class DeliveryViewModel: ObservableObject {
             throw DeliveryError.creationFailed("Failed to submit delivery: \(error.localizedDescription)")
         }
         
-        dailyResetManager.incrementDeliveryCount()
+        dailyResetUtility.incrementDeliveryCount()
         print("New delivery successfully submitted.")
         
         // Reset for the next new delivery
@@ -121,11 +121,13 @@ class DeliveryViewModel: ObservableObject {
     
     // MARK: - Fetch Next Page of Deliveries
     func fetchNextDeliveries(profile: Profile) async throws {
-        guard hasMorePages else {
-            print("No more pages to load.")
+        guard hasMorePages, !isFetchingDeliveries else {
+            print("No more pages to load or already collecting")
             return
         }
-
+        
+        isFetchingDeliveries = true
+        defer { isFetchingDeliveries = false }
         isWorking = true
 
         guard let (startDate, endDate) = calculateNextPageDates() else {
@@ -176,6 +178,13 @@ class DeliveryViewModel: ObservableObject {
 
     // MARK: - Fetch Muster Deliveries (Last 6 Months Only)
     func fetchMusterDeliveries(muster: Muster) async throws {
+        guard !isFetchingMusterDeliveries else {
+            print("Already fetching muster deliveries, skipping duplicate request.")
+            return
+        }
+        
+        isFetchingMusterDeliveries = true
+        defer { isFetchingMusterDeliveries = false }
         isWorking = true
 
         guard let (startDate, endDate) = calculateInitialDateRange() else {
@@ -382,7 +391,7 @@ class DeliveryViewModel: ObservableObject {
         let calendar = Calendar.current
         if !calendar.isDate(currentDate, inSameDayAs: Date()) {
             currentDate = Date()
-            currentDeliveryCount = 0
+            dailyDeliveryCount = 0
         }
     }
     
@@ -420,7 +429,7 @@ class DeliveryViewModel: ObservableObject {
     }
 
     private func resetDailyLimit() {
-        currentDeliveryCount = 0
+        dailyDeliveryCount = 0
         currentDate = Date()
         print("Daily Limit reset to 0.")
     }

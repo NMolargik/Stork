@@ -8,9 +8,10 @@ import SwiftUI
 import StorkModel
 
 struct MusterAdminAssignAdminView: View {
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var profileViewModel: ProfileViewModel
     @Environment(\.dismiss) var dismiss
+
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
 
     var body: some View {
         NavigationStack {
@@ -40,7 +41,8 @@ struct MusterAdminAssignAdminView: View {
 }
 
 #Preview {
-    MusterAdminAssignAdminView()
-        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+    MusterAdminAssignAdminView(
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+    )
 }

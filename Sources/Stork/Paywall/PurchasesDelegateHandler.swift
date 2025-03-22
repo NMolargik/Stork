@@ -8,10 +8,6 @@
 import Foundation
 import SkipRevenueCat
 
-/*
- The class we'll use to publish CustomerInfo data to our app.
- */
-
 class PurchasesDelegateHandler: NSObject {
     static let shared = PurchasesDelegateHandler()
 }

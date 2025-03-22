@@ -1,0 +1,30 @@
+//
+//  AboutView.swift
+//  skipapp-stork
+//
+//  Created by Nick Molargik on 1/22/25.
+//
+
+import SwiftUI
+
+struct AboutView: View {
+    let appInfo: (name: String, version: String)
+
+    var body: some View {
+        Section(header: Text("Stork")) {
+            AboutRowView(title: "Version", content: Text(appInfo.version))
+            AboutRowView(title: "Developer", content:
+                Link("Nick Molargik", destination: URL(string: "https://www.nickmolargik.tech")!)
+                    .foregroundColor(Color("storkBlue"))
+            )
+            AboutRowView(title: "Multiplatform Technology", content:
+                Link("Skip", destination: URL(string: "https://skip.tools")!)
+                    .foregroundColor(Color("storkBlue"))
+            )
+        }
+    }
+}
+
+#Preview {
+    AboutView(appInfo: ("Stork", "1.0.0"))
+}

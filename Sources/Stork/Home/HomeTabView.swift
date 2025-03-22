@@ -10,122 +10,36 @@ import StorkModel
 
 struct HomeTabView: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
     
-    @Binding var navigationPath: [String]
-    @Binding var selectedTab: Tab
-    @Binding var showingDeliveryAddition: Bool
+    @EnvironmentObject var appStateManager: AppStateManager
     
-    @State private var graphTabIndex: Int = 0
-    @State private var currentDate = Date()
-    
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
+
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationStack(path: $appStateManager.navigationPath) {
             VStack {
                 HStack {
                     Text("Stork")
                         .font(.largeTitle).fontWeight(.bold)
                         .padding(.trailing, 5)
-
-                    Spacer()
-                    
-                }
-                
-                HStack {
-                    Text("\(formattedDate)")
-                        .font(.footnote)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.gray)
-                        .onAppear(perform: startTimer)
-                    
                     Spacer()
                 }
-                .offset(y: -4)
                 
-                headerSection
-                
-                HomeCarouselView()
+                HomeWeekView()
+                HomeBodyView(deliveries: $deliveryViewModel.deliveries, startNewDelivery: deliveryViewModel.startNewDelivery)
+                HomeCarouselView(deliveryViewModel: deliveryViewModel)
                 
                 Spacer()
             }
             .padding()
         }
     }
-    
-    private var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d, h:mm:ss a" // Example: "Jan 24, 3:45:23 PM"
-        return formatter.string(from: currentDate)
-    }
-
-    private func startTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            currentDate = Date()
-        }
-    }
 }
-
-// MARK: - Header Section
-private extension HomeTabView {
-    var headerSection: some View {
-        HStack {
-            ZStack {
-                JarView(deliveries: Binding(get: { deliveryViewModel.deliveries }, set: { deliveryViewModel.deliveries = $0 ?? [] }),
-                        headerText: currentWeekRange,
-                        isTestMode: false, isMusterTest: false)
-                
-                WeekRangeView(weekRange: currentWeekRange, colorScheme: colorScheme)
-            }
-            
-            Spacer()
-            
-            VStack {
-                JarSummaryView(deliveries: $deliveryViewModel.deliveries)
-                
-                Spacer()
-                
-                PlusButton {
-                    withAnimation {
-                        triggerHaptic()
-                        deliveryViewModel.startNewDelivery()
-                        showingDeliveryAddition = true
-                        selectedTab = .deliveries
-                    }
-                }
-            }
-            .padding(.leading, 8)
-        }
-        .frame(height: 300)
-    }
-}
-
-// MARK: - Computed Properties
-private extension HomeTabView {
-    var currentWeekRange: String {
-        let calendar = Calendar.current
-        let now = Date()
-        
-        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start,
-              let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else {
-            return ""
-        }
-        
-        return "\(dateFormatter.string(from: weekStart)) - \(dateFormatter.string(from: weekEnd))"
-    }
-    
-    private var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d" // Example: "Aug 9"
-        return formatter
-    }
-}
-
-
 
 // MARK: - Preview
 #Preview {
-    HomeTabView(navigationPath: .constant([]), selectedTab: .constant(Tab.home), showingDeliveryAddition: .constant(false))
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+    HomeTabView(
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository())
+    )
+    .environmentObject(AppStateManager.shared)
 }

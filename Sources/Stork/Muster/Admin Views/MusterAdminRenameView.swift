@@ -9,9 +9,10 @@ import SwiftUI
 import StorkModel
 
 struct MusterAdminRenameView: View {
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var profileViewModel: ProfileViewModel
     @Environment(\.dismiss) var dismiss
+
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
     
     @State private var newName: String = ""
     
@@ -69,5 +70,8 @@ struct MusterAdminRenameView: View {
     }
 }
 #Preview {
-    MusterAdminRenameView()
+    MusterAdminRenameView(
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+    )
 }

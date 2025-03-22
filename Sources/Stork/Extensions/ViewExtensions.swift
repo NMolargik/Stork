@@ -24,7 +24,7 @@ public extension View {
     
     @MainActor func withMockEnvironmentObjects() -> some View {
         self
-            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()))
             .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
             .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
             .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))

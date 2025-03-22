@@ -1,7 +1,6 @@
 //
 //  DeliveryRowView.swift
 //
-//
 //  Created by Nick Molargik on 11/30/24.
 //
 
@@ -34,14 +33,15 @@ struct DeliveryRowView: View {
             
             Spacer()
         }
-        .background{
+        .background {
             Rectangle()
                 .foregroundStyle(
                     LinearGradient(
                         gradient: Gradient(colors: gradientColors(for: delivery.babies)),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
-                    ))
+                    )
+                )
                 .overlay {
                     Rectangle()
                         .foregroundStyle(.white)
@@ -52,55 +52,35 @@ struct DeliveryRowView: View {
         }
     }
     
-    /// Generates a summary of babies born in the delivery.
-    /// - Parameter babies: The list of babies in the delivery.
-    /// - Returns: A string summarizing the baby counts by sex.
+    /// Returns a summary string of baby counts by sex.
     private func babySummary(for babies: [Baby]) -> String {
-        // Initialize counters for each sex
-        var maleCount = 0
-        var femaleCount = 0
-        var lossCount = 0
+        let maleCount = babies.filter { $0.sex == .male }.count
+        let femaleCount = babies.filter { $0.sex == .female }.count
+        let lossCount = babies.filter { $0.sex == .loss }.count
         
-        // Manually count the number of each sex
-        for baby in babies {
-            switch baby.sex {
-            case Sex.male:
-                maleCount += 1
-            case Sex.female:
-                femaleCount += 1
-            case Sex.loss:
-                lossCount += 1
-            }
-        }
-        
-        // Build the summary string
-        var summary = [String]()
-        
+        var summaryComponents = [String]()
         if maleCount > 0 {
-            summary.append("\(maleCount) boy\(maleCount > 1 ? "s" : "")    ")
+            summaryComponents.append("\(maleCount) boy\(maleCount > 1 ? "s" : "")")
         }
-        
         if femaleCount > 0 {
-            summary.append("\(femaleCount) girl\(femaleCount > 1 ? "s" : "")    ")
+            summaryComponents.append("\(femaleCount) girl\(femaleCount > 1 ? "s" : "")")
         }
-        
         if lossCount > 0 {
-            summary.append("\(lossCount) loss\(lossCount > 1 ? "es" : "")    ")
+            summaryComponents.append("\(lossCount) loss\(lossCount > 1 ? "es" : "")")
         }
         
-        return summary.isEmpty ? "No babies... somehow" : summary.joined(separator: " ")
+        return summaryComponents.isEmpty ? "No babies... somehow" : summaryComponents.joined(separator: "    ")
     }
     
-    /// Generates a gradient representing the distribution of sexes in the delivery.
-    /// - Parameter babies: The list of babies in the delivery.
-    /// - Returns: An array of `Color` objects representing the gradient stops.
+    /// Returns an array of colors corresponding to the baby counts by sex.
     private func gradientColors(for babies: [Baby]) -> [Color] {
-        // Group and sort colors by sex
-        var colors: [Color] = []
-        colors.append(contentsOf: Array(repeating: Color("storkBlue"), count: babies.filter { $0.sex == Sex.male }.count))
-        colors.append(contentsOf: Array(repeating: Color("storkPink"), count: babies.filter { $0.sex == Sex.female }.count))
-        colors.append(contentsOf: Array(repeating: Color("storkPurple"), count: babies.filter { $0.sex == Sex.loss }.count))
-        return colors
+        let maleCount = babies.filter { $0.sex == .male }.count
+        let femaleCount = babies.filter { $0.sex == .female }.count
+        let lossCount = babies.filter { $0.sex == .loss }.count
+        
+        return Array(repeating: Color("storkBlue"), count: maleCount) +
+               Array(repeating: Color("storkPink"), count: femaleCount) +
+               Array(repeating: Color("storkPurple"), count: lossCount)
     }
 }
 

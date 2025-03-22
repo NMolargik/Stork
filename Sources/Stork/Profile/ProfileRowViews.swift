@@ -8,8 +8,9 @@ import SwiftUI
 import StorkModel
 
 struct ProfileRowView: View {
-    @AppStorage("errorMessage") private var errorMessage: String = ""
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStateManager: AppStateManager
 
     @Binding var existingInvitations: [MusterInvite]
     
@@ -61,19 +62,19 @@ struct ProfileRowView: View {
         Group {
             if profile.id == currentUser.id {
                 actionButton(text: "You", color: .gray, isEnabled: false) {
-                    errorMessage = "This... is you..."
+                    appStateManager.errorMessage = "This... is you..."
                 }
             } else if profile.musterId == currentUser.musterId && !profile.musterId.isEmpty {
                 actionButton(text: "Joined", color: .gray, isEnabled: false) {
-                    errorMessage = "User already joined muster"
+                    appStateManager.errorMessage = "User already joined muster"
                 }
             } else if !profile.musterId.isEmpty {
                 actionButton(text: "Unavailable", color: .gray, isEnabled: false) {
-                    errorMessage = "This user is already in a muster."
+                    appStateManager.errorMessage = "This user is already in a muster."
                 }
             } else if existingInvitations.contains(where: { $0.recipientId == profile.id }) {
                 actionButton(text: "Sent", color: .gray, isEnabled: false) {
-                    errorMessage = "User already invited to muster"
+                    appStateManager.errorMessage = "User already invited to muster"
                 }
             } else {
                 actionButton(text: "Invite", color: Color("storkBlue"), isEnabled: true) {
@@ -104,5 +105,6 @@ struct ProfileRowView: View {
         currentUser: Profile(),
         onInvite: {}
     )
+    .environmentObject(AppStateManager.shared)
 }
 

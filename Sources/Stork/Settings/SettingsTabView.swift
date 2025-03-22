@@ -9,17 +9,15 @@ import SwiftUI
 import StorkModel
 
 struct SettingsTabView: View {
-    @AppStorage("useMetric") private var useMetric: Bool = false
-    @AppStorage("useDarkMode") private var useDarkMode: Bool = false
-    @AppStorage("appState") private var appState: AppState = .splash
-    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-    @AppStorage("errorMessage") var errorMessage: String = ""
-
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
-    @EnvironmentObject var hospitalViewModel: HospitalViewModel
+    
+    @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
+
+    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
+    @ObservedObject var hospitalViewModel: HospitalViewModel
 
     @State private var showingDeleteConfirmation = false
     @State private var deleteConfirmationStep = 1
@@ -38,13 +36,11 @@ struct SettingsTabView: View {
         NavigationStack {
             List {
                 ProfileManagementView(
-                    isOnboardingComplete: $isOnboardingComplete,
-                    appState: $appState,
                     showingProfileEditor: $showingProfileEditor,
                     showingDeleteConfirmation: $showingDeleteConfirmation
                 )
 
-                PreferencesView(useMetric: $useMetric, useDarkMode: $useDarkMode)
+                PreferencesView()
 
                 AboutView(appInfo: appInfo)
             }
@@ -59,7 +55,7 @@ struct SettingsTabView: View {
                 }
             }
             .sheet(isPresented: $showingProfileEditor, content: {
-                ProfileView()
+                ProfileView(profileViewModel: profileViewModel)
                     .interactiveDismissDisabled()
                     .presentationDetents([.fraction(0.75)])
             })
@@ -76,8 +72,8 @@ struct SettingsTabView: View {
     }
     
     func signOut() {
-        triggerHaptic()
-        
+        HapticFeedback.trigger(style: .medium)
+
         deliveryViewModel.reset()
         hospitalViewModel.reset()
         musterViewModel.reset()
@@ -92,7 +88,6 @@ struct SettingsTabView: View {
 
         Task {
             do {
-                // Leave Muster if applicable
                 if !profileViewModel.profile.musterId.isEmpty {
                     try await musterViewModel.leaveMuster(
                         profileViewModel: profileViewModel,
@@ -102,10 +97,15 @@ struct SettingsTabView: View {
 
                 // Delete profile
                 try await profileViewModel.deleteProfile(password: passwordString)
+                
+                //TODO: Future - actually delete user's account, not just their data
+                // Requires updates to skip firebase
 
             } catch {
-                profileViewModel.isWorking = false
-                errorMessage = error.localizedDescription
+                withAnimation {
+                    profileViewModel.isWorking = false
+                    appStateManager.errorMessage = error.localizedDescription
+                }
             }
         }
     }
@@ -113,9 +113,12 @@ struct SettingsTabView: View {
 
 // MARK: - Preview
 #Preview {
-    SettingsTabView()
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
-        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
-        .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
+    SettingsTabView(
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
+        hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
+    )
+    .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
 }

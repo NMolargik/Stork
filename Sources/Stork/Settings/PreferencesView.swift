@@ -8,20 +8,20 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    @Binding var useMetric: Bool
-    @Binding var useDarkMode: Bool
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     var body: some View {
         Section(header: Text("Preferences")) {
-            Toggle("Use Metric Units", isOn: $useMetric)
+            Toggle("Use Metric Units", isOn: $appStorageManager.useMetric)
                 .tint(.green)
 
-            Toggle("Dark Mode", isOn: $useDarkMode)
+            Toggle("Dark Mode", isOn: $appStorageManager.useDarkMode)
                 .tint(.green)
         }
     }
 }
 
 #Preview {
-    PreferencesView(useMetric: .constant(false), useDarkMode: .constant(false))
+    PreferencesView()
+        .environmentObject(AppStorageManager())
 }

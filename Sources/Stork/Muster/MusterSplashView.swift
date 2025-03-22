@@ -9,11 +9,14 @@ import SwiftUI
 import StorkModel
 
 struct MusterSplashView: View {
-    @AppStorage("errorMessage") var errorMessage: String = ""
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStateManager: AppStateManager
 
-    @EnvironmentObject var musterViewModel: MusterViewModel
-    @EnvironmentObject var profileViewModel: ProfileViewModel
+    @ObservedObject var musterViewModel: MusterViewModel
+    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
+    @ObservedObject var hospitalViewModel: HospitalViewModel
     
     var body: some View {
         VStack {
@@ -50,14 +53,16 @@ struct MusterSplashView: View {
             .padding(.bottom, 5)
 
             CustomButtonView(text: "View Your Invitations", width: 300, height: 50, color: Color("storkOrange"), icon: nil, isEnabled: true, onTapAction: {
-                triggerHaptic()
+                HapticFeedback.trigger(style: .medium)
                 
                 Task {
                     do {
                         try await musterViewModel.fetchUserInvitations(profileId: profileViewModel.profile.id)
                         musterViewModel.showMusterInvitations = true
                     } catch {
-                        errorMessage = error.localizedDescription
+                        withAnimation {
+                            appStateManager.errorMessage = error.localizedDescription
+                        }
                         throw error
                     }
                 }
@@ -75,6 +80,9 @@ struct MusterSplashView: View {
         }
         .sheet(isPresented: $musterViewModel.showMusterInvitations) {
             MusterInvitationsView(
+                musterViewModel: musterViewModel,
+                profileViewModel: profileViewModel,
+                deliveryViewModel: deliveryViewModel,
                 showMusterInvitations: $musterViewModel.showMusterInvitations,
                 onRespond: { invite, accepted in
                     Task {
@@ -82,7 +90,9 @@ struct MusterSplashView: View {
                             try await musterViewModel.respondToUserInvite(profile: profileViewModel.profile, invite: invite, accepted: accepted, profileViewModel: profileViewModel)
                             musterViewModel.showMusterInvitations = false
                         } catch {
-                            errorMessage = error.localizedDescription
+                            withAnimation {
+                                appStateManager.errorMessage = error.localizedDescription
+                            }
                             throw error
                         }
                     }
@@ -92,7 +102,12 @@ struct MusterSplashView: View {
             .interactiveDismissDisabled(true)
         }
         .sheet(isPresented: $musterViewModel.showCreateMusterSheet) {
-            MusterCreationView(showCreateMusterSheet: $musterViewModel.showCreateMusterSheet)
+            MusterCreationView(
+                musterViewModel: musterViewModel,
+                profileViewModel: profileViewModel,
+                hospitalViewModel: hospitalViewModel,
+                showCreateMusterSheet: $musterViewModel.showCreateMusterSheet
+            )
                 .presentationDetents([.fraction(0.75)])
                 .interactiveDismissDisabled(true)
         }
@@ -100,7 +115,12 @@ struct MusterSplashView: View {
 }
 
 #Preview {
-    MusterSplashView()
-        .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
-        .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
+    MusterSplashView(
+        musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
+        hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
+    )
+    .environmentObject(AppStateManager.shared)
+        
 }

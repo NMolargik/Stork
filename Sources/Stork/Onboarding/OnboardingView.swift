@@ -9,19 +9,18 @@ import SwiftUI
 import StorkModel
 
 struct OnboardingView: View {
-    @AppStorage("appState") private var appState: AppState = .splash
-    @AppStorage("selectedTab") var selectedTab = Tab.hospitals
-    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-    @AppStorage("loggedIn") private var loggedIn: Bool = false
+    @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @State private var currentPage: Int = 0
-    @State private var isTransitioning: Bool = false // NEW: Track transition state
+    @State private var isTransitioning: Bool = false
     
+    // Completion callback from parent
     var onComplete: () -> Void
 
     private let totalPages = 3
     private var isLastPage: Bool { currentPage == totalPages - 1 }
-
+    
     var body: some View {
         VStack {
             // MARK: - Paged Onboarding Content
@@ -59,7 +58,7 @@ struct OnboardingView: View {
             }
             .padding([.horizontal, .bottom])
         }
-        .animation(.easeInOut(duration: 0.5), value: isTransitioning) // NEW: Smooth animation
+        .animation(.easeInOut(duration: 0.5), value: isTransitioning) // Smooth animation
     }
 
     private func nextPage() {
@@ -78,9 +77,10 @@ struct OnboardingView: View {
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // Wait for animation
             withAnimation {
-                isOnboardingComplete = true
-                selectedTab = .home
-                appState = Store.shared.subscriptionActive ? .main : .paywall
+                // Update global state via environment objects
+                appStorageManager.isOnboardingComplete = true
+                appStateManager.selectedTab = .home
+                appStateManager.currentAppScreen = Store.shared.subscriptionActive ? .main : .paywall
                 onComplete()
             }
         }
@@ -91,4 +91,6 @@ struct OnboardingView: View {
     OnboardingView {
         print("Onboarding completed!")
     }
+    .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
 }

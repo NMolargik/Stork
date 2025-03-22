@@ -10,12 +10,15 @@ import StorkModel
 
 struct HomeCarouselView: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var deliveryViewModel: DeliveryViewModel
+    
+    @ObservedObject var deliveryViewModel: DeliveryViewModel
     
     @State private var selectedIndex: Int = 0
 
     #if !SKIP
-    init() {
+    init(deliveryViewModel: DeliveryViewModel) {
+        self.deliveryViewModel = deliveryViewModel
+        
         UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color("storkIndigo"))
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.gray
        }
@@ -50,7 +53,7 @@ struct HomeCarouselView: View {
                     .padding(.vertical, 5)
                     .tag(3)
             }
-            .tabViewStyle(.page(indexDisplayMode: .never)) // Hide built-in indicators
+            .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.horizontal, -5)
             
@@ -70,6 +73,7 @@ struct HomeCarouselView: View {
 }
 
 #Preview {
-    HomeCarouselView()
-        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
+    HomeCarouselView(
+        deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository())
+    )
 }

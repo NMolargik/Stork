@@ -11,17 +11,18 @@ import SwiftUI
 import StorkModel
 import SkipRevenueCat
 
-#if SKIP
+#if !SKIP
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
+#else
 import java.util.regex.Pattern
+import SkipFirebaseCore
+import SkipFirebaseFirestore
+import SkipFirebaseAuth
 #endif
 
 public class ProfileViewModel: ObservableObject {
-    // MARK: - AppStorage
-    @AppStorage("appState") private var appState: AppState = .splash
-    @AppStorage("loggedIn") var loggedIn = false
-    @AppStorage("useMetric") private var useMetric: Bool = false
-    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
-    
     // MARK: - Published Core State
     @Published var profile: Profile
     @Published var tempProfile: Profile
@@ -49,10 +50,15 @@ public class ProfileViewModel: ObservableObject {
     // MARK: - Dependency
     private let profileRepository: ProfileRepositoryInterface
     
+    private let appStorageManager: AppStorageManager
+
+
+    
     // MARK: - Initializer
     @MainActor
-    public init(profileRepository: ProfileRepositoryInterface) {
+    public init(profileRepository: ProfileRepositoryInterface, appStorageManager: AppStorageManager) {
         self.profileRepository = profileRepository
+        self.appStorageManager = appStorageManager
         self.profile = Profile()
         self.tempProfile = Profile()
     }
@@ -104,7 +110,7 @@ public class ProfileViewModel: ObservableObject {
             self.profile = try await profileRepository.createProfile(profile: profile)
             
             // Mark user as logged in
-            self.loggedIn = true
+//            self.loggedIn = true
             
         } catch {
             self.errorMessage = "Registration failed: \(error.localizedDescription)"
@@ -169,7 +175,7 @@ public class ProfileViewModel: ObservableObject {
             let signedInProfile = try await profileRepository.signInWithEmail(profile: profile, password: passwordText)
             self.profile = signedInProfile
             print("found profile: \(self.profile.id)")
-            self.loggedIn = true
+//            self.loggedIn = true
             
             // Step 2) Attempt to fetch the user’s full profile (if separate)
             let currentProfile = try await profileRepository.getCurrentProfile()
@@ -254,7 +260,7 @@ public class ProfileViewModel: ObservableObject {
             try await profileRepository.deleteProfile(profile: profile)
             
             resetTempProfile()
-            isOnboardingComplete = false
+            appStorageManager.isOnboardingComplete = false
             reset()
             let _ = Purchases.sharedInstance.logOut(onError: {_ in }, onSuccess: {_ in })
             signOut()
@@ -277,9 +283,18 @@ public class ProfileViewModel: ObservableObject {
                 self.confirmPassword = ""
                 self.resetTempProfile()
                 self.reset()
-                self.isOnboardingComplete = false
-                self.loggedIn = false
-                self.appState = .splash
+                appStorageManager.isOnboardingComplete = false
+                DispatchQueue.main.async {
+                    do {
+                        try Auth.auth().signOut()
+                    } catch {
+                        print("could not sign out")
+                    }
+                    AppStateManager.shared.currentAppScreen = AppScreen.splash
+                    
+                    RootView().checkAppState()
+                }
+                print("Set app screen to splash")
             } catch {
                 self.errorMessage = "Failed to sign out: \(error.localizedDescription)"
             }
