@@ -23,6 +23,9 @@ struct OnboardingPageOneView: View {
                     isTestMode: true,
                     isMusterTest: false
                 )
+                #if SKIP
+                .frame(width: 150)
+                #endif
 
                 VStack(alignment: .leading, spacing: 8) {
                     ForEach(Sex.allCases) { sex in

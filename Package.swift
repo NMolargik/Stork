@@ -53,6 +53,7 @@ let package = Package(
                 .product(name: "SkipModel", package: "skip-model"),
                 .product(name: "SkipKit", package: "skip-kit"),
                 .product(name: "SkipRevenueCat", package: "skip-revenuecat")
+                
             ],
             resources: [.process("Resources")],
             plugins: [.plugin(name: "skipstone", package: "skip")]

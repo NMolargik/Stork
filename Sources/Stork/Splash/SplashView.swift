@@ -67,6 +67,9 @@ struct SplashView: View {
             .opacity(showMore ? 1.0 : 0.0)
             .transition(.move(edge: .bottom).combined(with: .opacity))
         
+            
+            Spacer()
+            
             Divider()
                 .scaleEffect(y: 4)
                 .padding(.horizontal)
@@ -82,8 +85,7 @@ struct SplashView: View {
                     AppStateManager.shared.currentAppScreen = AppScreen.register
                 }
             })
-            
-            Spacer()
+            .padding(.bottom)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

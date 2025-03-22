@@ -164,13 +164,14 @@ public struct RootView: View {
             return .onboard
         }
 
+        // TODO: Repair for android
         #if !SKIP
         await fetchCustomerInfo()
-        #endif
 
         if !Store.shared.subscriptionActive {
             return .paywall
         }
+        #endif
 
         return .main
     }

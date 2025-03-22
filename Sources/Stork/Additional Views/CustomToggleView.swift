@@ -46,6 +46,9 @@ struct CustomToggleView: View {
                     .fill(Color.white.opacity(0.8))
             )
         }
+        #if SKIP
+        .cornerRadius(20)
+        #endif
     }
 }
 

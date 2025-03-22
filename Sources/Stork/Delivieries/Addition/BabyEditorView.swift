@@ -109,7 +109,7 @@ struct BabyEditorView: View {
                         removeBaby(baby.id)
                     }
                 } label: {
-                    Image("minus")
+                    Image("minus.symbol")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 15, height: 15)
@@ -130,12 +130,16 @@ struct BabyEditorView: View {
         }
         .foregroundStyle(colorScheme == .dark ? .black : .white)
         .pickerStyle(.segmented)
+        #if !SKIP
         .background {
             Rectangle()
                 .cornerRadius(8)
                 .foregroundStyle(Color("storkOrange"))
                 .opacity(colorScheme == .dark ? 0.8 : 0.3)
         }
+        #else
+        .tint(Color("storkOrange"))
+        #endif
         .onChange(of: baby.sex) { _ in HapticFeedback.trigger(style: .medium) }
     }
     

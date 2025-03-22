@@ -104,8 +104,15 @@ struct RegisterView: View {
                         
                         Divider()
                         
-                        VStack {
+                        VStack(alignment: .center) {
                             Text("Select Your Birthday")
+                                .frame(minWidth: .infinity)
+                                .padding()
+                            #if !SKIP
+                                .font(.body)
+                            #else
+                                .font(.footnote)
+                            #endif
                             
                             DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
                                 .tint(Color("storkIndigo"))
@@ -140,6 +147,7 @@ struct RegisterView: View {
                             }
                         }
                         .pickerStyle(.segmented)
+                        .tint(Color("storkOrange"))
                         
                         Divider()
                         

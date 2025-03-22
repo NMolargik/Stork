@@ -49,12 +49,11 @@ struct LoginView: View {
                     CustomButtonView(
                         text: "Log In",
                         width: 120,
-                        height: 50,
+                        height: 40,
                         color: Color("storkIndigo"),
                         isEnabled: true,
                         onTapAction: handleLogin
                     )
-                    .padding(.bottom, 10)
                 }
                 
                 Button(action: {
@@ -68,8 +67,6 @@ struct LoginView: View {
                 })
                 .padding()
                 .disabled(profileViewModel.isWorking)
-                
-                Spacer()
             }
             .padding(.horizontal)
         }

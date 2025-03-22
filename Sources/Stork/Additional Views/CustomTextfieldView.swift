@@ -48,12 +48,20 @@ struct CustomTextfieldView: View {
                     }
                 }
                 .frame(height: 50)
+                #if !SKIP
                 .padding(.horizontal, 5)
+                #else
+                .padding(.leading, 5)
+                #endif
                 .textInputAutocapitalization(.never)
             }
             .padding(.leading)
             .background(colorScheme == .dark ? Color.black : Color.white)
+            #if !SKIP
             .cornerRadius(20)
+            #else
+            .cornerRadius(5)
+            #endif
             .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
             .frame(height: 50)
 
