@@ -55,13 +55,12 @@ public protocol HospitalRepositoryInterface {
     /// Fetches hospitals in a specific city and state.
     ///
     /// - Parameters:
-    ///   - city: The city to filter hospitals by.
     ///   - state: The state to filter hospitals by.
     /// - Returns: An array of `Hospital` objects representing hospitals in the specified city and state.
     /// - Throws:
     ///   - `HospitalError.notFound`: If no hospitals are found in the specified city and state.
     ///   - `HospitalError.firebaseError`: If the operation fails due to a Firestore-related issue.
-    func getHospitals(byCity city: String, andState state: String) async throws -> [Hospital]
+    func getHospitals(state: String) async throws -> [Hospital]
 
     /// Searches for hospitals by a partial name match.
     ///

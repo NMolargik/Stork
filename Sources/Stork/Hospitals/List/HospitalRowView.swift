@@ -24,10 +24,17 @@ struct HospitalRowView: View {
                     .font(.headline)
                     .foregroundStyle(selectionMode ? Color("storkBlue") : (colorScheme == .dark ? .white : .black))
                 
-                Text("\(hospital.citytown), \(hospital.state)")
-                    .font(.system(size: 12))
-                    .fontWeight(.bold)
-                    .foregroundStyle(.gray)
+                if (hospital.citytown == "") {
+                    Text("Unknown Location")
+                        .font(.system(size: 12))
+                        .fontWeight(.bold)
+                        .foregroundStyle(.gray)
+                } else {
+                    Text("\(hospital.citytown), \(hospital.state)")
+                        .font(.system(size: 12))
+                        .fontWeight(.bold)
+                        .foregroundStyle(.gray)
+                }
                 
                 HStack {
                     Text("Deliveries: \(hospital.deliveryCount)")

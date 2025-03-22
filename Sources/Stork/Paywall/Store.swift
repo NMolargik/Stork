@@ -17,10 +17,12 @@ class Store: ObservableObject {
         didSet {
             #if !os(macOS) || SKIP
             let entitlement = customerInfo?.entitlements.get(s: StoreConstants.entitlementID)
+            print("Checking entitlement")
             subscriptionActive = entitlement?.isActive == true
-            
+            print("Subscription active? \(subscriptionActive)")
+
             if (!subscriptionActive && entitlement?.latestPurchaseDateMillis != nil) {
-                logger.info("Subscription is not active")
+                print("Subscription is not active")
             }
             #endif
         }

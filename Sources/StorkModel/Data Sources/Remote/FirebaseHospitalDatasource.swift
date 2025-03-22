@@ -121,18 +121,15 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// Fetches hospitals located in a specific city and state.
     ///
     /// - Parameters:
-    ///   - city: The city to filter hospitals by.
     ///   - state: The state to filter hospitals by.
     /// - Returns: A list of matching `Hospital` objects.
     /// - Throws: `HospitalError.notFound` if no hospitals are found or Firestore errors.
-    public func listHospitals(city: String, state: String) async throws -> [Hospital] {
+    public func listHospitals(state: String) async throws -> [Hospital] {
         do {
             // Automatically uppercase both city and state (if your data is stored in uppercase).
-            let uppercasedCity = city.uppercased()
             let uppercasedState = state.uppercased()
             
             let query = db.collection("Hospital")
-                .whereField("citytown", isEqualTo: uppercasedCity)
                 .whereField("state", isEqualTo: uppercasedState)
             
             let snapshot = try await query.getDocuments()
@@ -143,7 +140,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
                 return try mapDocumentToHospital(data: data)
             }
         } catch {
-            throw HospitalError.notFound("Failed to fetch hospitals in \(city), \(state): \(error.localizedDescription)")
+            throw HospitalError.notFound("Failed to fetch hospitals in \(state): \(error.localizedDescription)")
         }
     }
 
@@ -169,11 +166,14 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
 
             let snapshot = try await query.getDocuments()
 
-            let hospitals = try snapshot.documents.map { document in
+            var hospitals = try snapshot.documents.map { document in
                 var data = document.data()
                 data["id"] = document.documentID  // Ensure 'id' field is set
                 return try mapDocumentToHospital(data: data)
             }
+            
+            hospitals.sort { $0.facility_name < $1.facility_name }
+
             
             if hospitals.isEmpty {
                 throw HospitalError.notFound("No hospitals matching '\(partialName)' found.")

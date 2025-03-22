@@ -74,7 +74,6 @@ private extension HomeTabView {
                 JarView(deliveries: Binding(get: { deliveryViewModel.deliveries }, set: { deliveryViewModel.deliveries = $0 ?? [] }),
                         headerText: currentWeekRange,
                         isTestMode: false, isMusterTest: false)
-                    .frame(width: 180)
                 
                 WeekRangeView(weekRange: currentWeekRange, colorScheme: colorScheme)
             }

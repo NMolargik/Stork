@@ -18,6 +18,8 @@ import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 
 struct PaywallMainView: View {
     @AppStorage("errorMessage") var errorMessage: String = ""
+    
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var storeViewModel = Store.shared
 
     let onCompleted: () -> Void  // Callback for closing the paywall
@@ -31,7 +33,7 @@ struct PaywallMainView: View {
         #endif
 
         ZStack {
-            VStack {
+            VStack(spacing: 0) {
 #if !SKIP && os(iOS)
                 PaywallMarketingView(signOut: signOut)
                     .modifier(StoreViewModifier())
@@ -92,7 +94,13 @@ struct PaywallMainView: View {
                     
                     Spacer()
                 }
+                .background {
+                    Color.white
+                        .ignoresSafeArea()
+
+                }
             }
+
         }
     }
 }

@@ -33,37 +33,39 @@ struct EditProfileView: View {
     
     // MARK: - Body
     var body: some View {
-        Form {
-            Section(header: Text("Name")) {
-                TextField("First Name", text: $firstName)
+        ScrollView {
+            Form {
+                Section(header: Text("Name")) {
+                    TextField("First Name", text: $firstName)
+                    
+                    TextField("Last Name", text: $lastName)
+                }
                 
-                TextField("Last Name", text: $lastName)
-            }
-            
-            Section(header: Text("Birthday")) {
-                DatePicker(
-                    "Select Birthday",
-                    selection: $birthday,
-                    displayedComponents: .date
-                )
-            }
-            
-            Section(header: Text("Role")) {
-                Picker("Role", selection: $role) {
-                    ForEach(ProfileRole.allCases, id: \.self) { role in
-                        Text(role.description).tag(role)
+                Section(header: Text("Birthday")) {
+                    DatePicker(
+                        "Select Birthday",
+                        selection: $birthday,
+                        displayedComponents: .date
+                    )
+                }
+                
+                Section(header: Text("Role")) {
+                    Picker("Role", selection: $role) {
+                        ForEach(ProfileRole.allCases, id: \.self) { role in
+                            Text(role.description).tag(role)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: role) { _ in
+                        triggerHaptic()
                     }
                 }
-                .pickerStyle(.segmented)
-                .onChange(of: role) { _ in
-                    triggerHaptic()
-                }
-            }
-            
-            if let errorMessage = errorMessage {
-                Section {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
+                
+                if let errorMessage = errorMessage {
+                    Section {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                    }
                 }
             }
         }

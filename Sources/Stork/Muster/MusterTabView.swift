@@ -67,6 +67,8 @@ struct MusterTabView: View {
                         }
 
                         Button {
+                            triggerHaptic()
+
                             Task {
                                 try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
                             }

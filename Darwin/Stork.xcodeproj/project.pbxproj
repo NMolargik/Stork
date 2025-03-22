@@ -16,7 +16,7 @@
 		EB0CEADB2D2D875F0011E63B /* storkicon.png in Resources */ = {isa = PBXBuildFile; fileRef = EB0CEADA2D2D875F0011E63B /* storkicon.png */; };
 		EB1F1A1D2D2D8F8000558B6B /* google-services.json in Sources */ = {isa = PBXBuildFile; fileRef = EB1F1A1C2D2D8F8000558B6B /* google-services.json */; };
 		EB1F1A1F2D2DC23900558B6B /* keystore.jks in Sources */ = {isa = PBXBuildFile; fileRef = EB1F1A1E2D2DC23900558B6B /* keystore.jks */; };
-		EB56129A2D234B250057EAC3 /* GoogleService-Info.plist in Sources */ = {isa = PBXBuildFile; fileRef = EB5612992D234B250057EAC3 /* GoogleService-Info.plist */; };
+		EBBD9FEB2D73FF9200EAB2E5 /* GoogleService-Info.plist in Sources */ = {isa = PBXBuildFile; fileRef = EBBD9FEA2D73FF9200EAB2E5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,8 +49,9 @@
 		EB0CEADA2D2D875F0011E63B /* storkicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storkicon.png; sourceTree = "<group>"; };
 		EB1F1A1C2D2D8F8000558B6B /* google-services.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "google-services.json"; path = "../Android/app/google-services.json"; sourceTree = "<group>"; };
 		EB1F1A1E2D2DC23900558B6B /* keystore.jks */ = {isa = PBXFileReference; lastKnownFileType = file; name = keystore.jks; path = ../Android/app/keystore.jks; sourceTree = "<group>"; };
-		EB5612992D234B250057EAC3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB9BBF0F2D246BD600C008C6 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		EBBD9FE92D73FD5100EAB2E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EBBD9FEA2D73FF9200EAB2E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,11 +85,12 @@
 		49F90C1F2A52156200F06D93 = {
 			isa = PBXGroup;
 			children = (
+				EBBD9FEA2D73FF9200EAB2E5 /* GoogleService-Info.plist */,
 				EB1F1A1E2D2DC23900558B6B /* keystore.jks */,
 				EB1F1A1C2D2D8F8000558B6B /* google-services.json */,
 				EB0CEAD82D2D85250011E63B /* LaunchScreen.storyboard */,
-				EB5612992D234B250057EAC3 /* GoogleService-Info.plist */,
 				496EB72F2A6AE4DE00C1253C /* README.md */,
+				EBBD9FE92D73FD5100EAB2E5 /* GoogleService-Info.plist */,
 				496EB72F2A6AE4DE00C1253A /* Skip.env */,
 				496EB72F2A6AE4DE00C1253B /* Stork.xcconfig */,
 				496BDBED2B8A7E9C00C09264 /* Localizable.xcstrings */,
@@ -210,10 +212,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBBD9FEB2D73FF9200EAB2E5 /* GoogleService-Info.plist in Sources */,
 				EB1F1A1F2D2DC23900558B6B /* keystore.jks in Sources */,
 				EB1F1A1D2D2D8F8000558B6B /* google-services.json in Sources */,
 				EB0CEAD92D2D85250011E63B /* LaunchScreen.storyboard in Sources */,
-				EB56129A2D234B250057EAC3 /* GoogleService-Info.plist in Sources */,
 				499CD43B2AC5B799001AE8D8 /* StorkAppMain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -225,17 +227,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "\"Stork needs your location to determine nearby hospitals\"";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"Stork needs your location to determine nearby hospitals\"";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -247,17 +250,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "\"Stork needs your location to determine nearby hospitals\"";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"Stork needs your location to determine nearby hospitals\"";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

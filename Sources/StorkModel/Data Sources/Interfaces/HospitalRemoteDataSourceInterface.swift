@@ -47,12 +47,11 @@ public protocol HospitalRemoteDataSourceInterface {
     /// Fetches hospitals located in a specific city and state.
     ///
     /// - Parameters:
-    ///   - city: The city to filter hospitals.
     ///   - state: The state to filter hospitals.
     /// - Returns: An array of `Hospital` objects matching the given city and state (or an empty array if none match).
     /// - Throws:
     ///   - `HospitalError.firebaseError`: If the fetch operation fails due to a Firestore-related issue.
-    func listHospitals(city: String, state: String) async throws -> [Hospital]
+    func listHospitals(state: String) async throws -> [Hospital]
 
     /// Deletes a hospital record from Firestore.
     ///

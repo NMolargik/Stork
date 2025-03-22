@@ -22,25 +22,28 @@ struct HospitalDetailView: View {
     let hospital: Hospital
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            hospitalMapView
-            
-            actionButtons
-            
-            hospitalDetailsView
-            
-            HStack {
-                HospitalStatView(
-                    text: "\(hospital.deliveryCount) deliver\(hospital.deliveryCount == 1 ? "y" : "ies"), \(hospital.babyCount) bab\(hospital.babyCount == 1 ? "y" : "ies")"
-                )
+        ScrollView {
+            VStack(alignment: .leading, spacing: 15) {
+                hospitalMapView
+                
+                actionButtons
+                
+                hospitalDetailsView
+                
+                HStack {
+                    HospitalStatView(
+                        text: "\(hospital.deliveryCount) deliver\(hospital.deliveryCount == 1 ? "y" : "ies"), \(hospital.babyCount) bab\(hospital.babyCount == 1 ? "y" : "ies")"
+                    )
+                    
+                    Spacer()
+                }
                 
                 Spacer()
             }
-            
-            Spacer()
+            .toolbar(.hidden)
+            .onAppear(perform: fetchLocation)
         }
-        .toolbar(.hidden)
-        .onAppear(perform: fetchLocation)
+        .ignoresSafeArea()
     }
 }
 
@@ -52,6 +55,17 @@ private extension HospitalDetailView {
                 MapView(latitude: location.latitude, longitude: location.longitude)
             } else {
                 Rectangle()
+                
+                if (hospital.state == "") {
+                    Text("No address listed yet.")
+                        .foregroundStyle(.white)
+                        .padding()
+                        .background {
+                            colorScheme == .dark ? Color.black : Color.white
+                        }
+                        .cornerRadius(10)
+                        .padding(.top)
+                }
             }
             
             VStack(alignment: .leading) {
@@ -71,20 +85,28 @@ private extension HospitalDetailView {
                 Spacer()
             }
             .padding(.horizontal)
-
+            .padding(.top, 50)
         }
         .frame(height: 250)
     }
     
     var hospitalDetailsView: some View {
         VStack(alignment: .leading, spacing: 15) {
-            HospitalInfoRow(icon: "pin.fill", text: "\(hospital.address) \(hospital.citytown), \(hospital.state) \(hospital.zip_code) - \(hospital.countyparish)", color: Color.red)
+            if (hospital.citytown != "") {
+                HospitalInfoRow(icon: "pin.fill", text: "\(hospital.address) \(hospital.citytown), \(hospital.state) \(hospital.zip_code) - \(hospital.countyparish)", color: Color.red)
+            }
             
-            HospitalInfoRow(icon: "phone.fill", text: hospital.telephone_number, color: Color.green)
+            if (hospital.telephone_number != "") {
+                HospitalInfoRow(icon: "phone.fill", text: hospital.telephone_number, color: Color.green)
+            }
             
-            HospitalInfoRow(icon: "info.square.fill", text: hospital.hospital_type, color: .blue)
+            if (hospital.hospital_type == "MISSING") {
+                HospitalInfoRow(icon: "info.square.fill", text: "Info coming soon!", color: .blue)
+            } else {
+                HospitalInfoRow(icon: "info.square.fill", text: hospital.hospital_type, color: .blue)
+            }
             
-            if hospital.meets_criteria_for_birthing_friendly_designation {
+            if (hospital.meets_criteria_for_birthing_friendly_designation) {
                 HospitalInfoRow(icon: "figure.child", text: "Birthing Center", color: Color("storkIndigo"))
             }
             
@@ -93,7 +115,8 @@ private extension HospitalDetailView {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(.vertical)
+        .padding(.leading, 5)
         .backgroundCard(colorScheme: colorScheme)
         .padding(.horizontal)
     }

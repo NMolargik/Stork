@@ -44,6 +44,8 @@ public class ProfileViewModel: ObservableObject {
     @Published var confirmPassword: String = ""
     @Published var confirmPasswordError: String? = nil
     
+    @Published var hasAttemptedSubmit: Bool = false
+    
     // MARK: - Dependency
     private let profileRepository: ProfileRepositoryInterface
     
@@ -77,10 +79,11 @@ public class ProfileViewModel: ObservableObject {
     // MARK: - Register / Create Profile
     @MainActor
     public func registerWithEmail() async throws {
+        hasAttemptedSubmit = true
         // 1) Validate entire registration form
         validateRegistrationForm()
         guard isFormValid else {
-            throw ProfileError.creationFailed("Details are invalid. Please correct the form.")
+            throw ProfileError.creationFailed("Some fields are invalid. Please try again.")
         }
         
         // 2) Show loading indicator
@@ -152,10 +155,10 @@ public class ProfileViewModel: ObservableObject {
     public func signInWithEmail() async throws {
         // Basic validation
         guard !profile.email.isEmpty else {
-            throw ProfileError.authenticationFailed("Email was not provided.")
+            throw ProfileError.authenticationFailed("An email address was not provided.")
         }
         guard !passwordText.isEmpty else {
-            throw ProfileError.authenticationFailed("Password was not provided.")
+            throw ProfileError.authenticationFailed("A password was not provided.")
         }
         
         isWorking = true
@@ -298,21 +301,29 @@ public class ProfileViewModel: ObservableObject {
     }
     
     func validateRegistrationForm() {
-        emailError = isEmailValid(tempProfile.email) ? nil : "Invalid email address"
-        passwordError = isPasswordValid(passwordText) ? nil : "Password must be at least 8 chars w/ letter, number, symbol"
-        confirmPasswordError = (passwordText == confirmPassword) ? nil : "Passwords do not match"
-        firstNameError = isNameValid(tempProfile.firstName) ? nil : "First name cannot be empty"
-        lastNameError = isNameValid(tempProfile.lastName) ? nil : "Last name cannot be empty"
-        birthdayError = isBirthdayValid(tempProfile.birthday) ? nil : "You must be at least 16 years old to use Stork"
-        
+        if hasAttemptedSubmit {
+            emailError = isEmailValid(tempProfile.email) ? nil : "Invalid email address"
+            passwordError = isPasswordValid(passwordText) ? nil : "Password must be at least 8 chars w/ letter, number, symbol"
+            firstNameError = isNameValid(tempProfile.firstName) ? nil : "First name cannot be empty"
+            lastNameError = isNameValid(tempProfile.lastName) ? nil : "Last name cannot be empty"
+            birthdayError = isBirthdayValid(tempProfile.birthday) ? nil : "You must be at least 16 years old to use Stork"
+        } else {
+            emailError = nil
+            passwordError = nil
+            firstNameError = nil
+            lastNameError = nil
+            birthdayError = nil
+        }
+        // Always validate confirm password immediately if it is not empty and does not match
+        confirmPasswordError = (!confirmPassword.isEmpty && passwordText != confirmPassword) ? "Passwords do not match" : nil
+
         withAnimation {
-            isFormValid =
-                emailError == nil &&
-                passwordError == nil &&
-                confirmPasswordError == nil &&
-                firstNameError == nil &&
-                lastNameError == nil &&
-                birthdayError == nil
+            isFormValid = (emailError == nil) &&
+                          (passwordError == nil) &&
+                          (confirmPasswordError == nil) &&
+                          (firstNameError == nil) &&
+                          (lastNameError == nil) &&
+                          (birthdayError == nil)
         }
     }
     

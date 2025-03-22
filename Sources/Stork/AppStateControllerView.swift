@@ -73,24 +73,24 @@ public struct AppStateControllerView: View {
                     SplashView(
                         showRegistration: $showRegistration,
                         onAuthenticated: {
-                            // User is now logged in
                             print("SplashView -> onAuthenticated: logged in")
                             self.loggedIn = true
-                            // Let checkAppState() handle subscription + onboarding
                             checkAppState()
                         }
                     )
+                    .transition(.opacity)
                     
                 case .register:
                     RegisterView(
                         showRegistration: $showRegistration,
                         onAuthenticated: {
-                            print("SplashView -> onAuthenticated: registered")
+                            print("RegisterView -> onAuthenticated: registered")
                             self.loggedIn = true
                             self.showRegistration = false
                             checkAppState()
                         }
                     )
+                    .transition(.move(edge: .bottom))
                     
                 case .paywall:
                     PaywallMainView(
@@ -104,16 +104,18 @@ public struct AppStateControllerView: View {
                             checkAppState()
                         }
                     )
+                    .transition(.opacity)
                     
                 case .onboard:
                     OnboardingView {
-                        // Onboarding done, re-check where to go next
                         print("Onboarding complete")
                         checkAppState()
                     }
+                    .transition(.slide)
                     
                 case .main:
                     MainView()
+                    .transition(.opacity)
                 }
             }
             .onAppear {
@@ -150,22 +152,22 @@ public struct AppStateControllerView: View {
         if loggedIn {
             Task {
                 do {
-                    // Fetch any needed data
                     try await fetchDataIfNeeded()
-                    
-                    // Attempt RevenueCat login using profile ID (if not empty)
                     try await handlePurchasesLogin()
                     
-                    // Decide the next state
-                    appState = await computeNextAppState()
-                    
+                    // Animate the state change
+                    let nextState = await computeNextAppState()
+                    withAnimation {
+                        appState = nextState
+                    }
                 } catch {
                     errorMessage = error.localizedDescription
                 }
             }
         } else {
-            // If not logged in, decide between splash or register
-            appState = showRegistration ? .register : .splash
+            withAnimation {
+                appState = showRegistration ? .register : .splash
+            }
         }
     }
     

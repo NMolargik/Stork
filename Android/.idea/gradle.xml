@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/../.build/checkouts/skip-unit/Sources/SkipUnit/Skip/buildSrc" name="buildSrc">
+                <projects>
+                  <project path="$PROJECT_DIR$/../.build/checkouts/skip-unit/Sources/SkipUnit/Skip/buildSrc" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone" name="stork.module">
+                <projects>
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseAuth" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseCore" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseFirestore" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseStorage" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFoundation" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipKit" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipLib" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipModel" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipRevenueCat" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipUI" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipUnit" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/Stork" />
+                  <project path="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/StorkModel" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/../.build/checkouts/skip-unit/Sources/SkipUnit/Skip/buildSrc" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseAuth" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseCore" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseFirestore" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFirebaseStorage" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipFoundation" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipKit" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipLib" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipModel" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipRevenueCat" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipUI" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/SkipUnit" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/Stork" />
+            <option value="$PROJECT_DIR$/../.build/plugins/outputs/skipapp-stork/Stork/destination/skipstone/StorkModel" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/SkipFirebaseAuth" />
+            <option value="$PROJECT_DIR$/SkipFirebaseCore" />
+            <option value="$PROJECT_DIR$/SkipFirebaseFirestore" />
+            <option value="$PROJECT_DIR$/SkipFirebaseStorage" />
+            <option value="$PROJECT_DIR$/SkipFoundation" />
+            <option value="$PROJECT_DIR$/SkipKit" />
+            <option value="$PROJECT_DIR$/SkipLib" />
+            <option value="$PROJECT_DIR$/SkipModel" />
+            <option value="$PROJECT_DIR$/SkipRevenueCat" />
+            <option value="$PROJECT_DIR$/SkipUI" />
+            <option value="$PROJECT_DIR$/SkipUnit" />
+            <option value="$PROJECT_DIR$/Stork" />
+            <option value="$PROJECT_DIR$/StorkModel" />
+            <option value="$PROJECT_DIR$/app" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

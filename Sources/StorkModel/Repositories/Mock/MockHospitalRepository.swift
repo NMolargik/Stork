@@ -113,22 +113,19 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     /// Lists hospitals filtered by city and state.
     ///
     /// - Parameters:
-    ///   - city: The city to filter hospitals by.
     ///   - state: The state to filter hospitals by.
     /// - Returns: An array of `Hospital` objects matching the specified city and state.
     /// - Throws: `HospitalError.notFound` if no hospitals are found in the specified city and state.
-    public func getHospitals(byCity city: String, andState state: String) async throws -> [Hospital] {
+    public func getHospitals(state: String) async throws -> [Hospital] {
         let filteredHospitals = hospitals.filter {
             #if !SKIP
-            $0.citytown.caseInsensitiveCompare(city) == .orderedSame &&
             $0.state.caseInsensitiveCompare(state) == .orderedSame
             #else
-            $0.citytown.equals(city, ignoreCase = true) &&
             $0.state.equals(state, ignoreCase = true)
             #endif
         }
         guard !filteredHospitals.isEmpty else {
-            throw HospitalError.notFound("No hospitals found in \(city), \(state).")
+            throw HospitalError.notFound("No hospitals found in \(state).")
         }
         return filteredHospitals
     }
