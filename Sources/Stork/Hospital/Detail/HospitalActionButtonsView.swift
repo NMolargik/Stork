@@ -22,7 +22,7 @@ struct HospitalActionButtonsView: View {
                 width: 100,
                 height: 40,
                 color: Color("storkOrange"),
-                icon: Image(systemName: "arrow.left"),
+                icon: Image("arrow.left", bundle: .module),
                 isEnabled: true,
                 onTapAction: { withAnimation { dismiss() } }
             )

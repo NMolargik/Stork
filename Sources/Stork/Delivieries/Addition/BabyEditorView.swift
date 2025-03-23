@@ -109,7 +109,7 @@ struct BabyEditorView: View {
                         removeBaby(baby.id)
                     }
                 } label: {
-                    Image("minus.symbol")
+                    Image("minus.symbol", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 15, height: 15)

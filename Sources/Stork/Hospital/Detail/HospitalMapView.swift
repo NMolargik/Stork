@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng
 struct HospitalMapView: View {
     @Environment(\.colorScheme) var colorScheme
     
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     @ObservedObject var profileViewModel: ProfileViewModel
     
     @Binding var location: Location?
@@ -62,11 +64,12 @@ struct HospitalMapView: View {
                 HStack(alignment: .top) {
                     Text(hospital.facility_name)
                         .hospitalTitleStyle(colorScheme: colorScheme)
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     
                     Spacer()
 
                     Button(action: togglePrimaryHospital) {
-                        Image(systemName: profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star")
+                        Image( profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star", bundle: .module)
                             .resizable()
                             .hospitalStarStyle(colorScheme: colorScheme)
                     }
@@ -98,5 +101,7 @@ struct HospitalMapView: View {
 }
 
 #Preview {
-    HospitalMapView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), location: .constant(Location(latitude: 0.0, longitude: 0.0)), hospital: Hospital.sampleHospital())
+    HospitalMapView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), location: .constant(Location(latitude: 0.0, longitude: 0.0)), hospital: Hospital.sampleHospital()
+    )
+    .environmentObject(AppStorageManager())
 }

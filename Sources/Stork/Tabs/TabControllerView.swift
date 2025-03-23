@@ -21,7 +21,7 @@ public struct TabControllerView: View {
             HomeTabView(deliveryViewModel: deliveryViewModel)
                 .tabItem {
                     VStack {
-                        Image(Tab.home.customIconName)
+                        Image(Tab.home.customIconName, bundle: .module)
                         Text(Tab.home.title)
                     }
                 }
@@ -36,7 +36,7 @@ public struct TabControllerView: View {
             )
             .tabItem {
                 VStack {
-                    Image(Tab.deliveries.customIconName)
+                    Image(Tab.deliveries.customIconName, bundle: .module)
                     Text(Tab.deliveries.title)
                 }
             }
@@ -50,7 +50,7 @@ public struct TabControllerView: View {
             )
             .tabItem {
                 VStack {
-                    Image(Tab.hospitals.customIconName)
+                    Image(Tab.hospitals.customIconName, bundle: .module)
                     Text(Tab.hospitals.title)
                 }
             }
@@ -65,7 +65,7 @@ public struct TabControllerView: View {
             )
             .tabItem {
                 VStack {
-                    Image(Tab.muster.customIconName)
+                    Image(Tab.muster.customIconName, bundle: .module)
                     Text(Tab.muster.title)
                 }
             }
@@ -78,17 +78,17 @@ public struct TabControllerView: View {
                 deliveryViewModel: deliveryViewModel,
                 hospitalViewModel: hospitalViewModel
             )
-            
-                .tabItem {
-                    VStack {
-                        Image(Tab.settings.customIconName)
-                        Text(Tab.settings.title)
-                    }
+            .tabItem {
+                VStack {
+                    Image(Tab.settings.customIconName, bundle: .module)
+                    Text(Tab.settings.title)
                 }
-                .tag(Tab.settings)
-                .environmentObject(appStateManager)
+            }
+            .tag(Tab.settings)
+            .environmentObject(appStateManager)
 
         }
+        .foregroundStyle(.black)
         .tint(Color("storkIndigo"))
         .onChange(of: appStateManager.selectedTab) { _ in
             HapticFeedback.trigger(style: .medium)

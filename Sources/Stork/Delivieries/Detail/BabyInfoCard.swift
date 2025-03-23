@@ -16,7 +16,7 @@ struct BabyInfoCard: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Image("figure.child")
+            Image("figure.child", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 60, height: 60)
@@ -36,22 +36,22 @@ struct BabyInfoCard: View {
     private var infoRows: some View {
         Group {
             InfoRowView(
-                icon: Image("scalemass.fill"),
+                icon: Image("scalemass.fill", bundle: .module),
                 text: formattedWeight,
                 iconColor: Color("storkOrange")
             )
             
             InfoRowView(
-                icon: Image("ruler.fill"),
+                icon: Image("ruler.fill", bundle: .module),
                 text: formattedHeight,
                 iconColor: Color.green
             )
             
             if baby.nurseCatch || baby.nicuStay {
                 InfoRowView(
-                    icon: Image("checkmark_stork"),
+                    icon: Image("checkmark_stork", bundle: .module),
                     text: baby.nurseCatch ? "Nurse Catch" : "NICU Stay",
-                    iconColor: baby.nurseCatch ? .teal : .red
+                    iconColor: baby.nurseCatch ? Color.teal : Color.red
                 )
             }
         }

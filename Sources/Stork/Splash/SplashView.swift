@@ -33,7 +33,7 @@ struct SplashView: View {
                         isInfoPresented = true
                     }
                 }, label: {
-                    Image("info.circle.fill")
+                    Image("info.circle.fill", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
@@ -92,7 +92,7 @@ struct SplashView: View {
                 Button(action: {
                     isInfoPresented = !isInfoPresented
                 }) {
-                    Image("info.circle")
+                    Image("info.circle", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)

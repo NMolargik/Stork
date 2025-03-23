@@ -12,7 +12,7 @@ struct NoHospitalsFoundView: View {
 
     var body: some View {
         VStack {
-            Image("exclamationmark.magnifyingglass")
+            Image("exclamationmark.magnifyingglass", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 50, height: 50)

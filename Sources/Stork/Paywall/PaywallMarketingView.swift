@@ -18,7 +18,7 @@ struct PaywallMarketingView: View {
                 ScrollView {
                     VStack(alignment: .center, spacing: 5) {
                         ZStack {
-                            Image("storkicon")
+                            Image("storkicon", bundle: .module)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: min(geometry.size.width * 0.6, 250)) // Adaptive size
@@ -52,7 +52,7 @@ struct PaywallMarketingView: View {
                         
                         HStack {
                             VStack {
-                                Image("shippingbox.fill")
+                                Image("shippingbox.fill", bundle: .module)
                                     .resizable()
                                     .scaledToFit()
                                     .foregroundColor(Color("storkBlue"))
@@ -60,7 +60,7 @@ struct PaywallMarketingView: View {
                                     .padding()
                                     .padding(.bottom)
                                 
-                                Image("person.3.fill")
+                                Image("person.3.fill", bundle: .module)
                                     .resizable()
                                     .scaledToFit()
                                     .foregroundColor(Color("storkPurple"))

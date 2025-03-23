@@ -18,7 +18,7 @@ struct OnboardingPageThreeView: View {
 
             JarView(
                 deliveries: Binding.constant(nil),
-                headerText: "Delivery Jar",
+                headerText: "Muster Jar",
                 isTestMode: true,
                 isMusterTest: true
             )

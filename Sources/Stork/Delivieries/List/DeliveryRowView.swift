@@ -9,6 +9,8 @@ import StorkModel
 
 struct DeliveryRowView: View {
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     var delivery: Delivery
 
@@ -20,6 +22,7 @@ struct DeliveryRowView: View {
                     .fontWeight(.bold)
                     .padding(.horizontal, 5)
                     .padding(.vertical, 3)
+                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     .backgroundCard(colorScheme: colorScheme)
                 
                 // Baby summary
@@ -102,4 +105,5 @@ struct DeliveryRowView: View {
         deliveryMethod: .vaginal,
         epiduralUsed: true
     ))
+    .environmentObject(AppStorageManager())
 }

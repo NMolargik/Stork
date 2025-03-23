@@ -34,7 +34,7 @@ struct DateSelectionView: View {
                     }
                 }) {
                     HStack {
-                        Image("calendar")
+                        Image("calendar", bundle: .module)
                             .foregroundStyle(.red)
 
                         Text("\(formattedDate(selectedDate))")

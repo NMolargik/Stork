@@ -26,7 +26,7 @@ struct HospitalSelectionView: View {
                 width: 250,
                 height: 50,
                 color: Color.red,
-                icon: Image("building.fill"),
+                icon: Image("building.fill", bundle: .module),
                 isEnabled: true,
                 onTapAction: {
                     withAnimation {

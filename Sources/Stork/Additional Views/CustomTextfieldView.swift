@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CustomTextfieldView: View {
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @Binding var text: String
     
@@ -43,8 +45,10 @@ struct CustomTextfieldView: View {
                 Group {
                     if isSecure {
                         SecureField(hintText, text: trimmedText)
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     } else {
                         TextField(hintText, text: trimmedText)
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     }
                 }
                 .frame(height: 50)
@@ -81,7 +85,7 @@ struct CustomTextfieldView: View {
         CustomTextfieldView(
             text: .constant("Email"),
             hintText: "Enter your email...",
-            icon: Image("envelope"),
+            icon: Image("envelope", bundle: .module),
             isSecure: false,
             iconColor: Color("storkBlue"),
             characterLimit: 25
@@ -90,10 +94,11 @@ struct CustomTextfieldView: View {
         CustomTextfieldView(
             text: .constant("Password"),
             hintText: "Enter your password...",
-            icon: Image("key"),
+            icon: Image("key", bundle: .module),
             isSecure: true,
             characterLimit: 20
         )
     }
     .padding()
+    .environmentObject(AppStorageManager())
 }

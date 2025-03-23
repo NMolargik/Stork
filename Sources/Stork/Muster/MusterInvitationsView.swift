@@ -13,6 +13,7 @@ struct MusterInvitationsView: View {
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -32,7 +33,7 @@ struct MusterInvitationsView: View {
                 } else if (musterViewModel.invites.count == 0) {
                     
                     VStack {
-                        Image("exclamationmark.magnifyingglass")
+                        Image("exclamationmark.magnifyingglass", bundle: .module)
                             .resizable()
                             .scaledToFit()
                             .foregroundStyle(.orange)
@@ -40,6 +41,7 @@ struct MusterInvitationsView: View {
                             .padding()
                         
                         Text("No invitations found. Ask a muster admin to send you an invitation!")
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                             .multilineTextAlignment(.center)
                             .font(.title3)
                             .padding(.horizontal)
@@ -133,4 +135,5 @@ struct MusterInvitationsView: View {
         onRespond: { _, _ in }
     )
     .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
 }

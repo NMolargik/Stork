@@ -21,6 +21,7 @@ struct DeliveryDetailView: View {
                         .fontWeight(.bold)
                         .padding(.leading)
                         .accessibilityLabel("Delivery Date: \(delivery.date.formatted(date: .omitted, time: .shortened))")
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
 
                     ForEach(delivery.babies, id: \.id) { baby in
                         BabyInfoCard(baby: baby, useMetric: appStorageManager.useMetric)

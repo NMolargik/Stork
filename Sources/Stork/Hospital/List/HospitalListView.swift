@@ -93,7 +93,7 @@ struct HospitalListView: View {
             Text("Searching by State")
                 .fontWeight(.bold)
             
-            Image("location.fill")
+            Image("location.fill", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 24, height: 24)

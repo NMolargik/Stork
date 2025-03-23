@@ -50,7 +50,7 @@ struct HospitalRowView: View {
             Spacer()
             
             if (profileViewModel.profile.primaryHospitalId == hospital.id) {
-                Image("star.fill")
+                Image("star.fill", bundle: .module)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)

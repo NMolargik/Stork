@@ -12,6 +12,7 @@ struct MusterSplashView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -21,7 +22,7 @@ struct MusterSplashView: View {
     var body: some View {
         VStack {
             HStack {
-                Image("person.3")
+                Image("person.3", bundle: .module)
                     .resizable()
                     .foregroundStyle(Color("storkIndigo"))
                     .scaledToFit()
@@ -29,6 +30,7 @@ struct MusterSplashView: View {
                     .navigationTitle("Join A Muster")
                 
                 Text("[ muhs-ter ] - noun\nA group of storks")
+                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     .multilineTextAlignment(.center)
                     .font(.body)
                     .fontWeight(.semibold)
@@ -39,6 +41,7 @@ struct MusterSplashView: View {
             .padding(8)
             
             Text("Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors.")
+                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 .multilineTextAlignment(.center)
                 .font(.body)
                 .fontWeight(.semibold)
@@ -72,6 +75,7 @@ struct MusterSplashView: View {
                 Text("Loading Your Muster...")
                     .padding(.top)
                     .fontWeight(.bold)
+                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 ProgressView()
                     .tint(Color("storkIndigo"))
             }
@@ -122,5 +126,6 @@ struct MusterSplashView: View {
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
     )
     .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
         
 }

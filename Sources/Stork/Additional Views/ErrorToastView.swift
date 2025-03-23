@@ -15,7 +15,7 @@ struct ErrorToastView: View {
     var body: some View {
         VStack {
             HStack {
-                Image("exclamationmark.triangle.fill")
+                Image("exclamationmark.triangle.fill", bundle: .module)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)

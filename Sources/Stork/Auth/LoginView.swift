@@ -23,7 +23,7 @@ struct LoginView: View {
                 CustomTextfieldView(
                     text: $profileViewModel.profile.email,
                     hintText: "Email Address",
-                    icon: Image("envelope"),
+                    icon: Image("envelope", bundle: .module),
                     isSecure: false,
                     iconColor: Color("storkBlue")
                 )
@@ -33,7 +33,7 @@ struct LoginView: View {
                 CustomTextfieldView(
                     text: $profileViewModel.passwordText,
                     hintText: "Password",
-                    icon: Image("key"),
+                    icon: Image("key", bundle: .module),
                     isSecure: true,
                     iconColor: Color("storkOrange")
                 )

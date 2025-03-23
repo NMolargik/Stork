@@ -10,6 +10,8 @@ import StorkModel
 
 struct DeliveryMethodPicker: View {
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @Binding var deliveryMethod: DeliveryMethod
 
@@ -17,6 +19,7 @@ struct DeliveryMethodPicker: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Delivery Method")
                 .font(.headline)
+                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
 
             Picker("Delivery Method", selection: $deliveryMethod) {
                 ForEach(DeliveryMethod.allCases, id: \.self) { method in
@@ -35,5 +38,7 @@ struct DeliveryMethodPicker: View {
 }
 
 #Preview {
-    DeliveryMethodPicker(deliveryMethod: .constant(DeliveryMethod.cSection))
+    DeliveryMethodPicker(deliveryMethod: .constant(DeliveryMethod.cSection)
+    )
+    .environmentObject(AppStorageManager())
 }

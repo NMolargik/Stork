@@ -33,7 +33,7 @@ struct PasswordResetSheetView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            CustomTextfieldView(text: $email, hintText: "Enter your email address...", icon: Image("envelope"), isSecure: false, iconColor: Color("storkBlue"))
+            CustomTextfieldView(text: $email, hintText: "Enter your email address...", icon: Image("envelope", bundle: .module), isSecure: false, iconColor: Color("storkBlue"))
                 .padding(.bottom)
             
             if (profileViewModel.isWorking) {

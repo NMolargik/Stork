@@ -39,7 +39,7 @@ struct ProfileAssignmentRowView: View {
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                 
                 HStack(spacing: 4) {
-                    Image("birthday.cake.fill")
+                    Image("birthday.cake.fill", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)

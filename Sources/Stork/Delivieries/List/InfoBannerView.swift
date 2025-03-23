@@ -9,6 +9,8 @@ import SwiftUI
 
 struct InfoBannerView: View {
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     let icon: String
     let text: String
@@ -18,7 +20,7 @@ struct InfoBannerView: View {
         HStack {
             Spacer()
 
-            Image(systemName: icon)
+            Image(icon, bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 24, height: 24)
@@ -26,9 +28,10 @@ struct InfoBannerView: View {
                 .padding(.trailing)
 
             Text(text)
-                .font(.title3)
+                .font(.body)
                 .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
+                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
 
             Spacer()
         }
@@ -39,4 +42,5 @@ struct InfoBannerView: View {
 
 #Preview {
     InfoBannerView(icon: "exclamationmark.triangle.fill", text: "info banner", color: Color.blue)
+        .environmentObject(AppStorageManager())
 }

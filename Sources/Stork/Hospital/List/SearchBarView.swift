@@ -16,7 +16,7 @@ struct SearchBarView: View {
             CustomTextfieldView(
                 text: $hospitalViewModel.searchQuery,
                 hintText: "Search by name",
-                icon: Image(hospitalViewModel.usingLocation ? "location.fill" : "magnifyingglass"),
+                icon: Image(hospitalViewModel.usingLocation ? "location.fill" : "magnifyingglass", bundle: .module),
                 isSecure: false,
                 iconColor: hospitalViewModel.usingLocation ? .blue : Color("storkOrange")
             )

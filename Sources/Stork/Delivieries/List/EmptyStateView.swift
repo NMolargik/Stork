@@ -9,6 +9,8 @@ import SwiftUI
 
 struct EmptyStateView: View {
     @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     var body: some View {
         VStack {
@@ -16,7 +18,7 @@ struct EmptyStateView: View {
 
             HStack(spacing: 16) {
                 ForEach(["storkPurple", "storkPink", "storkBlue"], id: \.self) { color in
-                    Image("figure.child")
+                    Image("figure.child", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 50, height: 50)
@@ -31,8 +33,9 @@ struct EmptyStateView: View {
             Text("No deliveries recorded yet. Use the button above to get started!")
                 .padding()
                 .multilineTextAlignment(.center)
-                .font(.title3)
+                .font(.body)
                 .fontWeight(.semibold)
+                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 .backgroundCard(colorScheme: colorScheme)
 
             Spacer(minLength: 200)
@@ -51,4 +54,5 @@ struct EmptyStateView: View {
 
 #Preview {
     EmptyStateView()
+        .environmentObject(AppStorageManager())
 }

@@ -12,6 +12,7 @@ struct MusterTabView: View {
     @Environment(\.colorScheme) var colorScheme
 
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var profileViewModel: ProfileViewModel
     @ObservedObject var musterViewModel: MusterViewModel
@@ -34,30 +35,59 @@ struct MusterTabView: View {
                                 Button {
                                     musterViewModel.showInviteUserSheet = true
                                 } label: {
-                                    Label("Invite User", systemImage: "person.badge.plus")
+                                    Label {
+                                        Text("Invite User")
+                                    } icon: {
+                                        Image("person.badge.plus", bundle: .module)
+                                            .resizable()
+                                            .foregroundStyle(Color("storkBlue"))
+                                            .frame(width: 25)
+                                    }
                                 }
                                 
                                 Button {
                                     musterViewModel.showAssignAdminSheet = true
                                 } label: {
-                                    Label("Assign Admin", systemImage: "person.badge.shield.exclamationmark.fill")
+                                    Label {
+                                        Text("Assign Admin")
+                                    } icon: {
+                                        Image("person.badge.shield.exclamationmark.fill", bundle: .module)
+                                            .resizable()
+                                            .foregroundStyle(.yellow)
+                                            .frame(width: 25)
+                                    }
                                 }
                                 
                                 Button {
                                     musterViewModel.showRenameSheet = true
                                 } label: {
-                                    Label("Rename Muster", systemImage: "tag.fill")
+                                    Label {
+                                        Text("Rename Muster")
+                                    } icon: {
+                                        Image("tag.fill", bundle: .module)
+                                            .resizable()
+                                            .foregroundStyle(Color("storkIndigo"))
+                                            .frame(width: 25)
+                                            
+                                    }
                                 }
                             }
                             
                             Button {
                                 showLeaveMusterSheet = true
                             } label: {
-                                Label("Leave Muster", systemImage: "door.left.hand.open")
+                                Label {
+                                    Text("Leave Muster")
+                                } icon: {
+                                    Image("door.left.hand.open", bundle: .module)
+                                        .resizable()
+                                        .foregroundStyle(.red)
+                                        .frame(width: 25)
+                                }
                             }
                             
                         } label: {
-                            Image("gear")
+                            Image("gear", bundle: .module)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
@@ -71,7 +101,7 @@ struct MusterTabView: View {
                                 try await musterViewModel.loadCurrentMuster(profileViewModel: profileViewModel, deliveryViewModel: deliveryViewModel)
                             }
                         } label: {
-                            Image("arrow.2.squarepath")
+                            Image("arrow.2.squarepath", bundle: .module)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
@@ -87,7 +117,7 @@ struct MusterTabView: View {
                                 appStateManager.selectedTab = .deliveries
                             }
                         } label: {
-                            Image("plus")
+                            Image("plus", bundle: .module)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
@@ -99,6 +129,7 @@ struct MusterTabView: View {
                     HStack {
                         Text(muster.name)
                             .font(.title2).fontWeight(.bold)
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                         
                         Spacer()
                     }
@@ -303,4 +334,5 @@ struct MusterTabView: View {
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
     )
     .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
 }

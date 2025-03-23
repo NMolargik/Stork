@@ -11,13 +11,13 @@ import StorkModel
 struct UserDeliveryDistributionView: View {
     @Environment(\.colorScheme) var colorScheme
     
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @StateObject private var colorsViewModel = UserColorsViewModel()
+
     @ObservedObject var musterViewModel: MusterViewModel
 
-
-    // MARK: - Input Data
     let deliveries: [Delivery]
-
-    @StateObject private var colorsViewModel = UserColorsViewModel()
 
     private var sixMonthsAgo: Date {
         Calendar.current.date(byAdding: .month, value: -6, to: Date()) ?? Date()
@@ -46,8 +46,6 @@ struct UserDeliveryDistributionView: View {
         }
     }
 
-    // MARK: - Subviews
-
     private var userListView: some View {
         let sortedProfiles = sortedProfilesByDeliveryCount()
 
@@ -56,7 +54,7 @@ struct UserDeliveryDistributionView: View {
                 ForEach(sortedProfiles, id: \.id) { profile in
                     HStack(alignment: .center) {
                         if (musterViewModel.currentMuster?.administratorProfileIds.contains(profile.id) == true) {                 
-                            Image("crown.fill")
+                            Image("crown.fill", bundle: .module)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
@@ -64,6 +62,7 @@ struct UserDeliveryDistributionView: View {
                         }
                         
                         Text("\(profile.firstName) \(profile.lastName.first.map { "\($0)." } ?? "")")
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                         
                         Circle()
                             .fill(colorsViewModel.userColors[profile.id] ?? .gray)
@@ -82,6 +81,7 @@ struct UserDeliveryDistributionView: View {
                 HStack(spacing: 8) {
                     Text("Old Members")
                         .font(.body)
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     
                     Circle()
                         .fill(colorsViewModel.userColors["Old Members"] ?? .gray)
