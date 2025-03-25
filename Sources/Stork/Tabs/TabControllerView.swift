@@ -20,10 +20,12 @@ public struct TabControllerView: View {
         TabView(selection: $appStateManager.selectedTab) {
             HomeTabView(deliveryViewModel: deliveryViewModel)
                 .tabItem {
-                    VStack {
-                        Image(Tab.home.customIconName)
+                    Label {
                         Text(Tab.home.title)
+                    } icon: {
+                        Image(Tab.home.customIconName, bundle: .module)
                     }
+                    .foregroundStyle(.gray)
                 }
                 .tag(Tab.home)
                 .environmentObject(appStateManager)
@@ -35,10 +37,13 @@ public struct TabControllerView: View {
                 musterViewModel: musterViewModel
             )
             .tabItem {
-                VStack {
-                    Image(Tab.deliveries.customIconName)
+                Label {
                     Text(Tab.deliveries.title)
+                } icon: {
+                    Image(Tab.deliveries.customIconName, bundle: .module)
                 }
+                .foregroundStyle(.gray)
+
             }
             .tag(Tab.deliveries)
             .environmentObject(appStateManager)
@@ -49,10 +54,13 @@ public struct TabControllerView: View {
                 onSelection: { _ in }
             )
             .tabItem {
-                VStack {
-                    Image(Tab.hospitals.customIconName)
+                Label {
                     Text(Tab.hospitals.title)
+                } icon: {
+                    Image(Tab.hospitals.customIconName, bundle: .module)
                 }
+                .foregroundStyle(.gray)
+
             }
             .tag(Tab.hospitals)
             .environmentObject(appStateManager)
@@ -64,10 +72,13 @@ public struct TabControllerView: View {
                 hospitalViewModel: hospitalViewModel
             )
             .tabItem {
-                VStack {
-                    Image(Tab.muster.customIconName)
+                Label {
                     Text(Tab.muster.title)
+                } icon: {
+                    Image(Tab.muster.customIconName, bundle: .module)
                 }
+                .foregroundStyle(.gray)
+
             }
             .tag(Tab.muster)
             .environmentObject(appStateManager)
@@ -78,17 +89,18 @@ public struct TabControllerView: View {
                 deliveryViewModel: deliveryViewModel,
                 hospitalViewModel: hospitalViewModel
             )
-            
-                .tabItem {
-                    VStack {
-                        Image(Tab.settings.customIconName)
-                        Text(Tab.settings.title)
-                    }
+            .tabItem {
+                Label {
+                    Text(Tab.settings.title)
+                } icon: {
+                    Image(Tab.settings.customIconName, bundle: .module)
                 }
-                .tag(Tab.settings)
-                .environmentObject(appStateManager)
+            }
+            .tag(Tab.settings)
+            .environmentObject(appStateManager)
 
         }
+        .foregroundStyle(.black)
         .tint(Color("storkIndigo"))
         .onChange(of: appStateManager.selectedTab) { _ in
             HapticFeedback.trigger(style: .medium)

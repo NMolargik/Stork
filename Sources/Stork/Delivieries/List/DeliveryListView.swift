@@ -8,9 +8,6 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryListView: View {
-    // MARK: - Environment
-    @Environment(\.colorScheme) var colorScheme
-        
     @ObservedObject var deliveryViewModel: DeliveryViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
 

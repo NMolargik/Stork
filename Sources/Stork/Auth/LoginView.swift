@@ -23,7 +23,7 @@ struct LoginView: View {
                 CustomTextfieldView(
                     text: $profileViewModel.profile.email,
                     hintText: "Email Address",
-                    icon: Image("envelope"),
+                    icon: Image("envelope", bundle: .module),
                     isSecure: false,
                     iconColor: Color("storkBlue")
                 )
@@ -33,7 +33,7 @@ struct LoginView: View {
                 CustomTextfieldView(
                     text: $profileViewModel.passwordText,
                     hintText: "Password",
-                    icon: Image("key"),
+                    icon: Image("key", bundle: .module),
                     isSecure: true,
                     iconColor: Color("storkOrange")
                 )
@@ -49,12 +49,11 @@ struct LoginView: View {
                     CustomButtonView(
                         text: "Log In",
                         width: 120,
-                        height: 50,
+                        height: 40,
                         color: Color("storkIndigo"),
                         isEnabled: true,
                         onTapAction: handleLogin
                     )
-                    .padding(.bottom, 10)
                 }
                 
                 Button(action: {
@@ -68,8 +67,6 @@ struct LoginView: View {
                 })
                 .padding()
                 .disabled(profileViewModel.isWorking)
-                
-                Spacer()
             }
             .padding(.horizontal)
         }

@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct ErrorToastView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     var body: some View {
         VStack {
             HStack {
-                Image("exclamationmark.triangle.fill")
+                Image("exclamationmark.triangle.fill", bundle: .module)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
@@ -24,7 +23,7 @@ struct ErrorToastView: View {
                 Text(appStateManager.errorMessage)
             }
             .padding()
-            .backgroundCard(colorScheme: colorScheme)
+            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
             .onTapGesture {
                 withAnimation {
                     appStateManager.errorMessage = ""
@@ -47,4 +46,5 @@ struct ErrorToastView: View {
 #Preview {
     ErrorToastView()
         .environmentObject(AppStateManager.shared)
+        .environmentObject(AppStorageManager())
 }

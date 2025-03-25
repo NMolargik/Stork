@@ -8,10 +8,10 @@ import SwiftUI
 import StorkModel
 
 struct MusterCreationView: View {
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -42,7 +42,7 @@ struct MusterCreationView: View {
                         CustomTextfieldView(
                             text: $musterViewModel.newMuster.name,
                             hintText: "Enter Muster name",
-                            icon: Image("tag.fill"),
+                            icon: Image("tag.fill", bundle: .module),
                             isSecure: false,
                             iconColor: Color("storkIndigo"),
                             characterLimit: 30
@@ -59,13 +59,14 @@ struct MusterCreationView: View {
                             Text(self.selectedHospital?.facility_name ?? "Select A Primary Hospital")
                                 .font(.headline)
                                 .multilineTextAlignment(.center)
+                                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
 
                             CustomButtonView(
                                 text: "Select A Hospital",
                                 width: 250,
                                 height: 40,
                                 color: Color.red,
-                                icon: Image("building.fill"),
+                                icon: Image("building.fill", bundle: .module),
                                 isEnabled: true,
                                 onTapAction: {
                                     musterViewModel.showHospitalSelection = true
@@ -74,16 +75,17 @@ struct MusterCreationView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .backgroundCard(colorScheme: colorScheme)
+                        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
 
 
                         Spacer()
 
                         Text("It's that easy!\n\nYou'll be able to add members to your muster after creation.")
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                             .padding()
                             .multilineTextAlignment(.center)
                             .fontWeight(.semibold)
-                            .backgroundCard(colorScheme: colorScheme)
+                            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
 
 
                         Spacer()
@@ -171,4 +173,5 @@ struct MusterCreationView: View {
         showCreateMusterSheet: .constant(false)
     )
     .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
 }

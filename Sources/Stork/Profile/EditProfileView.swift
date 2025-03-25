@@ -10,6 +10,8 @@ import StorkModel
 
 struct EditProfileView: View {
     @Environment(\.dismiss) var dismiss
+    
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @ObservedObject var profileViewModel: ProfileViewModel
     @ObservedObject var musterViewModel: MusterViewModel
@@ -37,8 +39,10 @@ struct EditProfileView: View {
             Form {
                 Section(header: Text("Name")) {
                     TextField("First Name", text: $firstName)
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     
                     TextField("Last Name", text: $lastName)
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 }
                 
                 Section(header: Text("Birthday")) {
@@ -47,7 +51,9 @@ struct EditProfileView: View {
                         selection: $birthday,
                         displayedComponents: .date
                     )
+                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 }
+                
                 
                 Section(header: Text("Role")) {
                     Picker("Role", selection: $role) {
@@ -64,7 +70,7 @@ struct EditProfileView: View {
                 if let errorMessage = errorMessage {
                     Section {
                         Text(errorMessage)
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
             }
@@ -152,4 +158,5 @@ struct EditProfileView: View {
 
 #Preview {
     EditProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()), hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
+        .environmentObject(AppStorageManager())
 }

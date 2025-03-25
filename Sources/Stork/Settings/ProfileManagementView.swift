@@ -30,7 +30,7 @@ struct ProfileManagementView: View {
                 
                 Spacer()
 
-                Image("person.text.rectangle.fill")
+                Image("person.text.rectangle.fill", bundle: .module)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
@@ -44,7 +44,7 @@ struct ProfileManagementView: View {
 
                 Spacer()
 
-                Image("book.fill")
+                Image("book.fill", bundle: .module)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
@@ -62,7 +62,7 @@ struct ProfileManagementView: View {
 
                 Spacer()
 
-                Image("trash.fill")
+                Image("trash.fill", bundle: .module)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)

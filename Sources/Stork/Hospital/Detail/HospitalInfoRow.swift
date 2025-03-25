@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct HospitalInfoRow: View {
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     let icon: String
     let text: String
     let color: Color
 
     var body: some View {
         HStack {
-            Image(icon)
+            Image(icon, bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 24, height: 24)
@@ -22,6 +24,7 @@ struct HospitalInfoRow: View {
 
             Text(text)
                 .fontWeight(.semibold)
+                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 .lineLimit(nil) // Allow unlimited lines
                 .multilineTextAlignment(.leading) // Ensure text aligns properly
             #if !SKIP
@@ -33,4 +36,5 @@ struct HospitalInfoRow: View {
 
 #Preview {
     HospitalInfoRow(icon: "figure.child", text: "Child Info", color: Color("storkIndigo"))
+        .environmentObject(AppStorageManager())
 }

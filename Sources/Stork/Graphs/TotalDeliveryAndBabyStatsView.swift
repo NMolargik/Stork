@@ -36,17 +36,17 @@ struct TotalDeliveryAndBabyStatsView: View {
                 Text("\(totalDeliveries) Deliveries")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                 
                 Text("&")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                 
                 Text("\(totalBabies) Babies")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
             }
             .padding()
             

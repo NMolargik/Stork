@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DeleteConfirmationView: View {
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     @Binding var step: Int
     @Binding var showing: Bool
     var onDelete: () -> Void
@@ -16,13 +18,15 @@ struct DeleteConfirmationView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Text(confirmationTitle)
+                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                
                     .font(.headline)
                     .multilineTextAlignment(.center)
                     .padding()
                 
                 Text(confirmationMessage)
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 
@@ -64,4 +68,5 @@ struct DeleteConfirmationView: View {
 
 #Preview {
     DeleteConfirmationView(step: .constant(2), showing: .constant(true), onDelete: {})
+        .environmentObject(AppStorageManager())
 }

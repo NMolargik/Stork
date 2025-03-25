@@ -9,7 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct SettingsTabView: View {
-    @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var appStorageManager: AppStorageManager

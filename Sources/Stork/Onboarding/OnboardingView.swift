@@ -56,7 +56,11 @@ struct OnboardingView: View {
                     onTapAction: nextPage
                 )
             }
-            .padding([.horizontal, .bottom])
+            .padding(.horizontal)
+            .frame(height: 80)
+            #if SKIP
+            .padding(.bottom, 60)
+            #endif
         }
         .animation(.easeInOut(duration: 0.5), value: isTransitioning) // Smooth animation
     }
@@ -80,7 +84,13 @@ struct OnboardingView: View {
                 // Update global state via environment objects
                 appStorageManager.isOnboardingComplete = true
                 appStateManager.selectedTab = .home
+                
+                //TODO: Repair Android
+                #if !SKIP
                 appStateManager.currentAppScreen = Store.shared.subscriptionActive ? .main : .paywall
+                #else
+                appStateManager.currentAppScreen = .main
+                #endif
                 onComplete()
             }
         }

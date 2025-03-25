@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct NoHospitalsFoundView: View {
-    @Environment(\.colorScheme) var colorScheme
-
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     var body: some View {
         VStack {
-            Image("exclamationmark.magnifyingglass")
+            Image("exclamationmark.magnifyingglass", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 50, height: 50)
@@ -24,10 +24,11 @@ struct NoHospitalsFoundView: View {
                 .frame(height: 70)
         }
         .padding()
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
 }
 
 #Preview {
     NoHospitalsFoundView()
+        .environmentObject(AppStorageManager())
 }

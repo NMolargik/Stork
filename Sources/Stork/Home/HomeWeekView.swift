@@ -1,5 +1,5 @@
 //
-//  HomeWeekView.swift
+//  HomeTimeView.swift
 //
 //
 //  Created by Nick Molargik on 3/17/25.
@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-// MARK: - Week Info View
-struct HomeWeekView: View {
+struct HomeTimeView: View {
     @EnvironmentObject var appStateManager: AppStateManager
 
     var body: some View {
@@ -25,6 +24,6 @@ struct HomeWeekView: View {
 }
 
 #Preview {
-    HomeWeekView()
+    HomeTimeView()
         .environmentObject(AppStateManager.shared)
 }

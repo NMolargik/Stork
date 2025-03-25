@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 #endif
 
 struct HospitalMapView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var profileViewModel: ProfileViewModel
     
@@ -52,7 +52,7 @@ struct HospitalMapView: View {
                     Text("No address listed yet.")
                         .foregroundStyle(.white)
                         .padding()
-                        .background(colorScheme == .dark ? Color.black : Color.white)
+                        .background(appStorageManager.useDarkMode ? Color.black : Color.white)
                         .cornerRadius(10)
                         .padding(.top)
                 }
@@ -61,14 +61,15 @@ struct HospitalMapView: View {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     Text(hospital.facility_name)
-                        .hospitalTitleStyle(colorScheme: colorScheme)
+                        .hospitalTitleStyle(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     
                     Spacer()
 
                     Button(action: togglePrimaryHospital) {
-                        Image(systemName: profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star")
+                        Image( profileViewModel.profile.primaryHospitalId == hospital.id ? "star.fill" : "star", bundle: .module)
                             .resizable()
-                            .hospitalStarStyle(colorScheme: colorScheme)
+                            .hospitalStarStyle(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     }
                 }
                 
@@ -98,5 +99,7 @@ struct HospitalMapView: View {
 }
 
 #Preview {
-    HospitalMapView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), location: .constant(Location(latitude: 0.0, longitude: 0.0)), hospital: Hospital.sampleHospital())
+    HospitalMapView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), location: .constant(Location(latitude: 0.0, longitude: 0.0)), hospital: Hospital.sampleHospital()
+    )
+    .environmentObject(AppStorageManager())
 }

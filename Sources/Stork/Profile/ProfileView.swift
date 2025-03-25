@@ -1,35 +1,42 @@
+//
+//  ProfileView.swift
+//
+//
+//  Created by Nick Molargik on 11/4/24.
+//
+
 import SwiftUI
 import StorkModel
 
 struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @ObservedObject var profileViewModel: ProfileViewModel
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square"), isSecure: false, iconColor: Color.green)
+                CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square", bundle: .module), isSecure: false, iconColor: Color.green)
                     .padding(.top)
                 
                 if let firstNameError = profileViewModel.firstNameError {
                     Text(firstNameError)
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .bold()
                         .padding(.top, -5)
                         .padding(.leading)
                 }
                 
-                CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square"), isSecure: false, iconColor: Color.green)
+                CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square", bundle: .module), isSecure: false, iconColor: Color.green)
                 
                 if let lastNameError = profileViewModel.lastNameError {
                     Text(lastNameError)
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .padding(.top, -5)
                         .padding(.leading)
                 }
@@ -38,6 +45,7 @@ struct ProfileView: View {
                 
                 VStack {
                     Text("Select Your Birthday")
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     
                     DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
                         .tint(Color("storkIndigo"))
@@ -50,12 +58,12 @@ struct ProfileView: View {
                         .padding(.leading)
                     
                 }
-                .backgroundCard(colorScheme: colorScheme)
+                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                 
                 if let birthdayError = profileViewModel.birthdayError {
                     Text(birthdayError)
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .padding(.top, -5)
                         .padding(.leading)
                 }
@@ -63,6 +71,7 @@ struct ProfileView: View {
                 Divider()
                 
                 Text("Select Your Role")
+                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 
                 Picker("Role", selection: $profileViewModel.tempProfile.role) {
                     ForEach(ProfileRole.allCases, id: \.self) { role in
@@ -93,6 +102,7 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Editing Profile")
+                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                         .font(.body)
                         .fontWeight(.bold)
                 }
@@ -142,4 +152,5 @@ struct ProfileView: View {
 #Preview {
     ProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()))
         .environmentObject(AppStateManager.shared)
+        .environmentObject(AppStorageManager())
 }

@@ -13,7 +13,7 @@ struct ErrorMessageView: View {
     
     var body: some View {
         Text(errorMessage)
-            .foregroundColor(.red)
+            .foregroundStyle(.red)
             .multilineTextAlignment(.center)
             .padding(.bottom)
     }

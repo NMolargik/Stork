@@ -15,7 +15,7 @@ struct CustomStepperButtonView: View {
     @State private var timer: Timer?
 
     var body: some View {
-        Image(systemName: iconName)
+        Image(iconName, bundle: .module)
             .resizable()
             .scaledToFit()
             .frame(width: 30, height: 30)

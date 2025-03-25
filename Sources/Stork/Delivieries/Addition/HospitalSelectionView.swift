@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HospitalSelectionView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var deliveryViewModel: DeliveryViewModel
     @ObservedObject var hospitalViewModel: HospitalViewModel
@@ -18,6 +18,7 @@ struct HospitalSelectionView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
             Text(deliveryViewModel.selectedHospital?.facility_name ?? "Please select a delivery location!")
+                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 .font(.headline)
                 .multilineTextAlignment(.center)
 
@@ -26,7 +27,7 @@ struct HospitalSelectionView: View {
                 width: 250,
                 height: 50,
                 color: Color.red,
-                icon: Image("building.fill"),
+                icon: Image("building.fill", bundle: .module),
                 isEnabled: true,
                 onTapAction: {
                     withAnimation {
@@ -37,7 +38,7 @@ struct HospitalSelectionView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
 }
 
@@ -47,4 +48,5 @@ struct HospitalSelectionView: View {
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
         profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
     )
+    .environmentObject(AppStorageManager())
 }

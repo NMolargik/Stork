@@ -12,6 +12,7 @@ struct MusterAdminInviteUserView: View {
     @Environment(\.dismiss) private var dismiss
 
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -31,7 +32,7 @@ struct MusterAdminInviteUserView: View {
                     Spacer()
                     
                     VStack {
-                        Image("person.crop.badge.magnifyingglass")
+                        Image("person.crop.badge.magnifyingglass", bundle: .module)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
@@ -39,6 +40,8 @@ struct MusterAdminInviteUserView: View {
                             .padding()
                         
                         Text("No users found with that last name")
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        
                             .multilineTextAlignment(.center)
                             .font(.title3)
                     }
@@ -78,7 +81,7 @@ struct MusterAdminInviteUserView: View {
             CustomTextfieldView(
                 text: $searchText,
                 hintText: "Search by last name",
-                icon: Image("magnifyingglass"),
+                icon: Image("magnifyingglass", bundle: .module),
                 isSecure: false,
                 iconColor: Color("storkBlue")
             )
@@ -186,4 +189,5 @@ struct MusterAdminInviteUserView: View {
         profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
     )
     .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
 }

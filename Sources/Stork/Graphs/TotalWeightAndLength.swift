@@ -39,17 +39,17 @@ struct TotalWeightAndLengthStatsView: View {
                 Text(weightString)
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                 
                 Text("&")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                 
                 Text(lengthString)
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
             }
             .padding()
             

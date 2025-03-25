@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomTextfieldView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @Binding var text: String
     
@@ -43,24 +43,34 @@ struct CustomTextfieldView: View {
                 Group {
                     if isSecure {
                         SecureField(hintText, text: trimmedText)
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     } else {
                         TextField(hintText, text: trimmedText)
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                     }
                 }
                 .frame(height: 50)
+                #if !SKIP
                 .padding(.horizontal, 5)
+                #else
+                .padding(.leading, 5)
+                #endif
                 .textInputAutocapitalization(.never)
             }
             .padding(.leading)
-            .background(colorScheme == .dark ? Color.black : Color.white)
+            .background(appStorageManager.useDarkMode ? Color.black : Color.white)
+            #if !SKIP
             .cornerRadius(20)
-            .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+            #else
+            .cornerRadius(5)
+            #endif
+            .shadow(color: appStorageManager.useDarkMode ? .white : .black, radius: 2)
             .frame(height: 50)
 
             if let limit = characterLimit {
                 Text("\(text.count)/\(limit)")
                     .font(.caption)
-                    .foregroundColor(text.count > limit ? .red : .gray)
+                    .foregroundStyle(text.count > limit ? .red : .gray)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
@@ -73,7 +83,7 @@ struct CustomTextfieldView: View {
         CustomTextfieldView(
             text: .constant("Email"),
             hintText: "Enter your email...",
-            icon: Image("envelope"),
+            icon: Image("envelope", bundle: .module),
             isSecure: false,
             iconColor: Color("storkBlue"),
             characterLimit: 25
@@ -82,10 +92,11 @@ struct CustomTextfieldView: View {
         CustomTextfieldView(
             text: .constant("Password"),
             hintText: "Enter your password...",
-            icon: Image("key"),
+            icon: Image("key", bundle: .module),
             isSecure: true,
             characterLimit: 20
         )
     }
     .padding()
+    .environmentObject(AppStorageManager())
 }
