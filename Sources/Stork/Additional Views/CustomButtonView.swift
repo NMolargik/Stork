@@ -34,7 +34,7 @@ struct CustomButtonView: View {
                 
                 Text(text)
             }
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
             .fontWeight(.bold)
             .frame(width: width, height: height)
         }

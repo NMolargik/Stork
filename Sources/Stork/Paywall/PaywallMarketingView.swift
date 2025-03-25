@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PaywallMarketingView: View {
-    @Environment(\.colorScheme) var colorScheme
 
     let signOut: () -> Void
     
@@ -55,7 +54,7 @@ struct PaywallMarketingView: View {
                                 Image("shippingbox.fill", bundle: .module)
                                     .resizable()
                                     .scaledToFit()
-                                    .foregroundColor(Color("storkBlue"))
+                                    .foregroundStyle(Color("storkBlue"))
                                     .frame(width: 24, height: 24)
                                     .padding()
                                     .padding(.bottom)
@@ -63,7 +62,7 @@ struct PaywallMarketingView: View {
                                 Image("person.3.fill", bundle: .module)
                                     .resizable()
                                     .scaledToFit()
-                                    .foregroundColor(Color("storkPurple"))
+                                    .foregroundStyle(Color("storkPurple"))
                                     .frame(width: 24, height: 24)
                                     .padding()
                             }
@@ -108,7 +107,7 @@ struct PaywallMarketingView: View {
                             signOut()
                         }) {
                             Text("Sign Out")
-                                .foregroundColor(Color("storkOrange"))
+                                .foregroundStyle(Color("storkOrange"))
                                 .font(.footnote)
                                 .fontWeight(.bold)
                                 .padding()

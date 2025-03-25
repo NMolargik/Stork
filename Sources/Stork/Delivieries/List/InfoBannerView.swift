@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct InfoBannerView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStorageManager: AppStorageManager
 
     let icon: String
@@ -36,7 +34,7 @@ struct InfoBannerView: View {
             Spacer()
         }
         .padding(8)
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
 }
 

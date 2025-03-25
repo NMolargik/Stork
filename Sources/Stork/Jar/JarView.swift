@@ -9,11 +9,12 @@ import SwiftUI
 import StorkModel
 
 struct JarView: View {
-    @Environment(\.colorScheme) var colorScheme
-
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     /// The deliveries coming in from elsewhere in the app (optional for test mode)
     @Binding var deliveries: [Delivery]?
     @State private var timerActive = false
+    let isMuster: Bool
 
     // Marble simulation states
     @State var marbles: [Marble] = []
@@ -23,35 +24,29 @@ struct JarView: View {
     
     let headerText: String
     let isTestMode: Bool
-    let isMusterTest: Bool
 
-    private let maxMarbleCount = 100
-    private let marbleRadius: CGFloat = 15
+    private let maxMarbleCount = 200
     private let collisionIterations = 14
     private let gravity: CGFloat = 1.0
     private let damping: CGFloat = 0.98
     private let friction: CGFloat = 0.85
 
     private let timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect()
-
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
                 Rectangle()
-                    .foregroundColor(colorScheme == .dark ? .black : .white)
+                    .foregroundStyle(appStorageManager.useDarkMode ? .black : .white)
                     .cornerRadius(20)
-                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+                    .shadow(color: appStorageManager.useDarkMode ? .white : .black, radius: 2)
 
                 Text(headerText)
                     .font(.headline)
                     .fontWeight(.bold)
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                     .padding(8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.white)
-                            .shadow(radius: 2)
-                    )
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.top, 20)
 
                 ZStack {
@@ -120,7 +115,7 @@ struct JarView: View {
         timerActive = true
 
         // Use the week-based filter here and filter out babies that already have a marble.
-        let newBabies = deliveriesForCurrentWeek(deliveries)
+        let newBabies = deliveriesForCurrentMonth(deliveries)
             .flatMap { $0.babies }
             .filter { !displayedBabyIDs.contains($0.id) }
 
@@ -146,13 +141,12 @@ struct JarView: View {
         addPendingMarblesSequentially()
     }
 
-    // 🔹 Test Mode: Instantly adds 35 marbles
     private func addTestMarbles(in size: CGSize) {
         Task {
             let testColors: [Color] = [Color("storkBlue"), Color("storkPink"), Color("storkPurple")]
             timerActive = true // ✅ Ensure marbles update properly
 
-            for _ in 0..<(isMusterTest ? 40 : 25) {
+            for _ in 0..<(isMuster ? 40 : 25) {
                 let testMarble = createMarble(
                     in: size,
                     color: testColors.randomElement() ?? .gray
@@ -272,10 +266,10 @@ struct JarView: View {
     ///   - color: The color of the marble based on baby's sex.
     /// - Returns: A new `Marble` instance.
     private func createMarble(in size: CGSize, color: Color) -> Marble {
-        let minX = marbleRadius
-        let maxX = max(marbleRadius, size.width - marbleRadius)
-        let minY = marbleRadius
-        let maxY = max(marbleRadius, size.height / 2)
+        let minX = isMuster ? 12.0 : 16.0
+        let maxX = max(isMuster ? 12.0 : 16.0, size.width - (isMuster ? 12.0 : 16.0))
+        let minY = isMuster ? 12.0 : 16.0
+        let maxY = max(isMuster ? 12.0 : 16.0, size.height / 2)
         
         var position: CGPoint
         var attempts = 0
@@ -292,7 +286,7 @@ struct JarView: View {
                 let dx = existingMarble.position.x - position.x
                 let dy = existingMarble.position.y - position.y
                 let distance = sqrt(dx * dx + dy * dy)
-                return distance < (existingMarble.marbleRadius + marbleRadius + 2)
+                return distance < (existingMarble.marbleRadius + (isMuster ? 12.0 : 16.0) + 2)
             }
             
             attempts += 1
@@ -306,7 +300,7 @@ struct JarView: View {
             id: UUID(),
             position: position,
             velocity: CGPoint(x: initialVelocityX, y: initialVelocityY),
-            marbleRadius: marbleRadius,
+            marbleRadius: isMuster ? 12.0 : 16.0,
             color: color
         )
     }

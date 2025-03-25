@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct NoHospitalsFoundView: View {
-    @Environment(\.colorScheme) var colorScheme
-
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     var body: some View {
         VStack {
             Image("exclamationmark.magnifyingglass", bundle: .module)
@@ -24,10 +24,11 @@ struct NoHospitalsFoundView: View {
                 .frame(height: 70)
         }
         .padding()
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
 }
 
 #Preview {
     NoHospitalsFoundView()
+        .environmentObject(AppStorageManager())
 }

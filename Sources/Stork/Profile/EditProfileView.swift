@@ -70,7 +70,7 @@ struct EditProfileView: View {
                 if let errorMessage = errorMessage {
                     Section {
                         Text(errorMessage)
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
             }

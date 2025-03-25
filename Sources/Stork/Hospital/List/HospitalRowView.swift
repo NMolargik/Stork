@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HospitalRowView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var profileViewModel: ProfileViewModel
     
@@ -22,7 +22,7 @@ struct HospitalRowView: View {
             VStack (alignment: .leading) {
                 Text(hospital.facility_name)
                     .font(.headline)
-                    .foregroundStyle(selectionMode ? Color("storkBlue") : (colorScheme == .dark ? .white : .black))
+                    .foregroundStyle(selectionMode ? Color("storkBlue") : (appStorageManager.useDarkMode ? .white : .black))
                 
                 if (hospital.citytown == "") {
                     Text("Unknown Location")
@@ -66,4 +66,5 @@ struct HospitalRowView: View {
         selectionMode: .constant(true),
         hospital: Hospital(id: "1234523423542342342342342342342", facility_name: "Parkview Hospital", address: "1116 South Hamsher Street", citytown: "Garrett", state: "IN", zip_code: "46738", countyparish: "Dekalb", telephone_number: "260-357-6625", hospital_type: "Normal Type", hospital_ownership: "Molargik", emergency_services: true, meets_criteria_for_birthing_friendly_designation: true, deliveryCount: 10, babyCount: 12)
     )
+    .environmentObject(AppStorageManager())
 }

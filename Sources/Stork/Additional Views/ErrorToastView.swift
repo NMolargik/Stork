@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ErrorToastView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
 
     var body: some View {
         VStack {
@@ -24,7 +23,7 @@ struct ErrorToastView: View {
                 Text(appStateManager.errorMessage)
             }
             .padding()
-            .backgroundCard(colorScheme: colorScheme)
+            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
             .onTapGesture {
                 withAnimation {
                     appStateManager.errorMessage = ""
@@ -47,4 +46,5 @@ struct ErrorToastView: View {
 #Preview {
     ErrorToastView()
         .environmentObject(AppStateManager.shared)
+        .environmentObject(AppStorageManager())
 }

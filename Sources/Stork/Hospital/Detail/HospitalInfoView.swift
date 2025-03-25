@@ -9,8 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct HospitalInfoView: View {
-    @Environment(\.colorScheme) var colorScheme
-
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     let hospital: Hospital
 
     var body: some View {
@@ -46,11 +46,12 @@ struct HospitalInfoView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical)
         .padding(.leading, 5)
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
         .padding(.horizontal)
     }
 }
 
 #Preview {
     HospitalInfoView(hospital: Hospital.sampleHospital())
+        .environmentObject(AppStorageManager())
 }

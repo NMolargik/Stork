@@ -9,8 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct ToggleSectionView: View {
-    @Environment(\.colorScheme) var colorScheme
-
     @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var deliveryViewModel: DeliveryViewModel
@@ -22,7 +20,7 @@ struct ToggleSectionView: View {
                 .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 .padding()
                 .fontWeight(.bold)
-                .backgroundCard(colorScheme: colorScheme)
+                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                 .tint(.green)
                 .onAppear {
                     deliveryViewModel.addToMuster = true
@@ -33,7 +31,7 @@ struct ToggleSectionView: View {
             .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
             .padding()
             .fontWeight(.bold)
-            .backgroundCard(colorScheme: colorScheme)
+            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
             .tint(.green)
     }
 }

@@ -9,8 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct HomeTabView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var appStorageManager: AppStorageManager
     
@@ -27,8 +25,12 @@ struct HomeTabView: View {
                     Spacer()
                 }
                 
-                HomeWeekView()
+                HomeTimeView()
+                
                 HomeBodyView(deliveries: $deliveryViewModel.deliveries, startNewDelivery: deliveryViewModel.startNewDelivery)
+                    .frame(maxWidth: .infinity)
+
+                
                 HomeCarouselView(deliveryViewModel: deliveryViewModel)
                 
                 Spacer()

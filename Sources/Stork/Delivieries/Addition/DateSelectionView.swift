@@ -9,8 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct DateSelectionView: View {
-    @Environment(\.colorScheme) var colorScheme
-
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     @ObservedObject var deliveryViewModel: DeliveryViewModel
     
     @Binding var selectedDate: Date
@@ -79,7 +79,7 @@ struct DateSelectionView: View {
             }
         }
         .padding(5)
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
     
     private func updateDeliveryDate() {
@@ -107,4 +107,5 @@ struct DateSelectionView: View {
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         selectedDate: .constant(Date()), selectedTime: .constant(Date()), showingDatePicker: .constant(true)
     )
+    .environmentObject(AppStorageManager())
 }

@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CustomTextfieldView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStorageManager: AppStorageManager
 
     @Binding var text: String
@@ -60,19 +58,19 @@ struct CustomTextfieldView: View {
                 .textInputAutocapitalization(.never)
             }
             .padding(.leading)
-            .background(colorScheme == .dark ? Color.black : Color.white)
+            .background(appStorageManager.useDarkMode ? Color.black : Color.white)
             #if !SKIP
             .cornerRadius(20)
             #else
             .cornerRadius(5)
             #endif
-            .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
+            .shadow(color: appStorageManager.useDarkMode ? .white : .black, radius: 2)
             .frame(height: 50)
 
             if let limit = characterLimit {
                 Text("\(text.count)/\(limit)")
                     .font(.caption)
-                    .foregroundColor(text.count > limit ? .red : .gray)
+                    .foregroundStyle(text.count > limit ? .red : .gray)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }

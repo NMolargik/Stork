@@ -96,7 +96,7 @@ struct SplashView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
-                        .foregroundColor(Color("storkIndigo"))
+                        .foregroundStyle(Color("storkIndigo"))
                 }
                 .shadow(radius: 5)
             }

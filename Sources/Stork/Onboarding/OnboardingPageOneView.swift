@@ -19,10 +19,11 @@ struct OnboardingPageOneView: View {
             HStack(spacing: 16) {
                 JarView(
                     deliveries: Binding.constant(nil),
+                    isMuster: false,
                     headerText: "Delivery Jar",
-                    isTestMode: true,
-                    isMusterTest: false
+                    isTestMode: true
                 )
+                
                 #if SKIP
                 .frame(width: 150)
                 #endif
@@ -42,7 +43,7 @@ struct OnboardingPageOneView: View {
             .padding(.horizontal)
 
             OnboardingDescriptionView(
-                text: "Stork allows users to track trends in labor and delivery. This includes sex, weight, monthly totals, and more!\nYour delivery jar will fill up with colored marbles that each represent a baby delivered in the last week."
+                text: "Stork allows users to track trends in labor and delivery. This includes sex, weight, monthly totals, and more!\nYour delivery jar will fill up with colored marbles that each represent a baby delivered in the last month."
             )
         }
     }

@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HomeCarouselView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var deliveryViewModel: DeliveryViewModel
     
@@ -30,26 +30,26 @@ struct HomeCarouselView: View {
                 #if !SKIP
                 DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(0)
                 
                 DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(1)
                 #endif
                 
                 BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(2)
                 
                 TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(3)
             }
@@ -76,4 +76,5 @@ struct HomeCarouselView: View {
     HomeCarouselView(
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository())
     )
+    .environmentObject(AppStorageManager())
 }

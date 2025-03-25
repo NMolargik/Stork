@@ -21,13 +21,13 @@ struct AboutView: View {
             
             AboutRowView(title: "Developer", content:
                 Link("Nick Molargik", destination: URL(string: "https://www.nickmolargik.tech")!)
-                    .foregroundColor(Color("storkBlue"))
+                    .foregroundStyle(Color("storkBlue"))
             )
             .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
             
             AboutRowView(title: "Multiplatform Technology", content:
                 Link("Skip", destination: URL(string: "https://skip.tools")!)
-                    .foregroundColor(Color("storkBlue"))
+                    .foregroundStyle(Color("storkBlue"))
             )
             .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
         }

@@ -10,8 +10,6 @@ import SwiftUI
 import StorkModel
 
 struct HospitalDetailView: View {
-    @Environment(\.colorScheme) var colorScheme
-
     @EnvironmentObject var appStateManager: AppStateManager
 
     @ObservedObject var hospitalViewModel: HospitalViewModel

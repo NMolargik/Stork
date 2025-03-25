@@ -18,15 +18,15 @@ struct OnboardingPageThreeView: View {
 
             JarView(
                 deliveries: Binding.constant(nil),
+                isMuster: true,
                 headerText: "Muster Jar",
-                isTestMode: true,
-                isMusterTest: true
+                isTestMode: true
             )
             .padding()
             .frame(height: 300)
 
             OnboardingDescriptionView(
-                text: "Create or join a muster to share delivery statistics and trends with a whole group of your peers. Good luck filling this jar every week!"
+                text: "Create or join a muster to share delivery statistics and trends with a whole group of your peers. Good luck filling this jar every month!"
             )
             .padding()
         }

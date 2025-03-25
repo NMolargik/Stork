@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct EmptyStateView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStorageManager: AppStorageManager
 
     var body: some View {
@@ -36,7 +34,7 @@ struct EmptyStateView: View {
                 .font(.body)
                 .fontWeight(.semibold)
                 .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
-                .backgroundCard(colorScheme: colorScheme)
+                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
 
             Spacer(minLength: 200)
 

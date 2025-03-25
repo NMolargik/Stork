@@ -9,8 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryAdditionView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStateManager: AppStateManager
     
     @ObservedObject var profileViewModel: ProfileViewModel

@@ -39,7 +39,7 @@ struct SplashInfoView: View {
                         dismiss()
                     }) {
                         Image("xmark.circle.fill", bundle: .module)
-                            .foregroundColor(Color("storkOrange"))
+                            .foregroundStyle(Color("storkOrange"))
                             .font(.title2)
                     }
                 }

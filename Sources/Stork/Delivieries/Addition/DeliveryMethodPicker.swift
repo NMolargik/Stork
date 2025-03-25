@@ -9,8 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryMethodPicker: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStorageManager: AppStorageManager
 
     @Binding var deliveryMethod: DeliveryMethod
@@ -33,7 +31,7 @@ struct DeliveryMethodPicker: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
 }
 

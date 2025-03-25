@@ -9,8 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct MusterSplashView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var appStorageManager: AppStorageManager
 
@@ -37,7 +35,7 @@ struct MusterSplashView: View {
                     .padding()
             }
             .frame(maxWidth: .infinity)
-            .backgroundCard(colorScheme: colorScheme)
+            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
             .padding(8)
             
             Text("Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors.")
@@ -46,7 +44,7 @@ struct MusterSplashView: View {
                 .font(.body)
                 .fontWeight(.semibold)
                 .padding(20)
-                .backgroundCard(colorScheme: colorScheme)
+                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                 
             Spacer()
             

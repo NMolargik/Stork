@@ -26,7 +26,7 @@ struct DeleteConfirmationView: View {
                 
                 Text(confirmationMessage)
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 

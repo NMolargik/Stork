@@ -8,7 +8,6 @@ import SwiftUI
 import StorkModel
 
 struct MusterCreationView: View {
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var appStateManager: AppStateManager
@@ -76,7 +75,7 @@ struct MusterCreationView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .backgroundCard(colorScheme: colorScheme)
+                        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
 
 
                         Spacer()
@@ -86,7 +85,7 @@ struct MusterCreationView: View {
                             .padding()
                             .multilineTextAlignment(.center)
                             .fontWeight(.semibold)
-                            .backgroundCard(colorScheme: colorScheme)
+                            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
 
 
                         Spacer()

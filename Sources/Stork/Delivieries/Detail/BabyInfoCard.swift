@@ -9,8 +9,8 @@ import SwiftUI
 import StorkModel
 
 struct BabyInfoCard: View {
-    @Environment(\.colorScheme) var colorScheme
-
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     let baby: Baby
     let useMetric: Bool
 
@@ -29,7 +29,7 @@ struct BabyInfoCard: View {
             }
         }
         .padding()
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
 
     // MARK: - Computed Properties for Weight & Height
@@ -79,4 +79,5 @@ struct BabyInfoCard: View {
 
 #Preview {
     BabyInfoCard(baby: Baby(deliveryId: "123", nurseCatch: true, nicuStay: true, sex: Sex.male), useMetric: false)
+        .environmentObject(AppStorageManager())
 }

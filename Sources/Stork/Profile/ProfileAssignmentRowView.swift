@@ -8,10 +8,9 @@
 import SwiftUI
 import StorkModel
 
-struct ProfileAssignmentRowView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
+struct ProfileAssignmentRowView: View {    
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     /// The `Profile` displayed in this row.
     var profile: Profile
@@ -36,17 +35,17 @@ struct ProfileAssignmentRowView: View {
                 Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                    .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
                 
                 HStack(spacing: 4) {
                     Image("birthday.cake.fill", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
 
                     Text(Self.dateFormatter.string(from: profile.birthday))
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                 }
             }
             
@@ -57,7 +56,7 @@ struct ProfileAssignmentRowView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
     
     // MARK: - Action Button
@@ -98,4 +97,5 @@ struct ProfileAssignmentRowView: View {
         onAssign: {}
     )
     .environmentObject(AppStateManager.shared)
+    .environmentObject(AppStorageManager())
 }

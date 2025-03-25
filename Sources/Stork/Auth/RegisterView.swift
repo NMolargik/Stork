@@ -10,8 +10,6 @@ import StorkModel
 import SkipKit
 
 struct RegisterView: View {
-    @Environment(\.colorScheme) var colorScheme
-
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var appStorageManager: AppStorageManager
 
@@ -41,7 +39,7 @@ struct RegisterView: View {
                         if let emailError = profileViewModel.emailError {
                             Text(emailError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -54,7 +52,7 @@ struct RegisterView: View {
                         if let passwordError = profileViewModel.passwordError {
                             Text(passwordError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -67,7 +65,7 @@ struct RegisterView: View {
                         if let confirmPasswordError = profileViewModel.confirmPasswordError {
                             Text(confirmPasswordError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -80,7 +78,7 @@ struct RegisterView: View {
                         if let firstNameError = profileViewModel.firstNameError {
                             Text(firstNameError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -93,7 +91,7 @@ struct RegisterView: View {
                         if let lastNameError = profileViewModel.lastNameError {
                             Text(lastNameError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -123,12 +121,12 @@ struct RegisterView: View {
                                 .padding(.top, -15)
                             
                         }
-                        .backgroundCard(colorScheme: colorScheme)
+                        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                         
                         if let birthdayError = profileViewModel.birthdayError {
                             Text(birthdayError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)

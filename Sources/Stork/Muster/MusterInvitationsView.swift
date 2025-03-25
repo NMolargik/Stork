@@ -9,7 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct MusterInvitationsView: View {
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var appStateManager: AppStateManager
@@ -56,7 +55,7 @@ struct MusterInvitationsView: View {
                             VStack(alignment: .leading) {
                                 Text(invite.senderName + " invited you to " + invite.musterName)
                                     .font(.headline)
-                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                    .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
 
                                 HStack {
                                     CustomButtonView(text: "Accept", width: 100, height: 40, color: Color("storkBlue"), isEnabled: true, onTapAction: {
@@ -93,7 +92,7 @@ struct MusterInvitationsView: View {
                                 }
                             }
                             .padding()
-                            .backgroundCard(colorScheme: colorScheme)
+                            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                             .padding(5)
                         }
                     }

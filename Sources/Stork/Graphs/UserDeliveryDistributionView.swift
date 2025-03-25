@@ -9,8 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct UserDeliveryDistributionView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStorageManager: AppStorageManager
     
     @StateObject private var colorsViewModel = UserColorsViewModel()
@@ -58,7 +56,7 @@ struct UserDeliveryDistributionView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
-                                .foregroundColor(.yellow)
+                                .foregroundStyle(.yellow)
                         }
                         
                         Text("\(profile.firstName) \(profile.lastName.first.map { "\($0)." } ?? "")")

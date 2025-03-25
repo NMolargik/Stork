@@ -10,7 +10,6 @@ import StorkModel
 
 struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var appStorageManager: AppStorageManager
@@ -26,7 +25,7 @@ struct ProfileView: View {
                 if let firstNameError = profileViewModel.firstNameError {
                     Text(firstNameError)
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .bold()
                         .padding(.top, -5)
                         .padding(.leading)
@@ -37,7 +36,7 @@ struct ProfileView: View {
                 if let lastNameError = profileViewModel.lastNameError {
                     Text(lastNameError)
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .padding(.top, -5)
                         .padding(.leading)
                 }
@@ -59,12 +58,12 @@ struct ProfileView: View {
                         .padding(.leading)
                     
                 }
-                .backgroundCard(colorScheme: colorScheme)
+                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                 
                 if let birthdayError = profileViewModel.birthdayError {
                     Text(birthdayError)
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .padding(.top, -5)
                         .padding(.leading)
                 }

@@ -9,8 +9,6 @@ import SwiftUI
 import StorkModel
 
 struct MusterTabView: View {
-    @Environment(\.colorScheme) var colorScheme
-
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var appStorageManager: AppStorageManager
     
@@ -21,6 +19,12 @@ struct MusterTabView: View {
     
     @State private var showingMusterInvitations: Bool = false
     @State private var showLeaveMusterSheet = false
+    
+    private var headerText: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter.string(from: Date())
+    }
     
     var body: some View {
         NavigationStack(path: $appStateManager.navigationPath) {
@@ -140,32 +144,12 @@ struct MusterTabView: View {
                         deliveries: deliveryViewModel.musterDeliveries
                     )
                     
-                    ZStack {
-                        JarView(
-                            deliveries: Binding(get: { deliveryViewModel.musterDeliveries }, set: { deliveryViewModel.musterDeliveries = $0 ?? [] }),
-                            headerText: getCurrentWeekRange() ?? "",
-                            isTestMode: false, isMusterTest: false
-                        )
-
-                        VStack {
-                            if let weekRange = getCurrentWeekRange() {
-                                Text(weekRange)
-                                    .padding(8)
-                                    .foregroundStyle(.gray)
-                                    .font(.headline)
-                                    .fontWeight(.bold)
-                                    .background {
-                                        Rectangle()
-                                            .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                            .cornerRadius(20)
-                                            .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                                    }
-                                    .padding(.top, 20)
-                            }
-                            
-                            Spacer()
-                        }
-                    }
+                    JarView(
+                        deliveries: Binding(get: { deliveryViewModel.musterDeliveries }, set: { deliveryViewModel.musterDeliveries = $0 ?? [] }),
+                        isMuster: true,
+                        headerText: headerText,
+                        isTestMode: false
+                    )
                     .padding()
                     
                     MusterCarouselView(deliveryViewModel: deliveryViewModel)

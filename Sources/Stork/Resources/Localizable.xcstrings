@@ -186,9 +186,6 @@
     "Confirm Password" : {
 
     },
-    "Content" : {
-
-    },
     "Continue" : {
 
     },
@@ -196,9 +193,6 @@
 
     },
     "Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors." : {
-
-    },
-    "Create or join a muster to share delivery statistics and trends with a whole group of your peers. Good luck filling this jar every week!" : {
 
     },
     "Daily Limit Reached" : {
@@ -726,9 +720,6 @@
     "Stork" : {
 
     },
-    "Stork allows users to track trends in labor and delivery. This includes sex, weight, monthly totals, and more!\nYour delivery jar will fill up with colored marbles that each represent a baby delivered in the last week." : {
-
-    },
     "Stork is a labor and delivery app designed to assist nurses and doctors in managing delivery statistics over time." : {
 
     },
@@ -771,6 +762,9 @@
 
     },
     "This action will permanently delete all your personal information and your deliveries." : {
+
+    },
+    "This Month" : {
 
     },
     "This will remove all your personal data and cannot be undone." : {
@@ -830,9 +824,6 @@
 
     },
     "Your Invitations" : {
-
-    },
-    "Your Jar" : {
 
     }
   },

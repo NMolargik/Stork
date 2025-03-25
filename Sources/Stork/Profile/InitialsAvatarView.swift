@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct InitialsAvatarView: View {
-    @Environment(\.colorScheme) var colorScheme
-
-    // MARK: - Properties
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     /// The user's first name.
     let firstName: String
@@ -54,7 +52,7 @@ struct InitialsAvatarView: View {
             
             Text(initials)
                 .font(font)
-                .foregroundColor(colorScheme == .dark ? .black : .white)
+                .foregroundStyle(appStorageManager.useDarkMode ? .black : .white)
                 .accessibilityLabel(Text("User initials: \(initials)"))
         }
     }
@@ -63,4 +61,5 @@ struct InitialsAvatarView: View {
 
 #Preview {
     InitialsAvatarView(firstName: "Nicholas", lastName: "Molargik", size: 25.0, font: .largeTitle)
+        .environmentObject(AppStorageManager())
 }

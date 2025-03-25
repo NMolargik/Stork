@@ -25,7 +25,7 @@ struct CustomToggleView: View {
         }) {
             HStack {
                 Text(title)
-                    .foregroundColor(textColor)
+                    .foregroundStyle(textColor)
                     .fontWeight(.bold)
                 Spacer()
                 ZStack(alignment: isOn ? .trailing : .leading) {

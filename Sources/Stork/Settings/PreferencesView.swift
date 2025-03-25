@@ -16,9 +16,11 @@ struct PreferencesView: View {
                 .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 .tint(.green)
 
+            #if !SKIP
             Toggle("Dark Mode", isOn: $appStorageManager.useDarkMode)
                 .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                 .tint(.green)
+            #endif
         }
     }
 }
