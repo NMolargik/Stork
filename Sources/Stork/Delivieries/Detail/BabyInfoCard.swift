@@ -9,14 +9,14 @@ import SwiftUI
 import StorkModel
 
 struct BabyInfoCard: View {
-    @Environment(\.colorScheme) var colorScheme
-
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
     let baby: Baby
     let useMetric: Bool
 
     var body: some View {
         HStack(spacing: 10) {
-            Image("figure.child")
+            Image("figure.child", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 60, height: 60)
@@ -29,29 +29,29 @@ struct BabyInfoCard: View {
             }
         }
         .padding()
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
     }
 
     // MARK: - Computed Properties for Weight & Height
     private var infoRows: some View {
         Group {
             InfoRowView(
-                icon: Image("scalemass.fill"),
+                icon: Image("scalemass.fill", bundle: .module),
                 text: formattedWeight,
                 iconColor: Color("storkOrange")
             )
             
             InfoRowView(
-                icon: Image("ruler.fill"),
+                icon: Image("ruler.fill", bundle: .module),
                 text: formattedHeight,
                 iconColor: Color.green
             )
             
             if baby.nurseCatch || baby.nicuStay {
                 InfoRowView(
-                    icon: Image("checkmark_stork"),
+                    icon: Image("checkmark_stork", bundle: .module),
                     text: baby.nurseCatch ? "Nurse Catch" : "NICU Stay",
-                    iconColor: baby.nurseCatch ? .teal : .red
+                    iconColor: baby.nurseCatch ? Color.teal : Color.red
                 )
             }
         }
@@ -79,4 +79,5 @@ struct BabyInfoCard: View {
 
 #Preview {
     BabyInfoCard(baby: Baby(deliveryId: "123", nurseCatch: true, nicuStay: true, sex: Sex.male), useMetric: false)
+        .environmentObject(AppStorageManager())
 }

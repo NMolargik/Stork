@@ -43,7 +43,7 @@ struct BabySexDistributionView: View {
                     if distributionData.isEmpty {
                         Text("No data available")
                             .font(.headline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     } else {
                         ForEach(distributionData) { data in
                             HStack {
@@ -53,7 +53,7 @@ struct BabySexDistributionView: View {
                                 
                                 Text("\(data.category): \(data.count)")
                                     .font(.headline)
-                                    .foregroundColor(.primary)
+                                    .foregroundStyle(.primary)
                             }
                         }
                     }

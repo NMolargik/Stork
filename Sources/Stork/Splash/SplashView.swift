@@ -33,7 +33,7 @@ struct SplashView: View {
                         isInfoPresented = true
                     }
                 }, label: {
-                    Image("info.circle.fill")
+                    Image("info.circle.fill", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
@@ -67,6 +67,9 @@ struct SplashView: View {
             .opacity(showMore ? 1.0 : 0.0)
             .transition(.move(edge: .bottom).combined(with: .opacity))
         
+            
+            Spacer()
+            
             Divider()
                 .scaleEffect(y: 4)
                 .padding(.horizontal)
@@ -82,19 +85,18 @@ struct SplashView: View {
                     AppStateManager.shared.currentAppScreen = AppScreen.register
                 }
             })
-            
-            Spacer()
+            .padding(.bottom)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     isInfoPresented = !isInfoPresented
                 }) {
-                    Image("info.circle")
+                    Image("info.circle", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
-                        .foregroundColor(Color("storkIndigo"))
+                        .foregroundStyle(Color("storkIndigo"))
                 }
                 .shadow(radius: 5)
             }

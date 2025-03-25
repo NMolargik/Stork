@@ -123,6 +123,7 @@ public struct RootView: View {
             if !appStateManager.errorMessage.isEmpty {
                 ErrorToastView()
                     .environmentObject(appStateManager)
+                    .environmentObject(appStorageManager)
                     .padding(.top, 50)
                     .transition(.move(edge: .top))
                     .animation(.default, value: appStateManager.errorMessage)
@@ -135,13 +136,15 @@ public struct RootView: View {
         if Auth.auth().currentUser != nil  {
             Task {
                 do {
-                    try await fetchDataIfNeeded()
+                    try await fetchProfileIfNeeded()
                     try await handlePurchasesLogin()
 
                     let nextState = await computeNextAppScreen()
                     withAnimation {
                         appStateManager.currentAppScreen = nextState
                     }
+                    
+                    try await fetchDataIfNeeded()
                 } catch {
                     withAnimation {
                         appStateManager.errorMessage = error.localizedDescription
@@ -164,13 +167,14 @@ public struct RootView: View {
             return .onboard
         }
 
+        // TODO: Repair for android
         #if !SKIP
         await fetchCustomerInfo()
-        #endif
 
         if !Store.shared.subscriptionActive {
             return .paywall
         }
+        #endif
 
         return .main
     }
@@ -189,20 +193,17 @@ public struct RootView: View {
     
     // MARK: - Fetch Data
     private func fetchDataIfNeeded() async throws {
-        profileViewModel.isWorking = true
         hospitalViewModel.isWorking = true
         deliveryViewModel.isWorking = true
         musterViewModel.isWorking = true
         
         defer {
-            profileViewModel.isWorking = false
             hospitalViewModel.isWorking = false
             deliveryViewModel.isWorking = false
             musterViewModel.isWorking = false
         }
 
         do {
-            try await fetchProfileIfNeeded()
             try await fetchDeliveriesIfNeeded()
             try await fetchHospitalsIfNeeded()
             try await fetchMusterIfNeeded()
@@ -249,6 +250,8 @@ public struct RootView: View {
         
         guard !userId.isEmpty else { return }
         
+        #if !SKIP
+        
         try await withCheckedThrowingContinuation { continuation in
             Purchases.sharedInstance.logIn(
                 newAppUserID: userId,
@@ -260,6 +263,8 @@ public struct RootView: View {
                 }
             )
         }
+        
+        #endif
     }
 
     private func configurePurchasesIfNeeded() {

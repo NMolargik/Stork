@@ -93,12 +93,12 @@ struct HospitalListView: View {
             Text("Searching by State")
                 .fontWeight(.bold)
             
-            Image("location.fill")
+            Image("location.fill", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 24, height: 24)
         }
-        .foregroundColor(.blue)
+        .foregroundStyle(.blue)
         .padding(.trailing)
     }
 
@@ -112,7 +112,7 @@ struct HospitalListView: View {
         }) {
             Text("Use Location")
                 .fontWeight(.bold)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
         }
     }
 
@@ -124,7 +124,7 @@ struct HospitalListView: View {
             }
         }) {
             Text("Missing?")
-                .foregroundColor(Color("storkOrange"))
+                .foregroundStyle(Color("storkOrange"))
                 .fontWeight(.bold)
         }
     }

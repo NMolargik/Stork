@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct MusterCarouselView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @ObservedObject var deliveryViewModel: DeliveryViewModel
 
@@ -31,7 +31,7 @@ struct MusterCarouselView: View {
             #if !SKIP
                 DeliveriesThisWeekView(deliveries: $deliveryViewModel.musterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(0)
             #endif
@@ -39,20 +39,20 @@ struct MusterCarouselView: View {
             #if !SKIP
                 DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(1)
             #endif
                 
                 BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(2)
                 
                 TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: colorScheme)
+                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(3)
             }

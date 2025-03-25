@@ -9,10 +9,7 @@ import SwiftUI
 import StorkModel
 import SkipKit
 
-
 struct RegisterView: View {
-    @Environment(\.colorScheme) var colorScheme
-
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var appStorageManager: AppStorageManager
 
@@ -37,12 +34,12 @@ struct RegisterView: View {
             NavigationStack {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        CustomTextfieldView(text: $profileViewModel.tempProfile.email, hintText: "Email Address", icon: Image("envelope"), isSecure: false, iconColor: Color("storkBlue"))
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.email, hintText: "Email Address", icon: Image("envelope", bundle: .module), isSecure: false, iconColor: Color("storkBlue"))
                         
                         if let emailError = profileViewModel.emailError {
                             Text(emailError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -50,12 +47,12 @@ struct RegisterView: View {
                                 .animation(.easeInOut(duration: 0.3), value: profileViewModel.emailError)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
+                        CustomTextfieldView(text: $profileViewModel.passwordText, hintText: "Password", icon: Image("key", bundle: .module), isSecure: true, iconColor: Color("storkOrange"))
                         
                         if let passwordError = profileViewModel.passwordError {
                             Text(passwordError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -63,12 +60,12 @@ struct RegisterView: View {
                                 .animation(.easeInOut(duration: 0.3), value: profileViewModel.passwordError)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.confirmPassword, hintText: "Confirm Password", icon: Image("key"), isSecure: true, iconColor: Color("storkOrange"))
+                        CustomTextfieldView(text: $profileViewModel.confirmPassword, hintText: "Confirm Password", icon: Image("key", bundle: .module), isSecure: true, iconColor: Color("storkOrange"))
                         
                         if let confirmPasswordError = profileViewModel.confirmPasswordError {
                             Text(confirmPasswordError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -76,12 +73,12 @@ struct RegisterView: View {
                                 .animation(.easeInOut(duration: 0.3), value: profileViewModel.confirmPasswordError)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square"), isSecure: false, iconColor: Color.green)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square", bundle: .module), isSecure: false, iconColor: Color.green)
                         
                         if let firstNameError = profileViewModel.firstNameError {
                             Text(firstNameError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -89,12 +86,12 @@ struct RegisterView: View {
                                 .animation(.easeInOut(duration: 0.3), value: profileViewModel.firstNameError)
                         }
                         
-                        CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square"), isSecure: false, iconColor: Color.green)
+                        CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square", bundle: .module), isSecure: false, iconColor: Color.green)
                         
                         if let lastNameError = profileViewModel.lastNameError {
                             Text(lastNameError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -104,8 +101,15 @@ struct RegisterView: View {
                         
                         Divider()
                         
-                        VStack {
+                        VStack(alignment: .center) {
                             Text("Select Your Birthday")
+                                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                                .padding()
+                            #if !SKIP
+                                .font(.body)
+                            #else
+                                .font(.footnote)
+                            #endif
                             
                             DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
                                 .tint(Color("storkIndigo"))
@@ -117,12 +121,12 @@ struct RegisterView: View {
                                 .padding(.top, -15)
                             
                         }
-                        .backgroundCard(colorScheme: colorScheme)
+                        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
                         
                         if let birthdayError = profileViewModel.birthdayError {
                             Text(birthdayError)
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .bold()
                                 .padding(.top, -5)
                                 .padding(.leading)
@@ -133,6 +137,7 @@ struct RegisterView: View {
                         Divider()
                         
                         Text("Select Your Role")
+                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
                         
                         Picker("Role", selection: $profileViewModel.tempProfile.role) {
                             ForEach(ProfileRole.allCases, id: \.self) { role in
@@ -140,6 +145,7 @@ struct RegisterView: View {
                             }
                         }
                         .pickerStyle(.segmented)
+                        .tint(Color("storkOrange"))
                         
                         Divider()
                         

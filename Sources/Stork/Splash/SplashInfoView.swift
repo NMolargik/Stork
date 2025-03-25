@@ -38,8 +38,8 @@ struct SplashInfoView: View {
                         HapticFeedback.trigger(style: .medium)
                         dismiss()
                     }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(Color("storkOrange"))
+                        Image("xmark.circle.fill", bundle: .module)
+                            .foregroundStyle(Color("storkOrange"))
                             .font(.title2)
                     }
                 }

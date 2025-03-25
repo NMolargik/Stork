@@ -78,7 +78,7 @@ struct DeliveriesLastSixMonthsView: View {
                     Text("\(monthlyData.count)")
                         .fontWeight(.bold)
                         .font(.caption)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                 }
             }
             .chartYAxis(.hidden)

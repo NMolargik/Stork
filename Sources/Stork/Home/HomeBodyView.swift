@@ -10,11 +10,17 @@ import StorkModel
 
 @MainActor
 struct HomeBodyView: View {
-    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @Binding var deliveries: [Delivery]
     var startNewDelivery: @MainActor () -> Void
+    
+    var currentMonth: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter.string(from: Date())
+    }
 
     var body: some View {
         HStack {
@@ -24,32 +30,12 @@ struct HomeBodyView: View {
                         Binding(get: { deliveries },
                                 set: { deliveries = $0 ?? [] }
                         ),
-                    headerText: appStateManager.currentWeekRange,
-                    isTestMode: false,
-                    isMusterTest: false
+                    isMuster: false,
+                    headerText: currentMonth,
+                    isTestMode: false
                 )
-                
-                VStack {
-                    if !appStateManager.currentWeekRange.isEmpty {
-                        Text(appStateManager.currentWeekRange)
-                            .padding(8)
-                            .foregroundStyle(.gray)
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .background {
-                                Rectangle()
-                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
-                                    .cornerRadius(20)
-                                    .shadow(color: colorScheme == .dark ? .white : .black, radius: 2)
-                            }
-                            .padding(.top, 20)
-                    }
-                    Spacer()
-                }
             }
-            
-            Spacer()
-            
+
             VStack {
                 JarSummaryView(deliveries: $deliveries)
                 
@@ -93,4 +79,5 @@ struct HomeBodyView: View {
 #Preview {
     HomeBodyView(deliveries: .constant([]), startNewDelivery: { })
         .environmentObject(AppStateManager.shared)
+        .environmentObject(AppStorageManager())
 }

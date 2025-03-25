@@ -17,7 +17,6 @@ import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 #endif
 
 struct PaywallMainView: View {
-    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var appStateManager: AppStateManager
 
     @ObservedObject var storeViewModel = Store.shared
@@ -92,13 +91,13 @@ struct PaywallMainView: View {
                     
                     Link("Terms of Service", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
                         .font(.footnote)
-                        .foregroundColor(Color("storkBlue"))
+                        .foregroundStyle(Color("storkBlue"))
                     
                     Spacer()
                     
                     Link("Privacy Policy", destination: URL(string: "https://www.nickmolargik.tech/stork-privacy-policy")!)
                         .font(.footnote)
-                        .foregroundColor(Color("storkBlue"))
+                        .foregroundStyle(Color("storkBlue"))
                     
                     Spacer()
                 }

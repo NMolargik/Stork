@@ -8,8 +8,6 @@ import SwiftUI
 import StorkModel
 
 struct BabyEditorView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var appStorageManager: AppStorageManager
 
     @Binding var baby: Baby
@@ -97,7 +95,7 @@ struct BabyEditorView: View {
         HStack {
             Text("Baby \(babyNumber)")
                 .font(.title2)
-                .foregroundStyle(colorScheme == .dark ? .black : .white)
+                .foregroundStyle(appStorageManager.useDarkMode ? .black : .white)
                 .fontWeight(.bold)
 
             Spacer()
@@ -109,7 +107,7 @@ struct BabyEditorView: View {
                         removeBaby(baby.id)
                     }
                 } label: {
-                    Image("minus")
+                    Image("minus.symbol", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 15, height: 15)
@@ -128,14 +126,18 @@ struct BabyEditorView: View {
                 Text($0.rawValue.capitalized).tag($0)
             }
         }
-        .foregroundStyle(colorScheme == .dark ? .black : .white)
+        .foregroundStyle(appStorageManager.useDarkMode ? .black : .white)
         .pickerStyle(.segmented)
+        #if !SKIP
         .background {
             Rectangle()
                 .cornerRadius(8)
                 .foregroundStyle(Color("storkOrange"))
-                .opacity(colorScheme == .dark ? 0.8 : 0.3)
+                .opacity(appStorageManager.useDarkMode ? 0.8 : 0.3)
         }
+        #else
+        .tint(Color("storkOrange"))
+        #endif
         .onChange(of: baby.sex) { _ in HapticFeedback.trigger(style: .medium) }
     }
     

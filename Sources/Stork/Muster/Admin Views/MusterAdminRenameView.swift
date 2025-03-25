@@ -22,7 +22,7 @@ struct MusterAdminRenameView: View {
                 CustomTextfieldView(
                     text: $newName,
                     hintText: "Enter Muster name",
-                    icon: Image("tag.fill"),
+                    icon: Image("tag.fill", bundle: .module),
                     isSecure: false,
                     iconColor: Color("storkIndigo"),
                     characterLimit: 30

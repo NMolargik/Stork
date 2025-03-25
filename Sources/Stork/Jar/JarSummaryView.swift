@@ -9,16 +9,17 @@ import SwiftUI
 import StorkModel
 
 struct JarSummaryView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @State private var babyCounts: [Sex: Int] = [:]
+
     @Binding var deliveries: [Delivery]
 
-    @State private var babyCounts: [Sex: Int] = [:]
-    
     private let timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack {
-            Text("Your Jar")
+            Text("This Month")
                 .foregroundStyle(.gray)
 
             Divider()
@@ -71,7 +72,7 @@ struct JarSummaryView: View {
         .frame(maxWidth: .infinity)
         .font(.title2)
         .fontWeight(.bold)
-        .backgroundCard(colorScheme: colorScheme)
+        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
         .onAppear { updateCount() }
         .onChange(of: deliveries) { _ in updateCount() }
         .onReceive(timer) { _ in updateCount() }
@@ -84,33 +85,27 @@ struct JarSummaryView: View {
     private func countBabies(of sex: Sex) -> Int {
         let calendar = Calendar.current
         let now = Date()
-        let today = calendar.startOfDay(for: now)
-        let weekday = calendar.component(.weekday, from: now)
         
-        // Calculate the most recent Sunday
-        let daysSinceSunday = weekday - 1
-        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysSinceSunday, to: today) else {
+        // Get the start of the current month
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else {
             return 0
         }
         
-        // Calculate the upcoming Saturday
-        guard let saturday = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
+        // Get the end of the current month by adding 1 month and subtracting 1 second
+        var components = DateComponents()
+        components.month = 1
+        components.second = -1
+        guard let endOfMonth = calendar.date(byAdding: components, to: startOfMonth) else {
             return 0
         }
-        let saturdayStart = calendar.startOfDay(for: saturday)
-        // Get the start of the next Sunday and subtract one second to get the end-of-Saturday
-        guard let startOfNextSunday = calendar.date(byAdding: .day, value: 1, to: saturdayStart) else {
-            return 0
-        }
-        let endOfWeek = startOfNextSunday.addingTimeInterval(-1)
         
-        // Filter deliveries that occurred within the full week (Sunday 00:00:00 to Saturday 23:59:59)
-        let weekDeliveries = deliveries.filter { delivery in
-            return delivery.date >= startOfWeek && delivery.date <= endOfWeek
+        // Filter deliveries that occurred within the current month (from startOfMonth to endOfMonth)
+        let monthDeliveries = deliveries.filter { delivery in
+            return delivery.date >= startOfMonth && delivery.date <= endOfMonth
         }
         
         // Count the babies with the matching sex from the filtered deliveries
-        return weekDeliveries.reduce(0) { count, delivery in
+        return monthDeliveries.reduce(0) { count, delivery in
             count + delivery.babies.filter { $0.sex == sex }.count
         }
     }
@@ -118,4 +113,5 @@ struct JarSummaryView: View {
 
 #Preview {
     JarSummaryView(deliveries: .constant([]))
+        .environmentObject(AppStorageManager())
 }

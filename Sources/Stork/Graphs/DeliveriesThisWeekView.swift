@@ -38,7 +38,7 @@ struct DeliveriesThisWeekView: View {
             if deliveriesLastSevenDays.isEmpty {
                 Text("No delivery data available for the past seven days.")
                     .font(.headline)
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                     .multilineTextAlignment(.center)
                     .padding()
             } else {
@@ -75,7 +75,7 @@ struct DeliveriesThisWeekView: View {
                         Text("\(dailyDelivery.count)")
                             .fontWeight(.bold)
                             .font(.caption)
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                     }
                 }
                 .chartYAxis(.hidden)

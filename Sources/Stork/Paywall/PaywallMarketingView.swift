@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PaywallMarketingView: View {
-    @Environment(\.colorScheme) var colorScheme
 
     let signOut: () -> Void
     
@@ -18,7 +17,7 @@ struct PaywallMarketingView: View {
                 ScrollView {
                     VStack(alignment: .center, spacing: 5) {
                         ZStack {
-                            Image("storkicon")
+                            Image("storkicon", bundle: .module)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: min(geometry.size.width * 0.6, 250)) // Adaptive size
@@ -52,18 +51,18 @@ struct PaywallMarketingView: View {
                         
                         HStack {
                             VStack {
-                                Image("shippingbox.fill")
+                                Image("shippingbox.fill", bundle: .module)
                                     .resizable()
                                     .scaledToFit()
-                                    .foregroundColor(Color("storkBlue"))
+                                    .foregroundStyle(Color("storkBlue"))
                                     .frame(width: 24, height: 24)
                                     .padding()
                                     .padding(.bottom)
                                 
-                                Image("person.3.fill")
+                                Image("person.3.fill", bundle: .module)
                                     .resizable()
                                     .scaledToFit()
-                                    .foregroundColor(Color("storkPurple"))
+                                    .foregroundStyle(Color("storkPurple"))
                                     .frame(width: 24, height: 24)
                                     .padding()
                             }
@@ -108,7 +107,7 @@ struct PaywallMarketingView: View {
                             signOut()
                         }) {
                             Text("Sign Out")
-                                .foregroundColor(Color("storkOrange"))
+                                .foregroundStyle(Color("storkOrange"))
                                 .font(.footnote)
                                 .fontWeight(.bold)
                                 .padding()

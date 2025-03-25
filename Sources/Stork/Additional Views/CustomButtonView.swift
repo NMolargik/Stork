@@ -34,7 +34,7 @@ struct CustomButtonView: View {
                 
                 Text(text)
             }
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
             .fontWeight(.bold)
             .frame(width: width, height: height)
         }
@@ -52,7 +52,7 @@ struct CustomButtonView: View {
             width: 200,
             height: 50,
             color: Color("storkIndigo"),
-            icon: Image("building.fill"),
+            icon: Image("building.fill", bundle: .module),
             isEnabled: true,
             onTapAction: {
                 print("Push Me button pressed")
