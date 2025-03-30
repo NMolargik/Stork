@@ -25,6 +25,8 @@ struct NoHospitalsFoundView: View {
         }
         .padding()
         .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .padding()
+
     }
 }
 

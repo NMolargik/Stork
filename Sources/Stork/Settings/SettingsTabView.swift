@@ -34,16 +34,26 @@ struct SettingsTabView: View {
     var body: some View {
         NavigationStack {
             List {
-                ProfileManagementView(
-                    showingProfileEditor: $showingProfileEditor,
-                    showingDeleteConfirmation: $showingDeleteConfirmation
-                )
-
-                PreferencesView()
-
-                AboutView(appInfo: appInfo)
+                Section {
+                    ProfileManagementView(
+                        showingProfileEditor: $showingProfileEditor,
+                        showingDeleteConfirmation: $showingDeleteConfirmation
+                    )
+                }
+                
+                Section {
+                    
+                    PreferencesView()
+                    
+                }
+                
+                Section {
+                    
+                    AboutView(appInfo: appInfo)
+                }
             }
             .navigationTitle("Settings")
+            .listStyle(.plain)
             .toolbar {
                 ToolbarItem {
                     Button(action: signOut) {

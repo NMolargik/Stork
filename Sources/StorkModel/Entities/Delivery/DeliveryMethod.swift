@@ -4,7 +4,7 @@
 //  Created by Nick Molargik on 11/26/24.
 //
 
-import Foundation
+import SkipFoundation
 
 /// Represents the various methods of delivery available within the Stork application.
 public enum DeliveryMethod: String, CaseIterable, Codable, Hashable {

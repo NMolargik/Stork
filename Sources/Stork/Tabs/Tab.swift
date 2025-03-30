@@ -4,7 +4,7 @@
 //  Created by Nick Molargik on 11/28/24.
 //
 
-import Foundation
+import SkipFoundation
 
 /// Represents the tabs available in the Stork app.
 public enum Tab: String, Hashable, CaseIterable {

@@ -32,8 +32,6 @@ struct HomeTabView: View {
 
                 
                 HomeCarouselView(deliveryViewModel: deliveryViewModel)
-                
-                Spacer()
             }
             .padding()
         }

@@ -36,6 +36,7 @@ struct ProfileManagementView: View {
                     .frame(width: 24, height: 24)
                     .foregroundStyle(Color("storkOrange"))
             }
+            
             HStack {
                 Button(action: restartOnboarding) {
                     Text("Restart Onboarding")

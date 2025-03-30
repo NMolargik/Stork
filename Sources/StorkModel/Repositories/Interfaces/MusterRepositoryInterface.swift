@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
+import SkipFoundation
 
 /// A protocol defining the repository interface for managing Muster entities.
 ///

@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
+import SkipFoundation
 
 /// A repository implementation for managing muster-related operations.
 /// Handles interactions with the remote data source for musters.

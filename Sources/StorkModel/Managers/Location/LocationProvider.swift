@@ -6,7 +6,7 @@
 //
 
 
-import Foundation
+import SkipFoundation
 import Combine
 import SkipModel
 

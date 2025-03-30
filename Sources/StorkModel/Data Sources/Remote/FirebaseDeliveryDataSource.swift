@@ -5,21 +5,26 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
-#if SKIP
-import SkipFirebaseFirestore
-#else
+import SkipFoundation
+
+#if !SKIP
+import FirebaseCore
 import FirebaseFirestore
+#else
+import SkipFirebaseCore
+import SkipFirebaseFirestore
 #endif
 
 /// A data source responsible for interacting with the Firebase Firestore database to manage delivery records.
-public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
+public actor FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// The Firestore database instance.
-    private let db: Firestore
+    private let firestore: Firestore
+    
+    public static var shared = FirebaseDeliveryDataSource()
 
     /// Initializes the FirebaseDeliveryDataSource with a Firestore instance.
     public init() {
-        self.db = Firestore.firestore()
+        self.firestore = Firestore.firestore()
     }
     
     // MARK: - Create a New Delivery Record
@@ -30,13 +35,13 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// - Returns: The newly created `Delivery`, including a newly generated document ID if successful.
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If an error occurs while creating the delivery.
-    public func createDelivery(delivery: Delivery) async throws -> Delivery {
+    @MainActor public func createDelivery(delivery: Delivery) async throws -> Delivery {
         do {
             // Convert our delivery to a dictionary suitable for Firestore
             let data = delivery.dictionary
 
             // Create the new Firestore document
-            let docRef = try await db.collection("Delivery").addDocument(data: data)
+            let docRef = try await firestore.collection("Delivery").addDocument(data: data)
             
             // Build a new Delivery object that includes the Firestore-generated document ID
             var newDelivery = delivery
@@ -56,10 +61,10 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// - Returns: The updated `Delivery`. (If Firestore auto-modifies fields, consider re-fetching the updated document if needed.)
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If an error occurs while updating the delivery.
-    public func updateDelivery(delivery: Delivery) async throws -> Delivery {
+    @MainActor public func updateDelivery(delivery: Delivery) async throws -> Delivery {
         do {
             let data = delivery.dictionary
-            try await db.collection("Delivery").document(delivery.id).updateData(data)
+            try await firestore.collection("Delivery").document(delivery.id).updateData(data)
             return delivery
         } catch {
             throw DeliveryError.firebaseError("Failed to update delivery: \(error.localizedDescription)")
@@ -75,9 +80,9 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// - Throws:
     ///   - `DeliveryError.notFound`: If no delivery with the specified ID is found.
     ///   - `DeliveryError.firebaseError`: If an error occurs while fetching the delivery.
-    public func getDelivery(byId id: String) async throws -> Delivery {
+    @MainActor public func getDelivery(byId id: String) async throws -> Delivery {
         do {
-            let document = try await db.collection("Delivery").document(id).getDocument()
+            let document = try await firestore.collection("Delivery").document(id).getDocument()
 
             // Safely unwrap the optional data
             guard let data = document.data() else {
@@ -116,7 +121,7 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     ///
     /// - Returns: An array of `Delivery` objects matching the specified filters within the given 6-month range.
     /// - Throws: `DeliveryError.firebaseError` if the operation fails.
-    public func listDeliveries(
+    @MainActor public func listDeliveries(
         userId: String? = nil,
         userFirstName: String? = nil,
         hospitalId: String? = nil,
@@ -130,28 +135,53 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
         endDate: Date?
     ) async throws -> [Delivery] {
         do {
-            var query: Query = db.collection("Delivery").order(by: "date", descending: true)
+            print("listDeliveries called with arguments: userId=\(String(describing: userId)), userFirstName=\(String(describing: userFirstName)), hospitalId=\(String(describing: hospitalId)), hospitalName=\(String(describing: hospitalName)), musterId=\(String(describing: musterId)), date=\(String(describing: date)), babyCount=\(String(describing: babyCount)), deliveryMethod=\(String(describing: deliveryMethod)), epiduralUsed=\(String(describing: epiduralUsed)), startDate=\(String(describing: startDate)), endDate=\(String(describing: endDate)))")
+            
+            var query: Query = await firestore.collection("Delivery").order(by: "date", descending: true)
+            var filterDescriptions = [String]()
 
             // MARK: - Apply Filters
-            if let userId { query = query.whereField("userId", isEqualTo: userId) }
-            if let musterId { query = query.whereField("musterId", isEqualTo: musterId) }
-            if let hospitalId { query = query.whereField("hospitalId", isEqualTo: hospitalId) }
-            if let deliveryMethod { query = query.whereField("deliveryMethod", isEqualTo: deliveryMethod.rawValue) }
-            if let epiduralUsed { query = query.whereField("epiduralUsed", isEqualTo: epiduralUsed) }
-            if let babyCount { query = query.whereField("babyCount", isEqualTo: babyCount) }
-
-            // MARK: - Pagination (6-month intervals)
+            if let userId {
+                query = query.whereField("userId", isEqualTo: userId)
+                filterDescriptions.append("userId == \(userId)")
+            }
+            if let musterId {
+                query = query.whereField("musterId", isEqualTo: musterId)
+                filterDescriptions.append("musterId == \(musterId)")
+            }
+            if let hospitalId {
+                query = query.whereField("hospitalId", isEqualTo: hospitalId)
+                filterDescriptions.append("hospitalId == \(hospitalId)")
+            }
+            if let deliveryMethod {
+                query = query.whereField("deliveryMethod", isEqualTo: deliveryMethod.rawValue)
+                filterDescriptions.append("deliveryMethod == \(deliveryMethod.rawValue)")
+            }
+            if let epiduralUsed {
+                query = query.whereField("epiduralUsed", isEqualTo: epiduralUsed)
+                filterDescriptions.append("epiduralUsed == \(epiduralUsed)")
+            }
+            if let babyCount {
+                query = query.whereField("babyCount", isEqualTo: babyCount)
+                filterDescriptions.append("babyCount == \(babyCount)")
+            }
             if let startDate {
                 let timestamp = startDate.timeIntervalSince1970
                 query = query.whereField("date", isGreaterThanOrEqualTo: timestamp)
+                filterDescriptions.append("date >= \(startDate)")
             }
             if let endDate {
                 let timestamp = endDate.timeIntervalSince1970
                 query = query.whereField("date", isLessThan: timestamp)
+                filterDescriptions.append("date < \(endDate)")
             }
+            
+            print("About to query. Filters applied: \(filterDescriptions.joined(separator: ", "))")
 
             // MARK: - Fetch Documents
             let snapshot = try await query.getDocuments()
+            
+            print("Got \(snapshot.documents.count) documents")
 
             let deliveries: [Delivery] = snapshot.documents.compactMap { document in
                 let delivery = Delivery(from: document.data(), id: document.documentID)
@@ -171,9 +201,9 @@ public class FirebaseDeliveryDataSource: DeliveryRemoteDataSourceInterface {
     /// - Parameter delivery: The `Delivery` object to delete.
     /// - Throws:
     ///   - `DeliveryError.firebaseError`: If an error occurs while deleting the delivery.
-    public func deleteDelivery(delivery: Delivery) async throws {
+    @MainActor public func deleteDelivery(delivery: Delivery) async throws {
         do {
-            try await db.collection("Delivery").document(delivery.id).delete()
+            try await firestore.collection("Delivery").document(delivery.id).delete()
         } catch {
             throw DeliveryError.firebaseError("Failed to delete delivery: \(error.localizedDescription)")
         }

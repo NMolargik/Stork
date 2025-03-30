@@ -68,7 +68,6 @@ struct HomeCarouselView: View {
             }
             .padding(.top, 5)
         }
-        .ignoresSafeArea(edges: .bottom)
     }
 }
 

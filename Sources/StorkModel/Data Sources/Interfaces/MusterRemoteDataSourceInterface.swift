@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
+import SkipFoundation
 
 /// A protocol defining the interface for remote data source interactions related to musters.
 public protocol MusterRemoteDataSourceInterface {

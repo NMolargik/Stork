@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/30/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 import StorkModel
 

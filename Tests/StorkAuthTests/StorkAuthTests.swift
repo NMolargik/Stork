@@ -1,6 +1,6 @@
 import XCTest
 import OSLog
-import Foundation
+import SkipFoundation
 @testable import StorkAuth
 
 let logger: Logger = Logger(subsystem: "StorkAuth", category: "Tests")

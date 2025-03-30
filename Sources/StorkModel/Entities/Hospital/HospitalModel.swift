@@ -5,6 +5,7 @@
 //  Created by Nick Molargik on 11/26/24.
 //
 
+import SkipFoundation
 import Foundation
 
 public struct Hospital: Identifiable, Codable, Hashable {

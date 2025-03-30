@@ -79,9 +79,19 @@ struct DeliveryRowView: View {
         let femaleCount = babies.filter { $0.sex == .female }.count
         let lossCount = babies.filter { $0.sex == .loss }.count
         
-        return Array(repeating: Color("storkBlue"), count: maleCount) +
-               Array(repeating: Color("storkPink"), count: femaleCount) +
-               Array(repeating: Color("storkPurple"), count: lossCount)
+        var colors = Array(repeating: Color("storkBlue"), count: maleCount) +
+                     Array(repeating: Color("storkPink"), count: femaleCount) +
+                     Array(repeating: Color("storkPurple"), count: lossCount)
+        
+        // Ensure that the gradient always has at least two colors
+        if colors.count == 1, let onlyColor = colors.first {
+            colors = [onlyColor, onlyColor]
+        } else if colors.isEmpty {
+            // Provide a default gradient if no babies are present
+            colors = [Color.gray, Color.gray]
+        }
+        
+        return colors
     }
 }
 

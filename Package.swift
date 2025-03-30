@@ -38,7 +38,7 @@ let package = Package(
         .package(url: "https://source.skip.tools/skip.git", from: "1.3.2"),
         .package(url: "https://source.skip.tools/skip-ui.git", from: "1.26.4"),
         .package(url: "https://source.skip.tools/skip-kit.git", from: "0.3.1"),
-        .package(url: "https://source.skip.tools/skip-firebase.git", from: "0.7.2"),
+        .package(url: "https://source.skip.tools/skip-firebase.git", from: "0.7.3"),
         .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.3.1"),
         .package(url: "https://source.skip.tools/skip-model.git", from: "1.4.2"),
         .package(url: "https://github.com/aduryagin/skip-revenuecat.git", from: "0.0.10"),

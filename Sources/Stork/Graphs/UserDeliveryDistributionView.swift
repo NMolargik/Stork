@@ -71,6 +71,7 @@ struct UserDeliveryDistributionView: View {
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
+                    .frame(height: 40)
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(20)
                 
@@ -89,6 +90,7 @@ struct UserDeliveryDistributionView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
+                .frame(height: 40)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(20)
             }

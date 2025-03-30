@@ -4,7 +4,7 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 import SkipRevenueCat
 import StorkModel

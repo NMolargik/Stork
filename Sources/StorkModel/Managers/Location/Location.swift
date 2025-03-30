@@ -5,6 +5,7 @@
 //  Created by Nick Molargik on 11/30/24.
 //
 
+import SkipFoundation
 import Foundation
 
 /// A lat/lon location (in degrees).
