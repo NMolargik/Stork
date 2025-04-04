@@ -10,7 +10,8 @@ import StorkModel
 
 struct HomeTabView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     @ObservedObject var deliveryViewModel: DeliveryViewModel
 
@@ -21,7 +22,7 @@ struct HomeTabView: View {
                     Text("Stork")
                         .font(.largeTitle).fontWeight(.bold)
                         .padding(.trailing, 5)
-                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        .foregroundStyle(useDarkMode ? Color.white : Color.black)
                     Spacer()
                 }
                 
@@ -44,5 +45,4 @@ struct HomeTabView: View {
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository())
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

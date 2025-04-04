@@ -28,38 +28,17 @@ struct BabySexDistributionView: View {
     // MARK: - Body
     var body: some View {
         VStack {
-            Spacer()
-            
             Text("6 Month Sex Distribution")
                 .fontWeight(.bold)
                 .foregroundStyle(.gray)
-                .offset(y: 25)
-                .frame(height: 10)
+                .frame(height: 40)
                 .padding(.bottom, 10)
             
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    
-                    if distributionData.isEmpty {
-                        Text("No data available")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(distributionData) { data in
-                            HStack {
-                                Circle()
-                                    .fill(data.color)
-                                    .frame(width: 10, height: 10)
-                                
-                                Text("\(data.category): \(data.count)")
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                            }
-                        }
-                    }
-                }
-                .padding()
-                
+            if distributionData.isEmpty {
+                Text("No data available")
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
+            } else {
                 GeometryReader { geometry in
                     ZStack {
                         if distributionData.isEmpty {
@@ -90,19 +69,42 @@ struct BabySexDistributionView: View {
                         }
                     }
                 }
-                .aspectRatio(1, contentMode: .fit)
-                .scaleEffect(0.9)
-                .padding()
-                .frame(width: 200)
+                .frame(maxHeight: .infinity)
+                .padding(.vertical, 5)
+                
+                HStack {
+                    Circle()
+                        .fill(distributionData[0].color)
+                        .frame(width: 10, height: 10)
+                    
+                    Text("\(distributionData[0].category): \(distributionData[0].count)")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    
+                    Circle()
+                        .fill(distributionData[1].color)
+                        .frame(width: 10, height: 10)
+                    
+                    Text("\(distributionData[1].category): \(distributionData[1].count)")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    
+                    Circle()
+                        .fill(distributionData[2].color)
+                        .frame(width: 10, height: 10)
+                    
+                    Text("\(distributionData[2].category): \(distributionData[2].count)")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                }
             }
-            .onAppear {
-                aggregateBabySexData()
-            }
-            .onChange(of: groupedDeliveries.count) { _ in
-                aggregateBabySexData()
-            }
-            
-            Spacer()
+        }
+        .padding()
+        .onAppear {
+            aggregateBabySexData()
+        }
+        .onChange(of: groupedDeliveries.count) { _ in
+            aggregateBabySexData()
         }
     }
     

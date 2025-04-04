@@ -284,23 +284,52 @@ public actor FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// **Important**: Ensure `data["id"]` is set before calling this method, or it will throw an error.
     @MainActor
     private func mapDocumentToHospital(data: [String: Any]) throws -> Hospital {
-        guard
-            let id = data["id"] as? String,
-            let facility_name = data["facility_name"] as? String,
-            let address = data["address"] as? String,
-            let citytown = data["citytown"] as? String,
-            let state = data["state"] as? String,
-            let zip_code = data["zip_code"] as? String,
-            let countyparish = data["countyparish"] as? String,
-            let telephone_number = data["telephone_number"] as? String,
-            let hospital_type = data["hospital_type"] as? String,
-            let hospital_ownership = data["hospital_ownership"] as? String,
-            let emergency_services = data["emergency_services"] as? Bool,
-            let meets_criteria_for_birthing_friendly_designation = data["meets_criteria_for_birthing_friendly_designation"] as? Bool,
-            let deliveryCount = data["deliveryCount"] as? Int,
-            let babyCount = data["babyCount"] as? Int
-        else {
-            throw HospitalError.unknown("Failed to map hospital data.")
+        // Require a valid id and facility_name, otherwise the hospital wouldn't make sense.
+        guard let id = data["id"] as? String else {
+            throw HospitalError.unknown("Failed to map hospital data: Missing id.")
+        }
+        guard let facility_name = data["facility_name"] as? String else {
+            throw HospitalError.unknown("Failed to map hospital data: Missing facility_name.")
+        }
+        
+        // Use default values for other fields if they're missing.
+        let address = data["address"] as? String ?? ""
+        let citytown = data["citytown"] as? String ?? ""
+        let state = data["state"] as? String ?? ""
+        let zip_code = data["zip_code"] as? String ?? ""
+        let countyparish = data["countyparish"] as? String ?? ""
+        let telephone_number = data["telephone_number"] as? String ?? ""
+        let hospital_type = data["hospital_type"] as? String ?? ""
+        let hospital_ownership = data["hospital_ownership"] as? String ?? ""
+        let emergency_services = data["emergency_services"] as? Bool ?? false
+        let meets_criteria_for_birthing_friendly_designation = data["meets_criteria_for_birthing_friendly_designation"] as? Bool ?? false
+        
+        // Robustly parse deliveryCount
+        var deliveryCount: Int = 0
+        if let dcNumber = data["deliveryCount"] as? NSNumber {
+            deliveryCount = dcNumber.intValue
+        } else if let dcInt = data["deliveryCount"] as? Int {
+            deliveryCount = dcInt
+        } else if let dcDouble = data["deliveryCount"] as? Double {
+            deliveryCount = Int(dcDouble)
+        } else if let dcString = data["deliveryCount"] as? String, let dcFromString = Int(dcString) {
+            deliveryCount = dcFromString
+        } else {
+            throw HospitalError.unknown("Failed to map hospital data for deliveryCount: " + String(describing: data["deliveryCount"]))
+        }
+        
+        // Robustly parse babyCount
+        var babyCount: Int = 0
+        if let bcNumber = data["babyCount"] as? NSNumber {
+            babyCount = bcNumber.intValue
+        } else if let bcInt = data["babyCount"] as? Int {
+            babyCount = bcInt
+        } else if let bcDouble = data["babyCount"] as? Double {
+            babyCount = Int(bcDouble)
+        } else if let bcString = data["babyCount"] as? String, let bcFromString = Int(bcString) {
+            babyCount = bcFromString
+        } else {
+            throw HospitalError.unknown("Failed to map hospital data for babyCount: " + String(describing: data["babyCount"]))
         }
         
         return Hospital(

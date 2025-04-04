@@ -24,8 +24,10 @@ let logger = Logger(subsystem: "com.nickmolargik.stork", category: "Stork")
 let androidSDK = ProcessInfo.processInfo.environment["android.os.Build.VERSION.SDK_INT"].flatMap { Int($0) }
 
 public struct RootView: View {
+    @AppStorage(StorageKeys.isOnboardingComplete) var isOnboardingComplete: Bool = false
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
+    
     @StateObject private var appStateManager: AppStateManager = AppStateManager.shared
-    @StateObject private  var appStorageManager: AppStorageManager = AppStorageManager()
 
     @StateObject private var profileViewModel: ProfileViewModel
     
@@ -36,13 +38,9 @@ public struct RootView: View {
     @State private var showRegistration: Bool = false
     
     public init() {
-        let appStorageManager = AppStorageManager()
-        _appStorageManager = StateObject(wrappedValue: appStorageManager)
-        
         _profileViewModel = StateObject(
             wrappedValue: ProfileViewModel(
-                profileRepository: DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource()),
-                appStorageManager: appStorageManager
+                profileRepository: DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource())
             )
         )
     }
@@ -59,7 +57,6 @@ public struct RootView: View {
                         onAuthenticated: { checkAppState() }
                     )
                     .environmentObject(appStateManager)
-                    .environmentObject(appStorageManager)
                     .onChange(of: appStateManager.currentAppScreen) { screen in
                         print(screen.rawValue)
                     }
@@ -72,7 +69,6 @@ public struct RootView: View {
                         onAuthenticated: { checkAppState() }
                     )
                     .environmentObject(appStateManager)
-                    .environmentObject(appStorageManager)
                     .transition(.move(edge: .bottom))
 
                 case .paywall:
@@ -91,7 +87,6 @@ public struct RootView: View {
                         checkAppState()
                     }
                         .environmentObject(appStateManager)
-                        .environmentObject(appStorageManager)
                         .transition(.slide)
 
                 case .main:
@@ -102,13 +97,13 @@ public struct RootView: View {
                         musterViewModel: musterViewModel
                     )
                     .environmentObject(appStateManager)
-                    .environmentObject(appStorageManager)
                     .transition(.opacity)
                 }
             }
-            .preferredColorScheme(appStorageManager.useDarkMode ? .dark : .light)
+            .preferredColorScheme(useDarkMode ? .dark : .light)
             .onAppear {
                 logger.log("Welcome to Stork on \(androidSDK != nil ? "Android" : "Darwin")!")
+                
                 configurePurchasesIfNeeded()
 
                 if !hospitalViewModel.locationProvider.isAuthorized() {
@@ -123,7 +118,6 @@ public struct RootView: View {
             if !appStateManager.errorMessage.isEmpty {
                 ErrorToastView()
                     .environmentObject(appStateManager)
-                    .environmentObject(appStorageManager)
                     .padding(.top, 50)
                     .transition(.move(edge: .top))
                     .animation(.default, value: appStateManager.errorMessage)
@@ -163,33 +157,34 @@ public struct RootView: View {
             return showRegistration ? .register : .splash
         }
 
-        if !appStorageManager.isOnboardingComplete {
+        if !isOnboardingComplete {
             return .onboard
         }
 
-        // TODO: Repair for android
-        #if !SKIP
+        
+        // !!! These are what ensure subscriptions
         await fetchCustomerInfo()
-
+        // TODO: remove when Android paywall is ready
+        #if !SKIP
         if !Store.shared.subscriptionActive {
             return .paywall
         }
         #endif
+        //
+
 
         return .main
     }
 
-    #if !SKIP
     private func fetchCustomerInfo() async {
-        await withCheckedContinuation { continuation in
-            Purchases.sharedInstance.getCustomerInfo(
-                fetchPolicy: ModelsCacheFetchPolicy.cachedOrFetched,
-                onError: { _ in continuation.resume() },   // Explicitly ignore the argument
-                onSuccess: { _ in continuation.resume() }  // Explicitly ignore the argument
-            )
-        }
+//        await withCheckedContinuation { continuation in
+//            Purchases.sharedInstance.getCustomerInfo(
+//                fetchPolicy: ModelsCacheFetchPolicy.cachedOrFetched,
+//                onError: { _ in continuation.resume() },   // Explicitly ignore the argument
+//                onSuccess: { _ in continuation.resume() }  // Explicitly ignore the argument
+//            )
+//        }
     }
-    #endif
     
     // MARK: - Fetch Data
     private func fetchDataIfNeeded() async throws {
@@ -270,6 +265,7 @@ public struct RootView: View {
     private func configurePurchasesIfNeeded() {
         #if os(iOS) || SKIP
         guard !Purchases.isConfigured else { return }
+        Purchases.logLevel = LogLevel.DEBUG
         Purchases.configure(apiKey: StoreConstants.apiKey)
         Purchases.sharedInstance.delegate = PurchasesDelegateHandler.shared
         #endif

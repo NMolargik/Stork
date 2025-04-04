@@ -10,7 +10,8 @@ import StorkModel
 
 struct OnboardingView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.isOnboardingComplete) var isOnboardingComplete: Bool = false
     
     @State private var currentPage: Int = 0
     @State private var isTransitioning: Bool = false
@@ -82,7 +83,7 @@ struct OnboardingView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // Wait for animation
             withAnimation {
                 // Update global state via environment objects
-                appStorageManager.isOnboardingComplete = true
+                isOnboardingComplete = true
                 appStateManager.selectedTab = .home
                 
                 //TODO: Repair Android
@@ -102,5 +103,4 @@ struct OnboardingView: View {
         print("Onboarding completed!")
     }
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

@@ -8,8 +8,10 @@ import SwiftUI
 import StorkModel
 
 struct BabyEditorView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
+    @AppStorage(StorageKeys.useMetric) var useMetric: Bool = false
 
+    
     @Binding var baby: Baby
     
     var babyNumber: Int
@@ -85,7 +87,7 @@ struct BabyEditorView: View {
         .onChange(of: baby.height) { _ in
             updateHeightFromModel()
         }
-        .onChange(of: appStorageManager.useMetric) { newMetric in
+        .onChange(of: useMetric) { newMetric in
             updateUnits(toMetric: newMetric)
         }
     }
@@ -95,7 +97,7 @@ struct BabyEditorView: View {
         HStack {
             Text("Baby \(babyNumber)")
                 .font(.title2)
-                .foregroundStyle(appStorageManager.useDarkMode ? .black : .white)
+                .foregroundStyle(useDarkMode ? .black : .white)
                 .fontWeight(.bold)
 
             Spacer()
@@ -126,14 +128,14 @@ struct BabyEditorView: View {
                 Text($0.rawValue.capitalized).tag($0)
             }
         }
-        .foregroundStyle(appStorageManager.useDarkMode ? .black : .white)
+        .foregroundStyle(useDarkMode ? .black : .white)
         .pickerStyle(.segmented)
         #if !SKIP
         .background {
             Rectangle()
                 .cornerRadius(8)
                 .foregroundStyle(Color("storkOrange"))
-                .opacity(appStorageManager.useDarkMode ? 0.8 : 0.3)
+                .opacity(useDarkMode ? 0.8 : 0.3)
         }
         #else
         .tint(Color("storkOrange"))
@@ -143,23 +145,23 @@ struct BabyEditorView: View {
     
     private var weightStepper: some View {
         CustomStepperView(
-            label: appStorageManager.useMetric
+            label: useMetric
                 ? "\(String(format: "%.2f", baby.weight * ounceToKg)) kg"  // ✅ Show 2 decimal places for kg
                 : "\(pounds) lbs \(ounces) oz", // ✅ No decimal for lbs, separate ounces
             decrement: { adjustWeight(-1) },
             increment: { adjustWeight(1) },
-            range: appStorageManager.useMetric ? weightRangeMetric : weightRangeImperial
+            range: useMetric ? weightRangeMetric : weightRangeImperial
         )
     }
     
     private var lengthStepper: some View {
         CustomStepperView(
-            label: appStorageManager.useMetric
+            label: useMetric
                 ? "\(String(format: "%.1f", lengthInCm)) cm"   // ✅ Show 1 decimal place for cm
                 : "\(String(format: "%.1f", baby.height)) in", // ✅ Show 1 decimal place for inches
             decrement: { adjustLength(-0.1) },
             increment: { adjustLength(0.1) },
-            range: appStorageManager.useMetric ? lengthRangeMetric : lengthRangeImperial
+            range: useMetric ? lengthRangeMetric : lengthRangeImperial
         )
     }
     
@@ -191,7 +193,7 @@ struct BabyEditorView: View {
     private func adjustWeight(_ delta: Int) {
         HapticFeedback.trigger(style: .medium)
         
-        if appStorageManager.useMetric {
+        if useMetric {
             let newWeightKg = ouncesToKg(baby.weight) + (Double(delta) * 0.1)
             if weightRangeMetric.contains(newWeightKg) {
                 baby.weight = max(kgToOunces(newWeightKg), 0.0)
@@ -217,7 +219,7 @@ struct BabyEditorView: View {
     
     private func adjustLength(_ delta: Double) {
         HapticFeedback.trigger(style: .medium)
-        if appStorageManager.useMetric {
+        if useMetric {
             lengthInCm = max(lengthInCm + delta, 0.0)
         } else {
             lengthInCm = max(lengthInCm + (delta * cmPerInch), 0.0)
@@ -245,7 +247,6 @@ struct BabyEditorView: View {
         sampleMode: true
     )
     .padding()
-    .environmentObject(AppStorageManager())
 }
 
 

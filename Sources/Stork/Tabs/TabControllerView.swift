@@ -111,7 +111,7 @@ public struct TabControllerView: View {
 // MARK: - Preview
 #Preview {
     TabControllerView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: DefaultHospitalRepository(remoteDataSource: FirebaseHospitalDatasource()), locationProvider: LocationProvider()),
         deliveryViewModel: DeliveryViewModel(deliveryRepository: DefaultDeliveryRepository(remoteDataSource: FirebaseDeliveryDataSource())),
         musterViewModel: MusterViewModel(musterRepository: DefaultMusterRepository(remoteDataSource: FirebaseMusterDataSource()))

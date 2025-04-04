@@ -78,7 +78,7 @@ struct PasswordResetSheetView: View {
 
 #Preview {
     PasswordResetSheetView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         isPasswordResetPresented: .constant(true),
         email: .constant("email@email.com")
     )

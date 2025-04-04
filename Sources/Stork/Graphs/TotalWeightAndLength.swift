@@ -31,9 +31,7 @@ struct TotalWeightAndLengthStatsView: View {
             Text("6 Month Stats")
                 .fontWeight(.bold)
                 .foregroundStyle(.gray)
-                .offset(y: 25)
-                .frame(height: 10)
-                .padding(.bottom, 10)
+                .frame(height: 20)
             
             HStack(spacing: 10) {
                 Text(weightString)
@@ -51,7 +49,7 @@ struct TotalWeightAndLengthStatsView: View {
                     .fontWeight(.bold)
                     .foregroundStyle(.primary)
             }
-            .padding()
+            .padding([.horizontal, .top])
             
             Text("Delivered")
                 .fontWeight(.bold)

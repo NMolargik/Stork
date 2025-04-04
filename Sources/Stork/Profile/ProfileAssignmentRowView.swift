@@ -10,7 +10,8 @@ import StorkModel
 
 struct ProfileAssignmentRowView: View {    
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     /// The `Profile` displayed in this row.
     var profile: Profile
@@ -35,7 +36,7 @@ struct ProfileAssignmentRowView: View {
                 Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
+                    .foregroundStyle(useDarkMode ? .white : .black)
                 
                 HStack(spacing: 4) {
                     Image("birthday.cake.fill", bundle: .module)
@@ -56,7 +57,7 @@ struct ProfileAssignmentRowView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
     }
     
     // MARK: - Action Button
@@ -97,5 +98,4 @@ struct ProfileAssignmentRowView: View {
         onAssign: {}
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

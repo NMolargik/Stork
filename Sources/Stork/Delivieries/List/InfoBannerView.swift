@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct InfoBannerView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
-
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
+    
     let icon: String
     let text: String
     let color: Color
@@ -29,16 +29,15 @@ struct InfoBannerView: View {
                 .font(.body)
                 .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                .foregroundStyle(useDarkMode ? Color.white : Color.black)
 
             Spacer()
         }
         .padding(8)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
     }
 }
 
 #Preview {
     InfoBannerView(icon: "exclamationmark.triangle.fill", text: "info banner", color: Color.blue)
-        .environmentObject(AppStorageManager())
 }

@@ -14,7 +14,6 @@
 		499CD4402AC5B799001AE8D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49F90C2F2A52156300F06D93 /* Assets.xcassets */; };
 		EB0CEAD92D2D85250011E63B /* LaunchScreen.storyboard in Sources */ = {isa = PBXBuildFile; fileRef = EB0CEAD82D2D85250011E63B /* LaunchScreen.storyboard */; };
 		EB0CEADB2D2D875F0011E63B /* storkicon.png in Resources */ = {isa = PBXBuildFile; fileRef = EB0CEADA2D2D875F0011E63B /* storkicon.png */; };
-		EB1F1A1F2D2DC23900558B6B /* keystore.jks in Sources */ = {isa = PBXBuildFile; fileRef = EB1F1A1E2D2DC23900558B6B /* keystore.jks */; };
 		EB30EEF12D847B9B001983EA /* StorkAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB30EEF02D847B9B001983EA /* StorkAppDelegate.swift */; };
 		EBF588732D985E4A0079F1B7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBF588722D985E4A0079F1B7 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -211,7 +210,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB1F1A1F2D2DC23900558B6B /* keystore.jks in Sources */,
 				EB30EEF12D847B9B001983EA /* StorkAppDelegate.swift in Sources */,
 				EB0CEAD92D2D85250011E63B /* LaunchScreen.storyboard in Sources */,
 				499CD43B2AC5B799001AE8D8 /* AppMain.swift in Sources */,
@@ -225,7 +223,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
@@ -236,7 +234,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 1.4.2;
+				MARKETING_VERSION = 1.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -248,7 +246,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
@@ -259,7 +257,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 1.4.2;
+				MARKETING_VERSION = 1.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

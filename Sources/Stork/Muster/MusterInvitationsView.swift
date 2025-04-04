@@ -12,7 +12,8 @@ struct MusterInvitationsView: View {
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -40,7 +41,7 @@ struct MusterInvitationsView: View {
                             .padding()
                         
                         Text("No invitations found. Ask a muster admin to send you an invitation!")
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                             .multilineTextAlignment(.center)
                             .font(.title3)
                             .padding(.horizontal)
@@ -55,7 +56,7 @@ struct MusterInvitationsView: View {
                             VStack(alignment: .leading) {
                                 Text(invite.senderName + " invited you to " + invite.musterName)
                                     .font(.headline)
-                                    .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
+                                    .foregroundStyle(useDarkMode ? .white : .black)
 
                                 HStack {
                                     CustomButtonView(text: "Accept", width: 100, height: 40, color: Color("storkBlue"), isEnabled: true, onTapAction: {
@@ -92,7 +93,7 @@ struct MusterInvitationsView: View {
                                 }
                             }
                             .padding()
-                            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                            .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                             .padding(5)
                         }
                     }
@@ -128,11 +129,10 @@ struct MusterInvitationsView: View {
 #Preview {
     MusterInvitationsView(
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         showMusterInvitations: .constant(true),
         onRespond: { _, _ in }
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

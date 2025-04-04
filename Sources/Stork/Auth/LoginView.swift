@@ -98,7 +98,7 @@ struct LoginView: View {
 
 #Preview {
     LoginView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         onAuthenticated: {}
     )
     .environmentObject(AppStateManager.shared)

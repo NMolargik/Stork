@@ -10,7 +10,8 @@ import StorkModel
 
 struct MusterSplashView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -28,23 +29,23 @@ struct MusterSplashView: View {
                     .navigationTitle("Join A Muster")
                 
                 Text("[ muhs-ter ] - noun\nA group of storks")
-                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                    .foregroundStyle(useDarkMode ? Color.white : Color.black)
                     .multilineTextAlignment(.center)
                     .font(.body)
                     .fontWeight(.semibold)
                     .padding()
             }
             .frame(maxWidth: .infinity)
-            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+            .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
             .padding(8)
             
             Text("Create a Muster or accept a pending invitation to an existing Muster to share statistics and gain insights with other nurses and doctors.")
-                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                .foregroundStyle(useDarkMode ? Color.white : Color.black)
                 .multilineTextAlignment(.center)
                 .font(.body)
                 .fontWeight(.semibold)
                 .padding(20)
-                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                 
             Spacer()
             
@@ -73,7 +74,7 @@ struct MusterSplashView: View {
                 Text("Loading Your Muster...")
                     .padding(.top)
                     .fontWeight(.bold)
-                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                    .foregroundStyle(useDarkMode ? Color.white : Color.black)
                 ProgressView()
                     .tint(Color("storkIndigo"))
             }
@@ -119,11 +120,10 @@ struct MusterSplashView: View {
 #Preview {
     MusterSplashView(
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
         
 }

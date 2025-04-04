@@ -10,7 +10,8 @@ import StorkModel
 
 struct MusterTabView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     @ObservedObject var profileViewModel: ProfileViewModel
     @ObservedObject var musterViewModel: MusterViewModel
@@ -133,7 +134,7 @@ struct MusterTabView: View {
                     HStack {
                         Text(muster.name)
                             .font(.title2).fontWeight(.bold)
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                         
                         Spacer()
                     }
@@ -312,11 +313,10 @@ struct MusterTabView: View {
 
 #Preview {
     MusterTabView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

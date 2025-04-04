@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HospitalInfoView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     let hospital: Hospital
 
@@ -46,12 +46,11 @@ struct HospitalInfoView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical)
         .padding(.leading, 5)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
         .padding(.horizontal)
     }
 }
 
 #Preview {
     HospitalInfoView(hospital: Hospital.sampleHospital())
-        .environmentObject(AppStorageManager())
 }

@@ -9,9 +9,9 @@ import SwiftUI
 import StorkModel
 
 struct UserDeliveryDistributionView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
-    
     @StateObject private var colorsViewModel = UserColorsViewModel()
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @ObservedObject var musterViewModel: MusterViewModel
 
@@ -60,7 +60,7 @@ struct UserDeliveryDistributionView: View {
                         }
                         
                         Text("\(profile.firstName) \(profile.lastName.first.map { "\($0)." } ?? "")")
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                         
                         Circle()
                             .fill(colorsViewModel.userColors[profile.id] ?? .gray)
@@ -80,7 +80,7 @@ struct UserDeliveryDistributionView: View {
                 HStack(spacing: 8) {
                     Text("Old Members")
                         .font(.body)
-                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        .foregroundStyle(useDarkMode ? Color.white : Color.black)
                     
                     Circle()
                         .fill(colorsViewModel.userColors["Old Members"] ?? .gray)

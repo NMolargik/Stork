@@ -11,7 +11,8 @@ import SkipKit
 
 struct RegisterView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @ObservedObject var profileViewModel: ProfileViewModel
     
@@ -103,7 +104,7 @@ struct RegisterView: View {
                         
                         VStack(alignment: .center) {
                             Text("Select Your Birthday")
-                                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                                .foregroundStyle(useDarkMode ? Color.white : Color.black)
                                 .padding()
                             #if !SKIP
                                 .font(.body)
@@ -121,7 +122,7 @@ struct RegisterView: View {
                                 .padding(.top, -15)
                             
                         }
-                        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                         
                         if let birthdayError = profileViewModel.birthdayError {
                             Text(birthdayError)
@@ -137,7 +138,7 @@ struct RegisterView: View {
                         Divider()
                         
                         Text("Select Your Role")
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                         
                         Picker("Role", selection: $profileViewModel.tempProfile.role) {
                             ForEach(ProfileRole.allCases, id: \.self) { role in
@@ -247,10 +248,9 @@ struct RegisterView: View {
 
 #Preview {
     RegisterView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         showRegistration: .constant(true),
         onAuthenticated: {}
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

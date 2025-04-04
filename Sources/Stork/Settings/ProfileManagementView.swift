@@ -8,66 +8,66 @@
 import SwiftUI
 
 struct ProfileManagementView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.isOnboardingComplete) var isOnboardingComplete: Bool = false
+    
     @EnvironmentObject var appStateManager: AppStateManager
 
     @Binding var showingProfileEditor: Bool
     @Binding var showingDeleteConfirmation: Bool
 
     var body: some View {
-        Section(header: Text("Profile")) {
-            HStack {
-                Button(action: {
-                    HapticFeedback.trigger(style: .medium)
+        Group {
+            Button(action: {
+                HapticFeedback.trigger(style: .medium)
 
-                    withAnimation {
-                        showingProfileEditor = true
-                    }
-                }, label: {
+                withAnimation {
+                    showingProfileEditor = true
+                }
+            }, label: {
+                HStack {
                     Text("Edit Profile")
                         .foregroundStyle(Color("storkOrange"))
-                })
-                
-                Spacer()
-
-                Image("person.text.rectangle.fill", bundle: .module)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(Color("storkOrange"))
-            }
+                    
+                    Spacer()
+                    
+                    Image("person.text.rectangle.fill", bundle: .module)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color("storkOrange"))
+                }
+            })
             
-            HStack {
-                Button(action: restartOnboarding) {
+            Button(action: restartOnboarding) {
+                HStack {
                     Text("Restart Onboarding")
                         .foregroundStyle(Color("storkIndigo"))
+                    Spacer()
+                    
+                    Image("book.fill", bundle: .module)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color("storkIndigo"))
                 }
-
-                Spacer()
-
-                Image("book.fill", bundle: .module)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(Color("storkIndigo"))
             }
 
-            HStack {
-                Button(action: {
-                    HapticFeedback.trigger(style: .medium)
-                    showingDeleteConfirmation = true
-                }) {
+            Button(action: {
+                HapticFeedback.trigger(style: .medium)
+                showingDeleteConfirmation = true
+            }) {
+                HStack {
                     Text("Delete Profile")
                         .foregroundStyle(.red)
+                    
+                    Spacer()
+                    
+                    Image("trash.fill", bundle: .module)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(.red)
                 }
-
-                Spacer()
-
-                Image("trash.fill", bundle: .module)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(.red)
             }
         }
     }
@@ -75,7 +75,7 @@ struct ProfileManagementView: View {
     private func restartOnboarding() {
         HapticFeedback.trigger(style: .medium)
         withAnimation {
-            appStorageManager.isOnboardingComplete = false
+            isOnboardingComplete = false
             appStateManager.currentAppScreen = .onboard
         }
     }
@@ -86,6 +86,5 @@ struct ProfileManagementView: View {
         showingProfileEditor: .constant(false),
         showingDeleteConfirmation: .constant(false)
     )
-    .environmentObject(AppStorageManager())
     .environmentObject(AppStateManager.shared)
 }

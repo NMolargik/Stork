@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryDetailListView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     let delivery: Delivery
 
@@ -50,10 +50,9 @@ struct DeliveryDetailListView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
     }
 }
 #Preview {
     DeliveryDetailListView(delivery: Delivery(sample: true))
-        .environmentObject(AppStorageManager())
 }

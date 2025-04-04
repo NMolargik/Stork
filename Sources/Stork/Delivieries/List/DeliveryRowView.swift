@@ -8,7 +8,7 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryRowView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     var delivery: Delivery
 
@@ -20,8 +20,8 @@ struct DeliveryRowView: View {
                     .fontWeight(.bold)
                     .padding(.horizontal, 5)
                     .padding(.vertical, 3)
-                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
-                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                    .foregroundStyle(useDarkMode ? Color.white : Color.black)
+                    .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                 
                 // Baby summary
                 Text(babySummary(for: delivery.babies))
@@ -113,5 +113,4 @@ struct DeliveryRowView: View {
         deliveryMethod: .vaginal,
         epiduralUsed: true
     ))
-    .environmentObject(AppStorageManager())
 }

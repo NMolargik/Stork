@@ -9,7 +9,8 @@ import StorkModel
 
 struct ProfileRowView: View {    
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @Binding var existingInvitations: [MusterInvite]
     
@@ -30,7 +31,7 @@ struct ProfileRowView: View {
                 Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
+                    .foregroundStyle(useDarkMode ? .white : .black)
                 
                 HStack(spacing: 4) {
                     Image("birthday.cake.fill", bundle: .module)
@@ -41,7 +42,7 @@ struct ProfileRowView: View {
                         .padding(.trailing)
                     
                     Text(Self.dateFormatter.string(from: profile.birthday))
-                        .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
+                        .foregroundStyle(useDarkMode ? .white : .black)
                 }
             }
             
@@ -52,7 +53,7 @@ struct ProfileRowView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
 
     }
     
@@ -105,6 +106,5 @@ struct ProfileRowView: View {
         onInvite: {}
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }
 

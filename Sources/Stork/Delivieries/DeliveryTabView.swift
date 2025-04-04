@@ -10,7 +10,8 @@ import StorkModel
 @MainActor
 struct DeliveryTabView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     @StateObject private var dailyResetUtility = DailyResetUtility()
     
@@ -80,7 +81,7 @@ struct DeliveryTabView: View {
                             ToolbarItem(placement: .navigationBarLeading) {
                                 Text("New Delivery")
                                     .fontWeight(.bold)
-                                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                                    .foregroundStyle(useDarkMode ? Color.white : Color.black)
                             }
                             
                             ToolbarItem(placement: .navigationBarTrailing) {
@@ -148,10 +149,9 @@ struct DeliveryTabView: View {
 #Preview {
     DeliveryTabView(
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository())
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }
