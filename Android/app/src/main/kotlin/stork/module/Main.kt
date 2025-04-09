@@ -4,8 +4,6 @@ import skip.lib.*
 import skip.model.*
 import skip.foundation.*
 import skip.ui.*
-
-import android.Manifest
 import android.app.Application
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
@@ -17,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.core.app.ActivityCompat
 import skip.firebase.core.FirebaseApp
 
 
@@ -62,55 +58,15 @@ open class MainActivity: AppCompatActivity {
 
         //Example of requesting permissions on startup.
         //These must match the permissions in the AndroidManifest.xml file.
-        let permissions = listOf(
-           Manifest.permission.ACCESS_COARSE_LOCATION,
-           Manifest.permission.ACCESS_FINE_LOCATION
+        //let permissions = listOf(
+           //Manifest.permission.ACCESS_COARSE_LOCATION,
+           //Manifest.permission.ACCESS_FINE_LOCATION
            //Manifest.permission.CAMERA,
            //Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        )
-        let requestTag = 1
-        ActivityCompat.requestPermissions(self, permissions.toTypedArray(), requestTag)
+        //)
+        //let requestTag = 1
+        //ActivityCompat.requestPermissions(self, permissions.toTypedArray(), requestTag)
         
-    }
-
-    override fun onStart() {
-        logger.info("onStart")
-        super.onStart()
-        StorkAppAppDelegate.shared.onStart(this)
-    }
-
-    override fun onResume() {
-        logger.info("onResume")
-        super.onResume()
-        StorkAppAppDelegate.shared.onResume(this)
-    }
-
-    override fun onPause() {
-        logger.info("onPause")
-        super.onPause()
-        StorkAppAppDelegate.shared.onPause(this)
-    }
-
-    override fun onStop() {
-        logger.info("onStop")
-        super.onStop()
-        StorkAppAppDelegate.shared.onStop(this)
-    }
-
-    override fun onDestroy() {
-        logger.info("onDestroy")
-        super.onDestroy()
-        StorkAppAppDelegate.shared.onDestroy(this)
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        StorkAppAppDelegate.shared.onLowMemory(this)
-    }
-
-    override fun onRestart() {
-        logger.info("onRestart")
-        super.onRestart()
     }
 
     override fun onSaveInstanceState(bundle: android.os.Bundle): Unit = super.onSaveInstanceState(bundle)
@@ -119,6 +75,36 @@ open class MainActivity: AppCompatActivity {
         // Usually you restore your state in onCreate(). It is possible to restore it in onRestoreInstanceState() as well, but not very common. (onRestoreInstanceState() is called after onStart(), whereas onCreate() is called before onStart().
         logger.info("onRestoreInstanceState")
         super.onRestoreInstanceState(bundle)
+    }
+
+    override fun onRestart() {
+        logger.info("onRestart")
+        super.onRestart()
+    }
+
+    override fun onStart() {
+        logger.info("onStart")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        logger.info("onResume")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        logger.info("onPause")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        logger.info("onStop")
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        logger.info("onDestroy")
+        super.onDestroy()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: kotlin.Array<String>, grantResults: IntArray) {
