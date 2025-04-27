@@ -28,21 +28,17 @@ struct MusterCarouselView: View {
     var body: some View {
         VStack {
             TabView(selection: $selectedIndex) {
-            #if !SKIP
                 DeliveriesThisWeekView(deliveries: $deliveryViewModel.musterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
-                    .tag(0)
-            #endif
-                
-            #if !SKIP
+                    .tag(0)                
+
                 DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(1)
-            #endif
                 
                 BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedMusterDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

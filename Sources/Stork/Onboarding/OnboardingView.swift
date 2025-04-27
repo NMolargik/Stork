@@ -85,13 +85,8 @@ struct OnboardingView: View {
                 // Update global state via environment objects
                 isOnboardingComplete = true
                 appStateManager.selectedTab = .home
-                
-                //TODO: Repair Android
-                #if !SKIP
                 appStateManager.currentAppScreen = Store.shared.subscriptionActive ? .main : .paywall
-                #else
-                appStateManager.currentAppScreen = .main
-                #endif
+                
                 onComplete()
             }
         }

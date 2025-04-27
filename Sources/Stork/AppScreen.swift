@@ -8,5 +8,5 @@
 import SkipFoundation
 
 public enum AppScreen: String, Hashable {
-    case splash, register, onboard, paywall, main
+    case splash, register, onboard, paywall, noNetwork, main
 }

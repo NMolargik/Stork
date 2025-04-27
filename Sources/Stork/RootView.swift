@@ -14,7 +14,10 @@ import OSLog
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
-#else
+import Network
+#endif
+
+#if SKIP
 import SkipFirebaseCore
 import SkipFirebaseFirestore
 import SkipFirebaseAuth
@@ -22,6 +25,11 @@ import SkipFirebaseAuth
 
 let logger = Logger(subsystem: "com.nickmolargik.stork", category: "Stork")
 let androidSDK = ProcessInfo.processInfo.environment["android.os.Build.VERSION.SDK_INT"].flatMap { Int($0) }
+
+#if !SKIP
+private let pathMonitor = NWPathMonitor()
+private let pathQueue   = DispatchQueue(label: "StorkNWPath")
+#endif
 
 public struct RootView: View {
     @AppStorage(StorageKeys.isOnboardingComplete) var isOnboardingComplete: Bool = false
@@ -43,6 +51,9 @@ public struct RootView: View {
                 profileRepository: DefaultProfileRepository(remoteDataSource: FirebaseProfileDataSource())
             )
         )
+#if !SKIP
+        pathMonitor.start(queue: pathQueue)
+#endif
     }
 
     // MARK: - Body
@@ -70,6 +81,13 @@ public struct RootView: View {
                     )
                     .environmentObject(appStateManager)
                     .transition(.move(edge: .bottom))
+                    
+                case .onboard:
+                    OnboardingView {
+                        checkAppState()
+                    }
+                        .environmentObject(appStateManager)
+                        .transition(.slide)
 
                 case .paywall:
                     PaywallMainView(
@@ -82,12 +100,10 @@ public struct RootView: View {
                         .environmentObject(appStateManager)
                         .transition(.opacity)
 
-                case .onboard:
-                    OnboardingView {
+                case .noNetwork:
+                    NeedNetworkView {
                         checkAppState()
                     }
-                        .environmentObject(appStateManager)
-                        .transition(.slide)
 
                 case .main:
                     TabControllerView(
@@ -127,6 +143,16 @@ public struct RootView: View {
 
     // MARK: - Main Decision Logic
     func checkAppState() {
+#if SKIP
+        let hasNetwork = isNetworkConnected()
+#else
+        let hasNetwork = pathMonitor.currentPath.status == .satisfied
+#endif
+        guard hasNetwork else {
+            withAnimation { appStateManager.currentAppScreen = .noNetwork }
+            return
+        }
+        
         if Auth.auth().currentUser != nil  {
             Task {
                 do {
@@ -164,27 +190,32 @@ public struct RootView: View {
         
         // !!! These are what ensure subscriptions
         await fetchCustomerInfo()
-        // TODO: remove when Android paywall is ready
-        #if !SKIP
         if !Store.shared.subscriptionActive {
             return .paywall
         }
-        #endif
-        //
 
 
         return .main
     }
 
     private func fetchCustomerInfo() async {
-//        await withCheckedContinuation { continuation in
-//            Purchases.sharedInstance.getCustomerInfo(
-//                fetchPolicy: ModelsCacheFetchPolicy.cachedOrFetched,
-//                onError: { _ in continuation.resume() },   // Explicitly ignore the argument
-//                onSuccess: { _ in continuation.resume() }  // Explicitly ignore the argument
-//            )
-//        }
+#if SKIP   // Android (Skip/KMP) – use suspend version, no fetchPolicy parameter
+        do {
+            _ = try await Purchases.sharedInstance.getCustomerInfo()
+        } catch {
+            // ignore errors; we'll just treat it as no subscription
+        }
+#else      // Apple platforms – use cache/fetch policy & continuation helper
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+            Purchases.sharedInstance.getCustomerInfo(
+                fetchPolicy: ModelsCacheFetchPolicy.cachedOrFetched,
+                onError:   { _ in continuation.resume(returning: ()) },
+                onSuccess: { _ in continuation.resume(returning: ()) }
+            )
+        }
+#endif
     }
+
     
     // MARK: - Fetch Data
     private func fetchDataIfNeeded() async throws {

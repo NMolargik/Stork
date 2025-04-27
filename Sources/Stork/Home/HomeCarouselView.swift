@@ -27,7 +27,6 @@ struct HomeCarouselView: View {
     var body: some View {
         VStack {
             TabView(selection: $selectedIndex) {
-                #if !SKIP
                 DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
@@ -39,7 +38,6 @@ struct HomeCarouselView: View {
                     .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(1)
-                #endif
                 
                 BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -201,9 +201,6 @@
     "Dark Mode" : {
 
     },
-    "Day" : {
-
-    },
     "Delete" : {
 
     },
@@ -333,6 +330,9 @@
     "ID: %@" : {
 
     },
+    "Internet Required" : {
+
+    },
     "Invite User" : {
 
     },
@@ -440,9 +440,6 @@
 
     },
     "Missing?" : {
-
-    },
-    "Month" : {
 
     },
     "Multiplatform Technology" : {
@@ -697,6 +694,9 @@
     "Stork Monthly" : {
 
     },
+    "Stork needs an internet connection to verify your subscription and load delivery data." : {
+
+    },
     "Submit" : {
 
     },
@@ -742,6 +742,9 @@
 
     },
     "Track Your Deliveries!" : {
+
+    },
+    "Try Again" : {
 
     },
     "Unknown Location" : {

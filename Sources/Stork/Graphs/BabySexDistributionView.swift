@@ -73,29 +73,26 @@ struct BabySexDistributionView: View {
                 .padding(.vertical, 5)
                 
                 HStack {
-                    Circle()
-                        .fill(distributionData[0].color)
-                        .frame(width: 10, height: 10)
-                    
-                    Text("\(distributionData[0].category): \(distributionData[0].count)")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    
-                    Circle()
-                        .fill(distributionData[1].color)
-                        .frame(width: 10, height: 10)
-                    
-                    Text("\(distributionData[1].category): \(distributionData[1].count)")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    
-                    Circle()
-                        .fill(distributionData[2].color)
-                        .frame(width: 10, height: 10)
-                    
-                    Text("\(distributionData[2].category): \(distributionData[2].count)")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
+                    ForEach(["Male", "Female", "Loss"], id: \.self) { category in
+                        // Look up existing data for this category; fall back to default color & 0 count
+                        let data = distributionData.first { $0.category == category }
+                        let count = data?.count ?? 0
+                        let color: Color = {
+                            switch category {
+                            case "Male":   return Color("storkBlue")
+                            case "Female": return Color("storkPink")
+                            default:       return Color("storkPurple")
+                            }
+                        }()
+                        
+                        Circle()
+                            .fill(data?.color ?? color)
+                            .frame(width: 10, height: 10)
+                        
+                        Text("\(category): \(count)")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                    }
                 }
             }
         }
@@ -152,23 +149,28 @@ struct BabySexDistributionView: View {
     }
 }
 
-// MARK: - Preview
-struct BabySexDistributionView_Previews: PreviewProvider {
-    static var previews: some View {
-        BabySexDistributionView(groupedDeliveries: .constant([
-            // Sample grouped deliveries data
-            (key: "July '24", value: [
-                Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
-                    Baby(deliveryId: "1", nurseCatch: true, nicuStay: false, sex: .male),
-                    Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female)
-                ], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
-            ]),
-            (key: "August '24", value: [
-                Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Date(), babies: [
-                    Baby(deliveryId: "2", nurseCatch: false, nicuStay: false, sex: .male),
-                    Baby(deliveryId: "2", nurseCatch: true, nicuStay: false, sex: .loss)
-                ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
-            ])
-        ]))
-    }
+#Preview {
+    BabySexDistributionView(groupedDeliveries: .constant([
+        // Sample grouped deliveries data
+        (key: "July '24", value: [
+            Delivery(id: "1", userId: "U1", userFirstName: "Alice",
+                     hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1",
+                     date: Date(),
+                     babies: [
+                        Baby(deliveryId: "1", nurseCatch: true,  nicuStay: false, sex: .male),
+                        Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female)
+                     ],
+                     babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
+        ]),
+        (key: "August '24", value: [
+            Delivery(id: "2", userId: "U2", userFirstName: "Bob",
+                     hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2",
+                     date: Date(),
+                     babies: [
+                        Baby(deliveryId: "2", nurseCatch: false, nicuStay: false, sex: .male),
+                        Baby(deliveryId: "2", nurseCatch: true,  nicuStay: false, sex: .loss)
+                     ],
+                     babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
+        ])
+    ]))
 }
