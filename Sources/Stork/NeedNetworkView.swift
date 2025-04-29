@@ -14,7 +14,7 @@ struct NeedNetworkView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Image("wifi.slash", bundle: .module)
+            Image("wifi.exclamationmark", bundle: .module)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 80, height: 80)

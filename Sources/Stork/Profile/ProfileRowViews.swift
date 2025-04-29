@@ -25,31 +25,28 @@ struct ProfileRowView: View {
     }()
     
     var body: some View {
-        HStack {
-            // Profile Information
-            VStack(alignment: .leading, spacing: 4) {
-                Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
-                    .font(.title3)
-                    .fontWeight(.bold)
+        VStack {
+            Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
+                .font(.title3)
+                .fontWeight(.bold)
+                .foregroundStyle(useDarkMode ? .white : .black)
+            
+            HStack(spacing: 4) {
+                Image("birthday.cake.fill", bundle: .module)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(Color("storkPink"))
+                    .padding(.trailing)
+                
+                Text(Self.dateFormatter.string(from: profile.birthday))
                     .foregroundStyle(useDarkMode ? .white : .black)
                 
-                HStack(spacing: 4) {
-                    Image("birthday.cake.fill", bundle: .module)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                        .foregroundStyle(Color("storkPink"))
-                        .padding(.trailing)
-                    
-                    Text(Self.dateFormatter.string(from: profile.birthday))
-                        .foregroundStyle(useDarkMode ? .white : .black)
-                }
+                Spacer()
+                
+                // Action Buttons or Status Indicators
+                actionButtonGroup
             }
-            
-            Spacer()
-            
-            // Action Buttons or Status Indicators
-            actionButtonGroup
         }
         .padding()
         .frame(maxWidth: .infinity)

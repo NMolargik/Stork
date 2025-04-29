@@ -52,7 +52,9 @@ struct MusterSplashView: View {
             CustomButtonView(text: "Create A New Muster", width: 300, height: 50, color: Color("storkIndigo"), icon: nil, isEnabled: true, onTapAction: {
                 musterViewModel.showCreateMusterSheet = true
             })
+            .disabled(musterViewModel.isWorking)
             .padding(.bottom, 5)
+            
 
             CustomButtonView(text: "View Your Invitations", width: 300, height: 50, color: Color("storkOrange"), icon: nil, isEnabled: true, onTapAction: {
                 HapticFeedback.trigger(style: .medium)
@@ -69,6 +71,7 @@ struct MusterSplashView: View {
                     }
                 }
             })
+            .disabled(musterViewModel.isWorking)
             
             if (musterViewModel.isWorking && profileViewModel.profile.musterId != "") {
                 Text("Loading Your Muster...")

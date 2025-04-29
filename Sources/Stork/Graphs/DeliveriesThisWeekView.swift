@@ -128,8 +128,9 @@ struct DeliveriesThisWeekView: View {
                     GeometryReader { geo in
                         let w  = geo.size.width
                         let stepX = w / CGFloat(max(animatedDeliveries.count - 1, 1))
-                        ForEach(animatedDeliveries) { point in
-                            let idx = animatedDeliveries.firstIndex(where: { $0.id == point.id }) ?? 0
+
+                        // Enumerate indices directly so each weekday appears exactly once
+                        ForEach(Array(animatedDeliveries.enumerated()), id: \.offset) { idx, point in
                             let xPos = stepX * CGFloat(idx)
                             Text(dateFormatter.string(from: point.date))
                                 .font(.caption)
@@ -157,63 +158,47 @@ struct DeliveriesThisWeekView: View {
     
     private func aggregateDeliveries() {
         let calendar = Calendar.current
-        let now = Date()
-        let today = calendar.startOfDay(for: now)
-        let weekday = calendar.component(.weekday, from: now)
-        
-        // Determine the start of the week (most recent Sunday)
-        let daysSinceSunday = weekday - 1
-        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysSinceSunday, to: today) else {
-            deliveriesLastSevenDays = []
-            return
-        }
-        
-        // Compute the upcoming Saturday (6 days after Sunday) and get its end-of-day
-        guard let saturday = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
-            deliveriesLastSevenDays = []
-            return
-        }
-        let saturdayStart = calendar.startOfDay(for: saturday)
-        // Instead of using date(bySettingHour:minute:second:of:), we get the start of Sunday (day after Saturday) and subtract one second
-        guard let startOfNextSunday = calendar.date(byAdding: .day, value: 1, to: saturdayStart) else {
-            deliveriesLastSevenDays = []
-            return
-        }
-        let endOfWeek = startOfNextSunday.addingTimeInterval(-1)
-        
-        // Build a dictionary for each day in the week (Sunday through Saturday) with an initial count of 0.
-        var counts: [Date: Int] = [:]
+        let now      = Date()
+        let today    = calendar.startOfDay(for: now)
+        let weekday  = calendar.component(.weekday, from: now)          // 1 = Sunday
+
+        // Most‑recent Sunday
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -(weekday - 1), to: today)
+        else { deliveriesLastSevenDays = []; return }
+
+        // Build a fixed list of the 7 day starts (Sun → Sat)
+        var weekDates: [Date] = []
         for offset in 0..<7 {
             if let date = calendar.date(byAdding: .day, value: offset, to: startOfWeek) {
-                counts[date] = 0
+                weekDates.append(date)
             }
         }
-        
-        // Iterate through deliveries and count those within the week range.
+
+        // Count deliveries per start‑of‑day
+        var counts: [Date: Int] = [:]
         for delivery in deliveries {
-            let deliveryDate = calendar.startOfDay(for: delivery.date)
-            if deliveryDate >= startOfWeek && deliveryDate <= endOfWeek {
-                counts[deliveryDate, default: 0] += 1
+            let d = calendar.startOfDay(for: delivery.date)
+            if let matched = weekDates.first(where: { calendar.isDate($0, inSameDayAs: d) }) {
+                counts[matched, default: 0] += 1
             }
         }
-        
-        // Convert the dictionary into a sorted array of DeliveryGraphData.
-        let updatedData = counts.map { DeliveryGraphData(date: $0.key, count: $0.value) }
-                                 .sorted { $0.date < $1.date }
-        
-        // Animate the update.
+
+        // Convert to graph data in guaranteed order Sunday‑through‑Saturday
+        let updatedData = weekDates.map { dayStart in
+            DeliveryGraphData(date: dayStart, count: counts[dayStart, default: 0])
+        }
+
         #if !SKIP
         withAnimation(.easeInOut(duration: 1.0)) {
             deliveriesLastSevenDays = updatedData
-            animatedDeliveries = updatedData
+            animatedDeliveries      = updatedData
         }
         #else
-            deliveriesLastSevenDays = updatedData
-            animatedDeliveries = updatedData
+        deliveriesLastSevenDays = updatedData
+        animatedDeliveries      = updatedData
         #endif
     }
 }
-
 
 #Preview {
     DeliveriesThisWeekView(deliveries: .constant([]))

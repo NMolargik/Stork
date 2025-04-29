@@ -24,7 +24,7 @@ struct HospitalInfoView: View {
             }
             
             InfoRowView(
-                icon: Image("info.square.fill", bundle: .module),
+                icon: Image("info.circle.fill", bundle: .module),
                 text: hospital.hospital_type == "MISSING" ? "Info coming soon!" : hospital.hospital_type,
                 iconColor: Color.blue
             )
