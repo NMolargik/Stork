@@ -5,8 +5,8 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
-import UIKit
+import SkipFoundation
+import SkipUI
 
 #if !SKIP
 import FirebaseCore
@@ -19,12 +19,15 @@ import SkipFirebaseAuth
 #endif
 
 /// A data source responsible for interacting with the Firebase Firestore database to manage profile records.
-public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
+public actor FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     
     // MARK: - Dependencies
     
     /// The Firestore database instance.
-    private let db: Firestore
+    private let firestore: Firestore
+    
+    public static var shared = FirebaseProfileDataSource()
+
     
     /// The Firebase Auth instance
     private let auth: Auth
@@ -33,7 +36,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     
     /// Initializes the FirebaseProfileDataSource with Firestore, Auth, and Storage instances.
     public init() {
-        self.db = Firestore.firestore()
+        self.firestore = Firestore.firestore()
         self.auth = Auth.auth()
     }
     
@@ -45,12 +48,13 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Returns: The newly created `Profile` (including the `id` if needed).
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If an error occurs while creating the profile.
+    @MainActor
     public func createProfile(profile: Profile) async throws -> Profile {
         do {
             // Convert to dictionary
             let data = profile.dictionary
             // Write to Firestore at document ID = profile.id (if you're setting that manually).
-            try await db.collection("Profile").document(profile.id).setData(data)
+            try await firestore.collection("Profile").document(profile.id).setData(data)
             
             // Return the same profile (or optionally re-fetch if needed).
             return profile
@@ -68,10 +72,11 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If an error occurs while updating the profile.
     ///   - `ProfileError.notFound`: If the profile does not exist.
+    @MainActor
     public func updateProfile(profile: Profile) async throws -> Profile {
         do {
             let data = profile.dictionary
-            try await db.collection("Profile").document(profile.id).updateData(data)
+            try await firestore.collection("Profile").document(profile.id).updateData(data)
             
             return profile
         } catch {
@@ -88,9 +93,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Throws:
     ///   - `ProfileError.notFound`: If no profile with the specified ID is found.
     ///   - `ProfileError.firebaseError`: If an error occurs while fetching the profile.
+    @MainActor
     public func getProfile(byId id: String) async throws -> Profile {
         do {
-            let document = try await db.collection("Profile").document(id).getDocument()
+            let document = try await firestore.collection("Profile").document(id).getDocument()
             guard let data = document.data() else {
                 throw ProfileError.notFound("Profile with ID \(id) not found.")
             }
@@ -109,15 +115,16 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Throws:
     ///   - `ProfileError.notFound`: If there is no currently logged-in user or their profile doesn't exist.
     ///   - `ProfileError.firebaseError`: If any error occurs while fetching the profile.
+    @MainActor
     public func getCurrentProfile() async throws -> Profile {
         do {
-            guard let userId = auth.currentUser?.uid else {
+            guard let userId = await auth.currentUser?.uid else {
                 // Optionally sign out if no valid user
-                try? auth.signOut()
+                try? await auth.signOut()
                 throw ProfileError.notFound("No profile currently logged in.")
             }
 
-            let document = try await db.collection("Profile").document(userId).getDocument()
+            let document = try await firestore.collection("Profile").document(userId).getDocument()
             guard let data = document.data() else {
                 throw ProfileError.notFound("Profile with ID \(userId) not found.")
             }
@@ -148,6 +155,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Returns: An array of `Profile` objects matching the specified filters.
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If an error occurs while fetching profiles.
+    @MainActor
     public func listProfiles(
         id: String? = nil,
         firstName: String? = nil,
@@ -160,7 +168,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
         musterId: String? = nil
     ) async throws -> [Profile] {
         do {
-            var query: Query = db.collection("Profile")
+            var query: Query = await firestore.collection("Profile")
             
             // Apply optional filters
             if let id = id { query = query.whereField("id", isEqualTo: id) }
@@ -197,9 +205,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If an error occurs while deleting the profile.
     ///   - `ProfileError.notFound`: If the profile does not exist.
+    @MainActor
     public func deleteProfile(profile: Profile) async throws {
         do {
-            try await db.collection("Profile").document(profile.id).delete()
+            try await firestore.collection("Profile").document(profile.id).delete()
         } catch {
             throw ProfileError.deletionFailed("Failed to delete profile with ID \(profile.id): \(error.localizedDescription)")
         }
@@ -215,6 +224,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Returns: The newly registered user’s UID (or a `Profile`, if you prefer).
     /// - Throws:
     ///   - `ProfileError.firebaseError`: If the registration process fails in Firebase.
+    @MainActor
     public func registerWithEmail(profile: Profile, password: String) async throws -> Profile {
         do {
             let result = try await auth.createUser(withEmail: profile.email, password: password)
@@ -234,12 +244,13 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     /// - Returns: A `Profile` object representing the authenticated user.
     /// - Throws:
     ///   - `ProfileError.authenticationFailed`: If authentication or profile retrieval fails.
+    @MainActor
     public func signInWithEmail(profile: Profile, password: String) async throws -> Profile {
         do {
             let result = try await auth.signIn(withEmail: profile.email, password: password)
             let firebaseUser = result.user
             
-            let document = try await db.collection("Profile").document(firebaseUser.uid).getDocument()
+            let document = try await firestore.collection("Profile").document(firebaseUser.uid).getDocument()
             guard let data = document.data() else {
                 throw ProfileError.notFound("No profile found for user with ID \(firebaseUser.uid).")
             }
@@ -278,9 +289,10 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     ///
     /// - Throws:
     ///   - `ProfileError.signOutFailed`: If the sign-out operation fails.
+    @MainActor
     public func signOut() async throws {
         do {
-            try auth.signOut()
+            try await auth.signOut()
             print("User signed out!")
         } catch {
             throw ProfileError.signOutFailed("Error signing out: \(error.localizedDescription)")
@@ -298,6 +310,7 @@ public class FirebaseProfileDataSource: ProfileRemoteDataSourceInterface {
     ///
     /// - Parameter email: The email address to send a password reset link to.
     /// - Throws: `ProfileError.firebaseError` if the reset fails.
+    @MainActor
     public func sendPasswordReset(email: String) async throws {
         do {
             try await auth.sendPasswordReset(withEmail: email)

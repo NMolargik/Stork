@@ -11,7 +11,7 @@ import StorkModel
 struct EditProfileView: View {
     @Environment(\.dismiss) var dismiss
     
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @ObservedObject var profileViewModel: ProfileViewModel
     @ObservedObject var musterViewModel: MusterViewModel
@@ -39,10 +39,10 @@ struct EditProfileView: View {
             Form {
                 Section(header: Text("Name")) {
                     TextField("First Name", text: $firstName)
-                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        .foregroundStyle(useDarkMode ? Color.white : Color.black)
                     
                     TextField("Last Name", text: $lastName)
-                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        .foregroundStyle(useDarkMode ? Color.white : Color.black)
                 }
                 
                 Section(header: Text("Birthday")) {
@@ -51,7 +51,7 @@ struct EditProfileView: View {
                         selection: $birthday,
                         displayedComponents: .date
                     )
-                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                    .foregroundStyle(useDarkMode ? Color.white : Color.black)
                 }
                 
                 
@@ -157,6 +157,5 @@ struct EditProfileView: View {
 }
 
 #Preview {
-    EditProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()), hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
-        .environmentObject(AppStorageManager())
+    EditProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()), musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()), hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))
 }

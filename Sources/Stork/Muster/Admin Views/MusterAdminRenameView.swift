@@ -72,6 +72,6 @@ struct MusterAdminRenameView: View {
 #Preview {
     MusterAdminRenameView(
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository())
     )
 }

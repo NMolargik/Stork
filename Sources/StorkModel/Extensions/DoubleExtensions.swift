@@ -4,7 +4,7 @@
 //  Created by Nick Molargik on 11/30/24.
 //
 
-import Foundation
+import SkipFoundation
 
 /// A `Double` extension that provides utility methods for angle conversions.
 public extension Double {

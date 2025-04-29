@@ -4,7 +4,7 @@
 //  Created by Nick Molargik on 11/26/24.
 //
 
-import Foundation
+import SkipFoundation
 
 /// Represents the various roles a user can have within the Stork application.
 public enum ProfileRole: String, Codable, Hashable, CaseIterable, Identifiable, CustomStringConvertible {

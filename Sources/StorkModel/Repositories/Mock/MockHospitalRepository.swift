@@ -5,8 +5,8 @@
 //  Created by Nick Molargik on 11/20/24.
 //
 
-import Foundation
 import SkipFoundation
+import Foundation
 
 /// A mock implementation of the `HospitalRepositoryInterface` protocol for testing purposes.
 public class MockHospitalRepository: HospitalRepositoryInterface {

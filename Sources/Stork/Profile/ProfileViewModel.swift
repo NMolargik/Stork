@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/8/24.
 //
 
-import Foundation
+import SkipFoundation
 import Combine
 import SwiftUI
 import StorkModel
@@ -23,6 +23,8 @@ import SkipFirebaseAuth
 #endif
 
 public class ProfileViewModel: ObservableObject {
+    @AppStorage(StorageKeys.isOnboardingComplete) var isOnboardingComplete: Bool = false
+    
     // MARK: - Published Core State
     @Published var profile: Profile
     @Published var tempProfile: Profile
@@ -50,15 +52,10 @@ public class ProfileViewModel: ObservableObject {
     // MARK: - Dependency
     private let profileRepository: ProfileRepositoryInterface
     
-    private let appStorageManager: AppStorageManager
-
-
-    
     // MARK: - Initializer
     @MainActor
-    public init(profileRepository: ProfileRepositoryInterface, appStorageManager: AppStorageManager) {
+    public init(profileRepository: ProfileRepositoryInterface) {
         self.profileRepository = profileRepository
-        self.appStorageManager = appStorageManager
         self.profile = Profile()
         self.tempProfile = Profile()
     }
@@ -260,7 +257,8 @@ public class ProfileViewModel: ObservableObject {
             try await profileRepository.deleteProfile(profile: profile)
             
             resetTempProfile()
-            appStorageManager.isOnboardingComplete = false
+            isOnboardingComplete = false
+            
             reset()
             let _ = Purchases.sharedInstance.logOut(onError: {_ in }, onSuccess: {_ in })
             signOut()
@@ -283,7 +281,7 @@ public class ProfileViewModel: ObservableObject {
                 self.confirmPassword = ""
                 self.resetTempProfile()
                 self.reset()
-                appStorageManager.isOnboardingComplete = false
+                isOnboardingComplete = false
                 DispatchQueue.main.async {
                     do {
                         try Auth.auth().signOut()

@@ -28,38 +28,17 @@ struct BabySexDistributionView: View {
     // MARK: - Body
     var body: some View {
         VStack {
-            Spacer()
-            
             Text("6 Month Sex Distribution")
                 .fontWeight(.bold)
                 .foregroundStyle(.gray)
-                .offset(y: 25)
-                .frame(height: 10)
+                .frame(height: 40)
                 .padding(.bottom, 10)
             
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    
-                    if distributionData.isEmpty {
-                        Text("No data available")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(distributionData) { data in
-                            HStack {
-                                Circle()
-                                    .fill(data.color)
-                                    .frame(width: 10, height: 10)
-                                
-                                Text("\(data.category): \(data.count)")
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                            }
-                        }
-                    }
-                }
-                .padding()
-                
+            if distributionData.isEmpty {
+                Text("No data available")
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
+            } else {
                 GeometryReader { geometry in
                     ZStack {
                         if distributionData.isEmpty {
@@ -90,19 +69,39 @@ struct BabySexDistributionView: View {
                         }
                     }
                 }
-                .aspectRatio(1, contentMode: .fit)
-                .scaleEffect(0.9)
-                .padding()
-                .frame(width: 200)
+                .frame(maxHeight: .infinity)
+                .padding(.vertical, 5)
+                
+                HStack {
+                    ForEach(["Male", "Female", "Loss"], id: \.self) { category in
+                        // Look up existing data for this category; fall back to default color & 0 count
+                        let data = distributionData.first { $0.category == category }
+                        let count = data?.count ?? 0
+                        let color: Color = {
+                            switch category {
+                            case "Male":   return Color("storkBlue")
+                            case "Female": return Color("storkPink")
+                            default:       return Color("storkPurple")
+                            }
+                        }()
+                        
+                        Circle()
+                            .fill(data?.color ?? color)
+                            .frame(width: 10, height: 10)
+                        
+                        Text("\(category): \(count)")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                    }
+                }
             }
-            .onAppear {
-                aggregateBabySexData()
-            }
-            .onChange(of: groupedDeliveries.count) { _ in
-                aggregateBabySexData()
-            }
-            
-            Spacer()
+        }
+        .padding()
+        .onAppear {
+            aggregateBabySexData()
+        }
+        .onChange(of: groupedDeliveries.count) { _ in
+            aggregateBabySexData()
         }
     }
     
@@ -150,23 +149,28 @@ struct BabySexDistributionView: View {
     }
 }
 
-// MARK: - Preview
-struct BabySexDistributionView_Previews: PreviewProvider {
-    static var previews: some View {
-        BabySexDistributionView(groupedDeliveries: .constant([
-            // Sample grouped deliveries data
-            (key: "July '24", value: [
-                Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
-                    Baby(deliveryId: "1", nurseCatch: true, nicuStay: false, sex: .male),
-                    Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female)
-                ], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
-            ]),
-            (key: "August '24", value: [
-                Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Date(), babies: [
-                    Baby(deliveryId: "2", nurseCatch: false, nicuStay: false, sex: .male),
-                    Baby(deliveryId: "2", nurseCatch: true, nicuStay: false, sex: .loss)
-                ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
-            ])
-        ]))
-    }
+#Preview {
+    BabySexDistributionView(groupedDeliveries: .constant([
+        // Sample grouped deliveries data
+        (key: "July '24", value: [
+            Delivery(id: "1", userId: "U1", userFirstName: "Alice",
+                     hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1",
+                     date: Date(),
+                     babies: [
+                        Baby(deliveryId: "1", nurseCatch: true,  nicuStay: false, sex: .male),
+                        Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female)
+                     ],
+                     babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
+        ]),
+        (key: "August '24", value: [
+            Delivery(id: "2", userId: "U2", userFirstName: "Bob",
+                     hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2",
+                     date: Date(),
+                     babies: [
+                        Baby(deliveryId: "2", nurseCatch: false, nicuStay: false, sex: .male),
+                        Baby(deliveryId: "2", nurseCatch: true,  nicuStay: false, sex: .loss)
+                     ],
+                     babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
+        ])
+    ]))
 }

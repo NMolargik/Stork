@@ -118,35 +118,6 @@
     "Added to your muster" : {
 
     },
-    "Appearance" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apariencia"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apparence"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "外観"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "外观"
-          }
-        }
-      }
-    },
     "Are you absolutely sure you want to delete your account?" : {
 
     },
@@ -228,9 +199,6 @@
       }
     },
     "Dark Mode" : {
-
-    },
-    "Day" : {
 
     },
     "Delete" : {
@@ -362,6 +330,9 @@
     "ID: %@" : {
 
     },
+    "Internet Required" : {
+
+    },
     "Invite User" : {
 
     },
@@ -469,9 +440,6 @@
 
     },
     "Missing?" : {
-
-    },
-    "Month" : {
 
     },
     "Multiplatform Technology" : {
@@ -726,6 +694,9 @@
     "Stork Monthly" : {
 
     },
+    "Stork needs an internet connection to verify your subscription and load delivery data." : {
+
+    },
     "Submit" : {
 
     },
@@ -771,6 +742,9 @@
 
     },
     "Track Your Deliveries!" : {
+
+    },
+    "Try Again" : {
 
     },
     "Unknown Location" : {

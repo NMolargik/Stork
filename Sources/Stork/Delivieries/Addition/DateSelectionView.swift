@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct DateSelectionView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     @ObservedObject var deliveryViewModel: DeliveryViewModel
     
@@ -58,28 +58,30 @@ struct DateSelectionView: View {
                     DatePicker("Select Date", selection: $selectedDate, displayedComponents: [.date])
                         .onChange(of: selectedDate) { _ in updateDeliveryDate() } // ✅ Ensure date updates properly
                         .tint(Color("storkIndigo"))
-#if !SKIP
+                        #if !SKIP
                         .datePickerStyle(.wheel)
-#endif
+                        #endif
                         .labelsHidden()
                         .environment(\.locale, Locale(identifier: "en_US"))
-                        .padding(.top, -15)
-
+                        .frame(height: 50)
+                        .padding()
 
                     Button("Done") {
                         withAnimation {
                             showingDatePicker = false
                         }
                     }
-                    .padding(.bottom)
+                    .foregroundStyle(Color("storkBlue"))
+                    .padding()
                 }
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.2)))
                 .transition(.opacity.combined(with: .scale))
                 .padding(.horizontal, 5)
+                .padding(.top)
             }
         }
         .padding(5)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
     }
     
     private func updateDeliveryDate() {
@@ -107,5 +109,4 @@ struct DateSelectionView: View {
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         selectedDate: .constant(Date()), selectedTime: .constant(Date()), showingDatePicker: .constant(true)
     )
-    .environmentObject(AppStorageManager())
 }

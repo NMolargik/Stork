@@ -1,6 +1,6 @@
 import XCTest
 import OSLog
-import Foundation
+import SkipFoundation
 @testable import Stork
 
 let logger: Logger = Logger(subsystem: "Stork", category: "Tests")

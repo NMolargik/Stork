@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/21/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 import StorkModel
 
@@ -21,7 +21,12 @@ class HospitalViewModel: ObservableObject {
     @Published var isWorking: Bool = false
     @Published var searchQuery: String = ""
     @Published var searchEnabled: Bool = true
+    #if SKIP
+    @Published var usingLocation: Bool = false
+    #else
     @Published var usingLocation: Bool = true
+    #endif
+    
     @Published var selectedHospital: Hospital?
     @Published var isMissingHospitalSheetPresented: Bool = false
 

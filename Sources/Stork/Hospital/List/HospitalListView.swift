@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/29/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 import StorkModel
 
@@ -38,7 +38,6 @@ struct HospitalListView: View {
                 if hospitalViewModel.hospitals.isEmpty && !hospitalViewModel.isWorking {
                     NoHospitalsFoundView()
                 }
-                
                                 
                 List(hospitalViewModel.hospitals, id: \.id) { hospital in
                     if selectionMode {
@@ -64,6 +63,7 @@ struct HospitalListView: View {
             }
             .navigationTitle("Hospitals")
             .toolbar {
+                #if !SKIP // No location searching on Android
                 ToolbarItemGroup(placement: .navigationBarLeading) {
                     if hospitalViewModel.usingLocation {
                         locationSearchIndicator
@@ -71,6 +71,7 @@ struct HospitalListView: View {
                         useLocationButton
                     }
                 }
+                #endif
                 
                 ToolbarItem {
                     missingHospitalButton
@@ -147,7 +148,7 @@ struct HospitalListView: View {
 #Preview {
     HospitalListView(
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         onSelection: { _ in }
     )
     .environmentObject(AppStateManager.shared)

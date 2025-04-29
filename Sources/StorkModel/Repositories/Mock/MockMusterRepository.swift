@@ -5,6 +5,7 @@
 //  Created by Nick Molargik on 11/20/24.
 //
 
+import SkipFoundation
 import Foundation
 
 /// A mock implementation of the `MusterRepositoryInterface` protocol for testing purposes.

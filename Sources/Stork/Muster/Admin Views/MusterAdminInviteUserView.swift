@@ -12,7 +12,8 @@ struct MusterAdminInviteUserView: View {
     @Environment(\.dismiss) private var dismiss
 
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -40,7 +41,7 @@ struct MusterAdminInviteUserView: View {
                             .padding()
                         
                         Text("No users found with that last name")
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                         
                             .multilineTextAlignment(.center)
                             .font(.title3)
@@ -186,8 +187,7 @@ struct MusterAdminInviteUserView: View {
 #Preview {
     MusterAdminInviteUserView(
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository())
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

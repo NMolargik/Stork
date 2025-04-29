@@ -5,27 +5,37 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
-#if SKIP
-import SkipFirebaseFirestore
-#else
+import SkipFoundation
+
+#if !SKIP
+import FirebaseCore
 import FirebaseFirestore
+#else
+import SkipFirebaseCore
+import SkipFirebaseFirestore
 #endif
+
+struct SendableDictionary: @unchecked Sendable {
+    let dictionary: [String: Any]
+}
 
 /// A concrete implementation of the `HospitalRemoteDataSourceInterface` protocol.
 /// Handles interactions with Firebase Firestore for hospital data.
-public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
+public actor FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     
     // MARK: - Properties
 
     /// Firestore database instance for interacting with Firebase.
-    private let db: Firestore
+    private let firestore: Firestore
+    
+    public static var shared = FirebaseHospitalDatasource()
+
 
     // MARK: - Initializer
 
     /// Initializes the data source with a Firestore instance.
     public init() {
-        self.db = Firestore.firestore()
+        self.firestore = Firestore.firestore()
     }
 
     // MARK: - Public Methods
@@ -35,7 +45,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// - Parameter hospital: The `Hospital` object to create.
     /// - Returns: The newly created `Hospital`, updated with the newly generated Firestore `id`.
     /// - Throws: `HospitalError.creationFailed` if creation fails.
-    public func createHospital(hospital: Hospital) async throws -> Hospital {
+    @MainActor public func createHospital(hospital: Hospital) async throws -> Hospital {
         do {
             let data: [String: Any] = [
                 "facility_name": hospital.facility_name,
@@ -52,7 +62,7 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
                 "deliveryCount": hospital.deliveryCount,
                 "babyCount": hospital.babyCount
             ]
-            let docRef = try await db.collection("Hospital").addDocument(data: data)
+            let docRef = try await firestore.collection("Hospital").addDocument(data: data)
             
             // Create a new Hospital that includes the Firestore-generated document ID.
             var newHospital = hospital
@@ -71,18 +81,21 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     ///   - additionalBabyCount: The number by which to increment `babyCount`.
     /// - Returns: The updated `Hospital` object with local counts incremented.
     /// - Throws: `HospitalError.updateFailed` if the Firestore update operation fails.
-    public func updateHospitalStats(
+    @MainActor public func updateHospitalStats(
         hospital: Hospital,
         additionalDeliveryCount: Int,
         additionalBabyCount: Int
     ) async throws -> Hospital {
         do {
             // Atomically increment the fields in Firestore
-            let docRef = db.collection("Hospital").document(hospital.id)
-            try await docRef.updateData([
+            let docRef = await firestore.collection("Hospital").document(hospital.id)
+
+            let updateValues: [String: Any] = [
                 "deliveryCount": FieldValue.increment(Int64(additionalDeliveryCount)),
                 "babyCount": FieldValue.increment(Int64(additionalBabyCount))
-            ])
+            ]
+            let safeUpdateValues = SendableDictionary(dictionary: updateValues)
+            try await docRef.updateData(safeUpdateValues.dictionary)
             
             // If Firestore didn't throw an error, safely increment local stats
             var updatedHospital = hospital
@@ -101,9 +114,9 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// - Parameter id: The Firestore document ID for the hospital.
     /// - Returns: A `Hospital` object if found.
     /// - Throws: `HospitalError.notFound` if the hospital document doesn't exist.
-    public func getHospital(byId id: String) async throws -> Hospital {
+    @MainActor public func getHospital(byId id: String) async throws -> Hospital {
         do {
-            let document = try await db.collection("Hospital").document(id).getDocument()
+            let document = try await firestore.collection("Hospital").document(id).getDocument()
             guard let data = document.data() else {
                 throw HospitalError.notFound("Hospital with ID \(id) not found.")
             }
@@ -124,32 +137,36 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     ///   - state: The state to filter hospitals by.
     /// - Returns: A list of matching `Hospital` objects.
     /// - Throws: `HospitalError.notFound` if no hospitals are found or Firestore errors.
-    public func listHospitals(state: String) async throws -> [Hospital] {
+    @MainActor public func listHospitals(state: String) async throws -> [Hospital] {
         do {
             // Automatically uppercase both city and state (if your data is stored in uppercase).
             let uppercasedState = state.uppercased()
             
-            let query = db.collection("Hospital")
+            let query = await firestore.collection("Hospital")
                 .whereField("state", isEqualTo: uppercasedState)
             
             let snapshot = try await query.getDocuments()
             
-            return try snapshot.documents.map { document in
+            var hospitals: [Hospital] = []
+            for document in snapshot.documents {
                 var data = document.data()
                 data["id"] = document.documentID  // Ensure 'id' field is set
-                return try mapDocumentToHospital(data: data)
+                let hospital = try mapDocumentToHospital(data: data)
+                hospitals.append(hospital)
             }
+            return hospitals
         } catch {
             throw HospitalError.notFound("Failed to fetch hospitals in \(state): \(error.localizedDescription)")
         }
     }
 
-    @MainActor
     /// Searches for hospitals by a partial name match.
     ///
     /// - Parameter partialName: A substring (case-insensitive) to filter hospital names by.
     /// - Returns: A list of matching `Hospital` objects.
     /// - Throws: `HospitalError.notFound` if none are found or Firestore errors.
+    ///
+    @MainActor
     public func listHospitalsByPartialName(partialName: String?) async throws -> [Hospital] {
         guard let partialName = partialName, !partialName.isEmpty else {
             throw HospitalError.notFound("Invalid search text.")
@@ -159,17 +176,19 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
         let normalizedPartialName = partialName.uppercased()
 
         do {
-            let query = db.collection("Hospital")
+            let query = await firestore.collection("Hospital")
                 .whereField("facility_name", isGreaterThanOrEqualTo: normalizedPartialName)
                 .whereField("facility_name", isLessThan: normalizedPartialName + "\u{F8FF}")
                 .order(by: "facility_name")
 
             let snapshot = try await query.getDocuments()
 
-            var hospitals = try snapshot.documents.map { document in
+            var hospitals: [Hospital] = []
+            for document in snapshot.documents {
                 var data = document.data()
                 data["id"] = document.documentID  // Ensure 'id' field is set
-                return try mapDocumentToHospital(data: data)
+                let hospital = try mapDocumentToHospital(data: data)
+                hospitals.append(hospital)
             }
             
             hospitals.sort { $0.facility_name < $1.facility_name }
@@ -190,15 +209,18 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// - Parameter id: The hospital's Firestore document ID.
     /// - Returns: The updated `Hospital`.
     /// - Throws: `HospitalError.updateFailed` if increment operation or re-fetch fails.
+    @MainActor
     public func incrementDeliveryCount(forHospitalId id: String) async throws -> Hospital {
         do {
-            // Atomically increment "deliveryCount" by 1
-            try await db.collection("Hospital").document(id).updateData([
+
+            let updateValues: [String: Any] = [
                 "deliveryCount": FieldValue.increment(Int64(1))
-            ])
+            ]
+            let safeUpdateValues = SendableDictionary(dictionary: updateValues)
+            try await firestore.collection("Hospital").document(id).updateData(safeUpdateValues.dictionary)
             
             // Fetch updated hospital
-            let doc = try await db.collection("Hospital").document(id).getDocument()
+            let doc = try await firestore.collection("Hospital").document(id).getDocument()
             guard let data = doc.data() else {
                 throw HospitalError.notFound("Hospital with ID \(id) not found after increment.")
             }
@@ -218,15 +240,18 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     ///   - id: The hospital's Firestore document ID.
     /// - Returns: The updated `Hospital`.
     /// - Throws: `HospitalError.updateFailed` if increment operation or re-fetch fails.
+    @MainActor
     public func incrementBabyCount(babyCount: Int, forHospitalId id: String) async throws -> Hospital {
         do {
-            // Atomically increment "babyCount" by the given value
-            try await db.collection("Hospital").document(id).updateData([
+
+            let updateValues: [String: Any] = [
                 "babyCount": FieldValue.increment(Int64(babyCount))
-            ])
+            ]
+            let safeUpdateValues = SendableDictionary(dictionary: updateValues)
+            try await firestore.collection("Hospital").document(id).updateData(safeUpdateValues.dictionary)
             
             // Fetch updated hospital
-            let doc = try await db.collection("Hospital").document(id).getDocument()
+            let doc = try await firestore.collection("Hospital").document(id).getDocument()
             guard let data = doc.data() else {
                 throw HospitalError.notFound("Hospital with ID \(id) not found after baby count increment.")
             }
@@ -243,9 +268,10 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     ///
     /// - Parameter id: The Firestore document ID of the hospital to delete.
     /// - Throws: `HospitalError.deletionFailed` if the delete operation fails.
+    @MainActor
     public func deleteHospital(byId id: String) async throws {
         do {
-            try await db.collection("Hospital").document(id).delete()
+            try await firestore.collection("Hospital").document(id).delete()
         } catch {
             throw HospitalError.deletionFailed("Failed to delete hospital with ID \(id): \(error.localizedDescription)")
         }
@@ -256,24 +282,54 @@ public class FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     /// Maps Firestore document data to a `Hospital` object.
     ///
     /// **Important**: Ensure `data["id"]` is set before calling this method, or it will throw an error.
+    @MainActor
     private func mapDocumentToHospital(data: [String: Any]) throws -> Hospital {
-        guard
-            let id = data["id"] as? String,
-            let facility_name = data["facility_name"] as? String,
-            let address = data["address"] as? String,
-            let citytown = data["citytown"] as? String,
-            let state = data["state"] as? String,
-            let zip_code = data["zip_code"] as? String,
-            let countyparish = data["countyparish"] as? String,
-            let telephone_number = data["telephone_number"] as? String,
-            let hospital_type = data["hospital_type"] as? String,
-            let hospital_ownership = data["hospital_ownership"] as? String,
-            let emergency_services = data["emergency_services"] as? Bool,
-            let meets_criteria_for_birthing_friendly_designation = data["meets_criteria_for_birthing_friendly_designation"] as? Bool,
-            let deliveryCount = data["deliveryCount"] as? Int,
-            let babyCount = data["babyCount"] as? Int
-        else {
-            throw HospitalError.unknown("Failed to map hospital data.")
+        // Require a valid id and facility_name, otherwise the hospital wouldn't make sense.
+        guard let id = data["id"] as? String else {
+            throw HospitalError.unknown("Failed to map hospital data: Missing id.")
+        }
+        guard let facility_name = data["facility_name"] as? String else {
+            throw HospitalError.unknown("Failed to map hospital data: Missing facility_name.")
+        }
+        
+        // Use default values for other fields if they're missing.
+        let address = data["address"] as? String ?? ""
+        let citytown = data["citytown"] as? String ?? ""
+        let state = data["state"] as? String ?? ""
+        let zip_code = data["zip_code"] as? String ?? ""
+        let countyparish = data["countyparish"] as? String ?? ""
+        let telephone_number = data["telephone_number"] as? String ?? ""
+        let hospital_type = data["hospital_type"] as? String ?? ""
+        let hospital_ownership = data["hospital_ownership"] as? String ?? ""
+        let emergency_services = data["emergency_services"] as? Bool ?? false
+        let meets_criteria_for_birthing_friendly_designation = data["meets_criteria_for_birthing_friendly_designation"] as? Bool ?? false
+        
+        // Robustly parse deliveryCount
+        var deliveryCount: Int = 0
+        if let dcNumber = data["deliveryCount"] as? NSNumber {
+            deliveryCount = dcNumber.intValue
+        } else if let dcInt = data["deliveryCount"] as? Int {
+            deliveryCount = dcInt
+        } else if let dcDouble = data["deliveryCount"] as? Double {
+            deliveryCount = Int(dcDouble)
+        } else if let dcString = data["deliveryCount"] as? String, let dcFromString = Int(dcString) {
+            deliveryCount = dcFromString
+        } else {
+            throw HospitalError.unknown("Failed to map hospital data for deliveryCount: " + String(describing: data["deliveryCount"]))
+        }
+        
+        // Robustly parse babyCount
+        var babyCount: Int = 0
+        if let bcNumber = data["babyCount"] as? NSNumber {
+            babyCount = bcNumber.intValue
+        } else if let bcInt = data["babyCount"] as? Int {
+            babyCount = bcInt
+        } else if let bcDouble = data["babyCount"] as? Double {
+            babyCount = Int(bcDouble)
+        } else if let bcString = data["babyCount"] as? String, let bcFromString = Int(bcString) {
+            babyCount = bcFromString
+        } else {
+            throw HospitalError.unknown("Failed to map hospital data for babyCount: " + String(describing: data["babyCount"]))
         }
         
         return Hospital(

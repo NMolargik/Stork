@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct JarView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     /// The deliveries coming in from elsewhere in the app (optional for test mode)
     @Binding var deliveries: [Delivery]?
@@ -37,16 +37,16 @@ struct JarView: View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
                 Rectangle()
-                    .foregroundStyle(appStorageManager.useDarkMode ? .black : .white)
+                    .foregroundStyle(useDarkMode ? .black : .white)
                     .cornerRadius(20)
-                    .shadow(color: appStorageManager.useDarkMode ? .white : .black, radius: 2)
+                    .shadow(color: useDarkMode ? .white : .black, radius: 2)
 
                 Text(headerText)
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundStyle(.gray)
                     .padding(8)
-                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                    .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.top, 20)
 
                 ZStack {

@@ -6,7 +6,7 @@
 //
 
 
-import Foundation
+import SkipFoundation
 import Combine
 import SkipModel
 
@@ -136,8 +136,6 @@ public class LocationProvider: NSObject, LocationProviderInterface {
         }
         let city = placemark.locality // City or town name
         let state = placemark.administrativeArea // Full state name
-        
-        return (city, state)
     #else
         let context = ProcessInfo.processInfo.androidContext
         guard let (city, state) = fetchCityAndState(context, location.latitude, location.longitude) else {
@@ -147,8 +145,9 @@ public class LocationProvider: NSObject, LocationProviderInterface {
                 userInfo: [NSLocalizedDescriptionKey: "Could not fetch city and state in SKIP context."]
             )
         }
-        return (city, state)
     #endif
+        print("City: \(city), State: \(state)")
+        return (city, state)
 
     }
     

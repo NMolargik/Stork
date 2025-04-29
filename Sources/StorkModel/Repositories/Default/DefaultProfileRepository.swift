@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/4/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 
 /// A repository implementation for managing profile-related operations.

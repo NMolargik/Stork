@@ -11,7 +11,6 @@ import StorkModel
 @MainActor
 struct HomeBodyView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
     
     @Binding var deliveries: [Delivery]
     var startNewDelivery: @MainActor () -> Void
@@ -79,5 +78,4 @@ struct HomeBodyView: View {
 #Preview {
     HomeBodyView(deliveries: .constant([]), startNewDelivery: { })
         .environmentObject(AppStateManager.shared)
-        .environmentObject(AppStorageManager())
 }

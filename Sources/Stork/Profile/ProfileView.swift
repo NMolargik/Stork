@@ -12,7 +12,8 @@ struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @ObservedObject var profileViewModel: ProfileViewModel
 
@@ -20,7 +21,7 @@ struct ProfileView: View {
         NavigationStack {
             ScrollView {
                 CustomTextfieldView(text: $profileViewModel.tempProfile.firstName, hintText: "First Name", icon: Image("1.square", bundle: .module), isSecure: false, iconColor: Color.green)
-                    .padding(.top)
+                    .padding(.vertical)
                 
                 if let firstNameError = profileViewModel.firstNameError {
                     Text(firstNameError)
@@ -31,7 +32,10 @@ struct ProfileView: View {
                         .padding(.leading)
                 }
                 
+                
                 CustomTextfieldView(text: $profileViewModel.tempProfile.lastName, hintText: "Last Name", icon: Image("2.square", bundle: .module), isSecure: false, iconColor: Color.green)
+                    .padding(.vertical)
+
                 
                 if let lastNameError = profileViewModel.lastNameError {
                     Text(lastNameError)
@@ -45,7 +49,9 @@ struct ProfileView: View {
                 
                 VStack {
                     Text("Select Your Birthday")
-                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        .foregroundStyle(useDarkMode ? Color.white : Color.black)
+                        .padding(.bottom)
+
                     
                     DatePicker("Select Birthday", selection: $profileViewModel.tempProfile.birthday, displayedComponents: [.date])
                         .tint(Color("storkIndigo"))
@@ -58,7 +64,9 @@ struct ProfileView: View {
                         .padding(.leading)
                     
                 }
-                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                .padding(8)
+                .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
+                .padding(.vertical)
                 
                 if let birthdayError = profileViewModel.birthdayError {
                     Text(birthdayError)
@@ -71,7 +79,8 @@ struct ProfileView: View {
                 Divider()
                 
                 Text("Select Your Role")
-                    .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                    .foregroundStyle(useDarkMode ? Color.white : Color.black)
+                    .padding(.top)
                 
                 Picker("Role", selection: $profileViewModel.tempProfile.role) {
                     ForEach(ProfileRole.allCases, id: \.self) { role in
@@ -102,7 +111,7 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Editing Profile")
-                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        .foregroundStyle(useDarkMode ? Color.white : Color.black)
                         .font(.body)
                         .fontWeight(.bold)
                 }
@@ -150,7 +159,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()))
+    ProfileView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()))
         .environmentObject(AppStateManager.shared)
-        .environmentObject(AppStorageManager())
 }

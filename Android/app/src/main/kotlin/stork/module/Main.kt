@@ -4,8 +4,6 @@ import skip.lib.*
 import skip.model.*
 import skip.foundation.*
 import skip.ui.*
-import skip.firebase.core.FirebaseApp
-
 import android.app.Application
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
@@ -17,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
+import skip.firebase.core.FirebaseApp
+
 
 internal val logger: SkipLogger = SkipLogger(subsystem = "stork.module", category = "Stork")
 

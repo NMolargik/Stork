@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct EmptyStateView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
-
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
+    
     var body: some View {
         VStack {
             Spacer()
@@ -33,8 +33,8 @@ struct EmptyStateView: View {
                 .multilineTextAlignment(.center)
                 .font(.body)
                 .fontWeight(.semibold)
-                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
-                .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                .foregroundStyle(useDarkMode ? Color.white : Color.black)
+                .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
 
             Spacer(minLength: 200)
 
@@ -52,5 +52,4 @@ struct EmptyStateView: View {
 
 #Preview {
     EmptyStateView()
-        .environmentObject(AppStorageManager())
 }

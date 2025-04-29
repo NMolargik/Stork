@@ -1,16 +1,16 @@
 import java.util.Properties
 
-dependencies {
-    implementation("com.google.maps.android:maps-compose:2.11.0")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-}
-
 plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.android.application)
     id("skip-build-plugin")
     id("com.google.gms.google-services") version "4.4.1" apply true
+}
+
+dependencies {
+    implementation("com.google.maps.android:maps-compose:2.11.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
 }
 
 skip {
@@ -30,6 +30,8 @@ android {
         jniLibs {
             keepDebugSymbols.add("**/*.so")
             pickFirsts.add("**/*.so")
+            // this option will compress JNI .so files
+            useLegacyPackaging = true
         }
     }
 
@@ -44,6 +46,10 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    lintOptions {
+        disable.add("Instantiatable")
     }
 
     // default signing configuration tries to load from keystore.properties

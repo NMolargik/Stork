@@ -4,7 +4,7 @@
 //  Created by Nick Molargik on 11/26/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 
 /// Represents the sex of a baby within the Stork application.

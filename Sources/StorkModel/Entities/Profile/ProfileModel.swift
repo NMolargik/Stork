@@ -4,6 +4,7 @@
 //  Created by Nick Molargik on 11/26/24.
 //
 
+import SkipFoundation
 import Foundation
 
 /// Represents a user profile within the Stork application.

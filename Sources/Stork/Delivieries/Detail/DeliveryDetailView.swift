@@ -8,7 +8,8 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryDetailView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
+    @AppStorage(StorageKeys.useMetric) var useMetric: Bool = false
 
     @Binding var delivery: Delivery
 
@@ -21,10 +22,10 @@ struct DeliveryDetailView: View {
                         .fontWeight(.bold)
                         .padding(.leading)
                         .accessibilityLabel("Delivery Date: \(delivery.date.formatted(date: .omitted, time: .shortened))")
-                        .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                        .foregroundStyle(useDarkMode ? Color.white : Color.black)
 
                     ForEach(delivery.babies, id: \.id) { baby in
-                        BabyInfoCard(baby: baby, useMetric: appStorageManager.useMetric)
+                        BabyInfoCard(baby: baby, useMetric: useMetric)
                     }
                     
                     DeliveryDetailListView(delivery: delivery)
@@ -50,5 +51,4 @@ struct DeliveryDetailView: View {
 
 #Preview {
     DeliveryDetailView(delivery: .constant(Delivery(sample: true)))
-        .environmentObject(AppStorageManager())
 }

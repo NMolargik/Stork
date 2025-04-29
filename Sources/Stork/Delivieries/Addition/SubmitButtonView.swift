@@ -72,7 +72,7 @@ struct SubmitButtonView: View {
 
 #Preview {
     SubmitButtonView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
         dailyResetUtility: DailyResetUtility()

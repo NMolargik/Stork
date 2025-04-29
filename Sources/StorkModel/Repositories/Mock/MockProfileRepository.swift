@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/20/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 
 /// A mock implementation of the `ProfileRepositoryInterface` protocol for testing purposes.

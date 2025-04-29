@@ -43,6 +43,6 @@ struct MusterAdminAssignAdminView: View {
 #Preview {
     MusterAdminAssignAdminView(
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository())
     )
 }
