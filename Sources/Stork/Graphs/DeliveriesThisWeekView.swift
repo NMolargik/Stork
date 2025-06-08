@@ -5,10 +5,8 @@
 //  Created by Nick Molargik on 12/31/24.
 //
 
-#if !SKIP
 import SwiftUI
 import StorkModel
-import Charts
 
 // MARK: - DeliveryData Model
 struct DeliveryGraphData: Identifiable {
@@ -34,131 +32,175 @@ struct DeliveriesThisWeekView: View {
     }()
     
     var body: some View {
-        VStack {
-            if deliveriesLastSevenDays.isEmpty {
-                Text("No delivery data available for the past seven days.")
-                    .font(.headline)
-                    .foregroundStyle(.gray)
-                    .multilineTextAlignment(.center)
-                    .padding()
-            } else {
-                Text("Deliveries This Week")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.gray)
-                    .offset(y: 25)
-                    .frame(height: 10)
-                    .padding(.bottom, 10)
-                
-                // MARK: - Line Chart
-                Chart(animatedDeliveries) { dailyDelivery in
-                    AreaMark(
-                        x: .value("Day", dailyDelivery.date, unit: .day),
-                        y: .value("Deliveries", dailyDelivery.count)
-                    )
-                    .interpolationMethod(.linear)
-                    .foregroundStyle(LinearGradient(colors: [Color("storkIndigo"), .clear], startPoint: .top, endPoint: .bottom))
-                    
-                    LineMark(
-                        x: .value("Day", dailyDelivery.date, unit: .day),
-                        y: .value("Deliveries", dailyDelivery.count)
-                    )
-                    .interpolationMethod(.linear)
-                    .foregroundStyle(Color("storkIndigo"))
-                    
-                    PointMark(
-                        x: .value("Day", dailyDelivery.date, unit: .day),
-                        y: .value("Deliveries", dailyDelivery.count)
-                    )
-                    .foregroundStyle(Color("storkOrange"))
-                    .symbolSize(100)
-                    .annotation(position: .top) {
-                        Text("\(dailyDelivery.count)")
-                            .fontWeight(.bold)
-                            .font(.caption)
-                            .foregroundStyle(.primary)
-                    }
-                }
-                .chartYAxis(.hidden)
-                .chartXAxis {
-                    AxisMarks(values: .stride(by: .day, count: 1)) { date in
-                        AxisGridLine()
-                        AxisTick()
-                        AxisValueLabel(format: .dateTime.weekday(.short))
-                    }
-                }
-                .padding()
-            }
+        GeometryReader { parentGeo in
+            let chartHeight = parentGeo.size.height * 2/3
             
-            Spacer()
-        }
-        .onAppear {
-            aggregateDeliveries()
-        }
-        .onChange(of: deliveries) { _ in
-            aggregateDeliveries()
+            VStack {
+                if deliveriesLastSevenDays.isEmpty {
+                    Text("No delivery data available for the past seven days.")
+                        .font(.headline)
+                        .foregroundStyle(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                } else {
+                    Text("Deliveries This Week")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.gray)
+                        .padding(.bottom, 10)
+                    
+                    Spacer()
+                    
+                    // MARK: - Hand‑drawn line chart (no Charts framework)
+                    GeometryReader { geo in
+                        let w  = geo.size.width
+                        let h  = geo.size.height
+                        let maxVal = (animatedDeliveries.map(\.count).max() ?? 1)
+                        let stepX  = w / CGFloat(max(animatedDeliveries.count - 1, 1))
+                        
+                        // Vertical grid lines
+                        ForEach(0 ..< animatedDeliveries.count, id: \.self) { idx in
+                            let x = stepX * CGFloat(idx)
+                            Path { p in
+                                p.move(to: .init(x: x, y: 0))
+                                p.addLine(to: .init(x: x, y: h))
+                            }
+                            .stroke(Color.gray.opacity(0.3),
+                                    style: StrokeStyle(lineWidth: 1, dash: [4.0, 4.0]))
+                        }
+                        
+                        // Area under curve
+                        Path { p in
+                            guard let first = animatedDeliveries.first else { return }
+                            let firstY = h - (CGFloat(first.count) / CGFloat(maxVal)) * h
+                            p.move(to: .init(x: 0, y: h))
+                            p.addLine(to: .init(x: 0, y: firstY))
+                            
+                            for (idx, point) in animatedDeliveries.enumerated() {
+                                let x = stepX * CGFloat(idx)
+                                let y = h - (CGFloat(point.count) / CGFloat(maxVal)) * h
+                                p.addLine(to: .init(x: x, y: y))
+                            }
+                            p.addLine(to: .init(x: w, y: h))
+                            p.closeSubpath()
+                        }
+                        .fill(
+                            LinearGradient(
+                                colors: [Color("storkIndigo").opacity(0.5), .clear],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        
+                        // Stroke line
+                        Path { p in
+                            guard let first = animatedDeliveries.first else { return }
+                            let firstY = h - (CGFloat(first.count) / CGFloat(maxVal)) * h
+                            p.move(to: .init(x: 0, y: firstY))
+                            
+                            for (idx, point) in animatedDeliveries.enumerated() {
+                                let x = stepX * CGFloat(idx)
+                                let y = h - (CGFloat(point.count) / CGFloat(maxVal)) * h
+                                p.addLine(to: .init(x: x, y: y))
+                            }
+                        }
+                        .stroke(Color("storkIndigo"), lineWidth: 2)
+                        
+                        // Points + labels
+                        ForEach(Array(animatedDeliveries.enumerated()).filter { $0.element.count > 0 },
+                                id: \.element.id) { idx, point in
+                            let x = stepX * CGFloat(idx)
+                            let y = h - (CGFloat(point.count) / CGFloat(maxVal)) * h
+                            Circle()
+                                .fill(Color("storkOrange"))
+                                .frame(width: 8, height: 8)
+                                .position(x: x, y: y)
+                            
+                            Text("\(point.count)")
+                                .font(.caption.bold())
+                                .foregroundColor(.primary)
+                                .position(x: x, y: y - 14)
+                        }
+                    }
+                    .frame(height: chartHeight)
+                    .padding(.horizontal)
+                    
+                    // X‑axis weekday labels (absolute positioning for Skip/Compose)
+                    GeometryReader { geo in
+                        let w  = geo.size.width
+                        let stepX = w / CGFloat(max(animatedDeliveries.count - 1, 1))
+
+                        // Enumerate indices directly so each weekday appears exactly once
+                        ForEach(Array(animatedDeliveries.enumerated()), id: \.offset) { idx, point in
+                            let xPos = stepX * CGFloat(idx)
+                            Text(dateFormatter.string(from: point.date))
+                                .font(.caption)
+                                .foregroundColor(.primary)
+                                .position(x: xPos, y: 16)   // center of a 24‑pt tall area
+                        }
+                    }
+                    .frame(height: 24)
+                    #if SKIP
+                    .padding(.top, 20)          // extra gap below plot when transpiled
+                    #endif
+                }
+                
+                Spacer()
+            }
+            .padding()
+            .onAppear {
+                aggregateDeliveries()
+            }
+            .onChange(of: deliveries) { _ in
+                aggregateDeliveries()
+            }
         }
     }
     
     private func aggregateDeliveries() {
         let calendar = Calendar.current
-        let now = Date()
-        let today = calendar.startOfDay(for: now)
-        let weekday = calendar.component(.weekday, from: now)
-        
-        // Determine the start of the week (most recent Sunday)
-        let daysSinceSunday = weekday - 1
-        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysSinceSunday, to: today) else {
-            deliveriesLastSevenDays = []
-            return
-        }
-        
-        // Compute the upcoming Saturday (6 days after Sunday) and get its end-of-day
-        guard let saturday = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
-            deliveriesLastSevenDays = []
-            return
-        }
-        let saturdayStart = calendar.startOfDay(for: saturday)
-        // Instead of using date(bySettingHour:minute:second:of:), we get the start of Sunday (day after Saturday) and subtract one second
-        guard let startOfNextSunday = calendar.date(byAdding: .day, value: 1, to: saturdayStart) else {
-            deliveriesLastSevenDays = []
-            return
-        }
-        let endOfWeek = startOfNextSunday.addingTimeInterval(-1)
-        
-        // Build a dictionary for each day in the week (Sunday through Saturday) with an initial count of 0.
-        var counts: [Date: Int] = [:]
+        let now      = Date()
+        let today    = calendar.startOfDay(for: now)
+        let weekday  = calendar.component(.weekday, from: now)          // 1 = Sunday
+
+        // Most‑recent Sunday
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -(weekday - 1), to: today)
+        else { deliveriesLastSevenDays = []; return }
+
+        // Build a fixed list of the 7 day starts (Sun → Sat)
+        var weekDates: [Date] = []
         for offset in 0..<7 {
             if let date = calendar.date(byAdding: .day, value: offset, to: startOfWeek) {
-                counts[date] = 0
+                weekDates.append(date)
             }
         }
-        
-        // Iterate through deliveries and count those within the week range.
+
+        // Count deliveries per start‑of‑day
+        var counts: [Date: Int] = [:]
         for delivery in deliveries {
-            let deliveryDate = calendar.startOfDay(for: delivery.date)
-            if deliveryDate >= startOfWeek && deliveryDate <= endOfWeek {
-                counts[deliveryDate, default: 0] += 1
+            let d = calendar.startOfDay(for: delivery.date)
+            if let matched = weekDates.first(where: { calendar.isDate($0, inSameDayAs: d) }) {
+                counts[matched, default: 0] += 1
             }
         }
-        
-        // Convert the dictionary into a sorted array of DeliveryGraphData.
-        let updatedData = counts.map { DeliveryGraphData(date: $0.key, count: $0.value) }
-                                 .sorted { $0.date < $1.date }
-        
-        // Animate the update.
+
+        // Convert to graph data in guaranteed order Sunday‑through‑Saturday
+        let updatedData = weekDates.map { dayStart in
+            DeliveryGraphData(date: dayStart, count: counts[dayStart, default: 0])
+        }
+
+        #if !SKIP
         withAnimation(.easeInOut(duration: 1.0)) {
             deliveriesLastSevenDays = updatedData
-            animatedDeliveries = updatedData
+            animatedDeliveries      = updatedData
         }
+        #else
+        deliveriesLastSevenDays = updatedData
+        animatedDeliveries      = updatedData
+        #endif
     }
 }
 
-// MARK: - Preview
-struct DeliveriesThisWeekView_Previews: PreviewProvider {
-    static var previews: some View {
-        DeliveriesThisWeekView(deliveries: .constant([]))
-            .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
-    }
+#Preview {
+    DeliveriesThisWeekView(deliveries: .constant([]))
+        .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
 }
-
-#endif

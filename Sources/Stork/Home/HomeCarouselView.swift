@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HomeCarouselView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     @ObservedObject var deliveryViewModel: DeliveryViewModel
     
@@ -27,29 +27,27 @@ struct HomeCarouselView: View {
     var body: some View {
         VStack {
             TabView(selection: $selectedIndex) {
-                #if !SKIP
                 DeliveriesThisWeekView(deliveries: $deliveryViewModel.deliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                    .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(0)
                 
                 DeliveriesLastSixMonthsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                    .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(1)
-                #endif
                 
                 BabySexDistributionView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                    .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(2)
                 
                 TotalWeightAndLengthStatsView(groupedDeliveries: $deliveryViewModel.groupedDeliveries)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                    .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
                     .padding(.vertical, 5)
                     .tag(3)
             }
@@ -68,7 +66,6 @@ struct HomeCarouselView: View {
             }
             .padding(.top, 5)
         }
-        .ignoresSafeArea(edges: .bottom)
     }
 }
 
@@ -76,5 +73,4 @@ struct HomeCarouselView: View {
     HomeCarouselView(
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository())
     )
-    .environmentObject(AppStorageManager())
 }

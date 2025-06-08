@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct SectionHeaderView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
+    
     let title: String
 
     var body: some View {
         Text(title)
-            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+            .foregroundStyle(useDarkMode ? Color.white : Color.black)
             .font(.title)
             .foregroundStyle(.primary)
             .fontWeight(.bold)
@@ -24,5 +25,4 @@ struct SectionHeaderView: View {
 
 #Preview {
     SectionHeaderView(title: "DECEMBER 2025")
-        .environmentObject(AppStorageManager())
 }

@@ -11,7 +11,6 @@ import StorkModel
 struct SettingsTabView: View {
     
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
 
     @ObservedObject var profileViewModel: ProfileViewModel
     @ObservedObject var musterViewModel: MusterViewModel
@@ -34,16 +33,24 @@ struct SettingsTabView: View {
     var body: some View {
         NavigationStack {
             List {
-                ProfileManagementView(
-                    showingProfileEditor: $showingProfileEditor,
-                    showingDeleteConfirmation: $showingDeleteConfirmation
-                )
+                Section(header: Text("Profile")) {
+                    ProfileManagementView(
+                        showingProfileEditor: $showingProfileEditor,
+                        showingDeleteConfirmation: $showingDeleteConfirmation
+                    )
+                }
+                
+                Section(header: Text("Preferences")) {
+                    PreferencesView()
+                }
 
-                PreferencesView()
-
-                AboutView(appInfo: appInfo)
+                Section(header: Text("Stork")) {
+                    AboutView(appInfo: appInfo)
+                }
+    
             }
             .navigationTitle("Settings")
+            .listStyle(.plain)
             .toolbar {
                 ToolbarItem {
                     Button(action: signOut) {
@@ -113,11 +120,10 @@ struct SettingsTabView: View {
 // MARK: - Preview
 #Preview {
     SettingsTabView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider())
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HospitalInfoRow: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     let icon: String
     let text: String
@@ -24,7 +24,7 @@ struct HospitalInfoRow: View {
 
             Text(text)
                 .fontWeight(.semibold)
-                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                .foregroundStyle(useDarkMode ? Color.white : Color.black)
                 .lineLimit(nil) // Allow unlimited lines
                 .multilineTextAlignment(.leading) // Ensure text aligns properly
             #if !SKIP
@@ -36,5 +36,4 @@ struct HospitalInfoRow: View {
 
 #Preview {
     HospitalInfoRow(icon: "figure.child", text: "Child Info", color: Color("storkIndigo"))
-        .environmentObject(AppStorageManager())
 }

@@ -1,3 +1,4 @@
+import SkipFoundation
 import Foundation
 #if os(macOS) // Skip transpiled tests only run on macOS targets
 import SkipTest

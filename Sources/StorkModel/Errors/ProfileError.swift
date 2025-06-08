@@ -1,3 +1,11 @@
+//
+//  ProfileError.swift
+//
+//
+//  Created by Nick Molargik on 11/4/24.
+//
+
+import SkipFoundation
 import Foundation
 
 public enum ProfileError: Error, LocalizedError {

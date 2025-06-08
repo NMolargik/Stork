@@ -35,14 +35,13 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://source.skip.tools/skip.git", from: "1.3.2"),
-        .package(url: "https://source.skip.tools/skip-ui.git", from: "1.26.4"),
-        .package(url: "https://source.skip.tools/skip-kit.git", from: "0.3.1"),
-        .package(url: "https://source.skip.tools/skip-firebase.git", from: "0.7.2"),
-        .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.3.1"),
-        .package(url: "https://source.skip.tools/skip-model.git", from: "1.4.2"),
-        .package(url: "https://github.com/aduryagin/skip-revenuecat.git", from: "0.0.10"),
-        //.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "13.3.0")
+        .package(url: "https://source.skip.tools/skip.git", from: "1.5.22"),
+        .package(url: "https://source.skip.tools/skip-ui.git", from: "1.29.3"),
+        .package(url: "https://source.skip.tools/skip-kit.git", from: "0.5.0"),
+        .package(url: "https://source.skip.tools/skip-firebase.git", from: "0.9.0"),
+        .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.3.6"),
+        .package(url: "https://source.skip.tools/skip-model.git", from: "1.5.0"),
+        .package(url: "https://github.com/aduryagin/skip-revenuecat.git", from: "0.0.12"),
     ],
     targets: [
         .target(
@@ -62,7 +61,11 @@ let package = Package(
             name: "StorkTests",
             dependencies: [
                 "Stork",
-                .product(name: "SkipTest", package: "skip")
+                .product(name: "SkipTest", package: "skip"),
+                .product(name: "SkipUI", package: "skip-ui"),
+                .product(name: "SkipModel", package: "skip-model"),
+                .product(name: "SkipKit", package: "skip-kit"),
+                .product(name: "SkipRevenueCat", package: "skip-revenuecat")
             ],
             resources: [.process("Resources")],
             plugins: [.plugin(name: "skipstone", package: "skip")]

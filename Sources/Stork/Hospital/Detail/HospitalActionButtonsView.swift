@@ -59,5 +59,5 @@ struct HospitalActionButtonsView: View {
 }
 
 #Preview {
-    HospitalActionButtonsView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), hospital: Hospital.sampleHospital())
+    HospitalActionButtonsView(profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()), hospital: Hospital.sampleHospital())
 }

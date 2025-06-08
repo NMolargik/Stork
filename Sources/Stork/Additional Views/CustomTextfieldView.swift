@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomTextfieldView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @Binding var text: String
     
@@ -43,10 +43,10 @@ struct CustomTextfieldView: View {
                 Group {
                     if isSecure {
                         SecureField(hintText, text: trimmedText)
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                     } else {
                         TextField(hintText, text: trimmedText)
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                     }
                 }
                 .frame(height: 50)
@@ -54,17 +54,18 @@ struct CustomTextfieldView: View {
                 .padding(.horizontal, 5)
                 #else
                 .padding(.leading, 5)
+                .padding(.bottom, 1)
                 #endif
                 .textInputAutocapitalization(.never)
             }
             .padding(.leading)
-            .background(appStorageManager.useDarkMode ? Color.black : Color.white)
+            .background(useDarkMode ? Color.black : Color.white)
             #if !SKIP
             .cornerRadius(20)
             #else
             .cornerRadius(5)
             #endif
-            .shadow(color: appStorageManager.useDarkMode ? .white : .black, radius: 2)
+            .shadow(color: useDarkMode ? .white : .black, radius: 3)
             .frame(height: 50)
 
             if let limit = characterLimit {
@@ -98,5 +99,4 @@ struct CustomTextfieldView: View {
         )
     }
     .padding()
-    .environmentObject(AppStorageManager())
 }

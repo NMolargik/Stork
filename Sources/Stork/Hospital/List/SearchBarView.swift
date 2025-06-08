@@ -42,9 +42,11 @@ struct SearchBarView: View {
                         }
                     }
                 )
+                .transition(.move(edge: .trailing))
+                .animation(.easeInOut(duration: 0.3), value: hospitalViewModel.searchEnabled)
             }
         }
-        .padding(.horizontal)
+        .padding([.top, .horizontal])
     }
 }
 

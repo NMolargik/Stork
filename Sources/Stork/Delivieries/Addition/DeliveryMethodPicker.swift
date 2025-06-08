@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct DeliveryMethodPicker: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @Binding var deliveryMethod: DeliveryMethod
 
@@ -17,7 +17,7 @@ struct DeliveryMethodPicker: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Delivery Method")
                 .font(.headline)
-                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                .foregroundStyle(useDarkMode ? Color.white : Color.black)
 
             Picker("Delivery Method", selection: $deliveryMethod) {
                 ForEach(DeliveryMethod.allCases, id: \.self) { method in
@@ -31,12 +31,11 @@ struct DeliveryMethodPicker: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
     }
 }
 
 #Preview {
     DeliveryMethodPicker(deliveryMethod: .constant(DeliveryMethod.cSection)
     )
-    .environmentObject(AppStorageManager())
 }

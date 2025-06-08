@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 1/22/25.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 
 struct Marble: Identifiable {

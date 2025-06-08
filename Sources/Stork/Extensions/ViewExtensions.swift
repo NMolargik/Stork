@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 1/24/25.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 import StorkModel
 
@@ -24,7 +24,7 @@ public extension View {
     
     @MainActor func withMockEnvironmentObjects() -> some View {
         self
-            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()))
+            .environmentObject(ProfileViewModel(profileRepository: MockProfileRepository()))
             .environmentObject(DeliveryViewModel(deliveryRepository: MockDeliveryRepository()))
             .environmentObject(MusterViewModel(musterRepository: MockMusterRepository()))
             .environmentObject(HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()))

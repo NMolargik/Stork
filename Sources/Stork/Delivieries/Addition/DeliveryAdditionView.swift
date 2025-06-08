@@ -155,7 +155,7 @@ struct DeliveryAdditionView: View {
 
 #Preview {
     DeliveryAdditionView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),

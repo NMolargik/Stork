@@ -11,7 +11,8 @@ struct MusterCreationView: View {
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @ObservedObject var musterViewModel: MusterViewModel
     @ObservedObject var profileViewModel: ProfileViewModel
@@ -59,7 +60,7 @@ struct MusterCreationView: View {
                             Text(self.selectedHospital?.facility_name ?? "Select A Primary Hospital")
                                 .font(.headline)
                                 .multilineTextAlignment(.center)
-                                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                                .foregroundStyle(useDarkMode ? Color.white : Color.black)
 
                             CustomButtonView(
                                 text: "Select A Hospital",
@@ -75,17 +76,17 @@ struct MusterCreationView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
 
 
                         Spacer()
 
                         Text("It's that easy!\n\nYou'll be able to add members to your muster after creation.")
-                            .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                            .foregroundStyle(useDarkMode ? Color.white : Color.black)
                             .padding()
                             .multilineTextAlignment(.center)
                             .fontWeight(.semibold)
-                            .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+                            .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
 
 
                         Spacer()
@@ -168,10 +169,9 @@ struct MusterCreationView: View {
 #Preview {
     MusterCreationView(
         musterViewModel: MusterViewModel(musterRepository: MockMusterRepository()),
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()),
         showCreateMusterSheet: .constant(false)
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

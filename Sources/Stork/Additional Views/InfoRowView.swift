@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct InfoRowView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     let icon: Image
     let text: String
@@ -23,7 +23,7 @@ struct InfoRowView: View {
                 .foregroundStyle(iconColor)
 
             Text(text)
-                .foregroundStyle(appStorageManager.useDarkMode ? Color.white : Color.black)
+                .foregroundStyle(useDarkMode ? Color.white : Color.black)
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .lineLimit(2)
@@ -36,5 +36,4 @@ struct InfoRowView: View {
 
 #Preview {
     InfoRowView(icon: Image("info", bundle: .module), text: "Info", iconColor: Color("storkBlue"))
-        .environmentObject(AppStorageManager())
 }

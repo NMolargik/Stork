@@ -31,9 +31,7 @@ struct TotalWeightAndLengthStatsView: View {
             Text("6 Month Stats")
                 .fontWeight(.bold)
                 .foregroundStyle(.gray)
-                .offset(y: 25)
-                .frame(height: 10)
-                .padding(.bottom, 10)
+                .frame(height: 20)
             
             HStack(spacing: 10) {
                 Text(weightString)
@@ -51,7 +49,7 @@ struct TotalWeightAndLengthStatsView: View {
                     .fontWeight(.bold)
                     .foregroundStyle(.primary)
             }
-            .padding()
+            .padding([.horizontal, .top])
             
             Text("Delivered")
                 .fontWeight(.bold)
@@ -112,22 +110,19 @@ struct TotalWeightAndLengthStatsView: View {
     }
 }
 
-// MARK: - Preview
-struct TotalWeightAndLengthStatsView_Previews: PreviewProvider {
-    static var previews: some View {
-        TotalWeightAndLengthStatsView(groupedDeliveries: .constant([
-            (key: "July '24", value: [
-                Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
-                    Baby(deliveryId: "1", nurseCatch: true, nicuStay: false, sex: .male, weight: 120.0, height: 20.5), // 120 oz (7.5 lbs)
-                    Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female, weight: 108.0, height: 19.8) // 108 oz (6.75 lbs)
-                ], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
-            ]),
-            (key: "August '24", value: [
-                Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Date(), babies: [
-                    Baby(deliveryId: "2", nurseCatch: false, nicuStay: false, sex: .male, weight: 132.0, height: 21.2), // 132 oz (8.25 lbs)
-                    Baby(deliveryId: "2", nurseCatch: true, nicuStay: false, sex: .loss, weight: 37.0, height: 14.7) // 37 oz (2.31 lbs)
-                ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
-            ])
-        ]))
-    }
+#Preview {
+    TotalWeightAndLengthStatsView(groupedDeliveries: .constant([
+        (key: "July '24", value: [
+            Delivery(id: "1", userId: "U1", userFirstName: "Alice", hospitalId: "H1", hospitalName: "General Hospital", musterId: "M1", date: Date(), babies: [
+                Baby(deliveryId: "1", nurseCatch: true,  nicuStay: false, sex: .male,   weight: 120.0, height: 20.5),
+                Baby(deliveryId: "1", nurseCatch: false, nicuStay: false, sex: .female, weight: 108.0, height: 19.8)
+            ], babyCount: 2, deliveryMethod: .vaginal, epiduralUsed: true)
+        ]),
+        (key: "August '24", value: [
+            Delivery(id: "2", userId: "U2", userFirstName: "Bob", hospitalId: "H2", hospitalName: "City Hospital", musterId: "M2", date: Date(), babies: [
+                Baby(deliveryId: "2", nurseCatch: false, nicuStay: false, sex: .male, weight: 132.0, height: 21.2),
+                Baby(deliveryId: "2", nurseCatch: true,  nicuStay: false, sex: .loss, weight:  37.0, height: 14.7)
+            ], babyCount: 2, deliveryMethod: .cSection, epiduralUsed: false)
+        ])
+    ]))
 }

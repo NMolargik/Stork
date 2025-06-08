@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct HospitalInfoView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     let hospital: Hospital
 
@@ -24,7 +24,7 @@ struct HospitalInfoView: View {
             }
             
             InfoRowView(
-                icon: Image("info.square.fill", bundle: .module),
+                icon: Image("info.circle.fill", bundle: .module),
                 text: hospital.hospital_type == "MISSING" ? "Info coming soon!" : hospital.hospital_type,
                 iconColor: Color.blue
             )
@@ -46,12 +46,11 @@ struct HospitalInfoView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical)
         .padding(.leading, 5)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
         .padding(.horizontal)
     }
 }
 
 #Preview {
     HospitalInfoView(hospital: Hospital.sampleHospital())
-        .environmentObject(AppStorageManager())
 }

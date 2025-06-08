@@ -9,7 +9,8 @@ import StorkModel
 
 struct ProfileRowView: View {    
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
 
     @Binding var existingInvitations: [MusterInvite]
     
@@ -24,35 +25,32 @@ struct ProfileRowView: View {
     }()
     
     var body: some View {
-        HStack {
-            // Profile Information
-            VStack(alignment: .leading, spacing: 4) {
-                Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
+        VStack {
+            Text("\(profile.role.description) \(profile.firstName) \(profile.lastName)")
+                .font(.title3)
+                .fontWeight(.bold)
+                .foregroundStyle(useDarkMode ? .white : .black)
+            
+            HStack(spacing: 4) {
+                Image("birthday.cake.fill", bundle: .module)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(Color("storkPink"))
+                    .padding(.trailing)
                 
-                HStack(spacing: 4) {
-                    Image("birthday.cake.fill", bundle: .module)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                        .foregroundStyle(Color("storkPink"))
-                        .padding(.trailing)
-                    
-                    Text(Self.dateFormatter.string(from: profile.birthday))
-                        .foregroundStyle(appStorageManager.useDarkMode ? .white : .black)
-                }
+                Text(Self.dateFormatter.string(from: profile.birthday))
+                    .foregroundStyle(useDarkMode ? .white : .black)
+                
+                Spacer()
+                
+                // Action Buttons or Status Indicators
+                actionButtonGroup
             }
-            
-            Spacer()
-            
-            // Action Buttons or Status Indicators
-            actionButtonGroup
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
 
     }
     
@@ -105,6 +103,5 @@ struct ProfileRowView: View {
         onInvite: {}
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }
 

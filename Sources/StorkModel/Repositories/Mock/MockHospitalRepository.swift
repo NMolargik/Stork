@@ -5,8 +5,8 @@
 //  Created by Nick Molargik on 11/20/24.
 //
 
-import Foundation
 import SkipFoundation
+import Foundation
 
 /// A mock implementation of the `HospitalRepositoryInterface` protocol for testing purposes.
 public class MockHospitalRepository: HospitalRepositoryInterface {
@@ -35,7 +35,7 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
     public func createHospital(name: String) async throws -> Hospital {
         let hospital = Hospital(
             id: UUID().uuidString,
-            facility_name: name,
+            facility_name: name.uppercased(),
             address: "",
             citytown: "",
             state: "",
@@ -45,7 +45,7 @@ public class MockHospitalRepository: HospitalRepositoryInterface {
             hospital_type: "",
             hospital_ownership: "",
             emergency_services: false,
-            meets_criteria_for_birthing_friendly_designation: false,
+            meets_criteria_for_birthing_friendly_designation: true,
             deliveryCount: 0,
             babyCount: 0
         )

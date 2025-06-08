@@ -9,7 +9,7 @@ import SwiftUI
 import StorkModel
 
 struct JarSummaryView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     @State private var babyCounts: [Sex: Int] = [:]
 
@@ -72,7 +72,7 @@ struct JarSummaryView: View {
         .frame(maxWidth: .infinity)
         .font(.title2)
         .fontWeight(.bold)
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
         .onAppear { updateCount() }
         .onChange(of: deliveries) { _ in updateCount() }
         .onReceive(timer) { _ in updateCount() }
@@ -113,5 +113,4 @@ struct JarSummaryView: View {
 
 #Preview {
     JarSummaryView(deliveries: .constant([]))
-        .environmentObject(AppStorageManager())
 }

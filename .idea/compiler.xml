@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="buildSrc" target="21" />
+      <module name="buildSrc.main" target="21" />
+      <module name="buildSrc.test" target="21" />
+      <module name="skipstone.stork.module.SkipFirebaseAuth" target="21" />
+      <module name="skipstone.stork.module.SkipFirebaseCore" target="21" />
+      <module name="skipstone.stork.module.SkipFirebaseFirestore" target="21" />
+      <module name="skipstone.stork.module.SkipFirebaseStorage" target="21" />
+      <module name="skipstone.stork.module.SkipFoundation" target="21" />
+      <module name="skipstone.stork.module.SkipKit" target="21" />
+      <module name="skipstone.stork.module.SkipLib" target="21" />
+      <module name="skipstone.stork.module.SkipModel" target="21" />
+      <module name="skipstone.stork.module.SkipRevenueCat" target="21" />
+      <module name="skipstone.stork.module.SkipUI" target="21" />
+      <module name="skipstone.stork.module.SkipUnit" target="21" />
+      <module name="skipstone.stork.module.Stork" target="21" />
+      <module name="skipstone.stork.module.StorkModel" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

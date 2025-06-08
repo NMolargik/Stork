@@ -43,6 +43,6 @@ struct DeliveryListView: View {
 #Preview {
     DeliveryListView(
         deliveryViewModel: DeliveryViewModel(deliveryRepository: MockDeliveryRepository()), 
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager())
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository())
     )
 }

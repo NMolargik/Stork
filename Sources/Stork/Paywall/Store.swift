@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 1/7/25.
 //
 
-import Foundation
+import SkipFoundation
 import SkipRevenueCat
 import SwiftUI
 
@@ -17,8 +17,10 @@ class Store: ObservableObject {
         didSet {
             #if !os(macOS) || SKIP
             let entitlement = customerInfo?.entitlements.get(s: StoreConstants.entitlementID)
+            
             print("Checking entitlement")
             subscriptionActive = entitlement?.isActive == true
+            
             print("Subscription active? \(subscriptionActive)")
 
             if (!subscriptionActive && entitlement?.latestPurchaseDateMillis != nil) {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NoHospitalsFoundView: View {
-    @EnvironmentObject var appStorageManager: AppStorageManager
+    @AppStorage(StorageKeys.useDarkMode) var useDarkMode: Bool = false
     
     var body: some View {
         VStack {
@@ -24,11 +24,12 @@ struct NoHospitalsFoundView: View {
                 .frame(height: 70)
         }
         .padding()
-        .backgroundCard(colorScheme: appStorageManager.useDarkMode ? .dark : .light)
+        .backgroundCard(colorScheme: useDarkMode ? .dark : .light)
+        .padding()
+
     }
 }
 
 #Preview {
     NoHospitalsFoundView()
-        .environmentObject(AppStorageManager())
 }

@@ -10,7 +10,8 @@ import StorkModel
 
 struct SplashView: View {
     @EnvironmentObject var appStateManager: AppStateManager
-    @EnvironmentObject var appStorageManager: AppStorageManager
+
+    @AppStorage(StorageKeys.dailyDeliveryCount) var dailyDeliveryCount: Int = 0
 
     @ObservedObject var profileViewModel: ProfileViewModel
     
@@ -39,6 +40,7 @@ struct SplashView: View {
                         .frame(width: 24, height: 24)
                         .foregroundStyle(Color("storkOrange"))
                 })
+                .disabled(profileViewModel.isWorking)
             }
             .padding(.trailing)
             
@@ -61,9 +63,10 @@ struct SplashView: View {
             LoginView(
                 profileViewModel: profileViewModel,
                 onAuthenticated: {
-                    appStorageManager.dailyDeliveryCount = 0
+                    dailyDeliveryCount = 0
                     self.onAuthenticated()
                 })
+            .disabled(profileViewModel.isWorking)
             .opacity(showMore ? 1.0 : 0.0)
             .transition(.move(edge: .bottom).combined(with: .opacity))
         
@@ -86,19 +89,21 @@ struct SplashView: View {
                 }
             })
             .padding(.bottom)
+            .disabled(profileViewModel.isWorking)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     isInfoPresented = !isInfoPresented
                 }) {
-                    Image("info.circle", bundle: .module)
+                    Image("info.circle.fill", bundle: .module)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
                         .foregroundStyle(Color("storkIndigo"))
                 }
                 .shadow(radius: 5)
+                .disabled(profileViewModel.isWorking)
             }
         }
         .padding(.top)
@@ -125,9 +130,8 @@ struct SplashView: View {
 
 #Preview {
     SplashView(
-        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()),
+        profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()),
         showRegistration: .constant(false), onAuthenticated: {}
     )
     .environmentObject(AppStateManager.shared)
-    .environmentObject(AppStorageManager())
 }

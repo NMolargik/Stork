@@ -4,6 +4,7 @@
 //  Created by Nick Molargik on 12/10/24.
 //
 
+import SkipFoundation
 import Foundation
 
 /// Represents an invitation sent to a user to join a muster within the Stork application.

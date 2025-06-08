@@ -5,7 +5,7 @@
 //  Created by Nick Molargik on 11/30/24.
 //
 
-import Foundation
+import SkipFoundation
 import SwiftUI
 import StorkModel
 
@@ -73,6 +73,6 @@ struct HospitalDetailView: View {
 }
 
 #Preview {
-    HospitalDetailView(hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()), profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository(), appStorageManager: AppStorageManager()), hospital: Hospital.sampleHospital())
+    HospitalDetailView(hospitalViewModel: HospitalViewModel(hospitalRepository: MockHospitalRepository(), locationProvider: MockLocationProvider()), profileViewModel: ProfileViewModel(profileRepository: MockProfileRepository()), hospital: Hospital.sampleHospital())
     .environmentObject(AppStateManager.shared)
 }
