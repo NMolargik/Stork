@@ -48,7 +48,7 @@ public actor FirebaseHospitalDatasource: HospitalRemoteDataSourceInterface {
     @MainActor public func createHospital(hospital: Hospital) async throws -> Hospital {
         do {
             let data: [String: Any] = [
-                "facility_name": hospital.facility_name,
+                "facility_name": hospital.facility_name.uppercased(),
                 "address": hospital.address,
                 "citytown": hospital.citytown,
                 "state": hospital.state,

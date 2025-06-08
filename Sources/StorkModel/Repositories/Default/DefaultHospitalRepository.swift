@@ -37,7 +37,7 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
             // Build an initial Hospital model with default fields
             let hospital = Hospital(
                 id: UUID().uuidString,
-                facility_name: name,
+                facility_name: name.uppercased(),
                 address: "",
                 citytown: "",
                 state: "",
@@ -47,7 +47,7 @@ public class DefaultHospitalRepository: HospitalRepositoryInterface {
                 hospital_type: "MISSING",
                 hospital_ownership: "",
                 emergency_services: false,
-                meets_criteria_for_birthing_friendly_designation: false,
+                meets_criteria_for_birthing_friendly_designation: true,
                 deliveryCount: 0,
                 babyCount: 0
             )
