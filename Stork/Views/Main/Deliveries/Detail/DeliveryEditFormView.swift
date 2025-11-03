@@ -64,20 +64,23 @@ struct DeliveryEditFormView: View {
                 Section("Babies") {
                     if let babies = delivery.babies, !babies.isEmpty {
                         ForEach(babies) { baby in
-                            Button {
-                                editingBaby = baby
-                                showBabySheet = true
-                            } label: {
-                                HStack {
-                                    Image(systemName: "figure.child")
-                                        .foregroundStyle(baby.sex.color)
-                                    Text(baby.sex.displayName)
-                                    Spacer()
-                                    Text("\(weightDisplay(baby.weight)), \(heightDisplay(baby.height))")
-                                        .foregroundStyle(.secondary)
+                            HStack {
+                                Image(systemName: "figure.child")
+                                    .foregroundStyle(baby.sex.color)
+                                Text(baby.sex.displayName)
+                                Spacer()
+                                Text("\(weightDisplay(baby.weight)), \(heightDisplay(baby.height))")
+                                    .foregroundStyle(.secondary)
+                                Button {
+                                    editingBaby = baby
+                                    showBabySheet = true
+                                } label: {
+                                    Image(systemName: "pencil")
                                 }
+                                .buttonStyle(.borderedProminent)
+                                .tint(.storkOrange)
+                                .foregroundColor(.white)
                             }
-                            .buttonStyle(.plain)
                         }
                         .onDelete { indexSet in
                             var current = delivery.babies ?? []

@@ -1,5 +1,5 @@
 //
-//  WeatherConditions.swift
+//  WeatherCondition-style.swift
 //  Stork
 //
 //  Created by Nick Molargik on 11/2/25.

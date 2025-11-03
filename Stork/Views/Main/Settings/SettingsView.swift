@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import Network
 
 struct SettingsView: View {
     @Environment(UserManager.self) private var userManager: UserManager
@@ -61,27 +60,30 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $viewModel.editingUser) {
             if let user = manager.currentUser {
-                UserEditView(
-                    firstName: Binding(
-                        get: { user.firstName },
-                        set: { user.firstName = $0 }
-                    ),
-                    lastName: Binding(
-                        get: { user.lastName },
-                        set: { user.lastName = $0 }
-                    ),
-                    birthday: Binding(
-                        get: { user.birthday },
-                        set: { user.birthday = $0 }
-                    ),
-                    role: Binding(
-                        get: { user.role },
-                        set: { user.role = $0 }
-                    ),
-                    validationMessage: ""
-                )
-                .padding(.top)
-                .presentationDetents([.medium])
+                Form {
+                    UserEditView(
+                        firstName: Binding(
+                            get: { user.firstName },
+                            set: { user.firstName = $0 }
+                        ),
+                        lastName: Binding(
+                            get: { user.lastName },
+                            set: { user.lastName = $0 }
+                        ),
+                        birthday: Binding(
+                            get: { user.birthday },
+                            set: { user.birthday = $0 }
+                        ),
+                        role: Binding(
+                            get: { user.role },
+                            set: { user.role = $0 }
+                        ),
+                        validationMessage: ""
+                    )
+                    .padding(.top)
+                }
+                .scrollDisabled(true)
+                .presentationDetents([.fraction(0.5)])
                 .presentationDragIndicator(.visible)
             } else {
                 ContentUnavailableView(
@@ -89,6 +91,7 @@ struct SettingsView: View {
                     systemImage: "person.crop.circle.badge.questionmark",
                     description: Text("Create a user to edit profile details.")
                 )
+                .presentationDetents([.fraction(0.5)])
             }
         }
         .onAppear { viewModel.startNetworkMonitoring() }
@@ -109,47 +112,4 @@ struct SettingsView: View {
         onDeletion: {}
     )
     .environment(UserManager(context: context))
-}
-
-
-extension SettingsView {
-    @Observable
-    class ViewModel {
-        // UI state
-        var editingUser: Bool = false
-        var showSignOutConfirmation: Bool = false
-        var showDeleteConfirmation: Bool = false
-        var showingFarewell: Bool = false
-        var pendingProfileImageData: Data? = nil
-
-        // Network state
-        private var networkMonitor: NWPathMonitor?
-        var isOnline: Bool = true
-
-        // App metadata
-        var appVersion: String {
-            let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
-            let build = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as? String ?? "—"
-            return "\(version) (Build \(build))"
-        }
-        var bundleIdentifier: String { Bundle.main.bundleIdentifier ?? "—" }
-
-        // Lifecycle
-        func startNetworkMonitoring() {
-            let monitor = NWPathMonitor()
-            monitor.pathUpdateHandler = { [weak self] path in
-                DispatchQueue.main.async {
-                    self?.isOnline = (path.status == .satisfied)
-                }
-            }
-            let queue = DispatchQueue(label: "NetworkMonitor")
-            monitor.start(queue: queue)
-            self.networkMonitor = monitor
-        }
-
-        func stopNetworkMonitoring() {
-            networkMonitor?.cancel()
-            networkMonitor = nil
-        }
-    }
 }
