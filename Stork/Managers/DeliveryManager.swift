@@ -176,6 +176,49 @@ class DeliveryManager {
         saveAndReload()
     }
     
+    private func currentWeekRangeSundayToSaturday() -> (start: Date, end: Date) {
+        var cal = Calendar(identifier: .gregorian)
+        cal.locale = Locale(identifier: "en_US_POSIX")
+        cal.firstWeekday = 1 // Sunday
+        cal.minimumDaysInFirstWeek = 1
+        
+        let now = Date()
+        let weekday = cal.component(.weekday, from: now) // Sun=1 ... Sat=7
+        let start = cal.startOfDay(for: cal.date(byAdding: .day, value: -(weekday - 1), to: now)!)
+        let end = cal.date(byAdding: .day, value: 7, to: start)! // exclusive
+        return (start, end)
+    }
+    
+    private func babiesThisWeekCount() -> Int {
+        let (start, end) = currentWeekRangeSundayToSaturday()
+        var desc = FetchDescriptor<Delivery>()
+        desc.predicate = #Predicate<Delivery> { d in
+            d.date >= start && d.date < end
+        }
+        do {
+            let weekly = try context.fetch(desc)
+            // Prefer deriving from deliveries: use delivery.babyCount (fast) and fallback to relationship if needed
+            let total = weekly.reduce(0) { sum, d in
+                let byField = d.babyCount
+                let byRel = d.babies?.count ?? 0
+                return sum + (byField > 0 ? byField : byRel)
+            }
+            return max(0, total)
+        } catch {
+            print("Failed to compute babiesThisWeekCount: \(error)")
+            return 0
+        }
+    }
+    
+    private func updateBabiesThisWeekWidget() {
+        // Write a fallback value the widget can read if SwiftData is unavailable
+        if let defaults = UserDefaults(suiteName: AppGroup.id) {
+            defaults.set(babiesThisWeekCount(), forKey: "babiesThisWeekCount")
+        }
+        // Ask WidgetKit to refresh the timeline for our widget kind
+        WidgetCenter.shared.reloadTimelines(ofKind: "DeliveriesThisWeekWidget")
+    }
+    
     private func saveAndReload() {
         do {
             try context.save()
@@ -183,6 +226,7 @@ class DeliveryManager {
             print(DeliveryError.creationFailed(error.localizedDescription))
         }
         Task { await refresh() }
+        updateBabiesThisWeekWidget()
     }
     
     private static let reviewPromptFifthKey = "DeliveryManager.hasPromptedForFifthReview"
@@ -212,4 +256,3 @@ class DeliveryManager {
         }
     }
 }
-

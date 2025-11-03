@@ -13,7 +13,7 @@ struct DeliveryMethodCard: View {
     let viewModel: HomeView.ViewModel
 
     var body: some View {
-        InsightCard(title: "Delivery Method", systemImage: "figure.and.child.holdinghands", accent: .storkBlue) {
+        InsightCard(title: "Delivery Method", systemImage: "hands.and.sparkles.fill", accent: .storkBlue) {
             let stats = viewModel.deliveryMethodStats(deliveries: deliveryManager.deliveries)
             VStack(alignment: .leading, spacing: 12) {
                 if stats.total > 0 {

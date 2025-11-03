@@ -93,6 +93,7 @@ struct DeliveryDetailView: View {
         .background(Color(uiColor: .systemBackground))
         .sheet(isPresented: $showEditSheet) {
             DeliveryEditFormView(delivery: delivery)
+                .interactiveDismissDisabled()
         }
     }
 }

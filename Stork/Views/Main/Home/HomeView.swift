@@ -5,6 +5,7 @@ import SwiftData
 struct HomeView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(InsightManager.self) private var insightManager: InsightManager
+    @Environment(\.horizontalSizeClass) private var hSizeClass
     
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
     
@@ -35,7 +36,14 @@ struct HomeView: View {
             .padding(.horizontal)
             .padding(.bottom, 20)
         }
-        
+        .onChange(of: hSizeClass) { oldValue, newValue in
+            guard oldValue != newValue else { return }
+            // When size class flips (e.g., iPad regular ↔︎ compact), wait two seconds for layout to settle, then refresh the jar
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                jarShuffle = true
+            }
+        }
         .environment(deliveryManager)
         .environment(insightManager)
     }

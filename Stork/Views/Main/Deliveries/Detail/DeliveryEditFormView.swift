@@ -172,6 +172,7 @@ struct DeliveryEditFormView: View {
                         // no-op
                     }
                 )
+                .interactiveDismissDisabled()
             }
         }
     }

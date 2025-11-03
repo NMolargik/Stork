@@ -60,7 +60,7 @@ struct DeliveryDetailHeaderView: View {
             // Stats row styled like Home cards
             HStack(spacing: 12) {
                 VStack(alignment: .center, spacing: 4) {
-                    Label("Delivery Method", systemImage: "figure.and.child.holdinghands")
+                    Label("Delivery Method", systemImage: "hands.and.sparkles.fill")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(delivery.deliveryMethod.displayName.capitalized)

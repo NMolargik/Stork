@@ -188,6 +188,7 @@ struct DeliveryEntryView: View {
                     useMetricUnits: useMetricUnits,
                     editingBaby: editingBaby
                 )
+                .interactiveDismissDisabled()
                 .onDisappear {
                     editingBaby = nil
                 }
@@ -196,8 +197,6 @@ struct DeliveryEntryView: View {
                 HospitalsView(selectionMode: true) { hospital in
                     // Apply the selection locally and (optionally) update the user’s primary
                     selectedHospitalId = hospital.remoteId
-                    // If you want this selection to also become the user’s primary by default, uncomment:
-                    // userManager.currentUser?.primaryHospitalId = hospital.remoteId
                 }
             }
         }

@@ -100,11 +100,9 @@ struct MainView: View {
                 SettingsView(
                     onSignOut: {
                         resetApplication()
-                    },
-                    onDeletion: {
-                        // TODO: hook up
                     }
                 )
+                .interactiveDismissDisabled()
                 .presentationDetents([.large])
                 .navigationTitle("Settings")
                 .toolbar {
@@ -120,6 +118,7 @@ struct MainView: View {
             DeliveryEntryView(
                 onDeliverySaved: { delivery, reviewScene in
                     viewModel.updateDelivery(delivery: delivery, reviewScene: reviewScene, deliveryManager: deliveryManager)
+                    viewModel.appTab = .home
                 }
             )
             .interactiveDismissDisabled(true)
@@ -212,9 +211,6 @@ struct MainView: View {
                 SettingsView(
                     onSignOut: {
                         resetApplication()
-                    },
-                    onDeletion: {
-                        // TODO: hook up
                     }
                 )
                 .navigationTitle(AppTab.settings.rawValue)
@@ -312,8 +308,9 @@ struct MainView: View {
         .sheet(isPresented: $viewModel.showingEntrySheet) {
             DeliveryEntryView(
                 onDeliverySaved: { delivery, reviewScene in
-                    viewModel.appTab = .list
+                    viewModel.appTab = .home
                     viewModel.updateDelivery(delivery: delivery, reviewScene: reviewScene, deliveryManager: deliveryManager)
+                    
                 })
             .interactiveDismissDisabled(true)
             .presentationDetents([.large])

@@ -9,13 +9,61 @@
 /* Begin PBXBuildFile section */
 		EB020E5E2E8A022400D9C239 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = EB020E5D2E8A022400D9C239 /* FirebaseAuth */; };
 		EB020E602E8A022400D9C239 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EB020E5F2E8A022400D9C239 /* FirebaseFirestore */; };
+		EB2E2E332EB9244A00D0149A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E322EB9244A00D0149A /* WidgetKit.framework */; };
+		EB2E2E352EB9244A00D0149A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E342EB9244A00D0149A /* SwiftUI.framework */; };
+		EB2E2E402EB9244B00D0149A /* StorkWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EB2E2E3E2EB9244B00D0149A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB020D342E89FDD000D9C239 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB2E2E2F2EB9244A00D0149A;
+			remoteInfo = StorkWidgetsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EB2E2E452EB9244C00D0149A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EB2E2E402EB9244B00D0149A /* StorkWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		EB020D3C2E89FDD000D9C239 /* Stork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stork.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StorkWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB2E2E322EB9244A00D0149A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		EB2E2E342EB9244A00D0149A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		EB2E2E462EB9249B00D0149A /* StorkWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StorkWidgetsExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EB2E2E442EB9244C00D0149A /* Exceptions for "StorkWidgets" folder in "StorkWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */;
+		};
+		EB2E2E482EB924DF00D0149A /* Exceptions for "Stork" folder in "StorkWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/Baby.swift,
+				Models/Delivery.swift,
+				Models/Enumerations/DeliveryMethod.swift,
+				Models/Enumerations/Sex.swift,
+			);
+			target = EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */;
+		};
 		EBB9C1CD2E8A1D5600013BF6 /* Exceptions for "Stork" folder in "Stork" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -30,8 +78,17 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				EBB9C1CD2E8A1D5600013BF6 /* Exceptions for "Stork" folder in "Stork" target */,
+				EB2E2E482EB924DF00D0149A /* Exceptions for "Stork" folder in "StorkWidgetsExtension" target */,
 			);
 			path = Stork;
+			sourceTree = "<group>";
+		};
+		EB2E2E362EB9244A00D0149A /* StorkWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EB2E2E442EB9244C00D0149A /* Exceptions for "StorkWidgets" folder in "StorkWidgetsExtension" target */,
+			);
+			path = StorkWidgets;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -46,13 +103,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB2E2E2D2EB9244A00D0149A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB2E2E352EB9244A00D0149A /* SwiftUI.framework in Frameworks */,
+				EB2E2E332EB9244A00D0149A /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		EB020D332E89FDD000D9C239 = {
 			isa = PBXGroup;
 			children = (
+				EB2E2E462EB9249B00D0149A /* StorkWidgetsExtension.entitlements */,
 				EB020D3E2E89FDD000D9C239 /* Stork */,
+				EB2E2E362EB9244A00D0149A /* StorkWidgets */,
+				EB2E2E312EB9244A00D0149A /* Frameworks */,
 				EB020D3D2E89FDD000D9C239 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,8 +130,18 @@
 			isa = PBXGroup;
 			children = (
 				EB020D3C2E89FDD000D9C239 /* Stork.app */,
+				EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		EB2E2E312EB9244A00D0149A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EB2E2E322EB9244A00D0149A /* WidgetKit.framework */,
+				EB2E2E342EB9244A00D0149A /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -75,10 +154,12 @@
 				EB020D382E89FDD000D9C239 /* Sources */,
 				EB020D392E89FDD000D9C239 /* Frameworks */,
 				EB020D3A2E89FDD000D9C239 /* Resources */,
+				EB2E2E452EB9244C00D0149A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EB2E2E3F2EB9244B00D0149A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				EB020D3E2E89FDD000D9C239 /* Stork */,
@@ -92,6 +173,28 @@
 			productReference = EB020D3C2E89FDD000D9C239 /* Stork.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB2E2E412EB9244C00D0149A /* Build configuration list for PBXNativeTarget "StorkWidgetsExtension" */;
+			buildPhases = (
+				EB2E2E2C2EB9244A00D0149A /* Sources */,
+				EB2E2E2D2EB9244A00D0149A /* Frameworks */,
+				EB2E2E2E2EB9244A00D0149A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EB2E2E362EB9244A00D0149A /* StorkWidgets */,
+			);
+			name = StorkWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = StorkWidgetsExtension;
+			productReference = EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -99,11 +202,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					EB020D3B2E89FDD000D9C239 = {
 						CreatedOnToolsVersion = 26.0;
+					};
+					EB2E2E2F2EB9244A00D0149A = {
+						CreatedOnToolsVersion = 26.1;
 					};
 				};
 			};
@@ -125,12 +231,20 @@
 			projectRoot = "";
 			targets = (
 				EB020D3B2E89FDD000D9C239 /* Stork */,
+				EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		EB020D3A2E89FDD000D9C239 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB2E2E2E2EB9244A00D0149A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -147,7 +261,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB2E2E2C2EB9244A00D0149A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EB2E2E3F2EB9244B00D0149A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */;
+			targetProxy = EB2E2E3E2EB9244B00D0149A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		EB020D452E89FDD100D9C239 /* Debug */ = {
@@ -293,6 +422,7 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -343,6 +473,7 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -373,6 +504,74 @@
 			};
 			name = Release;
 		};
+		EB2E2E422EB9244C00D0149A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = StorkWidgetsExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 33;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StorkWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = StorkWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.StorkWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EB2E2E432EB9244C00D0149A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = StorkWidgetsExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 33;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StorkWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = StorkWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.StorkWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -390,6 +589,15 @@
 			buildConfigurations = (
 				EB020D482E89FDD100D9C239 /* Debug */,
 				EB020D492E89FDD100D9C239 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB2E2E412EB9244C00D0149A /* Build configuration list for PBXNativeTarget "StorkWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB2E2E422EB9244C00D0149A /* Debug */,
+				EB2E2E432EB9244C00D0149A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

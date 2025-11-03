@@ -9,6 +9,7 @@ struct MigrationView: View {
     var migrationComplete: () -> Void
     
     @State private var isRunning = false
+    @State private var showCompletionAlert = false
     
     var body: some View {
         NavigationStack {
@@ -77,7 +78,7 @@ struct MigrationView: View {
                     switch migrationManager.status {
                     case .completed:
                         Button {
-                            migrationComplete()
+                            showCompletionAlert = true
                         } label: {
                             Text("Continue")
                                 .frame(maxWidth: .infinity)
@@ -110,6 +111,13 @@ struct MigrationView: View {
             .padding()
             .navigationTitle("Migration")
             .navigationBarTitleDisplayMode(.large)
+            .alert("Stork is now free", isPresented: $showCompletionAlert) {
+                Button("OK") {
+                    migrationComplete()
+                }
+            } message: {
+                Text("Stork is now free for you to use. If you previously subscribed to Stork, please go to System Settings and cancel your subscription.")
+            }
         }
         .task {
             await performMigration()
@@ -126,7 +134,7 @@ struct MigrationView: View {
                 deliveryManager: deliveryManager
             )
             if case .completed = migrationManager.status {
-                migrationComplete()
+                showCompletionAlert = true
             }
         } catch {
             migrationManager.status = .failed(error.localizedDescription)

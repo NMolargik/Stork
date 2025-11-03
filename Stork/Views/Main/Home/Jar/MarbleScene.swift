@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SpriteKit
+import UIKit
 
 final class MarbleScene: SKScene {
     // Helper to check if any marbles exist in the scene
@@ -21,7 +22,17 @@ final class MarbleScene: SKScene {
     var containerCornerRadius: CGFloat = 20 { didSet { rebuildWalls() } }
     private let frostNode = SKShapeNode()
     private var spawnY: CGFloat { size.height - 10 }
-    private var marbleRadius: CGFloat { max(15, min(size.width, size.height) * 0.025) }
+    private var marbleRadius: CGFloat {
+        #if os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return max(18, min(size.width, size.height) * 0.025)
+        } else {
+            return max(15, min(size.width, size.height) * 0.025)
+        }
+        #else
+        return max(15, min(size.width, size.height) * 0.025)
+        #endif
+    }
 
     // Callback fired once when the scene is ready (non-zero size & walls built)
     var onReady: (() -> Void)? { didSet { maybeSignalReady() } }

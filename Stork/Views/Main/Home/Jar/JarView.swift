@@ -21,6 +21,8 @@ struct JarView: View {
         s.scaleMode = .resizeFill
         return s
     }()
+    @State private var containerSize: CGSize = .zero
+    @Environment(\.horizontalSizeClass) private var hSizeClass
 
     @State private var prevBoy = 0
     @State private var prevGirl = 0
@@ -32,18 +34,36 @@ struct JarView: View {
     @State private var isMotionActive = false
 
     var body: some View {
-        ZStack {
-            // A subtle glassy background
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(.ultraThinMaterial)
-            TransparentSpriteView(scene: scene)
-                .overlay {
-                    Rectangle()
-                        .foregroundStyle(.ultraThinMaterial)
-                        .opacity(0.6)
+        GeometryReader { proxy in
+            let newSize = proxy.size
+            ZStack {
+                // A subtle glassy background
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.ultraThinMaterial)
+                TransparentSpriteView(scene: scene)
+                    .overlay {
+                        Rectangle()
+                            .foregroundStyle(.ultraThinMaterial)
+                            .opacity(0.6)
+                    }
+                    .ignoresSafeArea(edges: .bottom)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            }
+            .onChange(of: newSize) { _, new in
+                // When the container size changes (e.g., iPad regular ↔︎ compact), SpriteKit may cancel pending spawns.
+                // Do a full reset + respawn to guarantee exact counts.
+                let sizeChanged = containerSize != new
+                containerSize = new
+                guard sizeChanged else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
+                        prevBoy = boyCount
+                        prevGirl = girlCount
+                        prevLoss = lossCount
+                        didInitialDrop = true
+                    }
                 }
-                .ignoresSafeArea(edges: .bottom)
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            }
         }
         .overlay(alignment: .top) {
             Text(monthText())
@@ -100,11 +120,28 @@ struct JarView: View {
         }
         .onChange(of: reshuffle) { _, should in
             guard should else { return }
-            dropDeltasIfNeeded()
+            // Full reset + respawn to guarantee exact counts after a manual reshuffle trigger.
+            scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
+                prevBoy = boyCount
+                prevGirl = girlCount
+                prevLoss = lossCount
+                didInitialDrop = true
+            }
             DispatchQueue.main.async { self.reshuffle = false }
         }
         .onChange(of: colorScheme) { _, _ in
             scene.applyAppearance(isDark: colorScheme == .dark)
+        }
+        .onChange(of: hSizeClass) { _, _ in
+            // Also reset when size class flips; wait briefly for layout to settle.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
+                    prevBoy = boyCount
+                    prevGirl = girlCount
+                    prevLoss = lossCount
+                    didInitialDrop = true
+                }
+            }
         }
     }
 

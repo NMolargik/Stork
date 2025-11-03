@@ -80,15 +80,13 @@ final class MigrationManager {
         // 6) Sign user out
         do {
             // Sign out the user
-            try await self.signOutUser()
             try await deleteUser(user: fbUser)
+            try await self.signOutUser()
         } catch {
             // Not fatal—surface a message and continue
             status = .preparing("Couldn’t delete your profile document in Firebase: \(error.localizedDescription). You can retry later.")
         }
         
-
-
         // 7) Done
         status = .completed
     }

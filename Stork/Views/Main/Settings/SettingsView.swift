@@ -77,7 +77,6 @@ struct SettingsView: View {
     }
     
     var onSignOut: () -> Void
-    var onDeletion: () -> Void
 
     var body: some View {
         @Bindable var manager = userManager
@@ -185,7 +184,7 @@ struct SettingsView: View {
                     .padding(.top)
                 }
                 .scrollDisabled(true)
-                .presentationDetents([.fraction(0.5)])
+                .presentationDetents([.fraction(0.7)])
                 .presentationDragIndicator(.visible)
             } else {
                 ContentUnavailableView(
@@ -283,8 +282,7 @@ struct SettingsView: View {
     let context = ModelContext(container)
     
     SettingsView(
-        onSignOut: {},
-        onDeletion: {}
+        onSignOut: {}
     )
     .environment(UserManager(context: context))
 }
