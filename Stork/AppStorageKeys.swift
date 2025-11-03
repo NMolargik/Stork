@@ -11,4 +11,5 @@ struct AppStorageKeys {
     static let isOnboardingComplete = "isOnboardingComplete"
     static let useMetricUnits = "useMetricUnits"
     static let useDayMonthYearDates = "useDayMonthYearDates"
+    static let selectedIconColor = "selectedIconColor"
 }

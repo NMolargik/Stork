@@ -71,8 +71,8 @@ final class MigrationManager {
         }
 
         // 5) Delete migrated deliveries from Firebase
-        for (idx, _) in fbDeliveries.enumerated() {
-            //try await deleteDelivery(delivery: d)
+        for (idx, d) in fbDeliveries.enumerated() {
+            try await deleteDelivery(delivery: d)
             let p = 0.80 + (0.15 * Double(idx + 1) / Double(max(1, fbDeliveries.count)))
             setStatus("Cleaning up Firebase (\(idx + 1)/\(fbDeliveries.count))…", progress: p)
         }
@@ -81,7 +81,7 @@ final class MigrationManager {
         do {
             // Sign out the user
             try await self.signOutUser()
-            //try await deleteUser(user: fbUser)
+            try await deleteUser(user: fbUser)
         } catch {
             // Not fatal—surface a message and continue
             status = .preparing("Couldn’t delete your profile document in Firebase: \(error.localizedDescription). You can retry later.")
