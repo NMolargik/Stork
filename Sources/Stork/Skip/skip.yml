@@ -1,6 +1,0 @@
-# Configuration file for https://skip.tools project
-build:
-  contents:
-    - block: 'dependencies'
-      contents:
-        - 'implementation("com.google.maps.android:maps-compose:4.3.3")'

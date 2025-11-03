@@ -1,0 +1,167 @@
+//
+//  HealthManager.swift
+//  Stork
+//
+//  Created by Nick Molargik on 10/1/25.
+//
+
+import Foundation
+import HealthKit
+
+@MainActor
+@Observable
+final class HealthManager {
+
+    // MARK: - HealthKit
+    private let healthStore = HKHealthStore()
+    private let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
+
+    // Keep references so we can stop them later
+    private var observerQuery: HKObserverQuery?
+    private var statisticsQuery: HKStatisticsQuery?
+
+    // MARK: - Public state
+    private(set) var isAuthorized: Bool = false
+    private(set) var lastError: Error?
+
+    /// Live-updating total steps for the current calendar day (midnight -> now).
+    private(set) var todayStepCount: Int = 0
+
+    // MARK: - Authorization
+    func requestAuthorization() async {
+        guard HKHealthStore.isHealthDataAvailable() else {
+            self.isAuthorized = false
+            self.lastError = nil
+            print("[HealthManager] Health data not available on this device.")
+            return
+        }
+
+        let toRead: Set<HKObjectType> = [stepType]
+
+        do {
+            try await healthStore.requestAuthorization(toShare: [], read: toRead)
+            // Do not assume authorization was granted just because no error was thrown.
+            // Probe read access by attempting a statistics query. If we can read, we'll
+            // receive a non-nil sumQuantity; otherwise it will be nil.
+            await probeReadAccessForSteps()
+            self.lastError = nil
+        } catch {
+            self.isAuthorized = false
+            self.lastError = error
+            print("[HealthManager] Authorization failed: \(error)")
+        }
+    }
+
+    // MARK: - Observing step count
+
+    /// Start listening for step count updates for the current day.
+    /// Call after `requestAuthorization()` has succeeded.
+    func startObservingStepCount() {
+        guard isAuthorized else {
+            print("[HealthManager] startObservingStepCount called without authorization.")
+            return
+        }
+
+        // Initial fetch
+        fetchTodayStepCount()
+
+        // Observe changes to step samples
+        let observer = HKObserverQuery(sampleType: stepType, predicate: nil) { [weak self] _, _, error in
+            guard let self else { return }
+            if let error {
+                Task { @MainActor in self.lastError = error }
+                print("[HealthManager] Observer error: \(error)")
+                return
+            }
+            // Fetch updated value whenever HealthKit notifies us of changes
+            Task { @MainActor in
+                self.fetchTodayStepCount()
+            }
+        }
+        self.observerQuery = observer
+        healthStore.execute(observer)
+    }
+
+    /// Stop listening to step updates.
+    func stopObserving() {
+        if let q = observerQuery { healthStore.stop(q) }
+        if let q = statisticsQuery { healthStore.stop(q) }
+        observerQuery = nil
+        statisticsQuery = nil
+    }
+
+    // MARK: - Fetch helpers
+
+    /// Runs a one-shot statistics query to determine if we have read access to step data.
+    /// Updates `isAuthorized` accordingly and, if possible, seeds `todayStepCount`.
+    private func probeReadAccessForSteps() async {
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: [])
+
+        await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
+            let query = HKStatisticsQuery(
+                quantityType: stepType,
+                quantitySamplePredicate: predicate,
+                options: .cumulativeSum
+            ) { [weak self] _, stats, error in
+                guard let self else { cont.resume(); return }
+
+                Task { @MainActor in
+                    if let error {
+                        // Treat errors as not authorized for our purposes
+                        self.lastError = error
+                        self.isAuthorized = false
+                        print("[HealthManager] Probe error: \(error)")
+                    } else if let quantity = stats?.sumQuantity() {
+                        // If we can read a quantity (even if value is 0), we have read access.
+                        self.isAuthorized = true
+                        let value = quantity.doubleValue(for: .count())
+                        self.todayStepCount = Int(value)
+                    } else {
+                        // No quantity returned implies no read access.
+                        self.isAuthorized = false
+                        self.todayStepCount = 0
+                    }
+                    cont.resume()
+                }
+            }
+
+            // Execute without storing; this is a one-shot probe.
+            self.healthStore.execute(query)
+        }
+    }
+
+    /// Fetch the cumulative step count from midnight to now and update `todayStepCount`.
+    private func fetchTodayStepCount() {
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: [])
+
+        let statsQuery = HKStatisticsQuery(
+            quantityType: stepType,
+            quantitySamplePredicate: predicate,
+            options: .cumulativeSum
+        ) { [weak self] _, stats, error in
+            guard let self else { return }
+            if let error {
+                Task { @MainActor in self.lastError = error }
+                print("[HealthManager] Statistics query error: \(error)")
+                return
+            }
+
+            let quantity = stats?.sumQuantity()
+            let value = quantity?.doubleValue(for: .count()) ?? 0
+            Task { @MainActor in
+                // If a quantity exists, we have read access; otherwise, we likely do not.
+                self.isAuthorized = (quantity != nil)
+                self.todayStepCount = Int(value)
+            }
+        }
+        self.statisticsQuery = statsQuery
+        healthStore.execute(statsQuery)
+    }
+}
+
