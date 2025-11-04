@@ -15,6 +15,7 @@ extension MainView {
         var appTab: AppTab = .home
         var showingEntrySheet: Bool = false
         var showingSettingsSheet: Bool = false
+        var showingHospitalSheet: Bool = false
         var listPath = NavigationPath()
         var lastPushedDeliveryID: String? = nil
         var now: Date = Date()

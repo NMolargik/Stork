@@ -15,6 +15,8 @@ struct MainView: View {
     @Environment(\.horizontalSizeClass) private var hSizeClass
     @Environment(\.verticalSizeClass) private var vSizeClass
     @Environment(\.scenePhase) private var scenePhase
+
+    @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
     
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(UserManager.self) private var userManager: UserManager
@@ -66,6 +68,14 @@ struct MainView: View {
                     .toolbar {
                         ToolbarItemGroup(placement: .topBarTrailing) {
                             Button {
+                                viewModel.showingHospitalSheet = true
+                            } label: {
+                                Image(systemName: "building.2.fill")
+                            }
+                            .accessibilityLabel("Hospitals")
+                            .tint(.red)
+                            
+                            Button {
                                 viewModel.showingSettingsSheet = true
                             } label: {
                                 Image(systemName: "gearshape.fill")
@@ -112,6 +122,21 @@ struct MainView: View {
                         }
                     }
                 }
+            }
+        }
+        .sheet(isPresented: $viewModel.showingHospitalSheet) {
+            NavigationStack {
+                HospitalsView()
+                    .interactiveDismissDisabled()
+                    .presentationDetents([.large])
+                    .navigationTitle("Hospitals")
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Close") {
+                                viewModel.showingHospitalSheet = false
+                            }
+                        }
+                    }
             }
         }
         .sheet(isPresented: $viewModel.showingEntrySheet) {
@@ -267,18 +292,23 @@ struct MainView: View {
                         HStack(spacing: 8) {
                             ProgressView()
                                 .scaleEffect(0.8)
-                            Text("Loading weather…")
+                            Text("Loading...")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
-                        .accessibilityLabel("Loading weather")
+                        .accessibilityLabel("Loading...")
                     } else if weatherManager.error != nil {
                         HStack(spacing: 6) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .imageScale(.medium)
-                            Text("Weather Unavailable")
+                            Text("Unavailable")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
+                                .onTapGesture {
+                                    Task {
+                                        await weatherManager.refresh()
+                                    }
+                                }
                         }
                         .accessibilityLabel("Weather unavailable")
                     } else {
@@ -287,10 +317,19 @@ struct MainView: View {
                                 .imageScale(.medium)
                             
                             if let temp = weatherManager.temperatureString {
-                                Text("\(temp)")
-                                    .font(.headline)
-                                    .bold()
-                                    .monospacedDigit()
+                                if useMetricUnits,
+                                   let fValue = Double(temp.filter("0123456789.-".contains)) {
+                                    let celsius = (fValue - 32) * 5 / 9
+                                    Text(String(format: "%.1f°C", celsius))
+                                        .font(.headline)
+                                        .bold()
+                                        .monospacedDigit()
+                                } else {
+                                    Text("\(temp)")
+                                        .font(.headline)
+                                        .bold()
+                                        .monospacedDigit()
+                                }
                             }
                         }
                         .task {

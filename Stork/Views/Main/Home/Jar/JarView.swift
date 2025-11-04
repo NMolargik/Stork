@@ -23,6 +23,7 @@ struct JarView: View {
     }()
     @State private var containerSize: CGSize = .zero
     @Environment(\.horizontalSizeClass) private var hSizeClass
+    @State private var sizeChangeDebounceTask: Task<Void, Never>? = nil
 
     @State private var prevBoy = 0
     @State private var prevGirl = 0
@@ -50,12 +51,16 @@ struct JarView: View {
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             }
             .onChange(of: newSize) { _, new in
-                // When the container size changes (e.g., iPad regular ↔︎ compact), SpriteKit may cancel pending spawns.
-                // Do a full reset + respawn to guarantee exact counts.
+                // When the container size changes (e.g., iPad regular ↔︎ compact), debounce a full reset + respawn.
                 let sizeChanged = containerSize != new
                 containerSize = new
                 guard sizeChanged else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+
+                // Cancel any pending reset and schedule a short debounce to let layout settle.
+                sizeChangeDebounceTask?.cancel()
+                sizeChangeDebounceTask = Task { @MainActor in
+                    // ~0.5s debounce to avoid multiple resets during interactive resizes/splits
+                    try? await Task.sleep(nanoseconds: 500_000_000)
                     scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
                         prevBoy = boyCount
                         prevGirl = girlCount

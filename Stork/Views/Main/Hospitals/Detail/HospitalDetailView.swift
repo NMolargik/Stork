@@ -118,7 +118,7 @@ struct HospitalDetailView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle(hospital.facilityName)
+            .navigationTitle("Hospital")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if hSizeClass == .regular {

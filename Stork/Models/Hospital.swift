@@ -41,7 +41,14 @@ struct Hospital: Codable, Identifiable, Hashable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.remoteId = try container.decode(String.self, forKey: .remoteId)
+        // Accept either String or Int for id
+        if let idString = try? container.decode(String.self, forKey: .remoteId) {
+            self.remoteId = idString
+        } else if let idInt = try? container.decode(Int.self, forKey: .remoteId) {
+            self.remoteId = String(idInt)
+        } else {
+            throw DecodingError.typeMismatch(String.self, DecodingError.Context(codingPath: [CodingKeys.remoteId], debugDescription: "Expected id as String or Int"))
+        }
         self.facilityName = Hospital.formatTitleCase(try container.decode(String.self, forKey: .facilityName))
         self.address = Hospital.formatAddress(try container.decode(String.self, forKey: .address))
         self.citytown = Hospital.formatTitleCase(try container.decode(String.self, forKey: .citytown))

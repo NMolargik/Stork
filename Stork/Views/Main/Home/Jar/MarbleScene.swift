@@ -25,12 +25,12 @@ final class MarbleScene: SKScene {
     private var marbleRadius: CGFloat {
         #if os(iOS)
         if UIDevice.current.userInterfaceIdiom == .pad {
-            return max(18, min(size.width, size.height) * 0.025)
+            return max(20, min(size.width, size.height) * 0.025)
         } else {
-            return max(15, min(size.width, size.height) * 0.025)
+            return max(18, min(size.width, size.height) * 0.025)
         }
         #else
-        return max(15, min(size.width, size.height) * 0.025)
+        return max(18, min(size.width, size.height) * 0.025)
         #endif
     }
 
@@ -190,5 +190,47 @@ final class MarbleScene: SKScene {
         }
         actions.append(.run(completion))
         run(.sequence(actions))
+    }
+}
+
+struct MarblePreviewView: View {
+    private let marbleDiameter: CGFloat = 40 // approx 20 radius * 2
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Circle()
+                .fill(Color(MarbleScene.boyBlue))
+                .frame(width: marbleDiameter, height: marbleDiameter)
+            Circle()
+                .fill(Color(MarbleScene.girlPink))
+                .frame(width: marbleDiameter, height: marbleDiameter)
+            Circle()
+                .fill(Color(MarbleScene.lossPurple))
+                .frame(width: marbleDiameter, height: marbleDiameter)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.clear)
+        .contentShape(Rectangle())
+        .padding()
+    }
+}
+
+#Preview {
+    Group {
+        MarblePreviewView()
+            .background(Color.white)
+            .overlay {
+                Rectangle()
+                    .foregroundStyle(.ultraThinMaterial)
+                    .opacity(0.6)
+            }
+        MarblePreviewView()
+            .background(Color.black)
+            .preferredColorScheme(.dark)
+            .overlay {
+                Rectangle()
+                    .foregroundStyle(.ultraThinMaterial)
+                    .opacity(0.6)
+            }
     }
 }

@@ -38,10 +38,25 @@ extension ContentView {
                 return
             }
             guard let userManager else { return }
+            
+            // First try a quick local refresh (in case we already have the user cached)
             await userManager.refresh()
+            
+            // If not found yet, allow iCloud a bit more time to hydrate.
             if userManager.currentUser == nil {
-                await userManager.restoreFromCloud(timeout: 1, pollInterval: 1.0)
+                // Give CloudKit/SwiftData time to surface the user record.
+                // Increased timeout and faster polling to catch "appears a second later" cases.
+                await userManager.restoreFromCloud(timeout: 6, pollInterval: 0.5)
+                
+                // Defensive: brief retry loop after restore to cover racey arrivals.
+                let deadline = Date().addingTimeInterval(2.0)
+                while userManager.currentUser == nil && Date() < deadline {
+                    await userManager.refresh()
+                    if userManager.currentUser != nil { break }
+                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
+                }
             }
+            
             if userManager.currentUser != nil {
                 await MainActor.run {
                     withAnimation(.easeInOut(duration: 0.3)) { self.appStage = .main }

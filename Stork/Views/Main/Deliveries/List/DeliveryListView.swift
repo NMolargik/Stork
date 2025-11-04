@@ -19,6 +19,9 @@ struct DeliveryListView: View {
                         description: Text("Your logged deliveries will appear here.")
                     )
                 }
+                .refreshable {
+                    await deliveryManager.refresh()
+                }
             } else {
                 let source = viewModel.source(from: deliveryManager)
                 let months = viewModel.monthStarts(from: source)

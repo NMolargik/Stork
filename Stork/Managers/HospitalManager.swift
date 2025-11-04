@@ -6,6 +6,8 @@
 
 import Foundation
 import SwiftUI
+import class UIKit.NSDataAsset
+
 
 @MainActor
 @Observable
@@ -21,22 +23,19 @@ class HospitalManager {
     
     // MARK: - Parse hospitals.json
     func loadHospitalsFromJSON(fileName: String = "hospitals") async {
+        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
+            print("Error: \(fileName).json not found in app bundle")
+            self.hospitals = []
+            return
+        }
+
         do {
-            // Locate hospitals.json in the main bundle
-            guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
-                print("hospitals.json not found in bundle")
-                return
-            }
-            
-            // Read and decode JSON directly into [Hospital]
             let data = try Data(contentsOf: url)
             let hospitals = try JSONDecoder().decode([Hospital].self, from: data)
-            
-            // Update in-memory hospitals array
-            self.hospitals = hospitals.sorted(by: { $0.facilityName < $1.facilityName })
-            print("Successfully loaded \(hospitals.count) hospitals from \(fileName).json")
+            self.hospitals = hospitals.sorted { $0.facilityName < $1.facilityName }
+            print("Loaded \(hospitals.count) hospitals from bundle")
         } catch {
-            print("Error loading hospitals from JSON: \(error.localizedDescription)")
+            print("Failed to load or decode hospitals.json: \(error)")
             self.hospitals = []
         }
     }

@@ -22,26 +22,24 @@ struct BabyMeasurementsCard: View {
                     HStack(spacing: 6) {
                         Image(systemName: "scalemass.fill")
                         VStack(alignment: .leading, spacing: 0) {
-                            Text("Avg Weight").font(.caption2).foregroundStyle(.secondary)
+                            Text("Avg Weight").font(.caption2)
                             Text(weightDisplay(stats.averageWeight)).font(.subheadline).fontWeight(.semibold)
                         }
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(.ultraThinMaterial, in: Capsule())
-                    .foregroundStyle(.black)
 
                     HStack(spacing: 6) {
                         Image(systemName: "ruler.fill")
                         VStack(alignment: .leading, spacing: 0) {
-                            Text("Avg Height").font(.caption2).foregroundStyle(.secondary)
+                            Text("Avg Height").font(.caption2)
                             Text(heightDisplay(stats.averageHeight)).font(.subheadline).fontWeight(.semibold)
                         }
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(.ultraThinMaterial, in: Capsule())
-                    .foregroundStyle(.black)
                 }
 
                 if stats.count == 0 {

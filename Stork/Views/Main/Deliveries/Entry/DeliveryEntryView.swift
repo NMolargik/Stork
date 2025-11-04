@@ -128,9 +128,11 @@ struct DeliveryEntryView: View {
                             }
                         }
                         
-                        Text("At least one baby is required to finish.")
-                            .font(.footnote)
-                            .foregroundColor(.red)
+                        if viewModel.babies.isEmpty {
+                            Text("At least one baby is required to finish.")
+                                .font(.footnote)
+                                .foregroundColor(.red)
+                        }
                     }
                     .padding(.vertical, 4)
                 } header: {
