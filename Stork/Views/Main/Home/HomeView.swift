@@ -17,9 +17,14 @@ struct HomeView: View {
         ScrollView {
             VStack(spacing: 20) {
                 let monthly = viewModel.monthlyJarCounts(deliveries: deliveryManager.deliveries)
-                let monthlyKey = "\(monthly.boy)-\(monthly.girl)-\(monthly.loss)"
+                // Only recreate the JarView when the calendar month changes, not when counts change
+                let monthKey: String = {
+                    let df = DateFormatter()
+                    df.dateFormat = "yyyy-MM"
+                    return df.string(from: Date())
+                }()
                 JarView(boyCount: monthly.boy, girlCount: monthly.girl, lossCount: monthly.loss, reshuffle: $jarShuffle)
-                    .id(monthlyKey)
+                    .id(monthKey)
                     .frame(height: 250)
 
                 DeliveryMethodCard(viewModel: viewModel)
@@ -36,94 +41,12 @@ struct HomeView: View {
             .padding(.horizontal)
             .padding(.bottom, 20)
         }
-        .onChange(of: hSizeClass) { oldValue, newValue in
-            guard oldValue != newValue else { return }
-            // When size class flips (e.g., iPad regular ↔︎ compact), wait two seconds for layout to settle, then refresh the jar
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 2_000_000_000)
-                jarShuffle = true
-            }
+        .refreshable {
+            // Only refresh the marble jar; the rest of the Home screen stays as-is
+            jarShuffle = true
         }
         .environment(deliveryManager)
         .environment(insightManager)
-    }
-    
-    // (monthlyJarCounts helper removed)
-}
-
-// MARK: - Delivery Method Distribution Card
-
-
-// MARK: - Epidural Usage Card
-
-// MARK: - Baby Count Trends Card
-struct BabyCountCard: View {
-    @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
-
-    var body: some View {
-        InsightCard(title: "Babies per Delivery", systemImage: "figure.2.and.child.holdinghands", accent: .storkPink) {
-            let average = viewModel.averageBabyCount(deliveries: deliveryManager.deliveries)
-            let monthlyCounts = viewModel.monthlyBabyCounts(deliveries: deliveryManager.deliveries)
-            let totals = viewModel.deliveryAndBabyTotals(deliveries: deliveryManager.deliveries)
-            let totalDeliveries = totals.deliveries
-            let totalBabies = totals.babies
-
-            VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Average")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("\(String(format: "%.1f", average)) babies / delivery")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    Text("Deliveries: \(totalDeliveries) • Babies: \(totalBabies)")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-
-                if !monthlyCounts.labels.isEmpty {
-                    Chart {
-                        ForEach(Array(zip(monthlyCounts.labels, monthlyCounts.counts)), id: \.0) { label, count in
-                            AreaMark(
-                                x: .value("Month", label),
-                                y: .value("Babies", count)
-                            )
-                            .foregroundStyle(LinearGradient(colors: [.storkPink.opacity(0.35), .clear], startPoint: .top, endPoint: .bottom))
-                            .interpolationMethod(.catmullRom)
-
-                            LineMark(
-                                x: .value("Month", label),
-                                y: .value("Babies", count)
-                            )
-                            .foregroundStyle(.storkPink)
-                            .interpolationMethod(.catmullRom)
-                            .symbol(Circle())
-                            .symbolSize(30)
-                        }
-                    }
-                    .frame(height: 200)
-                    .chartYAxis {
-                        AxisMarks(position: .leading, values: .automatic) { value in
-                            AxisValueLabel(value.as(Int.self)!.description)
-                        }
-                    }
-                    .chartXAxis {
-                        AxisMarks(values: monthlyCounts.labels) { value in
-                            AxisValueLabel(anchor: .bottom) {
-                                if let label = value.as(String.self) {
-                                    Text(label).rotationEffect(.degrees(45))
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    Label("No deliveries logged yet.", systemImage: "tray.fill")
-                        .foregroundStyle(.secondary)
-                        .labelStyle(.titleOnly)
-                }
-            }
-        }
     }
 }
 

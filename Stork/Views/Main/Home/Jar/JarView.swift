@@ -23,12 +23,14 @@ struct JarView: View {
     }()
     @State private var containerSize: CGSize = .zero
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    @State private var sizeChangeDebounceTask: Task<Void, Never>? = nil
 
     @State private var prevBoy = 0
     @State private var prevGirl = 0
     @State private var prevLoss = 0
     @State private var didInitialDrop = false
+    @State private var startupIgnoreUntil: Date? = nil
+    @State private var hasCompletedInitialSpawn = false
+    @State private var sizeClassDebounceTask: Task<Void, Never>? = nil
 
     @Environment(\.colorScheme) private var colorScheme
     private let tilt = TiltManager()
@@ -41,33 +43,21 @@ struct JarView: View {
                 // A subtle glassy background
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(.ultraThinMaterial)
+                    .allowsHitTesting(false)
                 TransparentSpriteView(scene: scene)
                     .overlay {
                         Rectangle()
                             .foregroundStyle(.ultraThinMaterial)
                             .opacity(0.6)
+                            .allowsHitTesting(false)
                     }
                     .ignoresSafeArea(edges: .bottom)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             }
             .onChange(of: newSize) { _, new in
-                // When the container size changes (e.g., iPad regular ↔︎ compact), debounce a full reset + respawn.
                 let sizeChanged = containerSize != new
                 containerSize = new
-                guard sizeChanged else { return }
-
-                // Cancel any pending reset and schedule a short debounce to let layout settle.
-                sizeChangeDebounceTask?.cancel()
-                sizeChangeDebounceTask = Task { @MainActor in
-                    // ~0.5s debounce to avoid multiple resets during interactive resizes/splits
-                    try? await Task.sleep(nanoseconds: 500_000_000)
-                    scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
-                        prevBoy = boyCount
-                        prevGirl = girlCount
-                        prevLoss = lossCount
-                        didInitialDrop = true
-                    }
-                }
+                _ = sizeChanged // keep tracking size changes, but no reset here
             }
         }
         .overlay(alignment: .top) {
@@ -80,20 +70,16 @@ struct JarView: View {
                 .padding(.top, 8)
         }
         .onAppear {
+            startupIgnoreUntil = Date().addingTimeInterval(2.0)
             scene.onReady = { [weak scene] in
                 guard let scene = scene else { return }
                 scene.applyAppearance(isDark: colorScheme == .dark)
                 ensureInitialDropIfNeeded()
                 dropDeltasIfNeeded()
-            }
-            // If scene is already ready (didMove(to:) already ran), drop immediately to avoid race
-            if scene.size.width > 10, scene.size.height > 10, scene.physicsBody != nil {
-                ensureInitialDropIfNeeded()
-                dropDeltasIfNeeded()
+                hasCompletedInitialSpawn = true
             }
             scene.containerCornerRadius = cornerRadius
             scene.applyAppearance(isDark: colorScheme == .dark)
-            dropDeltasIfNeeded()
             if !isMotionActive {
                 isMotionActive = true
                 tilt.start { x in
@@ -124,6 +110,7 @@ struct JarView: View {
             dropDeltasIfNeeded()
         }
         .onChange(of: reshuffle) { _, should in
+            print("Reshuffling")
             guard should else { return }
             // Full reset + respawn to guarantee exact counts after a manual reshuffle trigger.
             scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
@@ -138,8 +125,10 @@ struct JarView: View {
             scene.applyAppearance(isDark: colorScheme == .dark)
         }
         .onChange(of: hSizeClass) { _, _ in
-            // Also reset when size class flips; wait briefly for layout to settle.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            // Debounce a full reset so we only refresh once after the size-class settles.
+            sizeClassDebounceTask?.cancel()
+            sizeClassDebounceTask = Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 350_000_000) // ~0.35s
                 scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
                     prevBoy = boyCount
                     prevGirl = girlCount
@@ -151,17 +140,29 @@ struct JarView: View {
     }
 
     private func ensureInitialDropIfNeeded() {
+        // Only perform the initial drop if we haven't done it, there is something to drop,
+        // and the scene isn't already in a populated state representing the current counts.
         guard !didInitialDrop else { return }
-        let total = boyCount + girlCount + lossCount
-        guard total > 0 else { return }
-        // If scene is not ready yet, enqueue will buffer; otherwise it will spawn now
-        if !scene.hasAnyMarbles() {
-            scene.enqueue(blue: boyCount, pink: girlCount, purple: lossCount)
+        print("Initial Drop!")
+        let expectedTotal = boyCount + girlCount + lossCount
+        guard expectedTotal > 0 else { return }
+
+        if scene.hasAnyMarbles() {
+            // Scene already populated (e.g., due to a reset/respawn during startup).
+            // Just sync counters to avoid a second initial drop.
             prevBoy = boyCount
             prevGirl = girlCount
             prevLoss = lossCount
             didInitialDrop = true
+            return
         }
+
+        // No marbles yet — perform the initial drop.
+        scene.enqueue(blue: boyCount, pink: girlCount, purple: lossCount)
+        prevBoy = boyCount
+        prevGirl = girlCount
+        prevLoss = lossCount
+        didInitialDrop = true
     }
 
     private func dropDeltasIfNeeded() {

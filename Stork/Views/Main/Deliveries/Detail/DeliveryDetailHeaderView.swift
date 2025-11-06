@@ -19,7 +19,6 @@ struct DeliveryDetailHeaderView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "calendar")
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Date").font(.caption2).foregroundStyle(.secondary)
                         Text(formattedDate(delivery.date))
                             .font(.subheadline).fontWeight(.semibold)
                     }
@@ -35,7 +34,6 @@ struct DeliveryDetailHeaderView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "building.2")
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Hospital").font(.caption2).foregroundStyle(.secondary)
                         Text({ () -> String in
                             if let id = delivery.hospitalId,
                                let resolved = hospitalManager.hospitals.first(where: { $0.remoteId == id }) {
@@ -44,7 +42,7 @@ struct DeliveryDetailHeaderView: View {
                             return "No Hospital Specified"
                         }())
                         .font(.subheadline).fontWeight(.semibold)
-                        .lineLimit(2)
+                        .lineLimit(4)
                         .minimumScaleFactor(0.85)
                     }
                 }

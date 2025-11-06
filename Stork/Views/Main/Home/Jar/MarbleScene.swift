@@ -162,6 +162,29 @@ final class MarbleScene: SKScene {
         addChild(node)
     }
 
+    // MARK: - Interaction
+    private func blast(at point: CGPoint, strength: CGFloat = 3.5, radius: CGFloat = 140) {
+        // Apply an outward impulse to marbles within the radius from 'point'
+        enumerateChildNodes(withName: "marble") { node, _ in
+            guard let body = node.physicsBody else { return }
+            let dx = node.position.x - point.x
+            let dy = node.position.y - point.y
+            let dist = sqrt(dx*dx + dy*dy)
+            guard dist > 1, dist <= radius else { return }
+            // Outward, distance-weighted impulse with slight upward bias
+            let nx = dx / dist
+            let ny = dy / dist
+            let falloff = max(0, 1.0 - (dist / radius)) // 1 at center → 0 at edge
+            let boost: CGFloat = 1.0 + 0.25 * falloff     // small extra punch near center
+            let impulse = strength * falloff * boost
+            let ix = nx * impulse
+            let iy = ny * impulse + 0.2 * impulse         // nudge upward a bit
+            body.applyImpulse(CGVector(dx: ix, dy: iy))
+            // Add a touch of spin
+            body.applyAngularImpulse((Bool.random() ? 1 : -1) * 0.02 * impulse)
+        }
+    }
+
     // Remove all existing marbles (preserve walls)
     func clearMarbles() {
         enumerateChildNodes(withName: "marble") { node, _ in
@@ -192,6 +215,34 @@ final class MarbleScene: SKScene {
         run(.sequence(actions))
     }
 }
+
+// MARK: - Touch handling
+#if os(iOS)
+extension MarbleScene {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let t = touches.first else { return }
+        let p = t.location(in: self)
+        blast(at: p)
+    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let t = touches.first else { return }
+        let p = t.location(in: self)
+        // Smaller strength while dragging to feel responsive without chaos
+        blast(at: p, strength: 2.6, radius: 120)
+    }
+}
+#else
+extension MarbleScene {
+    override func mouseDown(with event: NSEvent) {
+        let p = event.location(in: self)
+        blast(at: p)
+    }
+    override func mouseDragged(with event: NSEvent) {
+        let p = event.location(in: self)
+        blast(at: p, strength: 2.6, radius: 120)
+    }
+}
+#endif
 
 struct MarblePreviewView: View {
     private let marbleDiameter: CGFloat = 40 // approx 20 radius * 2
