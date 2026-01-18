@@ -54,7 +54,6 @@ struct MilestoneCardView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 28, height: 28)
-                .opacity(0.6)
                 .padding(.top, 8)
         }
         .padding(40)

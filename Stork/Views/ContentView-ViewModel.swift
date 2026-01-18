@@ -13,17 +13,24 @@ extension ContentView {
     class ViewModel {
         // MARK: - App State
         var appStage: AppStage = .start
-        
+        var cloudCheckMessage: String = "Checking for existing data..."
+
         // MARK: - Dependencies
         var userManager: UserManager?
+        var cloudSyncManager: CloudSyncManager?
         var resetApplication: (() -> Void)?
-        
+
         // MARK: - Configuration
-        func configure(userManager: UserManager, resetApplication: @escaping () -> Void) {
+        func configure(
+            userManager: UserManager,
+            cloudSyncManager: CloudSyncManager,
+            resetApplication: @escaping () -> Void
+        ) {
             self.userManager = userManager
+            self.cloudSyncManager = cloudSyncManager
             self.resetApplication = resetApplication
         }
-        
+
         // MARK: - Transitions
         var leadingTransition: AnyTransition {
             .asymmetric(
@@ -31,39 +38,84 @@ extension ContentView {
                 removal: .move(edge: .leading).combined(with: .opacity)
             )
         }
-        
+
         func prepareApp(migrationManager: MigrationManager) async {
+            // Check for Firebase migration first
             if migrationManager.isAuthenticated {
                 await MainActor.run { self.appStage = .migration }
                 return
             }
+
             guard let userManager else { return }
-            
-            // First try a quick local refresh (in case we already have the user cached)
+
+            // Quick local check first - user might already be cached
             await userManager.refresh()
-            
-            // If not found yet, allow iCloud a bit more time to hydrate.
-            if userManager.currentUser == nil {
-                // Give CloudKit/SwiftData time to surface the user record.
-                // Increased timeout and faster polling to catch "appears a second later" cases.
-                await userManager.restoreFromCloud(timeout: 6, pollInterval: 0.5)
-                
-                // Defensive: brief retry loop after restore to cover racey arrivals.
-                let deadline = Date().addingTimeInterval(2.0)
-                while userManager.currentUser == nil && Date() < deadline {
-                    await userManager.refresh()
-                    if userManager.currentUser != nil { break }
-                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
+            if userManager.hasExistingData() {
+                await transitionToMain()
+                return
+            }
+
+            // Show the "checking cloud" state to user
+            await MainActor.run {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    self.cloudCheckMessage = "Checking iCloud..."
+                    self.appStage = .checkingCloud
                 }
             }
-            
-            if userManager.currentUser != nil {
+
+            // If iCloud is available, wait for remote changes or timeout
+            if let cloudSyncManager, cloudSyncManager.isCloudAvailable {
                 await MainActor.run {
-                    withAnimation(.easeInOut(duration: 0.3)) { self.appStage = .main }
+                    self.cloudCheckMessage = "Syncing with iCloud..."
+                }
+
+                // Wait up to 10 seconds for a remote change notification
+                let receivedRemoteChange = await cloudSyncManager.waitForRemoteChange(timeout: 10)
+
+                if receivedRemoteChange {
+                    // Remote data arrived - refresh and check again
+                    await userManager.refresh()
+                    if userManager.hasExistingData() {
+                        await transitionToMain()
+                        return
+                    }
+                }
+
+                // Even if no notification, poll a few more times with increasing delays
+                // CloudKit can sometimes sync without firing the notification
+                await MainActor.run {
+                    self.cloudCheckMessage = "Looking for your data..."
+                }
+
+                for delay in [0.5, 1.0, 1.5, 2.0] {
+                    try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                    await userManager.refresh()
+                    if userManager.hasExistingData() {
+                        await transitionToMain()
+                        return
+                    }
                 }
             } else {
-                await MainActor.run {
-                    withAnimation(.easeInOut(duration: 0.3)) { self.appStage = .splash }
+                // No iCloud - just do a brief local check
+                await userManager.restoreFromCloud(timeout: 3, pollInterval: 0.5)
+                if userManager.hasExistingData() {
+                    await transitionToMain()
+                    return
+                }
+            }
+
+            // No existing data found - go to splash
+            await MainActor.run {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    self.appStage = .splash
+                }
+            }
+        }
+
+        private func transitionToMain() async {
+            await MainActor.run {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    self.appStage = .main
                 }
             }
         }

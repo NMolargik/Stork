@@ -134,6 +134,28 @@ class UserManager {
         }
     }
     
+    // MARK: - Existing Data Check
+
+    /// Checks if there's any existing data in the store (user or deliveries).
+    /// Useful for detecting returning users even if sync order is unpredictable.
+    func hasExistingData() -> Bool {
+        // Check for user first
+        if currentUser != nil {
+            return true
+        }
+
+        // Also check for any deliveries (might sync before user record)
+        do {
+            var deliveryDesc = FetchDescriptor<Delivery>()
+            deliveryDesc.fetchLimit = 1
+            let deliveryCount = try context.fetchCount(deliveryDesc)
+            return deliveryCount > 0
+        } catch {
+            print("Error checking for existing deliveries: \(error.localizedDescription)")
+            return false
+        }
+    }
+
     // MARK: - Error Handling
     private func handle(_ error: UserError) {
         print("Error: \(error.errorDescription ?? "Unknown UserManager error")")

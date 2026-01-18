@@ -143,7 +143,6 @@ struct InteractiveMediumView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
-                        .opacity(0.6)
 
                     HStack(spacing: 16) {
                         VStack(alignment: .leading, spacing: 2) {

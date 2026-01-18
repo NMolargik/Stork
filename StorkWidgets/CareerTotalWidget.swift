@@ -77,7 +77,6 @@ struct CareerTotalSmallView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
-                .opacity(0.6)
 
             Text("\(entry.totalBabies)")
                 .font(.system(size: 48, weight: .bold, design: .rounded))

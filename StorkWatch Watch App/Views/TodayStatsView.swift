@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TodayStatsView: View {
+    @Environment(\.modelContext) private var modelContext
+
     let deliveries: [Delivery]
     let healthManager: WatchHealthManager
+
+    @State private var isRefreshing = false
 
     private var todayDeliveries: [Delivery] {
         let calendar = Calendar.current
@@ -50,7 +55,7 @@ struct TodayStatsView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
-                        .opacity(0.6)
+
                     Text("Today")
                         .font(.headline)
                 }
@@ -82,9 +87,6 @@ struct TodayStatsView: View {
                     }
                 }
 
-                Divider()
-                    .padding(.vertical, 4)
-
                 // Week stats
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
@@ -110,6 +112,23 @@ struct TodayStatsView: View {
             .padding()
         }
         .navigationTitle("Stork")
+        .refreshable {
+            await refreshData()
+        }
+    }
+
+    private func refreshData() async {
+        isRefreshing = true
+        defer { isRefreshing = false }
+
+        // Refresh step count from HealthKit
+        healthManager.startObservingStepCount()
+
+        // Give SwiftData/iCloud a moment to sync any pending changes
+        try? await Task.sleep(nanoseconds: 500_000_000)
+
+        // Trigger haptic feedback on completion
+        WatchHaptics.success()
     }
 }
 

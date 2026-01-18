@@ -136,7 +136,6 @@ struct ShareableStatCardView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
-                        .opacity(0.6)
                 }
             }
         }

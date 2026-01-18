@@ -74,11 +74,13 @@ final class CloudSyncManager {
     private(set) var syncStatus: SyncStatus = .idle
     private(set) var isSyncing: Bool = false
     private(set) var lastSyncDate: Date?
+    private(set) var hasReceivedRemoteChange: Bool = false
 
     private var modelContext: ModelContext?
     private var networkMonitor: NWPathMonitor?
     private var isNetworkAvailable: Bool = true
     private var notificationObservers: [Any] = []
+    private var remoteChangeContinuations: [CheckedContinuation<Void, Never>] = []
 
     // MARK: - Initialization
 
@@ -154,7 +156,15 @@ final class CloudSyncManager {
 
     private func handleRemoteChange() {
         lastSyncDate = Date()
+        hasReceivedRemoteChange = true
         updateSyncStatus()
+
+        // Resume any waiting continuations
+        let continuations = remoteChangeContinuations
+        remoteChangeContinuations.removeAll()
+        for continuation in continuations {
+            continuation.resume()
+        }
     }
 
     private func handleStoreChange() {
@@ -214,5 +224,58 @@ final class CloudSyncManager {
     /// Checks if iCloud is available on this device
     var isCloudAvailable: Bool {
         FileManager.default.ubiquityIdentityToken != nil
+    }
+
+    // MARK: - Initial Sync Waiting
+
+    /// Waits for a remote change notification or timeout, whichever comes first.
+    /// Returns `true` if a remote change was received, `false` if timed out.
+    func waitForRemoteChange(timeout: TimeInterval) async -> Bool {
+        // If we've already received a remote change, return immediately
+        if hasReceivedRemoteChange {
+            return true
+        }
+
+        // If iCloud isn't available, don't wait
+        guard isCloudAvailable && isNetworkAvailable else {
+            return false
+        }
+
+        // Race between remote change notification and timeout
+        return await withTaskGroup(of: Bool.self) { group in
+            // Task 1: Wait for remote change notification
+            group.addTask { @MainActor in
+                await withCheckedContinuation { continuation in
+                    self.remoteChangeContinuations.append(continuation)
+                }
+                return true
+            }
+
+            // Task 2: Timeout
+            group.addTask {
+                try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+                return false
+            }
+
+            // Return the first result (either remote change or timeout)
+            let result = await group.next() ?? false
+
+            // Cancel remaining tasks
+            group.cancelAll()
+
+            // Clean up any pending continuations if we timed out
+            if !result {
+                await MainActor.run {
+                    self.remoteChangeContinuations.removeAll()
+                }
+            }
+
+            return result
+        }
+    }
+
+    /// Resets the remote change tracking (useful for testing or re-checking)
+    func resetRemoteChangeTracking() {
+        hasReceivedRemoteChange = false
     }
 }

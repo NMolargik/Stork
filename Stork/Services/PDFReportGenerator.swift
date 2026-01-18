@@ -158,13 +158,13 @@ final class PDFReportGenerator {
 
         // Background
         let path = UIBezierPath(roundedRect: boxRect, cornerRadius: 8)
-        UIColor.systemGray6.setFill()
+        UIColor.systemGray.setFill()
         path.fill()
 
         // Value
         let valueAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 22, weight: .bold),
-            .foregroundColor: UIColor.black
+            .foregroundColor: UIColor.white
         ]
         let valueSize = value.size(withAttributes: valueAttributes)
         value.draw(at: CGPoint(x: point.x + (width - valueSize.width) / 2, y: point.y + 8), withAttributes: valueAttributes)
@@ -172,7 +172,7 @@ final class PDFReportGenerator {
         // Label
         let labelAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 10, weight: .medium),
-            .foregroundColor: UIColor.darkGray
+            .foregroundColor: UIColor.white
         ]
         let labelSize = label.size(withAttributes: labelAttributes)
         label.draw(at: CGPoint(x: point.x + (width - labelSize.width) / 2, y: point.y + 32), withAttributes: labelAttributes)

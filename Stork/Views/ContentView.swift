@@ -50,6 +50,29 @@ struct ContentView: View {
                         }
                         await viewModel.prepareApp(migrationManager: migrationManager)
                     }
+            case .checkingCloud:
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .controlSize(.large)
+
+                    Text(viewModel.cloudCheckMessage)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+
+                    if cloudSyncManager.isCloudAvailable {
+                        HStack(spacing: 6) {
+                            Image(systemName: "checkmark.icloud")
+                                .foregroundStyle(.green)
+                            Text("iCloud Connected")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .id("checkingCloud")
+                .transition(.opacity)
+                .zIndex(0.5)
             case .splash:
                 SplashView(
                     checkForExisting: {
@@ -119,7 +142,10 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            viewModel.configure(userManager: userManager) {
+            viewModel.configure(
+                userManager: userManager,
+                cloudSyncManager: cloudSyncManager
+            ) {
                 self.resetApplication()
             }
         }

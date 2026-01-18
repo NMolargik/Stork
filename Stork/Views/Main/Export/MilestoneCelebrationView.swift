@@ -118,7 +118,6 @@ struct MilestoneCelebrationView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
-                    .opacity(0.5)
             }
             .padding(32)
             .frame(maxWidth: 340)

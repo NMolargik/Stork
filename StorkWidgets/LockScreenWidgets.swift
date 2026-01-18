@@ -101,7 +101,6 @@ struct CircularLockScreenView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
-                    .opacity(0.6)
                 
                 Text("\(entry.weeklyBabies)")
                     .font(.system(size: 20, weight: .bold, design: .rounded))
@@ -122,7 +121,6 @@ struct RectangularLockScreenView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
-                    .opacity(0.6)
 
                 HStack(spacing: 4) {
                     Text("\(entry.weeklyBabies)")
@@ -160,7 +158,6 @@ struct InlineLockScreenView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
-                .opacity(0.6)
         }
     }
 }
@@ -264,7 +261,6 @@ struct CareerInlineView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
-                .opacity(0.6)
         }
     }
 }

@@ -9,10 +9,11 @@ import Foundation
 
 enum AppStage: String, Identifiable {
     case start
+    case checkingCloud  // Checking iCloud for existing data
     case splash
     case migration
     case onboarding
     case main
-    
+
     var id: String { self.rawValue }
 }
