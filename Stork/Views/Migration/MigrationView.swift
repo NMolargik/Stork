@@ -18,6 +18,7 @@ struct MigrationView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Migrating Your Data")
                         .font(.title3.weight(.semibold))
+                        .accessibilityAddTraits(.isHeader)
                     Group {
                         switch migrationManager.status {
                         case .completed:
@@ -46,6 +47,8 @@ struct MigrationView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Preparing migration")
                     case .preparing(let msg):
                         HStack(spacing: 8) {
                             ProgressView().scaleEffect(0.9)
@@ -53,6 +56,8 @@ struct MigrationView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Preparing: \(msg)")
                     case .running(let msg, let p):
                         VStack(alignment: .leading, spacing: 8) {
                             Text(msg)
@@ -63,14 +68,18 @@ struct MigrationView: View {
                                 .tint(.storkBlue)
                                 .animation(.default, value: p)
                         }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("\(msg), \(Int(p * 100)) percent complete")
                     case .completed:
                         Label("Migration complete.", systemImage: "checkmark.circle.fill")
                             .font(.caption)
                             .foregroundStyle(.green)
+                            .accessibilityLabel("Migration complete")
                     case .failed(let reason):
                         Label(reason, systemImage: "xmark.octagon.fill")
                             .font(.caption)
                             .foregroundStyle(.red)
+                            .accessibilityLabel("Migration failed: \(reason)")
                     }
                 }
 
@@ -86,13 +95,18 @@ struct MigrationView: View {
                         }
                         .adaptiveGlass(tint: .storkBlue)
                         .foregroundStyle(.white)
+                        .accessibilityLabel("Continue")
+                        .accessibilityHint("Proceed to the main app after migration")
                     case .running(_, let p):
                         ProgressView(value: p)
                             .progressViewStyle(.linear)
                             .tint(.storkBlue)
                             .animation(.default, value: p)
+                            .accessibilityLabel("Migration progress")
+                            .accessibilityValue("\(Int(p * 100)) percent")
                     case .idle, .preparing:
                         ProgressView()
+                            .accessibilityLabel("Preparing migration")
                     case .failed:
                         Button {
                             Task { await performMigration() }
@@ -103,6 +117,8 @@ struct MigrationView: View {
                         }
                         .adaptiveGlass(tint: .storkOrange)
                         .foregroundStyle(.white)
+                        .accessibilityLabel("Retry migration")
+                        .accessibilityHint("Attempts to migrate your data again")
                     }
                 }
 

@@ -10,7 +10,7 @@ import SwiftUI
 extension OnboardingView {
     @Observable
     class ViewModel {
-        var currentStep: OnboardingStep = .userInfo
+        var currentStep: OnboardingStep = .privacy
         var firstName: String = ""
         var lastName: String = ""
         var birthday: Date = Calendar.current.date(byAdding: .year, value: -20, to: Date()) ?? Date()
@@ -28,6 +28,8 @@ extension OnboardingView {
         
         var canContinue: Bool {
             switch currentStep {
+            case .privacy:
+                return true
             case .userInfo:
                 let first = firstName.trimmingCharacters(in: .whitespaces)
                 let last  = lastName.trimmingCharacters(in: .whitespaces)
@@ -41,7 +43,7 @@ extension OnboardingView {
             switch currentStep {
             case .location, .health:
                 return true
-            case .userInfo, .complete:
+            case .privacy, .userInfo, .complete:
                 return false
             }
         }
@@ -49,6 +51,9 @@ extension OnboardingView {
         // Actions
         func handleContinueTapped(userManager: UserManager) {
             switch currentStep {
+            case .privacy:
+                currentStep = .userInfo
+
             case .userInfo:
                 userInfoError = nil
                 isSavingUser = true
@@ -91,7 +96,7 @@ extension OnboardingView {
                 currentStep = .health
             case .health:
                 currentStep = .complete
-            case .userInfo, .complete:
+            case .privacy, .userInfo, .complete:
                 break
             }
         }

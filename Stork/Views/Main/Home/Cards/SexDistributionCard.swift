@@ -17,43 +17,11 @@ struct SexDistributionCard: View {
         InsightCard(title: "Sex Distribution", systemImage: "chart.pie.fill", accent: .storkPurple) {
             let stats = viewModel.sexDistribution(deliveries: deliveryManager.deliveries)
             VStack(alignment: .leading, spacing: 10) {
-                // Stat chips
+                // Stat chips with animated percentages
                 HStack(spacing: 8) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "circle.fill")
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Male").font(.caption2).foregroundStyle(.secondary)
-                            Text("\(String(format: "%.0f", stats.malePercentage))%").font(.subheadline).fontWeight(.semibold)
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .foregroundStyle(.storkBlue)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "circle.fill")
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Female").font(.caption2).foregroundStyle(.secondary)
-                            Text("\(String(format: "%.0f", stats.femalePercentage))%").font(.subheadline).fontWeight(.semibold)
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .foregroundStyle(.storkPink)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "circle.fill")
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Loss").font(.caption2).foregroundStyle(.secondary)
-                            Text("\(String(format: "%.0f", stats.lossPercentage))%").font(.subheadline).fontWeight(.semibold)
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .foregroundStyle(.storkPurple)
+                    sexPill(label: "Male", percentage: stats.malePercentage, color: .storkBlue)
+                    sexPill(label: "Female", percentage: stats.femalePercentage, color: .storkPink)
+                    sexPill(label: "Loss", percentage: stats.lossPercentage, color: .storkPurple)
                 }
                 if stats.total > 0 {
                     ZStack {
@@ -72,15 +40,17 @@ struct SexDistributionCard: View {
                             }
                         }
                         .frame(height: 220)
+                        .accessibilityLabel("Pie chart showing sex distribution: \(stats.maleCount) male, \(stats.femaleCount) female, \(stats.lossCount) loss")
 
                         VStack(spacing: 2) {
                             Text("Babies")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("\(stats.total)")
-                                .font(.title2).bold()
+                            AnimatedInteger(value: stats.total, font: .title2, fontWeight: .bold)
                         }
                         .allowsHitTesting(false)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Total babies: \(stats.total)")
                     }
                 } else {
                     Label("No babies logged yet.", systemImage: "tray.fill")
@@ -89,6 +59,27 @@ struct SexDistributionCard: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func sexPill(label: String, percentage: Double, color: Color) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: "circle.fill")
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(label).font(.caption2).foregroundStyle(.secondary)
+                HStack(spacing: 0) {
+                    AnimatedNumber(value: percentage, format: "%.0f", font: .subheadline, fontWeight: .semibold, color: color)
+                    Text("%").font(.subheadline).fontWeight(.semibold)
+                }
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(.ultraThinMaterial, in: Capsule())
+        .foregroundStyle(color)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(label): \(String(format: "%.0f", percentage)) percent")
     }
 }
 

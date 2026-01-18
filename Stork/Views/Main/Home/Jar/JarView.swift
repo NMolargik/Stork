@@ -35,10 +35,13 @@ struct JarView: View {
     @Environment(\.colorScheme) private var colorScheme
     private let tilt = TiltManager()
     @State private var isMotionActive = false
+    @State private var isVisible = true
 
     var body: some View {
         GeometryReader { proxy in
             let newSize = proxy.size
+            let globalFrame = proxy.frame(in: .global)
+
             ZStack {
                 // A subtle glassy background
                 RoundedRectangle(cornerRadius: cornerRadius)
@@ -59,6 +62,12 @@ struct JarView: View {
                 containerSize = new
                 _ = sizeChanged // keep tracking size changes, but no reset here
             }
+            .onChange(of: globalFrame) { _, frame in
+                updateVisibility(for: frame)
+            }
+            .onAppear {
+                updateVisibility(for: globalFrame)
+            }
         }
         .overlay(alignment: .top) {
             Text(monthText())
@@ -69,6 +78,10 @@ struct JarView: View {
                 .shadow(radius: 1)
                 .padding(.top, 8)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Delivery jar for \(monthText())")
+        .accessibilityValue("\(boyCount) boys, \(girlCount) girls, \(lossCount) losses this month")
+        .accessibilityHint("Pull down to refresh the jar animation")
         .onAppear {
             startupIgnoreUntil = Date().addingTimeInterval(2.0)
             scene.onReady = { [weak scene] in
@@ -80,16 +93,7 @@ struct JarView: View {
             }
             scene.containerCornerRadius = cornerRadius
             scene.applyAppearance(isDark: colorScheme == .dark)
-            if !isMotionActive {
-                isMotionActive = true
-                tilt.start { x in
-                    let horizontalG = max(-0.5, min(0.5, x)) // clamp
-                    let dx = CGFloat(horizontalG * 6.0)     // subtle push
-                    DispatchQueue.main.async {
-                        scene.physicsWorld.gravity = CGVector(dx: dx, dy: -9.8)
-                    }
-                }
-            }
+            // Tilt and physics are managed by visibility handler
         }
         .onDisappear {
             if isMotionActive {
@@ -182,6 +186,40 @@ struct JarView: View {
         df.locale = .current
         df.dateFormat = "LLLL" // full month name
         return df.string(from: Date())
+    }
+
+    private func updateVisibility(for frame: CGRect) {
+        // Get screen bounds
+        let screenHeight = UIScreen.main.bounds.height
+
+        // Check if any part of the jar is visible on screen
+        // Add some padding to avoid flickering at edges
+        let visibleThreshold: CGFloat = -50
+        let nowVisible = frame.maxY > visibleThreshold && frame.minY < screenHeight + 50
+
+        if nowVisible != isVisible {
+            isVisible = nowVisible
+            scene.isPaused = !nowVisible
+
+            // Also pause/resume tilt when visibility changes
+            if nowVisible {
+                if !isMotionActive {
+                    isMotionActive = true
+                    tilt.start { x in
+                        let horizontalG = max(-0.5, min(0.5, x))
+                        let dx = CGFloat(horizontalG * 6.0)
+                        DispatchQueue.main.async {
+                            self.scene.physicsWorld.gravity = CGVector(dx: dx, dy: -9.8)
+                        }
+                    }
+                }
+            } else {
+                if isMotionActive {
+                    tilt.stop()
+                    isMotionActive = false
+                }
+            }
+        }
     }
 }
 

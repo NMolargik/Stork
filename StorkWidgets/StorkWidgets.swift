@@ -10,11 +10,6 @@ import SwiftUI
 import Foundation
 import SwiftData
 
-// MARK: - Shared constants
-enum AppGroup {
-    static let id = "group.com.molargiksoftware.Stork"
-}
-
 // Where the app writes the current week's count
 enum SharedKeys {
     static let deliveriesThisWeekCount = "deliveriesThisWeekCount"
@@ -52,15 +47,14 @@ func formattedWeekString(_ range: WeekRange) -> String {
     return "\(startText) – \(endText)"
 }
 
-// MARK: - Data read (SwiftData first, fallback to App Group defaults)
+// MARK: - Data read (CloudKit-synced SwiftData)
 @MainActor
 func widgetModelContainer() throws -> ModelContainer {
+    let cloudKitContainerID = "iCloud.com.molargiksoftware.Stork"
     let config = ModelConfiguration(
-        groupContainer: .identifier(AppGroup.id),
-        cloudKitDatabase: .none
+        cloudKitDatabase: .private(cloudKitContainerID)
     )
-    // Ensure Delivery/Baby models are available to this target
-    return try ModelContainer(for: Delivery.self, Baby.self, configurations: config)
+    return try ModelContainer(for: Delivery.self, Baby.self, DeliveryTag.self, configurations: config)
 }
 
 @MainActor

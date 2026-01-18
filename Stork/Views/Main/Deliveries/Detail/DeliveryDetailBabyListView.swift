@@ -16,6 +16,7 @@ struct DeliveryDetailBabyListView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .padding(.horizontal)
+                    .accessibilityLabel("No babies recorded for this delivery")
             } else {
                 ForEach(babies.indices, id: \.self) { index in
                     BabyCardView(baby: babies[index], index: index + 1)

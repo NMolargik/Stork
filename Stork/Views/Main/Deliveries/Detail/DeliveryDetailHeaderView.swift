@@ -7,19 +7,23 @@
 import SwiftUI
 
 struct DeliveryDetailHeaderView: View {
-    @Environment(HospitalManager.self) private var hospitalManager: HospitalManager
     @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates: Bool = false
-    
+
     let delivery: Delivery
-    
+
+    private var babyCount: Int {
+        delivery.babies?.count ?? delivery.babyCount
+    }
+
     var body: some View {
         VStack(spacing: 14) {
-            // Top chips: date + hospital
+            // Top chips: date + baby count
             HStack(spacing: 12) {
                 HStack(spacing: 6) {
                     Image(systemName: "calendar")
+                        .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 0) {
-                        Text(formattedDate(delivery.date))
+                        Text(delivery.date.formattedForDelivery(useDayMonthYear: useDayMonthYearDates))
                             .font(.subheadline).fontWeight(.semibold)
                     }
                 }
@@ -30,20 +34,15 @@ struct DeliveryDetailHeaderView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(uiColor: .tertiarySystemBackground))
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Delivery date: \(delivery.date.formattedForDelivery(useDayMonthYear: useDayMonthYearDates))")
 
                 HStack(spacing: 6) {
-                    Image(systemName: "building.2")
+                    Image(systemName: "figure.and.child.holdinghands")
+                        .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 0) {
-                        Text({ () -> String in
-                            if let id = delivery.hospitalId,
-                               let resolved = hospitalManager.hospitals.first(where: { $0.remoteId == id }) {
-                                return resolved.facilityName
-                            }
-                            return "No Hospital Specified"
-                        }())
-                        .font(.subheadline).fontWeight(.semibold)
-                        .lineLimit(4)
-                        .minimumScaleFactor(0.85)
+                        Text("\(babyCount) Bab\(babyCount == 1 ? "y" : "ies")")
+                            .font(.subheadline).fontWeight(.semibold)
                     }
                 }
                 .padding(.horizontal, 12)
@@ -53,6 +52,8 @@ struct DeliveryDetailHeaderView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(uiColor: .tertiarySystemBackground))
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("\(babyCount) bab\(babyCount == 1 ? "y" : "ies") delivered")
             }
 
             // Stats row styled like Home cards
@@ -70,6 +71,8 @@ struct DeliveryDetailHeaderView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(uiColor: .tertiarySystemBackground))
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Delivery method: \(delivery.deliveryMethod.displayName)")
 
                 VStack(alignment: .center, spacing: 4) {
                     Label("Epidural", systemImage: "syringe.fill")
@@ -84,6 +87,52 @@ struct DeliveryDetailHeaderView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(uiColor: .tertiarySystemBackground))
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Epidural: \(delivery.epiduralUsed ? "Yes" : "No")")
+            }
+
+            // Tags row
+            if let tags = delivery.tags, !tags.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Tags", systemImage: "tag.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    FlowLayout(spacing: 8) {
+                        ForEach(tags) { tag in
+                            TagChipView(tag: tag)
+                        }
+                    }
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(Color(uiColor: .tertiarySystemBackground))
+                )
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Tags: \(tags.map { $0.name }.joined(separator: ", "))")
+            }
+
+            // Notes section
+            if let notes = delivery.notes, !notes.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Notes", systemImage: "note.text")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Text(notes)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(Color(uiColor: .tertiarySystemBackground))
+                )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Notes: \(notes)")
             }
         }
         .padding()
@@ -94,20 +143,8 @@ struct DeliveryDetailHeaderView: View {
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Delivery details")
     }
-    
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        if useDayMonthYearDates {
-            formatter.dateFormat = "dd/MM/yyyy, h:mm a"
-        } else {
-            formatter.dateStyle = .long
-            formatter.timeStyle = .short
-        }
-        return formatter.string(from: date)
-    }
 }
 
 #Preview {
     DeliveryDetailHeaderView(delivery: Delivery.sample())
-        .environment(HospitalManager())
 }

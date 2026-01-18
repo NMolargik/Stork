@@ -3,15 +3,6 @@ import Observation
 import FirebaseAuth
 import FirebaseFirestore
 
-// MARK: - Progress state for the UI
-enum MigrationStatus: Equatable {
-    case idle
-    case preparing(String)
-    case running(String, Double) // message, progress 0...1
-    case completed
-    case failed(String)
-}
-
 // MARK: - Firebase-backed implementation
 @Observable
 final class MigrationManager {

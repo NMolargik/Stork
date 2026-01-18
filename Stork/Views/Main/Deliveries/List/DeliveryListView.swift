@@ -18,6 +18,7 @@ struct DeliveryListView: View {
                         systemImage: "list.bullet.rectangle",
                         description: Text("Your logged deliveries will appear here.")
                     )
+                    .accessibilityLabel("No deliveries yet. Your logged deliveries will appear here.")
                 }
                 .refreshable {
                     await deliveryManager.refresh()
@@ -36,6 +37,7 @@ struct DeliveryListView: View {
                                     NavigationLink(value: delivery) {
                                         DeliveryRowView(delivery: delivery)
                                             .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                            .hoverEffect(.lift)
                                     }
                                     .navigationLinkIndicatorVisibility(.hidden) // Add this to hide the chevron
                                     .buttonStyle(.plain)
@@ -43,7 +45,12 @@ struct DeliveryListView: View {
                                         Button(role: .destructive) {
                                             Haptics.error()
                                             Task { deliveryManager.delete(delivery) }
-                                        } label: { Label("Delete", systemImage: "trash").tint(.red) }
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                                .tint(.red)
+                                        }
+                                        .accessibilityLabel("Delete delivery")
+                                        .accessibilityHint("Permanently removes this delivery")
                                     }
                                     .listRowBackground(Color.clear)
                                     .listRowSeparator(.hidden)
@@ -70,6 +77,10 @@ struct DeliveryListView: View {
                     Image(systemName: "line.3.horizontal.decrease.circle")
                 }
                 .tint(.green)
+                .accessibilityLabel("Filter deliveries")
+                .accessibilityHint("Opens filter options for the delivery list")
+                .keyboardShortcut("f", modifiers: .command)
+                .hoverEffect(.highlight)
             }
         }
         .sheet(isPresented: $showingFilterSheet) {

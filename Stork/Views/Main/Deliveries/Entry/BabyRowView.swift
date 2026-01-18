@@ -21,13 +21,14 @@ struct BabyRowView: View {
                 Image(systemName: "person.fill")
                     .foregroundColor(baby.sex.color)
                     .font(.system(size: 24))
+                    .accessibilityHidden(true)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(baby.sex.rawValue.capitalized)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
-                    Text(weightHeightSummary(for: baby))
+                    Text(UnitConversion.weightHeightSummary(weightOunces: baby.weight, heightInches: baby.height, useMetric: useMetricUnits))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -36,11 +37,13 @@ struct BabyRowView: View {
                             Image(systemName: "cross.circle.fill")
                                 .font(.caption2)
                                 .foregroundColor(.storkOrange)
+                                .accessibilityLabel("NICU stay")
                         }
                         if baby.nurseCatch {
                             Image(systemName: "person.2.circle.fill")
                                 .font(.caption2)
                                 .foregroundColor(.green)
+                                .accessibilityLabel("Nurse catch")
                         }
                     }
                 }
@@ -56,15 +59,16 @@ struct BabyRowView: View {
                             .foregroundColor(.primary)
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                     }
-                    .buttonStyle(PlainButtonStyle()) // Prevent unintended tap propagation
+                    .buttonStyle(PlainButtonStyle())
                     .disabled(isDeleting)
-                    
+                    .accessibilityLabel("Edit baby")
+                    .accessibilityHint("Opens form to edit this baby's information")
+
                     Button(action: {
                         guard !isDeleting else { return }
                         withAnimation(.easeInOut(duration: 0.18)) {
                             isDeleting = true
                         }
-                        // Call the parent delete after the exit animation completes
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                             onDelete()
                         }
@@ -76,8 +80,10 @@ struct BabyRowView: View {
                             .foregroundColor(.red)
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                     }
-                    .buttonStyle(PlainButtonStyle()) // Prevent unintended tap propagation
+                    .buttonStyle(PlainButtonStyle())
                     .disabled(isDeleting)
+                    .accessibilityLabel("Delete baby")
+                    .accessibilityHint("Removes this baby from the delivery")
                 }
             }
             .padding()
@@ -86,30 +92,8 @@ struct BabyRowView: View {
         .offset(x: isDeleting ? 20 : 0)
         .scaleEffect(isDeleting ? 0.98 : 1)
         .animation(.easeInOut(duration: 0.18), value: isDeleting)
-    }
-    
-    private func weightHeightSummary(for baby: Baby) -> String {
-        let weightString: String
-        let heightString: String
-        
-        if useMetricUnits {
-            let weightKg = baby.weight / 35.27396
-            weightString = String(format: "%.1f kg", weightKg)
-            let heightCm = baby.height / 0.393701
-            heightString = String(format: "%.1f cm", heightCm)
-        } else {
-            let totalOunces = baby.weight
-            let lbs = Int(totalOunces / 16)
-            let oz = Int(totalOunces.truncatingRemainder(dividingBy: 16))
-            weightString = "\(lbs) lb \(oz) oz"
-            
-            let totalInches = baby.height
-            let ft = Int(totalInches / 12)
-            let inch = Int(totalInches.truncatingRemainder(dividingBy: 12))
-            heightString = ft > 0 ? "\(ft) ft \(inch) in" : "\(inch) in"
-        }
-        
-        return "\(weightString), \(heightString)"
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("\(baby.sex.rawValue.capitalized) baby, \(UnitConversion.weightHeightSummary(weightOunces: baby.weight, heightInches: baby.height, useMetric: useMetricUnits))\(baby.nicuStay ? ", NICU stay" : "")\(baby.nurseCatch ? ", nurse catch" : "")")
     }
 }
 

@@ -2,97 +2,149 @@
 //  OnboardingUserInfoPage.swift
 //  Stork
 //
-//  Created by Assistant on 10/2/25.
+//  Created by Nick Molargik on 10/2/25.
 //
 
 import SwiftUI
-import Observation
 
 struct OnboardingUserInfoPage: View {
-    @Environment(OnboardingView.ViewModel.self) private var onboardingViewModel: OnboardingView.ViewModel
-
-    @State private var showImagePicker = false
+    @Environment(OnboardingView.ViewModel.self) private var viewModel
+    @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates = false
 
     var body: some View {
-        NavigationStack {
-            @Bindable var viewModel: OnboardingView.ViewModel = onboardingViewModel
+        @Bindable var vm = viewModel
 
-            Form {
-                Section {
-                    VStack(spacing: 12) {
-                        Text("We just need a few details to finish up your profile!")
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity)
+        ScrollView {
+            VStack(spacing: 32) {
+                // Header
+                VStack(spacing: 16) {
+                    Image(systemName: "person.circle.fill")
+                        .font(.system(size: 64))
+                        .foregroundStyle(.storkOrange)
+                        .accessibilityHidden(true)
 
-                        Image(systemName: "person.circle")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 120, height: 120)
-                            .foregroundStyle(.storkOrange)
-                            .padding(.top, 4)
+                    Text("About You")
+                        .font(.title.bold())
+
+                    Text("Tell us a bit about yourself to personalize your experience.")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                .padding(.top, 24)
+
+                // Form Fields
+                VStack(spacing: 0) {
+                    // First Name
+                    FormField(icon: "person.fill", iconColor: .storkPurple) {
+                        TextField("First Name", text: $vm.firstName)
+                            .textContentType(.givenName)
+                            .textInputAutocapitalization(.words)
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .listRowInsets(EdgeInsets(top: 16, leading: 16, bottom: 8, trailing: 16))
-                    .listRowBackground(Color.clear)
+
+                    Divider().padding(.leading, 56)
+
+                    // Last Name
+                    FormField(icon: "person.fill", iconColor: .storkPurple) {
+                        TextField("Last Name", text: $vm.lastName)
+                            .textContentType(.familyName)
+                            .textInputAutocapitalization(.words)
+                    }
+
+                    Divider().padding(.leading, 56)
+
+                    // Birthday
+                    FormField(icon: "calendar", iconColor: .red) {
+                        HStack {
+                            Text("Birthday")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            DatePicker("", selection: $vm.birthday, displayedComponents: .date)
+                                .labelsHidden()
+                                .environment(\.locale, useDayMonthYearDates ? Locale(identifier: "en_GB") : Locale.current)
+                        }
+                    }
+
+                    Divider().padding(.leading, 56)
+
+                    // Role
+                    FormField(icon: "stethoscope", iconColor: .storkBlue) {
+                        HStack {
+                            Text("Role")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Picker("", selection: $vm.role) {
+                                ForEach(UserRole.allCases) { role in
+                                    Text(role.description).tag(role)
+                                }
+                            }
+                            .labelsHidden()
+                            .pickerStyle(.segmented)
+                            .frame(width: 160)
+                        }
+                    }
+                }
+                .background(Color(uiColor: .secondarySystemGroupedBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .padding(.horizontal, 20)
+
+                // Validation Message
+                if !viewModel.isAgeValid {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                        Text("You must be at least 15 years old.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal)
                 }
 
-                // Fields
-                UserEditView(
-                    firstName: $viewModel.firstName,
-                    lastName: $viewModel.lastName,
-                    birthday: $viewModel.birthday,
-                    role: $viewModel.role,
-                    validationMessage: validationMessage
-                )
-            }
-            .formStyle(.grouped)
-        }
-        .overlay(alignment: .bottom) {
-            if let error = onboardingViewModel.userInfoError, !error.isEmpty {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.yellow)
-                    Text(error)
-                        .multilineTextAlignment(.leading)
+                // Error Message
+                if let error = viewModel.userInfoError {
+                    HStack(spacing: 8) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.horizontal, 20)
                 }
-                .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.ultraThinMaterial)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .strokeBorder(Color.secondary.opacity(0.2))
-                )
-                .padding()
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+
+                Spacer(minLength: 120)
             }
         }
-        .navigationTitle("A Little About You")
-        .navigationBarTitleDisplayMode(.large)
-        .disabled(onboardingViewModel.isSavingUser)
-        .overlay {
-            if onboardingViewModel.isSavingUser {
-                ZStack {
-                    Color.black.opacity(0.05).ignoresSafeArea()
-                    ProgressView("Saving your info…")
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
-                }
-            }
-        }
+        .scrollIndicators(.hidden)
+        .disabled(viewModel.isSavingUser)
     }
+}
 
-    private var validationMessage: String {
-        guard !onboardingViewModel.isAgeValid else { return "" }
-        return "You must be at least 15 years old."
+private struct FormField<Content: View>: View {
+    let icon: String
+    let iconColor: Color
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundStyle(iconColor)
+                .frame(width: 28)
+                .accessibilityHidden(true)
+
+            content
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
     }
 }
 
 #Preview {
-    NavigationStack {
-        OnboardingUserInfoPage()
-            .environment(OnboardingView.ViewModel())
-    }
+    OnboardingUserInfoPage()
+        .environment(OnboardingView.ViewModel())
 }

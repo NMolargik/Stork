@@ -21,25 +21,31 @@ struct BabyMeasurementsCard: View {
                 HStack(spacing: 8) {
                     HStack(spacing: 6) {
                         Image(systemName: "scalemass.fill")
+                            .accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: 0) {
                             Text("Avg Weight").font(.caption2)
-                            Text(weightDisplay(stats.averageWeight)).font(.subheadline).fontWeight(.semibold)
+                            Text(UnitConversion.weightDisplay(stats.averageWeight, useMetric: useMetricUnits)).font(.subheadline).fontWeight(.semibold)
                         }
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(.ultraThinMaterial, in: Capsule())
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Average weight: \(UnitConversion.weightDisplay(stats.averageWeight, useMetric: useMetricUnits))")
 
                     HStack(spacing: 6) {
                         Image(systemName: "ruler.fill")
+                            .accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: 0) {
                             Text("Avg Height").font(.caption2)
-                            Text(heightDisplay(stats.averageHeight)).font(.subheadline).fontWeight(.semibold)
+                            Text(UnitConversion.heightDisplay(stats.averageHeight, useMetric: useMetricUnits)).font(.subheadline).fontWeight(.semibold)
                         }
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(.ultraThinMaterial, in: Capsule())
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Average height: \(UnitConversion.heightDisplay(stats.averageHeight, useMetric: useMetricUnits))")
                 }
 
                 if stats.count == 0 {
@@ -48,24 +54,6 @@ struct BabyMeasurementsCard: View {
                         .labelStyle(.titleOnly)
                 }
             }
-        }
-    }
-
-    private func weightDisplay(_ ounces: Double) -> String {
-        if useMetricUnits {
-            let grams = ounces * 28.349523125
-            return "\(Int(round(grams))) g"
-        } else {
-            return "\(String(format: "%.1f", ounces)) oz"
-        }
-    }
-
-    private func heightDisplay(_ inches: Double) -> String {
-        if useMetricUnits {
-            let cm = inches * 2.54
-            return "\(String(format: "%.1f", cm)) cm"
-        } else {
-            return "\(String(format: "%.1f", inches)) in"
         }
     }
 }

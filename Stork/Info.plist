@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.molargiksoftware.Stork</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>stork</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSWeatherUsageDescription</key>
 	<string>Stork uses weather data to show you current weather conditions.</string>
 	<key>UIBackgroundModes</key>

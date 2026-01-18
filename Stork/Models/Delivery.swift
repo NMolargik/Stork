@@ -13,28 +13,31 @@ import SwiftData
 final class Delivery {
     var id: UUID = UUID()
     var date: Date = Date.now
-    var hospitalId: String?
     @Relationship(deleteRule: .cascade) var babies: [Baby]?
     var babyCount: Int = 0
     var deliveryMethod: DeliveryMethod = DeliveryMethod.vaginal
     var epiduralUsed: Bool = false
+    var notes: String?
+    @Relationship(inverse: \DeliveryTag.deliveries) var tags: [DeliveryTag]?
 
     init(
         id: UUID = UUID(),
         date: Date,
-        hospitalId: String? = nil,
         babies: [Baby] = [],
         babyCount: Int,
         deliveryMethod: DeliveryMethod,
-        epiduralUsed: Bool
+        epiduralUsed: Bool,
+        notes: String? = nil,
+        tags: [DeliveryTag] = []
     ) {
         self.id = id
         self.date = date
-        self.hospitalId = hospitalId
         self.babies = babies
         self.babyCount = babyCount
         self.deliveryMethod = deliveryMethod
         self.epiduralUsed = epiduralUsed
+        self.notes = notes
+        self.tags = tags
     }
 
     init?(from dictionary: [String: Any], id: String?) {
@@ -66,9 +69,6 @@ final class Delivery {
             print("[Delivery Init Debug] Error: epiduralUsed missing or not a Bool. Value: " + String(describing: dictionary["epiduralUsed"]))
             return nil
         }
-
-        // Optional hospitalId
-        let hospitalIdString = dictionary["hospitalId"] as? String
 
         // Parse babies
         var babiesData: [Any]?
@@ -117,7 +117,6 @@ final class Delivery {
         // Initialize self
         self.id = UUID()
         self.date = Date(timeIntervalSince1970: dateTimestamp)
-        self.hospitalId = hospitalIdString
         self.babies = []
         self.deliveryMethod = deliveryMethod
         self.epiduralUsed = epiduralUsed
@@ -130,10 +129,11 @@ final class Delivery {
     static func sample() -> Delivery {
         let delivery = Delivery(
             date: Date(),
-            hospitalId: nil,
             babyCount: 3,
             deliveryMethod: .vaginal,
-            epiduralUsed: true
+            epiduralUsed: true,
+            notes: "Twins on Christmas! Such a memorable delivery.",
+            tags: []
         )
         let b1 = Baby(nurseCatch: true, nicuStay: false, sex: .male, weight: 121.6, height: 19.0, birthday: Date(), delivery: delivery)
         let b2 = Baby(nurseCatch: false, nicuStay: true, sex: .female, weight: 121.6, height: 19.0, birthday: Date(), delivery: delivery)

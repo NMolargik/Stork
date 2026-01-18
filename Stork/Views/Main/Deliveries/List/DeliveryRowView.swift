@@ -99,16 +99,18 @@ struct DeliveryRowView: View {
         .padding(.vertical, 10)
         .padding(.horizontal, 12)
         .background(
-            ZStack {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: viewModel.gradientColors),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: viewModel.gradientColors),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
                     )
-            }
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(.white.opacity(0.15))
+                )
         )
         .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .onHover { hovering in
@@ -143,24 +145,6 @@ struct DeliveryRowView: View {
             .animation(.easeInOut(duration: 0.3), value: total)
             .accessibilityLabel("Sex distribution: \(viewModel.maleCount) boys, \(viewModel.femaleCount) girls, \(viewModel.lossCount) losses")
         }
-    }
-    
-    private func metricPill(title: String, value: String, tint: Color, textColor: Color) -> some View {
-        HStack(spacing: 6) {
-            Text("\(title): \(value)")
-                .font(.caption)
-                .fontWeight(.medium)
-                .monospacedDigit()
-                .foregroundStyle(textColor)
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(
-            Capsule()
-                .fill(tint)
-                .shadow(color: .black.opacity(0.1), radius: 2)
-        )
-        .accessibilityLabel("\(title) \(value)")
     }
 }
 

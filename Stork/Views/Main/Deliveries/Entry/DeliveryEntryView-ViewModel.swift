@@ -8,20 +8,27 @@ extension DeliveryEntryView {
         var deliveryMethod: DeliveryMethod
         var epiduralUsed: Bool
         var babies: [Baby]
+        var notes: String
+        var selectedTags: [DeliveryTag]
         var showingBabySheet: Bool = false
+        var showingTagSheet: Bool = false
         var selectedScene: UIWindowScene?
-        
+
         init(existingDelivery: Delivery? = nil) {
             if let delivery = existingDelivery {
                 self.date = delivery.date
                 self.deliveryMethod = delivery.deliveryMethod
                 self.epiduralUsed = delivery.epiduralUsed
                 self.babies = delivery.babies ?? []
+                self.notes = delivery.notes ?? ""
+                self.selectedTags = delivery.tags ?? []
             } else {
                 self.date = Date()
                 self.deliveryMethod = .vaginal
                 self.epiduralUsed = true
                 self.babies = []
+                self.notes = ""
+                self.selectedTags = []
             }
         }
         
@@ -96,43 +103,61 @@ extension DeliveryEntryView {
                             }
                         }
                         .pickerStyle(.segmented)
+                        .accessibilityLabel("Baby sex")
+                        .accessibilityHint("Select male, female, or loss")
                     }
-                    
+
                     Section("Weight") {
                         if useMetricUnits {
                             HStack {
                                 TextField("Weight (kg)", value: $entry.weight, format: .number)
                                     .keyboardType(.decimalPad)
+                                    .accessibilityLabel("Weight in kilograms")
+                                    .accessibilityHint("Enter the baby's weight")
                                 Text("kg")
+                                    .accessibilityHidden(true)
                             }
                         } else {
                             HStack {
                                 TextField("Weight (oz)", value: $entry.weight, format: .number)
                                     .keyboardType(.decimalPad)
+                                    .accessibilityLabel("Weight in ounces")
+                                    .accessibilityHint("Enter the baby's weight")
                                 Text("oz")
+                                    .accessibilityHidden(true)
                             }
                         }
                     }
-                    
+
                     Section("Height") {
                         if useMetricUnits {
                             HStack {
                                 TextField("Height (cm)", value: $entry.height, format: .number)
                                     .keyboardType(.decimalPad)
+                                    .accessibilityLabel("Height in centimeters")
+                                    .accessibilityHint("Enter the baby's height")
                                 Text("cm")
+                                    .accessibilityHidden(true)
                             }
                         } else {
                             HStack {
                                 TextField("Height (in)", value: $entry.height, format: .number)
                                     .keyboardType(.decimalPad)
+                                    .accessibilityLabel("Height in inches")
+                                    .accessibilityHint("Enter the baby's height")
                                 Text("in")
+                                    .accessibilityHidden(true)
                             }
                         }
                     }
-                    
+
                     Section("Additional Info") {
                         Toggle("NICU Stay", isOn: $entry.nicuStay)
+                            .accessibilityLabel("NICU stay")
+                            .accessibilityHint("Toggle if baby required NICU care")
                         Toggle("Nurse Catch", isOn: $entry.nurseCatch)
+                            .accessibilityLabel("Nurse catch")
+                            .accessibilityHint("Toggle if delivery was a nurse catch")
                     }
                 }
                 .navigationTitle(entry.id == nil ? "Add Baby" : "Edit Baby")
@@ -143,12 +168,16 @@ extension DeliveryEntryView {
                             dismiss()
                         }
                         .disabled(!isValidEntry())
+                        .accessibilityLabel(entry.id == nil ? "Add baby" : "Save changes")
+                        .accessibilityHint(isValidEntry() ? "Saves the baby information" : "Enter weight and height to enable")
                     }
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") {
                             dismiss()
                         }
                         .foregroundStyle(.storkOrange)
+                        .accessibilityLabel("Cancel")
+                        .accessibilityHint("Discards changes and closes the form")
                     }
                 }
             }

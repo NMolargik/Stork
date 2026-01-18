@@ -30,11 +30,11 @@ enum Sex: String, Codable, Hashable, CaseIterable, Identifiable, CustomStringCon
     public var color: Color {
         switch self {
         case .male:
-            return Color("storkBlue")
+            return .storkBlue
         case .female:
-            return Color("storkPink")
+            return .storkPink
         case .loss:
-            return Color("storkPurple")
+            return .storkPurple
         }
     }
     

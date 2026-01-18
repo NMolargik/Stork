@@ -12,4 +12,6 @@ struct AppStorageKeys {
     static let useMetricUnits = "useMetricUnits"
     static let useDayMonthYearDates = "useDayMonthYearDates"
     static let selectedIconColor = "selectedIconColor"
+    static let hasSeenHospitalRemovalNotice = "hasSeenHospitalRemovalNotice"
+    static let homeCardOrder = "homeCardOrder"
 }

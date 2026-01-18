@@ -33,13 +33,19 @@ struct BabyCountCard: View {
                     Text("Average")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text("\(String(format: "%.1f", average)) babies / delivery")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    Text("Deliveries: \(totalDeliveries) • Babies: \(totalBabies)")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    AnimatedStatText(value: average, format: "%.1f", suffix: "babies / delivery", font: .title3, fontWeight: .semibold)
+                    HStack(spacing: 4) {
+                        Text("Deliveries:")
+                        AnimatedInteger(value: totalDeliveries, font: .footnote, color: .secondary)
+                        Text("•")
+                        Text("Babies:")
+                        AnimatedInteger(value: totalBabies, font: .footnote, color: .secondary)
+                    }
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Average \(String(format: "%.1f", average)) babies per delivery. Total \(totalDeliveries) deliveries, \(totalBabies) babies.")
 
                 if !monthlyCounts.labels.isEmpty {
                     Chart {
@@ -77,6 +83,7 @@ struct BabyCountCard: View {
                             }
                         }
                     }
+                    .accessibilityLabel("Chart showing babies delivered over time by month")
                 } else {
                     Label("No deliveries logged yet.", systemImage: "tray.fill")
                         .foregroundStyle(.secondary)

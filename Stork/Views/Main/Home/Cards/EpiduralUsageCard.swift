@@ -15,9 +15,8 @@ struct EpiduralUsageCard: View {
     var body: some View {
         InsightCard(title: "Epidural", systemImage: "syringe.fill", accent: Color.red) {
             let percentage = viewModel.epiduralUsagePercentage(deliveries: deliveryManager.deliveries)
-            Text("\(String(format: "%.1f", percentage))%")
-                .font(.title2)
-                .fontWeight(.bold)
+            AnimatedPercentage(value: percentage, font: .title2, fontWeight: .bold)
+                .accessibilityLabel("Epidural usage: \(String(format: "%.1f", percentage)) percent of deliveries")
         }
     }
 }

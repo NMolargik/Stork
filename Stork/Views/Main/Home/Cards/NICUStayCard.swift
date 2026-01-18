@@ -15,9 +15,8 @@ struct NICUStayCard: View {
     var body: some View {
         InsightCard(title: "NICU Stays", systemImage: "bed.double", accent: Color.red) {
             let percentage = viewModel.nicuStayPercentage(deliveries: deliveryManager.deliveries)
-            Text("\(String(format: "%.1f", percentage))%")
-                .font(.title2)
-                .fontWeight(.bold)
+            AnimatedPercentage(value: percentage, font: .title2, fontWeight: .bold)
+                .accessibilityLabel("N I C U stays: \(String(format: "%.1f", percentage)) percent of babies")
         }
     }
 }

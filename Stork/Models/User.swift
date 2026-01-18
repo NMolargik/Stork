@@ -12,7 +12,6 @@ import SwiftData
 @Model
 final class User {
     var id: UUID = UUID()
-    var primaryHospitalId: String?
     var firstName: String = ""
     var lastName: String = ""
     var birthday: Date = Date.now
@@ -28,7 +27,6 @@ final class User {
     
     init(
         id: UUID = UUID(),
-        primaryHospitalId: String? = nil,
         firstName: String,
         lastName: String,
         birthday: Date,
@@ -36,7 +34,6 @@ final class User {
         role: UserRole
     ) {
         self.id = id
-        self.primaryHospitalId = primaryHospitalId
         self.firstName = firstName
         self.lastName = lastName
         self.birthday = birthday
@@ -44,7 +41,7 @@ final class User {
         self.role = role
     }
     
-    convenience init?(from dictionary: [String: Any], resolveHospital: (String) -> Hospital?) {
+    convenience init?(from dictionary: [String: Any]) {
         let formatter = User.dateFormatter
 
         // Stringly-typed Firebase payloads
@@ -61,13 +58,9 @@ final class User {
             birthday = parsed
         }
 
-        // Hospital is referenced by string id, may be empty
-        let primaryHospitalId = (dictionary["primaryHospitalId"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-
         // Generate a local UUID (we don't use Firebase's string id as SwiftData primary key)
         self.init(
             id: UUID(),
-            primaryHospitalId: primaryHospitalId,
             firstName: firstName,
             lastName: lastName,
             birthday: birthday,
@@ -76,13 +69,8 @@ final class User {
         )
     }
     
-    convenience init?(from dictionary: [String: Any]) {
-        self.init(from: dictionary) { _ in nil }
-    }
-    
     public init() {
         self.id = UUID()
-        self.primaryHospitalId = nil
         self.firstName = ""
         self.lastName = ""
         self.birthday = Date()
@@ -103,7 +91,6 @@ final class User {
         let bday = formatter.date(from: "04/23/1990") ?? Date()
         return User(
             id: UUID(uuidString: "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE")!,
-            primaryHospitalId: nil,
             firstName: "Avery",
             lastName: "Johnson",
             birthday: bday,
@@ -118,7 +105,6 @@ final class User {
         let bday = formatter.date(from: "01/15/1985") ?? Date()
         return User(
             id: UUID(uuidString: "11111111-2222-3333-4444-555555555555")!,
-            primaryHospitalId: nil,
             firstName: "Jordan",
             lastName: "Reeves",
             birthday: bday,
@@ -126,18 +112,4 @@ final class User {
             role: .doctor
         )
     }()
-
-    static let sampleWithHospital: (Hospital?) -> User = { hospital in
-        let formatter = User.dateFormatter
-        let bday = formatter.date(from: "09/09/1992") ?? Date()
-        return User(
-            id: UUID(),
-            primaryHospitalId: hospital?.remoteId,
-            firstName: "Taylor",
-            lastName: "Morgan",
-            birthday: bday,
-            joinDate: formatter.string(from: Date()),
-            role: .nurse
-        )
-    }
 }

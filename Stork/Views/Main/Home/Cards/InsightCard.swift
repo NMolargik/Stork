@@ -53,7 +53,10 @@ struct InsightCard<Content: View>: View {
         )
         .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
         .clipped()
+        .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .hoverEffect(.lift)
         .accessibilityElement(children: .contain)
+        .accessibilityLabel("\(title) statistics")
     }
 }
 

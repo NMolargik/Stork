@@ -13,30 +13,13 @@ struct BabyCardView: View {
     let baby: Baby
     let index: Int
 
-    private func weightDisplay(_ ounces: Double) -> String {
-        if useMetricUnits {
-            let grams = ounces * 28.349523125
-            return "\(Int(round(grams))) g"
-        } else {
-            return String(format: "%.1f oz", ounces)
-        }
-    }
-
-    private func heightDisplay(_ inches: Double) -> String {
-        if useMetricUnits {
-            let cm = inches * 2.54
-            return String(format: "%.1f cm", cm)
-        } else {
-            return String(format: "%.1f in", inches)
-        }
-    }
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Header chip
             HStack(spacing: 8) {
                 Image(systemName: "figure.child")
                     .foregroundStyle(.white)
+                    .accessibilityHidden(true)
                 Text(baby.sex.displayName)
                     .font(.subheadline).fontWeight(.semibold)
                     .foregroundStyle(.white)
@@ -44,6 +27,8 @@ struct BabyCardView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 8)
             .background(baby.sex.color, in: Capsule())
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Baby \(index + 1): \(baby.sex.displayName)")
 
             // Measurement tiles
             HStack(spacing: 12) {
@@ -51,9 +36,10 @@ struct BabyCardView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "ruler")
                             .foregroundStyle(.green)
+                            .accessibilityHidden(true)
                         Text("Length").bold()
                     }
-                    Text(heightDisplay(baby.height))
+                    Text(UnitConversion.heightDisplay(baby.height, useMetric: useMetricUnits))
                         .font(.headline)
                 }
                 .padding(12)
@@ -63,14 +49,17 @@ struct BabyCardView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(uiColor: .tertiarySystemBackground))
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Length: \(UnitConversion.heightDisplay(baby.height, useMetric: useMetricUnits))")
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 6) {
                         Image(systemName: "scalemass.fill")
                             .foregroundStyle(.storkOrange)
+                            .accessibilityHidden(true)
                         Text("Weight").bold()
                     }
-                    Text(weightDisplay(baby.weight))
+                    Text(UnitConversion.weightDisplay(baby.weight, useMetric: useMetricUnits))
                         .font(.headline)
                 }
                 .padding(12)
@@ -80,6 +69,8 @@ struct BabyCardView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(uiColor: .tertiarySystemBackground))
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Weight: \(UnitConversion.weightDisplay(baby.weight, useMetric: useMetricUnits))")
             }
 
             // Meta rows as soft capsules (only when applicable)
@@ -91,6 +82,7 @@ struct BabyCardView: View {
                             .padding(.vertical, 6)
                             .foregroundStyle(.white)
                             .background(.red, in: Capsule())
+                            .accessibilityLabel("Nurse catch")
                     }
                     if baby.nicuStay {
                         Label("NICU Stay", systemImage: "bed.double")
@@ -98,6 +90,7 @@ struct BabyCardView: View {
                             .padding(.vertical, 6)
                             .foregroundStyle(.white)
                             .background(.red, in: Capsule())
+                            .accessibilityLabel("NICU stay required")
                     }
                 }
                 .font(.caption)
@@ -112,12 +105,5 @@ struct BabyCardView: View {
                         .stroke(Color.white.opacity(0.12))
                 )
         )
-    }
-    
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
     }
 }

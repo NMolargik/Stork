@@ -7,34 +7,113 @@
 
 import SwiftUI
 import SwiftData
-import WeatherKit
-import Combine
+import UIKit
 
 struct MainView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    @Environment(\.verticalSizeClass) private var vSizeClass
-    @Environment(\.scenePhase) private var scenePhase
 
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
-    
+    @AppStorage(AppStorageKeys.isOnboardingComplete) private var isOnboardingComplete: Bool = false
+    @AppStorage(AppStorageKeys.hasSeenHospitalRemovalNotice) private var hasSeenHospitalRemovalNotice: Bool = false
+
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(UserManager.self) private var userManager: UserManager
     @Environment(HealthManager.self) private var healthManager: HealthManager
     @Environment(WeatherManager.self) private var weatherManager: WeatherManager
     @Environment(LocationManager.self) private var locationManager: LocationManager
-    
+    @Environment(ExportManager.self) private var exportManager: ExportManager
+
     var resetApplication: () -> Void
-    
+    @Binding var pendingDeepLink: DeepLink?
+
     @State private var viewModel: ViewModel = ViewModel()
+    @State private var showHospitalRemovalAlert: Bool = false
+    @State private var milestoneShareImage: IdentifiableImage?
     
     var body: some View {
-        Group {
-            if isRegularWidth {
-                regularWidthView()
-            } else {
-                compactWidthView()
+        ZStack {
+            Group {
+                if isRegularWidth {
+                    regularWidthView()
+                } else {
+                    compactWidthView()
+                }
             }
+            .onAppear {
+                // Show hospital removal notice to existing users who haven't seen it
+                if isOnboardingComplete && !hasSeenHospitalRemovalNotice {
+                    showHospitalRemovalAlert = true
+                }
+            }
+            .alert("Hospitals Removed", isPresented: $showHospitalRemovalAlert) {
+                Button("Got It", role: .cancel) {
+                    hasSeenHospitalRemovalNotice = true
+                }
+            } message: {
+                Text("To better protect your privacy, Stork no longer stores hospital information. Correlating delivery dates with specific facilities posed a small but real re-identification risk under HIPAA. Your delivery records remain intact—only the hospital field has been removed.")
+            }
+
+            // Milestone celebration overlay
+            if let milestone = deliveryManager.pendingMilestoneCelebration {
+                MilestoneCelebrationView(
+                    milestone: milestone,
+                    userName: userManager.currentUser.map { "\($0.firstName) \($0.lastName)" },
+                    onDismiss: {
+                        deliveryManager.dismissMilestoneCelebration()
+                    },
+                    onShare: {
+                        shareMilestone(milestone)
+                    }
+                )
+                .transition(.opacity)
+                .zIndex(100)
+            }
+        }
+        .sheet(item: $milestoneShareImage) { imageWrapper in
+            ShareSheet(items: [imageWrapper.image])
+        }
+        .onChange(of: pendingDeepLink) { _, newLink in
+            handleDeepLink(newLink)
+        }
+        .onAppear {
+            // Handle any pending deep link on appear
+            if pendingDeepLink != nil {
+                handleDeepLink(pendingDeepLink)
+            }
+        }
+    }
+
+    private func handleDeepLink(_ link: DeepLink?) {
+        guard let link = link else { return }
+
+        // Reset the deep link after handling
+        defer { pendingDeepLink = nil }
+
+        switch link {
+        case .newDelivery:
+            viewModel.showingEntrySheet = true
+        case .home:
+            viewModel.appTab = .home
+        case .deliveries, .weeklyDeliveries:
+            viewModel.appTab = .list
+        case .settings:
+            if isRegularWidth {
+                viewModel.showingSettingsSheet = true
+            } else {
+                viewModel.appTab = .settings
+            }
+        }
+    }
+
+    private func shareMilestone(_ milestone: DeliveryManager.MilestoneCelebration) {
+        let milestoneType: CardImageRenderer.MilestoneType = milestone.type == .babies ? .babies : .deliveries
+        if let image = exportManager.renderMilestoneCard(
+            count: milestone.count,
+            milestoneType: milestoneType,
+            userName: userManager.currentUser.map { "\($0.firstName) \($0.lastName)" }
+        ) {
+            milestoneShareImage = IdentifiableImage(image: image)
         }
     }
     
@@ -58,23 +137,49 @@ struct MainView: View {
                             }
                             .accessibilityIdentifier("addEntryButton")
                             .tint(.storkBlue)
+                            .keyboardShortcut("n", modifiers: .command)
+                            .hoverEffect(.highlight)
                         }
                     }
             }
         } detail: {
             NavigationStack(path: $viewModel.listPath) {
-                HomeView(showingEntrySheet: $viewModel.showingEntrySheet)
+                HomeView(showingEntrySheet: $viewModel.showingEntrySheet, showingReorderSheet: $viewModel.showingReorderSheet)
                     .navigationTitle("Stork")
                     .toolbar {
-                        ToolbarItemGroup(placement: .topBarTrailing) {
+                        ToolbarItem(placement: .topBarTrailing) {
                             Button {
-                                viewModel.showingHospitalSheet = true
+                                viewModel.showingReorderSheet = true
                             } label: {
-                                Image(systemName: "building.2.fill")
+                                Image(systemName: "arrow.up.arrow.down")
                             }
-                            .accessibilityLabel("Hospitals")
-                            .tint(.red)
-                            
+                            .accessibilityLabel("Reorder cards")
+                            .tint(.storkPurple)
+                            .keyboardShortcut("r", modifiers: .command)
+                            .hoverEffect(.highlight)
+                        }
+
+                        if #available(iOS 26.0, *) {
+                            ToolbarSpacer(.flexible, placement: .topBarTrailing)
+                        }
+
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                                viewModel.showingCalendarSheet = true
+                            } label: {
+                                Image(systemName: "calendar")
+                            }
+                            .accessibilityLabel("Calendar")
+                            .tint(.storkPink)
+                            .keyboardShortcut("k", modifiers: .command)
+                            .hoverEffect(.highlight)
+                        }
+                        
+                        if #available(iOS 26.0, *) {
+                            ToolbarSpacer(.flexible, placement: .topBarTrailing)
+                        }
+
+                        ToolbarItem(placement: .topBarTrailing) {
                             Button {
                                 viewModel.showingSettingsSheet = true
                             } label: {
@@ -82,19 +187,14 @@ struct MainView: View {
                             }
                             .accessibilityLabel("Settings")
                             .tint(.storkOrange)
+                            .keyboardShortcut(",", modifiers: .command)
+                            .hoverEffect(.highlight)
                         }
                     }
                     .navigationDestination(for: UUID.self) { deliveryId in
                         if let delivery = (deliveryManager.visibleDeliveries.first { $0.id == deliveryId }
                                            ?? deliveryManager.deliveries.first { $0.id == deliveryId }) {
-                            DeliveryDetailView(
-                                delivery: delivery,
-                                onClose: {
-                                    if !viewModel.listPath.isEmpty {
-                                        viewModel.listPath.removeLast()
-                                    }
-                                }
-                            )
+                            DeliveryDetailView(delivery: delivery)
                         } else {
                             ContentUnavailableView(
                                 "Delivery Not Found",
@@ -120,23 +220,35 @@ struct MainView: View {
                         Button("Close") {
                             viewModel.showingSettingsSheet = false
                         }
+                        .keyboardShortcut(.escape, modifiers: [])
+                        .hoverEffect(.highlight)
                     }
                 }
             }
         }
-        .sheet(isPresented: $viewModel.showingHospitalSheet) {
+        .sheet(isPresented: $viewModel.showingCalendarSheet) {
             NavigationStack {
-                HospitalsView()
-                    .interactiveDismissDisabled()
-                    .presentationDetents([.large])
-                    .navigationTitle("Hospitals")
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button("Close") {
-                                viewModel.showingHospitalSheet = false
-                            }
+                DeliveryCalendarView(
+                    onDeliverySelected: { deliveryId in
+                        viewModel.showingCalendarSheet = false
+                        // Navigate after sheet dismisses
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            viewModel.appTab = .list
+                            viewModel.listPath.append(deliveryId)
                         }
                     }
+                )
+                .interactiveDismissDisabled()
+                .presentationDetents([.large])
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Close") {
+                            viewModel.showingCalendarSheet = false
+                        }
+                        .keyboardShortcut(.escape, modifiers: [])
+                        .hoverEffect(.highlight)
+                    }
+                }
             }
         }
         .sheet(isPresented: $viewModel.showingEntrySheet) {
@@ -163,19 +275,38 @@ struct MainView: View {
         TabView(selection: $viewModel.appTab) {
             NavigationStack {
                 HomeView(
-                    showingEntrySheet: $viewModel.showingEntrySheet
+                    showingEntrySheet: $viewModel.showingEntrySheet,
+                    showingReorderSheet: $viewModel.showingReorderSheet
                 )
                 .navigationTitle("Stork")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
+                            viewModel.showingReorderSheet = true
+                        } label: {
+                            Image(systemName: "arrow.up.arrow.down")
+                                .foregroundStyle(.storkPurple)
+                        }
+                        .accessibilityLabel("Reorder cards")
+                        .accessibilityHint("Customize the order of home screen cards")
+                        .keyboardShortcut("r", modifiers: .command)
+                        .hoverEffect(.highlight)
+                    }
+
+                    if #available(iOS 26.0, *) {
+                        ToolbarSpacer(.flexible, placement: .topBarTrailing)
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
                             viewModel.handleAddTapped()
                         } label: {
-                            Text("New Delivery")
-                                .bold()
-                                .foregroundStyle(.storkBlue)
+                            Image(systemName: "plus")
+                                .foregroundStyle(.blue)
                         }
                         .accessibilityIdentifier("addEntryButton")
+                        .keyboardShortcut("n", modifiers: .command)
+                        .hoverEffect(.highlight)
                     }
                 }
             }
@@ -213,6 +344,8 @@ struct MainView: View {
                                 .foregroundStyle(.storkBlue)
                             }
                             .accessibilityIdentifier("addEntryButton")
+                            .keyboardShortcut("n", modifiers: .command)
+                            .hoverEffect(.highlight)
                         }
                     }
             }
@@ -223,14 +356,26 @@ struct MainView: View {
             .tag(AppTab.list)
             
             NavigationStack {
-                HospitalsView()
-                    .navigationTitle(AppTab.hospitals.rawValue)
+                DeliveryCalendarView()
+                    .navigationTitle(AppTab.calendar.rawValue)
+                    .navigationDestination(for: UUID.self) { deliveryId in
+                        if let delivery = (deliveryManager.visibleDeliveries.first { $0.id == deliveryId }
+                                           ?? deliveryManager.deliveries.first { $0.id == deliveryId }) {
+                            DeliveryDetailView(delivery: delivery)
+                        } else {
+                            ContentUnavailableView(
+                                "Delivery Not Found",
+                                systemImage: "exclamationmark.triangle",
+                                description: Text("The selected delivery could not be loaded.")
+                            )
+                        }
+                    }
             }
             .tabItem {
-                AppTab.hospitals.icon()
-                Text(AppTab.hospitals.rawValue)
+                AppTab.calendar.icon()
+                Text(AppTab.calendar.rawValue)
             }
-            .tag(AppTab.hospitals)
+            .tag(AppTab.calendar)
             
             NavigationStack {
                 SettingsView(
@@ -255,7 +400,7 @@ struct MainView: View {
                             Image(systemName: "figure.walk")
                                 .imageScale(.medium)
 
-                            Text("\(healthManager.todayStepCount) steps")
+                            Text("\(healthManager.todayStepCount) steps today")
                                 .font(.headline)
                                 .bold()
                                 .monospacedDigit()
@@ -362,14 +507,17 @@ struct MainView: View {
     }
     
     // MARK: - Helpers
-    
+
     private var isRegularWidth: Bool {
         hSizeClass == .regular
     }
-    
-    private var timer: Publishers.Autoconnect<Timer.TimerPublisher> {
-        Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
-    }
+}
+
+// MARK: - Helper Types
+
+struct IdentifiableImage: Identifiable {
+    let id = UUID()
+    let image: UIImage
 }
 
 #Preview("MainView") {
@@ -379,13 +527,13 @@ struct MainView: View {
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
     let context = ModelContext(container)
-    
-    return MainView(resetApplication: {})
+
+    return MainView(resetApplication: {}, pendingDeepLink: .constant(nil))
         .environment(DeliveryManager(context: context))
         .environment(UserManager(context: context))
         .environment(HealthManager())
-        .environment(HospitalManager())
         .environment(WeatherManager())
         .environment(LocationManager())
         .environment(InsightManager(deliveryManager: DeliveryManager(context: context)))
+        .environment(ExportManager())
 }

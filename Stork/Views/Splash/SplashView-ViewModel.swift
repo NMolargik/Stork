@@ -14,14 +14,11 @@ extension SplashView {
         var subtitleVisible = false
         var buttonVisible = false
         
-        var showInfoSheet: Bool = false
         var showResetPasswordSheet: Bool = false
         var resetEmail: String = ""
         var resetError: String? = nil
         var isResettingPassword: Bool = false
         var resetSuccess: Bool = false
-        var isSyncingFromCloud: Bool = false
-        var lastSyncError: String? = nil
         var email: String = ""
         var password: String = ""
         var loginError: String? = nil

@@ -22,51 +22,20 @@ struct DeliveryMethodCard: View {
                     let c = stats.cSectionPercentage
                     let vb = stats.vBacPercentage
 
-                    // Stacked percentage bar
-                    GeometryReader { geo in
-                        let w = geo.size.width
-                        ZStack {
-                            Capsule()
-                                .fill(.ultraThinMaterial)
-                            HStack(spacing: 0) {
-                                Rectangle()
-                                    .frame(width: w * CGFloat(v / 100.0))
-                                    .foregroundStyle(.storkBlue)
-                                Rectangle()
-                                    .frame(width: w * CGFloat(c / 100.0))
-                                    .foregroundStyle(.storkOrange)
-                                Rectangle()
-                                    .frame(width: w * CGFloat(vb / 100.0))
-                                    .foregroundStyle(.storkPurple)
-                            }
-                            .frame(height: 14)
-                            .clipShape(Capsule())
-                            Capsule()
-                                .strokeBorder(.white.opacity(0.12))
-                        }
-                    }
-                    .frame(height: 16)
+                    // Animated stacked percentage bar
+                    AnimatedProgressBar(segments: [
+                        .init(value: v, color: .storkBlue),
+                        .init(value: c, color: .storkOrange),
+                        .init(value: vb, color: .storkPurple)
+                    ])
+                    .accessibilityHidden(true)
 
-                    // Legend and actual values
+                    // Legend with animated percentages
                     VStack(alignment: .leading, spacing: 6) {
                         HStack(spacing: 8) {
-                            Label("Vaginal \(String(format: "%.0f", v))%", systemImage: "circle.fill")
-                                .foregroundStyle(.storkBlue)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(.ultraThinMaterial, in: Capsule())
-
-                            Label("C-Section \(String(format: "%.0f", c))%", systemImage: "circle.fill")
-                                .foregroundStyle(.storkOrange)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(.ultraThinMaterial, in: Capsule())
-
-                            Label("VBAC \(String(format: "%.0f", vb))%", systemImage: "circle.fill")
-                                .foregroundStyle(.storkPurple)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(.ultraThinMaterial, in: Capsule())
+                            methodPill(label: "Vaginal", value: v, color: .storkBlue)
+                            methodPill(label: "C-Section", value: c, color: .storkOrange)
+                            methodPill(label: "VBAC", value: vb, color: .storkPurple)
                         }
                         .font(.caption)
                     }
@@ -77,6 +46,22 @@ struct DeliveryMethodCard: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func methodPill(label: String, value: Double, color: Color) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: "circle.fill")
+                .font(.caption2)
+            Text(label)
+            AnimatedNumber(value: value, format: "%.0f", font: .caption, fontWeight: .regular, color: color)
+            Text("%")
+        }
+        .foregroundStyle(color)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(.ultraThinMaterial, in: Capsule())
+        .accessibilityLabel("\(label) deliveries: \(String(format: "%.0f", value)) percent")
     }
 }
 

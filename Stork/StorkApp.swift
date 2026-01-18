@@ -31,7 +31,7 @@ struct StorkApp: App {
             )
             
             sharedModelContainer = try ModelContainer(
-                for: User.self, Delivery.self, Baby.self,
+                for: User.self, Delivery.self, Baby.self, DeliveryTag.self,
                 configurations: config
             )
             
@@ -41,11 +41,35 @@ struct StorkApp: App {
         }
     }
 
+    @State private var pendingDeepLink: DeepLink?
+
     var body: some Scene {
         WindowGroup {
-            ContentView(resetApplication: self.resetApplication)
+            ContentView(resetApplication: self.resetApplication, pendingDeepLink: $pendingDeepLink)
                 .modelContainer(sharedModelContainer)
                 .environment(userManager)
+                .onOpenURL { url in
+                    handleDeepLink(url)
+                }
+        }
+    }
+
+    private func handleDeepLink(_ url: URL) {
+        guard url.scheme == "stork" else { return }
+
+        switch url.host {
+        case "new-delivery":
+            pendingDeepLink = .newDelivery
+        case "home":
+            pendingDeepLink = .home
+        case "deliveries":
+            if url.pathComponents.contains("week") {
+                pendingDeepLink = .weeklyDeliveries
+            } else {
+                pendingDeepLink = .deliveries
+            }
+        default:
+            break
         }
     }
     

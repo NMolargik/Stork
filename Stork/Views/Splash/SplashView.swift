@@ -27,6 +27,7 @@ struct SplashView: View {
                 .scaleEffect(viewModel.titleVisible ? 1 : 0.7)
                 .animation(.easeOut(duration: 0.6), value: viewModel.titleVisible)
                 .padding(.bottom, 5)
+                .accessibilityAddTraits(.isHeader)
 
             Text("a labor and delivery app")
                 .font(hSizeClass == .regular ? .title : .title3)
@@ -43,6 +44,7 @@ struct SplashView: View {
                 .offset(y: viewModel.subtitleVisible ? 0 : 20)
                 .animation(.easeOut(duration: 0.6).delay(0.8), value: viewModel.subtitleVisible)
                 .padding()
+                .accessibilityLabel("Stork app logo")
             
             Spacer()
             
@@ -69,6 +71,8 @@ struct SplashView: View {
             .scaleEffect(viewModel.subtitleVisible ? 1 : 0.98)
             .animation(.easeOut(duration: 0.5).delay(1.1), value: viewModel.subtitleVisible)
             .zIndex(1)
+            .accessibilityLabel(showExistingUser ? "Existing user section expanded" : "Existing user")
+            .accessibilityHint(showExistingUser ? "Tap to collapse login form" : "Tap to show login form")
 
             // Expanding container anchored under the Existing User button
             VStack(spacing: 0) {
@@ -77,11 +81,14 @@ struct SplashView: View {
                         Image(systemName: "envelope.fill")
                             .foregroundStyle(.storkBlue)
                             .frame(width: 20)
+                            .accessibilityHidden(true)
                         TextField("Email Address", text: $viewModel.email)
                             .textContentType(.emailAddress)
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled(true)
+                            .accessibilityLabel("Email address")
+                            .accessibilityHint("Enter your email address to log in")
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 12)
@@ -98,8 +105,11 @@ struct SplashView: View {
                         Image(systemName: "lock.fill")
                             .foregroundStyle(.storkOrange)
                             .frame(width: 20)
+                            .accessibilityHidden(true)
                         SecureField("Password", text: $viewModel.password)
                             .textContentType(.password)
+                            .accessibilityLabel("Password")
+                            .accessibilityHint("Enter your password to log in")
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 12)
@@ -129,6 +139,8 @@ struct SplashView: View {
                 .buttonStyle(.plain)
                 .tint(.storkBlue)
                 .padding(.top, 6)
+                .accessibilityLabel("Forgot your password")
+                .accessibilityHint("Opens password reset form")
 
             }
             .padding(.top)
@@ -204,18 +216,23 @@ struct SplashView: View {
                 !viewModel.email.contains("@")
             ))
             .frame(width: 250)
+            .accessibilityLabel(showExistingUser ? (viewModel.isLoggingIn ? "Logging in" : "Log in") : "New user")
+            .accessibilityHint(showExistingUser ? "Tap to log in with your credentials" : "Tap to create a new account")
             
 
             if let loginError = viewModel.loginError {
                 HStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(.yellow)
+                        .accessibilityHidden(true)
                     Text(loginError)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.top, 6)
                 .padding(.horizontal)
                 .transition(.opacity.combined(with: .move(edge: .top)))
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Login error: \(loginError)")
             }
             
             Spacer()
@@ -241,12 +258,15 @@ struct SplashView: View {
                         Image(systemName: "envelope.fill")
                             .foregroundStyle(.storkBlue)
                             .frame(width: 20)
+                            .accessibilityHidden(true)
                         TextField("Email Address", text: $viewModel.resetEmail)
                             .textContentType(.emailAddress)
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled(true)
                             .disabled(viewModel.isResettingPassword || viewModel.resetSuccess)
+                            .accessibilityLabel("Email address")
+                            .accessibilityHint("Enter the email address for password reset")
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 12)
@@ -263,22 +283,28 @@ struct SplashView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(.yellow)
-                            Text(resetError) // TODO: fix ugly error text
+                                .accessibilityHidden(true)
+                            Text(resetError)
                                 .foregroundStyle(.red)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding(.horizontal)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Error: \(resetError)")
                     }
 
                     if viewModel.resetSuccess {
                         HStack(spacing: 8) {
                             Image(systemName: "checkmark.seal.fill")
                                 .foregroundStyle(.green)
+                                .accessibilityHidden(true)
                             Text("Check your email for password reset instructions")
                                 .foregroundStyle(.primary)
                         }
                         .transition(.opacity.combined(with: .move(edge: .top)))
                         .padding(.horizontal)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Success: Check your email for password reset instructions")
                     }
 
                     Button {
@@ -301,6 +327,8 @@ struct SplashView: View {
                     .bold()
                     .disabled(viewModel.isResettingPassword || viewModel.resetSuccess || viewModel.resetEmail.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !viewModel.resetEmail.contains("@"))
                     .padding(.top, 4)
+                    .accessibilityLabel(viewModel.isResettingPassword ? "Sending reset email" : "Submit password reset")
+                    .accessibilityHint("Sends a password reset email to the address entered")
 
                     Spacer(minLength: 0)
                 }

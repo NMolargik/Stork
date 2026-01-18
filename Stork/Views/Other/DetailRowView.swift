@@ -40,6 +40,7 @@ private extension DetailRowView {
     var featureBody: some View {
         HStack(spacing: 14) {
             leadingCircle(size: 44, iconSize: 40, font: .title3, backgroundOpacity: 0.18, hierarchical: true)
+                .accessibilityHidden(true)
             Text(title)
                 .font(.title3.weight(.semibold))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -52,6 +53,8 @@ private extension DetailRowView {
         )
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .shadow(radius: 6, y: 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(title)
     }
 }
 

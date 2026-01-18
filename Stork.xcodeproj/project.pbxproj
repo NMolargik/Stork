@@ -12,6 +12,7 @@
 		EB2E2E332EB9244A00D0149A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E322EB9244A00D0149A /* WidgetKit.framework */; };
 		EB2E2E352EB9244A00D0149A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E342EB9244A00D0149A /* SwiftUI.framework */; };
 		EB2E2E402EB9244B00D0149A /* StorkWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EB38FE0D2F1C2CED0050EAC4 /* StorkWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = EB38FDED2F1C2CEC0050EAC4 /* StorkWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -21,6 +22,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = EB2E2E2F2EB9244A00D0149A;
 			remoteInfo = StorkWidgetsExtension;
+		};
+		EB38FDFA2F1C2CED0050EAC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB020D342E89FDD000D9C239 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB38FDEC2F1C2CEC0050EAC4;
+			remoteInfo = "StorkWatch Watch App";
+		};
+		EB38FE042F1C2CED0050EAC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB020D342E89FDD000D9C239 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB38FDEC2F1C2CEC0050EAC4;
+			remoteInfo = "StorkWatch Watch App";
+		};
+		EB38FE0B2F1C2CED0050EAC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB020D342E89FDD000D9C239 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB38FDEC2F1C2CEC0050EAC4;
+			remoteInfo = "StorkWatch Watch App";
+		};
+		EB6B0FEE2F1BF58700601421 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB020D342E89FDD000D9C239 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB020D3B2E89FDD000D9C239;
+			remoteInfo = Stork;
+		};
+		EB6B0FFD2F1BF59600601421 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB020D342E89FDD000D9C239 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB020D3B2E89FDD000D9C239;
+			remoteInfo = Stork;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -36,6 +72,27 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB38FE112F1C2CED0050EAC4 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				EB38FE0D2F1C2CED0050EAC4 /* StorkWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBD03CAA2F1C551000A7AA0E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +101,12 @@
 		EB2E2E322EB9244A00D0149A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		EB2E2E342EB9244A00D0149A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		EB2E2E462EB9249B00D0149A /* StorkWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StorkWidgetsExtension.entitlements; sourceTree = "<group>"; };
+		EB38FDED2F1C2CEC0050EAC4 /* StorkWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "StorkWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB38FDF92F1C2CED0050EAC4 /* StorkWatch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "StorkWatch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB38FE032F1C2CED0050EAC4 /* StorkWatch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "StorkWatch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB6B0FEA2F1BF58700601421 /* StorkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB6B0FF72F1BF59600601421 /* StorkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBD03CAE2F1C58AD00A7AA0E /* StorkWatchWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StorkWatchWidgetsExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -57,13 +120,44 @@
 		EB2E2E482EB924DF00D0149A /* Exceptions for "Stork" folder in "StorkWidgetsExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AppStorageKeys.swift,
+				Errors/DeliveryError.swift,
+				Errors/UserError.swift,
+				Extensions/UnitConversion.swift,
+				Managers/DeliveryManager.swift,
+				Managers/UserManager.swift,
 				Models/Baby.swift,
 				Models/Delivery.swift,
+				Models/DeliveryFilter.swift,
+				Models/DeliveryTag.swift,
 				Models/Enumerations/DeliveryMethod.swift,
 				Models/Enumerations/Sex.swift,
-				Resources/hospitals.json,
+				Models/Enumerations/UserRole.swift,
+				Models/User.swift,
+				Views/Other/TagViews.swift,
 			);
 			target = EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */;
+		};
+		EB38FE362F1C33E10050EAC4 /* Exceptions for "Stork" folder in "StorkWatch Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppStorageKeys.swift,
+				Errors/DeliveryError.swift,
+				Errors/UserError.swift,
+				Extensions/UnitConversion.swift,
+				Managers/DeliveryManager.swift,
+				Managers/UserManager.swift,
+				Models/Baby.swift,
+				Models/Delivery.swift,
+				Models/DeliveryFilter.swift,
+				Models/DeliveryTag.swift,
+				Models/Enumerations/DeliveryMethod.swift,
+				Models/Enumerations/Sex.swift,
+				Models/Enumerations/UserRole.swift,
+				Models/User.swift,
+				Views/Other/TagViews.swift,
+			);
+			target = EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */;
 		};
 		EBB9C1CD2E8A1D5600013BF6 /* Exceptions for "Stork" folder in "Stork" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -80,6 +174,7 @@
 			exceptions = (
 				EBB9C1CD2E8A1D5600013BF6 /* Exceptions for "Stork" folder in "Stork" target */,
 				EB2E2E482EB924DF00D0149A /* Exceptions for "Stork" folder in "StorkWidgetsExtension" target */,
+				EB38FE362F1C33E10050EAC4 /* Exceptions for "Stork" folder in "StorkWatch Watch App" target */,
 			);
 			path = Stork;
 			sourceTree = "<group>";
@@ -90,6 +185,31 @@
 				EB2E2E442EB9244C00D0149A /* Exceptions for "StorkWidgets" folder in "StorkWidgetsExtension" target */,
 			);
 			path = StorkWidgets;
+			sourceTree = "<group>";
+		};
+		EB38FDEE2F1C2CEC0050EAC4 /* StorkWatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "StorkWatch Watch App";
+			sourceTree = "<group>";
+		};
+		EB38FDFC2F1C2CED0050EAC4 /* StorkWatch Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "StorkWatch Watch AppTests";
+			sourceTree = "<group>";
+		};
+		EB38FE062F1C2CED0050EAC4 /* StorkWatch Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "StorkWatch Watch AppUITests";
+			sourceTree = "<group>";
+		};
+		EB6B0FEB2F1BF58700601421 /* StorkTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StorkTests;
+			sourceTree = "<group>";
+		};
+		EB6B0FF82F1BF59600601421 /* StorkUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StorkUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -113,15 +233,56 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB38FDEA2F1C2CEC0050EAC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB38FDF62F1C2CED0050EAC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB38FE002F1C2CED0050EAC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB6B0FE72F1BF58700601421 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB6B0FF42F1BF59600601421 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		EB020D332E89FDD000D9C239 = {
 			isa = PBXGroup;
 			children = (
+				EBD03CAE2F1C58AD00A7AA0E /* StorkWatchWidgetsExtension.entitlements */,
 				EB2E2E462EB9249B00D0149A /* StorkWidgetsExtension.entitlements */,
 				EB020D3E2E89FDD000D9C239 /* Stork */,
 				EB2E2E362EB9244A00D0149A /* StorkWidgets */,
+				EB6B0FEB2F1BF58700601421 /* StorkTests */,
+				EB6B0FF82F1BF59600601421 /* StorkUITests */,
+				EB38FDEE2F1C2CEC0050EAC4 /* StorkWatch Watch App */,
+				EB38FDFC2F1C2CED0050EAC4 /* StorkWatch Watch AppTests */,
+				EB38FE062F1C2CED0050EAC4 /* StorkWatch Watch AppUITests */,
 				EB2E2E312EB9244A00D0149A /* Frameworks */,
 				EB020D3D2E89FDD000D9C239 /* Products */,
 			);
@@ -132,6 +293,11 @@
 			children = (
 				EB020D3C2E89FDD000D9C239 /* Stork.app */,
 				EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */,
+				EB6B0FEA2F1BF58700601421 /* StorkTests.xctest */,
+				EB6B0FF72F1BF59600601421 /* StorkUITests.xctest */,
+				EB38FDED2F1C2CEC0050EAC4 /* StorkWatch Watch App.app */,
+				EB38FDF92F1C2CED0050EAC4 /* StorkWatch Watch AppTests.xctest */,
+				EB38FE032F1C2CED0050EAC4 /* StorkWatch Watch AppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,11 +322,13 @@
 				EB020D392E89FDD000D9C239 /* Frameworks */,
 				EB020D3A2E89FDD000D9C239 /* Resources */,
 				EB2E2E452EB9244C00D0149A /* Embed Foundation Extensions */,
+				EB38FE112F1C2CED0050EAC4 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				EB2E2E3F2EB9244B00D0149A /* PBXTargetDependency */,
+				EB38FE0C2F1C2CED0050EAC4 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				EB020D3E2E89FDD000D9C239 /* Stork */,
@@ -196,6 +364,121 @@
 			productReference = EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB38FE0E2F1C2CED0050EAC4 /* Build configuration list for PBXNativeTarget "StorkWatch Watch App" */;
+			buildPhases = (
+				EB38FDE92F1C2CEC0050EAC4 /* Sources */,
+				EB38FDEA2F1C2CEC0050EAC4 /* Frameworks */,
+				EB38FDEB2F1C2CEC0050EAC4 /* Resources */,
+				EBD03CAA2F1C551000A7AA0E /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EB38FDEE2F1C2CEC0050EAC4 /* StorkWatch Watch App */,
+			);
+			name = "StorkWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "StorkWatch Watch App";
+			productReference = EB38FDED2F1C2CEC0050EAC4 /* StorkWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EB38FDF82F1C2CED0050EAC4 /* StorkWatch Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB38FE122F1C2CED0050EAC4 /* Build configuration list for PBXNativeTarget "StorkWatch Watch AppTests" */;
+			buildPhases = (
+				EB38FDF52F1C2CED0050EAC4 /* Sources */,
+				EB38FDF62F1C2CED0050EAC4 /* Frameworks */,
+				EB38FDF72F1C2CED0050EAC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB38FDFB2F1C2CED0050EAC4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EB38FDFC2F1C2CED0050EAC4 /* StorkWatch Watch AppTests */,
+			);
+			name = "StorkWatch Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "StorkWatch Watch AppTests";
+			productReference = EB38FDF92F1C2CED0050EAC4 /* StorkWatch Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		EB38FE022F1C2CED0050EAC4 /* StorkWatch Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB38FE152F1C2CED0050EAC4 /* Build configuration list for PBXNativeTarget "StorkWatch Watch AppUITests" */;
+			buildPhases = (
+				EB38FDFF2F1C2CED0050EAC4 /* Sources */,
+				EB38FE002F1C2CED0050EAC4 /* Frameworks */,
+				EB38FE012F1C2CED0050EAC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB38FE052F1C2CED0050EAC4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EB38FE062F1C2CED0050EAC4 /* StorkWatch Watch AppUITests */,
+			);
+			name = "StorkWatch Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "StorkWatch Watch AppUITests";
+			productReference = EB38FE032F1C2CED0050EAC4 /* StorkWatch Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		EB6B0FE92F1BF58700601421 /* StorkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB6B0FF22F1BF58700601421 /* Build configuration list for PBXNativeTarget "StorkTests" */;
+			buildPhases = (
+				EB6B0FE62F1BF58700601421 /* Sources */,
+				EB6B0FE72F1BF58700601421 /* Frameworks */,
+				EB6B0FE82F1BF58700601421 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB6B0FEF2F1BF58700601421 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EB6B0FEB2F1BF58700601421 /* StorkTests */,
+			);
+			name = StorkTests;
+			packageProductDependencies = (
+			);
+			productName = StorkTests;
+			productReference = EB6B0FEA2F1BF58700601421 /* StorkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		EB6B0FF62F1BF59600601421 /* StorkUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB6B0FFF2F1BF59600601421 /* Build configuration list for PBXNativeTarget "StorkUITests" */;
+			buildPhases = (
+				EB6B0FF32F1BF59600601421 /* Sources */,
+				EB6B0FF42F1BF59600601421 /* Frameworks */,
+				EB6B0FF52F1BF59600601421 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB6B0FFE2F1BF59600601421 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EB6B0FF82F1BF59600601421 /* StorkUITests */,
+			);
+			name = StorkUITests;
+			packageProductDependencies = (
+			);
+			productName = StorkUITests;
+			productReference = EB6B0FF72F1BF59600601421 /* StorkUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -203,14 +486,33 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					EB020D3B2E89FDD000D9C239 = {
 						CreatedOnToolsVersion = 26.0;
 					};
 					EB2E2E2F2EB9244A00D0149A = {
 						CreatedOnToolsVersion = 26.1;
+					};
+					EB38FDEC2F1C2CEC0050EAC4 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					EB38FDF82F1C2CED0050EAC4 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = EB38FDEC2F1C2CEC0050EAC4;
+					};
+					EB38FE022F1C2CED0050EAC4 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = EB38FDEC2F1C2CEC0050EAC4;
+					};
+					EB6B0FE92F1BF58700601421 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = EB020D3B2E89FDD000D9C239;
+					};
+					EB6B0FF62F1BF59600601421 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = EB020D3B2E89FDD000D9C239;
 					};
 				};
 			};
@@ -233,6 +535,11 @@
 			targets = (
 				EB020D3B2E89FDD000D9C239 /* Stork */,
 				EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */,
+				EB6B0FE92F1BF58700601421 /* StorkTests */,
+				EB6B0FF62F1BF59600601421 /* StorkUITests */,
+				EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */,
+				EB38FDF82F1C2CED0050EAC4 /* StorkWatch Watch AppTests */,
+				EB38FE022F1C2CED0050EAC4 /* StorkWatch Watch AppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -246,6 +553,41 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		EB2E2E2E2EB9244A00D0149A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB38FDEB2F1C2CEC0050EAC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB38FDF72F1C2CED0050EAC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB38FE012F1C2CED0050EAC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB6B0FE82F1BF58700601421 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB6B0FF52F1BF59600601421 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -269,6 +611,41 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB38FDE92F1C2CEC0050EAC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB38FDF52F1C2CED0050EAC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB38FDFF2F1C2CED0050EAC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB6B0FE62F1BF58700601421 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB6B0FF32F1BF59600601421 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -276,6 +653,31 @@
 			isa = PBXTargetDependency;
 			target = EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */;
 			targetProxy = EB2E2E3E2EB9244B00D0149A /* PBXContainerItemProxy */;
+		};
+		EB38FDFB2F1C2CED0050EAC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */;
+			targetProxy = EB38FDFA2F1C2CED0050EAC4 /* PBXContainerItemProxy */;
+		};
+		EB38FE052F1C2CED0050EAC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */;
+			targetProxy = EB38FE042F1C2CED0050EAC4 /* PBXContainerItemProxy */;
+		};
+		EB38FE0C2F1C2CED0050EAC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */;
+			targetProxy = EB38FE0B2F1C2CED0050EAC4 /* PBXContainerItemProxy */;
+		};
+		EB6B0FEF2F1BF58700601421 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB020D3B2E89FDD000D9C239 /* Stork */;
+			targetProxy = EB6B0FEE2F1BF58700601421 /* PBXContainerItemProxy */;
+		};
+		EB6B0FFE2F1BF59600601421 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB020D3B2E89FDD000D9C239 /* Stork */;
+			targetProxy = EB6B0FFD2F1BF59600601421 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -406,14 +808,14 @@
 		EB020D482E89FDD100D9C239 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "IconBlue IconOrange IconPink";
 				ASSETCATALOG_COMPILER_APPICON_NAME = IconPurple;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Stork/Stork.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				ENABLE_PREVIEWS = YES;
@@ -436,14 +838,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -457,14 +859,14 @@
 		EB020D492E89FDD100D9C239 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "IconBlue IconOrange IconPink";
 				ASSETCATALOG_COMPILER_APPICON_NAME = IconPurple;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Stork/Stork.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				ENABLE_PREVIEWS = YES;
@@ -487,14 +889,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -513,7 +915,7 @@
 				CODE_SIGN_ENTITLEMENTS = StorkWidgetsExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StorkWidgets/Info.plist;
@@ -525,7 +927,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.StorkWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -550,7 +952,7 @@
 				CODE_SIGN_ENTITLEMENTS = StorkWidgetsExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StorkWidgets/Info.plist;
@@ -562,7 +964,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.StorkWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -576,6 +978,268 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EB38FE0F2F1C2CED0050EAC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "StorkWatch Watch App/StorkWatch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "StorkWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Stork;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nickmolargik.stork;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Debug;
+		};
+		EB38FE102F1C2CED0050EAC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "StorkWatch Watch App/StorkWatch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "StorkWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Stork;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nickmolargik.stork;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Release;
+		};
+		EB38FE132F1C2CED0050EAC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.molargiksoftware.StorkWatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StorkWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/StorkWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		EB38FE142F1C2CED0050EAC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.molargiksoftware.StorkWatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StorkWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/StorkWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+		EB38FE162F1C2CED0050EAC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.molargiksoftware.StorkWatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "StorkWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Debug;
+		};
+		EB38FE172F1C2CED0050EAC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.molargiksoftware.StorkWatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "StorkWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Release;
+		};
+		EB6B0FF02F1BF58700601421 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.molargiksoftware.StorkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stork.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stork";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		EB6B0FF12F1BF58700601421 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.molargiksoftware.StorkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stork.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stork";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		EB6B10002F1BF59600601421 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.molargiksoftware.StorkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Stork;
+			};
+			name = Debug;
+		};
+		EB6B10012F1BF59600601421 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R8Q8DM58C6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.molargiksoftware.StorkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Stork;
 			};
 			name = Release;
 		};
@@ -605,6 +1269,51 @@
 			buildConfigurations = (
 				EB2E2E422EB9244C00D0149A /* Debug */,
 				EB2E2E432EB9244C00D0149A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB38FE0E2F1C2CED0050EAC4 /* Build configuration list for PBXNativeTarget "StorkWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB38FE0F2F1C2CED0050EAC4 /* Debug */,
+				EB38FE102F1C2CED0050EAC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB38FE122F1C2CED0050EAC4 /* Build configuration list for PBXNativeTarget "StorkWatch Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB38FE132F1C2CED0050EAC4 /* Debug */,
+				EB38FE142F1C2CED0050EAC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB38FE152F1C2CED0050EAC4 /* Build configuration list for PBXNativeTarget "StorkWatch Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB38FE162F1C2CED0050EAC4 /* Debug */,
+				EB38FE172F1C2CED0050EAC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB6B0FF22F1BF58700601421 /* Build configuration list for PBXNativeTarget "StorkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB6B0FF02F1BF58700601421 /* Debug */,
+				EB6B0FF12F1BF58700601421 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB6B0FFF2F1BF59600601421 /* Build configuration list for PBXNativeTarget "StorkUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB6B10002F1BF59600601421 /* Debug */,
+				EB6B10012F1BF59600601421 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

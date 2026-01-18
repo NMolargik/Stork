@@ -10,74 +10,107 @@ import SwiftData
 
 struct OnboardingView: View {
     @Environment(UserManager.self) private var userManager: UserManager
-    
+
     var onFinished: () -> Void = {}
 
-    @State private var viewModel: OnboardingView.ViewModel = .init()
+    @State private var viewModel = ViewModel()
+
+    private var steps: [OnboardingStep] {
+        OnboardingStep.allCases
+    }
+
+    private var currentIndex: Int {
+        steps.firstIndex(of: viewModel.currentStep) ?? 0
+    }
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                if viewModel.currentStep == .userInfo {
-                    OnboardingUserInfoPage()
-                        .transition(.asymmetric(insertion: .move(edge: .trailing),
-                                                removal: .move(edge: .leading)))
+        VStack(spacing: 0) {
+            // Page Indicators
+            if viewModel.currentStep != .complete {
+                HStack(spacing: 8) {
+                    ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
+                        Capsule()
+                            .fill(index <= currentIndex ? Color.storkPurple : Color.secondary.opacity(0.3))
+                            .frame(height: 4)
+                            .animation(.easeInOut(duration: 0.3), value: currentIndex)
+                    }
                 }
-                if viewModel.currentStep == .location {
-                    OnboardingLocationPage()
-                        .transition(.asymmetric(insertion: .move(edge: .trailing),
-                                                removal: .move(edge: .leading)))
-                }
-                if viewModel.currentStep == .health {
-                    OnboardingHealthPage()
-                        .transition(.asymmetric(insertion: .move(edge: .trailing),
-                                                removal: .move(edge: .leading)))
-                }
-                if viewModel.currentStep == .complete {
-                    OnboardingCompletePage(
-                        onFinish: onFinished
-                    )
-                    .transition(.asymmetric(insertion: .move(edge: .trailing),
-                                            removal: .move(edge: .leading)))
-                }
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+                .padding(.bottom, 8)
             }
-            .animation(.easeInOut(duration: 0.25), value: viewModel.currentStep)
-            .navigationTitle(viewModel.currentStep.title)
-            .navigationBarTitleDisplayMode(.large)
+
+            // Content
+            TabView(selection: $viewModel.currentStep) {
+                OnboardingPrivacyPage()
+                    .tag(OnboardingStep.privacy)
+
+                OnboardingUserInfoPage()
+                    .tag(OnboardingStep.userInfo)
+
+                OnboardingLocationPage()
+                    .tag(OnboardingStep.location)
+
+                OnboardingHealthPage()
+                    .tag(OnboardingStep.health)
+
+                OnboardingCompletePage(onFinish: onFinished)
+                    .tag(OnboardingStep.complete)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .animation(.easeInOut(duration: 0.3), value: viewModel.currentStep)
+
+            // Bottom Buttons
+            if viewModel.currentStep != .complete {
+                VStack(spacing: 12) {
+                    // Continue Button
+                    Button {
+                        Haptics.mediumImpact()
+                        viewModel.handleContinueTapped(userManager: userManager)
+                    } label: {
+                        HStack(spacing: 8) {
+                            if viewModel.isSavingUser {
+                                ProgressView()
+                                    .tint(.white)
+                            }
+                            Text(viewModel.currentStep == .userInfo && viewModel.isSavingUser ? "Saving..." : "Continue")
+                                .font(.headline)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(viewModel.canContinue && !viewModel.isSavingUser ? Color.storkPurple : Color.secondary.opacity(0.3))
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+                    .disabled(!viewModel.canContinue || viewModel.isSavingUser)
+
+                    // Skip Button (optional steps only)
+                    if viewModel.showsSkip {
+                        Button {
+                            Haptics.lightImpact()
+                            viewModel.handleSkipTapped()
+                        } label: {
+                            Text("Skip for now")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
+                .padding(.top, 12)
+                .background(.ultraThinMaterial)
+            }
         }
+        .background(Color(uiColor: .systemGroupedBackground))
         .task {
-            viewModel.currentStep = .userInfo
+            viewModel.currentStep = .privacy
 
             if let user = userManager.currentUser {
                 viewModel.firstName = user.firstName
                 viewModel.lastName = user.lastName
                 viewModel.birthday = user.birthday
                 viewModel.role = user.role
-            }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if viewModel.currentStep != .complete {
-                HStack {
-                    if viewModel.showsSkip {
-                        Button("Skip For Now") { viewModel.handleSkipTapped() }
-                            .foregroundStyle(.white)
-                            .padding()
-                            .adaptiveGlass(tint: .storkOrange)
-                    }
-                    
-                    Spacer()
-                    
-                    Button("Continue") { viewModel.handleContinueTapped(userManager: userManager) }
-                        .foregroundStyle(.white)
-                        .padding()
-                        .adaptiveGlass(tint: (viewModel.canContinue && !viewModel.isSavingUser) ? .storkPurple : .gray)
-                        .disabled(!viewModel.canContinue || viewModel.isSavingUser)
-                }
-                .bold()
-                .padding(.horizontal)
-                .padding(.top, 12)
-                .padding(.bottom, 8)
-                .background(.ultraThinMaterial)
             }
         }
         .environment(viewModel)
@@ -95,7 +128,6 @@ struct OnboardingView: View {
         fatalError("Preview ModelContainer setup failed: \(error)")
     }
 
-    // Prepare a lightweight UserManager with the in-memory context
     let previewUserManager = UserManager(context: container.mainContext)
     let locationManager = LocationManager()
     let healthManager = HealthManager()

@@ -12,17 +12,19 @@ import FirebaseAuth
 struct ContentView: View {
     @Environment(UserManager.self) private var userManager: UserManager
     @AppStorage(AppStorageKeys.isOnboardingComplete) private var isOnboardingComplete: Bool = false
-    
+
     var resetApplication: () -> Void
+    @Binding var pendingDeepLink: DeepLink?
 
     @State private var viewModel: ContentView.ViewModel = ViewModel()
     @State private var deliveryManager: DeliveryManager?
     @State private var insightManager: InsightManager?
+    @State private var exportManager = ExportManager()
     @State private var migrationManager = MigrationManager()
     @State private var healthManager = HealthManager()
     @State private var weatherManager = WeatherManager()
     @State private var locationManager = LocationManager()
-    @State private var hospitalManager = HospitalManager()
+    @State private var cloudSyncManager = CloudSyncManager()
     
     var body: some View {
         ZStack {
@@ -43,6 +45,8 @@ struct ContentView: View {
                             if self.insightManager == nil, let deliveryManager {
                                 self.insightManager = InsightManager(deliveryManager: deliveryManager)
                             }
+                            // Configure cloud sync manager with model context
+                            self.cloudSyncManager.configure(with: userManager.context)
                         }
                         await viewModel.prepareApp(migrationManager: migrationManager)
                     }
@@ -97,18 +101,20 @@ struct ContentView: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             viewModel.resetApplicationStage()
                         }
-                    }
+                    },
+                    pendingDeepLink: $pendingDeepLink
                 )
                 .id("main")
                 .transition(viewModel.leadingTransition)
                 .zIndex(0)
                 .environment(deliveryManager)
                 .environment(userManager)
-                .environment(hospitalManager)
                 .environment(healthManager)
                 .environment(insightManager)
                 .environment(weatherManager)
                 .environment(locationManager)
+                .environment(exportManager)
+                .environment(cloudSyncManager)
                 .task { weatherManager.setLocationProvider(LocationManager()) }
             }
         }
@@ -136,7 +142,8 @@ struct ContentView: View {
     let previewUserManager = UserManager(context: container.mainContext)
 
     return ContentView(
-        resetApplication: {}
+        resetApplication: {},
+        pendingDeepLink: .constant(nil)
     )
     .modelContainer(container)
     .environment(previewUserManager)
@@ -145,5 +152,5 @@ struct ContentView: View {
     .environment(HealthManager())
     .environment(WeatherManager())
     .environment(LocationManager())
-    .environment(HospitalManager())
+    .environment(CloudSyncManager())
 }

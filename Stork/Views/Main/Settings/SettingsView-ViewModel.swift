@@ -13,10 +13,6 @@ extension SettingsView {
     class ViewModel {
         // UI state
         var editingUser: Bool = false
-        var showSignOutConfirmation: Bool = false
-        var showDeleteConfirmation: Bool = false
-        var showingFarewell: Bool = false
-        var pendingProfileImageData: Data? = nil
 
         // Network state
         private var networkMonitor: NWPathMonitor?
@@ -28,7 +24,6 @@ extension SettingsView {
             let build = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as? String ?? "—"
             return "\(version) (Build \(build))"
         }
-        var bundleIdentifier: String { Bundle.main.bundleIdentifier ?? "—" }
 
         // Lifecycle
         func startNetworkMonitoring() {
