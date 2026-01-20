@@ -62,6 +62,7 @@ struct ContentView: View {
                 )
                 .environment(userManager)
                 .environment(deliveryManager)
+                .environment(cloudSyncManager)
                 .id("syncing")
                 .transition(viewModel.leadingTransition)
                 .zIndex(1)

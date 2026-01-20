@@ -7,6 +7,7 @@ struct HomeView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(InsightManager.self) private var insightManager: InsightManager
     @Environment(ExportManager.self) private var exportManager: ExportManager
+    @Environment(CloudSyncManager.self) private var cloudSyncManager: CloudSyncManager
     @Environment(\.horizontalSizeClass) private var hSizeClass
 
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
@@ -35,6 +36,9 @@ struct HomeView: View {
         }
         .refreshable {
             jarShuffle = true
+            await cloudSyncManager.triggerSync()
+            await deliveryManager.refresh()
+            print("Pull to refresh - synced \(deliveryManager.deliveries.count) deliveries")
         }
         .environment(deliveryManager)
         .environment(insightManager)
@@ -150,4 +154,5 @@ struct ShareSheet: UIViewControllerRepresentable {
         .environment(DeliveryManager(context: context))
         .environment(InsightManager(deliveryManager: DeliveryManager(context: context)))
         .environment(ExportManager())
+        .environment(CloudSyncManager())
 }

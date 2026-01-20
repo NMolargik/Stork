@@ -11,17 +11,25 @@ import SwiftData
 struct SyncingView: View {
     @Environment(UserManager.self) private var userManager
     @Environment(DeliveryManager.self) private var deliveryManager
+    @Environment(CloudSyncManager.self) private var cloudSyncManager
+
+    @AppStorage(AppStorageKeys.hasCompletedInitialSync) private var hasCompletedInitialSync: Bool = false
 
     var onSyncComplete: (Bool) -> Void
 
     @State private var statusMessage: String = "Checking for your data..."
     @State private var hasTimedOut: Bool = false
     @State private var dotCount: Int = 0
-    @State private var timeoutTask: Task<Void, Never>?
+    @State private var syncTask: Task<Void, Never>?
 
-    
-    /// Maximum time to wait for sync before continuing (in seconds)
-    private let syncTimeout: TimeInterval = 8
+    /// Maximum time to wait for sync on fresh install (in seconds)
+    private let freshInstallTimeout: TimeInterval = 20
+
+    /// Maximum time to wait for sync on returning user (in seconds)
+    private let returningUserTimeout: TimeInterval = 8
+
+    /// How often to poll for data (in seconds)
+    private let pollInterval: TimeInterval = 1.5
 
     /// Animated dots for the loading indicator
     private var animatedDots: String {
@@ -76,14 +84,13 @@ struct SyncingView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(uiColor: .systemBackground))
         .onAppear {
-            startSyncCheck()
             startDotAnimation()
         }
         .onDisappear {
-            timeoutTask?.cancel()
+            syncTask?.cancel()
         }
         .task {
-            startSyncCheck()
+            await performSyncWithPolling()
         }
     }
     
@@ -101,61 +108,109 @@ struct SyncingView: View {
     }
 
 
-    private func startSyncCheck() {
-        // Start the timeout timer
-        timeoutTask = Task {
-            try? await Task.sleep(for: .seconds(syncTimeout))
+    /// Main sync method that polls for data with appropriate timeout
+    private func performSyncWithPolling() async {
+        // Use longer timeout for fresh installs where iCloud data may take time to arrive
+        let timeout = hasCompletedInitialSync ? returningUserTimeout : freshInstallTimeout
 
-            guard !Task.isCancelled else { return }
+        let deadline = Date().addingTimeInterval(timeout)
 
-            // Timeout reached - check what we have
-            await MainActor.run {
-                checkDataAndComplete()
-            }
-        }
-
-        // Start checking for data
-        Task {
-            await performSyncCheck()
-        }
-    }
-
-    private func performSyncCheck() async {
-        // Update status
+        // Initial status
         await MainActor.run {
-            statusMessage = "Looking for deliveries"
+            statusMessage = hasCompletedInitialSync
+                ? "Looking for deliveries"
+                : "Syncing with iCloud"
         }
 
-        // Refresh user manager to get latest data
+        // Initial refresh
         await userManager.refresh()
+        await deliveryManager.refresh()
 
-        // Small delay to allow SwiftData/CloudKit sync
-        try? await Task.sleep(for: .seconds(2))
+        // Check if we already have data
+        if checkForData() {
+            await completeSync(foundData: true)
+            return
+        }
 
-        // Check if we have data
-        let hasUser = userManager.currentUser != nil
-        let hasDeliveries = !deliveryManager.deliveries.isEmpty
+        // Wait for remote change notification first (more reliable than just polling)
+        // Give iCloud a chance to notify us of incoming data
+        let receivedRemoteChange = await cloudSyncManager.waitForRemoteChange(timeout: min(5, timeout / 2))
 
-        // Cancel timeout if we found data
-        if hasUser || hasDeliveries {
-            timeoutTask?.cancel()
+        if receivedRemoteChange {
+            // Remote change received - refresh and check
+            await userManager.refresh()
+            await deliveryManager.refresh()
 
-            await MainActor.run {
-                statusMessage = hasDeliveries ? "Found your deliveries!" : "Ready to go!"
-            }
-
-            // Brief delay to show success message
-            try? await Task.sleep(for: .seconds(0.5))
-
-            await MainActor.run {
-                onSyncComplete(hasDeliveries)
+            if checkForData() {
+                await completeSync(foundData: true)
+                return
             }
         }
+
+        // Poll until deadline or data found
+        while Date() < deadline {
+            if Task.isCancelled { return }
+
+            // Wait for poll interval
+            try? await Task.sleep(for: .seconds(pollInterval))
+
+            // Refresh managers
+            await userManager.refresh()
+            await deliveryManager.refresh()
+
+            // Check for data
+            if checkForData() {
+                await completeSync(foundData: true)
+                return
+            }
+
+            // Update status message periodically to show progress
+            await MainActor.run {
+                let remainingSeconds = Int(deadline.timeIntervalSinceNow)
+                if remainingSeconds > 5 {
+                    statusMessage = "Still looking for your data"
+                } else if remainingSeconds > 0 {
+                    statusMessage = "Almost done checking"
+                }
+            }
+        }
+
+        // Timeout reached - complete with whatever we have
+        await completeSync(foundData: checkForData())
     }
 
-    private func checkDataAndComplete() {
-        let hasData = !deliveryManager.deliveries.isEmpty || userManager.currentUser != nil
-        onSyncComplete(hasData)
+    /// Checks if we have any user or delivery data
+    private func checkForData() -> Bool {
+        return userManager.currentUser != nil || !deliveryManager.deliveries.isEmpty
+    }
+
+    /// Completes the sync process
+    private func completeSync(foundData: Bool) async {
+        let deliveryCount = deliveryManager.deliveries.count
+
+        // Mark that we've completed initial sync (for future app launches)
+        if foundData && !hasCompletedInitialSync {
+            hasCompletedInitialSync = true
+        }
+
+        // Print to console for debugging
+        print("Sync complete - Found \(deliveryCount) deliveries")
+
+        await MainActor.run {
+            hasTimedOut = true
+            if deliveryCount > 0 {
+                statusMessage = "Found \(deliveryCount) \(deliveryCount == 1 ? "delivery" : "deliveries")!"
+            } else {
+                statusMessage = "Ready to go!"
+            }
+        }
+
+        // Brief delay to show success message
+        try? await Task.sleep(for: .seconds(0.5))
+
+        await MainActor.run {
+            onSyncComplete(foundData)
+        }
     }
 }
 
@@ -302,5 +357,6 @@ private struct EdgeGradientsView: View {
     }
     .environment(UserManager(context: container.mainContext))
     .environment(DeliveryManager(context: container.mainContext))
+    .environment(CloudSyncManager())
     .modelContainer(container)
 }

@@ -14,4 +14,5 @@ struct AppStorageKeys {
     static let selectedIconColor = "selectedIconColor"
     static let hasSeenHospitalRemovalNotice = "hasSeenHospitalRemovalNotice"
     static let homeCardOrder = "homeCardOrder"
+    static let hasCompletedInitialSync = "hasCompletedInitialSync"
 }
