@@ -129,14 +129,13 @@ struct ExportView: View {
     NavigationStack {
         ExportView()
             .environment(DeliveryManager(context: PreviewContainer.shared.mainContext))
-            .environment(UserManager(context: PreviewContainer.shared.mainContext))
             .environment(ExportManager())
     }
 }
 
 private enum PreviewContainer {
     static let shared: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [config])
     }()

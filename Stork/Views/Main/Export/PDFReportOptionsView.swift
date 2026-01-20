@@ -11,7 +11,6 @@ import SwiftData
 struct PDFReportOptionsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(DeliveryManager.self) private var deliveryManager
-    @Environment(UserManager.self) private var userManager
     @Environment(ExportManager.self) private var exportManager
 
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
@@ -153,13 +152,12 @@ struct PDFReportOptionsView: View {
 #Preview {
     PDFReportOptionsView()
         .environment(DeliveryManager(context: PreviewContainer.shared.mainContext))
-        .environment(UserManager(context: PreviewContainer.shared.mainContext))
         .environment(ExportManager())
 }
 
 private enum PreviewContainer {
     static let shared: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [config])
     }()

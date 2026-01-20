@@ -19,13 +19,11 @@ struct MainView: View {
     @AppStorage(AppStorageKeys.hasSeenHospitalRemovalNotice) private var hasSeenHospitalRemovalNotice: Bool = false
 
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    @Environment(UserManager.self) private var userManager: UserManager
     @Environment(HealthManager.self) private var healthManager: HealthManager
     @Environment(WeatherManager.self) private var weatherManager: WeatherManager
     @Environment(LocationManager.self) private var locationManager: LocationManager
     @Environment(ExportManager.self) private var exportManager: ExportManager
 
-    var resetApplication: () -> Void
     @Binding var pendingDeepLink: DeepLink?
 
     @State private var viewModel: ViewModel = ViewModel()
@@ -208,11 +206,7 @@ struct MainView: View {
         }
         .sheet(isPresented: $viewModel.showingSettingsSheet) {
             NavigationStack {
-                SettingsView(
-                    onSignOut: {
-                        resetApplication()
-                    }
-                )
+                SettingsView()
                 .interactiveDismissDisabled()
                 .presentationDetents([.large])
                 .navigationTitle("Settings")
@@ -381,11 +375,7 @@ struct MainView: View {
             .tag(AppTab.calendar)
             
             NavigationStack {
-                SettingsView(
-                    onSignOut: {
-                        resetApplication()
-                    }
-                )
+                SettingsView()
                 .navigationTitle(AppTab.settings.rawValue)
             }
             .tabItem {
@@ -525,16 +515,15 @@ struct IdentifiableImage: Identifiable {
 
 #Preview("MainView") {
     let container: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
     let context = ModelContext(container)
 
-    return MainView(resetApplication: {}, pendingDeepLink: .constant(nil))
+    return MainView(pendingDeepLink: .constant(nil))
         .environment(DeliveryManager(context: context))
-        .environment(UserManager(context: context))
-        .environment(HealthManager())
+                .environment(HealthManager())
         .environment(WeatherManager())
         .environment(LocationManager())
         .environment(InsightManager(deliveryManager: DeliveryManager(context: context)))

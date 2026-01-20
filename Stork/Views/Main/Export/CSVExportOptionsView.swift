@@ -180,7 +180,7 @@ struct CSVExportOptionsView: View {
 // Preview helper
 private enum PreviewContainer {
     static let shared: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [config])
     }()

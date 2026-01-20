@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct SyncingView: View {
-    @Environment(UserManager.self) private var userManager
     @Environment(DeliveryManager.self) private var deliveryManager
     @Environment(CloudSyncManager.self) private var cloudSyncManager
 
@@ -123,7 +122,6 @@ struct SyncingView: View {
         }
 
         // Initial refresh
-        await userManager.refresh()
         await deliveryManager.refresh()
 
         // Check if we already have data
@@ -138,7 +136,6 @@ struct SyncingView: View {
 
         if receivedRemoteChange {
             // Remote change received - refresh and check
-            await userManager.refresh()
             await deliveryManager.refresh()
 
             if checkForData() {
@@ -155,7 +152,6 @@ struct SyncingView: View {
             try? await Task.sleep(for: .seconds(pollInterval))
 
             // Refresh managers
-            await userManager.refresh()
             await deliveryManager.refresh()
 
             // Check for data
@@ -168,9 +164,9 @@ struct SyncingView: View {
             await MainActor.run {
                 let remainingSeconds = Int(deadline.timeIntervalSinceNow)
                 if remainingSeconds > 5 {
-                    statusMessage = "Still looking for your data"
+                    statusMessage = "Looking for existing data"
                 } else if remainingSeconds > 0 {
-                    statusMessage = "Almost done checking"
+                    statusMessage = "Making sure"
                 }
             }
         }
@@ -179,9 +175,9 @@ struct SyncingView: View {
         await completeSync(foundData: checkForData())
     }
 
-    /// Checks if we have any user or delivery data
+    /// Checks if we have any delivery data
     private func checkForData() -> Bool {
-        return userManager.currentUser != nil || !deliveryManager.deliveries.isEmpty
+        return !deliveryManager.deliveries.isEmpty
     }
 
     /// Completes the sync process
@@ -347,7 +343,7 @@ private struct EdgeGradientsView: View {
 
 #Preview {
     let container: ModelContainer = {
-        let schema = Schema([User.self, Delivery.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [config])
     }()
@@ -355,8 +351,7 @@ private struct EdgeGradientsView: View {
     return SyncingView { foundData in
         print("Sync complete, found data: \(foundData)")
     }
-    .environment(UserManager(context: container.mainContext))
-    .environment(DeliveryManager(context: container.mainContext))
+        .environment(DeliveryManager(context: container.mainContext))
     .environment(CloudSyncManager())
     .modelContainer(container)
 }

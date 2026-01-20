@@ -29,7 +29,7 @@ extension OnboardingView {
         }
 
         // Actions
-        func handleContinueTapped(userManager: UserManager) {
+        func handleContinueTapped() {
             switch currentStep {
             case .privacy:
                 currentStep = .location

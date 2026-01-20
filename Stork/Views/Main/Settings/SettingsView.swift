@@ -10,7 +10,6 @@ import SwiftData
 
 // MARK: - Settings View
 struct SettingsView: View {
-    @Environment(UserManager.self) private var userManager
     @Environment(DeliveryManager.self) private var deliveryManager
     @Environment(CloudSyncManager.self) private var cloudSyncManager
     @Environment(\.modelContext) private var modelContext
@@ -46,8 +45,6 @@ struct SettingsView: View {
         .init(color: "pink", asset: "icon-pink-preview", uiColor: .storkPink),
         .init(color: "orange", asset: "icon-orange-preview", uiColor: .storkOrange)
     ]
-
-    var onSignOut: () -> Void
 
     var body: some View {
         Form {
@@ -289,7 +286,6 @@ struct SettingsView: View {
             OnboardingView(onFinished: {
                 showOnboardingPreview = false
             })
-            .environment(userManager)
             .environment(LocationManager())
             .environment(HealthManager())
             .interactiveDismissDisabled()
@@ -563,14 +559,13 @@ fileprivate extension Bool {
 // MARK: - Preview
 #Preview {
     let container: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
     let context = ModelContext(container)
 
-    return SettingsView(onSignOut: {})
-        .environment(UserManager(context: context))
-        .environment(DeliveryManager(context: context))
+    return SettingsView()
+                .environment(DeliveryManager(context: context))
         .environment(CloudSyncManager())
 }

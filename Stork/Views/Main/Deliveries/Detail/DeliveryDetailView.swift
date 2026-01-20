@@ -484,7 +484,7 @@ private extension DeliveryMethod {
 
 #Preview("Delivery Detail") {
     let container: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
@@ -498,7 +498,7 @@ private extension DeliveryMethod {
 
 #Preview("Delivery Detail - Multiple Babies") {
     let container: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()

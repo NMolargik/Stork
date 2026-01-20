@@ -9,8 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct OnboardingView: View {
-    @Environment(UserManager.self) private var userManager: UserManager
-
     var onFinished: () -> Void = {}
 
     @State private var viewModel = ViewModel()
@@ -64,7 +62,7 @@ struct OnboardingView: View {
                     // Continue Button
                     Button {
                         Haptics.mediumImpact()
-                        viewModel.handleContinueTapped(userManager: userManager)
+                        viewModel.handleContinueTapped()
                     } label: {
                         HStack(spacing: 8) {
                             Text("Continue")
@@ -110,19 +108,17 @@ struct OnboardingView: View {
     let container: ModelContainer
     do {
         container = try ModelContainer(
-            for: User.self, Delivery.self, Baby.self,
+            for: Delivery.self, Baby.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
     } catch {
         fatalError("Preview ModelContainer setup failed: \(error)")
     }
 
-    let previewUserManager = UserManager(context: container.mainContext)
     let locationManager = LocationManager()
     let healthManager = HealthManager()
 
     return OnboardingView(onFinished: {})
-        .environment(previewUserManager)
         .environment(locationManager)
         .environment(healthManager)
         .modelContainer(container)

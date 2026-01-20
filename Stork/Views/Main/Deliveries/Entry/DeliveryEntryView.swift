@@ -10,8 +10,6 @@ struct DeliveryEntryView: View {
     
     @State private var editingBaby: Baby?
 
-    @Environment(UserManager.self) private var userManager: UserManager
-    
     init(existingDelivery: Delivery? = nil, onDeliverySaved: @escaping (Delivery, UIWindowScene?) -> Void) {
         self.existingDelivery = existingDelivery
         self.onDeliverySaved = onDeliverySaved
@@ -284,29 +282,25 @@ struct DeliveryEntryView: View {
 
 #Preview("New Delivery") {
     let container: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     NavigationStack {
         DeliveryEntryView(onDeliverySaved: { _, _ in })
-            .environment(UserManager(context: context))
     }
 }
 
 #Preview("Edit Delivery") {
     let container: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     NavigationStack {
         DeliveryEntryView(existingDelivery: Delivery.sample(), onDeliverySaved: { _, _ in })
-            .environment(UserManager(context: context))
     }
 }
 

@@ -306,35 +306,6 @@ struct DateFormattingTests {
     }
 }
 
-// MARK: - User Model Tests
-
-@Suite("User Model Tests")
-struct UserModelTests {
-
-    @Test("User initializes with correct values")
-    func userInitialization() {
-        let user = User()
-
-        #expect(user.id != UUID())
-        #expect(!user.joinDate.isEmpty)
-    }
-
-    @Test("User sample has correct values")
-    func userSample() {
-        let sample = User.sample
-
-        #expect(sample.id != UUID())
-        #expect(!sample.joinDate.isEmpty)
-    }
-
-    @Test("User empty initializer works")
-    func userEmptyInit() {
-        let user = User()
-
-        #expect(!user.joinDate.isEmpty)
-    }
-}
-
 // MARK: - AppTab Tests
 
 @Suite("AppTab Tests")

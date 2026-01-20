@@ -3,7 +3,6 @@ import SwiftData
 
 struct DeliveryEditFormView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    @Environment(UserManager.self) private var userManager: UserManager
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
@@ -338,7 +337,7 @@ private struct BabyEditSheet: View {
 
 #Preview {
     let container: ModelContainer = {
-        let schema = Schema([Delivery.self, User.self, Baby.self])
+        let schema = Schema([Delivery.self, Baby.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
@@ -346,5 +345,4 @@ private struct BabyEditSheet: View {
     let d = Delivery.sample()
     return DeliveryEditFormView(delivery: d)
         .environment(DeliveryManager(context: context))
-        .environment(UserManager(context: context))
 }

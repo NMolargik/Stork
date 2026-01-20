@@ -15,19 +15,11 @@ extension ContentView {
         var appStage: AppStage = .splash
 
         // MARK: - Dependencies
-        var userManager: UserManager?
         var cloudSyncManager: CloudSyncManager?
-        var resetApplication: (() -> Void)?
 
         // MARK: - Configuration
-        func configure(
-            userManager: UserManager,
-            cloudSyncManager: CloudSyncManager,
-            resetApplication: @escaping () -> Void
-        ) {
-            self.userManager = userManager
+        func configure(cloudSyncManager: CloudSyncManager) {
             self.cloudSyncManager = cloudSyncManager
-            self.resetApplication = resetApplication
         }
 
         // MARK: - Transitions
@@ -44,9 +36,5 @@ extension ContentView {
             }
         }
 
-        func resetApplicationStage() {
-            appStage = .splash
-            resetApplication?()
-        }
     }
 }

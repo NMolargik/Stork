@@ -123,14 +123,12 @@
 				Errors/UserError.swift,
 				Extensions/UnitConversion.swift,
 				Managers/DeliveryManager.swift,
-				Managers/UserManager.swift,
 				Models/Baby.swift,
 				Models/Delivery.swift,
 				Models/DeliveryFilter.swift,
 				Models/DeliveryTag.swift,
 				Models/Enumerations/DeliveryMethod.swift,
 				Models/Enumerations/Sex.swift,
-				Models/User.swift,
 				Views/Other/TagViews.swift,
 			);
 			target = EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */;
@@ -143,14 +141,12 @@
 				Errors/UserError.swift,
 				Extensions/UnitConversion.swift,
 				Managers/DeliveryManager.swift,
-				Managers/UserManager.swift,
 				Models/Baby.swift,
 				Models/Delivery.swift,
 				Models/DeliveryFilter.swift,
 				Models/DeliveryTag.swift,
 				Models/Enumerations/DeliveryMethod.swift,
 				Models/Enumerations/Sex.swift,
-				Models/User.swift,
 				Views/Other/TagViews.swift,
 			);
 			target = EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */;

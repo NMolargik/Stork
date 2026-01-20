@@ -11,12 +11,6 @@ import TipKit
 
 @main
 struct StorkApp: App {
-    @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates: Bool = false
-    @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
-    @AppStorage(AppStorageKeys.isOnboardingComplete) private var isOnboardingComplete: Bool = false
-
-    @State private var userManager: UserManager
-    
     private let sharedModelContainer: ModelContainer
 
     init() {
@@ -28,11 +22,9 @@ struct StorkApp: App {
             )
 
             sharedModelContainer = try ModelContainer(
-                for: User.self, Delivery.self, Baby.self, DeliveryTag.self,
+                for: Delivery.self, Baby.self, DeliveryTag.self,
                 configurations: config
             )
-
-            userManager = UserManager(context: sharedModelContainer.mainContext)
         } catch {
             fatalError("[Stork] Failed to initialize ModelContainer: \(error)")
         }
@@ -47,9 +39,8 @@ struct StorkApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(resetApplication: self.resetApplication, pendingDeepLink: $pendingDeepLink)
+            ContentView(pendingDeepLink: $pendingDeepLink)
                 .modelContainer(sharedModelContainer)
-                .environment(userManager)
                 .onOpenURL { url in
                     handleDeepLink(url)
                 }
@@ -73,11 +64,5 @@ struct StorkApp: App {
         default:
             break
         }
-    }
-    
-    private func resetApplication() {
-        useMetricUnits = false
-        useDayMonthYearDates = false
-        isOnboardingComplete = false
     }
 }
