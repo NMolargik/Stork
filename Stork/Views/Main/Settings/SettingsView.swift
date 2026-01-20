@@ -36,60 +36,21 @@ struct SettingsView: View {
     private struct IconOption: Identifiable, Equatable {
         let color: String
         let asset: String
+        let uiColor: Color
         var id: String { color }
     }
 
     private let iconOptions: [IconOption] = [
-        .init(color: "purple", asset: "icon-purple-preview"),
-        .init(color: "blue", asset: "icon-blue-preview"),
-        .init(color: "pink", asset: "icon-pink-preview"),
-        .init(color: "orange", asset: "icon-orange-preview")
+        .init(color: "purple", asset: "icon-purple-preview", uiColor: .storkPurple),
+        .init(color: "blue", asset: "icon-blue-preview", uiColor: .storkBlue),
+        .init(color: "pink", asset: "icon-pink-preview", uiColor: .storkPink),
+        .init(color: "orange", asset: "icon-orange-preview", uiColor: .storkOrange)
     ]
 
     var onSignOut: () -> Void
 
     var body: some View {
-        @Bindable var manager = userManager
-
         Form {
-            // MARK: - Profile
-            Section {
-                Button {
-                    viewModel.editingUser = true
-                    Haptics.lightImpact()
-                } label: {
-                    HStack {
-                        Image(systemName: "person.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(.storkPurple)
-
-                        if let user = manager.currentUser {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("\(user.firstName) \(user.lastName)")
-                                    .font(.body)
-                                    .foregroundStyle(.primary)
-                                Text(user.role.rawValue.capitalized)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        } else {
-                            Text("Edit Profile")
-                                .foregroundStyle(.primary)
-                        }
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Edit user profile")
-                .accessibilityHint("Opens form to edit your name, birthday, and role")
-            }
-
             // MARK: - Preferences
             Section {
                 Toggle(isOn: $useMetricUnits) {
@@ -107,8 +68,6 @@ struct SettingsView: View {
                 .accessibilityLabel("Use day month year date format")
                 .accessibilityHint("Switch between Month–Day–Year and Day–Month–Year formats for dates")
                 .onChange(of: useDayMonthYearDates) { _, _ in Haptics.lightImpact() }
-            } header: {
-                Text("Preferences")
             }
 
             // MARK: - App Icon Picker
@@ -121,13 +80,13 @@ struct SettingsView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 72, height: 72)
-                                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 14)
-                                            .stroke(.storkPurple, lineWidth: 3)
+                                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                            .stroke(option.uiColor, lineWidth: 3)
                                             .opacity(selectedIconColor == option.color ? 1 : 0)
                                     )
-                                    .contentShape(RoundedRectangle(cornerRadius: 14))
+                                    .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                     .onTapGesture {
                                         selectedIconColor = option.color
                                         Haptics.lightImpact()
@@ -150,6 +109,8 @@ struct SettingsView: View {
                     }
                     .padding(.vertical, 4)
                 }
+                .scrollClipDisabled()
+                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             } header: {
                 Text("App Icon")
             }
@@ -305,42 +266,6 @@ struct SettingsView: View {
                 .accessibilityHint("Opens publisher website")
             } header: {
                 Text("About")
-            }
-        }
-        .sheet(isPresented: $viewModel.editingUser) {
-            if let user = manager.currentUser {
-                Form {
-                    UserEditView(
-                        firstName: Binding(
-                            get: { user.firstName },
-                            set: { user.firstName = $0 }
-                        ),
-                        lastName: Binding(
-                            get: { user.lastName },
-                            set: { user.lastName = $0 }
-                        ),
-                        birthday: Binding(
-                            get: { user.birthday },
-                            set: { user.birthday = $0 }
-                        ),
-                        role: Binding(
-                            get: { user.role },
-                            set: { user.role = $0 }
-                        ),
-                        validationMessage: ""
-                    )
-                    .padding(.top)
-                }
-                .scrollDisabled(true)
-                .presentationDetents([.fraction(0.7)])
-                .presentationDragIndicator(.visible)
-            } else {
-                ContentUnavailableView(
-                    "No user found",
-                    systemImage: "person.crop.circle.badge.questionmark",
-                    description: Text("Create a user to edit profile details.")
-                )
-                .presentationDetents([.fraction(0.5)])
             }
         }
         .onChange(of: scenePhase) { _, newPhase in

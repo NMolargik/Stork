@@ -6,9 +6,8 @@
 //
 
 import SwiftUI
-import FirebaseCore
 import SwiftData
-import FirebaseAuth
+import TipKit
 
 @main
 struct StorkApp: App {
@@ -21,24 +20,27 @@ struct StorkApp: App {
     private let sharedModelContainer: ModelContainer
 
     init() {
-        FirebaseApp.configure()
-
         let cloudKitContainerID = "iCloud.com.molargiksoftware.Stork"
-        
+
         do {
             let config = ModelConfiguration(
                 cloudKitDatabase: .private(cloudKitContainerID)
             )
-            
+
             sharedModelContainer = try ModelContainer(
                 for: User.self, Delivery.self, Baby.self, DeliveryTag.self,
                 configurations: config
             )
-            
+
             userManager = UserManager(context: sharedModelContainer.mainContext)
         } catch {
             fatalError("[Stork] Failed to initialize ModelContainer: \(error)")
         }
+
+        // Configure TipKit
+        try? Tips.configure([
+            .displayFrequency(.immediate)
+        ])
     }
 
     @State private var pendingDeepLink: DeepLink?
@@ -77,11 +79,5 @@ struct StorkApp: App {
         useMetricUnits = false
         useDayMonthYearDates = false
         isOnboardingComplete = false
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            // Handle sign-out failure gracefully
-            print("[Stork] Failed to sign out: \(error)")
-        }
     }
 }

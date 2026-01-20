@@ -158,11 +158,9 @@ struct ShareCardView: View {
         selectedMilestone = milestone
         selectedCard = nil
 
-        let userName = userManager.currentUser.map { "\($0.firstName) \($0.lastName)" }
         renderedImage = exportManager.renderMilestoneCard(
             count: milestone.count,
-            milestoneType: milestone.type,
-            userName: userName
+            milestoneType: milestone.type
         )
         Haptics.lightImpact()
     }

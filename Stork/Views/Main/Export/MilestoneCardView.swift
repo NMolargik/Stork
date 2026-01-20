@@ -10,7 +10,6 @@ import SwiftUI
 struct MilestoneCardView: View {
     let count: Int
     let milestoneType: CardImageRenderer.MilestoneType
-    let userName: String?
 
     var body: some View {
         VStack(spacing: 20) {
@@ -40,14 +39,6 @@ struct MilestoneCardView: View {
             Text(suffixText)
                 .font(.title3)
                 .foregroundStyle(.secondary)
-
-            // User name if provided
-            if let name = userName, !name.isEmpty {
-                Text("— \(name)")
-                    .font(.headline)
-                    .foregroundStyle(.tertiary)
-                    .padding(.top, 4)
-            }
 
             // Branding
             Image("storkicon")
@@ -107,15 +98,13 @@ struct MilestoneCardView: View {
 #Preview("500 Babies") {
     MilestoneCardView(
         count: 500,
-        milestoneType: .babies,
-        userName: "Sarah Johnson"
+        milestoneType: .babies
     )
 }
 
 #Preview("100 Deliveries") {
     MilestoneCardView(
         count: 100,
-        milestoneType: .deliveries,
-        userName: nil
+        milestoneType: .deliveries
     )
 }

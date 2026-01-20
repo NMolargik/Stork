@@ -128,7 +128,7 @@ struct DeliveryEntryView: View {
             babiesList
 
             if viewModel.babies.isEmpty {
-                Text("At least one baby is required to finish.")
+                Text("At least one baby is required.")
                     .font(.footnote)
                     .foregroundColor(.red)
             }
@@ -179,7 +179,7 @@ struct DeliveryEntryView: View {
         } header: {
             Text("Tags")
         } footer: {
-            Text("Examples: \"Teaching Moment\", \"First Solo\", \"Night Shift\"")
+            Text("Examples: \"Teaching Moment\", \"First Solo\", \"Night Shift\". Do not include patient information.")
         }
     }
 

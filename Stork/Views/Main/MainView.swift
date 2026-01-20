@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import UIKit
+import TipKit
 
 struct MainView: View {
     @Environment(\.modelContext) private var modelContext
@@ -30,6 +31,8 @@ struct MainView: View {
     @State private var viewModel: ViewModel = ViewModel()
     @State private var showHospitalRemovalAlert: Bool = false
     @State private var milestoneShareImage: IdentifiableImage?
+
+    private let newDeliveryTip = NewDeliveryTip()
     
     var body: some View {
         ZStack {
@@ -58,7 +61,6 @@ struct MainView: View {
             if let milestone = deliveryManager.pendingMilestoneCelebration {
                 MilestoneCelebrationView(
                     milestone: milestone,
-                    userName: userManager.currentUser.map { "\($0.firstName) \($0.lastName)" },
                     onDismiss: {
                         deliveryManager.dismissMilestoneCelebration()
                     },
@@ -110,8 +112,7 @@ struct MainView: View {
         let milestoneType: CardImageRenderer.MilestoneType = milestone.type == .babies ? .babies : .deliveries
         if let image = exportManager.renderMilestoneCard(
             count: milestone.count,
-            milestoneType: milestoneType,
-            userName: userManager.currentUser.map { "\($0.firstName) \($0.lastName)" }
+            milestoneType: milestoneType
         ) {
             milestoneShareImage = IdentifiableImage(image: image)
         }
@@ -307,6 +308,8 @@ struct MainView: View {
                         .accessibilityIdentifier("addEntryButton")
                         .keyboardShortcut("n", modifiers: .command)
                         .hoverEffect(.highlight)
+                        .popoverTip(newDeliveryTip, arrowEdge: .top)
+                        .tipViewStyle(StorkTipViewStyle())
                     }
                 }
             }

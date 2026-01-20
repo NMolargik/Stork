@@ -9,7 +9,6 @@ import Foundation
 
 enum OnboardingStep: CaseIterable {
     case privacy
-    case userInfo
     case location
     case health
     case complete
@@ -17,7 +16,6 @@ enum OnboardingStep: CaseIterable {
     var title: String {
         switch self {
         case .privacy: return "Your Privacy"
-        case .userInfo: return "About You"
         case .location: return "Location"
         case .health: return "Step Count"
         case .complete: return "You're All Set"

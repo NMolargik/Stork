@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MilestoneCelebrationView: View {
     let milestone: DeliveryManager.MilestoneCelebration
-    let userName: String?
     let onDismiss: () -> Void
     let onShare: () -> Void
 
@@ -67,13 +66,6 @@ struct MilestoneCelebrationView: View {
                     Text(suffixText)
                         .font(.title3)
                         .foregroundStyle(.secondary)
-
-                    if let name = userName, !name.isEmpty {
-                        Text("Congratulations, \(name)!")
-                            .font(.headline)
-                            .foregroundStyle(.tertiary)
-                            .padding(.top, 4)
-                    }
                 }
                 .opacity(showContent ? 1 : 0)
                 .offset(y: showContent ? 0 : 20)
@@ -268,7 +260,6 @@ struct ConfettiPieceView: View {
 #Preview("500 Babies Milestone") {
     MilestoneCelebrationView(
         milestone: DeliveryManager.MilestoneCelebration(count: 500, type: .babies),
-        userName: "Sarah Johnson",
         onDismiss: {},
         onShare: {}
     )
@@ -277,7 +268,6 @@ struct ConfettiPieceView: View {
 #Preview("100 Deliveries Milestone") {
     MilestoneCelebrationView(
         milestone: DeliveryManager.MilestoneCelebration(count: 100, type: .deliveries),
-        userName: nil,
         onDismiss: {},
         onShare: {}
     )

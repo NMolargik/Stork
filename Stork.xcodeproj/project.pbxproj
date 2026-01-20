@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EB020E5E2E8A022400D9C239 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = EB020E5D2E8A022400D9C239 /* FirebaseAuth */; };
-		EB020E602E8A022400D9C239 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EB020E5F2E8A022400D9C239 /* FirebaseFirestore */; };
 		EB2E2E332EB9244A00D0149A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E322EB9244A00D0149A /* WidgetKit.framework */; };
 		EB2E2E352EB9244A00D0149A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E342EB9244A00D0149A /* SwiftUI.framework */; };
 		EB2E2E402EB9244B00D0149A /* StorkWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -132,7 +130,6 @@
 				Models/DeliveryTag.swift,
 				Models/Enumerations/DeliveryMethod.swift,
 				Models/Enumerations/Sex.swift,
-				Models/Enumerations/UserRole.swift,
 				Models/User.swift,
 				Views/Other/TagViews.swift,
 			);
@@ -153,7 +150,6 @@
 				Models/DeliveryTag.swift,
 				Models/Enumerations/DeliveryMethod.swift,
 				Models/Enumerations/Sex.swift,
-				Models/Enumerations/UserRole.swift,
 				Models/User.swift,
 				Views/Other/TagViews.swift,
 			);
@@ -219,8 +215,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB020E5E2E8A022400D9C239 /* FirebaseAuth in Frameworks */,
-				EB020E602E8A022400D9C239 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,8 +329,6 @@
 			);
 			name = Stork;
 			packageProductDependencies = (
-				EB020E5D2E8A022400D9C239 /* FirebaseAuth */,
-				EB020E5F2E8A022400D9C239 /* FirebaseFirestore */,
 			);
 			productName = Stork;
 			productReference = EB020D3C2E89FDD000D9C239 /* Stork.app */;
@@ -526,7 +518,6 @@
 			mainGroup = EB020D332E89FDD000D9C239;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				EB020E5C2E8A022400D9C239 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EB020D3D2E89FDD000D9C239 /* Products */;
@@ -838,7 +829,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -889,7 +880,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -927,7 +918,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.StorkWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -964,7 +955,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.StorkWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1003,7 +994,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1041,7 +1032,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickmolargik.stork.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1319,30 +1310,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		EB020E5C2E8A022400D9C239 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 12.3.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		EB020E5D2E8A022400D9C239 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EB020E5C2E8A022400D9C239 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-		EB020E5F2E8A022400D9C239 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EB020E5C2E8A022400D9C239 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EB020D342E89FDD000D9C239 /* Project object */;
 }

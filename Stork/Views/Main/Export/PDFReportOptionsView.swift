@@ -129,19 +129,12 @@ struct PDFReportOptionsView: View {
     }
 
     private func generatePDF() async {
-        guard let user = userManager.currentUser else {
-            errorMessage = "No user profile found."
-            showError = true
-            return
-        }
-
         do {
             let customInterval = dateRange == .custom
                 ? DateInterval(start: customStartDate, end: customEndDate)
                 : nil
 
             let url = try await exportManager.generatePDFReport(
-                user: user,
                 deliveries: deliveryManager.deliveries,
                 dateRange: dateRange,
                 customDateInterval: customInterval,

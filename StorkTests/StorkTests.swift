@@ -313,69 +313,25 @@ struct UserModelTests {
 
     @Test("User initializes with correct values")
     func userInitialization() {
-        let birthday = Date()
-        let user = User(
-            firstName: "Jane",
-            lastName: "Doe",
-            birthday: birthday,
-            role: .nurse
-        )
+        let user = User()
 
-        #expect(user.firstName == "Jane")
-        #expect(user.lastName == "Doe")
-        #expect(user.birthday == birthday)
-        #expect(user.role == .nurse)
+        #expect(user.id != UUID())
+        #expect(!user.joinDate.isEmpty)
     }
 
     @Test("User sample has correct values")
     func userSample() {
         let sample = User.sample
 
-        #expect(sample.firstName == "Avery")
-        #expect(sample.lastName == "Johnson")
-        #expect(sample.role == .nurse)
-    }
-
-    @Test("User sample doctor has correct role")
-    func userSampleDoctor() {
-        let doctor = User.sampleDoctor
-
-        #expect(doctor.firstName == "Jordan")
-        #expect(doctor.lastName == "Reeves")
-        #expect(doctor.role == .doctor)
-    }
-
-    @Test("User initials are correct")
-    func userInitials() {
-        let user = User(
-            firstName: "Jane",
-            lastName: "Doe",
-            birthday: Date(),
-            role: .nurse
-        )
-
-        #expect(user.initials == "JD")
-    }
-
-    @Test("User initials handle empty names")
-    func userInitialsEmpty() {
-        let user = User(
-            firstName: "",
-            lastName: "",
-            birthday: Date(),
-            role: .nurse
-        )
-
-        #expect(user.initials == "")
+        #expect(sample.id != UUID())
+        #expect(!sample.joinDate.isEmpty)
     }
 
     @Test("User empty initializer works")
     func userEmptyInit() {
         let user = User()
 
-        #expect(user.firstName == "")
-        #expect(user.lastName == "")
-        #expect(user.role == .nurse)
+        #expect(!user.joinDate.isEmpty)
     }
 }
 

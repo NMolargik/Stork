@@ -45,9 +45,6 @@ struct OnboardingView: View {
                 OnboardingPrivacyPage()
                     .tag(OnboardingStep.privacy)
 
-                OnboardingUserInfoPage()
-                    .tag(OnboardingStep.userInfo)
-
                 OnboardingLocationPage()
                     .tag(OnboardingStep.location)
 
@@ -69,20 +66,16 @@ struct OnboardingView: View {
                         viewModel.handleContinueTapped(userManager: userManager)
                     } label: {
                         HStack(spacing: 8) {
-                            if viewModel.isSavingUser {
-                                ProgressView()
-                                    .tint(.white)
-                            }
-                            Text(viewModel.currentStep == .userInfo && viewModel.isSavingUser ? "Saving..." : "Continue")
+                            Text("Continue")
                                 .font(.headline)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
-                        .background(viewModel.canContinue && !viewModel.isSavingUser ? Color.storkPurple : Color.secondary.opacity(0.3))
+                        .background(viewModel.canContinue ? Color.storkPurple : Color.secondary.opacity(0.3))
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
-                    .disabled(!viewModel.canContinue || viewModel.isSavingUser)
+                    .disabled(!viewModel.canContinue)
 
                     // Skip Button (optional steps only)
                     if viewModel.showsSkip {
@@ -105,13 +98,6 @@ struct OnboardingView: View {
         .background(Color(uiColor: .systemGroupedBackground))
         .task {
             viewModel.currentStep = .privacy
-
-            if let user = userManager.currentUser {
-                viewModel.firstName = user.firstName
-                viewModel.lastName = user.lastName
-                viewModel.birthday = user.birthday
-                viewModel.role = user.role
-            }
         }
         .environment(viewModel)
     }

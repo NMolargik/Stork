@@ -14,7 +14,6 @@ import Charts
 final class PDFReportGenerator {
 
     struct Configuration {
-        let user: User
         let deliveries: [Delivery]
         let dateRange: ExportDateRange
         let customDateInterval: DateInterval?
@@ -90,20 +89,6 @@ final class PDFReportGenerator {
             .foregroundColor: UIColor.darkGray
         ]
         dateRangeText.draw(at: CGPoint(x: margin, y: y), withAttributes: subtitleAttributes)
-
-        // User Info (right side)
-        let userInfo = "\(config.user.firstName) \(config.user.lastName)"
-        let userRole = config.user.role.description
-        let userAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 12, weight: .medium),
-            .foregroundColor: UIColor.darkGray
-        ]
-
-        let userInfoSize = userInfo.size(withAttributes: userAttributes)
-        userInfo.draw(at: CGPoint(x: pageWidth - margin - userInfoSize.width, y: yPosition), withAttributes: userAttributes)
-
-        let roleSize = userRole.size(withAttributes: userAttributes)
-        userRole.draw(at: CGPoint(x: pageWidth - margin - roleSize.width, y: yPosition + 16), withAttributes: userAttributes)
 
         y += 30
 

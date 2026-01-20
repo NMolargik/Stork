@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import FirebaseAuth
 
 struct ContentView: View {
     @Environment(UserManager.self) private var userManager: UserManager
@@ -20,96 +19,31 @@ struct ContentView: View {
     @State private var deliveryManager: DeliveryManager?
     @State private var insightManager: InsightManager?
     @State private var exportManager = ExportManager()
-    @State private var migrationManager = MigrationManager()
     @State private var healthManager = HealthManager()
     @State private var weatherManager = WeatherManager()
     @State private var locationManager = LocationManager()
     @State private var cloudSyncManager = CloudSyncManager()
-    
+
     var body: some View {
         ZStack {
-            switch (viewModel.appStage) {
-            case .start:
-                ProgressView()
-                    .id("start")
-                    .zIndex(0)
-                    .task {
-                        // Ensure managers exist in the View
-                        await MainActor.run {
-                            if self.deliveryManager == nil {
-                                self.deliveryManager = DeliveryManager(context: userManager.context)
-                            }
-                            if self.weatherManager.locationManager == nil {
-                                self.weatherManager.setLocationProvider(LocationManager())
-                            }
-                            if self.insightManager == nil, let deliveryManager {
-                                self.insightManager = InsightManager(deliveryManager: deliveryManager)
-                            }
-                            // Configure cloud sync manager with model context
-                            self.cloudSyncManager.configure(with: userManager.context)
-                        }
-                        await viewModel.prepareApp(migrationManager: migrationManager)
-                    }
-            case .checkingCloud:
-                VStack(spacing: 16) {
-                    ProgressView()
-                        .controlSize(.large)
-
-                    Text(viewModel.cloudCheckMessage)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-
-                    if cloudSyncManager.isCloudAvailable {
-                        HStack(spacing: 6) {
-                            Image(systemName: "checkmark.icloud")
-                                .foregroundStyle(.green)
-                            Text("iCloud Connected")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-                .id("checkingCloud")
-                .transition(.opacity)
-                .zIndex(0.5)
+            switch viewModel.appStage {
             case .splash:
                 SplashView(
-                    checkForExisting: {
-                        Task { await viewModel.prepareApp(migrationManager: migrationManager) }
-                    },
-                    attemptLogIn: { emailAddress, password in
-                        return await viewModel.attemptLogIn(emailAddress: emailAddress, password: password, migrationManager: migrationManager)
-                    },
-                    moveToOnboarding: {
-                        viewModel.appStage = .onboarding
-                    },
-                    resetPassword: { emailAddress in
-                        try await migrationManager.sendPasswordReset(emailAddress: emailAddress)
+                    onContinue: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            viewModel.appStage = .onboarding
+                        }
                     }
                 )
                 .id("splash")
                 .transition(viewModel.leadingTransition)
                 .zIndex(1)
-            case .migration:
-                MigrationView(
-                    migrationComplete: {
-                        withAnimation {
-                            viewModel.appStage = .onboarding
-                        }
-                    }
-                )
-                .environment(deliveryManager)
-                .environment(userManager)
-                .environment(migrationManager)
-                .id("migration")
-                .transition(viewModel.leadingTransition)
-                .zIndex(1)
+
             case .onboarding:
                 OnboardingView(onFinished: {
                     isOnboardingComplete = true
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        viewModel.appStage = .main
+                        viewModel.appStage = .syncing
                     }
                 })
                 .id("onboarding")
@@ -117,7 +51,21 @@ struct ContentView: View {
                 .environment(healthManager)
                 .transition(viewModel.leadingTransition)
                 .zIndex(1)
-                .environment(migrationManager)
+
+            case .syncing:
+                SyncingView(
+                    onSyncComplete: { foundData in
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            viewModel.appStage = .main
+                        }
+                    }
+                )
+                .environment(userManager)
+                .environment(deliveryManager)
+                .id("syncing")
+                .transition(viewModel.leadingTransition)
+                .zIndex(1)
+
             case .main:
                 MainView(
                     resetApplication: {
@@ -140,6 +88,23 @@ struct ContentView: View {
                 .environment(cloudSyncManager)
                 .task { weatherManager.setLocationProvider(LocationManager()) }
             }
+        }
+        .task {
+            // Ensure managers exist in the View
+            await MainActor.run {
+                if self.deliveryManager == nil {
+                    self.deliveryManager = DeliveryManager(context: userManager.context)
+                }
+                if self.weatherManager.locationManager == nil {
+                    self.weatherManager.setLocationProvider(LocationManager())
+                }
+                if self.insightManager == nil, let deliveryManager {
+                    self.insightManager = InsightManager(deliveryManager: deliveryManager)
+                }
+                // Configure cloud sync manager with model context
+                self.cloudSyncManager.configure(with: userManager.context)
+            }
+            await viewModel.prepareApp(isOnboardingComplete: isOnboardingComplete)
         }
         .onAppear {
             viewModel.configure(
@@ -173,7 +138,6 @@ struct ContentView: View {
     )
     .modelContainer(container)
     .environment(previewUserManager)
-    .environment(MigrationManager())
     .environment(DeliveryManager(context: previewUserManager.context))
     .environment(HealthManager())
     .environment(WeatherManager())

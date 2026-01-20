@@ -11,9 +11,6 @@ import Network
 extension SettingsView {
     @Observable
     class ViewModel {
-        // UI state
-        var editingUser: Bool = false
-
         // Network state
         private var networkMonitor: NWPathMonitor?
         var isOnline: Bool = true

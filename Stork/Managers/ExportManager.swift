@@ -63,7 +63,6 @@ class ExportManager {
     // MARK: - PDF Report
 
     func generatePDFReport(
-        user: User,
         deliveries: [Delivery],
         dateRange: ExportDateRange,
         customDateInterval: DateInterval?,
@@ -87,7 +86,6 @@ class ExportManager {
         }
 
         let config = PDFReportGenerator.Configuration(
-            user: user,
             deliveries: filtered,
             dateRange: dateRange,
             customDateInterval: customDateInterval,
@@ -136,13 +134,11 @@ class ExportManager {
 
     func renderMilestoneCard(
         count: Int,
-        milestoneType: CardImageRenderer.MilestoneType,
-        userName: String?
+        milestoneType: CardImageRenderer.MilestoneType
     ) -> UIImage? {
         cardRenderer.renderMilestoneCard(
             count: count,
-            milestoneType: milestoneType,
-            userName: userName
+            milestoneType: milestoneType
         )
     }
 

@@ -88,13 +88,11 @@ final class CardImageRenderer {
 
     func renderMilestoneCard(
         count: Int,
-        milestoneType: MilestoneType,
-        userName: String?
+        milestoneType: MilestoneType
     ) -> UIImage? {
         let cardView = MilestoneCardView(
             count: count,
-            milestoneType: milestoneType,
-            userName: userName
+            milestoneType: milestoneType
         )
         .environment(\.colorScheme, .light)
 

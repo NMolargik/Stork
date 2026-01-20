@@ -75,7 +75,7 @@ struct OnboardingLocationPage: View {
                         icon: "sun.max.fill",
                         iconColor: .yellow,
                         title: "Local Weather",
-                        description: "See current conditions on your home screen."
+                        description: "See current conditions on your dashboard."
                     )
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))

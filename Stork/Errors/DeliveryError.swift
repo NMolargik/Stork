@@ -14,8 +14,7 @@ enum DeliveryError: Error, LocalizedError {
     case updateFailed(String)
     case fetchFailed(String)
     case deletionFailed(String)
-    case firebaseError(String)
-    
+
     var message: String {
         switch self {
         case .notFound(let msg),
@@ -23,8 +22,7 @@ enum DeliveryError: Error, LocalizedError {
              .creationFailed(let msg),
              .updateFailed(let msg),
              .fetchFailed(let msg),
-             .deletionFailed(let msg),
-             .firebaseError(let msg):
+             .deletionFailed(let msg):
             return msg
         }
     }

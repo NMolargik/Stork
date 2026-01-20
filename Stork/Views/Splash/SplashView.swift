@@ -6,20 +6,18 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct SplashView: View {
-    var checkForExisting: () -> Void
-    var attemptLogIn: (String, String) async -> String?
-    var moveToOnboarding: () -> Void
-    var resetPassword: (String) async throws -> Void
-    
+    var onContinue: () -> Void
+
     @State private var viewModel = SplashView.ViewModel()
-    @State private var showExistingUser = false
     @Environment(\.horizontalSizeClass) private var hSizeClass
 
     var body: some View {
         VStack {
+            Spacer()
+
+            // Title
             Text("Stork")
                 .font(.system(size: hSizeClass == .regular ? 90 : 60))
                 .bold()
@@ -29,212 +27,51 @@ struct SplashView: View {
                 .padding(.bottom, 5)
                 .accessibilityAddTraits(.isHeader)
 
+            // Subtitle
             Text("a labor and delivery app")
                 .font(hSizeClass == .regular ? .title : .title3)
                 .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
                 .opacity(viewModel.subtitleVisible ? 1 : 0)
                 .offset(y: viewModel.subtitleVisible ? 0 : 20)
                 .animation(.easeOut(duration: 0.6).delay(0.8), value: viewModel.subtitleVisible)
 
+            // App icon
             Image("storkicon")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: hSizeClass == .regular ? 200 : 220)
                 .opacity(viewModel.subtitleVisible ? 1 : 0)
-                .offset(y: viewModel.subtitleVisible ? 0 : 20)
-                .animation(.easeOut(duration: 0.6).delay(0.8), value: viewModel.subtitleVisible)
+                .scaleEffect(viewModel.subtitleVisible ? 1 : 0)
+                .animation(.bouncy(duration: 0.6).delay(0.8), value: viewModel.subtitleVisible)
                 .padding()
                 .accessibilityLabel("Stork app logo")
-            
+
             Spacer()
-            
+
+            // Get Started Button
             Button {
                 Haptics.lightImpact()
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                    checkForExisting()
-                    showExistingUser.toggle()
-                }
+                onContinue()
             } label: {
                 HStack(spacing: 8) {
-                    Image(systemName: showExistingUser ? "chevron.down.circle.fill" : "person.crop.circle.fill")
-                    Text(showExistingUser ? "Welcome Back!" : "Existing User")
+                    Image(systemName: "arrow.right.circle.fill")
+                    Text("Get Started")
                         .bold()
-                        .frame(width: 140, alignment: .center)
                 }
                 .padding()
                 .frame(maxWidth: 250)
+                .background(Color.storkPurple)
+                .foregroundStyle(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
             }
-            .adaptiveGlass(tint: .storkPurple)
-            .foregroundStyle(.white)
-            .padding(.top, 8)
-            .opacity(viewModel.subtitleVisible ? 1 : 0)
-            .scaleEffect(viewModel.subtitleVisible ? 1 : 0.98)
-            .animation(.easeOut(duration: 0.5).delay(1.1), value: viewModel.subtitleVisible)
-            .zIndex(1)
-            .accessibilityLabel(showExistingUser ? "Existing user section expanded" : "Existing user")
-            .accessibilityHint(showExistingUser ? "Tap to collapse login form" : "Tap to show login form")
+            .buttonStyle(.plain)
+            .opacity(viewModel.buttonVisible ? 1 : 0)
+            .scaleEffect(viewModel.buttonVisible ? 1 : 0.98)
+            .animation(.easeOut(duration: 0.5).delay(1.2), value: viewModel.buttonVisible)
+            .accessibilityLabel("Get Started")
+            .accessibilityHint("Tap to begin using Stork")
 
-            // Expanding container anchored under the Existing User button
-            VStack(spacing: 0) {
-                VStack(spacing: 14) {
-                    HStack(spacing: 12) {
-                        Image(systemName: "envelope.fill")
-                            .foregroundStyle(.storkBlue)
-                            .frame(width: 20)
-                            .accessibilityHidden(true)
-                        TextField("Email Address", text: $viewModel.email)
-                            .textContentType(.emailAddress)
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled(true)
-                            .accessibilityLabel("Email address")
-                            .accessibilityHint("Enter your email address to log in")
-                    }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .strokeBorder(Color.secondary.opacity(0.15))
-                    )
-
-                    HStack(spacing: 12) {
-                        Image(systemName: "lock.fill")
-                            .foregroundStyle(.storkOrange)
-                            .frame(width: 20)
-                            .accessibilityHidden(true)
-                        SecureField("Password", text: $viewModel.password)
-                            .textContentType(.password)
-                            .accessibilityLabel("Password")
-                            .accessibilityHint("Enter your password to log in")
-                    }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .strokeBorder(Color.secondary.opacity(0.15))
-                    )
-                }
-                .padding(.horizontal)
-                .frame(maxWidth: 360)
-
-                Button {
-                    Haptics.lightImpact()
-                    viewModel.resetEmail = viewModel.email
-                    viewModel.resetError = nil
-                    viewModel.resetSuccess = false
-                    viewModel.showResetPasswordSheet = true
-                } label: {
-                    Text("Forgot Your Password?")
-                        .font(.footnote)
-                        .foregroundStyle(.red)
-                }
-                .buttonStyle(.plain)
-                .tint(.storkBlue)
-                .padding(.top, 6)
-                .accessibilityLabel("Forgot your password")
-                .accessibilityHint("Opens password reset form")
-
-            }
-            .padding(.top)
-            .opacity(showExistingUser ? 1 : 0)
-            .scaleEffect(showExistingUser ? 1 : 0.98, anchor: .top)
-            .frame(height: showExistingUser ? nil : 0, alignment: .top)
-            .clipped()
-            .animation(.spring(response: 0.5, dampingFraction: 0.85), value: showExistingUser)
-            
-            Button {
-                Haptics.lightImpact()
-                if showExistingUser {
-                    // Attempt login
-                    viewModel.loginError = nil
-                    viewModel.isLoggingIn = true
-                    Task {
-                        let errorMessage = await attemptLogIn(viewModel.email, viewModel.password)
-                        await MainActor.run {
-                            self.viewModel.loginError = errorMessage
-                            self.viewModel.isLoggingIn = false
-                        }
-                    }
-                } else {
-                    // Go to onboarding for new users
-                    moveToOnboarding()
-                }
-            } label: {
-                if showExistingUser {
-                    if viewModel.isLoggingIn {
-                        ProgressView()
-                            .frame(height: 50)
-                            .frame(maxWidth: 250)
-                    } else {
-                        HStack(spacing: 8) {
-                            Image(systemName: "arrow.right.circle.fill")
-                            Text("Log In")
-                                .bold()
-                                .frame(width: 140, alignment: .center)
-                        }
-                        .padding()
-                        .frame(maxWidth: 250)
-                    }
-                } else {
-                    HStack(spacing: 8) {
-                        Image(systemName: "person.crop.circle.badge.plus")
-                        Text("New User")
-                            .bold()
-                            .frame(width: 140, alignment: .center)
-                    }
-                    .padding()
-                    .frame(maxWidth: 250)
-                }
-            }
-            .adaptiveGlass(tint: {
-                if showExistingUser {
-                    return (viewModel.isLoggingIn ||
-                            viewModel.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-                            viewModel.password.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-                            !viewModel.email.contains("@")) ? .gray : .storkBlue
-                } else {
-                    return .storkOrange
-                }
-            }())
-            .foregroundStyle(.white)
-            .padding(.top, 8)
-            .opacity(viewModel.subtitleVisible ? 1 : 0)
-            .scaleEffect(viewModel.subtitleVisible ? 1 : 0.98)
-            .animation(.easeOut(duration: 0.5).delay(1.2), value: viewModel.subtitleVisible)
-            .disabled(showExistingUser && (
-                viewModel.isLoggingIn ||
-                viewModel.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-                viewModel.password.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-                !viewModel.email.contains("@")
-            ))
-            .frame(width: 250)
-            .accessibilityLabel(showExistingUser ? (viewModel.isLoggingIn ? "Logging in" : "Log in") : "New user")
-            .accessibilityHint(showExistingUser ? "Tap to log in with your credentials" : "Tap to create a new account")
-            
-
-            if let loginError = viewModel.loginError {
-                HStack(spacing: 8) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.yellow)
-                        .accessibilityHidden(true)
-                    Text(loginError)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(.top, 6)
-                .padding(.horizontal)
-                .transition(.opacity.combined(with: .move(edge: .top)))
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel("Login error: \(loginError)")
-            }
-            
             Spacer()
         }
         .onAppear {
@@ -243,152 +80,9 @@ struct SplashView: View {
         .padding(.top, hSizeClass == .regular ? 40 : 80)
         .frame(maxWidth: hSizeClass == .regular ? 520 : .infinity)
         .padding(.horizontal, 24)
-        .sheet(isPresented: $viewModel.showResetPasswordSheet) {
-            NavigationStack {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Reset Password")
-                        .font(.title2).bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    Text("Enter the email address associated with your account.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-
-                    HStack(spacing: 12) {
-                        Image(systemName: "envelope.fill")
-                            .foregroundStyle(.storkBlue)
-                            .frame(width: 20)
-                            .accessibilityHidden(true)
-                        TextField("Email Address", text: $viewModel.resetEmail)
-                            .textContentType(.emailAddress)
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled(true)
-                            .disabled(viewModel.isResettingPassword || viewModel.resetSuccess)
-                            .accessibilityLabel("Email address")
-                            .accessibilityHint("Enter the email address for password reset")
-                    }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .strokeBorder(Color.secondary.opacity(0.15))
-                    )
-
-                    if let resetError = viewModel.resetError {
-                        HStack(spacing: 8) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.yellow)
-                                .accessibilityHidden(true)
-                            Text(resetError)
-                                .foregroundStyle(.red)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                        .padding(.horizontal)
-                        .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Error: \(resetError)")
-                    }
-
-                    if viewModel.resetSuccess {
-                        HStack(spacing: 8) {
-                            Image(systemName: "checkmark.seal.fill")
-                                .foregroundStyle(.green)
-                                .accessibilityHidden(true)
-                            Text("Check your email for password reset instructions")
-                                .foregroundStyle(.primary)
-                        }
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-                        .padding(.horizontal)
-                        .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Success: Check your email for password reset instructions")
-                    }
-
-                    Button {
-                        Haptics.lightImpact()
-                        attemptPasswordReset()
-                    } label: {
-                        if viewModel.isResettingPassword {
-                            ProgressView()
-                                .frame(maxWidth: .infinity)
-                        } else {
-                            Text("Submit")
-                                .bold()
-                                .frame(maxWidth: .infinity)
-                        }
-                    }
-                    .foregroundStyle(.white)
-                    .padding()
-                    .adaptiveGlass(tint: viewModel.isResettingPassword || viewModel.resetSuccess || viewModel.resetEmail.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !viewModel.resetEmail.contains("@") ? .gray : .storkPurple)
-                    .font(.title3)
-                    .bold()
-                    .disabled(viewModel.isResettingPassword || viewModel.resetSuccess || viewModel.resetEmail.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !viewModel.resetEmail.contains("@"))
-                    .padding(.top, 4)
-                    .accessibilityLabel(viewModel.isResettingPassword ? "Sending reset email" : "Submit password reset")
-                    .accessibilityHint("Sends a password reset email to the address entered")
-
-                    Spacer(minLength: 0)
-                }
-                .padding()
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            viewModel.showResetPasswordSheet = false
-                        } label: {
-                            Image(systemName: "xmark")
-                                .font(.body.weight(.semibold))
-                        }
-                        .accessibilityLabel("Close")
-                        .tint(.red)
-                        .disabled(viewModel.isResettingPassword)
-                    }
-                }
-            }
-            .presentationDetents([.medium])
-            .interactiveDismissDisabled(viewModel.isResettingPassword)
-        }
-    }
-
-    private func attemptPasswordReset() {
-        viewModel.isResettingPassword = true
-        viewModel.resetError = nil
-        Task {
-            do {
-                try await resetPassword(viewModel.resetEmail.trimmingCharacters(in: .whitespacesAndNewlines))
-                await MainActor.run {
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        viewModel.resetSuccess = true
-                    }
-                }
-                try? await Task.sleep(nanoseconds: 4_000_000_000)
-                await MainActor.run {
-                    viewModel.showResetPasswordSheet = false
-                    viewModel.resetSuccess = false
-                    viewModel.isResettingPassword = false
-                    viewModel.resetEmail = ""
-                }
-            } catch {
-                await MainActor.run {
-                    if let authError = error as? AuthError {
-                        viewModel.resetError = authError.message
-                    } else {
-                        viewModel.resetError = error.localizedDescription
-                    }
-                    viewModel.isResettingPassword = false
-                }
-            }
-        }
     }
 }
 
 #Preview {
-    SplashView(
-        checkForExisting: {},
-        attemptLogIn: { _,_ in nil },
-        moveToOnboarding: {},
-        resetPassword: { _ in }
-    )
+    SplashView(onContinue: {})
 }
