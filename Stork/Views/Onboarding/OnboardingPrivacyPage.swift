@@ -67,10 +67,12 @@ struct OnboardingPrivacyPage: View {
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(maxWidth: 500)
                 .padding(.horizontal, 20)
 
                 Spacer(minLength: 120)
             }
+            .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
     }

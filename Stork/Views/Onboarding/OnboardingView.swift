@@ -35,6 +35,7 @@ struct OnboardingView: View {
                             .animation(.easeInOut(duration: 0.3), value: currentIndex)
                     }
                 }
+                .frame(maxWidth: 500)
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
                 .padding(.bottom, 8)
@@ -89,9 +90,11 @@ struct OnboardingView: View {
                         }
                     }
                 }
+                .frame(maxWidth: 500)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
                 .padding(.top, 12)
+                .frame(maxWidth: .infinity)
                 .background(.ultraThinMaterial)
             }
         }

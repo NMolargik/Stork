@@ -69,6 +69,7 @@ struct OnboardingHealthPage: View {
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(maxWidth: 500)
                 .padding(.horizontal, 20)
 
                 // Step Count Display (when authorized)
@@ -82,7 +83,7 @@ struct OnboardingHealthPage: View {
                             .foregroundStyle(.primary)
                     }
                     .padding()
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: 500)
                     .background(Color(uiColor: .secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .padding(.horizontal, 20)
@@ -104,6 +105,7 @@ struct OnboardingHealthPage: View {
                                 .foregroundStyle(.primary)
                                 .clipShape(RoundedRectangle(cornerRadius: 14))
                         }
+                        .frame(maxWidth: 500)
                         .padding(.horizontal, 20)
                     } else {
                         Button {
@@ -123,12 +125,14 @@ struct OnboardingHealthPage: View {
                                 .foregroundStyle(.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 14))
                         }
+                        .frame(maxWidth: 500)
                         .padding(.horizontal, 20)
                     }
                 }
 
                 Spacer(minLength: 120)
             }
+            .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
     }

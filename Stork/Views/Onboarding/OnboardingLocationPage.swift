@@ -80,6 +80,7 @@ struct OnboardingLocationPage: View {
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(maxWidth: 500)
                 .padding(.horizontal, 20)
 
                 // Action Button
@@ -96,6 +97,7 @@ struct OnboardingLocationPage: View {
                             .foregroundStyle(.white)
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
+                    .frame(maxWidth: 500)
                     .padding(.horizontal, 20)
                 } else if status == .denied || status == .restricted {
                     Button {
@@ -111,11 +113,13 @@ struct OnboardingLocationPage: View {
                             .foregroundStyle(.primary)
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
+                    .frame(maxWidth: 500)
                     .padding(.horizontal, 20)
                 }
 
                 Spacer(minLength: 120)
             }
+            .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
     }

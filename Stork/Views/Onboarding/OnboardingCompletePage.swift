@@ -75,6 +75,7 @@ struct OnboardingCompletePage: View {
             }
             .background(Color(uiColor: .secondarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .frame(maxWidth: 500)
             .padding(.horizontal, 20)
 
             Spacer()
@@ -96,6 +97,7 @@ struct OnboardingCompletePage: View {
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
+            .frame(maxWidth: 500)
             .padding(.horizontal, 20)
             .padding(.bottom, 40)
             .opacity(showButton ? 1 : 0)
