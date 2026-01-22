@@ -79,7 +79,9 @@ struct ContentView: View {
                 .environment(locationManager)
                 .environment(exportManager)
                 .environment(cloudSyncManager)
-                .task { weatherManager.setLocationProvider(LocationManager()) }
+                .task {
+                    weatherManager.setLocationProvider(LocationManager())
+                }
             }
         }
         .task {

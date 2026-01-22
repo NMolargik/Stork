@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Observation
 
 extension ContentView {
     @Observable
@@ -35,6 +34,5 @@ extension ContentView {
                 appStage = isOnboardingComplete ? .syncing : .splash
             }
         }
-
     }
 }

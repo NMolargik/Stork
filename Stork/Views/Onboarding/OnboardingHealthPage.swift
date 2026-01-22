@@ -89,45 +89,23 @@ struct OnboardingHealthPage: View {
                     .padding(.horizontal, 20)
                 }
 
-                // Action Button
-                if !healthManager.isAuthorized {
-                    if healthManager.lastError != nil {
-                        Button {
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
-                            }
-                        } label: {
-                            Label("Open Settings", systemImage: "gear")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .background(Color.secondary.opacity(0.2))
-                                .foregroundStyle(.primary)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                // Open Settings Button (only when denied)
+                if !healthManager.isAuthorized && healthManager.lastError != nil {
+                    Button {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
                         }
-                        .frame(maxWidth: 500)
-                        .padding(.horizontal, 20)
-                    } else {
-                        Button {
-                            Haptics.mediumImpact()
-                            Task {
-                                await healthManager.requestAuthorization()
-                                if healthManager.isAuthorized {
-                                    healthManager.startObservingStepCount()
-                                }
-                            }
-                        } label: {
-                            Label("Connect Apple Health", systemImage: "heart.fill")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .background(Color.pink)
-                                .foregroundStyle(.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
-                        }
-                        .frame(maxWidth: 500)
-                        .padding(.horizontal, 20)
+                    } label: {
+                        Label("Open Settings", systemImage: "gear")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(Color.secondary.opacity(0.2))
+                            .foregroundStyle(.primary)
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
+                    .frame(maxWidth: 500)
+                    .padding(.horizontal, 20)
                 }
 
                 Spacer(minLength: 120)

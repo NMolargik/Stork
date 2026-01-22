@@ -11,6 +11,9 @@ import SwiftData
 struct OnboardingView: View {
     var onFinished: () -> Void = {}
 
+    @Environment(LocationManager.self) private var locationManager
+    @Environment(HealthManager.self) private var healthManager
+
     @State private var viewModel = ViewModel()
 
     private var steps: [OnboardingStep] {
@@ -62,11 +65,21 @@ struct OnboardingView: View {
                     // Continue Button
                     Button {
                         Haptics.mediumImpact()
-                        viewModel.handleContinueTapped()
+                        Task {
+                            await viewModel.handleContinueTapped(
+                                locationManager: locationManager,
+                                healthManager: healthManager
+                            )
+                        }
                     } label: {
                         HStack(spacing: 8) {
-                            Text("Continue")
-                                .font(.headline)
+                            if viewModel.isRequestingPermission {
+                                ProgressView()
+                                    .tint(.white)
+                            } else {
+                                Text("Continue")
+                                    .font(.headline)
+                            }
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
@@ -75,8 +88,7 @@ struct OnboardingView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .disabled(!viewModel.canContinue)
-
-                    }
+                }
                 .frame(maxWidth: 500)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)

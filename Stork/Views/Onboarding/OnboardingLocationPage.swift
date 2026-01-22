@@ -83,23 +83,8 @@ struct OnboardingLocationPage: View {
                 .frame(maxWidth: 500)
                 .padding(.horizontal, 20)
 
-                // Action Button
-                if status == .notDetermined {
-                    Button {
-                        Haptics.mediumImpact()
-                        locationManager.requestAuthorization()
-                    } label: {
-                        Label("Allow Location Access", systemImage: "location.fill")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(Color.storkBlue)
-                            .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
-                    }
-                    .frame(maxWidth: 500)
-                    .padding(.horizontal, 20)
-                } else if status == .denied || status == .restricted {
+                // Open Settings Button (only when denied/restricted)
+                if status == .denied || status == .restricted {
                     Button {
                         if let url = URL(string: UIApplication.openSettingsURLString) {
                             UIApplication.shared.open(url)
