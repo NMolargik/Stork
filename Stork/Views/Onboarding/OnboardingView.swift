@@ -76,18 +76,7 @@ struct OnboardingView: View {
                     }
                     .disabled(!viewModel.canContinue)
 
-                    // Skip Button (optional steps only)
-                    if viewModel.showsSkip {
-                        Button {
-                            Haptics.lightImpact()
-                            viewModel.handleSkipTapped()
-                        } label: {
-                            Text("Skip for now")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
                     }
-                }
                 .frame(maxWidth: 500)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)

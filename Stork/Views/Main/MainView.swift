@@ -29,6 +29,7 @@ struct MainView: View {
     @State private var viewModel: ViewModel = ViewModel()
     @State private var showHospitalRemovalAlert: Bool = false
     @State private var milestoneShareImage: IdentifiableImage?
+    @State private var showWeatherAttribution: Bool = false
 
     private let newDeliveryTip = NewDeliveryTip()
     
@@ -453,7 +454,7 @@ struct MainView: View {
                         HStack(spacing: 8) {
                             weatherManager.condition?.weatherSymbolView()
                                 .imageScale(.medium)
-                            
+
                             if let temp = weatherManager.temperatureString {
                                 if useMetricUnits,
                                    let fValue = Double(temp.filter("0123456789.-".contains)) {
@@ -470,11 +471,34 @@ struct MainView: View {
                                 }
                             }
                         }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            Haptics.lightImpact()
+                            showWeatherAttribution = true
+                        }
+                        .popover(isPresented: $showWeatherAttribution, arrowEdge: .bottom) {
+                            VStack(spacing: 12) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "apple.logo")
+                                    Text("Weather")
+                                }
+                                .font(.headline)
+
+                                Link(destination: URL(string: "https://weatherkit.apple.com/legal-attribution.html")!) {
+                                    Text("Legal Attribution")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.blue)
+                                }
+                            }
+                            .padding()
+                            .presentationCompactAdaptation(.popover)
+                        }
                         .task {
                             await weatherManager.refresh()
                         }
                         .accessibilityElement(children: .combine)
                         .accessibilityLabel("Current weather")
+                        .accessibilityHint("Tap to view weather attribution")
                     }
                 }
                 .padding(.horizontal, 12)

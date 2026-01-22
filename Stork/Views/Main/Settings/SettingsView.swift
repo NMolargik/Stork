@@ -264,6 +264,30 @@ struct SettingsView: View {
             } header: {
                 Text("About")
             }
+
+            // MARK: - Attributions
+            Section {
+                Link(destination: URL(string: "https://weatherkit.apple.com/legal-attribution.html")!) {
+                    HStack {
+                        Label {
+                            Text(" Weather")
+                        } icon: {
+                            Image(systemName: "apple.logo")
+                        }
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+                .accessibilityLabel("Apple Weather attribution")
+                .accessibilityHint("Opens Apple Weather legal attribution page")
+            } header: {
+                Text("Attributions")
+            } footer: {
+                Text("Weather data provided by Apple Weather.")
+            }
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active, let color = pendingIconColor {

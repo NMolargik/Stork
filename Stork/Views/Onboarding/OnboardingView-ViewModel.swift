@@ -19,15 +19,6 @@ extension OnboardingView {
             }
         }
 
-        var showsSkip: Bool {
-            switch currentStep {
-            case .location, .health:
-                return true
-            case .privacy, .complete:
-                return false
-            }
-        }
-
         // Actions
         func handleContinueTapped() {
             switch currentStep {
@@ -42,15 +33,5 @@ extension OnboardingView {
             }
         }
 
-        func handleSkipTapped() {
-            switch currentStep {
-            case .location:
-                currentStep = .health
-            case .health:
-                currentStep = .complete
-            case .privacy, .complete:
-                break
-            }
-        }
     }
 }
