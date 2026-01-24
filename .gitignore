@@ -28,6 +28,9 @@ Podfile.lock
 Carthage/Build/
 Carthage/Checkouts/
 
+# IDE
+.idea/
+
 # Misc
 *.DS_Store
 *.swp

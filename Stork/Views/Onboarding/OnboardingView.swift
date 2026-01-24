@@ -9,10 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct OnboardingView: View {
-    var onFinished: () -> Void = {}
-
     @Environment(LocationManager.self) private var locationManager
     @Environment(HealthManager.self) private var healthManager
+    
+    var onFinished: () -> Void = {}
 
     @State private var viewModel = ViewModel()
 
