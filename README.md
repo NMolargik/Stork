@@ -1,3 +1,5 @@
+<img src="Icons/icon-blue-preview.png" alt="Stork Blue" width="96" height="96"> <img src="Icons/icon-pink-preview.png" alt="Stork Pink" width="96" height="96"> <img src="Icons/icon-orange-preview.png" alt="Stork Orange" width="96" height="96"> <img src="Icons/icon-purple-preview.png" alt="Stork Purple" width="96" height="96">
+
 # Stork
 
 A professional iOS app for healthcare professionals to track baby deliveries and maintain career statistics.
