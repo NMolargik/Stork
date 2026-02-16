@@ -44,6 +44,7 @@ public extension View {
 
 struct StatPillBackground: ViewModifier {
     func body(content: Content) -> some View {
+        #if os(iOS)
         if #available(iOS 26.0, *) {
             content
                 .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -56,6 +57,14 @@ struct StatPillBackground: ViewModifier {
                         .shadow(radius: 5)
                 )
         }
+        #else
+        content
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .shadow(radius: 5)
+            )
+        #endif
     }
 }
 

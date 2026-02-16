@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum AppTab: String, CaseIterable, Identifiable {
-    case home = "Dashboard"
+    case dashboard = "Dashboard"
     case list = "Deliveries"
     case calendar = "Calendar"
     case settings = "Settings"
@@ -17,7 +17,7 @@ enum AppTab: String, CaseIterable, Identifiable {
 
     func icon() -> Image {
         switch self {
-        case .home:
+        case .dashboard:
             return Image(systemName: "circle.hexagongrid.fill")
         case .list:
             return Image(systemName: "list.bullet")
@@ -30,7 +30,7 @@ enum AppTab: String, CaseIterable, Identifiable {
 
     func color() -> Color {
         switch self {
-        case .home:
+        case .dashboard:
             return Color.storkPurple
         case .list:
             return Color.storkBlue

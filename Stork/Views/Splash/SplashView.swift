@@ -11,6 +11,7 @@ struct SplashView: View {
     var onContinue: () -> Void
 
     @State private var viewModel = SplashView.ViewModel()
+    @State private var isPulsing = false
     @Environment(\.horizontalSizeClass) private var hSizeClass
 
     var body: some View {
@@ -28,7 +29,7 @@ struct SplashView: View {
                 .accessibilityAddTraits(.isHeader)
 
             // Subtitle
-            Text("a labor and delivery app")
+            Text("for labor & delivery professionals")
                 .font(hSizeClass == .regular ? .title : .title3)
                 .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
@@ -41,11 +42,18 @@ struct SplashView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: hSizeClass == .regular ? 200 : 220)
+                .scaleEffect(isPulsing ? 1.1 : 1.0)
+                .animation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true), value: isPulsing)
                 .opacity(viewModel.subtitleVisible ? 1 : 0)
                 .scaleEffect(viewModel.subtitleVisible ? 1 : 0)
                 .animation(.bouncy(duration: 0.6).delay(0.8), value: viewModel.subtitleVisible)
                 .padding()
                 .accessibilityLabel("Stork app logo")
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                        isPulsing = true
+                    }
+                }
 
             Spacer()
 
@@ -55,9 +63,10 @@ struct SplashView: View {
                 onContinue()
             } label: {
                 HStack(spacing: 8) {
-                    Image(systemName: "arrow.right.circle.fill")
                     Text("Get Started")
                         .bold()
+                    
+                    Image(systemName: "arrow.right.circle.fill")
                 }
                 .padding()
                 .frame(maxWidth: 250)

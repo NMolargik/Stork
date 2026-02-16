@@ -10,7 +10,7 @@ import Foundation
 /// Deep link actions that can be triggered from widgets or external URLs
 enum DeepLink: Equatable {
     case newDelivery
-    case home
+    case dashboard
     case deliveries
     case weeklyDeliveries
     case settings

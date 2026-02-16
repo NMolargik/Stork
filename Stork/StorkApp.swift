@@ -53,8 +53,8 @@ struct StorkApp: App {
         switch url.host {
         case "new-delivery":
             pendingDeepLink = .newDelivery
-        case "home":
-            pendingDeepLink = .home
+        case "dashboard":
+            pendingDeepLink = .dashboard
         case "deliveries":
             if url.pathComponents.contains("week") {
                 pendingDeepLink = .weeklyDeliveries

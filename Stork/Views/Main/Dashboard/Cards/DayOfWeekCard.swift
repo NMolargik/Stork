@@ -10,7 +10,7 @@ import SwiftData
 
 struct DayOfWeekCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Day of Week", systemImage: "calendar", accent: .storkPink) {
@@ -24,7 +24,7 @@ struct DayOfWeekCard: View {
                                 Text("Busiest Day")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
-                                Text(HomeView.ViewModel.DayOfWeekStats.fullDayNames[busiestDay])
+                                Text(DashboardView.ViewModel.DayOfWeekStats.fullDayNames[busiestDay])
                                     .font(.title2.bold())
                                     .foregroundStyle(.storkPink)
                             }
@@ -39,7 +39,7 @@ struct DayOfWeekCard: View {
                             }
                         }
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Busiest day is \(HomeView.ViewModel.DayOfWeekStats.fullDayNames[busiestDay]) with \(stats.busiestCount) deliveries")
+                        .accessibilityLabel("Busiest day is \(DashboardView.ViewModel.DayOfWeekStats.fullDayNames[busiestDay]) with \(stats.busiestCount) deliveries")
                     }
 
                     Divider()
@@ -56,11 +56,11 @@ struct DayOfWeekCard: View {
                                     .fill(weekday == stats.busiestDay ? Color.storkPink : Color.storkPink.opacity(0.4))
                                     .frame(width: 28, height: max(8, 60 * heightRatio))
 
-                                Text(HomeView.ViewModel.DayOfWeekStats.dayNames[weekday])
+                                Text(DashboardView.ViewModel.DayOfWeekStats.dayNames[weekday])
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                             }
-                            .accessibilityLabel("\(HomeView.ViewModel.DayOfWeekStats.fullDayNames[weekday]): \(count) deliveries")
+                            .accessibilityLabel("\(DashboardView.ViewModel.DayOfWeekStats.fullDayNames[weekday]): \(count) deliveries")
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -82,6 +82,6 @@ struct DayOfWeekCard: View {
     }()
     let context = ModelContext(container)
 
-    DayOfWeekCard(viewModel: HomeView.ViewModel())
+    DayOfWeekCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

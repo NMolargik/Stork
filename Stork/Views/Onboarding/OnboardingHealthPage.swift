@@ -17,7 +17,7 @@ struct OnboardingHealthPage: View {
                 "checkmark.circle.fill",
                 .green,
                 "Health Connected",
-                "We'll show your daily step count on the home screen."
+                "We'll show your daily step count on the dashboard screen on iPhone."
             )
         } else if healthManager.lastError != nil {
             return (
@@ -104,6 +104,7 @@ struct OnboardingHealthPage: View {
                             .foregroundStyle(.primary)
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
+                    .buttonStyle(.plain)
                     .frame(maxWidth: 500)
                     .padding(.horizontal, 20)
                 }

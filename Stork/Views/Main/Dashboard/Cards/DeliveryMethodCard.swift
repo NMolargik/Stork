@@ -10,7 +10,7 @@ import SwiftData
 
 struct DeliveryMethodCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Delivery Method", systemImage: "hands.and.sparkles.fill", accent: .storkBlue) {
@@ -73,6 +73,6 @@ struct DeliveryMethodCard: View {
     }()
     let context = ModelContext(container)
     
-    DeliveryMethodCard(viewModel: HomeView.ViewModel())
+    DeliveryMethodCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

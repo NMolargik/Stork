@@ -100,12 +100,12 @@ struct CareerTotalWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: CareerTotalProvider()) { entry in
             if #available(iOS 17.0, *) {
-                Link(destination: URL(string: "stork://home")!) {
+                Link(destination: URL(string: "stork://dashboard")!) {
                     CareerTotalSmallView(entry: entry)
                         .containerBackground(.fill.tertiary, for: .widget)
                 }
             } else {
-                Link(destination: URL(string: "stork://home")!) {
+                Link(destination: URL(string: "stork://dashboard")!) {
                     CareerTotalSmallView(entry: entry)
                         .padding()
                         .background()

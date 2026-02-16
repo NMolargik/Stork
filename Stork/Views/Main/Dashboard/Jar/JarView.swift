@@ -12,9 +12,11 @@ struct JarView: View {
     let boyCount: Int
     let girlCount: Int
     let lossCount: Int
+    var monthLabel: String? = nil
     @Binding var reshuffle: Bool
 
     private let cornerRadius: CGFloat = 12
+    @State private var showHistory = false
 
     @State private var scene = {
         let s = MarbleScene()
@@ -42,21 +44,10 @@ struct JarView: View {
             let newSize = proxy.size
             let globalFrame = proxy.frame(in: .global)
 
-            ZStack {
-                // A subtle glassy background
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(.ultraThinMaterial)
-                    .allowsHitTesting(false)
-                TransparentSpriteView(scene: scene)
-                    .overlay {
-                        Rectangle()
-                            .foregroundStyle(.ultraThinMaterial)
-                            .opacity(0.6)
-                            .allowsHitTesting(false)
-                    }
-                    .ignoresSafeArea(edges: .bottom)
-                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-            }
+            TransparentSpriteView(scene: scene)
+                .ignoresSafeArea(edges: .bottom)
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                .modifier(JarGlassBackground(cornerRadius: cornerRadius))
             .onChange(of: newSize) { _, new in
                 let sizeChanged = containerSize != new
                 containerSize = new
@@ -70,20 +61,49 @@ struct JarView: View {
             }
         }
         .overlay(alignment: .top) {
-            Text(monthText())
-                .font(.body.weight(.semibold))
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(.thinMaterial, in: Capsule())
-                .shadow(radius: 1)
+            if let monthLabel {
+                Text(monthLabel)
+                    .font(.body.weight(.semibold))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .modifier(JarLabelBackground())
+                    .padding(.top, 8)
+            } else {
+                Button {
+                    showHistory = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(monthText())
+                            .font(.body.weight(.semibold))
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                    }
+                    .foregroundStyle(.gray)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .modifier(JarLabelBackground())
+                }
+                #if os(visionOS)
+                .buttonStyle(.plain)
+                #endif
                 .padding(.top, 8)
+            }
+        }
+        .sheet(isPresented: $showHistory) {
+            JarHistoryView()
+                .presentationDetents([.medium])
+                .interactiveDismissDisabled()
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Delivery jar for \(monthText())")
-        .accessibilityValue("\(boyCount) boys, \(girlCount) girls, \(lossCount) losses this month")
-        .accessibilityHint("Pull down to refresh the jar animation")
+        .accessibilityLabel("Delivery jar for \(monthLabel ?? monthText())")
+        .accessibilityValue("\(boyCount) boys, \(girlCount) girls, \(lossCount) losses")
+        .accessibilityHint(monthLabel == nil ? "Tap month label to view jar history" : "")
         .onAppear {
             startupIgnoreUntil = Date().addingTimeInterval(2.0)
+            // Disable SpriteKit frost when SwiftUI liquid glass handles it
+            if #available(iOS 26.0, *) {
+                scene.useFrostEffect = false
+            }
             scene.onReady = { [weak scene] in
                 guard let scene = scene else { return }
                 scene.applyAppearance(isDark: colorScheme == .dark)
@@ -189,8 +209,12 @@ struct JarView: View {
     }
 
     private func updateVisibility(for frame: CGRect) {
-        // Get screen bounds
+        // Get screen/window bounds
+        #if os(iOS)
         let screenHeight = UIScreen.main.bounds.height
+        #else
+        let screenHeight: CGFloat = 1200
+        #endif
 
         // Check if any part of the jar is visible on screen
         // Add some padding to avoid flickering at edges
@@ -220,6 +244,59 @@ struct JarView: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - Glass Modifiers
+
+private struct JarGlassBackground: ViewModifier {
+    let cornerRadius: CGFloat
+
+    func body(content: Content) -> some View {
+        #if os(iOS)
+        if #available(iOS 26.0, *) {
+            content
+                .glassEffect(.regular, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        } else {
+            jarFallback(content: content)
+        }
+        #else
+        jarFallback(content: content)
+        #endif
+    }
+
+    private func jarFallback(content: Content) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(.ultraThinMaterial)
+                .allowsHitTesting(false)
+            content
+                .overlay {
+                    Rectangle()
+                        .foregroundStyle(.ultraThinMaterial)
+                        .opacity(0.6)
+                        .allowsHitTesting(false)
+                }
+        }
+    }
+}
+
+private struct JarLabelBackground: ViewModifier {
+    func body(content: Content) -> some View {
+        #if os(iOS)
+        if #available(iOS 26.0, *) {
+            content
+                .glassEffect(.regular, in: Capsule())
+        } else {
+            content
+                .background(.thinMaterial, in: Capsule())
+                .shadow(radius: 1)
+        }
+        #else
+        content
+            .background(.thinMaterial, in: Capsule())
+            .shadow(radius: 1)
+        #endif
     }
 }
 

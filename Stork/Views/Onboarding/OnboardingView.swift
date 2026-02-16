@@ -18,9 +18,15 @@ struct OnboardingView: View {
 
     private var steps: [OnboardingStep] {
         OnboardingStep.allCases.filter { step in
+            #if os(visionOS)
+            if step == .health {
+                return false
+            }
+            #else
             if step == .health, UIDevice.current.userInterfaceIdiom == .pad {
                 return false
             }
+            #endif
             return true
         }
     }
@@ -55,10 +61,12 @@ struct OnboardingView: View {
                 OnboardingLocationPage()
                     .tag(OnboardingStep.location)
 
+                #if !os(visionOS)
                 if UIDevice.current.userInterfaceIdiom != .pad {
                     OnboardingHealthPage()
                         .tag(OnboardingStep.health)
                 }
+                #endif
 
                 OnboardingCompletePage(onFinish: onFinished)
                     .tag(OnboardingStep.complete)
@@ -94,6 +102,7 @@ struct OnboardingView: View {
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
+                    .buttonStyle(.plain)
                     .disabled(!viewModel.canContinue)
                 }
                 .frame(maxWidth: 500)

@@ -3,7 +3,7 @@ import Charts
 import SwiftData
 import UIKit
 
-struct HomeView: View {
+struct DashboardView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(InsightManager.self) private var insightManager: InsightManager
     @Environment(ExportManager.self) private var exportManager: ExportManager
@@ -18,7 +18,7 @@ struct HomeView: View {
     @State private var viewModel = ViewModel()
     @State private var shareImage: UIImage?
     @State private var showShareSheet = false
-    @State private var cardOrder: [HomeCard] = HomeCard.loadOrder()
+    @State private var cardOrder: [DashboardCard] = DashboardCard.loadOrder()
 
     var body: some View {
         ScrollView {
@@ -48,13 +48,13 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $showingReorderSheet) {
-            HomeCardOrderSheet(currentOrder: cardOrder) { newOrder in
+            DashboardCardOrderSheet(currentOrder: cardOrder) { newOrder in
                 cardOrder = newOrder
             }
             .presentationDetents([.large])
         }
         .onAppear {
-            cardOrder = HomeCard.loadOrder()
+            cardOrder = DashboardCard.loadOrder()
         }
     }
 
@@ -74,7 +74,7 @@ struct HomeView: View {
     }
 
     @ViewBuilder
-    private func cardView(for card: HomeCard) -> some View {
+    private func cardView(for card: DashboardCard) -> some View {
         switch card {
         case .deliveryMethod:
             DeliveryMethodCard(viewModel: viewModel)
@@ -150,7 +150,7 @@ struct ShareSheet: UIViewControllerRepresentable {
     }()
     let context = ModelContext(container)
 
-    HomeView(showingEntrySheet: .constant(false), showingReorderSheet: .constant(false))
+    DashboardView(showingEntrySheet: .constant(false), showingReorderSheet: .constant(false))
         .environment(DeliveryManager(context: context))
         .environment(InsightManager(deliveryManager: DeliveryManager(context: context)))
         .environment(ExportManager())

@@ -27,6 +27,9 @@ final class HealthManager {
     /// Live-updating total steps for the current calendar day (midnight -> now).
     private(set) var todayStepCount: Int = 0
 
+    /// Daily step counts for the last 7 days (oldest first). Each entry is (date, steps).
+    private(set) var weeklyStepCounts: [(date: Date, steps: Int)] = []
+
     // MARK: - Authorization
     func requestAuthorization() async {
         guard HKHealthStore.isHealthDataAvailable() else {
@@ -129,6 +132,51 @@ final class HealthManager {
             }
 
             // Execute without storing; this is a one-shot probe.
+            self.healthStore.execute(query)
+        }
+    }
+
+    /// Fetch daily step totals for the last 7 days and update `weeklyStepCounts`.
+    func fetchWeeklyStepCounts() async {
+        guard isAuthorized else { return }
+
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfToday = calendar.startOfDay(for: now)
+        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: startOfToday) else { return }
+
+        let predicate = HKQuery.predicateForSamples(withStart: sevenDaysAgo, end: now, options: [])
+
+        await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
+            let query = HKStatisticsCollectionQuery(
+                quantityType: stepType,
+                quantitySamplePredicate: predicate,
+                options: .cumulativeSum,
+                anchorDate: sevenDaysAgo,
+                intervalComponents: DateComponents(day: 1)
+            )
+
+            query.initialResultsHandler = { [weak self] _, results, error in
+                guard let self else { cont.resume(); return }
+
+                Task { @MainActor in
+                    defer { cont.resume() }
+                    if let error {
+                        self.lastError = error
+                        print("[HealthManager] Weekly query error: \(error)")
+                        return
+                    }
+                    guard let results else { return }
+
+                    var daily: [(date: Date, steps: Int)] = []
+                    results.enumerateStatistics(from: sevenDaysAgo, to: now) { stats, _ in
+                        let steps = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                        daily.append((date: stats.startDate, steps: Int(steps)))
+                    }
+                    self.weeklyStepCounts = daily
+                }
+            }
+
             self.healthStore.execute(query)
         }
     }

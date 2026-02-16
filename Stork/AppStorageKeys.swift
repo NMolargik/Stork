@@ -13,6 +13,6 @@ struct AppStorageKeys {
     static let useDayMonthYearDates = "useDayMonthYearDates"
     static let selectedIconColor = "selectedIconColor"
     static let hasSeenHospitalRemovalNotice = "hasSeenHospitalRemovalNotice"
-    static let homeCardOrder = "homeCardOrder"
+    static let dashboardCardOrder = "homeCardOrder"
     static let hasCompletedInitialSync = "hasCompletedInitialSync"
 }

@@ -94,8 +94,8 @@ struct MainView: View {
         switch link {
         case .newDelivery:
             viewModel.showingEntrySheet = true
-        case .home:
-            viewModel.appTab = .home
+        case .dashboard:
+            viewModel.appTab = .dashboard
         case .deliveries, .weeklyDeliveries:
             viewModel.appTab = .list
         case .settings:
@@ -144,7 +144,7 @@ struct MainView: View {
             }
         } detail: {
             NavigationStack(path: $viewModel.listPath) {
-                HomeView(showingEntrySheet: $viewModel.showingEntrySheet, showingReorderSheet: $viewModel.showingReorderSheet)
+                DashboardView(showingEntrySheet: $viewModel.showingEntrySheet, showingReorderSheet: $viewModel.showingReorderSheet)
                     .navigationTitle("Stork")
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
@@ -158,9 +158,11 @@ struct MainView: View {
                             .hoverEffect(.highlight)
                         }
 
+                        #if !os(visionOS)
                         if #available(iOS 26.0, *) {
                             ToolbarSpacer(.flexible, placement: .topBarTrailing)
                         }
+                        #endif
 
                         ToolbarItem(placement: .topBarTrailing) {
                             Button {
@@ -174,9 +176,11 @@ struct MainView: View {
                             .hoverEffect(.highlight)
                         }
                         
+                        #if !os(visionOS)
                         if #available(iOS 26.0, *) {
                             ToolbarSpacer(.flexible, placement: .topBarTrailing)
                         }
+                        #endif
 
                         ToolbarItem(placement: .topBarTrailing) {
                             Button {
@@ -250,7 +254,7 @@ struct MainView: View {
             DeliveryEntryView(
                 onDeliverySaved: { delivery, reviewScene in
                     viewModel.updateDelivery(delivery: delivery, reviewScene: reviewScene, deliveryManager: deliveryManager)
-                    viewModel.appTab = .home
+                    viewModel.appTab = .dashboard
                 }
             )
             .interactiveDismissDisabled(true)
@@ -269,7 +273,7 @@ struct MainView: View {
     private func compactWidthView() -> some View {
         TabView(selection: $viewModel.appTab) {
             NavigationStack {
-                HomeView(
+                DashboardView(
                     showingEntrySheet: $viewModel.showingEntrySheet,
                     showingReorderSheet: $viewModel.showingReorderSheet
                 )
@@ -282,14 +286,16 @@ struct MainView: View {
                             Image(systemName: "arrow.up.arrow.down")
                         }
                         .accessibilityLabel("Reorder cards")
-                        .accessibilityHint("Customize the order of home screen cards")
+                        .accessibilityHint("Customize the order of dashboard cards")
                         .keyboardShortcut("r", modifiers: .command)
                         .hoverEffect(.highlight)
                     }
 
+                    #if !os(visionOS)
                     if #available(iOS 26.0, *) {
                         ToolbarSpacer(.flexible, placement: .topBarTrailing)
                     }
+                    #endif
 
                     ToolbarItem(placement: .confirmationAction) {
                         Button {
@@ -310,10 +316,10 @@ struct MainView: View {
                 }
             }
             .tabItem {
-                AppTab.home.icon()
-                Text(AppTab.home.rawValue)
+                AppTab.dashboard.icon()
+                Text(AppTab.dashboard.rawValue)
             }
-            .tag(AppTab.home)
+            .tag(AppTab.dashboard)
             
             NavigationStack(path: $viewModel.listPath) {
                 DeliveryListView(showingEntrySheet: $viewModel.showingEntrySheet)
@@ -368,6 +374,22 @@ struct MainView: View {
                             )
                         }
                     }
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button {
+                                viewModel.handleAddTapped()
+                            } label: {
+                                Label("Add", systemImage: "plus")
+                                    .imageScale(.large)
+                                    .bold()
+                            }
+                            .tint(.storkBlue)
+                            .labelStyle(.titleAndIcon)
+                            .accessibilityIdentifier("addEntryButton")
+                            .keyboardShortcut("n", modifiers: .command)
+                            .hoverEffect(.highlight)
+                        }
+                    }
             }
             .tabItem {
                 AppTab.calendar.icon()
@@ -398,12 +420,18 @@ struct MainView: View {
                                 .font(.headline)
                                 .bold()
                                 .monospacedDigit()
-                            
+
                             Spacer(minLength: 0)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            Haptics.lightImpact()
+                            viewModel.showingStepTrendSheet = true
                         }
                         .accessibilityElement(children: .combine)
                         .accessibilityLabel("Today's steps")
                         .accessibilityValue(Text("\(healthManager.todayStepCount)"))
+                        .accessibilityHint("Tap to view weekly step trend")
                     } else {
                         HStack(spacing: 8) {
                             Image(systemName: "figure.walk")
@@ -509,12 +537,17 @@ struct MainView: View {
         .sheet(isPresented: $viewModel.showingEntrySheet) {
             DeliveryEntryView(
                 onDeliverySaved: { delivery, reviewScene in
-                    viewModel.appTab = .home
+                    viewModel.appTab = .dashboard
                     viewModel.updateDelivery(delivery: delivery, reviewScene: reviewScene, deliveryManager: deliveryManager)
-                    
+
                 })
             .interactiveDismissDisabled(true)
             .presentationDetents([.large])
+        }
+        .sheet(isPresented: $viewModel.showingStepTrendSheet) {
+            StepTrendSheet()
+                .interactiveDismissDisabled()
+                .presentationDetents([.medium])
         }
         .onChange(of: viewModel.listPath) { _, newValue in
             if newValue.count == 0 {

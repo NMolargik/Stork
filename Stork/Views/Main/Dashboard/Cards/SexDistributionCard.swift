@@ -11,7 +11,7 @@ import Charts
 
 struct SexDistributionCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Sex Distribution", systemImage: "chart.pie.fill", accent: .storkPurple) {
@@ -91,7 +91,7 @@ struct SexDistributionCard: View {
     }()
     let context = ModelContext(container)
     
-    SexDistributionCard(viewModel: HomeView.ViewModel())
+    SexDistributionCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }
 

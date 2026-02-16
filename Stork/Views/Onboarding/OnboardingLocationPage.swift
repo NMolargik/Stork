@@ -35,7 +35,7 @@ struct OnboardingLocationPage: View {
                 "location.circle.fill",
                 .storkBlue,
                 "Enable Location",
-                "Allow location access to see local weather on your home screen."
+                "Allow location access to see local weather on your dashboard screen on iPhone."
             )
         @unknown default:
             return (
@@ -98,6 +98,7 @@ struct OnboardingLocationPage: View {
                             .foregroundStyle(.primary)
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
+                    .buttonStyle(.plain)
                     .frame(maxWidth: 500)
                     .padding(.horizontal, 20)
                 }

@@ -10,7 +10,7 @@ import SwiftData
 
 struct TimeOfDayCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Time of Day", systemImage: "clock.fill", accent: .storkPurple) {
@@ -107,6 +107,6 @@ struct TimeOfDayCard: View {
     }()
     let context = ModelContext(container)
 
-    TimeOfDayCard(viewModel: HomeView.ViewModel())
+    TimeOfDayCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

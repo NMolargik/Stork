@@ -1,5 +1,5 @@
 //
-//  HomeCard.swift
+//  DashboardCard.swift
 //  Stork
 //
 //  Created by Nick Molargik on 1/17/26.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-/// Represents the reorderable cards on the Home screen.
+/// Represents the reorderable cards on the Dashboard screen.
 /// JarView is always at the top and is not included here.
-enum HomeCard: String, CaseIterable, Codable, Identifiable {
+enum DashboardCard: String, CaseIterable, Codable, Identifiable {
     case deliveryMethod = "deliveryMethod"
     case epiduralNicu = "epiduralNicu"  // Unified Epidural + NICU row
     case babyCount = "babyCount"
@@ -51,14 +51,14 @@ enum HomeCard: String, CaseIterable, Codable, Identifiable {
     }
 
     /// Default order of cards
-    static var defaultOrder: [HomeCard] {
+    static var defaultOrder: [DashboardCard] {
         return allCases
     }
 
     /// Load saved order from UserDefaults, or return default
-    static func loadOrder() -> [HomeCard] {
-        guard let data = UserDefaults.standard.data(forKey: AppStorageKeys.homeCardOrder),
-              let order = try? JSONDecoder().decode([HomeCard].self, from: data) else {
+    static func loadOrder() -> [DashboardCard] {
+        guard let data = UserDefaults.standard.data(forKey: AppStorageKeys.dashboardCardOrder),
+              let order = try? JSONDecoder().decode([DashboardCard].self, from: data) else {
             return defaultOrder
         }
         // Ensure all cards are present (in case new cards were added)
@@ -70,9 +70,9 @@ enum HomeCard: String, CaseIterable, Codable, Identifiable {
     }
 
     /// Save order to UserDefaults
-    static func saveOrder(_ order: [HomeCard]) {
+    static func saveOrder(_ order: [DashboardCard]) {
         if let data = try? JSONEncoder().encode(order) {
-            UserDefaults.standard.set(data, forKey: AppStorageKeys.homeCardOrder)
+            UserDefaults.standard.set(data, forKey: AppStorageKeys.dashboardCardOrder)
         }
     }
 }

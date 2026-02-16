@@ -11,7 +11,7 @@ import SwiftData
 struct BabyMeasurementsCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Baby Measurements", systemImage: "ruler", accent: .storkOrange) {
@@ -67,6 +67,6 @@ struct BabyMeasurementsCard: View {
     }()
     let context = ModelContext(container)
     
-    BabyMeasurementsCard(viewModel: HomeView.ViewModel())
+    BabyMeasurementsCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

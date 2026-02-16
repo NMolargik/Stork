@@ -97,6 +97,7 @@ struct OnboardingCompletePage: View {
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
+            .buttonStyle(.plain)
             .frame(maxWidth: 500)
             .padding(.horizontal, 20)
             .padding(.bottom, 40)

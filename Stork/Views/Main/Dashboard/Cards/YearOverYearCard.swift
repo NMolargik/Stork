@@ -10,7 +10,7 @@ import SwiftData
 
 struct YearOverYearCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Year over Year", systemImage: "chart.line.uptrend.xyaxis", accent: .storkBlue) {
@@ -126,6 +126,6 @@ struct YearOverYearCard: View {
     }()
     let context = ModelContext(container)
 
-    YearOverYearCard(viewModel: HomeView.ViewModel())
+    YearOverYearCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

@@ -1,5 +1,5 @@
 //
-//  HomeCardOrderSheet.swift
+//  DashboardCardOrderSheet.swift
 //  Stork
 //
 //  Created by Nick Molargik on 1/17/26.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct HomeCardOrderSheet: View {
+struct DashboardCardOrderSheet: View {
     @Environment(\.dismiss) private var dismiss
 
-    @State private var cardOrder: [HomeCard]
-    var onSave: ([HomeCard]) -> Void
+    @State private var cardOrder: [DashboardCard]
+    var onSave: ([DashboardCard]) -> Void
 
-    init(currentOrder: [HomeCard], onSave: @escaping ([HomeCard]) -> Void) {
+    init(currentOrder: [DashboardCard], onSave: @escaping ([DashboardCard]) -> Void) {
         _cardOrder = State(initialValue: currentOrder)
         self.onSave = onSave
     }
@@ -36,7 +36,7 @@ struct HomeCardOrderSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        HomeCard.saveOrder(cardOrder)
+                        DashboardCard.saveOrder(cardOrder)
                         onSave(cardOrder)
                         dismiss()
                     }
@@ -95,7 +95,7 @@ struct HomeCardOrderSheet: View {
         } header: {
             Text("Drag to Reorder")
         } footer: {
-            Text("Drag cards to customize your home screen layout.")
+            Text("Drag cards to customize your dashboard layout.")
         }
         .environment(\.editMode, .constant(.active))
     }
@@ -106,5 +106,5 @@ struct HomeCardOrderSheet: View {
 }
 
 #Preview {
-    HomeCardOrderSheet(currentOrder: HomeCard.defaultOrder) { _ in }
+    DashboardCardOrderSheet(currentOrder: DashboardCard.defaultOrder) { _ in }
 }

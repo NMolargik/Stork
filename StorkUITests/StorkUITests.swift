@@ -49,14 +49,14 @@ final class StorkUITests: XCTestCase {
     }
 
     @MainActor
-    func testNavigateToHomeTab() throws {
+    func testNavigateToDashboardTab() throws {
         let tabBar = app.tabBars.firstMatch
         guard tabBar.exists else { return } // Skip on iPad
 
-        let homeTab = tabBar.buttons["Home"]
-        if homeTab.exists {
-            homeTab.tap()
-            XCTAssertTrue(homeTab.isSelected, "Home tab should be selected after tapping")
+        let dashboardTab = tabBar.buttons["Dashboard"]
+        if dashboardTab.exists {
+            dashboardTab.tap()
+            XCTAssertTrue(dashboardTab.isSelected, "Dashboard tab should be selected after tapping")
         }
     }
 
@@ -101,7 +101,7 @@ final class StorkUITests: XCTestCase {
         let tabBar = app.tabBars.firstMatch
         guard tabBar.exists else { return } // Skip on iPad
 
-        let tabs = ["Home", "Deliveries", "Calendar", "Settings"]
+        let tabs = ["Dashboard", "Deliveries", "Calendar", "Settings"]
 
         for tabName in tabs {
             let tab = tabBar.buttons[tabName]
@@ -263,7 +263,7 @@ final class StorkUITests: XCTestCase {
         let tabBar = app.tabBars.firstMatch
         guard tabBar.exists else { return } // Skip on iPad
 
-        let expectedTabs = ["Home", "Deliveries", "Calendar", "Settings"]
+        let expectedTabs = ["Dashboard", "Deliveries", "Calendar", "Settings"]
         for tabName in expectedTabs {
             let tab = tabBar.buttons[tabName]
             XCTAssertTrue(tab.exists, "Tab '\(tabName)' should have accessibility label")
@@ -314,11 +314,11 @@ final class StorkUITests: XCTestCase {
             XCTAssertTrue(settingsTab.isSelected)
         }
 
-        // Select Home tab
-        let homeTab = tabBar.buttons["Home"]
-        if homeTab.exists {
-            homeTab.tap()
-            XCTAssertTrue(homeTab.isSelected)
+        // Select Dashboard tab
+        let dashboardTab = tabBar.buttons["Dashboard"]
+        if dashboardTab.exists {
+            dashboardTab.tap()
+            XCTAssertTrue(dashboardTab.isSelected)
         }
 
         // Go back to Settings
@@ -414,9 +414,9 @@ final class DeliveryDetailUITests: XCTestCase {
     }
 }
 
-// MARK: - Home View Tests
+// MARK: - Dashboard View Tests
 
-final class HomeViewUITests: XCTestCase {
+final class DashboardViewUITests: XCTestCase {
 
     var app: XCUIApplication!
 
@@ -432,37 +432,37 @@ final class HomeViewUITests: XCTestCase {
     }
 
     @MainActor
-    func testHomeViewLoads() throws {
-        // Home is the default tab, should be visible on launch
+    func testDashboardViewLoads() throws {
+        // Dashboard is the default tab, should be visible on launch
         let navigationBar = app.navigationBars["Stork"]
         let exists = navigationBar.waitForExistence(timeout: 3)
 
         // Also check for tab bar selection
         let tabBar = app.tabBars.firstMatch
         if tabBar.exists {
-            let homeTab = tabBar.buttons["Home"]
-            if homeTab.exists {
-                XCTAssertTrue(homeTab.isSelected || exists, "Home should be the initial view")
+            let dashboardTab = tabBar.buttons["Dashboard"]
+            if dashboardTab.exists {
+                XCTAssertTrue(dashboardTab.isSelected || exists, "Dashboard should be the initial view")
                 return
             }
         }
 
-        XCTAssertTrue(exists || tabBar.exists, "Home view should load")
+        XCTAssertTrue(exists || tabBar.exists, "Dashboard view should load")
     }
 
     @MainActor
-    func testHomeViewHasNewDeliveryButton() throws {
-        // Look for the "New Delivery" button on home view
+    func testDashboardViewHasNewDeliveryButton() throws {
+        // Look for the "New Delivery" button on dashboard view
         let newDeliveryButton = app.buttons["New Delivery"]
         let addButton = app.buttons["addEntryButton"]
 
         let exists = newDeliveryButton.waitForExistence(timeout: 2) || addButton.waitForExistence(timeout: 2)
-        XCTAssertTrue(exists, "Home view should have a new delivery button")
+        XCTAssertTrue(exists, "Dashboard view should have a new delivery button")
     }
 
     @MainActor
-    func testHomeViewScrollable() throws {
-        // Home view should be scrollable
+    func testDashboardViewScrollable() throws {
+        // Dashboard view should be scrollable
         let scrollView = app.scrollViews.firstMatch
 
         if scrollView.exists {
@@ -492,7 +492,7 @@ final class StorkPerformanceTests: XCTestCase {
                 tabBar.buttons["Deliveries"].tap()
                 tabBar.buttons["Calendar"].tap()
                 tabBar.buttons["Settings"].tap()
-                tabBar.buttons["Home"].tap()
+                tabBar.buttons["Dashboard"].tap()
             }
         }
     }

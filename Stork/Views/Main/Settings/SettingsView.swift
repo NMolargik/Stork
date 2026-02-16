@@ -67,6 +67,7 @@ struct SettingsView: View {
                 .onChange(of: useDayMonthYearDates) { _, _ in Haptics.lightImpact() }
             }
 
+            #if !os(visionOS)
             // MARK: - App Icon Picker
             Section {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -111,6 +112,7 @@ struct SettingsView: View {
             } header: {
                 Text("App Icon")
             }
+            #endif
 
             // MARK: - iCloud Sync
             Section {

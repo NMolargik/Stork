@@ -1,5 +1,5 @@
 //
-//  HomeView-ViewModel.swift
+//  DashboardView-ViewModel.swift
 //  Stork
 //
 //  Created by Nick Molargik on 10/3/25.
@@ -14,7 +14,7 @@ private extension Int {
     }
 }
 
-extension HomeView {
+extension DashboardView {
     @Observable
     class ViewModel {
         struct DeliveryMethodStats {

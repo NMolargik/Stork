@@ -10,7 +10,7 @@ import SwiftData
 
 struct PersonalBestsCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Personal Bests", systemImage: "trophy.fill", accent: .storkOrange) {
@@ -140,6 +140,6 @@ struct PersonalBestsCard: View {
     }()
     let context = ModelContext(container)
 
-    PersonalBestsCard(viewModel: HomeView.ViewModel())
+    PersonalBestsCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

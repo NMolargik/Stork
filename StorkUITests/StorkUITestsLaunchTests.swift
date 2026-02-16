@@ -30,16 +30,16 @@ final class StorkUITestsLaunchTests: XCTestCase {
     }
 
     @MainActor
-    func testLaunchHomeScreenshot() throws {
+    func testLaunchDashboardScreenshot() throws {
         let app = XCUIApplication()
         app.launch()
 
-        // Wait for the home view to fully load
+        // Wait for the dashboard view to fully load
         let navigationBar = app.navigationBars["Stork"]
         _ = navigationBar.waitForExistence(timeout: 3)
 
         let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = "Home Screen"
+        attachment.name = "Dashboard Screen"
         attachment.lifetime = .keepAlways
         add(attachment)
     }

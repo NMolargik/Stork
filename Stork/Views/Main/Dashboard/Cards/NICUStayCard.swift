@@ -1,5 +1,5 @@
 //
-//  EpiduralUsageCard.swift
+//  NICUStayCard.swift
 //  Stork
 //
 //  Created by Nick Molargik on 11/3/25.
@@ -8,15 +8,15 @@
 import SwiftUI
 import SwiftData
 
-struct EpiduralUsageCard: View {
+struct NICUStayCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
-        InsightCard(title: "Epidural", systemImage: "syringe.fill", accent: Color.red) {
-            let percentage = viewModel.epiduralUsagePercentage(deliveries: deliveryManager.deliveries)
+        InsightCard(title: "NICU Stays", systemImage: "bed.double", accent: Color.red) {
+            let percentage = viewModel.nicuStayPercentage(deliveries: deliveryManager.deliveries)
             AnimatedPercentage(value: percentage, font: .title2, fontWeight: .bold)
-                .accessibilityLabel("Epidural usage: \(String(format: "%.1f", percentage)) percent of deliveries")
+                .accessibilityLabel("N I C U stays: \(String(format: "%.1f", percentage)) percent of babies")
         }
     }
 }
@@ -29,6 +29,6 @@ struct EpiduralUsageCard: View {
     }()
     let context = ModelContext(container)
     
-    EpiduralUsageCard(viewModel: HomeView.ViewModel())
+    NICUStayCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

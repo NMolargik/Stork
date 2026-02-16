@@ -51,7 +51,11 @@ struct MilestoneCelebrationView: View {
                 VStack(spacing: 8) {
                     Text(prefixText)
                         .font(.title3)
+                        #if os(visionOS)
+                        .foregroundStyle(.black)
+                        #else
                         .foregroundStyle(.secondary)
+                        #endif
 
                     Text("\(milestone.count)")
                         .font(.system(size: 72, weight: .bold, design: .rounded))
@@ -65,7 +69,11 @@ struct MilestoneCelebrationView: View {
 
                     Text(suffixText)
                         .font(.title3)
+                        #if os(visionOS)
+                        .foregroundStyle(.black)
+                        #else
                         .foregroundStyle(.secondary)
+                        #endif
                 }
                 .opacity(showContent ? 1 : 0)
                 .offset(y: showContent ? 0 : 20)
@@ -89,6 +97,9 @@ struct MilestoneCelebrationView: View {
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
+                    #if os(visionOS)
+                    .buttonStyle(.plain)
+                    #endif
 
                     Button {
                         dismissWithAnimation()
@@ -115,7 +126,11 @@ struct MilestoneCelebrationView: View {
             .frame(maxWidth: 340)
             .background(
                 RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    #if os(visionOS)
+                    .fill(.white.opacity(0.95))
+                    #else
                     .fill(Color(uiColor: .systemBackground))
+                    #endif
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 28, style: .continuous)

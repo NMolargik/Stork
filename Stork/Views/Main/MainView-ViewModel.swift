@@ -11,11 +11,12 @@ extension MainView {
     @Observable
     class ViewModel {
         // MARK: - UI State (moved from View)
-        var appTab: AppTab = .home
+        var appTab: AppTab = .dashboard
         var showingEntrySheet: Bool = false
         var showingSettingsSheet: Bool = false
         var showingCalendarSheet: Bool = false
         var showingReorderSheet: Bool = false
+        var showingStepTrendSheet: Bool = false
         var listPath = NavigationPath()
         var lastPushedDeliveryID: String? = nil
         var now: Date = Date()

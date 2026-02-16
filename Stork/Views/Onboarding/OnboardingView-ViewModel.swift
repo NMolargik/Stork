@@ -44,8 +44,10 @@ extension OnboardingView {
                     // Stay on page - user will see updated UI and tap Continue again
                 } else {
                     // Already determined (authorized or denied), move forward
-                    // Skip health step on iPad — step count isn't displayed there
-                    #if os(iOS)
+                    // Skip health step on iPad and visionOS
+                    #if os(visionOS)
+                    currentStep = .complete
+                    #elseif os(iOS)
                     if UIDevice.current.userInterfaceIdiom == .pad {
                         currentStep = .complete
                     } else {

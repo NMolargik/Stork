@@ -313,7 +313,7 @@ struct AppTabTests {
 
     @Test("AppTab has correct raw values")
     func appTabRawValues() {
-        #expect(AppTab.home.rawValue == "Dashboard")
+        #expect(AppTab.dashboard.rawValue == "Dashboard")
         #expect(AppTab.list.rawValue == "Deliveries")
         #expect(AppTab.calendar.rawValue == "Calendar")
         #expect(AppTab.settings.rawValue == "Settings")
@@ -577,14 +577,14 @@ struct DeliveryManagerMilestoneTests {
     }
 }
 
-// MARK: - HomeView.ViewModel Analytics Tests
+// MARK: - DashboardView.ViewModel Analytics Tests
 
-@Suite("HomeView.ViewModel Analytics Tests")
-struct HomeViewModelAnalyticsTests {
+@Suite("DashboardView.ViewModel Analytics Tests")
+struct DashboardViewModelAnalyticsTests {
 
     @Test("TimeOfDayStats calculates shift breakdown correctly")
     func timeOfDayShiftBreakdown() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         // Create deliveries at different times
         var deliveries: [Delivery] = []
@@ -625,7 +625,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("TimeOfDayStats finds peak hour")
     func timeOfDayPeakHour() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         // 3 deliveries at 10am
@@ -643,7 +643,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("TimeOfDayStats handles empty deliveries")
     func timeOfDayEmptyDeliveries() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
         let stats = viewModel.timeOfDayStats(deliveries: [])
 
         #expect(stats.total == 0)
@@ -653,7 +653,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("DayOfWeekStats calculates day counts correctly")
     func dayOfWeekCounts() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         // Create deliveries on different days
@@ -684,16 +684,16 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("DayOfWeekStats has correct day names")
     func dayOfWeekDayNames() {
-        #expect(HomeView.ViewModel.DayOfWeekStats.dayNames.count == 8) // includes empty string at index 0
-        #expect(HomeView.ViewModel.DayOfWeekStats.dayNames[1] == "Sun")
-        #expect(HomeView.ViewModel.DayOfWeekStats.dayNames[7] == "Sat")
-        #expect(HomeView.ViewModel.DayOfWeekStats.fullDayNames[1] == "Sunday")
-        #expect(HomeView.ViewModel.DayOfWeekStats.fullDayNames[7] == "Saturday")
+        #expect(DashboardView.ViewModel.DayOfWeekStats.dayNames.count == 8) // includes empty string at index 0
+        #expect(DashboardView.ViewModel.DayOfWeekStats.dayNames[1] == "Sun")
+        #expect(DashboardView.ViewModel.DayOfWeekStats.dayNames[7] == "Sat")
+        #expect(DashboardView.ViewModel.DayOfWeekStats.fullDayNames[1] == "Sunday")
+        #expect(DashboardView.ViewModel.DayOfWeekStats.fullDayNames[7] == "Saturday")
     }
 
     @Test("YearOverYearStats calculates yearly totals")
     func yearOverYearTotals() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         let cal = Calendar.current
@@ -729,7 +729,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("YearOverYearStats calculates growth percentages")
     func yearOverYearGrowth() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         let cal = Calendar.current
@@ -761,7 +761,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("YearOverYearStats handles no previous year data")
     func yearOverYearNoPreviousYear() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         let currentYearDate = Date()
@@ -775,7 +775,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("PersonalBests finds most deliveries in a day")
     func personalBestsMostInDay() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         let today = Date()
@@ -799,7 +799,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("PersonalBests finds most babies in a day")
     func personalBestsMostBabiesInDay() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         let today = Date()
@@ -822,7 +822,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("PersonalBests calculates longest streak")
     func personalBestsLongestStreak() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
 
         var deliveries: [Delivery] = []
         let cal = Calendar.current
@@ -841,7 +841,7 @@ struct HomeViewModelAnalyticsTests {
 
     @Test("PersonalBests handles empty deliveries")
     func personalBestsEmptyDeliveries() {
-        let viewModel = HomeView.ViewModel()
+        let viewModel = DashboardView.ViewModel()
         let stats = viewModel.personalBests(deliveries: [])
 
         #expect(stats.mostDeliveriesInDay == nil)

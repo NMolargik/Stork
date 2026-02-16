@@ -20,6 +20,8 @@ final class MarbleScene: SKScene {
         return found
     }
     var containerCornerRadius: CGFloat = 20 { didSet { rebuildWalls() } }
+    /// When false, the SpriteKit frost overlay is hidden (SwiftUI glass handles it).
+    var useFrostEffect: Bool = true { didSet { updateFrostVisibility() } }
     private let frostNode = SKShapeNode()
     private var spawnY: CGFloat { size.height - 10 }
     private var marbleRadius: CGFloat {
@@ -79,9 +81,17 @@ final class MarbleScene: SKScene {
     }
 
     func applyAppearance(isDark: Bool) {
+        guard useFrostEffect else { return }
         // Slightly stronger material in dark mode, lighter in light mode
         let alpha: CGFloat = isDark ? 0.18 : 0.08
         frostNode.fillColor = SKColor.white.withAlphaComponent(alpha)
+    }
+
+    private func updateFrostVisibility() {
+        frostNode.isHidden = !useFrostEffect
+        if !useFrostEffect {
+            frostNode.fillColor = .clear
+        }
     }
 
     private func updateFrostFrame() {
@@ -217,7 +227,7 @@ final class MarbleScene: SKScene {
 }
 
 // MARK: - Touch handling
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 extension MarbleScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let t = touches.first else { return }

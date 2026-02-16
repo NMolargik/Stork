@@ -12,7 +12,7 @@ import SwiftData
 struct BabyCountCard: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    let viewModel: HomeView.ViewModel
+    let viewModel: DashboardView.ViewModel
 
     var body: some View {
         InsightCard(title: "Babies per Delivery", systemImage: "figure.2.and.child.holdinghands", accent: .storkPink) {
@@ -120,6 +120,6 @@ struct BabyCountCard: View {
     }()
     let context = ModelContext(container)
     
-    BabyCountCard(viewModel: HomeView.ViewModel())
+    BabyCountCard(viewModel: DashboardView.ViewModel())
         .environment(DeliveryManager(context: context))
 }

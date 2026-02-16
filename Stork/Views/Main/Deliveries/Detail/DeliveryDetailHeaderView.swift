@@ -56,7 +56,7 @@ struct DeliveryDetailHeaderView: View {
                 .accessibilityLabel("\(babyCount) bab\(babyCount == 1 ? "y" : "ies") delivered")
             }
 
-            // Stats row styled like Home cards
+            // Stats row styled like Dashboard cards
             HStack(spacing: 12) {
                 VStack(alignment: .center, spacing: 4) {
                     Label("Delivery Method", systemImage: "hands.and.sparkles.fill")
