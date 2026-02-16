@@ -150,7 +150,7 @@ struct DeliveryEditFormView: View {
                 Image(systemName: "pencil")
             }
             .buttonStyle(.borderedProminent)
-            .tint(.storkOrange)
+            .tint(.green)
             .foregroundColor(.white)
         }
     }

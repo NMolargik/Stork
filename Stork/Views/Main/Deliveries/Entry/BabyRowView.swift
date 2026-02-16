@@ -56,7 +56,7 @@ struct BabyRowView: View {
                             .font(.caption)
                             .padding(8)
                             .background(Color.gray.opacity(0.2))
-                            .foregroundColor(.primary)
+                            .foregroundColor(.green)
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                     }
                     .buttonStyle(PlainButtonStyle())

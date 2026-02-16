@@ -44,71 +44,93 @@ struct DeliveryCalendarView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Month navigation header
-            MonthHeaderView(
-                displayedMonth: $displayedMonth,
-                onPrevious: { changeMonth(by: -1) },
-                onNext: { changeMonth(by: 1) },
-                onToday: { goToToday() }
-            )
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-
-            // Method filter
-            MethodFilterView(selectedMethod: $selectedMethod)
-                .padding(.horizontal)
-                .padding(.bottom, 8)
-
-            // Calendar grid
-            CalendarGridView(
-                displayedMonth: displayedMonth,
-                selectedDate: $selectedDate,
-                deliveries: filteredDeliveries
-            )
-            .padding(.horizontal)
-
-            Divider()
-                .padding(.top, 16)
-
-            // Selected day deliveries
-            if deliveriesForSelectedDate.isEmpty {
-                ContentUnavailableView(
-                    "No Deliveries",
-                    systemImage: "calendar.badge.checkmark",
-                    description: Text("No deliveries recorded on \(formattedDate(selectedDate))")
+        ScrollView {
+            VStack(spacing: 0) {
+                // Month navigation header
+                MonthHeaderView(
+                    displayedMonth: $displayedMonth,
+                    onPrevious: { changeMonth(by: -1) },
+                    onNext: { changeMonth(by: 1) },
+                    onToday: { goToToday() }
                 )
-                .frame(maxHeight: .infinity)
-            } else {
-                List {
-                    Section {
-                        ForEach(deliveriesForSelectedDate) { delivery in
-                            if let onSelected = onDeliverySelected {
-                                Button {
-                                    onSelected(delivery.id)
-                                } label: {
-                                    DeliveryCalendarRowView(
-                                        delivery: delivery,
-                                        useDayMonthYear: useDayMonthYearDates
-                                    )
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+
+                // Method filter
+                MethodFilterView(selectedMethod: $selectedMethod)
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+
+                // Calendar grid
+                CalendarGridView(
+                    displayedMonth: displayedMonth,
+                    selectedDate: $selectedDate,
+                    deliveries: filteredDeliveries
+                )
+                .padding(.horizontal)
+
+                Divider()
+                    .padding(.top, 16)
+
+                // Selected day deliveries
+                if deliveriesForSelectedDate.isEmpty {
+                    ContentUnavailableView(
+                        "No Deliveries",
+                        systemImage: "calendar.badge.checkmark",
+                        description: Text("No deliveries recorded on \(formattedDate(selectedDate))")
+                    )
+                    .padding(.top, 40)
+                } else {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("\(deliveriesForSelectedDate.count) deliver\(deliveriesForSelectedDate.count == 1 ? "y" : "ies"), \(babyCountForSelectedDate) bab\(babyCountForSelectedDate == 1 ? "y" : "ies") on \(formattedDate(selectedDate))")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .textCase(.uppercase)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 16)
+                            .padding(.bottom, 8)
+
+                        VStack(spacing: 0) {
+                            ForEach(Array(deliveriesForSelectedDate.enumerated()), id: \.element.id) { index, delivery in
+                                if index > 0 {
+                                    Divider()
+                                        .padding(.leading, 16)
                                 }
-                                .buttonStyle(.plain)
-                            } else {
-                                NavigationLink(value: delivery.id) {
-                                    DeliveryCalendarRowView(
-                                        delivery: delivery,
-                                        useDayMonthYear: useDayMonthYearDates
-                                    )
+
+                                Group {
+                                    if let onSelected = onDeliverySelected {
+                                        Button {
+                                            onSelected(delivery.id)
+                                        } label: {
+                                            DeliveryCalendarRowView(
+                                                delivery: delivery,
+                                                useDayMonthYear: useDayMonthYearDates
+                                            )
+                                        }
+                                        .buttonStyle(.plain)
+                                    } else {
+                                        NavigationLink(value: delivery.id) {
+                                            DeliveryCalendarRowView(
+                                                delivery: delivery,
+                                                useDayMonthYear: useDayMonthYearDates
+                                            )
+                                        }
+                                        .foregroundStyle(.primary)
+                                    }
                                 }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 4)
                             }
                         }
-                    } header: {
-                        Text("\(deliveriesForSelectedDate.count) deliver\(deliveriesForSelectedDate.count == 1 ? "y" : "ies"), \(babyCountForSelectedDate) bab\(babyCountForSelectedDate == 1 ? "y" : "ies") on \(formattedDate(selectedDate))")
+                        .background(Color(uiColor: .secondarySystemGroupedBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .padding(.horizontal, 16)
                     }
                 }
-                .listStyle(.insetGrouped)
             }
+            .padding(.bottom, 16)
         }
+        .background(Color(uiColor: .systemGroupedBackground))
         .navigationTitle("Calendar")
         .task {
             await deliveryManager.refresh()

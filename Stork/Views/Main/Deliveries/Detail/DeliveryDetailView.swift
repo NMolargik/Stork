@@ -91,7 +91,7 @@ struct DeliveryDetailView: View {
 
                 VStack(spacing: 8) {
                     // Large date display
-                    Text(delivery.date.formatted(.dateTime.weekday(.wide)))
+                    Text(delivery.date.formatted(.dateTime.hour().minute()) + " - " + delivery.date.formatted(.dateTime.weekday(.wide)))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.white.opacity(0.9))
@@ -104,15 +104,6 @@ struct DeliveryDetailView: View {
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundStyle(.white.opacity(0.9))
-
-                    // Time
-                    HStack(spacing: 4) {
-                        Image(systemName: "clock")
-                        Text(delivery.date.formatted(.dateTime.hour().minute()))
-                    }
-                    .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.8))
-                    .padding(.top, 4)
                 }
                 .padding(.vertical, 32)
             }
@@ -190,22 +181,20 @@ struct DeliveryDetailView: View {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundStyle(color)
+                .frame(height: 30)
 
             Text(value)
-                .font(.headline)
-                .fontWeight(.bold)
+                .font(.subheadline.bold())
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
 
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(secondaryGroupedBackground)
-                .shadow(color: .black.opacity(0.08), radius: 8, y: 4)
-        )
+        .padding(12)
+        .frame(maxWidth: .infinity, maxHeight: 85)
+        .modifier(StatPillBackground())
     }
 
     // MARK: - Content Section
@@ -425,7 +414,7 @@ struct DeliveryDetailView: View {
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
-            .tint(.storkOrange)
+            .tint(.green)
         }
 
         ToolbarItem(placement: .topBarTrailing) {
@@ -460,7 +449,7 @@ private extension DeliveryMethod {
     var icon: String {
         switch self {
         case .vaginal:
-            return "figure.walk"
+            return "square.and.arrow.up"
         case .cSection:
             return "scissors"
         case .vBac:

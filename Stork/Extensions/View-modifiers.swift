@@ -42,6 +42,23 @@ public extension View {
 }
 #endif
 
+struct StatPillBackground: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .shadow(radius: 5)
+        } else {
+            content
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                        .shadow(radius: 5)
+                )
+        }
+    }
+}
+
 struct ShimmerModifier: ViewModifier {
     @State private var phase: CGFloat = -1
     

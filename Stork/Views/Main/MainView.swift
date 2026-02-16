@@ -126,17 +126,17 @@ struct MainView: View {
                 DeliveryListView(showingEntrySheet: $viewModel.showingEntrySheet)
                     .navigationTitle("Deliveries")
                     .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
+                        ToolbarItem(placement: .confirmationAction) {
                             Button {
                                 viewModel.handleAddTapped()
                             } label: {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "plus")
-                                }
-                                .foregroundStyle(.storkBlue)
+                                Label("Add", systemImage: "plus")
+                                    .imageScale(.large)
+                                    .bold()
                             }
                             .accessibilityIdentifier("addEntryButton")
                             .tint(.storkBlue)
+                            .labelStyle(.titleAndIcon)
                             .keyboardShortcut("n", modifiers: .command)
                             .hoverEffect(.highlight)
                         }
@@ -154,7 +154,6 @@ struct MainView: View {
                                 Image(systemName: "arrow.up.arrow.down")
                             }
                             .accessibilityLabel("Reorder cards")
-                            .tint(.storkPurple)
                             .keyboardShortcut("r", modifiers: .command)
                             .hoverEffect(.highlight)
                         }
@@ -281,7 +280,6 @@ struct MainView: View {
                             viewModel.showingReorderSheet = true
                         } label: {
                             Image(systemName: "arrow.up.arrow.down")
-                                .foregroundStyle(.storkPurple)
                         }
                         .accessibilityLabel("Reorder cards")
                         .accessibilityHint("Customize the order of home screen cards")
@@ -293,13 +291,16 @@ struct MainView: View {
                         ToolbarSpacer(.flexible, placement: .topBarTrailing)
                     }
 
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .confirmationAction) {
                         Button {
                             viewModel.handleAddTapped()
                         } label: {
-                            Image(systemName: "plus")
-                                .foregroundStyle(.blue)
+                            Label("Add", systemImage: "plus")
+                                .imageScale(.large)
+                                .bold()
                         }
+                        .tint(.storkBlue)
+                        .labelStyle(.titleAndIcon)
                         .accessibilityIdentifier("addEntryButton")
                         .keyboardShortcut("n", modifiers: .command)
                         .hoverEffect(.highlight)
@@ -330,17 +331,16 @@ struct MainView: View {
                         }
                     }
                     .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
+                        ToolbarItem(placement: .confirmationAction) {
                             Button {
                                 viewModel.handleAddTapped()
                             } label: {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "plus")
-                                    Text("Add")
-                                        .bold()
-                                }
-                                .foregroundStyle(.storkBlue)
+                                Label("Add", systemImage: "plus")
+                                    .imageScale(.large)
+                                    .bold()
                             }
+                            .tint(.storkBlue)
+                            .labelStyle(.titleAndIcon)
                             .accessibilityIdentifier("addEntryButton")
                             .keyboardShortcut("n", modifiers: .command)
                             .hoverEffect(.highlight)

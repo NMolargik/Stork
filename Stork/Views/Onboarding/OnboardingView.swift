@@ -17,7 +17,12 @@ struct OnboardingView: View {
     @State private var viewModel = ViewModel()
 
     private var steps: [OnboardingStep] {
-        OnboardingStep.allCases
+        OnboardingStep.allCases.filter { step in
+            if step == .health, UIDevice.current.userInterfaceIdiom == .pad {
+                return false
+            }
+            return true
+        }
     }
 
     private var currentIndex: Int {
@@ -50,8 +55,10 @@ struct OnboardingView: View {
                 OnboardingLocationPage()
                     .tag(OnboardingStep.location)
 
-                OnboardingHealthPage()
-                    .tag(OnboardingStep.health)
+                if UIDevice.current.userInterfaceIdiom != .pad {
+                    OnboardingHealthPage()
+                        .tag(OnboardingStep.health)
+                }
 
                 OnboardingCompletePage(onFinish: onFinished)
                     .tag(OnboardingStep.complete)
