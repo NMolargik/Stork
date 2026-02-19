@@ -20,6 +20,32 @@ extension OnboardingView {
 
         // Actions
 
+        #if os(visionOS)
+        /// Handles Continue button tap (visionOS — no HealthKit).
+        @MainActor
+        func handleContinueTapped(
+            locationManager: LocationManager
+        ) async {
+            switch currentStep {
+            case .privacy:
+                currentStep = .location
+
+            case .location:
+                let status = locationManager.authorizationStatus
+                if status == .notDetermined {
+                    isRequestingPermission = true
+                    locationManager.requestAuthorization()
+                    try? await Task.sleep(for: .milliseconds(500))
+                    isRequestingPermission = false
+                } else {
+                    currentStep = .complete
+                }
+
+            case .complete:
+                break
+            }
+        }
+        #else
         /// Handles Continue button tap. Returns true if we should wait for permission dialog.
         /// - On location page: if not determined, requests permission and stays on page
         /// - On health page: if not yet requested, requests permission and stays on page
@@ -44,23 +70,11 @@ extension OnboardingView {
                     // Stay on page - user will see updated UI and tap Continue again
                 } else {
                     // Already determined (authorized or denied), move forward
-                    // Skip health step on iPad and visionOS
-                    #if os(visionOS)
-                    currentStep = .complete
-                    #elseif os(iOS)
-                    if UIDevice.current.userInterfaceIdiom == .pad {
-                        currentStep = .complete
-                    } else {
-                        currentStep = .health
-                    }
-                    #else
                     currentStep = .health
-                    #endif
                 }
 
             case .health:
-                let hasBeenRequested = healthManager.isAuthorized || healthManager.lastError != nil
-                if !hasBeenRequested {
+                if !healthManager.hasRequestedAuthorization {
                     // Request permission - user must tap Continue again after dialog
                     isRequestingPermission = true
                     await healthManager.requestAuthorization()
@@ -78,5 +92,6 @@ extension OnboardingView {
                 break
             }
         }
+        #endif
     }
 }

@@ -10,25 +10,16 @@ import SwiftData
 
 struct OnboardingView: View {
     @Environment(LocationManager.self) private var locationManager
+    #if !os(visionOS)
     @Environment(HealthManager.self) private var healthManager
+    #endif
     
     var onFinished: () -> Void = {}
 
     @State private var viewModel = ViewModel()
 
     private var steps: [OnboardingStep] {
-        OnboardingStep.allCases.filter { step in
-            #if os(visionOS)
-            if step == .health {
-                return false
-            }
-            #else
-            if step == .health, UIDevice.current.userInterfaceIdiom == .pad {
-                return false
-            }
-            #endif
-            return true
-        }
+        OnboardingStep.allCases
     }
 
     private var currentIndex: Int {
@@ -62,10 +53,8 @@ struct OnboardingView: View {
                     .tag(OnboardingStep.location)
 
                 #if !os(visionOS)
-                if UIDevice.current.userInterfaceIdiom != .pad {
-                    OnboardingHealthPage()
-                        .tag(OnboardingStep.health)
-                }
+                OnboardingHealthPage()
+                    .tag(OnboardingStep.health)
                 #endif
 
                 OnboardingCompletePage(onFinish: onFinished)
@@ -81,10 +70,16 @@ struct OnboardingView: View {
                     Button {
                         Haptics.mediumImpact()
                         Task {
+                            #if os(visionOS)
+                            await viewModel.handleContinueTapped(
+                                locationManager: locationManager
+                            )
+                            #else
                             await viewModel.handleContinueTapped(
                                 locationManager: locationManager,
                                 healthManager: healthManager
                             )
+                            #endif
                         }
                     } label: {
                         HStack(spacing: 8) {
@@ -133,10 +128,14 @@ struct OnboardingView: View {
     }
 
     let locationManager = LocationManager()
+    #if !os(visionOS)
     let healthManager = HealthManager()
+    #endif
 
     return OnboardingView(onFinished: {})
         .environment(locationManager)
+        #if !os(visionOS)
         .environment(healthManager)
+        #endif
         .modelContainer(container)
 }

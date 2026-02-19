@@ -19,7 +19,9 @@ struct MainView: View {
     @AppStorage(AppStorageKeys.hasSeenHospitalRemovalNotice) private var hasSeenHospitalRemovalNotice: Bool = false
 
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
+    #if !os(visionOS)
     @Environment(HealthManager.self) private var healthManager: HealthManager
+    #endif
     @Environment(WeatherManager.self) private var weatherManager: WeatherManager
     @Environment(LocationManager.self) private var locationManager: LocationManager
     @Environment(ExportManager.self) private var exportManager: ExportManager
@@ -159,6 +161,10 @@ struct MainView: View {
                         }
 
                         #if !os(visionOS)
+                        stepToolbarItem
+                        #endif
+
+                        #if !os(visionOS)
                         if #available(iOS 26.0, *) {
                             ToolbarSpacer(.flexible, placement: .topBarTrailing)
                         }
@@ -175,7 +181,7 @@ struct MainView: View {
                             .keyboardShortcut("k", modifiers: .command)
                             .hoverEffect(.highlight)
                         }
-                        
+
                         #if !os(visionOS)
                         if #available(iOS 26.0, *) {
                             ToolbarSpacer(.flexible, placement: .topBarTrailing)
@@ -260,13 +266,26 @@ struct MainView: View {
             .interactiveDismissDisabled(true)
             .presentationDetents([.large])
         }
+        #if !os(visionOS)
+        .sheet(isPresented: $viewModel.showingStepTrendSheet) {
+            StepTrendSheet()
+                .interactiveDismissDisabled()
+                .presentationDetents([.medium])
+        }
+        .task {
+            await healthManager.requestAuthorization()
+            if healthManager.isAuthorized {
+                healthManager.startObservingStepCount()
+            }
+        }
+        #endif
         .onChange(of: viewModel.listPath) { _, newValue in
             if newValue.count == 0 {
                 viewModel.lastPushedDeliveryID = nil
             }
         }
     }
-    
+
     // MARK: - iPHONE
     
     @ViewBuilder
@@ -290,6 +309,10 @@ struct MainView: View {
                         .keyboardShortcut("r", modifiers: .command)
                         .hoverEffect(.highlight)
                     }
+
+                    #if !os(visionOS)
+                    stepToolbarItem
+                    #endif
 
                     #if !os(visionOS)
                     if #available(iOS 26.0, *) {
@@ -410,6 +433,7 @@ struct MainView: View {
         .tint(viewModel.appTab.color())
         .tabViewBottomAccessoryIfAvailable {
             HStack(spacing: 12) {
+                #if !os(visionOS)
                 Group {
                     if healthManager.isAuthorized {
                         HStack(spacing: 10) {
@@ -450,6 +474,7 @@ struct MainView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
+                #endif
                 
                 Spacer()
                 
@@ -544,11 +569,13 @@ struct MainView: View {
             .interactiveDismissDisabled(true)
             .presentationDetents([.large])
         }
+        #if !os(visionOS)
         .sheet(isPresented: $viewModel.showingStepTrendSheet) {
             StepTrendSheet()
                 .interactiveDismissDisabled()
                 .presentationDetents([.medium])
         }
+        #endif
         .onChange(of: viewModel.listPath) { _, newValue in
             if newValue.count == 0 {
                 viewModel.lastPushedDeliveryID = nil
@@ -561,6 +588,40 @@ struct MainView: View {
     private var isRegularWidth: Bool {
         hSizeClass == .regular
     }
+
+    #if !os(visionOS)
+    private var shouldShowStepToolbarButton: Bool {
+        if isRegularWidth { return true }
+        if #available(iOS 26.0, *) { return false }
+        return true
+    }
+
+    @ToolbarContentBuilder
+    private var stepToolbarItem: some ToolbarContent {
+        if shouldShowStepToolbarButton {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    Haptics.lightImpact()
+                    if !healthManager.isAuthorized {
+                        Task {
+                            await healthManager.requestAuthorization()
+                            if healthManager.isAuthorized {
+                                healthManager.startObservingStepCount()
+                            }
+                        }
+                    }
+                    viewModel.showingStepTrendSheet = true
+                } label: {
+                    Label(
+                        healthManager.isAuthorized ? "\(healthManager.todayStepCount)" : "Steps",
+                        systemImage: "figure.walk"
+                    )
+                }
+                .tint(.storkPurple)
+            }
+        }
+    }
+    #endif
 }
 
 // MARK: - Helper Types
@@ -580,7 +641,9 @@ struct IdentifiableImage: Identifiable {
 
     return MainView(pendingDeepLink: .constant(nil))
         .environment(DeliveryManager(context: context))
-                .environment(HealthManager())
+        #if !os(visionOS)
+        .environment(HealthManager())
+        #endif
         .environment(WeatherManager())
         .environment(LocationManager())
         .environment(InsightManager(deliveryManager: DeliveryManager(context: context)))

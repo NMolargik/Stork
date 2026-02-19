@@ -313,7 +313,9 @@ struct SettingsView: View {
                 showOnboardingPreview = false
             })
             .environment(LocationManager())
+            #if !os(visionOS)
             .environment(HealthManager())
+            #endif
             .interactiveDismissDisabled()
         }
         #endif

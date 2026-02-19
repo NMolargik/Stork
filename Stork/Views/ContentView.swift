@@ -18,7 +18,9 @@ struct ContentView: View {
     @State private var deliveryManager: DeliveryManager?
     @State private var insightManager: InsightManager?
     @State private var exportManager = ExportManager()
+    #if !os(visionOS)
     @State private var healthManager = HealthManager()
+    #endif
     @State private var weatherManager = WeatherManager()
     @State private var locationManager = LocationManager()
     @State private var cloudSyncManager = CloudSyncManager()
@@ -47,7 +49,9 @@ struct ContentView: View {
                 })
                 .id("onboarding")
                 .environment(locationManager)
+                #if !os(visionOS)
                 .environment(healthManager)
+                #endif
                 .transition(viewModel.leadingTransition)
                 .zIndex(1)
 
@@ -73,7 +77,9 @@ struct ContentView: View {
                 .transition(viewModel.leadingTransition)
                 .zIndex(0)
                 .environment(deliveryManager)
+                #if !os(visionOS)
                 .environment(healthManager)
+                #endif
                 .environment(insightManager)
                 .environment(weatherManager)
                 .environment(locationManager)
@@ -124,7 +130,9 @@ struct ContentView: View {
     )
     .modelContainer(container)
     .environment(DeliveryManager(context: container.mainContext))
+    #if !os(visionOS)
     .environment(HealthManager())
+    #endif
     .environment(WeatherManager())
     .environment(LocationManager())
     .environment(CloudSyncManager())

@@ -5,6 +5,7 @@
 //  Created by Nick Molargik on 2/16/26.
 //
 
+#if !os(visionOS)
 import SwiftUI
 import Charts
 
@@ -15,7 +16,13 @@ struct StepTrendSheet: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
-                if healthManager.weeklyStepCounts.isEmpty {
+                if !healthManager.isAuthorized {
+                    ContentUnavailableView(
+                        "Steps Unavailable",
+                        systemImage: "figure.walk",
+                        description: Text("Grant Stork access to step data in the Health app, or pair an Apple Watch to track steps.")
+                    )
+                } else if healthManager.weeklyStepCounts.isEmpty {
                     ProgressView("Loading steps…")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
@@ -94,3 +101,4 @@ struct StepTrendSheet: View {
         }
     }
 }
+#endif

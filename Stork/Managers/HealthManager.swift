@@ -5,6 +5,7 @@
 //  Created by Nick Molargik on 10/1/25.
 //
 
+#if !os(visionOS)
 import Foundation
 import HealthKit
 
@@ -22,6 +23,7 @@ final class HealthManager {
 
     // MARK: - Public state
     private(set) var isAuthorized: Bool = false
+    private(set) var hasRequestedAuthorization: Bool = false
     private(set) var lastError: Error?
 
     /// Live-updating total steps for the current calendar day (midnight -> now).
@@ -32,6 +34,8 @@ final class HealthManager {
 
     // MARK: - Authorization
     func requestAuthorization() async {
+        defer { self.hasRequestedAuthorization = true }
+
         guard HKHealthStore.isHealthDataAvailable() else {
             self.isAuthorized = false
             self.lastError = nil
@@ -43,10 +47,16 @@ final class HealthManager {
 
         do {
             try await healthStore.requestAuthorization(toShare: [], read: toRead)
-            // Do not assume authorization was granted just because no error was thrown.
-            // Probe read access by attempting a statistics query. If we can read, we'll
-            // receive a non-nil sumQuantity; otherwise it will be nil.
+            #if os(visionOS)
+            // visionOS has no built-in pedometer, so the probe (which checks for
+            // existing step data) falsely reports "no read access" when there's
+            // simply no data source. Assume authorized if the request didn't throw.
+            self.isAuthorized = true
+            #else
+            // Probe read access by attempting a statistics query. On iOS/iPadOS
+            // the built-in pedometer virtually guarantees step samples exist.
             await probeReadAccessForSteps()
+            #endif
             self.lastError = nil
         } catch {
             self.isAuthorized = false
@@ -203,8 +213,6 @@ final class HealthManager {
             let quantity = stats?.sumQuantity()
             let value = quantity?.doubleValue(for: .count()) ?? 0
             Task { @MainActor in
-                // If a quantity exists, we have read access; otherwise, we likely do not.
-                self.isAuthorized = (quantity != nil)
                 self.todayStepCount = Int(value)
             }
         }
@@ -212,4 +220,5 @@ final class HealthManager {
         healthStore.execute(statsQuery)
     }
 }
+#endif
 

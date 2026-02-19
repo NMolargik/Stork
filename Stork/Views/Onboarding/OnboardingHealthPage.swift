@@ -5,6 +5,7 @@
 //  Created by Nick Molargik on 10/2/25.
 //
 
+#if !os(visionOS)
 import SwiftUI
 import UIKit
 
@@ -17,7 +18,7 @@ struct OnboardingHealthPage: View {
                 "checkmark.circle.fill",
                 .green,
                 "Health Connected",
-                "We'll show your daily step count on the dashboard screen on iPhone."
+                "We'll show your daily step count on the dashboard."
             )
         } else if healthManager.lastError != nil {
             return (
@@ -151,3 +152,4 @@ private struct HealthFeatureRow: View {
     OnboardingHealthPage()
         .environment(HealthManager())
 }
+#endif
