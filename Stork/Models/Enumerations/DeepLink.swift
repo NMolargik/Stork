@@ -12,6 +12,7 @@ enum DeepLink: Equatable {
     case deliveries
     case weeklyDeliveries
     case delivery(UUID)
+    case calendar
     case settings
 
     /// Parses a `stork://` URL. Returns nil for unrecognized URLs.
@@ -30,6 +31,8 @@ enum DeepLink: Equatable {
             guard let component = url.pathComponents.dropFirst().first,
                   let id = UUID(uuidString: component) else { return nil }
             self = .delivery(id)
+        case "calendar":
+            self = .calendar
         case "settings":
             self = .settings
         default:

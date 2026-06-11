@@ -15,6 +15,33 @@
 	</array>
 	<key>NSWeatherUsageDescription</key>
 	<string>Stork uses weather data to show you current weather conditions.</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>stork://new-delivery</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>New Delivery</string>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>plus.circle.fill</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>stork://deliveries/week</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Babies This Week</string>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>chart.bar.fill</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>stork://calendar</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Calendar</string>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>calendar</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

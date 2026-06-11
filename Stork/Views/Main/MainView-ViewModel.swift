@@ -35,6 +35,12 @@ extension MainView {
             case .delivery(let id):
                 appTab = .list
                 listPath.append(id)
+            case .calendar:
+                if isRegularWidth {
+                    showingCalendarSheet = true
+                } else {
+                    appTab = .calendar
+                }
             case .settings:
                 if isRegularWidth {
                     showingSettingsSheet = true

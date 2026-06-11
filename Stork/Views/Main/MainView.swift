@@ -174,7 +174,7 @@ struct MainView: View {
 
     private var compactWidthView: some View {
         TabView(selection: $viewModel.appTab) {
-            Tab(AppTab.dashboard.rawValue, systemImage: AppTab.dashboard.systemImage, value: .dashboard) {
+            Tab(String(localized: AppTab.dashboard.localizedTitle), systemImage: AppTab.dashboard.systemImage, value: .dashboard) {
                 NavigationStack {
                     DashboardView(
                         showingEntrySheet: $viewModel.showingEntrySheet,
@@ -186,10 +186,10 @@ struct MainView: View {
                 }
             }
 
-            Tab(AppTab.list.rawValue, systemImage: AppTab.list.systemImage, value: .list) {
+            Tab(String(localized: AppTab.list.localizedTitle), systemImage: AppTab.list.systemImage, value: .list) {
                 NavigationStack(path: $viewModel.listPath) {
                     DeliveryListView(showingEntrySheet: $viewModel.showingEntrySheet)
-                        .navigationTitle(AppTab.list.rawValue)
+                        .navigationTitle(Text(AppTab.list.localizedTitle))
                         .navigationDestination(for: UUID.self) { deliveryId in
                             DeliveryDestinationView(deliveryId: deliveryId)
                         }
@@ -201,10 +201,10 @@ struct MainView: View {
                 }
             }
 
-            Tab(AppTab.calendar.rawValue, systemImage: AppTab.calendar.systemImage, value: .calendar) {
+            Tab(String(localized: AppTab.calendar.localizedTitle), systemImage: AppTab.calendar.systemImage, value: .calendar) {
                 NavigationStack {
                     DeliveryCalendarView()
-                        .navigationTitle(AppTab.calendar.rawValue)
+                        .navigationTitle(Text(AppTab.calendar.localizedTitle))
                         .navigationDestination(for: UUID.self) { deliveryId in
                             DeliveryDestinationView(deliveryId: deliveryId)
                         }
@@ -216,10 +216,10 @@ struct MainView: View {
                 }
             }
 
-            Tab(AppTab.settings.rawValue, systemImage: AppTab.settings.systemImage, value: .settings) {
+            Tab(String(localized: AppTab.settings.localizedTitle), systemImage: AppTab.settings.systemImage, value: .settings) {
                 NavigationStack {
                     SettingsView()
-                        .navigationTitle(AppTab.settings.rawValue)
+                        .navigationTitle(Text(AppTab.settings.localizedTitle))
                 }
             }
         }

@@ -14,10 +14,28 @@ import Foundation
 import os
 
 struct SpotlightDeliveryIndexer: DeliveryIndexing {
+    /// Signature of the last indexed state — refresh() runs often (saves,
+    /// launches, CloudKit imports) and re-donating identical content churns
+    /// the Spotlight XPC service for nothing.
+    @MainActor private static var lastSignature: Int?
+
     nonisolated init() {}
 
     func reindex(_ deliveries: [Delivery]) {
         let entities = deliveries.map(DeliveryEntity.init(from:))
+
+        var hasher = Hasher()
+        for entity in entities {
+            hasher.combine(entity.id)
+            hasher.combine(entity.date)
+            hasher.combine(entity.babyCount)
+            hasher.combine(entity.method)
+            hasher.combine(entity.epiduralUsed)
+        }
+        let signature = hasher.finalize()
+        guard signature != Self.lastSignature else { return }
+        Self.lastSignature = signature
+
         Task {
             // Named index per Apple guidance (the default index is not for
             // production). Created inside the task region: CSSearchableIndex

@@ -13,6 +13,17 @@ enum AppTab: String, CaseIterable, Identifiable {
 
     var id: String { self.rawValue }
 
+    /// Localizable title — raw values are identifiers and must not be
+    /// shown to users (they bypass the string catalog).
+    var localizedTitle: LocalizedStringResource {
+        switch self {
+        case .dashboard: "Dashboard"
+        case .list: "Deliveries"
+        case .calendar: "Calendar"
+        case .settings: "Settings"
+        }
+    }
+
     var systemImage: String {
         switch self {
         case .dashboard: "circle.hexagongrid.fill"

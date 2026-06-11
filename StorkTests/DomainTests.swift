@@ -269,6 +269,7 @@ struct DeepLinkParsingTests {
         ("stork://dashboard", DeepLink.dashboard),
         ("stork://deliveries", DeepLink.deliveries),
         ("stork://deliveries/week", DeepLink.weeklyDeliveries),
+        ("stork://calendar", DeepLink.calendar),
         ("stork://settings", DeepLink.settings),
     ])
     func parsesKnownLinks(urlString: String, expected: DeepLink) {

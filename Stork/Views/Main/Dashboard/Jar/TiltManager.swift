@@ -15,14 +15,31 @@ import UIKit
 /// queue would trap the runtime isolation check the first time a callback
 /// fires on a real device.
 final class TiltManager {
-    private let motion = CMMotionManager()
+    /// One CMMotionManager per app, per Apple guidance — and deliberately
+    /// never deallocated: releasing a CMMotionManager during scene teardown
+    /// on macOS ("Designed for iPad") over-releases a CoreMotion
+    /// dispatch-source handler and crashes (SIGSEGV in _Block_release).
+    /// On Mac the short-circuit below means it is never even allocated.
+    private static let sharedMotion = CMMotionManager()
+
     private var lastX = 0.0
+
+    /// Whether this environment can deliver device motion at all.
+    /// The app-on-Mac check must come first so `sharedMotion` is never
+    /// instantiated where no motion hardware exists.
+    private static var isMotionSupported: Bool {
+        #if os(iOS)
+        if ProcessInfo.processInfo.isiOSAppOnMac { return false }
+        #endif
+        return sharedMotion.isDeviceMotionAvailable
+    }
 
     /// Start device motion updates and call the handler with a smoothed
     /// horizontal tilt in Gs (-1...1), mapped to the screen's horizontal
     /// axis (accounts for portrait/landscape).
     func start(handler: @escaping (Double) -> Void) {
-        guard motion.isDeviceMotionAvailable else { return }
+        guard Self.isMotionSupported else { return }
+        let motion = Self.sharedMotion
         motion.deviceMotionUpdateInterval = 1.0 / 60.0
         motion.startDeviceMotionUpdates(using: .xArbitraryZVertical, to: .main) { [weak self] data, _ in
             guard let self, let d = data else { return }
@@ -57,7 +74,8 @@ final class TiltManager {
     }
 
     func stop() {
-        motion.stopDeviceMotionUpdates()
+        guard Self.isMotionSupported else { return }
+        Self.sharedMotion.stopDeviceMotionUpdates()
     }
 
     /// Resolve the current interface orientation from the foreground-active

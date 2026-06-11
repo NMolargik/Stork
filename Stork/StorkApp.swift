@@ -12,6 +12,9 @@ import AppIntents
 /// injects them into the environment. Views never construct managers.
 @main
 struct StorkApp: App {
+    @UIApplicationDelegateAdaptor(QuickActionAppDelegate.self) private var appDelegate
+    @State private var quickActions = QuickActionRelay.shared
+
     private let sharedModelContainer: ModelContainer
 
     @State private var deliveryManager: DeliveryManager
@@ -72,6 +75,14 @@ struct StorkApp: App {
         ])
     }
 
+    private func consumeQuickAction() {
+        guard let url = quickActions.url else { return }
+        quickActions.url = nil
+        if let link = DeepLink(url: url) {
+            pendingDeepLink = link
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView(pendingDeepLink: $pendingDeepLink)
@@ -91,6 +102,22 @@ struct StorkApp: App {
                         pendingDeepLink = link
                     }
                 }
+                // Home Screen quick actions arrive via the UIKit delegates
+                // and the relay; consume on launch (cold) and change (warm).
+                .task {
+                    consumeQuickAction()
+                }
+                .onChange(of: quickActions.url) { _, _ in
+                    consumeQuickAction()
+                }
+        }
+        .commands {
+            StorkCommands(
+                pendingDeepLink: $pendingDeepLink,
+                deliveryManager: deliveryManager,
+                cloudSyncManager: cloudSyncManager,
+                toastManager: toastManager
+            )
         }
     }
 }

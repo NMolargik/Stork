@@ -75,7 +75,10 @@ struct BabyCountCard: View {
                     }
                     .chartXAxis {
                         AxisMarks(values: shownLabels) { value in
-                            AxisValueLabel(anchor: .bottom) {
+                            // Anchor must be a standard UnitPoint; .bottom is
+                            // rejected by Charts at runtime — topLeading suits
+                            // the 45° rotated labels.
+                            AxisValueLabel(anchor: .topLeading) {
                                 if let label = value.as(String.self) {
                                     Text(Self.abbrevLabel(label))
                                         .rotationEffect(.degrees(45))
