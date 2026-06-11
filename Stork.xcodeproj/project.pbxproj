@@ -503,6 +503,9 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
+				"fr-CA",
+				ja,
 			);
 			mainGroup = EB020D332E89FDD000D9C239;
 			minimizedProjectReferenceProxies = 1;
@@ -807,8 +810,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Stork uses your location to show local weather conditions.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork uses your location to show local weather conditions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -859,8 +862,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork needs your location to search for nearby hospitals";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Stork uses your location to show local weather conditions.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork uses your location to show local weather conditions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

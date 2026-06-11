@@ -16,6 +16,7 @@ struct StepCountView: View {
             HStack {
                 Image(systemName: "figure.walk")
                     .foregroundStyle(.green)
+                    .accessibilityHidden(true)
                 Text("Steps")
                     .font(.headline)
             }
@@ -43,6 +44,9 @@ struct StepCountView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Steps today")
+                .accessibilityValue("\(healthManager.todayStepCount)")
 
                 // Goal progress
                 let progress = min(Double(healthManager.todayStepCount) / 10000.0 * 100, 100)
@@ -56,6 +60,7 @@ struct StepCountView: View {
                     Image(systemName: "heart.text.square")
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
 
                     Text("Health Access Required")
                         .font(.subheadline)

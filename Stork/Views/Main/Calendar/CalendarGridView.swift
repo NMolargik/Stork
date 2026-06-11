@@ -139,6 +139,7 @@ private struct DayCell: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 
     private func dotColor(for delivery: Delivery) -> Color {
@@ -161,13 +162,18 @@ private struct DayCell: View {
     private var accessibilityLabel: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        let dateString = dateFormatter.string(from: date)
+        var dateString = dateFormatter.string(from: date)
+        if isToday {
+            dateString = "Today, \(dateString)"
+        }
 
         if deliveriesForDay.isEmpty {
             return dateString
         } else {
             let babyCount = deliveriesForDay.reduce(0) { $0 + ($1.babies?.count ?? $1.babyCount) }
-            return "\(dateString), \(deliveriesForDay.count) deliver\(deliveriesForDay.count == 1 ? "y" : "ies"), \(babyCount) bab\(babyCount == 1 ? "y" : "ies")"
+            let deliveryPart = deliveriesForDay.count == 1 ? String(localized: "1 delivery") : String(localized: "\(deliveriesForDay.count) deliveries")
+            let babyPart = babyCount == 1 ? String(localized: "1 baby") : String(localized: "\(babyCount) babies")
+            return "\(dateString), \(deliveryPart), \(babyPart)"
         }
     }
 }

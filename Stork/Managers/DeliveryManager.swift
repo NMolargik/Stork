@@ -32,6 +32,7 @@ final class DeliveryManager {
     @ObservationIgnored private let defaults: KeyValueStoring
     #if !os(watchOS)
     @ObservationIgnored private let reviewRequester: ReviewRequesting
+    @ObservationIgnored private let indexer: DeliveryIndexing
     #endif
 
     private(set) var deliveries: [Delivery] = []
@@ -60,7 +61,8 @@ final class DeliveryManager {
         milestoneTracker: MilestoneTracker = MilestoneTracker(),
         widgetReloader: WidgetTimelineReloading = WidgetCenterReloader(),
         defaults: KeyValueStoring = UserDefaults.standard,
-        reviewRequester: ReviewRequesting = AppStoreReviewRequester()
+        reviewRequester: ReviewRequesting = AppStoreReviewRequester(),
+        indexer: DeliveryIndexing = SpotlightDeliveryIndexer()
     ) {
         self.container = container
         self.context = container.mainContext
@@ -68,6 +70,7 @@ final class DeliveryManager {
         self.widgetReloader = widgetReloader
         self.defaults = defaults
         self.reviewRequester = reviewRequester
+        self.indexer = indexer
         Task { await refresh() }
     }
     #endif
@@ -88,6 +91,11 @@ final class DeliveryManager {
                 sortBy: [SortDescriptor(\.date, order: .reverse)]
             )
             deliveries = try context.fetch(descriptor)
+            #if !os(watchOS)
+            // Keep the Spotlight semantic index in sync (covers saves,
+            // deletes, and CloudKit imports — every path refreshes).
+            indexer.reindex(deliveries)
+            #endif
         } catch {
             Log.deliveries.error("Fetch failed: \(error.localizedDescription)")
             deliveries = []

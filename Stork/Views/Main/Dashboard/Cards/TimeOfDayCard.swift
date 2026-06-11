@@ -95,6 +95,7 @@ struct TimeOfDayCard: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(.ultraThinMaterial, in: Capsule())
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(label) shift: \(String(format: "%.0f", percentage)) percent, \(count) deliveries")
     }
 }

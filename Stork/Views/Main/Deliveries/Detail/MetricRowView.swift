@@ -30,6 +30,7 @@ struct MetricRowView<Value: View>: View {
             valueView
                 .font(.subheadline)
         }
+        .accessibilityElement(children: .combine)
     }
 }
 

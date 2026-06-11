@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import AppIntents
 import SwiftData
 
 // MARK: - Platform-adaptive colors
@@ -70,6 +71,14 @@ struct DeliveryDetailView: View {
             DeliveryEditFormView(delivery: delivery)
                 .interactiveDismissDisabled()
         }
+        #if !os(watchOS)
+        // Lets the new Siri understand "this delivery" when the detail
+        // screen is frontmost (onscreen-awareness via the entity bridge).
+        .userActivity("com.molargiksoftware.Stork.deliveryDetail") { activity in
+            activity.title = "Viewing a delivery"
+            activity.appEntityIdentifier = EntityIdentifier(for: DeliveryEntity.self, identifier: delivery.id)
+        }
+        #endif
     }
 
     // MARK: - Hero Header
@@ -106,6 +115,9 @@ struct DeliveryDetailView: View {
                         .foregroundStyle(.white.opacity(0.9))
                 }
                 .padding(.vertical, 32)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Delivery date")
+                .accessibilityValue(delivery.date.formatted(date: .complete, time: .shortened))
             }
             .frame(maxWidth: .infinity)
 
@@ -195,6 +207,9 @@ struct DeliveryDetailView: View {
         .padding(12)
         .frame(maxWidth: .infinity, maxHeight: 85)
         .modifier(StatPillBackground())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityValue(value)
     }
 
     // MARK: - Content Section
@@ -262,6 +277,8 @@ struct DeliveryDetailView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .background(baby.sex.color.opacity(0.1))
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Baby \(index), \(baby.sex.displayName), born at \(baby.birthday.formatted(.dateTime.hour().minute()))")
 
             // Measurements
             HStack(spacing: 0) {
@@ -279,6 +296,9 @@ struct DeliveryDetailView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Weight")
+                .accessibilityValue(UnitConversion.weightDisplay(baby.weight, useMetric: useMetricUnits))
 
                 Divider()
                     .frame(height: 50)
@@ -297,6 +317,9 @@ struct DeliveryDetailView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Length")
+                .accessibilityValue(UnitConversion.heightDisplay(baby.height, useMetric: useMetricUnits))
             }
 
             // Special indicators
@@ -352,6 +375,8 @@ struct DeliveryDetailView: View {
                         Capsule()
                             .fill(tag.color.opacity(0.15))
                     )
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Tag: \(tag.name)")
                 }
             }
             .padding(16)
@@ -383,11 +408,14 @@ struct DeliveryDetailView: View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .foregroundStyle(color)
+                .accessibilityHidden(true)
             Text(title)
                 .font(.headline)
                 .fontWeight(.bold)
         }
         .padding(.leading, 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
     }
 
     // MARK: - Toolbar

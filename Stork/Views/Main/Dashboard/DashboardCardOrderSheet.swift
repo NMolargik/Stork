@@ -55,6 +55,7 @@ struct DashboardCardOrderSheet: View {
                     .font(.title2)
                     .foregroundStyle(.storkPink)
                     .frame(width: 32)
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Marble Jar")
                         .font(.body)
@@ -65,8 +66,10 @@ struct DashboardCardOrderSheet: View {
                 Spacer()
                 Image(systemName: "lock.fill")
                     .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
             }
             .padding(.vertical, 4)
+            .accessibilityElement(children: .combine)
         } header: {
             Text("Fixed Position")
         }
@@ -81,13 +84,17 @@ struct DashboardCardOrderSheet: View {
                         .font(.title2)
                         .foregroundStyle(.storkBlue)
                         .frame(width: 32)
+                        .accessibilityHidden(true)
                     Text(card.displayName)
                         .font(.body)
                     Spacer()
                     Image(systemName: "line.3.horizontal")
                         .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
                 }
                 .padding(.vertical, 4)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(card.displayName)
                 .contentShape(Rectangle())
                 .hoverEffect(.lift)
             }

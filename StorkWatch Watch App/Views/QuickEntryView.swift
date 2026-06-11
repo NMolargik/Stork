@@ -35,6 +35,7 @@ struct QuickEntryView: View {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                         .foregroundStyle(.storkBlue)
+                        .accessibilityHidden(true)
                     Text("Quick Entry")
                         .font(.headline)
                 }
@@ -188,11 +189,21 @@ struct StepperRow: View {
     let color: Color
     let systemImage: String
 
+    /// Singular, lowercased form of the row label for button accessibility labels.
+    private var singularLabel: String {
+        switch label {
+        case "Boys": return "boy"
+        case "Girls": return "girl"
+        default: return label.lowercased()
+        }
+    }
+
     var body: some View {
         HStack {
             Image(systemName: systemImage)
                 .foregroundStyle(color)
                 .frame(width: 24)
+                .accessibilityHidden(true)
 
             Text(label)
                 .font(.subheadline)
@@ -212,6 +223,7 @@ struct StepperRow: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(count == 0)
+                .accessibilityLabel("Remove \(singularLabel)")
 
                 Text("\(count)")
                     .font(.system(.body, design: .rounded, weight: .semibold))
@@ -229,9 +241,13 @@ struct StepperRow: View {
                         .foregroundStyle(color)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Add \(singularLabel)")
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityValue("\(count)")
     }
 }
 
@@ -245,6 +261,7 @@ struct ConfirmationView: View {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 50))
                 .foregroundStyle(.green)
+                .accessibilityHidden(true)
 
             Text("Saved!")
                 .font(.headline)

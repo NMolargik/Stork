@@ -60,6 +60,7 @@ struct DayOfWeekCard: View {
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                             }
+                            .accessibilityElement(children: .combine)
                             .accessibilityLabel("\(DashboardView.ViewModel.DayOfWeekStats.fullDayNames[weekday]): \(count) deliveries")
                         }
                     }

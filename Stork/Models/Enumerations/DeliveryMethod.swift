@@ -8,7 +8,9 @@
 import Foundation
 
 /// Represents the various methods of delivery available within the Stork application.
-enum DeliveryMethod: String, CaseIterable, Codable, Hashable {
+/// Nonisolated: a pure value type used from nonisolated contexts (App Intents
+/// entity display, widget timelines) as well as the UI.
+nonisolated enum DeliveryMethod: String, CaseIterable, Codable, Hashable, Sendable {
     case vaginal
     case cSection
     case vBac

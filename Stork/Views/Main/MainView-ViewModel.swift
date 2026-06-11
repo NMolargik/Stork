@@ -32,6 +32,9 @@ extension MainView {
                 appTab = .dashboard
             case .deliveries, .weeklyDeliveries:
                 appTab = .list
+            case .delivery(let id):
+                appTab = .list
+                listPath.append(id)
             case .settings:
                 if isRegularWidth {
                     showingSettingsSheet = true
@@ -56,6 +59,9 @@ extension MainView {
             // Existing deliveries are updated by their own edit flow.
             if !deliveryManager.deliveries.contains(where: { $0.id == delivery.id }) {
                 deliveryManager.create(delivery: delivery, reviewScene: reviewScene)
+                // Teach Siri/Apple Intelligence about manual logs (Siri-initiated
+                // logs are recorded by the system automatically).
+                LogDeliveryIntent.donate(reflecting: delivery)
             }
             showingEntrySheet = false
         }

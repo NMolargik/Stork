@@ -107,6 +107,9 @@ struct CircularLockScreenView: View {
                     .monospacedDigit()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Babies this week")
+        .accessibilityValue("\(entry.weeklyBabies)")
     }
 }
 
@@ -143,6 +146,9 @@ struct RectangularLockScreenView: View {
                     .monospacedDigit()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Babies")
+        .accessibilityValue("\(entry.weeklyBabies) this week, \(entry.todayBabies) today")
     }
 }
 
@@ -158,6 +164,7 @@ struct InlineLockScreenView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
+                .accessibilityHidden(true)
         }
     }
 }
@@ -247,6 +254,9 @@ struct CareerCircularView: View {
                     .foregroundStyle(.secondary)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Career total babies")
+        .accessibilityValue("\(entry.careerTotal)")
     }
 }
 
@@ -261,6 +271,7 @@ struct CareerInlineView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
+                .accessibilityHidden(true)
         }
     }
 }

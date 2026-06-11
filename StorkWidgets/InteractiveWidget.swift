@@ -126,6 +126,9 @@ struct InteractiveSmallView: View {
                 .foregroundStyle(.white)
                 .clipShape(Capsule())
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("New delivery")
+            .accessibilityValue("\(entry.todayBabies) babies today, \(entry.weeklyBabies) babies this week")
         }
     }
 }
@@ -189,6 +192,9 @@ struct InteractiveMediumView: View {
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("New delivery")
+            .accessibilityValue("\(entry.todayBabies) babies today, \(entry.weeklyBabies) babies this week")
         }
     }
 }

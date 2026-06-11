@@ -133,6 +133,7 @@ struct DeliveryEditFormView: View {
         HStack {
             Image(systemName: "figure.child")
                 .foregroundStyle(baby.sex.color)
+                .accessibilityHidden(true)
             Text(baby.sex.displayName)
             Spacer()
             Text("\(UnitConversion.weightDisplay(baby.weight, useMetric: useMetricUnits)), \(UnitConversion.heightDisplay(baby.height, useMetric: useMetricUnits))")
@@ -146,6 +147,7 @@ struct DeliveryEditFormView: View {
             .buttonStyle(.borderedProminent)
             .tint(.green)
             .foregroundColor(.white)
+            .accessibilityLabel("Edit baby")
         }
     }
 

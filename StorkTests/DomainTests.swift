@@ -282,4 +282,12 @@ struct DeepLinkParsingTests {
         #expect(DeepLink(url: URL(string: "https://deliveries")!) == nil)
         #expect(DeepLink(url: URL(string: "stork://unknown")!) == nil)
     }
+
+    @Test("Delivery links parse their UUID and reject malformed ones")
+    func deliveryLink() {
+        let id = UUID()
+        #expect(DeepLink(url: URL(string: "stork://delivery/\(id.uuidString)")!) == .delivery(id))
+        #expect(DeepLink(url: URL(string: "stork://delivery/not-a-uuid")!) == nil)
+        #expect(DeepLink(url: URL(string: "stork://delivery")!) == nil)
+    }
 }

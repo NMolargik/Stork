@@ -20,6 +20,7 @@ private struct Harness {
     let container: ModelContainer
     let manager: DeliveryManager
     let widgetReloader: FakeWidgetReloader
+    let indexer: FakeDeliveryIndexer
 
     init(milestoneStore: FakeKeyValueStore = FakeKeyValueStore()) throws {
         // Unique on-disk store per harness: simultaneous in-memory containers
@@ -29,11 +30,13 @@ private struct Harness {
         let config = ModelConfiguration(url: url)
         container = try ModelContainer(for: Delivery.self, Baby.self, DeliveryTag.self, configurations: config)
         widgetReloader = FakeWidgetReloader()
+        indexer = FakeDeliveryIndexer()
         manager = DeliveryManager(
             container: container,
             milestoneTracker: MilestoneTracker(storage: milestoneStore),
             widgetReloader: widgetReloader,
-            defaults: FakeKeyValueStore()
+            defaults: FakeKeyValueStore(),
+            indexer: indexer
         )
     }
 }
@@ -69,6 +72,16 @@ struct DeliveryManagerBehaviorTests {
         await harness.manager.refresh()
 
         #expect(harness.widgetReloader.reloadedKinds.contains(WidgetKind.deliveriesThisWeek))
+    }
+
+    @Test("Refreshing reindexes deliveries into the Spotlight seam")
+    func refreshReindexes() async throws {
+        let harness = try Harness()
+
+        harness.manager.create(delivery: makeDelivery())
+        await harness.manager.refresh()
+
+        #expect(harness.indexer.reindexedBatches.last?.count == 1)
     }
 
     @Test("Re-saving a delivery with the same id merges instead of duplicating")

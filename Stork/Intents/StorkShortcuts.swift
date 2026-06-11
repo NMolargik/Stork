@@ -51,5 +51,15 @@ struct StorkShortcuts: AppShortcutsProvider {
             shortTitle: "New Delivery",
             systemImageName: "square.and.pencil"
         )
+
+        AppShortcut(
+            intent: OpenDeliveryIntent(),
+            phrases: [
+                "Open a delivery in \(.applicationName)",
+                "Show a delivery in \(.applicationName)"
+            ],
+            shortTitle: "Open Delivery",
+            systemImageName: "doc.text.magnifyingglass"
+        )
     }
 }

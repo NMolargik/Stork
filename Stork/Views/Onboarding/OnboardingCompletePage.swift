@@ -52,6 +52,7 @@ struct OnboardingCompletePage: View {
                             .font(.title3)
                             .foregroundStyle(feature.color)
                             .frame(width: 28)
+                            .accessibilityHidden(true)
 
                         Text(feature.title)
                             .font(.body)
@@ -61,7 +62,9 @@ struct OnboardingCompletePage: View {
                         Image(systemName: "checkmark")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(.green)
+                            .accessibilityHidden(true)
                     }
+                    .accessibilityElement(children: .combine)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
                     .opacity(showContent ? 1 : 0)
@@ -90,6 +93,7 @@ struct OnboardingCompletePage: View {
                         .font(.headline)
                     Image(systemName: "arrow.right")
                         .font(.headline)
+                        .accessibilityHidden(true)
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 54)

@@ -41,7 +41,7 @@ struct DeliveryDetailHeaderView: View {
                     Image(systemName: "figure.and.child.holdinghands")
                         .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("\(babyCount) Bab\(babyCount == 1 ? "y" : "ies")")
+                        Text(babyCount == 1 ? "1 Baby" : "\(babyCount) Babies")
                             .font(.subheadline).fontWeight(.semibold)
                     }
                 }
@@ -53,7 +53,7 @@ struct DeliveryDetailHeaderView: View {
                         .fill(Color(uiColor: .tertiarySystemBackground))
                 )
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel("\(babyCount) bab\(babyCount == 1 ? "y" : "ies") delivered")
+                .accessibilityLabel(babyCount == 1 ? "1 baby delivered" : "\(babyCount) babies delivered")
             }
 
             // Stats row styled like Dashboard cards

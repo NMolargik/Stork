@@ -110,6 +110,9 @@ struct DeliveriesWeekView: View {
                 .foregroundStyle(.secondary)
         }
         .padding()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Babies this week")
+        .accessibilityValue("\(entry.count), \(WeekMath.formattedWeekString(entry.week))")
     }
 }
 

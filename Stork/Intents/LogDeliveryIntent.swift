@@ -8,6 +8,7 @@
 
 import AppIntents
 import Foundation
+import os
 
 struct LogDeliveryIntent: AppIntent {
     static let title: LocalizedStringResource = "Log a Delivery"
@@ -77,5 +78,32 @@ struct LogDeliveryIntent: AppIntent {
         return .result(
             dialog: "Logged \(total) \(total == 1 ? "baby" : "babies"). Great work!"
         )
+    }
+}
+
+extension LogDeliveryIntent {
+    /// Donates an interaction mirroring a delivery the user logged through
+    /// the app's UI, so Apple Intelligence / the new Siri can learn real
+    /// usage patterns. Siri and Shortcuts executions are recorded by the
+    /// system automatically — only call this from manual save paths, once
+    /// per real save.
+    @MainActor
+    static func donate(reflecting delivery: Delivery) {
+        let babies = delivery.babies ?? []
+
+        let intent = LogDeliveryIntent()
+        intent.boys = babies.count { $0.sex == .male }
+        intent.girls = babies.count { $0.sex == .female }
+        intent.losses = babies.count { $0.sex == .loss }
+        intent.method = delivery.deliveryMethod
+        intent.epiduralUsed = delivery.epiduralUsed
+
+        Task {
+            do {
+                _ = try await IntentDonationManager.shared.donate(intent: intent)
+            } catch {
+                Log.app.error("Intent donation failed: \(error.localizedDescription)")
+            }
+        }
     }
 }

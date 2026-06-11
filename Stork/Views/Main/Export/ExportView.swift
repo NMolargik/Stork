@@ -26,6 +26,7 @@ struct ExportView: View {
                             .font(.title2)
                             .foregroundStyle(.storkPurple)
                             .frame(width: 40)
+                            .accessibilityHidden(true)
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text("PDF Report")
@@ -39,6 +40,7 @@ struct ExportView: View {
 
                         Image(systemName: "chevron.right")
                             .foregroundStyle(.tertiary)
+                            .accessibilityHidden(true)
                     }
                 }
                 .buttonStyle(.plain)
@@ -52,6 +54,7 @@ struct ExportView: View {
                             .font(.title2)
                             .foregroundStyle(.storkBlue)
                             .frame(width: 40)
+                            .accessibilityHidden(true)
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text("CSV Export")
@@ -65,6 +68,7 @@ struct ExportView: View {
 
                         Image(systemName: "chevron.right")
                             .foregroundStyle(.tertiary)
+                            .accessibilityHidden(true)
                     }
                 }
                 .buttonStyle(.plain)
@@ -83,6 +87,7 @@ struct ExportView: View {
                             .font(.title2)
                             .foregroundStyle(.storkPink)
                             .frame(width: 40)
+                            .accessibilityHidden(true)
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Share Cards")

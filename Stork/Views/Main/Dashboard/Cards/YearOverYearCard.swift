@@ -86,6 +86,8 @@ struct YearOverYearCard: View {
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("\(yearData.year): \(yearData.deliveries) deliveries, \(yearData.babies) babies")
                             }
                         }
                     }
@@ -114,6 +116,7 @@ struct YearOverYearCard: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(.ultraThinMaterial, in: Capsule())
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(label) \(isPositive ? "up" : "down") \(String(format: "%.1f", abs(growth))) percent")
     }
 }

@@ -15,6 +15,8 @@ struct ToastView: View {
         toastContent
             .padding(.horizontal, 16)
             .frame(maxWidth: 300)
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isStaticText)
     }
 
     @ViewBuilder
@@ -43,6 +45,7 @@ struct ToastView: View {
             Image(systemName: toast.icon ?? toast.style.iconName)
                 .font(.title3)
                 .fontWeight(.semibold)
+                .accessibilityHidden(true)
 
             Text(toast.message)
                 .font(.subheadline)
@@ -63,6 +66,7 @@ struct ToastView: View {
                     .background(Circle().fill(.white.opacity(0.2)))
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Dismiss")
         }
     }
 }

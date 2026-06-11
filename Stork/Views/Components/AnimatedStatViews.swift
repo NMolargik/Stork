@@ -40,6 +40,7 @@ struct AnimatedNumber: View {
             .fontWeight(fontWeight)
             .foregroundStyle(color)
             .contentTransition(.numericText(value: displayedValue))
+            .accessibilityLabel(String(format: format, value))
             .onAppear {
                 guard !hasAppeared else { return }
                 hasAppeared = true
@@ -88,6 +89,8 @@ struct AnimatedPercentage: View {
         .font(font)
         .fontWeight(fontWeight)
         .foregroundStyle(color)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(String(format: "%.1f percent", value))
         .onAppear {
             guard !hasAppeared else { return }
             hasAppeared = true
@@ -147,6 +150,7 @@ struct AnimatedProgressBar: View {
             }
         }
         .frame(height: height + 2)
+        .accessibilityHidden(true)
         .onAppear {
             guard !hasAppeared else { return }
             hasAppeared = true
@@ -198,6 +202,8 @@ struct AnimatedStatText: View {
         }
         .font(font)
         .fontWeight(fontWeight)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(String(format: format, value)) \(suffix)")
         .onAppear {
             guard !hasAppeared else { return }
             hasAppeared = true
@@ -243,6 +249,7 @@ struct AnimatedInteger: View {
             .fontWeight(fontWeight)
             .foregroundStyle(color)
             .contentTransition(.numericText(value: Double(displayedValue)))
+            .accessibilityLabel("\(value)")
             .onAppear {
                 guard !hasAppeared else { return }
                 hasAppeared = true

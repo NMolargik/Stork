@@ -53,6 +53,7 @@ struct DeliveryMethodCard: View {
         HStack(spacing: 4) {
             Image(systemName: "circle.fill")
                 .font(.caption2)
+                .accessibilityHidden(true)
             Text(label)
             AnimatedNumber(value: value, format: "%.0f", font: .caption, fontWeight: .regular, color: color)
             Text("%")
@@ -61,6 +62,7 @@ struct DeliveryMethodCard: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(.ultraThinMaterial, in: Capsule())
+        .accessibilityElement(children: .combine)
         .accessibilityLabel("\(label) deliveries: \(String(format: "%.0f", value)) percent")
     }
 }

@@ -55,6 +55,7 @@ struct TodayStatsView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
+                        .accessibilityHidden(true)
 
                     Text("Today")
                         .font(.headline)
@@ -75,6 +76,9 @@ struct TodayStatsView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Babies today")
+                .accessibilityValue("\(todayBabyCount)")
 
                 // Sex breakdown pills
                 if todayBabyCount > 0 {
@@ -97,6 +101,9 @@ struct TodayStatsView: View {
                             .font(.title3.bold())
                             .monospacedDigit()
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Babies this week")
+                    .accessibilityValue("\(weekBabyCount)")
                     Spacer()
                     VStack(alignment: .trailing, spacing: 2) {
                         Text("Deliveries")
@@ -106,6 +113,9 @@ struct TodayStatsView: View {
                             .font(.title3.bold())
                             .monospacedDigit()
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Deliveries today")
+                    .accessibilityValue("\(todayDeliveries.count)")
                 }
                 .padding(.horizontal, 8)
             }
@@ -150,6 +160,9 @@ struct StatPill: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(color.opacity(0.2), in: Capsule())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label)
+        .accessibilityValue("\(count)")
     }
 }
 

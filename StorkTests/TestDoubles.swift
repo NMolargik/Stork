@@ -48,6 +48,16 @@ final class FakeWidgetReloader: WidgetTimelineReloading {
     }
 }
 
+/// Records Spotlight reindex requests.
+@MainActor
+final class FakeDeliveryIndexer: DeliveryIndexing {
+    private(set) var reindexedBatches: [[Delivery]] = []
+
+    func reindex(_ deliveries: [Delivery]) {
+        reindexedBatches.append(deliveries)
+    }
+}
+
 /// Stubbed location provider.
 @MainActor
 final class FakeLocationProvider: LocationProviding {

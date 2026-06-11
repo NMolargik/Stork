@@ -58,6 +58,7 @@ struct JarHistoryView: View {
                     .foregroundStyle(.storkOrange)
                     .keyboardShortcut(.escape, modifiers: [])
                     .hoverEffect(.highlight)
+                    .accessibilityLabel("Close jar history")
                 }
             }
         }
@@ -72,6 +73,8 @@ struct JarHistoryView: View {
                     .animation(.easeInOut(duration: 0.2), value: selectedPage)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Page \(selectedPage + 1) of \(months.count)")
     }
 
     private func dotColor(for index: Int) -> Color {

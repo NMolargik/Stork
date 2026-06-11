@@ -40,6 +40,9 @@ struct StepTrendSheet: View {
                             .monospacedDigit()
                     }
                     .padding(.horizontal)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("7-day average")
+                    .accessibilityValue("\(dailyAverage.formatted()) steps")
 
                     Chart {
                         ForEach(healthManager.weeklyStepCounts, id: \.date) { entry in
@@ -76,6 +79,7 @@ struct StepTrendSheet: View {
                         }
                     }
                     .padding(.horizontal)
+                    .accessibilityLabel("Daily step counts for the last 7 days")
 
                     Spacer()
                 }
@@ -93,6 +97,7 @@ struct StepTrendSheet: View {
                     .foregroundStyle(.storkPurple)
                     .keyboardShortcut(.escape, modifiers: [])
                     .hoverEffect(.highlight)
+                    .accessibilityLabel("Close")
                 }
             }
         }

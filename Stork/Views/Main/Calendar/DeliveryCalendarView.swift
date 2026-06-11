@@ -82,7 +82,7 @@ struct DeliveryCalendarView: View {
                     .padding(.top, 40)
                 } else {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("\(deliveriesForSelectedDate.count) deliver\(deliveriesForSelectedDate.count == 1 ? "y" : "ies"), \(babyCountForSelectedDate) bab\(babyCountForSelectedDate == 1 ? "y" : "ies") on \(formattedDate(selectedDate))")
+                        Text("^[\(deliveriesForSelectedDate.count) delivery](inflect: true), ^[\(babyCountForSelectedDate) baby](inflect: true) on \(formattedDate(selectedDate))")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             .textCase(.uppercase)
@@ -277,6 +277,7 @@ private struct FilterChip: View {
                 .foregroundStyle(isSelected ? color : .primary)
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 }
 
@@ -312,7 +313,7 @@ private struct DeliveryCalendarRowView: View {
                     .font(.headline)
 
                 // Baby summary
-                Text("\(babyCount) bab\(babyCount == 1 ? "y" : "ies") \u{2022} \(delivery.deliveryMethod.rawValue)")
+                Text("^[\(babyCount) baby](inflect: true) \u{2022} \(delivery.deliveryMethod.displayName)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -325,15 +326,18 @@ private struct DeliveryCalendarRowView: View {
                     Image(systemName: "syringe")
                         .imageScale(.small)
                         .foregroundStyle(.storkBlue)
+                        .accessibilityLabel("Epidural used")
                 }
                 if delivery.babies?.contains(where: { $0.nicuStay }) == true {
                     Image(systemName: "cross.circle")
                         .imageScale(.small)
                         .foregroundStyle(.orange)
+                        .accessibilityLabel("NICU stay")
                 }
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
     }
 
     private var timeString: String {

@@ -36,6 +36,7 @@ struct MilestoneCelebrationView: View {
                 }
             }
             .ignoresSafeArea()
+            .accessibilityHidden(true)
 
             // Main card
             VStack(spacing: 24) {
@@ -46,6 +47,7 @@ struct MilestoneCelebrationView: View {
                     .shadow(color: .yellow.opacity(0.6), radius: 20)
                     .scaleEffect(showContent ? 1.0 : 0.3)
                     .rotationEffect(.degrees(showContent ? 0 : -30))
+                    .accessibilityHidden(true)
 
                 // Milestone text
                 VStack(spacing: 8) {
@@ -77,6 +79,8 @@ struct MilestoneCelebrationView: View {
                 }
                 .opacity(showContent ? 1 : 0)
                 .offset(y: showContent ? 0 : 20)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("\(prefixText) \(milestone.count) \(suffixText)")
 
                 // Action buttons
                 VStack(spacing: 12) {
@@ -121,6 +125,7 @@ struct MilestoneCelebrationView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
+                    .accessibilityHidden(true)
             }
             .padding(32)
             .frame(maxWidth: 340)

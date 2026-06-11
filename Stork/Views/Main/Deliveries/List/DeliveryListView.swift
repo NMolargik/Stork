@@ -1,4 +1,5 @@
 import SwiftUI
+import AppIntents
 import SwiftData
 
 struct DeliveryListView: View {
@@ -39,6 +40,9 @@ struct DeliveryListView: View {
                                             .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                                             .hoverEffect(.lift)
                                     }
+                                    // Onscreen awareness: lets the new Siri
+                                    // resolve "this/that delivery" in the list.
+                                    .appEntityIdentifier(EntityIdentifier(for: DeliveryEntity.self, identifier: delivery.id))
                                     .navigationLinkIndicatorVisibility(.hidden) // Add this to hide the chevron
                                     .buttonStyle(.plain)
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {

@@ -50,6 +50,8 @@ struct OnboardingView: View {
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
                 .padding(.bottom, 8)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Step \(currentIndex + 1) of \(steps.count)")
             }
 
             // Content

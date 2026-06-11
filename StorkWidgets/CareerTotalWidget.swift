@@ -90,6 +90,9 @@ struct CareerTotalSmallView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Career total babies")
+        .accessibilityValue("\(entry.totalBabies)")
     }
 }
 
