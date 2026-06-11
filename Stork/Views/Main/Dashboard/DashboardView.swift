@@ -25,11 +25,30 @@ struct DashboardView: View {
                 // JarView always at top
                 jarViewSection
 
-                // Dynamic card order
-                ForEach(cardOrder) { card in
-                    cardView(for: card)
+                // Dynamic card order: one column in compact width, two
+                // balanced columns when there's room (iPad, Mac, visionOS,
+                // resized iPhone windows).
+                if hSizeClass == .regular {
+                    HStack(alignment: .top, spacing: 16) {
+                        VStack(spacing: 16) {
+                            ForEach(columnCards(even: true)) { card in
+                                cardView(for: card)
+                            }
+                        }
+                        VStack(spacing: 16) {
+                            ForEach(columnCards(even: false)) { card in
+                                cardView(for: card)
+                            }
+                        }
+                    }
+                } else {
+                    ForEach(cardOrder) { card in
+                        cardView(for: card)
+                    }
                 }
             }
+            .frame(maxWidth: 1000)
+            .frame(maxWidth: .infinity)
             .padding(.horizontal)
             .padding(.bottom, 20)
         }
@@ -55,6 +74,14 @@ struct DashboardView: View {
     }
 
     // MARK: - View Sections
+
+    /// Splits the user's card order into two columns by alternating, so
+    /// reordering still reads left-to-right, top-to-bottom in regular width.
+    private func columnCards(even: Bool) -> [DashboardCard] {
+        cardOrder.enumerated()
+            .filter { ($0.offset % 2 == 0) == even }
+            .map(\.element)
+    }
 
     @ContentBuilder
     private var jarViewSection: some View {

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct OnboardingPrivacyPage: View {
+    @State private var hasAppeared = false
+
     var body: some View {
         ScrollView {
             VStack(spacing: 32) {
@@ -16,6 +18,7 @@ struct OnboardingPrivacyPage: View {
                     Image(systemName: "lock.shield.fill")
                         .font(.system(size: 64))
                         .foregroundStyle(.storkPurple)
+                        .symbolEffect(.bounce, value: hasAppeared)
                         .accessibilityHidden(true)
 
                     Text("Your Privacy Matters")
@@ -75,6 +78,7 @@ struct OnboardingPrivacyPage: View {
             .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
+        .onAppear { hasAppeared = true }
     }
 }
 

@@ -29,6 +29,8 @@ struct AddDeliveryToolbarButton: View {
                 .imageScale(.large)
                 .bold()
         }
+        // The one prominent action per screen, per the Liquid Glass toolbar HIG.
+        .buttonStyle(.borderedProminent)
         .tint(.storkBlue)
         .labelStyle(.titleAndIcon)
         .accessibilityIdentifier("addEntryButton")

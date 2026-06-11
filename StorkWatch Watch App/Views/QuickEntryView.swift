@@ -267,7 +267,7 @@ struct ConfirmationView: View {
                 .font(.headline)
 
             if let delivery = delivery {
-                Text("\(delivery.babyCount) \(delivery.babyCount == 1 ? "baby" : "babies")")
+                Text("^[\(delivery.babyCount) baby](inflect: true)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

@@ -104,12 +104,11 @@ struct OnboardingView: View {
                             }
                         }
                         .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(viewModel.canContinue ? Color.storkPurple : Color.secondary.opacity(0.3))
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .frame(height: 38)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.glassProminent)
+                    .controlSize(.large)
+                    .tint(.storkPurple)
                     .disabled(!viewModel.canContinue)
                 }
                 .frame(maxWidth: 500)

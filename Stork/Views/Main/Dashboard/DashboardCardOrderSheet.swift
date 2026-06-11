@@ -30,7 +30,6 @@ struct DashboardCardOrderSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .foregroundStyle(.storkOrange)
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }

@@ -74,33 +74,39 @@ struct SettingsView: View {
                     HStack(spacing: 16) {
                         ForEach(iconOptions) { option in
                             ZStack(alignment: .topTrailing) {
-                                Image(option.asset)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 72, height: 72)
-                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                            .stroke(option.uiColor, lineWidth: 3)
-                                            .opacity(selectedIconColor == option.color ? 1 : 0)
-                                    )
-                                    .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                    .onTapGesture {
-                                        selectedIconColor = option.color
-                                        Haptics.lightImpact()
+                                Button {
+                                    selectedIconColor = option.color
+                                    Haptics.lightImpact()
 
-                                        if scenePhase == .active {
-                                            Task { await iconManager.changeAppIcon(to: option.color) }
-                                        } else {
-                                            pendingIconColor = option.color
-                                        }
+                                    if scenePhase == .active {
+                                        Task { await iconManager.changeAppIcon(to: option.color) }
+                                    } else {
+                                        pendingIconColor = option.color
                                     }
+                                } label: {
+                                    Image(option.asset)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 72, height: 72)
+                                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                                .stroke(option.uiColor, lineWidth: 3)
+                                                .opacity(selectedIconColor == option.color ? 1 : 0)
+                                        )
+                                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                }
+                                .buttonStyle(.plain)
+                                .hoverEffect(.lift)
+                                .accessibilityLabel("\(option.color.capitalized) app icon")
+                                .accessibilityAddTraits(selectedIconColor == option.color ? [.isSelected] : [])
 
                                 if selectedIconColor == option.color {
                                     Image(systemName: "checkmark.circle.fill")
                                         .foregroundStyle(.storkPurple)
                                         .background(.white, in: Circle())
                                         .offset(x: -4, y: 4)
+                                        .accessibilityHidden(true)
                                 }
                             }
                         }

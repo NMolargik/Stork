@@ -13,27 +13,17 @@ struct DeliveryEditFormView: View {
     @State private var showTagSheet = false
     @State private var editedNotes: String = ""
     @State private var editedTags: [DeliveryTag] = []
+    // Method and epidural are staged like notes/tags so Cancel really cancels
+    // (a direct model binding would autosave behind the Cancel button).
+    @State private var editedMethod: DeliveryMethod
+    @State private var editedEpidural: Bool
 
     init(delivery: Delivery) {
         self.delivery = delivery
         _editedNotes = State(initialValue: delivery.notes ?? "")
         _editedTags = State(initialValue: delivery.tags ?? [])
-    }
-
-    // MARK: - Extracted Bindings
-
-    private var deliveryMethodBinding: Binding<DeliveryMethod> {
-        Binding(
-            get: { delivery.deliveryMethod },
-            set: { delivery.deliveryMethod = $0 }
-        )
-    }
-
-    private var epiduralBinding: Binding<Bool> {
-        Binding(
-            get: { delivery.epiduralUsed },
-            set: { delivery.epiduralUsed = $0 }
-        )
+        _editedMethod = State(initialValue: delivery.deliveryMethod)
+        _editedEpidural = State(initialValue: delivery.epiduralUsed)
     }
 
     // MARK: - Actions
@@ -55,6 +45,8 @@ struct DeliveryEditFormView: View {
             delivery.babyCount = delivery.babies?.count ?? 0
             delivery.notes = editedNotes.isEmpty ? nil : editedNotes
             delivery.tags = editedTags
+            delivery.deliveryMethod = editedMethod
+            delivery.epiduralUsed = editedEpidural
         }
         dismiss()
     }
@@ -95,14 +87,14 @@ struct DeliveryEditFormView: View {
     @ContentBuilder
     private var deliveryDetailsSection: some View {
         Section("Delivery Details") {
-            Picker("Delivery Method", selection: deliveryMethodBinding) {
+            Picker("Delivery Method", selection: $editedMethod) {
                 ForEach(DeliveryMethod.allCases, id: \.self) { method in
                     Text(method.description).tag(method)
                 }
             }
             .pickerStyle(.segmented)
 
-            Toggle("Epidural Used", isOn: epiduralBinding)
+            Toggle("Epidural Used", isOn: $editedEpidural)
                 .tint(.red)
         }
     }
@@ -145,7 +137,7 @@ struct DeliveryEditFormView: View {
                 Image(systemName: "pencil")
             }
             .buttonStyle(.borderedProminent)
-            .tint(.green)
+            .tint(.storkBlue)
             .foregroundColor(.white)
             .accessibilityLabel("Edit baby")
         }
@@ -215,10 +207,10 @@ struct DeliveryEditFormView: View {
                 notesSection
             }
             .navigationTitle("Edit Delivery")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .foregroundStyle(.storkOrange)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save", action: saveDelivery)
@@ -286,12 +278,12 @@ private struct BabyEditSheet: View {
                     HStack {
                         TextField(useMetricUnits ? "Weight (g)" : "Weight (oz)",
                                   value: Binding<Double>(
-                                    get: { useMetricUnits ? draft.weight * 28.349523125 : draft.weight },
-                                    set: { newVal in draft.weight = useMetricUnits ? newVal / 28.349523125 : newVal }
+                                    get: { UnitConversion.ouncesToDisplayWeight(draft.weight, useMetric: useMetricUnits) },
+                                    set: { newVal in draft.weight = UnitConversion.displayWeightToOunces(newVal, useMetric: useMetricUnits) }
                                   ),
                                   format: .number)
                         .keyboardType(.decimalPad)
-                        
+
                         Text(useMetricUnits ? "g" : "oz")
                     }
                 }
@@ -299,8 +291,8 @@ private struct BabyEditSheet: View {
                     HStack {
                         TextField(useMetricUnits ? "Height (cm)" : "Height (in)",
                                   value: Binding<Double>(
-                                    get: { useMetricUnits ? draft.height * 2.54 : draft.height },
-                                    set: { newVal in draft.height = useMetricUnits ? newVal / 2.54 : newVal }
+                                    get: { UnitConversion.inchesToDisplayHeight(draft.height, useMetric: useMetricUnits) },
+                                    set: { newVal in draft.height = UnitConversion.displayHeightToInches(newVal, useMetric: useMetricUnits) }
                                   ),
                                   format: .number)
                         .keyboardType(.decimalPad)
@@ -315,10 +307,10 @@ private struct BabyEditSheet: View {
                 }
             }
             .navigationTitle(baby == nil ? "Add Baby" : "Edit Baby")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { onCancel(); dismiss() }
-                        .foregroundStyle(.storkOrange)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { onSave(draft); dismiss() }

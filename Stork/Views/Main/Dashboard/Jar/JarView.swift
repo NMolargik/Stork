@@ -91,9 +91,9 @@ struct JarView: View {
             }
         }
         .sheet(isPresented: $showHistory) {
+            // Read-only sheet — keep the standard swipe-to-dismiss (HIG).
             JarHistoryView()
                 .presentationDetents([.medium])
-                .interactiveDismissDisabled()
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Delivery jar for \(monthLabel ?? monthText())")

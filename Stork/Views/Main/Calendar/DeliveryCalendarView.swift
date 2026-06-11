@@ -128,6 +128,8 @@ struct DeliveryCalendarView: View {
                     }
                 }
             }
+            .frame(maxWidth: 700)
+            .frame(maxWidth: .infinity)
             .padding(.bottom, 16)
         }
         .background(Color(uiColor: .systemGroupedBackground))
@@ -231,24 +233,13 @@ private struct MethodFilterView: View {
                 // Method chips
                 ForEach(DeliveryMethod.allCases, id: \.self) { method in
                     FilterChip(
-                        label: method.rawValue,
-                        color: colorForMethod(method),
+                        label: method.displayName,
+                        color: method.accentColor,
                         isSelected: selectedMethod == method,
                         onTap: { selectedMethod = method }
                     )
                 }
             }
-        }
-    }
-
-    private func colorForMethod(_ method: DeliveryMethod) -> Color {
-        switch method {
-        case .vaginal:
-            return .storkPink
-        case .cSection:
-            return .storkBlue
-        case .vBac:
-            return .storkPurple
         }
     }
 }
@@ -353,7 +344,7 @@ private struct DeliveryCalendarRowView: View {
         case .female:
             return .storkPink
         case .loss:
-            return .gray
+            return .storkPurple
         }
     }
 }

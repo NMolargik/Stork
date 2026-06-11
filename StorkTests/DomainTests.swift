@@ -168,6 +168,17 @@ struct DeliveryFilterMatchingTests {
         #expect(filter.matches(makeDelivery(method: .vaginal)))
     }
 
+    @Test("Search text matches tag names, case-insensitively")
+    func searchTextMatchesTags() {
+        var filter = DeliveryFilter()
+        filter.searchText = "night"
+
+        let tagged = makeDelivery(tags: [DeliveryTag(name: "Night Shift")])
+        #expect(filter.matches(tagged))
+        #expect(!filter.matches(makeDelivery(tags: [DeliveryTag(name: "First Solo")])))
+        #expect(!filter.matches(makeDelivery(tags: [])))
+    }
+
     @Test("Tag filter matches when delivery has any selected tag")
     func tagFilter() {
         let tagA = DeliveryTag(name: "Night Shift")

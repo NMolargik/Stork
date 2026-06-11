@@ -19,13 +19,11 @@ private var secondaryGroupedBackground: Color {
 struct DeliveryDetailView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.horizontalSizeClass) private var hSizeClass
 
     @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates: Bool = false
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
 
     var delivery: Delivery
-    var onClose: (() -> Void)?
 
     @State private var showDeleteConfirm = false
     @State private var showDeleteError = false
@@ -45,6 +43,8 @@ struct DeliveryDetailView: View {
             VStack(spacing: 0) {
                 heroHeader
                 contentSection
+                    .frame(maxWidth: 700)
+                    .frame(maxWidth: .infinity)
             }
         }
         #if os(watchOS)
@@ -57,7 +57,7 @@ struct DeliveryDetailView: View {
         .toolbar {
             toolbarContent
         }
-        .alert("Delete this delivery?", isPresented: $showDeleteConfirm) {
+        .confirmationDialog("Delete this delivery?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
             deleteAlert
         } message: {
             Text("This action cannot be undone.")
@@ -123,6 +123,7 @@ struct DeliveryDetailView: View {
 
             // Quick stats pills overlapping the gradient
             quickStatsRow
+                .frame(maxWidth: 700)
                 .padding(.horizontal, 16)
                 .offset(y: -24)
         }
@@ -148,14 +149,7 @@ struct DeliveryDetailView: View {
     }
 
     private var deliveryAccentColor: Color {
-        switch delivery.deliveryMethod {
-        case .vaginal:
-            return .storkPink
-        case .cSection:
-            return .storkPurple
-        case .vBac:
-            return .storkBlue
-        }
+        delivery.deliveryMethod.accentColor
     }
 
     @ContentBuilder
@@ -165,7 +159,7 @@ struct DeliveryDetailView: View {
             statPill(
                 icon: "figure.and.child.holdinghands",
                 value: "\(babyCount)",
-                label: babyCount == 1 ? "Baby" : "Babies",
+                label: babyCount == 1 ? String(localized: "Baby") : String(localized: "Babies"),
                 color: .storkBlue
             )
 
@@ -422,36 +416,20 @@ struct DeliveryDetailView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        // Only show custom close button when presented modally (onClose provided)
-        if hSizeClass == .regular, let onClose {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    onClose()
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.left")
-                        Text("Close")
-                    }
-                }
-            }
-        }
-
         ToolbarItem(placement: .topBarTrailing) {
             Button {
                 showEditSheet = true
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
-            .tint(.green)
         }
 
         ToolbarItem(placement: .topBarTrailing) {
-            Button {
+            Button(role: .destructive) {
                 showDeleteConfirm = true
             } label: {
                 Label("Delete", systemImage: "trash")
             }
-            .tint(.red)
         }
     }
 
@@ -460,11 +438,7 @@ struct DeliveryDetailView: View {
     @ContentBuilder
     private var deleteAlert: some View {
         Button("Delete", role: .destructive) {
-            if let onClose {
-                onClose()
-            } else {
-                dismiss()
-            }
+            dismiss()
             deliveryManager.delete(delivery)
         }
         Button("Cancel", role: .cancel) { }
@@ -477,7 +451,7 @@ private extension DeliveryMethod {
     var icon: String {
         switch self {
         case .vaginal:
-            return "square.and.arrow.up"
+            return "hands.and.sparkles.fill"
         case .cSection:
             return "scissors"
         case .vBac:

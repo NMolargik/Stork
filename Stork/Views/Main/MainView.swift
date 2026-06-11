@@ -7,9 +7,10 @@ import SwiftUI
 import SwiftData
 import UIKit
 
+/// One adaptive navigation model for every platform: tab bar on iPhone,
+/// switchable tab bar / sidebar on iPad and Mac, sidebar on visionOS —
+/// per the Liquid Glass era HIG, instead of a forked NavigationSplitView.
 struct MainView: View {
-    @Environment(\.horizontalSizeClass) private var hSizeClass
-
     @Environment(DeliveryManager.self) private var deliveryManager
     @Environment(ExportManager.self) private var exportManager
     #if !os(visionOS)
@@ -27,27 +28,21 @@ struct MainView: View {
 
     var body: some View {
         ZStack {
-            Group {
-                if isRegularWidth {
-                    regularWidthView
-                } else {
-                    compactWidthView
+            adaptiveTabs
+                .onAppear {
+                    // One-time notice for users who had data before hospital
+                    // tracking was removed for HIPAA reasons.
+                    if isOnboardingComplete && !hasSeenHospitalRemovalNotice {
+                        showHospitalRemovalAlert = true
+                    }
                 }
-            }
-            .onAppear {
-                // One-time notice for users who had data before hospital
-                // tracking was removed for HIPAA reasons.
-                if isOnboardingComplete && !hasSeenHospitalRemovalNotice {
-                    showHospitalRemovalAlert = true
+                .alert("Hospitals Removed", isPresented: $showHospitalRemovalAlert) {
+                    Button("Got It", role: .cancel) {
+                        hasSeenHospitalRemovalNotice = true
+                    }
+                } message: {
+                    Text("To better protect your privacy, Stork no longer stores hospital information. Correlating delivery dates with specific facilities posed a small but real re-identification risk under HIPAA. Your delivery records remain intact—only the hospital field has been removed.")
                 }
-            }
-            .alert("Hospitals Removed", isPresented: $showHospitalRemovalAlert) {
-                Button("Got It", role: .cancel) {
-                    hasSeenHospitalRemovalNotice = true
-                }
-            } message: {
-                Text("To better protect your privacy, Stork no longer stores hospital information. Correlating delivery dates with specific facilities posed a small but real re-identification risk under HIPAA. Your delivery records remain intact—only the hospital field has been removed.")
-            }
 
             if let milestone = deliveryManager.pendingMilestoneCelebration {
                 MilestoneCelebrationView(
@@ -78,9 +73,16 @@ struct MainView: View {
         }
         #if !os(visionOS)
         .sheet(isPresented: $viewModel.showingStepTrendSheet) {
+            // Read-only sheet — keep the standard swipe-to-dismiss (HIG).
             StepTrendSheet()
-                .interactiveDismissDisabled()
                 .presentationDetents([.medium])
+        }
+        .task {
+            guard healthManager.isStepTrackingSupported else { return }
+            await healthManager.requestAuthorization()
+            if healthManager.isAuthorized {
+                healthManager.startObservingStepCount()
+            }
         }
         #endif
         .onChange(of: pendingDeepLink) { _, newLink in
@@ -98,81 +100,9 @@ struct MainView: View {
         }
     }
 
-    // MARK: - Regular width (iPad / visionOS)
+    // MARK: - Adaptive tabs
 
-    private var regularWidthView: some View {
-        NavigationSplitView {
-            NavigationStack {
-                DeliveryListView(showingEntrySheet: $viewModel.showingEntrySheet)
-                    .navigationTitle("Deliveries")
-                    .toolbar {
-                        ToolbarItem(placement: .confirmationAction) {
-                            AddDeliveryToolbarButton { viewModel.handleAddTapped() }
-                        }
-                    }
-            }
-        } detail: {
-            NavigationStack(path: $viewModel.listPath) {
-                DashboardView(showingEntrySheet: $viewModel.showingEntrySheet, showingReorderSheet: $viewModel.showingReorderSheet)
-                    .minimizeToolbarOnScrollIfAvailable()
-                    .navigationTitle("Stork")
-                    .toolbar { dashboardToolbar(showsSettingsButton: true) }
-                    .navigationDestination(for: UUID.self) { deliveryId in
-                        DeliveryDestinationView(deliveryId: deliveryId)
-                    }
-            }
-        }
-        .sheet(isPresented: $viewModel.showingSettingsSheet) {
-            NavigationStack {
-                SettingsView()
-                    .interactiveDismissDisabled()
-                    .presentationDetents([.large])
-                    .navigationTitle("Settings")
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button("Close") {
-                                viewModel.showingSettingsSheet = false
-                            }
-                            .keyboardShortcut(.escape, modifiers: [])
-                            .hoverEffect(.highlight)
-                        }
-                    }
-            }
-        }
-        .sheet(isPresented: $viewModel.showingCalendarSheet) {
-            NavigationStack {
-                DeliveryCalendarView(
-                    onDeliverySelected: { deliveryId in
-                        viewModel.navigateFromCalendar(to: deliveryId)
-                    }
-                )
-                .interactiveDismissDisabled()
-                .presentationDetents([.large])
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Close") {
-                            viewModel.showingCalendarSheet = false
-                        }
-                        .keyboardShortcut(.escape, modifiers: [])
-                        .hoverEffect(.highlight)
-                    }
-                }
-            }
-        }
-        #if !os(visionOS)
-        .task {
-            guard healthManager.isStepTrackingSupported else { return }
-            await healthManager.requestAuthorization()
-            if healthManager.isAuthorized {
-                healthManager.startObservingStepCount()
-            }
-        }
-        #endif
-    }
-
-    // MARK: - Compact width (iPhone)
-
-    private var compactWidthView: some View {
+    private var adaptiveTabs: some View {
         TabView(selection: $viewModel.appTab) {
             Tab(String(localized: AppTab.dashboard.localizedTitle), systemImage: AppTab.dashboard.systemImage, value: .dashboard) {
                 NavigationStack {
@@ -182,7 +112,7 @@ struct MainView: View {
                     )
                     .minimizeToolbarOnScrollIfAvailable()
                     .navigationTitle("Stork")
-                    .toolbar { dashboardToolbar(showsSettingsButton: false) }
+                    .toolbar { dashboardToolbar }
                 }
             }
 
@@ -223,7 +153,11 @@ struct MainView: View {
                 }
             }
         }
-        .tint(viewModel.appTab.color())
+        .tabViewStyle(.sidebarAdaptable)
+        // No per-tab tint: an explicit ancestor tint cascades into toolbar
+        // buttons and even overrides the destructive red on swipe actions.
+        // The app-wide AccentColor is the single accent; roles supply
+        // semantic colors (HIG).
         .tabViewBottomAccessoryIfAvailable {
             HStack(spacing: 12) {
                 #if !os(visionOS)
@@ -239,10 +173,10 @@ struct MainView: View {
         }
     }
 
-    // MARK: - Toolbars
+    // MARK: - Dashboard toolbar
 
     @ToolbarContentBuilder
-    private func dashboardToolbar(showsSettingsButton: Bool) -> some ToolbarContent {
+    private var dashboardToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
                 viewModel.showingReorderSheet = true
@@ -256,87 +190,20 @@ struct MainView: View {
         }
 
         #if !os(visionOS)
-        stepToolbarItem
-
-        ToolbarSpacer(.flexible, placement: .topBarTrailing)
+        ToolbarSpacer(.fixed, placement: .topBarTrailing)
         #endif
 
-        if showsSettingsButton {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    viewModel.showingCalendarSheet = true
-                } label: {
-                    Image(systemName: "calendar")
-                }
-                .accessibilityLabel("Calendar")
-                .tint(.storkPink)
-                .keyboardShortcut("k", modifiers: .command)
-                .hoverEffect(.highlight)
-            }
-
-            #if !os(visionOS)
-            ToolbarSpacer(.flexible, placement: .topBarTrailing)
-            #endif
-
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    viewModel.showingSettingsSheet = true
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                }
-                .accessibilityLabel("Settings")
-                .tint(.storkOrange)
-                .keyboardShortcut(",", modifiers: .command)
-                .hoverEffect(.highlight)
-            }
-        } else {
-            ToolbarItem(placement: .confirmationAction) {
-                AddDeliveryToolbarButton(action: { viewModel.handleAddTapped() }, showsTip: true)
-            }
+        ToolbarItem(placement: .confirmationAction) {
+            AddDeliveryToolbarButton(action: { viewModel.handleAddTapped() }, showsTip: true)
         }
     }
-
-    #if !os(visionOS)
-    /// The step pill lives in the bottom accessory on iPhone; only regular
-    /// width needs a toolbar entry — and only where a pedometer exists
-    /// (hidden for "Designed for iPad" on Mac / Apple Vision Pro).
-    @ToolbarContentBuilder
-    private var stepToolbarItem: some ToolbarContent {
-        if isRegularWidth && healthManager.isStepTrackingSupported {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    Haptics.lightImpact()
-                    if !healthManager.isAuthorized {
-                        Task {
-                            await healthManager.requestAuthorization()
-                            if healthManager.isAuthorized {
-                                healthManager.startObservingStepCount()
-                            }
-                        }
-                    }
-                    viewModel.showingStepTrendSheet = true
-                } label: {
-                    Label(
-                        healthManager.isAuthorized ? "\(healthManager.todayStepCount)" : "Steps",
-                        systemImage: "figure.walk"
-                    )
-                }
-                .tint(.storkPurple)
-            }
-        }
-    }
-    #endif
 
     // MARK: - Helpers
-
-    private var isRegularWidth: Bool {
-        hSizeClass == .regular
-    }
 
     private func handleDeepLink(_ link: DeepLink?) {
         guard let link else { return }
         defer { pendingDeepLink = nil }
-        viewModel.handle(deepLink: link, isRegularWidth: isRegularWidth)
+        viewModel.handle(deepLink: link)
     }
 
     private func shareMilestone(_ milestone: MilestoneCelebration) {
@@ -370,6 +237,7 @@ struct IdentifiableImage: Identifiable {
         .environment(LocationManager())
         .environment(ExportManager())
         .environment(CloudSyncManager())
+        .environment(ToastManager())
         #if !os(visionOS)
         .environment(HealthManager())
         #endif

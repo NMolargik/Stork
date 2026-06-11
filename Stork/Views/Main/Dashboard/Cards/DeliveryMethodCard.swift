@@ -24,18 +24,18 @@ struct DeliveryMethodCard: View {
 
                     // Animated stacked percentage bar
                     AnimatedProgressBar(segments: [
-                        .init(value: v, color: .storkBlue),
-                        .init(value: c, color: .storkOrange),
-                        .init(value: vb, color: .storkPurple)
+                        .init(value: v, color: DeliveryMethod.vaginal.accentColor),
+                        .init(value: c, color: DeliveryMethod.cSection.accentColor),
+                        .init(value: vb, color: DeliveryMethod.vBac.accentColor)
                     ])
                     .accessibilityHidden(true)
 
                     // Legend with animated percentages
                     VStack(alignment: .leading, spacing: 6) {
                         HStack(spacing: 8) {
-                            methodPill(label: "Vaginal", value: v, color: .storkBlue)
-                            methodPill(label: "C-Section", value: c, color: .storkOrange)
-                            methodPill(label: "VBAC", value: vb, color: .storkPurple)
+                            methodPill(label: "Vaginal", value: v, color: DeliveryMethod.vaginal.accentColor)
+                            methodPill(label: "C-Section", value: c, color: DeliveryMethod.cSection.accentColor)
+                            methodPill(label: "VBAC", value: vb, color: DeliveryMethod.vBac.accentColor)
                         }
                         .font(.caption)
                     }

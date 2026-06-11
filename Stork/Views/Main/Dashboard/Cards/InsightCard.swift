@@ -36,24 +36,23 @@ struct InsightCard<Content: View>: View {
             }
             content
         }
-        .padding(14)
+        .padding(16)
         .background(
             ZStack {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(.ultraThinMaterial)
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(
                         LinearGradient(colors: [accent.opacity(0.14), .clear], startPoint: .topLeading, endPoint: .bottomTrailing)
                     )
             }
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(.white.opacity(0.08))
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(.quaternary)
         )
         .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
-        .clipped()
-        .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .hoverEffect(.lift)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(title) statistics")

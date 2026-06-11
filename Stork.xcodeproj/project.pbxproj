@@ -158,8 +158,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				EBB9C1CD2E8A1D5600013BF6 /* Exceptions for "Stork" folder in "Stork" target */,
-				EB2E2E482EB924DF00D0149A /* Exceptions for "Stork" folder in "StorkWidgetsExtension" target */,
 				EB38FE362F1C33E10050EAC4 /* Exceptions for "Stork" folder in "StorkWatch Watch App" target */,
+				EB2E2E482EB924DF00D0149A /* Exceptions for "Stork" folder in "StorkWidgetsExtension" target */,
 			);
 			path = Stork;
 			sourceTree = "<group>";
@@ -468,7 +468,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2620;
-				LastUpgradeCheck = 2620;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					EB020D3B2E89FDD000D9C239 = {
 						CreatedOnToolsVersion = 26.0;
@@ -517,10 +517,10 @@
 			projectRoot = "";
 			targets = (
 				EB020D3B2E89FDD000D9C239 /* Stork */,
+				EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */,
 				EB2E2E2F2EB9244A00D0149A /* StorkWidgetsExtension */,
 				EB6B0FE92F1BF58700601421 /* StorkTests */,
 				EB6B0FF62F1BF59600601421 /* StorkUITests */,
-				EB38FDEC2F1C2CEC0050EAC4 /* StorkWatch Watch App */,
 				EB38FDF82F1C2CED0050EAC4 /* StorkWatch Watch AppTests */,
 				EB38FE022F1C2CED0050EAC4 /* StorkWatch Watch AppUITests */,
 			);
@@ -671,6 +671,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -736,6 +737,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

@@ -1,20 +1,11 @@
 import SwiftUI
 
 struct DeliveryRowView: View {
-    @Environment(\.horizontalSizeClass) private var hSizeClass
     @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates: Bool = false
-    
+
     var delivery: Delivery
     @State private var viewModel: ViewModel
-    @State private var isHovered: Bool = false
-    
-    private var isRegularWidth: Bool {
-        #if os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad { return true }
-        #endif
-        return hSizeClass == .regular
-    }
-    
+
     init(delivery: Delivery) {
         self.delivery = delivery
         self._viewModel = State(wrappedValue: ViewModel(delivery: delivery))
@@ -113,11 +104,6 @@ struct DeliveryRowView: View {
                 )
         )
         .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isHovered = hovering
-            }
-        }
         .onChange(of: delivery.babyCount) { _, _ in
             self.viewModel = ViewModel(delivery: delivery)
         }

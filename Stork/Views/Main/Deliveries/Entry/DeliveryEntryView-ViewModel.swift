@@ -175,7 +175,6 @@ extension DeliveryEntryView {
                         Button("Cancel") {
                             dismiss()
                         }
-                        .foregroundStyle(.storkOrange)
                         .accessibilityLabel("Cancel")
                         .accessibilityHint("Discards changes and closes the form")
                     }

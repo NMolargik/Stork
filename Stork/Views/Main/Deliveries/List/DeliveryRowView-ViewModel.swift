@@ -185,9 +185,9 @@ extension DeliveryRowView {
             var parts: [String] = []
             parts.append("Delivered on \(delivery.date.formatted(date: .abbreviated, time: .shortened))")
             if maleCount + femaleCount + lossCount > 0 {
-                if maleCount > 0 { parts.append("\(maleCount) boy\(maleCount == 1 ? "" : "s")") }
-                if femaleCount > 0 { parts.append("\(femaleCount) girl\(femaleCount == 1 ? "" : "s")") }
-                if lossCount > 0 { parts.append("\(lossCount) loss\(lossCount == 1 ? "" : "es")") }
+                if maleCount > 0 { parts.append(String(localized: "^[\(maleCount) boy](inflect: true)")) }
+                if femaleCount > 0 { parts.append(String(localized: "^[\(femaleCount) girl](inflect: true)")) }
+                if lossCount > 0 { parts.append(String(localized: "^[\(lossCount) loss](inflect: true)")) }
             }
             return parts.joined(separator: ", ")
         }

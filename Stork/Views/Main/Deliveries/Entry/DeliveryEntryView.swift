@@ -96,54 +96,31 @@ struct DeliveryEntryView: View {
     @ContentBuilder
     private var babiesSection: some View {
         Section {
-            babiesSectionContent
-        } header: {
-            Text("Babies")
-        }
-    }
-
-    @ContentBuilder
-    private var babiesSectionContent: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Babies")
-                    .font(.headline)
-                Spacer()
-                Button {
-                    editingBaby = nil
-                    viewModel.showingBabySheet = true
-                } label: {
-                    Label("Add", systemImage: "plus")
-                        .labelStyle(.titleOnly)
-                }
-                .buttonStyle(.bordered)
-                .tint(.storkBlue)
-                .hoverEffect(.highlight)
-                .accessibilityLabel("Add baby")
-                .accessibilityHint("Opens form to add a new baby to this delivery")
-            }
-
             babiesList
 
+            Button {
+                editingBaby = nil
+                viewModel.showingBabySheet = true
+            } label: {
+                Label("Add Baby", systemImage: "plus")
+            }
+            .tint(.storkBlue)
+            .hoverEffect(.highlight)
+            .accessibilityHint("Opens form to add a new baby to this delivery")
+        } header: {
+            Text("Babies")
+        } footer: {
             if viewModel.babies.isEmpty {
                 Text("At least one baby is required.")
-                    .font(.footnote)
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
             }
         }
-        .padding(.vertical, 4)
     }
 
     @ContentBuilder
     private var babiesList: some View {
-        if viewModel.babies.isEmpty {
-            Text("No babies added yet.")
-                .foregroundColor(.secondary)
-                .padding(.vertical, 8)
-        } else {
-            ForEach(viewModel.babies) { baby in
-                babyRow(baby)
-            }
+        ForEach(viewModel.babies) { baby in
+            babyRow(baby)
         }
     }
 
@@ -163,49 +140,12 @@ struct DeliveryEntryView: View {
             }
         )
         .padding(.vertical, 4)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(.systemBackground))
-                .shadow(radius: 2)
-        )
     }
 
     @ContentBuilder
     private var tagsSection: some View {
         Section {
-            tagsSectionContent
-        } header: {
-            Text("Tags")
-        } footer: {
-            Text("Examples: \"Teaching Moment\", \"First Solo\", \"Night Shift\". Do not include patient information.")
-        }
-    }
-
-    @ContentBuilder
-    private var tagsSectionContent: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Tags")
-                    .font(.headline)
-                Spacer()
-                Button {
-                    viewModel.showingTagSheet = true
-                } label: {
-                    Label("Add", systemImage: "plus")
-                        .labelStyle(.titleOnly)
-                }
-                .buttonStyle(.bordered)
-                .tint(.storkPurple)
-                .hoverEffect(.highlight)
-                .accessibilityLabel("Add tags")
-                .accessibilityHint("Opens picker to add tags to this delivery")
-            }
-
-            if viewModel.selectedTags.isEmpty {
-                Text("No tags added. Tags help you find memorable deliveries later.")
-                    .foregroundColor(.secondary)
-                    .font(.footnote)
-            } else {
+            if !viewModel.selectedTags.isEmpty {
                 FlowLayout(spacing: 8) {
                     ForEach(viewModel.selectedTags) { tag in
                         TagChipView(tag: tag) {
@@ -215,9 +155,22 @@ struct DeliveryEntryView: View {
                         }
                     }
                 }
+                .padding(.vertical, 4)
             }
+
+            Button {
+                viewModel.showingTagSheet = true
+            } label: {
+                Label("Add Tags", systemImage: "tag")
+            }
+            .tint(.storkPurple)
+            .hoverEffect(.highlight)
+            .accessibilityHint("Opens picker to add tags to this delivery")
+        } header: {
+            Text("Tags")
+        } footer: {
+            Text("Examples: \"Teaching Moment\", \"First Solo\", \"Night Shift\". Do not include patient information.")
         }
-        .padding(.vertical, 4)
     }
 
     @ContentBuilder
@@ -243,10 +196,10 @@ struct DeliveryEntryView: View {
                 notesSection
             }
             .navigationTitle(existingDelivery == nil ? "New Delivery" : "Edit Delivery")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .foregroundStyle(.storkOrange)
                         .accessibilityLabel("Cancel")
                         .accessibilityHint("Discards changes and closes the form")
                         .keyboardShortcut(.escape, modifiers: [])

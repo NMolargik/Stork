@@ -94,7 +94,6 @@ struct StepTrendSheet: View {
                     } label: {
                         Image(systemName: "xmark")
                     }
-                    .foregroundStyle(.storkPurple)
                     .keyboardShortcut(.escape, modifiers: [])
                     .hoverEffect(.highlight)
                     .accessibilityLabel("Close")

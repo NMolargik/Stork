@@ -55,7 +55,6 @@ struct JarHistoryView: View {
                     } label: {
                         Image(systemName: "xmark")
                     }
-                    .foregroundStyle(.storkOrange)
                     .keyboardShortcut(.escape, modifiers: [])
                     .hoverEffect(.highlight)
                     .accessibilityLabel("Close jar history")

@@ -96,12 +96,11 @@ struct OnboardingCompletePage: View {
                         .accessibilityHidden(true)
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 54)
-                .background(Color.storkPurple)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .frame(height: 42)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.glassProminent)
+            .controlSize(.large)
+            .tint(.storkPurple)
             .frame(maxWidth: 500)
             .padding(.horizontal, 20)
             .padding(.bottom, 40)

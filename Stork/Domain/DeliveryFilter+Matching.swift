@@ -29,7 +29,8 @@ extension DeliveryFilter {
             let needle = searchText.lowercased()
             let matchesMethod = delivery.deliveryMethod.rawValue.lowercased().contains(needle)
             let matchesNotes = delivery.notes?.lowercased().contains(needle) ?? false
-            guard matchesMethod || matchesNotes else { return false }
+            let matchesTags = (delivery.tags ?? []).contains { $0.name.lowercased().contains(needle) }
+            guard matchesMethod || matchesNotes || matchesTags else { return false }
         }
 
         // Tag filtering: a delivery matches if it has ANY of the selected tags.

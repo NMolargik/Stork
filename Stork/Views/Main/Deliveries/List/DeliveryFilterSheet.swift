@@ -65,9 +65,9 @@ struct DeliveryFilterSheet: View {
 
     private var babyCountDisplayText: String {
         if let count = tempFilter.babyCount, count > 0 {
-            return "\(count) \(count == 1 ? "baby" : "babies")"
+            return String(localized: "^[\(count) baby](inflect: true)")
         } else {
-            return "Any number of babies"
+            return String(localized: "Any number of babies")
         }
     }
 
@@ -116,7 +116,7 @@ struct DeliveryFilterSheet: View {
     private var deliveryMethodSection: some View {
         Section {
             ForEach(DeliveryMethod.allCases, id: \.self) { method in
-                Toggle(method.rawValue.capitalized, isOn: deliveryMethodBinding(for: method))
+                Toggle(method.displayName, isOn: deliveryMethodBinding(for: method))
             }
         } header: {
             Text("Delivery Method")
@@ -171,7 +171,7 @@ struct DeliveryFilterSheet: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 dateRangeSection
                 babyCountSection
@@ -181,14 +181,29 @@ struct DeliveryFilterSheet: View {
                 notesSection
             }
             .navigationTitle("Filter Deliveries")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .foregroundStyle(.storkOrange)
                         .accessibilityLabel("Cancel")
                         .accessibilityHint("Discards filter changes")
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Reset") {
+                        let searchText = tempFilter.searchText
+                        tempFilter = DeliveryFilter()
+                        tempFilter.searchText = searchText
+                        isDateRangeEnabled = false
+                    }
+                    .disabled({
+                        var withoutSearch = tempFilter
+                        withoutSearch.searchText = ""
+                        return withoutSearch.isEmpty && !isDateRangeEnabled
+                    }())
+                    .accessibilityHint("Clears all filter criteria")
+                    .hoverEffect(.highlight)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Apply", action: applyFilters)

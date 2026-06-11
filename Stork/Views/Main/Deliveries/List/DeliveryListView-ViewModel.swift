@@ -10,11 +10,6 @@ import SwiftUI
 extension DeliveryListView {
     @Observable
     class ViewModel {
-        // Source list used by the UI (shows filtered if present, otherwise all)
-        func source(from manager: DeliveryManager) -> [Delivery] {
-            manager.visibleDeliveries.isEmpty ? manager.deliveries : manager.visibleDeliveries
-        }
-
         // Unique month starts (first of month) in descending order
         func monthStarts(from deliveries: [Delivery]) -> [Date] {
             let cal = Calendar.current

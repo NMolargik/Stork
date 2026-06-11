@@ -24,7 +24,7 @@ struct BabyRowView: View {
                     .accessibilityHidden(true)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(baby.sex.rawValue.capitalized)
+                    Text(baby.sex.displayName)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
@@ -93,7 +93,7 @@ struct BabyRowView: View {
         .scaleEffect(isDeleting ? 0.98 : 1)
         .animation(.easeInOut(duration: 0.18), value: isDeleting)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("\(baby.sex.rawValue.capitalized) baby, \(UnitConversion.weightHeightSummary(weightOunces: baby.weight, heightInches: baby.height, useMetric: useMetricUnits))\(baby.nicuStay ? ", NICU stay" : "")\(baby.nurseCatch ? ", nurse catch" : "")")
+        .accessibilityLabel("\(baby.sex.displayName) baby, \(UnitConversion.weightHeightSummary(weightOunces: baby.weight, heightInches: baby.height, useMetric: useMetricUnits))\(baby.nicuStay ? ", NICU stay" : "")\(baby.nurseCatch ? ", nurse catch" : "")")
     }
 }
 

@@ -36,13 +36,4 @@ enum AppTab: String, CaseIterable, Identifiable {
     func icon() -> Image {
         Image(systemName: systemImage)
     }
-
-    func color() -> Color {
-        switch self {
-        case .dashboard: .storkPurple
-        case .list: .storkBlue
-        case .calendar: .storkPink
-        case .settings: .storkOrange
-        }
-    }
 }

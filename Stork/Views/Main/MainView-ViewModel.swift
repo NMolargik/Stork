@@ -11,8 +11,6 @@ extension MainView {
         // MARK: - UI State
         var appTab: AppTab = .dashboard
         var showingEntrySheet: Bool = false
-        var showingSettingsSheet: Bool = false
-        var showingCalendarSheet: Bool = false
         var showingReorderSheet: Bool = false
         var showingStepTrendSheet: Bool = false
         var listPath = NavigationPath()
@@ -24,7 +22,7 @@ extension MainView {
             showingEntrySheet = true
         }
 
-        func handle(deepLink: DeepLink, isRegularWidth: Bool) {
+        func handle(deepLink: DeepLink) {
             switch deepLink {
             case .newDelivery:
                 showingEntrySheet = true
@@ -36,28 +34,9 @@ extension MainView {
                 appTab = .list
                 listPath.append(id)
             case .calendar:
-                if isRegularWidth {
-                    showingCalendarSheet = true
-                } else {
-                    appTab = .calendar
-                }
+                appTab = .calendar
             case .settings:
-                if isRegularWidth {
-                    showingSettingsSheet = true
-                } else {
-                    appTab = .settings
-                }
-            }
-        }
-
-        /// Dismisses the calendar sheet, then pushes the selected delivery
-        /// once the dismissal animation has finished.
-        func navigateFromCalendar(to deliveryId: UUID) {
-            showingCalendarSheet = false
-            Task { @MainActor in
-                try? await Task.sleep(for: .seconds(0.3))
-                appTab = .list
-                listPath.append(deliveryId)
+                appTab = .settings
             }
         }
 

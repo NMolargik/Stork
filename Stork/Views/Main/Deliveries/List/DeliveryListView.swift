@@ -8,32 +8,55 @@ struct DeliveryListView: View {
     
     @State private var showingFilterSheet: Bool = false
     @State private var filter: DeliveryFilter = DeliveryFilter()
+    @State private var searchText: String = ""
     @State private var viewModel = ViewModel()
-    
+
     var body: some View {
         Group {
-            if deliveryManager.visibleDeliveries.isEmpty && deliveryManager.deliveries.isEmpty {
+            if deliveryManager.deliveries.isEmpty {
                 ScrollView {
-                    ContentUnavailableView(
-                        "No Deliveries Yet",
-                        systemImage: "list.bullet.rectangle",
-                        description: Text("Your logged deliveries will appear here.")
-                    )
-                    .accessibilityLabel("No deliveries yet. Your logged deliveries will appear here.")
+                    ContentUnavailableView {
+                        Label("No Deliveries Yet", systemImage: "list.bullet.rectangle")
+                    } description: {
+                        Text("Your logged deliveries will appear here.")
+                    } actions: {
+                        Button {
+                            showingEntrySheet = true
+                        } label: {
+                            Label("Log a Delivery", systemImage: "plus")
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
                 }
                 .refreshable {
                     await deliveryManager.refresh()
                 }
+            } else if deliveryManager.visibleDeliveries.isEmpty {
+                // A filter or search is active and nothing matches — never
+                // fall back to showing everything.
+                if searchText.isEmpty {
+                    ContentUnavailableView {
+                        Label("No Matches", systemImage: "line.3.horizontal.decrease.circle")
+                    } description: {
+                        Text("No deliveries match the current filters.")
+                    } actions: {
+                        Button("Clear Filters") {
+                            clearFilters()
+                        }
+                    }
+                } else {
+                    ContentUnavailableView.search(text: searchText)
+                }
             } else {
-                let source = viewModel.source(from: deliveryManager)
+                let source = deliveryManager.visibleDeliveries
                 let months = viewModel.monthStarts(from: source)
-                
+
                 List {
                     ForEach(months, id: \.self) { monthStart in
                         let monthDeliveries = viewModel.deliveries(in: monthStart, from: source)
-                        
+
                         if !monthDeliveries.isEmpty {
-                            Section(header: Text(WeekMath.monthHeaderTitle(for: monthStart)).bold().font(.title)) {
+                            Section(header: Text(WeekMath.monthHeaderTitle(for: monthStart)).font(.title2.bold())) {
                                 ForEach(monthDeliveries) { delivery in
                                     NavigationLink(value: delivery) {
                                         DeliveryRowView(delivery: delivery)
@@ -51,7 +74,6 @@ struct DeliveryListView: View {
                                             Task { deliveryManager.delete(delivery) }
                                         } label: {
                                             Label("Delete", systemImage: "trash")
-                                                .tint(.red)
                                         }
                                         .accessibilityLabel("Delete delivery")
                                         .accessibilityHint("Permanently removes this delivery")
@@ -65,10 +87,17 @@ struct DeliveryListView: View {
                     }
                 }
                 .listStyle(.plain) // Ensure consistent list behavior
+                .frame(maxWidth: 760)
+                .frame(maxWidth: .infinity)
                 .refreshable {
                     await deliveryManager.refresh()
                 }
             }
+        }
+        .searchable(text: $searchText, prompt: Text("Search notes, tags, and methods"))
+        .onChange(of: searchText) { _, newValue in
+            filter.searchText = newValue
+            deliveryManager.applyFilter(filter)
         }
         .navigationDestination(for: Delivery.self) { delivery in
             DeliveryDetailView(delivery: delivery)
@@ -78,9 +107,11 @@ struct DeliveryListView: View {
                 Button(action: {
                     showingFilterSheet = true
                 }) {
-                    Image(systemName: "line.3.horizontal.decrease.circle")
+                    Image(systemName: hasActiveFilters
+                          ? "line.3.horizontal.decrease.circle.fill"
+                          : "line.3.horizontal.decrease.circle")
+                        .contentTransition(.symbolEffect(.replace))
                 }
-                .tint(.green)
                 .accessibilityLabel("Filter deliveries")
                 .accessibilityHint("Opens filter options for the delivery list")
                 .keyboardShortcut("f", modifiers: .command)
@@ -93,6 +124,19 @@ struct DeliveryListView: View {
                     deliveryManager.applyFilter(filter)
                 }
         }
+    }
+
+    /// Whether any criteria beyond the search field are active.
+    private var hasActiveFilters: Bool {
+        var withoutSearch = filter
+        withoutSearch.searchText = ""
+        return !withoutSearch.isEmpty
+    }
+
+    private func clearFilters() {
+        filter = DeliveryFilter()
+        filter.searchText = searchText
+        deliveryManager.applyFilter(filter)
     }
 }
 
