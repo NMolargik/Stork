@@ -69,8 +69,9 @@ extension OnboardingView {
                     isRequestingPermission = false
                     // Stay on page - user will see updated UI and tap Continue again
                 } else {
-                    // Already determined (authorized or denied), move forward
-                    currentStep = .health
+                    // Already determined (authorized or denied), move forward.
+                    // Skip the Health page where step tracking can't work.
+                    currentStep = healthManager.isStepTrackingSupported ? .health : .complete
                 }
 
             case .health:

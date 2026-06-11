@@ -54,7 +54,7 @@ final class Baby {
         )
     }
 
-    static let sample: Baby = {
+    @MainActor static let sample: Baby = {
         let baby = Baby(
             id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
             birthday: Calendar.current.date(from: DateComponents(year: 2024, month: 9, day: 28, hour: 14, minute: 32)) ?? .now,

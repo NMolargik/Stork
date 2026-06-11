@@ -223,7 +223,7 @@ struct CardThumbnail: View {
 #Preview {
     NavigationStack {
         ShareCardView()
-            .environment(DeliveryManager(context: PreviewContainer.shared.mainContext))
+            .environment(DeliveryManager(container: PreviewContainer.shared))
             .environment(ExportManager())
     }
 }

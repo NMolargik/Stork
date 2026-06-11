@@ -151,7 +151,7 @@ struct PDFReportOptionsView: View {
 
 #Preview {
     PDFReportOptionsView()
-        .environment(DeliveryManager(context: PreviewContainer.shared.mainContext))
+        .environment(DeliveryManager(container: PreviewContainer.shared))
         .environment(ExportManager())
 }
 

@@ -2,16 +2,29 @@
 //  StorkApp.swift
 //  Stork
 //
-//  Created by Nick Molargik on 9/28/25.
-//
 
 import SwiftUI
 import SwiftData
 import TipKit
+import AppIntents
 
+/// Composition root: builds the model container and every manager, then
+/// injects them into the environment. Views never construct managers.
 @main
 struct StorkApp: App {
     private let sharedModelContainer: ModelContainer
+
+    @State private var deliveryManager: DeliveryManager
+    @State private var cloudSyncManager: CloudSyncManager
+    @State private var locationManager: LocationManager
+    @State private var weatherManager: WeatherManager
+    @State private var exportManager: ExportManager
+    @State private var toastManager: ToastManager
+    #if !os(visionOS)
+    @State private var healthManager: HealthManager
+    #endif
+
+    @State private var pendingDeepLink: DeepLink?
 
     init() {
         let cloudKitContainerID = "iCloud.com.molargiksoftware.Stork"
@@ -20,7 +33,6 @@ struct StorkApp: App {
             let config = ModelConfiguration(
                 cloudKitDatabase: .private(cloudKitContainerID)
             )
-
             sharedModelContainer = try ModelContainer(
                 for: Delivery.self, Baby.self, DeliveryTag.self,
                 configurations: config
@@ -29,40 +41,56 @@ struct StorkApp: App {
             fatalError("[Stork] Failed to initialize ModelContainer: \(error)")
         }
 
-        // Configure TipKit
+        let location = LocationManager()
+        locationManager = location
+        weatherManager = WeatherManager(locationProvider: location)
+
+        let deliveries = DeliveryManager(container: sharedModelContainer)
+        deliveryManager = deliveries
+
+        // Sync runs in the background: refresh the in-memory cache whenever
+        // CloudKit delivers remote changes (no blocking sync screen).
+        let cloudSync = CloudSyncManager()
+        cloudSync.configure(with: sharedModelContainer.mainContext)
+        cloudSync.onRemoteChange = {
+            Task { await deliveries.refresh() }
+        }
+        cloudSyncManager = cloudSync
+
+        exportManager = ExportManager()
+        toastManager = ToastManager()
+
+        // Expose the delivery manager to App Intents (@Dependency) so Siri
+        // and Shortcuts can log deliveries and read stats.
+        AppDependencyManager.shared.add(dependency: deliveries)
+        #if !os(visionOS)
+        healthManager = HealthManager()
+        #endif
+
         try? Tips.configure([
             .displayFrequency(.immediate)
         ])
     }
 
-    @State private var pendingDeepLink: DeepLink?
-
     var body: some Scene {
         WindowGroup {
             ContentView(pendingDeepLink: $pendingDeepLink)
+                .toastContainer()
                 .modelContainer(sharedModelContainer)
+                .environment(deliveryManager)
+                .environment(cloudSyncManager)
+                .environment(locationManager)
+                .environment(weatherManager)
+                .environment(exportManager)
+                .environment(toastManager)
+                #if !os(visionOS)
+                .environment(healthManager)
+                #endif
                 .onOpenURL { url in
-                    handleDeepLink(url)
+                    if let link = DeepLink(url: url) {
+                        pendingDeepLink = link
+                    }
                 }
-        }
-    }
-
-    private func handleDeepLink(_ url: URL) {
-        guard url.scheme == "stork" else { return }
-
-        switch url.host {
-        case "new-delivery":
-            pendingDeepLink = .newDelivery
-        case "dashboard":
-            pendingDeepLink = .dashboard
-        case "deliveries":
-            if url.pathComponents.contains("week") {
-                pendingDeepLink = .weeklyDeliveries
-            } else {
-                pendingDeepLink = .deliveries
-            }
-        default:
-            break
         }
     }
 }

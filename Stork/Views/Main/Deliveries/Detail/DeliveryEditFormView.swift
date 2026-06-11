@@ -4,7 +4,6 @@ import SwiftData
 struct DeliveryEditFormView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
 
     @Bindable var delivery: Delivery
@@ -40,56 +39,51 @@ struct DeliveryEditFormView: View {
     // MARK: - Actions
 
     private func deleteBabies(_ indexSet: IndexSet) {
-        var current = delivery.babies ?? []
-        for index in indexSet.sorted(by: >) {
-            if index >= 0 && index < current.count {
-                let baby = current[index]
-                baby.delivery = nil
+        deliveryManager.update(delivery) { delivery in
+            var current = delivery.babies ?? []
+            for index in indexSet.sorted(by: >) where current.indices.contains(index) {
+                current[index].delivery = nil
                 current.remove(at: index)
             }
+            delivery.babies = current
+            delivery.babyCount = current.count
         }
-        delivery.babies = current
-        delivery.babyCount = current.count
-        do { try modelContext.save() } catch { print("Save failed: \(error)") }
-        Task { await deliveryManager.refresh() }
     }
 
     private func saveDelivery() {
-        for baby in delivery.babies ?? [] { baby.delivery = delivery }
-        delivery.babyCount = delivery.babies?.count ?? 0
-        delivery.notes = editedNotes.isEmpty ? nil : editedNotes
-        delivery.tags = editedTags
-        do { try modelContext.save() } catch { print("Save failed: \(error)") }
-        Task { await deliveryManager.refresh() }
+        deliveryManager.update(delivery) { delivery in
+            delivery.babyCount = delivery.babies?.count ?? 0
+            delivery.notes = editedNotes.isEmpty ? nil : editedNotes
+            delivery.tags = editedTags
+        }
         dismiss()
     }
 
     private func handleBabySave(_ updated: BabyDraft) {
-        var list = delivery.babies ?? []
-        if let existing = editingBaby, let idx = list.firstIndex(where: { $0.id == existing.id }) {
-            list[idx].sex = updated.sex
-            list[idx].weight = updated.weight
-            list[idx].height = updated.height
-            list[idx].nicuStay = updated.nicuStay
-            list[idx].nurseCatch = updated.nurseCatch
-            list[idx].birthday = updated.birthday
-        } else {
-            let new = Baby(
-                birthday: updated.birthday,
-                height: updated.height,
-                weight: updated.weight,
-                nurseCatch: updated.nurseCatch,
-                nicuStay: updated.nicuStay,
-                sex: updated.sex,
-                delivery: delivery
-            )
-            list.append(new)
+        deliveryManager.update(delivery) { delivery in
+            var list = delivery.babies ?? []
+            if let existing = editingBaby, let idx = list.firstIndex(where: { $0.id == existing.id }) {
+                list[idx].sex = updated.sex
+                list[idx].weight = updated.weight
+                list[idx].height = updated.height
+                list[idx].nicuStay = updated.nicuStay
+                list[idx].nurseCatch = updated.nurseCatch
+                list[idx].birthday = updated.birthday
+            } else {
+                let new = Baby(
+                    birthday: updated.birthday,
+                    height: updated.height,
+                    weight: updated.weight,
+                    nurseCatch: updated.nurseCatch,
+                    nicuStay: updated.nicuStay,
+                    sex: updated.sex,
+                    delivery: delivery
+                )
+                list.append(new)
+            }
+            delivery.babies = list
+            delivery.babyCount = list.count
         }
-        for b in list { b.delivery = delivery }
-        delivery.babies = list
-        delivery.babyCount = list.count
-        do { try modelContext.save() } catch { print("Save failed: \(error)") }
-        Task { await deliveryManager.refresh() }
     }
 
     private func removeTag(at index: Int) {
@@ -341,8 +335,7 @@ private struct BabyEditSheet: View {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
     let d = Delivery.sample()
     return DeliveryEditFormView(delivery: d)
-        .environment(DeliveryManager(context: context))
+        .environment(DeliveryManager(container: container))
 }

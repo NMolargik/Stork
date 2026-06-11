@@ -477,11 +477,10 @@ private extension DeliveryMethod {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     NavigationStack {
         DeliveryDetailView(delivery: Delivery.sample())
-            .environment(DeliveryManager(context: context))
+            .environment(DeliveryManager(container: container))
     }
 }
 
@@ -491,13 +490,12 @@ private extension DeliveryMethod {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     let delivery = Delivery.sample()
     // The sample already has 3 babies
 
     NavigationStack {
         DeliveryDetailView(delivery: delivery)
-            .environment(DeliveryManager(context: context))
+            .environment(DeliveryManager(container: container))
     }
 }

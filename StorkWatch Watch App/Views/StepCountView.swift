@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StepCountView: View {
-    @Bindable var healthManager: WatchHealthManager
+    let healthManager: HealthManager
 
     var body: some View {
         VStack(spacing: 16) {
@@ -82,5 +82,5 @@ struct StepCountView: View {
 }
 
 #Preview {
-    StepCountView(healthManager: WatchHealthManager())
+    StepCountView(healthManager: HealthManager())
 }

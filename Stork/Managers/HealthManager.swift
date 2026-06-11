@@ -2,26 +2,20 @@
 //  HealthManager.swift
 //  Stork
 //
-//  Created by Nick Molargik on 10/1/25.
-//
 
 #if !os(visionOS)
 import Foundation
-import HealthKit
+import Observation
+import os
 
+/// Observable step-count state for the UI, shared by the iOS app and the
+/// watch app. All HealthKit specifics live behind `StepCountReading`.
 @MainActor
 @Observable
 final class HealthManager {
 
-    // MARK: - HealthKit
-    private let healthStore = HKHealthStore()
-    private let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
+    @ObservationIgnored private let reader: StepCountReading
 
-    // Keep references so we can stop them later
-    private var observerQuery: HKObserverQuery?
-    private var statisticsQuery: HKStatisticsQuery?
-
-    // MARK: - Public state
     private(set) var isAuthorized: Bool = false
     private(set) var hasRequestedAuthorization: Bool = false
     private(set) var lastError: Error?
@@ -29,196 +23,102 @@ final class HealthManager {
     /// Live-updating total steps for the current calendar day (midnight -> now).
     private(set) var todayStepCount: Int = 0
 
-    /// Daily step counts for the last 7 days (oldest first). Each entry is (date, steps).
+    /// Daily step counts for the last 7 days (oldest first).
     private(set) var weeklyStepCounts: [(date: Date, steps: Int)] = []
 
-    // MARK: - Authorization
-    func requestAuthorization() async {
-        defer { self.hasRequestedAuthorization = true }
+    init(reader: StepCountReading = HealthKitStepReader()) {
+        self.reader = reader
+    }
 
-        guard HKHealthStore.isHealthDataAvailable() else {
-            self.isAuthorized = false
-            self.lastError = nil
-            print("[HealthManager] Health data not available on this device.")
+    /// Whether step tracking can ever work in this environment. False when
+    /// the iPad app runs on a Mac or Apple Vision Pro ("Designed for iPad"):
+    /// there is no pedometer there, so all step UI should be hidden.
+    /// (Macs can report HealthKit as available via iPhone-synced data, so
+    /// the explicit app-on-Mac check comes first.)
+    var isStepTrackingSupported: Bool {
+        #if os(iOS)
+        if ProcessInfo.processInfo.isiOSAppOnMac { return false }
+        #endif
+        return reader.isHealthDataAvailable
+    }
+
+    // MARK: - Authorization
+
+    func requestAuthorization() async {
+        defer { hasRequestedAuthorization = true }
+
+        guard reader.isHealthDataAvailable else {
+            isAuthorized = false
+            lastError = nil
+            Log.health.info("Health data not available on this device.")
             return
         }
 
-        let toRead: Set<HKObjectType> = [stepType]
-
         do {
-            try await healthStore.requestAuthorization(toShare: [], read: toRead)
-            #if os(visionOS)
-            // visionOS has no built-in pedometer, so the probe (which checks for
-            // existing step data) falsely reports "no read access" when there's
-            // simply no data source. Assume authorized if the request didn't throw.
-            self.isAuthorized = true
-            #else
-            // Probe read access by attempting a statistics query. On iOS/iPadOS
-            // the built-in pedometer virtually guarantees step samples exist.
-            await probeReadAccessForSteps()
-            #endif
-            self.lastError = nil
+            try await reader.requestReadAuthorization()
+            // HealthKit hides read-permission state; probe by fetching.
+            // A nil count means read access was denied.
+            if let steps = try await reader.todayStepCount() {
+                isAuthorized = true
+                todayStepCount = steps
+            } else {
+                isAuthorized = false
+                todayStepCount = 0
+            }
+            lastError = nil
         } catch {
-            self.isAuthorized = false
-            self.lastError = error
-            print("[HealthManager] Authorization failed: \(error)")
+            isAuthorized = false
+            lastError = error
+            Log.health.error("Authorization failed: \(error.localizedDescription)")
         }
     }
 
-    // MARK: - Observing step count
+    // MARK: - Observing
 
     /// Start listening for step count updates for the current day.
     /// Call after `requestAuthorization()` has succeeded.
     func startObservingStepCount() {
         guard isAuthorized else {
-            print("[HealthManager] startObservingStepCount called without authorization.")
+            Log.health.info("startObservingStepCount called without authorization.")
             return
         }
 
-        // Initial fetch
-        fetchTodayStepCount()
+        refreshTodayStepCount()
 
-        // Observe changes to step samples
-        let observer = HKObserverQuery(sampleType: stepType, predicate: nil) { [weak self] _, _, error in
-            guard let self else { return }
-            if let error {
-                Task { @MainActor in self.lastError = error }
-                print("[HealthManager] Observer error: \(error)")
-                return
-            }
-            // Fetch updated value whenever HealthKit notifies us of changes
+        reader.startObservingStepChanges { [weak self] in
             Task { @MainActor in
-                self.fetchTodayStepCount()
+                self?.refreshTodayStepCount()
             }
         }
-        self.observerQuery = observer
-        healthStore.execute(observer)
     }
 
-    /// Stop listening to step updates.
     func stopObserving() {
-        if let q = observerQuery { healthStore.stop(q) }
-        if let q = statisticsQuery { healthStore.stop(q) }
-        observerQuery = nil
-        statisticsQuery = nil
+        reader.stopObserving()
     }
 
-    // MARK: - Fetch helpers
+    // MARK: - Fetching
 
-    /// Runs a one-shot statistics query to determine if we have read access to step data.
-    /// Updates `isAuthorized` accordingly and, if possible, seeds `todayStepCount`.
-    private func probeReadAccessForSteps() async {
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: [])
-
-        await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
-            let query = HKStatisticsQuery(
-                quantityType: stepType,
-                quantitySamplePredicate: predicate,
-                options: .cumulativeSum
-            ) { [weak self] _, stats, error in
-                guard let self else { cont.resume(); return }
-
-                Task { @MainActor in
-                    if let error {
-                        // Treat errors as not authorized for our purposes
-                        self.lastError = error
-                        self.isAuthorized = false
-                        print("[HealthManager] Probe error: \(error)")
-                    } else if let quantity = stats?.sumQuantity() {
-                        // If we can read a quantity (even if value is 0), we have read access.
-                        self.isAuthorized = true
-                        let value = quantity.doubleValue(for: .count())
-                        self.todayStepCount = Int(value)
-                    } else {
-                        // No quantity returned implies no read access.
-                        self.isAuthorized = false
-                        self.todayStepCount = 0
-                    }
-                    cont.resume()
-                }
-            }
-
-            // Execute without storing; this is a one-shot probe.
-            self.healthStore.execute(query)
-        }
-    }
-
-    /// Fetch daily step totals for the last 7 days and update `weeklyStepCounts`.
     func fetchWeeklyStepCounts() async {
         guard isAuthorized else { return }
-
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfToday = calendar.startOfDay(for: now)
-        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: startOfToday) else { return }
-
-        let predicate = HKQuery.predicateForSamples(withStart: sevenDaysAgo, end: now, options: [])
-
-        await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
-            let query = HKStatisticsCollectionQuery(
-                quantityType: stepType,
-                quantitySamplePredicate: predicate,
-                options: .cumulativeSum,
-                anchorDate: sevenDaysAgo,
-                intervalComponents: DateComponents(day: 1)
-            )
-
-            query.initialResultsHandler = { [weak self] _, results, error in
-                guard let self else { cont.resume(); return }
-
-                Task { @MainActor in
-                    defer { cont.resume() }
-                    if let error {
-                        self.lastError = error
-                        print("[HealthManager] Weekly query error: \(error)")
-                        return
-                    }
-                    guard let results else { return }
-
-                    var daily: [(date: Date, steps: Int)] = []
-                    results.enumerateStatistics(from: sevenDaysAgo, to: now) { stats, _ in
-                        let steps = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
-                        daily.append((date: stats.startDate, steps: Int(steps)))
-                    }
-                    self.weeklyStepCounts = daily
-                }
-            }
-
-            self.healthStore.execute(query)
+        do {
+            weeklyStepCounts = try await reader.dailyStepCounts(days: 7)
+        } catch {
+            lastError = error
+            Log.health.error("Weekly step query failed: \(error.localizedDescription)")
         }
     }
 
-    /// Fetch the cumulative step count from midnight to now and update `todayStepCount`.
-    private func fetchTodayStepCount() {
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: [])
-
-        let statsQuery = HKStatisticsQuery(
-            quantityType: stepType,
-            quantitySamplePredicate: predicate,
-            options: .cumulativeSum
-        ) { [weak self] _, stats, error in
-            guard let self else { return }
-            if let error {
-                Task { @MainActor in self.lastError = error }
-                print("[HealthManager] Statistics query error: \(error)")
-                return
-            }
-
-            let quantity = stats?.sumQuantity()
-            let value = quantity?.doubleValue(for: .count()) ?? 0
-            Task { @MainActor in
-                self.todayStepCount = Int(value)
+    private func refreshTodayStepCount() {
+        Task {
+            do {
+                if let steps = try await reader.todayStepCount() {
+                    todayStepCount = steps
+                }
+            } catch {
+                lastError = error
+                Log.health.error("Step query failed: \(error.localizedDescription)")
             }
         }
-        self.statisticsQuery = statsQuery
-        healthStore.execute(statsQuery)
     }
 }
 #endif
-

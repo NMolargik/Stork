@@ -37,12 +37,13 @@ struct JarView: View {
     @Environment(\.colorScheme) private var colorScheme
     private let tilt = TiltManager()
     @State private var isMotionActive = false
-    @State private var isVisible = true
+    /// Starts false so the first scroll-visibility callback performs the
+    /// real "became visible" work (unpause physics, start tilt).
+    @State private var isVisible = false
 
     var body: some View {
         GeometryReader { proxy in
             let newSize = proxy.size
-            let globalFrame = proxy.frame(in: .global)
 
             TransparentSpriteView(scene: scene)
                 .ignoresSafeArea(edges: .bottom)
@@ -53,12 +54,12 @@ struct JarView: View {
                 containerSize = new
                 _ = sizeChanged // keep tracking size changes, but no reset here
             }
-            .onChange(of: globalFrame) { _, frame in
-                updateVisibility(for: frame)
-            }
-            .onAppear {
-                updateVisibility(for: globalFrame)
-            }
+        }
+        // Pause physics + motion when scrolled offscreen. Scroll-relative
+        // visibility (not UIScreen bounds) keeps this correct in resizable
+        // windows and non-fullscreen presentations.
+        .onScrollVisibilityChange(threshold: 0.01) { visible in
+            setVisible(visible)
         }
         .overlay(alignment: .top) {
             if let monthLabel {
@@ -104,8 +105,7 @@ struct JarView: View {
             if #available(iOS 26.0, *) {
                 scene.useFrostEffect = false
             }
-            scene.onReady = { [weak scene] in
-                guard let scene = scene else { return }
+            scene.onReady = {
                 scene.applyAppearance(isDark: colorScheme == .dark)
                 ensureInitialDropIfNeeded()
                 dropDeltasIfNeeded()
@@ -134,7 +134,6 @@ struct JarView: View {
             dropDeltasIfNeeded()
         }
         .onChange(of: reshuffle) { _, should in
-            print("Reshuffling")
             guard should else { return }
             // Full reset + respawn to guarantee exact counts after a manual reshuffle trigger.
             scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
@@ -167,7 +166,6 @@ struct JarView: View {
         // Only perform the initial drop if we haven't done it, there is something to drop,
         // and the scene isn't already in a populated state representing the current counts.
         guard !didInitialDrop else { return }
-        print("Initial Drop!")
         let expectedTotal = boyCount + girlCount + lossCount
         guard expectedTotal > 0 else { return }
 
@@ -208,19 +206,7 @@ struct JarView: View {
         return df.string(from: Date())
     }
 
-    private func updateVisibility(for frame: CGRect) {
-        // Get screen/window bounds
-        #if os(iOS)
-        let screenHeight = UIScreen.main.bounds.height
-        #else
-        let screenHeight: CGFloat = 1200
-        #endif
-
-        // Check if any part of the jar is visible on screen
-        // Add some padding to avoid flickering at edges
-        let visibleThreshold: CGFloat = -50
-        let nowVisible = frame.maxY > visibleThreshold && frame.minY < screenHeight + 50
-
+    private func setVisible(_ nowVisible: Bool) {
         if nowVisible != isVisible {
             isVisible = nowVisible
             scene.isPaused = !nowVisible
@@ -232,9 +218,7 @@ struct JarView: View {
                     tilt.start { x in
                         let horizontalG = max(-0.5, min(0.5, x))
                         let dx = CGFloat(horizontalG * 6.0)
-                        DispatchQueue.main.async {
-                            self.scene.physicsWorld.gravity = CGVector(dx: dx, dy: -9.8)
-                        }
+                        scene.physicsWorld.gravity = CGVector(dx: dx, dy: -9.8)
                     }
                 }
             } else {

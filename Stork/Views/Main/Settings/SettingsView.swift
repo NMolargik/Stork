@@ -545,7 +545,7 @@ struct SettingsView: View {
     // MARK: - Test Milestone Celebration
     private func triggerTestMilestone() {
         // Pick a random milestone for testing
-        let testMilestones: [(Int, DeliveryManager.MilestoneCelebration.MilestoneType)] = [
+        let testMilestones: [(Int, MilestoneCelebration.MilestoneType)] = [
             (100, .babies),
             (250, .babies),
             (500, .babies),
@@ -554,7 +554,7 @@ struct SettingsView: View {
             (500, .deliveries)
         ]
         let (count, type) = testMilestones.randomElement() ?? (500, .babies)
-        deliveryManager.pendingMilestoneCelebration = DeliveryManager.MilestoneCelebration(
+        deliveryManager.pendingMilestoneCelebration = MilestoneCelebration(
             count: count,
             type: type
         )
@@ -591,9 +591,8 @@ fileprivate extension Bool {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     return SettingsView()
-                .environment(DeliveryManager(context: context))
+                .environment(DeliveryManager(container: container))
         .environment(CloudSyncManager())
 }

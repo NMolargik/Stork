@@ -128,7 +128,7 @@ struct ExportView: View {
 #Preview {
     NavigationStack {
         ExportView()
-            .environment(DeliveryManager(context: PreviewContainer.shared.mainContext))
+            .environment(DeliveryManager(container: PreviewContainer.shared))
             .environment(ExportManager())
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import os
 
 @MainActor
 @Observable
@@ -25,13 +26,13 @@ final class IconManager {
     @MainActor
     func changeAppIcon(to color: String) async {
         guard UIApplication.shared.supportsAlternateIcons else {
-            print("Alternate icons not supported.")
+            Log.app.info("Alternate icons not supported.")
             isChangingIcon = false
             return
         }
 
         guard !isChangingIcon else {
-            print("Icon change already in progress.")
+            Log.app.info("Icon change already in progress.")
             return
         }
 
@@ -40,12 +41,12 @@ final class IconManager {
 
         // Wait until app is active and no modal is presented
         while !canPresentIconAlertNow() {
-            print("Waiting for app to be active and no modal...")
+            Log.app.debug("Waiting for app to be active and no modal...")
             try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
         }
 
         let availableKeys = availableAlternateIconKeys()
-        print("Available icon keys:", availableKeys)
+        Log.app.debug("Available icon keys: \(availableKeys)")
 
         let targetIsPrimary = color == primaryIconColorKey
         let targetKey: String? = targetIsPrimary ? nil : alternateIconKeyForColor[color]
@@ -53,12 +54,12 @@ final class IconManager {
         // Validate non-primary key
         if !targetIsPrimary {
             guard let key = targetKey else {
-                print("No icon key mapped for color: \(color)")
+                Log.app.error("No icon key mapped for color: \(color)")
                 isChangingIcon = false
                 return
             }
             guard availableKeys.contains(key) else {
-                print("Icon key '\(key)' not found in Info.plist")
+                Log.app.error("Icon key \(key) not found in Info.plist")
                 isChangingIcon = false
                 return
             }
@@ -67,7 +68,7 @@ final class IconManager {
         // Skip if already using the target icon
         let current = UIApplication.shared.alternateIconName
         if (targetIsPrimary && current == nil) || (!targetIsPrimary && current == targetKey) {
-            print("Already using icon: \(targetKey ?? "primary")")
+            Log.app.debug("Already using icon: \(targetKey ?? "primary")")
             isChangingIcon = false
             return
         }
@@ -78,17 +79,17 @@ final class IconManager {
     private func setIcon(to name: String?) async {
         do {
             try await UIApplication.shared.setAlternateIconName(name)
-            print("Success: Icon changed to \(name ?? "primary")")
+            Log.app.info("Icon changed to \(name ?? "primary")")
             isChangingIcon = false
         } catch let error as NSError {
             if error.domain == NSPOSIXErrorDomain && error.code == 35 && retryCount < maxRetries {
                 retryCount += 1
                 let delay = 0.4 + Double(retryCount) * 0.3
-                print("EAGAIN – retry \(retryCount)/\(maxRetries) in \(delay)s...")
+                Log.app.info("EAGAIN - retrying icon change \(self.retryCount)/\(self.maxRetries) in \(delay)s")
                 try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 await setIcon(to: name)
             } else {
-                print("Failed to change icon: \(error.localizedDescription)")
+                Log.app.error("Failed to change icon: \(error.localizedDescription)")
                 isChangingIcon = false
             }
         }

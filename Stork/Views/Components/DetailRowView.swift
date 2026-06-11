@@ -16,7 +16,7 @@ struct DetailRowView<Trailing: View>: View {
         title: String,
         subtitle: String? = nil,
         tint: Color,
-        @ViewBuilder trailing: @escaping () -> Trailing = { EmptyView() }
+        @ViewBuilder trailing: @escaping () -> Trailing
     ) {
         self.style = style
         self.systemImage = systemImage
@@ -33,6 +33,27 @@ struct DetailRowView<Trailing: View>: View {
         case .insight:
             insightBody
         }
+    }
+}
+
+extension DetailRowView where Trailing == EmptyView {
+    /// Convenience for rows without a trailing accessory; avoids the
+    /// defaulted-generic-closure inference that future Swift modes reject.
+    init(
+        style: Style,
+        systemImage: String,
+        title: String,
+        subtitle: String? = nil,
+        tint: Color
+    ) {
+        self.init(
+            style: style,
+            systemImage: systemImage,
+            title: title,
+            subtitle: subtitle,
+            tint: tint,
+            trailing: { EmptyView() }
+        )
     }
 }
 
@@ -125,4 +146,25 @@ private struct SymbolRenderingModifier: ViewModifier {
             content
         }
     }
+}
+
+#Preview {
+    VStack(spacing: 16) {
+        DetailRowView(
+            style: .feature,
+            systemImage: "heart.fill",
+            title: "Feature Row",
+            tint: .storkPink
+        )
+        DetailRowView(
+            style: .insight,
+            systemImage: "chart.bar.fill",
+            title: "Insight Row",
+            subtitle: "With a subtitle",
+            tint: .storkBlue
+        ) {
+            Text("12").bold()
+        }
+    }
+    .padding()
 }

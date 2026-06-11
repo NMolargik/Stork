@@ -60,8 +60,8 @@ struct CareerTotalProvider: TimelineProvider {
         } catch {
             // Fallback to UserDefaults
             let defaults = UserDefaults(suiteName: AppGroup.id)
-            let babies = defaults?.integer(forKey: "careerTotalBabies") ?? 0
-            let deliveries = defaults?.integer(forKey: "careerTotalDeliveries") ?? 0
+            let babies = defaults?.integer(forKey: SharedDefaultsKey.careerTotalBabies) ?? 0
+            let deliveries = defaults?.integer(forKey: SharedDefaultsKey.careerTotalDeliveries) ?? 0
             return CareerTotalEntry(date: Date(), totalBabies: babies, totalDeliveries: deliveries)
         }
     }

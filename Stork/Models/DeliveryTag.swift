@@ -53,7 +53,7 @@ final class DeliveryTag {
 
 // MARK: - Color Hex Extension
 
-extension Color {
+nonisolated extension Color {
     init?(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")

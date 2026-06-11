@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MilestoneCelebrationView: View {
-    let milestone: DeliveryManager.MilestoneCelebration
+    let milestone: MilestoneCelebration
     let onDismiss: () -> Void
     let onShare: () -> Void
 
@@ -274,7 +274,7 @@ struct ConfettiPieceView: View {
 
 #Preview("500 Babies Milestone") {
     MilestoneCelebrationView(
-        milestone: DeliveryManager.MilestoneCelebration(count: 500, type: .babies),
+        milestone: MilestoneCelebration(count: 500, type: .babies),
         onDismiss: {},
         onShare: {}
     )
@@ -282,7 +282,7 @@ struct ConfettiPieceView: View {
 
 #Preview("100 Deliveries Milestone") {
     MilestoneCelebrationView(
-        milestone: DeliveryManager.MilestoneCelebration(count: 100, type: .deliveries),
+        milestone: MilestoneCelebration(count: 100, type: .deliveries),
         onDismiss: {},
         onShare: {}
     )

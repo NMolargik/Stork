@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Observation
+import os
 
 @MainActor
 @Observable
@@ -192,7 +193,7 @@ class ExportManager {
                 }
             }
         } catch {
-            print("Failed to cleanup temp files: \(error)")
+            Log.export.error("Failed to cleanup temp files: \(error.localizedDescription)")
         }
     }
 }

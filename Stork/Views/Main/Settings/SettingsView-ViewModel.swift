@@ -25,13 +25,14 @@ extension SettingsView {
         // Lifecycle
         func startNetworkMonitoring() {
             let monitor = NWPathMonitor()
-            monitor.pathUpdateHandler = { [weak self] path in
-                DispatchQueue.main.async {
-                    self?.isOnline = (path.status == .satisfied)
+            // @Sendable: NWPathMonitor invokes this on its background queue.
+            monitor.pathUpdateHandler = { @Sendable [weak self] path in
+                let isOnline = (path.status == .satisfied)
+                Task { @MainActor in
+                    self?.isOnline = isOnline
                 }
             }
-            let queue = DispatchQueue(label: "NetworkMonitor")
-            monitor.start(queue: queue)
+            monitor.start(queue: DispatchQueue(label: "NetworkMonitor"))
             self.networkMonitor = monitor
         }
 

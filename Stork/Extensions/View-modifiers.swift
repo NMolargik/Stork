@@ -19,44 +19,38 @@ extension View {
     }
 }
 
-#if os(iOS)
 public extension View {
+    /// Bottom accessory exists on iOS only; no-op elsewhere (visionOS).
     @ViewBuilder
     func tabViewBottomAccessoryIfAvailable<Accessory: View>(@ViewBuilder _ accessory: () -> Accessory) -> some View {
-        if #available(iOS 26.0, *) {
-            // Only use the new API when available at runtime
-            self.tabViewBottomAccessory(content: accessory)
+        #if os(iOS)
+        self.tabViewBottomAccessory(content: accessory)
+        #else
+        self
+        #endif
+    }
+
+    /// Minimizes the toolbar on scroll where the OS supports it (iOS 27+).
+    @ViewBuilder
+    func minimizeToolbarOnScrollIfAvailable() -> some View {
+        #if os(iOS)
+        if #available(iOS 27.0, *) {
+            self.toolbarMinimizeBehavior(.onScrollDown)
         } else {
-            // On earlier OS versions, do nothing
             self
         }
-    }
-}
-#else
-public extension View {
-    @ViewBuilder
-    func tabViewBottomAccessoryIfAvailable<Accessory: View>(@ViewBuilder _ accessory: () -> Accessory) -> some View {
-        // Non-iOS platforms: no-op to keep API usage consistent
+        #else
         self
+        #endif
     }
 }
-#endif
 
 struct StatPillBackground: ViewModifier {
     func body(content: Content) -> some View {
         #if os(iOS)
-        if #available(iOS 26.0, *) {
-            content
-                .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .shadow(radius: 5)
-        } else {
-            content
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.ultraThinMaterial)
-                        .shadow(radius: 5)
-                )
-        }
+        content
+            .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .shadow(radius: 5)
         #else
         content
             .background(

@@ -545,7 +545,7 @@ struct DeliveryManagerMilestoneTests {
 
     @Test("DeliveryManager has baby milestone thresholds")
     func deliveryManagerBabyMilestones() {
-        let milestones = DeliveryManager.babyMilestones
+        let milestones = MilestoneTracker.babyMilestones
 
         #expect(milestones.contains(100))
         #expect(milestones.contains(250))
@@ -555,7 +555,7 @@ struct DeliveryManagerMilestoneTests {
 
     @Test("DeliveryManager has delivery milestone thresholds")
     func deliveryManagerDeliveryMilestones() {
-        let milestones = DeliveryManager.deliveryMilestones
+        let milestones = MilestoneTracker.deliveryMilestones
 
         #expect(milestones.contains(50))
         #expect(milestones.contains(100))
@@ -566,10 +566,10 @@ struct DeliveryManagerMilestoneTests {
 
     @Test("MilestoneCelebration type equality works")
     func milestoneCelebrationEquality() {
-        let milestone1 = DeliveryManager.MilestoneCelebration(count: 100, type: .babies)
-        let milestone2 = DeliveryManager.MilestoneCelebration(count: 100, type: .babies)
-        let milestone3 = DeliveryManager.MilestoneCelebration(count: 100, type: .deliveries)
-        let milestone4 = DeliveryManager.MilestoneCelebration(count: 500, type: .babies)
+        let milestone1 = MilestoneCelebration(count: 100, type: .babies)
+        let milestone2 = MilestoneCelebration(count: 100, type: .babies)
+        let milestone3 = MilestoneCelebration(count: 100, type: .deliveries)
+        let milestone4 = MilestoneCelebration(count: 500, type: .babies)
 
         #expect(milestone1 == milestone2)
         #expect(milestone1 != milestone3)

@@ -138,8 +138,7 @@ struct PersonalBestsCard: View {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     PersonalBestsCard(viewModel: DashboardView.ViewModel())
-        .environment(DeliveryManager(context: context))
+        .environment(DeliveryManager(container: container))
 }

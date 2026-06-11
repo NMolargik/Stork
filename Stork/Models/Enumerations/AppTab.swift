@@ -2,8 +2,6 @@
 //  AppTab.swift
 //  Stork
 //
-//  Created by Nick Molargik on 10/3/25.
-//
 
 import SwiftUI
 
@@ -15,29 +13,25 @@ enum AppTab: String, CaseIterable, Identifiable {
 
     var id: String { self.rawValue }
 
-    func icon() -> Image {
+    var systemImage: String {
         switch self {
-        case .dashboard:
-            return Image(systemName: "circle.hexagongrid.fill")
-        case .list:
-            return Image(systemName: "list.bullet")
-        case .calendar:
-            return Image(systemName: "calendar")
-        case .settings:
-            return Image(systemName: "gearshape.2")
+        case .dashboard: "circle.hexagongrid.fill"
+        case .list: "list.bullet"
+        case .calendar: "calendar"
+        case .settings: "gearshape.2"
         }
+    }
+
+    func icon() -> Image {
+        Image(systemName: systemImage)
     }
 
     func color() -> Color {
         switch self {
-        case .dashboard:
-            return Color.storkPurple
-        case .list:
-            return Color.storkBlue
-        case .calendar:
-            return Color.storkPink
-        case .settings:
-            return Color.storkOrange
+        case .dashboard: .storkPurple
+        case .list: .storkBlue
+        case .calendar: .storkPink
+        case .settings: .storkOrange
         }
     }
 }

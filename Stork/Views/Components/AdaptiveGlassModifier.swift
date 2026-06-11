@@ -12,13 +12,7 @@ struct AdaptiveGlassModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(iOS)
-        if #available(iOS 26.0, *) {
-            content.glassEffect(.regular.interactive().tint(tint))
-        } else {
-            content
-                .background(tint)
-                .cornerRadius(20)
-        }
+        content.glassEffect(.regular.interactive().tint(tint))
         #else
         content
             .background(tint)

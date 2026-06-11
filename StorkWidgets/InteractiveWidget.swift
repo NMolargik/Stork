@@ -61,7 +61,7 @@ struct InteractiveWidgetProvider: TimelineProvider {
             let todayBabies = todayDeliveries.reduce(0) { $0 + ($1.babies?.count ?? 0) }
 
             // Weekly data
-            let week = currentWeekRange(now: now)
+            let week = WeekMath.weekRange(containing: now)
             let weekStart = week.start
             let weekEnd = week.end
             var weekDesc = FetchDescriptor<Delivery>()

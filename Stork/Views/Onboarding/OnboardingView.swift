@@ -19,7 +19,15 @@ struct OnboardingView: View {
     @State private var viewModel = ViewModel()
 
     private var steps: [OnboardingStep] {
+        #if os(visionOS)
         OnboardingStep.allCases
+        #else
+        // Skip the Health page where step tracking can't work
+        // ("Designed for iPad" on Mac / Apple Vision Pro).
+        healthManager.isStepTrackingSupported
+            ? OnboardingStep.allCases
+            : OnboardingStep.allCases.filter { $0 != .health }
+        #endif
     }
 
     private var currentIndex: Int {
@@ -53,8 +61,10 @@ struct OnboardingView: View {
                     .tag(OnboardingStep.location)
 
                 #if !os(visionOS)
-                OnboardingHealthPage()
-                    .tag(OnboardingStep.health)
+                if healthManager.isStepTrackingSupported {
+                    OnboardingHealthPage()
+                        .tag(OnboardingStep.health)
+                }
                 #endif
 
                 OnboardingCompletePage(onFinish: onFinished)

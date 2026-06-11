@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import WatchKit
+import os
 
 struct QuickEntryView: View {
     @Environment(\.modelContext) private var modelContext
@@ -154,7 +155,7 @@ struct QuickEntryView: View {
             // Check for milestone
             checkMilestone()
         } catch {
-            print("Failed to save delivery: \(error)")
+            Log.deliveries.error("Failed to save delivery: \(error.localizedDescription)")
             WatchHaptics.error()
         }
     }

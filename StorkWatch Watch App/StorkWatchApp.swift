@@ -16,7 +16,7 @@ struct StorkWatchApp: App {
         do {
             let cloudKitContainerID = "iCloud.com.molargiksoftware.Stork"
             let config = ModelConfiguration(
-                groupContainer: .identifier(WatchAppGroup.id),
+                groupContainer: .identifier(AppGroup.id),
                 cloudKitDatabase: .private(cloudKitContainerID)
             )
             modelContainer = try ModelContainer(
@@ -34,9 +34,4 @@ struct StorkWatchApp: App {
                 .modelContainer(modelContainer)
         }
     }
-}
-
-// MARK: - Shared Constants
-enum WatchAppGroup {
-    static let id = "group.com.molargiksoftware.Stork"
 }

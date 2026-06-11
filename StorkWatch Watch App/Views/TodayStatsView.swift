@@ -12,7 +12,7 @@ struct TodayStatsView: View {
     @Environment(\.modelContext) private var modelContext
 
     let deliveries: [Delivery]
-    let healthManager: WatchHealthManager
+    let healthManager: HealthManager
 
     @State private var isRefreshing = false
 
@@ -41,8 +41,8 @@ struct TodayStatsView: View {
     }
 
     private var weekBabyCount: Int {
-        let week = currentWeekRange()
-        let weekDeliveries = deliveries.filter { $0.date >= week.start && $0.date < week.end }
+        let week = WeekMath.weekRange()
+        let weekDeliveries = deliveries.filter { week.contains($0.date) }
         return weekDeliveries.reduce(0) { $0 + ($1.babies?.count ?? 0) }
     }
 
@@ -153,21 +153,6 @@ struct StatPill: View {
     }
 }
 
-// MARK: - Week Range Helper
-struct WeekRange {
-    let start: Date
-    let end: Date
-}
-
-func currentWeekRange(now: Date = Date()) -> WeekRange {
-    var calendar = Calendar(identifier: .gregorian)
-    calendar.firstWeekday = 1 // Sunday
-    let weekday = calendar.component(.weekday, from: now)
-    let start = calendar.startOfDay(for: calendar.date(byAdding: .day, value: -(weekday - 1), to: now)!)
-    let end = calendar.date(byAdding: .day, value: 7, to: start)!
-    return WeekRange(start: start, end: end)
-}
-
 #Preview {
-    TodayStatsView(deliveries: [], healthManager: WatchHealthManager())
+    TodayStatsView(deliveries: [], healthManager: HealthManager())
 }

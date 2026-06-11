@@ -80,8 +80,7 @@ struct DayOfWeekCard: View {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     DayOfWeekCard(viewModel: DashboardView.ViewModel())
-        .environment(DeliveryManager(context: context))
+        .environment(DeliveryManager(container: container))
 }

@@ -2,28 +2,24 @@
 //  ContentView.swift
 //  Stork
 //
-//  Created by Nick Molargik on 9/28/25.
-//
 
 import SwiftUI
 import SwiftData
 
+/// App-stage state machine: splash → onboarding → main.
+/// Managers are constructed in `StorkApp` and arrive via the environment.
+/// iCloud sync runs in the background; a toast keeps the user informed.
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(DeliveryManager.self) private var deliveryManager
+    @Environment(ToastManager.self) private var toastManager
+
     @AppStorage(AppStorageKeys.isOnboardingComplete) private var isOnboardingComplete: Bool = false
 
     @Binding var pendingDeepLink: DeepLink?
 
-    @State private var viewModel: ContentView.ViewModel = ViewModel()
-    @State private var deliveryManager: DeliveryManager?
-    @State private var insightManager: InsightManager?
-    @State private var exportManager = ExportManager()
-    #if !os(visionOS)
-    @State private var healthManager = HealthManager()
-    #endif
-    @State private var weatherManager = WeatherManager()
-    @State private var locationManager = LocationManager()
-    @State private var cloudSyncManager = CloudSyncManager()
+    @State private var viewModel = ViewModel()
+    @State private var didShowSyncToast: Bool = false
+    @State private var wasReturningUser: Bool = false
 
     var body: some View {
         ZStack {
@@ -31,9 +27,7 @@ struct ContentView: View {
             case .splash:
                 SplashView(
                     onContinue: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            viewModel.appStage = .onboarding
-                        }
+                        viewModel.advance(to: .onboarding)
                     }
                 )
                 .id("splash")
@@ -43,97 +37,62 @@ struct ContentView: View {
             case .onboarding:
                 OnboardingView(onFinished: {
                     isOnboardingComplete = true
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        viewModel.appStage = .syncing
-                    }
+                    viewModel.advance(to: .main)
                 })
                 .id("onboarding")
-                .environment(locationManager)
-                #if !os(visionOS)
-                .environment(healthManager)
-                #endif
-                .transition(viewModel.leadingTransition)
-                .zIndex(1)
-
-            case .syncing:
-                SyncingView(
-                    onSyncComplete: { foundData in
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            viewModel.appStage = .main
-                        }
-                    }
-                )
-                .environment(deliveryManager)
-                .environment(cloudSyncManager)
-                .id("syncing")
                 .transition(viewModel.leadingTransition)
                 .zIndex(1)
 
             case .main:
-                MainView(
-                    pendingDeepLink: $pendingDeepLink
-                )
-                .id("main")
-                .transition(viewModel.leadingTransition)
-                .zIndex(0)
-                .environment(deliveryManager)
-                #if !os(visionOS)
-                .environment(healthManager)
-                #endif
-                .environment(insightManager)
-                .environment(weatherManager)
-                .environment(locationManager)
-                .environment(exportManager)
-                .environment(cloudSyncManager)
-                .task {
-                    weatherManager.setLocationProvider(LocationManager())
-                }
+                MainView(pendingDeepLink: $pendingDeepLink)
+                    .id("main")
+                    .transition(viewModel.leadingTransition)
+                    .zIndex(0)
+                    .onAppear {
+                        handleMainEntry()
+                    }
             }
         }
         .task {
-            // Ensure managers exist in the View
-            await MainActor.run {
-                if self.deliveryManager == nil {
-                    self.deliveryManager = DeliveryManager(context: modelContext)
-                }
-                if self.weatherManager.locationManager == nil {
-                    self.weatherManager.setLocationProvider(LocationManager())
-                }
-                if self.insightManager == nil, let deliveryManager {
-                    self.insightManager = InsightManager(deliveryManager: deliveryManager)
-                }
-                // Configure cloud sync manager with model context
-                self.cloudSyncManager.configure(with: modelContext)
-            }
-            await viewModel.prepareApp(isOnboardingComplete: isOnboardingComplete)
+            wasReturningUser = isOnboardingComplete
+            viewModel.prepareApp(isOnboardingComplete: isOnboardingComplete)
         }
-        .onAppear {
-            viewModel.configure(cloudSyncManager: cloudSyncManager)
+    }
+
+    /// On first entry to MainView for a returning user, surface a lightweight
+    /// toast so they understand iCloud sync is running in the background, and
+    /// nudge the local cache in case data arrived before managers were ready.
+    private func handleMainEntry() {
+        guard !didShowSyncToast, wasReturningUser else { return }
+        didShowSyncToast = true
+
+        toastManager.show(
+            message: "Syncing with iCloud…",
+            style: .info,
+            icon: "icloud.fill"
+        )
+
+        Task {
+            await deliveryManager.refresh()
         }
     }
 }
 
 #Preview {
-    // Create an in-memory SwiftData container for previews
-    let container: ModelContainer
-    do {
-        container = try ModelContainer(
-            for: Delivery.self, Baby.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
-    } catch {
-        fatalError("Preview ModelContainer setup failed: \(error)")
-    }
+    let container: ModelContainer = {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        return try! ModelContainer(for: Delivery.self, Baby.self, DeliveryTag.self, configurations: config)
+    }()
 
-    return ContentView(
-        pendingDeepLink: .constant(nil)
-    )
-    .modelContainer(container)
-    .environment(DeliveryManager(context: container.mainContext))
-    #if !os(visionOS)
-    .environment(HealthManager())
-    #endif
-    .environment(WeatherManager())
-    .environment(LocationManager())
-    .environment(CloudSyncManager())
+    ContentView(pendingDeepLink: .constant(nil))
+        .modelContainer(container)
+        .environment(DeliveryManager(container: container))
+        .environment(CloudSyncManager())
+        .environment(LocationManager())
+        .environment(WeatherManager())
+        .environment(ExportManager())
+        .environment(ToastManager())
+        #if !os(visionOS)
+        .environment(HealthManager())
+        #endif
 }

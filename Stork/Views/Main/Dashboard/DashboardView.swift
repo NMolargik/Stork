@@ -5,7 +5,6 @@ import UIKit
 
 struct DashboardView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
-    @Environment(InsightManager.self) private var insightManager: InsightManager
     @Environment(ExportManager.self) private var exportManager: ExportManager
     @Environment(CloudSyncManager.self) private var cloudSyncManager: CloudSyncManager
     @Environment(\.horizontalSizeClass) private var hSizeClass
@@ -38,10 +37,7 @@ struct DashboardView: View {
             jarShuffle = true
             await cloudSyncManager.triggerSync()
             await deliveryManager.refresh()
-            print("Pull to refresh - synced \(deliveryManager.deliveries.count) deliveries")
         }
-        .environment(deliveryManager)
-        .environment(insightManager)
         .sheet(isPresented: $showShareSheet) {
             if let image = shareImage {
                 ShareSheet(items: [image])
@@ -63,13 +59,8 @@ struct DashboardView: View {
     @ViewBuilder
     private var jarViewSection: some View {
         let monthly = viewModel.monthlyJarCounts(deliveries: deliveryManager.deliveries)
-        let monthKey: String = {
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM"
-            return df.string(from: Date())
-        }()
         JarView(boyCount: monthly.boy, girlCount: monthly.girl, lossCount: monthly.loss, reshuffle: $jarShuffle)
-            .id(monthKey)
+            .id(WeekMath.startOfMonth(for: Date()))
             .frame(height: 250)
     }
 
@@ -148,11 +139,9 @@ struct ShareSheet: UIViewControllerRepresentable {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
 
     DashboardView(showingEntrySheet: .constant(false), showingReorderSheet: .constant(false))
-        .environment(DeliveryManager(context: context))
-        .environment(InsightManager(deliveryManager: DeliveryManager(context: context)))
+        .environment(DeliveryManager(container: container))
         .environment(ExportManager())
         .environment(CloudSyncManager())
 }

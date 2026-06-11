@@ -65,8 +65,7 @@ struct BabyMeasurementsCard: View {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
     
     BabyMeasurementsCard(viewModel: DashboardView.ViewModel())
-        .environment(DeliveryManager(context: context))
+        .environment(DeliveryManager(container: container))
 }

@@ -32,7 +32,7 @@ struct DeliveryListView: View {
                         let monthDeliveries = viewModel.deliveries(in: monthStart, from: source)
                         
                         if !monthDeliveries.isEmpty {
-                            Section(header: Text(deliveryManager.headerTitle(for: monthStart)).bold().font(.title)) {
+                            Section(header: Text(WeekMath.monthHeaderTitle(for: monthStart)).bold().font(.title)) {
                                 ForEach(monthDeliveries) { delivery in
                                     NavigationLink(value: delivery) {
                                         DeliveryRowView(delivery: delivery)
@@ -98,10 +98,9 @@ struct DeliveryListView: View {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         return try! ModelContainer(for: schema, configurations: [configuration])
     }()
-    let context = ModelContext(container)
     
     NavigationStack {
         DeliveryListView(showingEntrySheet: .constant(false))
-            .environment(DeliveryManager(context: context))
+            .environment(DeliveryManager(container: container))
     }
 }

@@ -65,8 +65,8 @@ extension DeliveryEntryView {
                 if let baby = baby {
                     self.id = baby.id
                     self.sex = baby.sex
-                    self.weight = useMetricUnits ? baby.weight / 35.27396 : baby.weight
-                    self.height = useMetricUnits ? baby.height / 0.393701 : baby.height
+                    self.weight = useMetricUnits ? baby.weight * UnitConversion.ouncesToKilograms : baby.weight
+                    self.height = useMetricUnits ? baby.height * UnitConversion.inchesToCentimeters : baby.height
                     self.nurseCatch = baby.nurseCatch
                     self.nicuStay = baby.nicuStay
                 } else {
@@ -192,8 +192,8 @@ extension DeliveryEntryView {
             let heightInInches: Double
             
             if useMetricUnits {
-                weightInOunces = entry.weight * 35.27396
-                heightInInches = entry.height * 0.393701
+                weightInOunces = entry.weight / UnitConversion.ouncesToKilograms
+                heightInInches = entry.height * UnitConversion.centimetersToInches
             } else {
                 weightInOunces = entry.weight
                 heightInInches = entry.height
@@ -216,4 +216,11 @@ extension DeliveryEntryView {
             }
         }
     }
+}
+
+#Preview("Baby Entry") {
+    DeliveryEntryView.BabyEntrySheet(
+        viewModel: .constant(DeliveryEntryView.ViewModel()),
+        useMetricUnits: false
+    )
 }

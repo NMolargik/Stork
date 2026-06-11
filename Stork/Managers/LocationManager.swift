@@ -12,7 +12,7 @@ import os
 
 @MainActor
 @Observable
-class LocationManager: NSObject, CLLocationManagerDelegate {
+final class LocationManager: NSObject, CLLocationManagerDelegate, LocationProviding {
 
     // MARK: - Public observable state
     private(set) var isAuthorized: Bool = false
@@ -149,25 +149,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 
     // MARK: - Helpers
-
-    private func map(error: Error) -> LocationError {
-        // If it's already a LocationError, pass it through
-        if let locErr = error as? LocationError { return locErr }
-        // Prefer underlying CLError codes when possible
-        let ns = error as NSError
-        if ns.domain == kCLErrorDomain {
-            // Map some common CLError codes
-            switch CLError.Code(rawValue: ns.code) {
-            case .denied?:
-                return .notAuthorized
-            case .locationUnknown?:
-                return .updateFailed(underlying: error)
-            default:
-                return .updateFailed(underlying: error)
-            }
-        }
-        return .updateFailed(underlying: error)
-    }
 
     private func updateAuth(from status: CLAuthorizationStatus) {
         authorizationStatus = status

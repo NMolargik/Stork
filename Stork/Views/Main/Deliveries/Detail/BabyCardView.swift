@@ -107,3 +107,8 @@ struct BabyCardView: View {
         )
     }
 }
+
+#Preview {
+    BabyCardView(baby: .sample, index: 0)
+        .padding()
+}

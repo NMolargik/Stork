@@ -112,6 +112,8 @@ final class MarbleScene: SKScene {
         guard let onReady else { return } // do not consume readiness until handler exists
         didSignalReady = true
         flushPending()
+        // One-shot: release the handler so the scene doesn't retain its owner.
+        self.onReady = nil
         DispatchQueue.main.async {
             onReady()
         }

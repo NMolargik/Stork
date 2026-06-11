@@ -101,4 +101,10 @@ struct StepTrendSheet: View {
         }
     }
 }
+
+#Preview {
+    StepTrendSheet()
+        .environment(HealthManager())
+}
+
 #endif

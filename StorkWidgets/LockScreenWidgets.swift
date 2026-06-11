@@ -62,7 +62,7 @@ struct LockScreenProvider: TimelineProvider {
             let todayBabies = todayDeliveries.reduce(0) { $0 + ($1.babies?.count ?? 0) }
 
             // Weekly babies
-            let week = currentWeekRange(now: now)
+            let week = WeekMath.weekRange(containing: now)
             let weekStart = week.start
             let weekEnd = week.end
             var weekDesc = FetchDescriptor<Delivery>()

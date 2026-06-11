@@ -12,7 +12,7 @@ struct WatchContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Delivery.date, order: .reverse) private var allDeliveries: [Delivery]
 
-    @State private var healthManager = WatchHealthManager()
+    @State private var healthManager = HealthManager()
     @State private var selectedTab: WatchTab = .today
 
     var body: some View {

@@ -281,24 +281,12 @@ struct DeliveryEntryView: View {
 }
 
 #Preview("New Delivery") {
-    let container: ModelContainer = {
-        let schema = Schema([Delivery.self, Baby.self])
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        return try! ModelContainer(for: schema, configurations: [configuration])
-    }()
-
     NavigationStack {
         DeliveryEntryView(onDeliverySaved: { _, _ in })
     }
 }
 
 #Preview("Edit Delivery") {
-    let container: ModelContainer = {
-        let schema = Schema([Delivery.self, Baby.self])
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        return try! ModelContainer(for: schema, configurations: [configuration])
-    }()
-
     NavigationStack {
         DeliveryEntryView(existingDelivery: Delivery.sample(), onDeliverySaved: { _, _ in })
     }

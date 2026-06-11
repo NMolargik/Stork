@@ -374,3 +374,13 @@ struct ShareableStatCardView: View {
         )
     }
 }
+
+#Preview("Share Card") {
+    ShareableStatCardView(
+        cardType: .deliveryMethod,
+        deliveries: [Delivery.sample()],
+        useMetricUnits: false,
+        includeWatermark: true
+    )
+    .padding()
+}

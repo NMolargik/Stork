@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct JarHistoryView: View {
     @Environment(DeliveryManager.self) private var deliveryManager: DeliveryManager
@@ -124,4 +125,18 @@ private struct JarHistoryPage: View {
         df.dateFormat = "LLLL yyyy"
         return df.string(from: monthDate)
     }
+}
+
+#Preview("Jar History") {
+    let container: ModelContainer = {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        return try! ModelContainer(for: Delivery.self, Baby.self, DeliveryTag.self, configurations: config)
+    }()
+
+    JarHistoryView()
+        .environment(DeliveryManager(container: container))
+}
+
+#Preview("Jar History Page") {
+    JarHistoryPage(boyCount: 3, girlCount: 2, lossCount: 1, monthDate: .now, monthKey: "preview")
 }

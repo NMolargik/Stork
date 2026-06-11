@@ -2,26 +2,14 @@
 //  ContentView-ViewModel.swift
 //  Stork
 //
-//  Created by Nick Molargik on 8/30/25.
-//
 
 import SwiftUI
 
 extension ContentView {
     @Observable
-    class ViewModel {
-        // MARK: - App State
+    final class ViewModel {
         var appStage: AppStage = .splash
 
-        // MARK: - Dependencies
-        var cloudSyncManager: CloudSyncManager?
-
-        // MARK: - Configuration
-        func configure(cloudSyncManager: CloudSyncManager) {
-            self.cloudSyncManager = cloudSyncManager
-        }
-
-        // MARK: - Transitions
         var leadingTransition: AnyTransition {
             .asymmetric(
                 insertion: .move(edge: .trailing).combined(with: .opacity),
@@ -29,10 +17,16 @@ extension ContentView {
             )
         }
 
-        func prepareApp(isOnboardingComplete: Bool) async {
-            await MainActor.run {
-                appStage = isOnboardingComplete ? .syncing : .splash
+        func advance(to stage: AppStage) {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                appStage = stage
             }
+        }
+
+        /// Returning users go straight to the app; iCloud sync continues
+        /// in the background with a toast instead of a blocking screen.
+        func prepareApp(isOnboardingComplete: Bool) {
+            appStage = isOnboardingComplete ? .main : .splash
         }
     }
 }
