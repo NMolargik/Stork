@@ -61,7 +61,7 @@ struct SexDistributionCard: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func sexPill(label: String, percentage: Double, color: Color) -> some View {
         HStack(spacing: 6) {
             Image(systemName: "circle.fill")

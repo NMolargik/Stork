@@ -11,7 +11,7 @@ struct MetricRowView<Value: View>: View {
     let title: String
     let valueView: Value
     
-    init(_ title: String, @ViewBuilder value: () -> Value) {
+    init(_ title: String, @ContentBuilder value: () -> Value) {
         self.title = title
         self.valueView = value()
     }

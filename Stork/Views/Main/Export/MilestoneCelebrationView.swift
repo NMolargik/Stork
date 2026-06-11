@@ -264,7 +264,7 @@ struct ConfettiPieceView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var confettiShapeView: some View {
         switch shapeType {
         case 0:

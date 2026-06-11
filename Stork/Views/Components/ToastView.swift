@@ -19,7 +19,7 @@ struct ToastView: View {
             .accessibilityAddTraits(.isStaticText)
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var toastContent: some View {
         #if os(visionOS)
         toastBody

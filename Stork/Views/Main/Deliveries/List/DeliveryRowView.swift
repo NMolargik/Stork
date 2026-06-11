@@ -128,7 +128,7 @@ struct DeliveryRowView: View {
         .accessibilityLabel(viewModel.accessibilitySummary)
     }
     
-    @ViewBuilder
+    @ContentBuilder
     private func sexDots(_ segments: [DeliveryRowView.ViewModel.DotSegment]) -> some View {
         let total = segments.reduce(0) { $0 + $1.count }
         if total == 0 { EmptyView() } else {

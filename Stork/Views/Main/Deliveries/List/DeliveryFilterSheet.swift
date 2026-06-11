@@ -79,7 +79,7 @@ struct DeliveryFilterSheet: View {
 
     // MARK: - View Sections
 
-    @ViewBuilder
+    @ContentBuilder
     private var dateRangeSection: some View {
         Section {
             Toggle("Filter by Date Range", isOn: $isDateRangeEnabled)
@@ -98,7 +98,7 @@ struct DeliveryFilterSheet: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var babyCountSection: some View {
         Section {
             Stepper(value: babyCountBinding, in: 0...10) {
@@ -112,7 +112,7 @@ struct DeliveryFilterSheet: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var deliveryMethodSection: some View {
         Section {
             ForEach(DeliveryMethod.allCases, id: \.self) { method in
@@ -123,7 +123,7 @@ struct DeliveryFilterSheet: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var epiduralSection: some View {
         Section {
             Toggle("Epidural Used Only", isOn: $tempFilter.epiduralUsedOnly)
@@ -135,7 +135,7 @@ struct DeliveryFilterSheet: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var tagsSection: some View {
         if !allTags.isEmpty {
             Section {
@@ -158,7 +158,7 @@ struct DeliveryFilterSheet: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var notesSection: some View {
         Section {
             Toggle("Has Notes", isOn: $tempFilter.hasNotesOnly)

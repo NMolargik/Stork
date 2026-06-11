@@ -47,7 +47,7 @@ struct DashboardCardOrderSheet: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var jarSection: some View {
         Section {
             HStack(spacing: 12) {
@@ -75,7 +75,7 @@ struct DashboardCardOrderSheet: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var cardsSection: some View {
         Section {
             ForEach(cardOrder) { card in

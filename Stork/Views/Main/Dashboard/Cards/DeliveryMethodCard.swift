@@ -48,7 +48,7 @@ struct DeliveryMethodCard: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func methodPill(label: String, value: Double, color: Color) -> some View {
         HStack(spacing: 4) {
             Image(systemName: "circle.fill")

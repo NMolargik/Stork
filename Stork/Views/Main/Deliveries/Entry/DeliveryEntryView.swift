@@ -57,7 +57,7 @@ struct DeliveryEntryView: View {
 
     // MARK: - View Sections
 
-    @ViewBuilder
+    @ContentBuilder
     private var detailsSection: some View {
         Section("Details") {
             DatePicker("Date", selection: $viewModel.date, in: viewModel.dateRange, displayedComponents: [.date, .hourAndMinute])
@@ -93,7 +93,7 @@ struct DeliveryEntryView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var babiesSection: some View {
         Section {
             babiesSectionContent
@@ -102,7 +102,7 @@ struct DeliveryEntryView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var babiesSectionContent: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -134,7 +134,7 @@ struct DeliveryEntryView: View {
         .padding(.vertical, 4)
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var babiesList: some View {
         if viewModel.babies.isEmpty {
             Text("No babies added yet.")
@@ -147,7 +147,7 @@ struct DeliveryEntryView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func babyRow(_ baby: Baby) -> some View {
         BabyRowView(
             baby: baby,
@@ -170,7 +170,7 @@ struct DeliveryEntryView: View {
         )
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var tagsSection: some View {
         Section {
             tagsSectionContent
@@ -181,7 +181,7 @@ struct DeliveryEntryView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var tagsSectionContent: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -220,7 +220,7 @@ struct DeliveryEntryView: View {
         .padding(.vertical, 4)
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var notesSection: some View {
         Section {
             TextField("Add a personal note...", text: $viewModel.notes, axis: .vertical)

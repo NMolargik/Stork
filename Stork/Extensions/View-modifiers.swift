@@ -21,8 +21,8 @@ extension View {
 
 public extension View {
     /// Bottom accessory exists on iOS only; no-op elsewhere (visionOS).
-    @ViewBuilder
-    func tabViewBottomAccessoryIfAvailable<Accessory: View>(@ViewBuilder _ accessory: () -> Accessory) -> some View {
+    @ContentBuilder
+    func tabViewBottomAccessoryIfAvailable<Accessory: View>(@ContentBuilder _ accessory: () -> Accessory) -> some View {
         #if os(iOS)
         self.tabViewBottomAccessory(content: accessory)
         #else
@@ -31,7 +31,7 @@ public extension View {
     }
 
     /// Minimizes the toolbar on scroll where the OS supports it (iOS 27+).
-    @ViewBuilder
+    @ContentBuilder
     func minimizeToolbarOnScrollIfAvailable() -> some View {
         #if os(iOS)
         if #available(iOS 27.0, *) {
@@ -84,7 +84,7 @@ struct ShimmerModifier: ViewModifier {
 }
 
 extension View {
-    @ViewBuilder
+    @ContentBuilder
     func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
         if condition { transform(self) } else { self }
     }

@@ -169,7 +169,7 @@ struct ShareableStatCardView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var cardContent: some View {
         switch cardType {
         case .deliveryMethod:

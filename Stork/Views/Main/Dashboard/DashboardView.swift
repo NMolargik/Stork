@@ -56,7 +56,7 @@ struct DashboardView: View {
 
     // MARK: - View Sections
 
-    @ViewBuilder
+    @ContentBuilder
     private var jarViewSection: some View {
         let monthly = viewModel.monthlyJarCounts(deliveries: deliveryManager.deliveries)
         JarView(boyCount: monthly.boy, girlCount: monthly.girl, lossCount: monthly.loss, reshuffle: $jarShuffle)
@@ -64,7 +64,7 @@ struct DashboardView: View {
             .frame(height: 250)
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func cardView(for card: DashboardCard) -> some View {
         switch card {
         case .deliveryMethod:
@@ -99,7 +99,7 @@ struct DashboardView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func shareContextMenu(for cardType: CardImageRenderer.CardType) -> some View {
         Button {
             shareCard(cardType)

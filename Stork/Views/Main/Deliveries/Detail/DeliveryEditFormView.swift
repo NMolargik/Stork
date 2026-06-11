@@ -92,7 +92,7 @@ struct DeliveryEditFormView: View {
 
     // MARK: - View Sections
 
-    @ViewBuilder
+    @ContentBuilder
     private var deliveryDetailsSection: some View {
         Section("Delivery Details") {
             Picker("Delivery Method", selection: deliveryMethodBinding) {
@@ -107,7 +107,7 @@ struct DeliveryEditFormView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var babiesSection: some View {
         Section("Babies") {
             babiesList
@@ -115,7 +115,7 @@ struct DeliveryEditFormView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var babiesList: some View {
         if let babies = delivery.babies, !babies.isEmpty {
             ForEach(babies) { baby in
@@ -128,7 +128,7 @@ struct DeliveryEditFormView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func babyRow(_ baby: Baby) -> some View {
         HStack {
             Image(systemName: "figure.child")
@@ -151,7 +151,7 @@ struct DeliveryEditFormView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var addBabyButton: some View {
         Button {
             editingBaby = nil
@@ -164,7 +164,7 @@ struct DeliveryEditFormView: View {
         .foregroundColor(.white)
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var tagsSection: some View {
         Section("Tags") {
             if !editedTags.isEmpty {
@@ -194,7 +194,7 @@ struct DeliveryEditFormView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var notesSection: some View {
         Section {
             TextField("Add a personal note...", text: $editedNotes, axis: .vertical)

@@ -83,7 +83,7 @@ struct DeliveryDetailView: View {
 
     // MARK: - Hero Header
 
-    @ViewBuilder
+    @ContentBuilder
     private var heroHeader: some View {
         VStack(spacing: 0) {
             // Gradient background with date (colors based on baby sex distribution)
@@ -158,7 +158,7 @@ struct DeliveryDetailView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var quickStatsRow: some View {
         HStack(spacing: 12) {
             // Baby count
@@ -187,7 +187,7 @@ struct DeliveryDetailView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func statPill(icon: String, value: String, label: String, color: Color) -> some View {
         VStack(spacing: 6) {
             Image(systemName: icon)
@@ -214,7 +214,7 @@ struct DeliveryDetailView: View {
 
     // MARK: - Content Section
 
-    @ViewBuilder
+    @ContentBuilder
     private var contentSection: some View {
         VStack(spacing: 20) {
             // Babies section
@@ -237,7 +237,7 @@ struct DeliveryDetailView: View {
         .padding(.bottom, 32)
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private var babiesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(title: "Babies", icon: "heart.fill", color: .pink)
@@ -248,7 +248,7 @@ struct DeliveryDetailView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func babyCard(_ baby: Baby, index: Int) -> some View {
         VStack(spacing: 0) {
             // Header with sex indicator
@@ -354,7 +354,7 @@ struct DeliveryDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func tagsSection(_ tags: [DeliveryTag]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(title: "Tags", icon: "tag.fill", color: .storkPurple)
@@ -386,7 +386,7 @@ struct DeliveryDetailView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func notesSection(_ notes: String) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(title: "Notes", icon: "note.text", color: .storkOrange)
@@ -403,7 +403,7 @@ struct DeliveryDetailView: View {
         }
     }
 
-    @ViewBuilder
+    @ContentBuilder
     private func sectionHeader(title: String, icon: String, color: Color) -> some View {
         HStack(spacing: 8) {
             Image(systemName: icon)
@@ -457,7 +457,7 @@ struct DeliveryDetailView: View {
 
     // MARK: - Alerts
 
-    @ViewBuilder
+    @ContentBuilder
     private var deleteAlert: some View {
         Button("Delete", role: .destructive) {
             if let onClose {

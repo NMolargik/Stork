@@ -13,7 +13,7 @@ struct InsightCard<Content: View>: View {
     let accent: Color
     let content: Content
 
-    init(title: String, systemImage: String? = nil, accent: Color = .storkBlue, @ViewBuilder content: () -> Content) {
+    init(title: String, systemImage: String? = nil, accent: Color = .storkBlue, @ContentBuilder content: () -> Content) {
         self.title = title
         self.systemImage = systemImage
         self.accent = accent
