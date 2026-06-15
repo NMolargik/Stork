@@ -1,8 +1,11 @@
 {
+  "features" : [
+    "refractivity"
+  ],
   "fill" : {
     "linear-gradient" : [
       "display-p3:0.97598,0.94086,1.00000,1.00000",
-      "display-p3:0.91764,0.44717,1.00000,1.00000"
+      "display-p3:0.91357,0.44312,1.00000,1.00000"
     ],
     "orientation" : {
       "start" : {
@@ -17,29 +20,47 @@
   },
   "groups" : [
     {
+      "blur-material" : null,
       "layers" : [
         {
-          "image-name" : "features 3.svg",
-          "name" : "features 3"
-        },
-        {
-          "image-name" : "stork 3.svg",
-          "name" : "stork 3"
-        },
+          "image-name" : "stork 2.svg",
+          "name" : "stork 2",
+          "position" : {
+            "scale" : 1.36,
+            "translation-in-points" : [
+              6.99628752375952,
+              124.64592539343789
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "refractivity" : {
+        "depth" : 0,
+        "enabled" : true,
+        "strength" : 0
+      },
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.6
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
         {
           "image-name" : "beak.svg",
           "name" : "beak",
           "position" : {
-            "scale" : 1,
+            "scale" : 1.36,
             "translation-in-points" : [
-              2.01600189788752,
-              -2.9979999999999336
+              5.552593395638041,
+              125.88046102776627
             ]
           }
-        },
-        {
-          "image-name" : "sack 2.svg",
-          "name" : "sack 2"
         }
       ],
       "shadow" : {
@@ -47,8 +68,36 @@
         "opacity" : 0.5
       },
       "translucency" : {
-        "enabled" : true,
+        "enabled" : false,
         "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "image-name" : "sack 3.svg",
+          "name" : "sack 3",
+          "position" : {
+            "scale" : 1.36,
+            "translation-in-points" : [
+              -28.825791327993784,
+              163.9732729808254
+            ]
+          }
+        }
+      ],
+      "refractivity" : {
+        "depth" : 0,
+        "enabled" : true,
+        "strength" : 0.5
+      },
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.6
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.52
       }
     }
   ],

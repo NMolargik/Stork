@@ -56,15 +56,14 @@ final class HealthManager {
 
         do {
             try await reader.requestReadAuthorization()
-            // HealthKit hides read-permission state; probe by fetching.
-            // A nil count means read access was denied.
-            if let steps = try await reader.todayStepCount() {
-                isAuthorized = true
-                todayStepCount = steps
-            } else {
-                isAuthorized = false
-                todayStepCount = 0
-            }
+            // HealthKit deliberately hides read-permission state, so a
+            // non-throwing request is the only authorization signal we get —
+            // treat it as granted. A nil/zero step count means "no samples
+            // yet" (e.g. iPad, which has no pedometer), NOT denied. Conflating
+            // the two made onboarding falsely report "Access Denied" right
+            // after the user approved the prompt.
+            isAuthorized = true
+            todayStepCount = (try? await reader.todayStepCount()) ?? 0
             lastError = nil
         } catch {
             isAuthorized = false

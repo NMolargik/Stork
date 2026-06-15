@@ -56,8 +56,10 @@ final class HealthKitStepReader: StepCountReading {
                 } else if let quantity = stats?.sumQuantity() {
                     continuation.resume(returning: Int(quantity.doubleValue(for: .count())))
                 } else {
-                    // No quantity implies no read access; iPhone/Watch pedometers
-                    // virtually guarantee samples exist when access is granted.
+                    // No samples in range. This is NOT a reliable denial
+                    // signal — devices without a pedometer (e.g. iPad) report
+                    // no steps even when access is granted. Callers treat nil
+                    // as "no data", not "denied".
                     continuation.resume(returning: nil)
                 }
             }

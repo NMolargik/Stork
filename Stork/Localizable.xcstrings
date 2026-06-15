@@ -4724,28 +4724,6 @@
         }
       }
     },
-    "Got It" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entendido"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compris"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "わかりました"
-          }
-        }
-      }
-    },
     "Grant Stork access to step data in the Health app, or pair an Apple Watch to track steps." : {
       "localizations" : {
         "es" : {
@@ -4962,28 +4940,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "履歴"
-          }
-        }
-      }
-    },
-    "Hospitals Removed" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hospitales eliminados"
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hôpitaux retirés"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "病院情報を削除しました"
           }
         }
       }
@@ -8625,28 +8581,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld件の分娩をすべて完全に削除します。"
-          }
-        }
-      }
-    },
-    "To better protect your privacy, Stork no longer stores hospital information. Correlating delivery dates with specific facilities posed a small but real re-identification risk under HIPAA. Your delivery records remain intact—only the hospital field has been removed." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Para proteger mejor tu privacidad, Stork ya no almacena información de hospitales. Correlacionar fechas de partos con centros específicos suponía un riesgo pequeño pero real de reidentificación según HIPAA. Tus registros de partos permanecen intactos; solo se ha eliminado el campo de hospital."
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pour mieux protéger votre vie privée, Stork ne conserve plus les informations sur les hôpitaux. La corrélation des dates d'accouchement avec des établissements précis posait un risque de réidentification faible mais réel selon la HIPAA. Vos dossiers d'accouchement demeurent intacts — seul le champ de l'hôpital a été retiré."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プライバシーをより確実に保護するため、Storkは病院情報を保存しなくなりました。分娩日と特定の施設を関連付けることには、HIPAA上わずかながら現実的な再識別リスクがありました。分娩記録はそのまま残っており、削除されたのは病院の項目のみです。"
           }
         }
       }

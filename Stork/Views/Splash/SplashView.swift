@@ -38,7 +38,7 @@ struct SplashView: View {
                 .animation(.easeOut(duration: 0.6).delay(0.8), value: viewModel.subtitleVisible)
 
             // App icon
-            Image("storkicon")
+            Image("icon-purple-preview")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: hSizeClass == .regular ? 200 : 220)

@@ -17,32 +17,14 @@ struct MainView: View {
     @Environment(HealthManager.self) private var healthManager
     #endif
 
-    @AppStorage(AppStorageKeys.isOnboardingComplete) private var isOnboardingComplete: Bool = false
-    @AppStorage(AppStorageKeys.hasSeenHospitalRemovalNotice) private var hasSeenHospitalRemovalNotice: Bool = false
-
     @Binding var pendingDeepLink: DeepLink?
 
     @State private var viewModel = ViewModel()
-    @State private var showHospitalRemovalAlert: Bool = false
     @State private var milestoneShareImage: IdentifiableImage?
 
     var body: some View {
         ZStack {
             adaptiveTabs
-                .onAppear {
-                    // One-time notice for users who had data before hospital
-                    // tracking was removed for HIPAA reasons.
-                    if isOnboardingComplete && !hasSeenHospitalRemovalNotice {
-                        showHospitalRemovalAlert = true
-                    }
-                }
-                .alert("Hospitals Removed", isPresented: $showHospitalRemovalAlert) {
-                    Button("Got It", role: .cancel) {
-                        hasSeenHospitalRemovalNotice = true
-                    }
-                } message: {
-                    Text("To better protect your privacy, Stork no longer stores hospital information. Correlating delivery dates with specific facilities posed a small but real re-identification risk under HIPAA. Your delivery records remain intact—only the hospital field has been removed.")
-                }
 
             if let milestone = deliveryManager.pendingMilestoneCelebration {
                 MilestoneCelebrationView(
