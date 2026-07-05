@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import SwiftData
+import StorkCore
+import StorkServices
+import StorkDesignSystem
 
 struct TodayStatsView: View {
-    @Environment(\.modelContext) private var modelContext
-
     let deliveries: [Delivery]
     let healthManager: HealthManager
 

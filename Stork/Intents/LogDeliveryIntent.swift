@@ -2,13 +2,15 @@
 //  LogDeliveryIntent.swift
 //  Stork
 //
-//  Lets Siri / Shortcuts / Apple Intelligence log a delivery without
-//  opening the app — counts only, never patient-identifying data.
+//  Lets Siri / Shortcuts / Apple Intelligence log a delivery without opening the app —
+//  counts only, never patient-identifying data.
 //
 
 import AppIntents
 import Foundation
 import os
+import StorkCore
+import StorkComposition
 
 struct LogDeliveryIntent: AppIntent {
     static let title: LocalizedStringResource = "Log a Delivery"
@@ -27,7 +29,7 @@ struct LogDeliveryIntent: AppIntent {
     var losses: Int
 
     @Parameter(title: "Delivery Method", default: .vaginal)
-    var method: DeliveryMethod
+    var method: DeliveryMethodAppEnum
 
     @Parameter(title: "Epidural Used", default: false)
     var epiduralUsed: Bool
@@ -39,13 +41,10 @@ struct LogDeliveryIntent: AppIntent {
         }
     }
 
-    @Dependency
-    private var deliveryManager: DeliveryManager
+    @Dependency private var session: SessionController
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
-        // "Log a delivery" with no counts shouldn't fail — ask for them.
-        // Parameterized invocations ("…with two girls") skip these prompts.
         var boys = self.boys
         var girls = self.girls
         if boys + girls + losses == 0 {
@@ -67,43 +66,33 @@ struct LogDeliveryIntent: AppIntent {
             date: Date(),
             babies: babies,
             babyCount: total,
-            deliveryMethod: method,
+            deliveryMethod: method.core,
             epiduralUsed: epiduralUsed,
             notes: "Added via Siri - may lack baby details."
         )
         for baby in babies { baby.delivery = delivery }
 
-        deliveryManager.create(delivery: delivery)
+        try session.logDelivery(delivery)
 
-        return .result(
-            dialog: "Logged \(total) \(total == 1 ? "baby" : "babies"). Great work!"
-        )
+        return .result(dialog: "Logged \(total) \(total == 1 ? "baby" : "babies"). Great work!")
     }
 }
 
 extension LogDeliveryIntent {
-    /// Donates an interaction mirroring a delivery the user logged through
-    /// the app's UI, so Apple Intelligence / the new Siri can learn real
-    /// usage patterns. Siri and Shortcuts executions are recorded by the
-    /// system automatically — only call this from manual save paths, once
-    /// per real save.
+    /// Donates an interaction mirroring a delivery logged through the app's UI so Apple
+    /// Intelligence / Siri can learn real usage. Call only from manual save paths.
     @MainActor
     static func donate(reflecting delivery: Delivery) {
         let babies = delivery.babies ?? []
-
         let intent = LogDeliveryIntent()
         intent.boys = babies.count { $0.sex == .male }
         intent.girls = babies.count { $0.sex == .female }
         intent.losses = babies.count { $0.sex == .loss }
-        intent.method = delivery.deliveryMethod
+        intent.method = DeliveryMethodAppEnum(delivery.deliveryMethod)
         intent.epiduralUsed = delivery.epiduralUsed
-
         Task {
-            do {
-                _ = try await IntentDonationManager.shared.donate(intent: intent)
-            } catch {
-                Log.app.error("Intent donation failed: \(error.localizedDescription)")
-            }
+            do { _ = try await IntentDonationManager.shared.donate(intent: intent) }
+            catch { Log.app.error("Intent donation failed: \(error.localizedDescription)") }
         }
     }
 }

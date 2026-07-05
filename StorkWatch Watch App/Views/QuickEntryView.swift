@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
-import SwiftData
+import StorkCore
+import StorkDesignSystem
 import WatchKit
 import os
 
 struct QuickEntryView: View {
-    @Environment(\.modelContext) private var modelContext
+    let model: WatchDeliveryModel
 
     @State private var boyCount: Int = 0
     @State private var girlCount: Int = 0
@@ -112,64 +113,26 @@ struct QuickEntryView: View {
     }
 
     private func saveDelivery() {
-        // Create babies based on counts
-        var babies: [Baby] = []
-
-        for _ in 0..<boyCount {
-            let baby = Baby(sex: .male)
-            babies.append(baby)
-        }
-        for _ in 0..<girlCount {
-            let baby = Baby(sex: .female)
-            babies.append(baby)
-        }
-        for _ in 0..<lossCount {
-            let baby = Baby(sex: .loss)
-            babies.append(baby)
-        }
-
-        // Create delivery
-        let delivery = Delivery(
-            date: Date(),
-            babies: babies,
-            babyCount: totalBabies,
-            deliveryMethod: deliveryMethod,
-            epiduralUsed: false,
-            notes: "Added from Watch - may lack baby details."
-        )
-
-        // Link babies to delivery
-        for baby in babies {
-            baby.delivery = delivery
-        }
-
-        // Save
-        modelContext.insert(delivery)
         do {
-            try modelContext.save()
-            savedDelivery = delivery
+            // The use-case runs the shared save side effects (app-group counts,
+            // complication reloads) and returns real milestone detection.
+            let result = try model.log(
+                boys: boyCount,
+                girls: girlCount,
+                losses: lossCount,
+                method: deliveryMethod
+            )
+            savedDelivery = result.delivery
             showingConfirmation = true
 
-            // Haptic feedback for milestone check
-            WatchHaptics.success()
-
-            // Check for milestone
-            checkMilestone()
+            if result.milestone != nil {
+                WatchHaptics.milestone()
+            } else {
+                WatchHaptics.success()
+            }
         } catch {
             Log.deliveries.error("Failed to save delivery: \(error.localizedDescription)")
             WatchHaptics.error()
-        }
-    }
-
-    private func checkMilestone() {
-        // Query total babies
-        let descriptor = FetchDescriptor<Baby>()
-        if let allBabies = try? modelContext.fetch(descriptor) {
-            let total = allBabies.count
-            let milestones = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]
-            if milestones.contains(total) {
-                WatchHaptics.milestone()
-            }
         }
     }
 
@@ -284,6 +247,20 @@ struct ConfirmationView: View {
     }
 }
 
-#Preview {
-    QuickEntryView()
+#if DEBUG
+private struct PreviewLoadDeliveries: LoadDeliveries {
+    func callAsFunction() throws(PersistenceError) -> [Delivery] { [] }
 }
+
+private struct PreviewLogDelivery: LogDelivery {
+    @discardableResult
+    func callAsFunction(_ delivery: Delivery) throws(PersistenceError) -> MilestoneCelebration? { nil }
+}
+
+#Preview {
+    QuickEntryView(model: WatchDeliveryModel(
+        loadDeliveries: PreviewLoadDeliveries(),
+        logDelivery: PreviewLogDelivery()
+    ))
+}
+#endif

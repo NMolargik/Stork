@@ -12,6 +12,7 @@
 
 import SwiftUI
 import UIKit
+import StorkCore
 
 /// Bridge between the UIKit delegate world and SwiftUI.
 /// The `shared` instance exists only because UIKit instantiates the

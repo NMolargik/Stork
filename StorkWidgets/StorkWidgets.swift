@@ -7,16 +7,15 @@ import WidgetKit
 import SwiftUI
 import Foundation
 import SwiftData
+import StorkCore
+import StorkData
+import StorkDesignSystem
 
 // MARK: - Data read (CloudKit-synced SwiftData)
 
 @MainActor
 func widgetModelContainer() throws -> ModelContainer {
-    let cloudKitContainerID = "iCloud.com.molargiksoftware.Stork"
-    let config = ModelConfiguration(
-        cloudKitDatabase: .private(cloudKitContainerID)
-    )
-    return try ModelContainer(for: Delivery.self, Baby.self, DeliveryTag.self, configurations: config)
+    try StorkStore.makeContainer()
 }
 
 @MainActor

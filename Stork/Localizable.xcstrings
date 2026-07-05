@@ -2,9 +2,11 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "extractionState" : "manual",
+      "shouldGenerateSymbol" : false
     },
     " Weather" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -24,9 +26,11 @@
             "value" : " 天気"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "(%@)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -46,9 +50,11 @@
             "value" : "(%@)"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -68,9 +74,11 @@
             "value" : "%"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -93,6 +101,7 @@
       }
     },
     "%@ — %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -112,7 +121,8 @@
             "value" : "%@ — %@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@ %@" : {
       "localizations" : {
@@ -137,6 +147,7 @@
       }
     },
     "%@ %@ %@ percent" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -156,9 +167,11 @@
             "value" : "%@ %@ %@パーセント"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@ %lld %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -181,9 +194,11 @@
       }
     },
     "%@ app icon" : {
-
+      "extractionState" : "manual",
+      "shouldGenerateSymbol" : false
     },
     "%@ baby, %@%@%@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -203,9 +218,11 @@
             "value" : "%@の赤ちゃん、%@%@%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@ deliveries: %@ percent" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -225,9 +242,11 @@
             "value" : "%@分娩：%@パーセント"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@ shift: %@ percent, %lld deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -247,9 +266,11 @@
             "value" : "%@シフト：%@パーセント、分娩%lld件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@ statistics" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -269,9 +290,11 @@
             "value" : "%@の統計"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@ steps" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -291,9 +314,11 @@
             "value" : "%@歩"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@, %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -313,9 +338,11 @@
             "value" : "%@, %@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@: %@ percent" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -335,9 +362,11 @@
             "value" : "%@：%@パーセント"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@: %@, %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -357,9 +386,11 @@
             "value" : "%@: %@, %@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@: %@%%" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -379,9 +410,11 @@
             "value" : "%@: %@%%"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%@: %lld deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -401,9 +434,11 @@
             "value" : "%@：分娩%lld件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -448,6 +483,7 @@
       }
     },
     "%lld babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -467,9 +503,11 @@
             "value" : "赤ちゃん%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld Babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -489,9 +527,11 @@
             "value" : "赤ちゃん%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld babies delivered" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -511,9 +551,11 @@
             "value" : "赤ちゃん%lld人誕生"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld boys, %lld girls, %lld losses" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -533,9 +575,11 @@
             "value" : "男の子%lld人、女の子%lld人、死産%lld件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld consecutive days" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -555,9 +599,11 @@
             "value" : "%lld日連続"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -577,9 +623,11 @@
             "value" : "分娩%lld件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld deliveries, %lld babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -599,9 +647,11 @@
             "value" : "分娩%lld件、赤ちゃん%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld steps today" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -621,9 +671,11 @@
             "value" : "今日%lld歩"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld total babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -643,9 +695,11 @@
             "value" : "赤ちゃん合計%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "%lld: %lld deliveries, %lld babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -665,9 +719,11 @@
             "value" : "%lld：分娩%lld件、赤ちゃん%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "•" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -687,9 +743,11 @@
             "value" : "•"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "^[%lld baby](inflect: true)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -709,9 +767,11 @@
             "value" : "赤ちゃん%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "^[%lld baby](inflect: true) • %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -731,9 +791,11 @@
             "value" : "赤ちゃん%lld人 • %@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "^[%lld boy](inflect: true)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -753,9 +815,11 @@
             "value" : "男の子%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "^[%lld delivery](inflect: true), ^[%lld baby](inflect: true) on %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -775,9 +839,11 @@
             "value" : "分娩%lld件、赤ちゃん%lld人（%@）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "^[%lld girl](inflect: true)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -797,9 +863,11 @@
             "value" : "女の子%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "^[%lld loss](inflect: true)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -819,9 +887,11 @@
             "value" : "死産%lld件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "+" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -841,9 +911,11 @@
             "value" : "+"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "+%lld" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -863,9 +935,11 @@
             "value" : "+%lld"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "1 baby" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -885,9 +959,11 @@
             "value" : "赤ちゃん1人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "1 Baby" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -910,6 +986,7 @@
       }
     },
     "1 baby delivered" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -932,6 +1009,7 @@
       }
     },
     "1 delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -951,9 +1029,11 @@
             "value" : "分娩1件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "7-day average" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -976,6 +1056,7 @@
       }
     },
     "7-Day Average" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -995,10 +1076,11 @@
             "value" : "7日間平均"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "12" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1018,9 +1100,11 @@
             "value" : "12"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "About" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1040,9 +1124,11 @@
             "value" : "アプリについて"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Add" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1062,9 +1148,11 @@
             "value" : "追加"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Add A Baby" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1087,6 +1175,7 @@
       }
     },
     "Add a personal note..." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1106,9 +1195,11 @@
             "value" : "個人的なメモを追加..."
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Add at least one baby to enable" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1131,6 +1222,7 @@
       }
     },
     "Add baby" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1153,6 +1245,7 @@
       }
     },
     "Add Baby" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1172,9 +1265,11 @@
             "value" : "赤ちゃんを追加"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Add personal memories about this delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1197,7 +1292,7 @@
       }
     },
     "Add Sample Data (1 Year)" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1217,7 +1312,8 @@
             "value" : "サンプルデータを追加（1年分）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Add tags" : {
       "extractionState" : "stale",
@@ -1243,6 +1339,7 @@
       }
     },
     "Add Tags" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1262,9 +1359,11 @@
             "value" : "タグを追加"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Additional Info" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1284,9 +1383,11 @@
             "value" : "追加情報"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Adjust to filter by number of babies per delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1309,6 +1410,7 @@
       }
     },
     "Always at top" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1328,7 +1430,32 @@
             "value" : "常に最上部"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
+    },
+    "An unknown error occurred. Please try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se produjo un error desconocido. Inténtalo de nuevo."
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur inconnue s'est produite. Veuillez réessayer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不明なエラーが発生しました。もう一度お試しください。"
+          }
+        }
+      },
+      "shouldGenerateSymbol" : false
     },
     "And how many girls?" : {
       "localizations" : {
@@ -1353,6 +1480,7 @@
       }
     },
     "Any number" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1372,9 +1500,11 @@
             "value" : "指定なし"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Any number of babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1394,9 +1524,11 @@
             "value" : "赤ちゃんの人数を問わない"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "App Icon" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1416,9 +1548,11 @@
             "value" : "アプリアイコン"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "App version %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1441,6 +1575,7 @@
       }
     },
     "Apple Weather attribution" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1460,9 +1595,11 @@
             "value" : "Apple Weatherの帰属表示"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Applies the selected filters to the delivery list" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1485,6 +1622,7 @@
       }
     },
     "Apply" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1504,9 +1642,11 @@
             "value" : "適用"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Apply filters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1529,6 +1669,7 @@
       }
     },
     "At least one baby is required." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1548,9 +1689,11 @@
             "value" : "赤ちゃんが1人以上必要です。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Attributions" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1570,9 +1713,11 @@
             "value" : "帰属表示"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Average" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1592,9 +1737,11 @@
             "value" : "平均"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Average %@ babies per delivery. Total %lld deliveries, %lld babies." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1614,9 +1761,11 @@
             "value" : "1回の分娩あたり平均%@人の赤ちゃん。合計で分娩%lld件、赤ちゃん%lld人です。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Average height: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1639,6 +1788,7 @@
       }
     },
     "Average weight: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1661,6 +1811,7 @@
       }
     },
     "avg height" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1680,9 +1831,11 @@
             "value" : "平均身長"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Avg Height" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1702,9 +1855,11 @@
             "value" : "平均身長"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "avg weight" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1724,9 +1879,11 @@
             "value" : "平均体重"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Avg Weight" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1746,9 +1903,11 @@
             "value" : "平均体重"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1768,9 +1927,11 @@
             "value" : "赤ちゃん"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1790,9 +1951,11 @@
             "value" : "赤ちゃん"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "babies per delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1812,7 +1975,8 @@
             "value" : "分娩あたりの赤ちゃん"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Babies This Week" : {
       "localizations" : {
@@ -1837,6 +2001,7 @@
       }
     },
     "Babies:" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1856,9 +2021,11 @@
             "value" : "赤ちゃん："
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Baby" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1878,9 +2045,11 @@
             "value" : "赤ちゃん"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Baby %lld" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1900,9 +2069,11 @@
             "value" : "赤ちゃん%lld"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Baby %lld, %@, born at %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1922,9 +2093,11 @@
             "value" : "赤ちゃん%lld、%@、%@に誕生"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Baby %lld: %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1944,9 +2117,11 @@
             "value" : "赤ちゃん%lld：%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Baby Count" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1966,9 +2141,11 @@
             "value" : "赤ちゃんの人数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Baby count filter" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1991,6 +2168,7 @@
       }
     },
     "Baby sex" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2010,9 +2188,11 @@
             "value" : "赤ちゃんの性別"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Backup & Sync" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2032,9 +2212,11 @@
             "value" : "バックアップと同期"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Boys" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2054,7 +2236,8 @@
             "value" : "男の子"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Boys: %lld" : {
       "extractionState" : "stale",
@@ -2080,6 +2263,7 @@
       }
     },
     "Busiest Day" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2099,9 +2283,11 @@
             "value" : "最も忙しい曜日"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Busiest day is %@ with %lld deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2121,9 +2307,11 @@
             "value" : "最も忙しい曜日は%@で、分娩%lld件です"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "By Shift" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2143,9 +2331,11 @@
             "value" : "シフト別"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "C-section" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2165,9 +2355,11 @@
             "value" : "帝王切開"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "C-Section" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2187,9 +2379,11 @@
             "value" : "帝王切開"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Calendar" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2209,9 +2403,11 @@
             "value" : "カレンダー"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Cancel" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2231,7 +2427,8 @@
             "value" : "キャンセル"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Career Delivery Totals" : {
       "localizations" : {
@@ -2278,6 +2475,7 @@
       }
     },
     "Chart showing babies delivered over time by month" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2297,9 +2495,11 @@
             "value" : "月別の赤ちゃん誕生数の推移を示すグラフです"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Clear Filters" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2319,12 +2519,11 @@
             "value" : "フィルターをクリア"
           }
         }
-      }
-    },
-    "Clears all filter criteria" : {
-
+      },
+      "shouldGenerateSymbol" : false
     },
     "Close" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2344,9 +2543,11 @@
             "value" : "閉じる"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Close jar history" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2366,9 +2567,11 @@
             "value" : "ジャーの履歴を閉じる"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "cm" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2388,9 +2591,11 @@
             "value" : "cm"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Connect Health" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2410,9 +2615,11 @@
             "value" : "ヘルスケアと連携"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Connect Health to show pedometer" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2432,10 +2639,11 @@
             "value" : "歩数計を表示するにはヘルスケアと連携してください"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Content" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2455,9 +2663,11 @@
             "value" : "コンテンツ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Continue" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2477,9 +2687,11 @@
             "value" : "続ける"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Couldn't delete delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2501,7 +2713,80 @@
         }
       }
     },
+    "Couldn't load your deliveries. (%@)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron cargar tus partos. (%@)"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de charger vos accouchements. (%@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分娩データを読み込めませんでした。(%@)"
+          }
+        }
+      },
+      "shouldGenerateSymbol" : false
+    },
+    "Couldn't Save Delivery" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo guardar el parto"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'enregistrer l'accouchement"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分娩を保存できませんでした"
+          }
+        }
+      },
+      "shouldGenerateSymbol" : false
+    },
+    "Couldn't save your changes. (%@)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron guardar tus cambios. (%@)"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'enregistrer vos modifications. (%@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変更を保存できませんでした。(%@)"
+          }
+        }
+      },
+      "shouldGenerateSymbol" : false
+    },
     "Count" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2521,9 +2806,11 @@
             "value" : "件数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Create New Tag" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2543,9 +2830,11 @@
             "value" : "新規タグを作成"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Create shareable images of your statistics cards and milestone achievements." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2565,9 +2854,11 @@
             "value" : "統計カードやマイルストーン達成を共有用の画像として作成できます。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Create Tag" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2587,9 +2878,11 @@
             "value" : "タグを作成"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "CSV Export" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2609,9 +2902,11 @@
             "value" : "CSV書き出し"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Current weather" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2631,9 +2926,11 @@
             "value" : "現在の天気"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Customize the order of dashboard cards" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2656,6 +2953,7 @@
       }
     },
     "Daily step counts for the last 7 days" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2675,9 +2973,11 @@
             "value" : "過去7日間の毎日の歩数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Dashboard" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2697,9 +2997,11 @@
             "value" : "ダッシュボード"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Data" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2719,9 +3021,11 @@
             "value" : "データ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Date" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2741,9 +3045,11 @@
             "value" : "日付"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Date and time must be between %@ and %@." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2766,6 +3072,7 @@
       }
     },
     "Date cannot be changed when editing" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2788,6 +3095,7 @@
       }
     },
     "Date Range" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2807,9 +3115,11 @@
             "value" : "期間"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Day" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2829,9 +3139,11 @@
             "value" : "日"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Day–Month–Year Dates" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2851,9 +3163,11 @@
             "value" : "日–月–年形式の日付"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delete" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2873,9 +3187,11 @@
             "value" : "削除"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delete All" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2895,9 +3211,11 @@
             "value" : "すべて削除"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delete all deliveries" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2920,6 +3238,7 @@
       }
     },
     "Delete All Deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2939,9 +3258,11 @@
             "value" : "すべての分娩を削除"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delete All Deliveries?" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2961,9 +3282,11 @@
             "value" : "すべての分娩を削除しますか？"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delete baby" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2983,9 +3306,11 @@
             "value" : "赤ちゃんを削除"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delete delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3005,9 +3330,11 @@
             "value" : "分娩を削除"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delete this delivery?" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3027,9 +3354,11 @@
             "value" : "この分娩を削除しますか？"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Deleting…" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3049,9 +3378,11 @@
             "value" : "削除中…"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3071,9 +3402,11 @@
             "value" : "分娩"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3093,9 +3426,11 @@
             "value" : "分娩"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Deliveries:" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3115,9 +3450,11 @@
             "value" : "分娩："
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3137,9 +3474,11 @@
             "value" : "分娩"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delivery date" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3159,9 +3498,11 @@
             "value" : "分娩日"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delivery date and time" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3181,9 +3522,11 @@
             "value" : "分娩の日時"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delivery date: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3206,6 +3549,7 @@
       }
     },
     "Delivery details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3228,6 +3572,7 @@
       }
     },
     "Delivery Details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3250,6 +3595,7 @@
       }
     },
     "Delivery jar for %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3269,9 +3615,11 @@
             "value" : "%@の分娩ジャー"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delivery method" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3291,9 +3639,11 @@
             "value" : "分娩方法"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delivery Method" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3313,9 +3663,11 @@
             "value" : "分娩方法"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Delivery method: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3338,6 +3690,7 @@
       }
     },
     "Delivery Not Found" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3360,6 +3713,7 @@
       }
     },
     "Delivery notes" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3379,9 +3733,11 @@
             "value" : "分娩メモ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Details" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3401,9 +3757,11 @@
             "value" : "詳細"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Developer" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3423,9 +3781,11 @@
             "value" : "開発者"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Discards changes and closes the form" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3448,6 +3808,7 @@
       }
     },
     "Discards filter changes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3470,6 +3831,7 @@
       }
     },
     "Dismiss" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3489,9 +3851,11 @@
             "value" : "閉じる"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Done" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3511,9 +3875,11 @@
             "value" : "完了"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Double tap to remove" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3533,9 +3899,11 @@
             "value" : "削除するにはダブルタップします"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Drag cards to customize your dashboard layout." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3555,9 +3923,11 @@
             "value" : "カードをドラッグしてダッシュボードのレイアウトをカスタマイズしましょう。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Drag to Reorder" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3577,9 +3947,11 @@
             "value" : "ドラッグして並べ替え"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Edit" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3599,9 +3971,11 @@
             "value" : "編集"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Edit baby" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3621,9 +3995,11 @@
             "value" : "赤ちゃんを編集"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Edit Baby" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3643,9 +4019,11 @@
             "value" : "赤ちゃんを編集"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Edit Delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3665,9 +4043,11 @@
             "value" : "分娩を編集"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Enable to filter deliveries within a specific date range" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3690,6 +4070,7 @@
       }
     },
     "Enable to show only deliveries that have personal notes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3712,6 +4093,7 @@
       }
     },
     "Enable to show only deliveries where epidural was used" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3734,6 +4116,7 @@
       }
     },
     "End date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3756,6 +4139,7 @@
       }
     },
     "End Date" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3775,9 +4159,11 @@
             "value" : "終了日"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "End date must be after start date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3800,6 +4186,7 @@
       }
     },
     "Enter Stork" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3819,9 +4206,11 @@
             "value" : "Storkを始める"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Enter the baby's height" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3844,6 +4233,7 @@
       }
     },
     "Enter the baby's weight" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3866,6 +4256,7 @@
       }
     },
     "Enter weight and height to enable" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3888,6 +4279,7 @@
       }
     },
     "Epidural" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3907,9 +4299,11 @@
             "value" : "硬膜外麻酔"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "epidural usage" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3929,9 +4323,11 @@
             "value" : "硬膜外麻酔使用率"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Epidural usage: %@ percent of deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3951,9 +4347,11 @@
             "value" : "硬膜外麻酔の使用：分娩の%@パーセント"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Epidural used" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3973,9 +4371,11 @@
             "value" : "硬膜外麻酔使用"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Epidural Used" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3995,9 +4395,11 @@
             "value" : "硬膜外麻酔使用"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Epidural used only" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4020,6 +4422,7 @@
       }
     },
     "Epidural Used Only" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4039,9 +4442,11 @@
             "value" : "硬膜外麻酔使用のみ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Epidural: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4064,6 +4469,7 @@
       }
     },
     "Error: Date must be within the last 3 days" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4086,6 +4492,7 @@
       }
     },
     "Examples: \"Teaching Moment\", \"First Solo\", \"Night Shift\". Do not include patient information." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4105,9 +4512,11 @@
             "value" : "例：「指導の機会」「初めての単独担当」「夜勤」。患者情報は含めないでください。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Export & Share" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4127,9 +4536,11 @@
             "value" : "書き出しと共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Export and Share" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4152,6 +4563,7 @@
       }
     },
     "Export CSV" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4171,9 +4583,11 @@
             "value" : "CSVを書き出す"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Export Data" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4193,9 +4607,11 @@
             "value" : "データを書き出す"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Export data for spreadsheets or backup" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4215,9 +4631,11 @@
             "value" : "スプレッドシートやバックアップ用にデータを書き出し"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Export data or share statistics as images" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4240,6 +4658,7 @@
       }
     },
     "Export delivery records as PDF or CSV, or share your statistics." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4259,9 +4678,11 @@
             "value" : "分娩記録をPDFまたはCSVで書き出したり、統計を共有したりできます。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Export Error" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4281,9 +4702,11 @@
             "value" : "書き出しエラー"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Export your delivery records for analysis, backup, or professional portfolios." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4303,9 +4726,11 @@
             "value" : "分析、バックアップ、職務ポートフォリオのために分娩記録を書き出せます。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Exporting..." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4325,9 +4750,11 @@
             "value" : "書き出し中..."
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Filter by date range" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4350,6 +4777,7 @@
       }
     },
     "Filter by Date Range" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4369,9 +4797,11 @@
             "value" : "期間で絞り込み"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Filter deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4391,9 +4821,11 @@
             "value" : "分娩を絞り込み"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Filter Deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4413,9 +4845,11 @@
             "value" : "分娩を絞り込み"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Finish" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4435,9 +4869,11 @@
             "value" : "完了"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Finish delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4460,6 +4896,7 @@
       }
     },
     "Fixed Position" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4479,9 +4916,11 @@
             "value" : "固定位置"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "for labor & delivery professionals" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4501,9 +4940,11 @@
             "value" : "分娩医療のプロフェッショナルへ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Format" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4523,9 +4964,11 @@
             "value" : "形式"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "g" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4545,9 +4988,11 @@
             "value" : "g"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Generate a summary report with charts" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4567,9 +5012,11 @@
             "value" : "グラフ付きのサマリーレポートを生成"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Generate CSV" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4589,9 +5036,11 @@
             "value" : "CSVを生成"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Generate PDF Report" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4611,9 +5060,11 @@
             "value" : "PDFレポートを生成"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Generating..." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4633,9 +5084,11 @@
             "value" : "生成中..."
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Get Started" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4655,9 +5108,11 @@
             "value" : "はじめる"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Girls" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4677,7 +5132,8 @@
             "value" : "女の子"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Girls: %lld" : {
       "extractionState" : "stale",
@@ -4725,6 +5181,7 @@
       }
     },
     "Grant Stork access to step data in the Health app, or pair an Apple Watch to track steps." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4744,9 +5201,11 @@
             "value" : "ヘルスケアAppでStorkに歩数データへのアクセスを許可するか、Apple Watchをペアリングして歩数を記録してください。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Has notes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4769,6 +5228,7 @@
       }
     },
     "Has Notes" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4788,9 +5248,11 @@
             "value" : "メモあり"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Height" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4810,9 +5272,11 @@
             "value" : "身長"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Height (cm)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4832,9 +5296,11 @@
             "value" : "身長（cm）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Height (in)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4854,9 +5320,11 @@
             "value" : "身長（in）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Height in centimeters" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4876,9 +5344,11 @@
             "value" : "センチメートル単位の身長"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Height in inches" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4898,9 +5368,11 @@
             "value" : "インチ単位の身長"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Here's what you can do with Stork" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4920,9 +5392,11 @@
             "value" : "Storkでできること"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "History" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -4942,7 +5416,8 @@
             "value" : "履歴"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "How many babies you've delivered this week (Sunday through Saturday)." : {
       "localizations" : {
@@ -4989,6 +5464,7 @@
       }
     },
     "iCloud" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5008,9 +5484,11 @@
             "value" : "iCloud"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "iCloud Sync Status" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5030,9 +5508,11 @@
             "value" : "iCloud同期の状況"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Imperial" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5052,9 +5532,11 @@
             "value" : "ヤード・ポンド法"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "in" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5074,9 +5556,11 @@
             "value" : "in"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Include Watermark" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5096,9 +5580,11 @@
             "value" : "ウォーターマークを含める"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Jar History" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5118,9 +5604,11 @@
             "value" : "ジャーの履歴"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "kg" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5140,9 +5628,11 @@
             "value" : "kg"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Legal Attribution" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5162,9 +5652,11 @@
             "value" : "法的帰属表示"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Length" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5184,9 +5676,11 @@
             "value" : "身長"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Length: %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5206,9 +5700,11 @@
             "value" : "身長：%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Loading steps…" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5228,9 +5724,11 @@
             "value" : "歩数を読み込み中…"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Loading..." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5250,7 +5748,8 @@
             "value" : "読み込み中..."
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Log a ${method} delivery with ${boys} boys and ${girls} girls" : {
       "localizations" : {
@@ -5275,6 +5774,7 @@
       }
     },
     "Log a Delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5294,7 +5794,8 @@
             "value" : "分娩を記録"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Log Delivery" : {
       "localizations" : {
@@ -5341,6 +5842,7 @@
       }
     },
     "Longest Streak" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5360,9 +5862,11 @@
             "value" : "最長連続日数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Longest streak: %lld consecutive days with deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5382,9 +5886,11 @@
             "value" : "最長連続記録：分娩のある日が%lld日連続"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Loss" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5404,7 +5910,8 @@
             "value" : "死産"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Loss: %lld" : {
       "extractionState" : "stale",
@@ -5452,6 +5959,7 @@
       }
     },
     "Manage Tags" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5474,6 +5982,7 @@
       }
     },
     "Marble Jar" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5493,9 +6002,11 @@
             "value" : "マーブルジャー"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Metric" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5515,9 +6026,11 @@
             "value" : "メートル法"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Metric Units" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5537,9 +6050,11 @@
             "value" : "メートル法の単位"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Milestones Achieved" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5559,9 +6074,11 @@
             "value" : "達成したマイルストーン"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Molargik Software LLC" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5581,9 +6098,11 @@
             "value" : "Molargik Software LLC"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Month" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5603,9 +6122,11 @@
             "value" : "月"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "N I C U stays: %@ percent of babies" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5628,6 +6149,7 @@
       }
     },
     "New Delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5647,9 +6169,11 @@
             "value" : "新規分娩"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Next month" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5669,9 +6193,11 @@
             "value" : "翌月"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Nick Molargik" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5691,9 +6217,11 @@
             "value" : "Nick Molargik"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "NICU" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5713,9 +6241,11 @@
             "value" : "NICU"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "NICU stay" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5735,9 +6265,11 @@
             "value" : "NICU入院"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "NICU Stay" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5757,9 +6289,11 @@
             "value" : "NICU入院"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "NICU stay required" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5782,6 +6316,7 @@
       }
     },
     "NICU stays" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5801,9 +6336,11 @@
             "value" : "NICU入院"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5823,7 +6360,8 @@
             "value" : "いいえ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No babies added yet." : {
       "extractionState" : "stale",
@@ -5871,6 +6409,7 @@
       }
     },
     "No babies logged yet." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5890,9 +6429,11 @@
             "value" : "まだ赤ちゃんが記録されていません。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No babies recorded for this delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5915,6 +6456,7 @@
       }
     },
     "No babies recorded for this delivery." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5937,6 +6479,7 @@
       }
     },
     "No babies recorded." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5959,6 +6502,7 @@
       }
     },
     "No data" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -5978,9 +6522,11 @@
             "value" : "データなし"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No Deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6000,9 +6546,11 @@
             "value" : "分娩なし"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No deliveries logged yet." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6022,9 +6570,11 @@
             "value" : "まだ分娩が記録されていません。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No deliveries match the current filters." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6044,9 +6594,11 @@
             "value" : "現在のフィルターに一致する分娩はありません。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No deliveries recorded on %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6066,9 +6618,11 @@
             "value" : "%@には分娩の記録がありません"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No Deliveries Yet" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6088,7 +6642,8 @@
             "value" : "まだ分娩がありません"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No deliveries yet. Your logged deliveries will appear here." : {
       "extractionState" : "stale",
@@ -6114,6 +6669,7 @@
       }
     },
     "No Matches" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6133,9 +6689,11 @@
             "value" : "一致なし"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "No tags added." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6181,6 +6739,7 @@
       }
     },
     "Notes" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6200,9 +6759,11 @@
             "value" : "メモ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Notes: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6247,6 +6808,7 @@
       }
     },
     "Nurse catch" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6266,9 +6828,11 @@
             "value" : "ナースキャッチ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Nurse Catch" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6288,9 +6852,11 @@
             "value" : "ナースキャッチ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "OK" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6310,7 +6876,8 @@
             "value" : "OK"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Open Delivery" : {
       "localizations" : {
@@ -6335,6 +6902,7 @@
       }
     },
     "Open Settings" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6354,7 +6922,8 @@
             "value" : "設定を開く"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Opens a delivery's details in Stork." : {
       "localizations" : {
@@ -6379,6 +6948,7 @@
       }
     },
     "Opens Apple Weather legal attribution page" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6401,6 +6971,7 @@
       }
     },
     "Opens filter options for the delivery list" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6420,9 +6991,11 @@
             "value" : "分娩リストのフィルターオプションを開きます"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Opens form to add a new baby to this delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6445,6 +7018,7 @@
       }
     },
     "Opens form to edit this baby's information" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6467,6 +7041,7 @@
       }
     },
     "Opens LinkedIn profile" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6489,6 +7064,7 @@
       }
     },
     "Opens picker to add tags to this delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6511,6 +7087,7 @@
       }
     },
     "Opens publisher website" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6555,6 +7132,7 @@
       }
     },
     "Options" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6574,9 +7152,11 @@
             "value" : "オプション"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "oz" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6596,9 +7176,11 @@
             "value" : "oz"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Page %lld of %lld" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6618,9 +7200,11 @@
             "value" : "ページ %lld / %lld"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "PDF Report" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6640,9 +7224,11 @@
             "value" : "PDFレポート"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Peak Hour" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6662,9 +7248,11 @@
             "value" : "ピーク時間帯"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Peak hour is %@ with %lld deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6684,9 +7272,11 @@
             "value" : "ピーク時間帯は%@で、分娩%lld件です"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Per-baby format includes detailed measurements for each baby." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6706,9 +7296,11 @@
             "value" : "赤ちゃんごとの形式では、各赤ちゃんの詳細な測定値が含まれます。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Permanently removes all delivery records" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6731,6 +7323,7 @@
       }
     },
     "Permanently removes this delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6750,9 +7343,11 @@
             "value" : "この分娩を完全に削除します"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Pie chart showing sex distribution: %lld male, %lld female, %lld loss" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6772,9 +7367,11 @@
             "value" : "性別の内訳を示す円グラフ：男の子%lld人、女の子%lld人、死産%lld件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Preview" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6794,7 +7391,8 @@
             "value" : "プレビュー"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Preview Onboarding" : {
       "extractionState" : "stale",
@@ -6820,6 +7418,7 @@
       }
     },
     "Previous month" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6839,9 +7438,11 @@
             "value" : "前月"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Private notes for memorable deliveries. No PHI - just personal memories like \"twins on Christmas!\"" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6861,9 +7462,11 @@
             "value" : "思い出に残る分娩のための個人メモです。PHI（保護対象保健情報）は記載せず、「クリスマスに双子！」のような個人的な思い出だけを残しましょう。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Private notes for memorable deliveries. No PHI." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6886,6 +7489,7 @@
       }
     },
     "Progress" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6905,9 +7509,11 @@
             "value" : "進捗"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Publisher" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6927,7 +7533,8 @@
             "value" : "発行元"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Quickly log a delivery you performed. You can add details like measurements later in Stork." : {
       "localizations" : {
@@ -6952,6 +7559,7 @@
       }
     },
     "Record a Delivery" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6971,9 +7579,11 @@
             "value" : "分娩を記録"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Refresh Deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -6993,9 +7603,11 @@
             "value" : "分娩を更新"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Removes this baby from the delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7018,6 +7630,7 @@
       }
     },
     "Reorder cards" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7037,9 +7650,11 @@
             "value" : "カードを並べ替え"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Reorder Cards" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7059,9 +7674,11 @@
             "value" : "カードを並べ替え"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Report Period" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7081,9 +7698,11 @@
             "value" : "レポート期間"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Reset" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7103,7 +7722,8 @@
             "value" : "リセット"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Reshuffle" : {
       "extractionState" : "stale",
@@ -7129,6 +7749,7 @@
       }
     },
     "Row Format" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7148,9 +7769,11 @@
             "value" : "行の形式"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Rows to Export" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7170,9 +7793,11 @@
             "value" : "書き出す行"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Save" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7192,9 +7817,11 @@
             "value" : "保存"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Save changes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7217,6 +7844,7 @@
       }
     },
     "Saves the baby information" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7239,6 +7867,7 @@
       }
     },
     "Saves the delivery record" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7261,6 +7890,7 @@
       }
     },
     "Search notes, tags, and methods" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7280,10 +7910,11 @@
             "value" : "メモ、タグ、方法を検索"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Seeding…" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7303,9 +7934,11 @@
             "value" : "サンプルデータを作成中…"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Select male, female, or loss" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7328,6 +7961,7 @@
       }
     },
     "Select the beginning of the date range" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7350,6 +7984,7 @@
       }
     },
     "Select the date and time of delivery" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7372,6 +8007,7 @@
       }
     },
     "Select the end of the date range" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7394,6 +8030,7 @@
       }
     },
     "Select vaginal, C-section, or V-BAC" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7416,6 +8053,7 @@
       }
     },
     "Selected (%lld)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7435,9 +8073,11 @@
             "value" : "選択済み（%lld）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Settings" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7457,9 +8097,11 @@
             "value" : "設定"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Sex" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7479,9 +8121,11 @@
             "value" : "性別"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Sex distribution: %lld boys, %lld girls, %lld losses" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7501,9 +8145,11 @@
             "value" : "性別の内訳：男の子%lld人、女の子%lld人、死産%lld件"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7523,9 +8169,11 @@
             "value" : "共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share Achievement" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7545,9 +8193,11 @@
             "value" : "達成を共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share Card" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7567,9 +8217,11 @@
             "value" : "カードを共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share Cards" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7589,9 +8241,11 @@
             "value" : "共有カード"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share CSV File" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7611,9 +8265,11 @@
             "value" : "CSVファイルを共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share Image" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7633,9 +8289,11 @@
             "value" : "画像を共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share PDF Report" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7655,9 +8313,11 @@
             "value" : "PDFレポートを共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share statistics and milestones as images" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7677,9 +8337,11 @@
             "value" : "統計やマイルストーンを画像として共有"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Share your achievements with colleagues!" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7699,10 +8361,11 @@
             "value" : "達成したことを同僚と共有しましょう！"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Show Error" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7722,10 +8385,11 @@
             "value" : "エラーを表示"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Show Info" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7745,10 +8409,11 @@
             "value" : "情報を表示"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Show Success" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7768,9 +8433,11 @@
             "value" : "成功を表示"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Shows deliveries with ANY of the selected tags" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7790,9 +8457,11 @@
             "value" : "選択したタグのいずれかを含む分娩を表示します"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Sign in to iCloud in Settings to enable sync." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7812,7 +8481,8 @@
             "value" : "同期を有効にするには、設定でiCloudにサインインしてください。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Start a New Delivery" : {
       "localizations" : {
@@ -7837,6 +8507,7 @@
       }
     },
     "Start date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7859,6 +8530,7 @@
       }
     },
     "Start Date" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7878,9 +8550,11 @@
             "value" : "開始日"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Statistics" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7900,9 +8574,11 @@
             "value" : "統計"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Statistics Cards" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7922,9 +8598,11 @@
             "value" : "統計カード"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Step %lld of %lld" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7944,9 +8622,11 @@
             "value" : "ステップ %lld / %lld"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Steps" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7966,9 +8646,11 @@
             "value" : "歩数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Steps This Week" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -7988,9 +8670,11 @@
             "value" : "今週の歩数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Steps Unavailable" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8010,9 +8694,11 @@
             "value" : "歩数を取得できません"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Stork" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8032,9 +8718,11 @@
             "value" : "Stork"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Stork app logo" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8054,9 +8742,11 @@
             "value" : "Storkアプリのロゴ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Stork is designed to keep your data private and secure." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8076,9 +8766,11 @@
             "value" : "Storkはあなたのデータを非公開かつ安全に保つよう設計されています。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Stork Statistics" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8098,9 +8790,11 @@
             "value" : "Storkの統計"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Suggested Tags" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8120,9 +8814,11 @@
             "value" : "おすすめタグ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Switch between imperial and metric units for weight and length measurements" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8145,6 +8841,7 @@
       }
     },
     "Switch between Month–Day–Year and Day–Month–Year formats for dates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8167,6 +8864,7 @@
       }
     },
     "Sync" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8186,7 +8884,8 @@
             "value" : "同期"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Sync with iCloud" : {
       "localizations" : {
@@ -8211,6 +8910,7 @@
       }
     },
     "Synced with iCloud" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8233,6 +8933,7 @@
       }
     },
     "Tag name" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8252,9 +8953,11 @@
             "value" : "タグ名"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Tag: %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8274,9 +8977,11 @@
             "value" : "タグ：%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Tags" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8296,9 +9001,11 @@
             "value" : "タグ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Tags: %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8318,9 +9025,11 @@
             "value" : "タグ：%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Tap a card to preview and share it." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8340,9 +9049,11 @@
             "value" : "カードをタップしてプレビュー・共有できます。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Tap here to start tracking your first delivery." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8362,9 +9073,11 @@
             "value" : "ここをタップして最初の分娩の記録を始めましょう。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Tap month label to view jar history" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8387,6 +9100,7 @@
       }
     },
     "Tap to begin using Stork" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8406,9 +9120,11 @@
             "value" : "タップしてStorkを使い始めます"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Tap to view weather attribution" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8431,6 +9147,7 @@
       }
     },
     "Tap to view weekly step trend" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8450,7 +9167,8 @@
             "value" : "タップして週間の歩数推移を表示します"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Test Milestone" : {
       "extractionState" : "stale",
@@ -8476,6 +9194,7 @@
       }
     },
     "The report will include delivery method breakdown, sex distribution, and summary statistics." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8495,9 +9214,11 @@
             "value" : "レポートには分娩方法の内訳、性別の内訳、サマリー統計が含まれます。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "The selected delivery could not be loaded." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8520,6 +9241,7 @@
       }
     },
     "This action cannot be undone." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8539,9 +9261,11 @@
             "value" : "この操作は取り消せません。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "This will permanently delete all %lld delivery records and their associated baby data. This action cannot be undone." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8561,9 +9285,11 @@
             "value" : "%lld件の分娩記録と関連する赤ちゃんのデータをすべて完全に削除します。この操作は取り消せません。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "This will permanently remove all %lld deliveries." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8583,9 +9309,11 @@
             "value" : "%lld件の分娩をすべて完全に削除します。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Today" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8605,9 +9333,11 @@
             "value" : "今日"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Today's steps" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8627,9 +9357,11 @@
             "value" : "今日の歩数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Today's Steps" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8649,9 +9381,11 @@
             "value" : "今日の歩数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Toggle if baby required NICU care" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8674,6 +9408,7 @@
       }
     },
     "Toggle if delivery was a nurse catch" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8696,6 +9431,7 @@
       }
     },
     "Toggle whether an epidural was administered" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8718,6 +9454,7 @@
       }
     },
     "Total Babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8737,9 +9474,11 @@
             "value" : "赤ちゃん合計"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Total babies: %lld" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8759,9 +9498,11 @@
             "value" : "赤ちゃん合計：%lld"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Total Deliveries" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8781,9 +9522,11 @@
             "value" : "分娩合計"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "total deliveries on this day of the week" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8803,9 +9546,11 @@
             "value" : "この曜日の分娩総数"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Unavailable" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8825,9 +9570,11 @@
             "value" : "利用不可"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Units" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8847,9 +9594,11 @@
             "value" : "単位"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Use day month year date format" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8872,6 +9621,7 @@
       }
     },
     "Use metric units" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8894,6 +9644,7 @@
       }
     },
     "Vaginal" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8913,9 +9664,11 @@
             "value" : "経腟"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "VBAC" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8935,9 +9688,11 @@
             "value" : "VBAC"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Version" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8957,9 +9712,11 @@
             "value" : "バージョン"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "vs %lld: %lld deliveries, %lld babies" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8979,9 +9736,11 @@
             "value" : "vs %lld：分娩%lld件、赤ちゃん%lld人"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weather" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9001,9 +9760,11 @@
             "value" : "天気"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weather data provided by Apple Weather." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9023,9 +9784,11 @@
             "value" : "気象データはApple Weatherにより提供されています。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weather unavailable" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9045,9 +9808,11 @@
             "value" : "天気を取得できません"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weight" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9067,9 +9832,11 @@
             "value" : "体重"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weight (g)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9092,6 +9859,7 @@
       }
     },
     "Weight (kg)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9111,9 +9879,11 @@
             "value" : "体重（kg）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weight (oz)" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9133,9 +9903,11 @@
             "value" : "体重（oz）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weight in kilograms" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9155,9 +9927,11 @@
             "value" : "キログラム単位の体重"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weight in ounces" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9177,9 +9951,11 @@
             "value" : "オンス単位の体重"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Weight: %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9199,9 +9975,11 @@
             "value" : "体重：%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Yes" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9221,9 +9999,11 @@
             "value" : "はい"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "You're All Set!" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9243,7 +10023,8 @@
             "value" : "準備完了！"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "You've delivered %lld %@ across %lld %@. Incredible work!" : {
       "localizations" : {
@@ -9312,6 +10093,7 @@
       }
     },
     "Your Data" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9331,9 +10113,11 @@
             "value" : "あなたのデータ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Your logged deliveries will appear here." : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9353,9 +10137,11 @@
             "value" : "記録した分娩がここに表示されます。"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Your Privacy Matters" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9375,9 +10161,11 @@
             "value" : "あなたのプライバシーを大切に"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     },
     "Your Tags" : {
+      "extractionState" : "manual",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -9397,7 +10185,8 @@
             "value" : "あなたのタグ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol" : false
     }
   },
   "version" : "1.0"

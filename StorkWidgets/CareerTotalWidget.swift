@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import StorkCore
 
 // MARK: - Career Total Entry
 struct CareerTotalEntry: TimelineEntry {

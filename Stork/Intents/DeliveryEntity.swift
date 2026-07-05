@@ -2,14 +2,16 @@
 //  DeliveryEntity.swift
 //  Stork
 //
-//  The Siri / Spotlight / Apple Intelligence representation of a delivery.
-//  HIPAA-conscious by construction: aggregate facts only (date, counts,
-//  method, epidural) — never notes or tags, which can hold free text.
+//  The Siri / Spotlight / Apple Intelligence representation of a delivery. HIPAA-conscious
+//  by construction: aggregate facts only (date, counts, method, epidural) — never notes or
+//  tags, which can hold free text.
 //
 
 import AppIntents
 import CoreSpotlight
 import Foundation
+import StorkCore
+import StorkComposition
 
 struct DeliveryEntity: AppEntity, IndexedEntity {
     static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Delivery")
@@ -24,13 +26,11 @@ struct DeliveryEntity: AppEntity, IndexedEntity {
     var babyCount: Int
 
     @Property(title: "Delivery Method")
-    var method: DeliveryMethod
+    var method: DeliveryMethodAppEnum
 
     @Property(title: "Epidural Used")
     var epiduralUsed: Bool
 
-    /// Feeds Spotlight's semantic index so the new Siri can reason over
-    /// the entity ("the C-section with twins last week").
     @ComputedProperty(indexingKey: \.contentDescription)
     var summary: String {
         "\(babyCount) \(babyCount == 1 ? "baby" : "babies"), \(method.displayName) delivery, \(epiduralUsed ? "with" : "without") epidural"
@@ -48,7 +48,7 @@ struct DeliveryEntity: AppEntity, IndexedEntity {
         self.id = delivery.id
         self.date = delivery.date
         self.babyCount = delivery.babies?.count ?? delivery.babyCount
-        self.method = delivery.deliveryMethod
+        self.method = DeliveryMethodAppEnum(delivery.deliveryMethod)
         self.epiduralUsed = delivery.epiduralUsed
     }
 }
@@ -56,22 +56,19 @@ struct DeliveryEntity: AppEntity, IndexedEntity {
 // MARK: - Query
 
 struct DeliveryEntityQuery: EntityQuery {
-    @Dependency
-    private var deliveryManager: DeliveryManager
+    @Dependency private var session: SessionController
 
     @MainActor
     func entities(for identifiers: [UUID]) async throws -> [DeliveryEntity] {
-        await deliveryManager.refresh()
         let wanted = Set(identifiers)
-        return deliveryManager.deliveries
+        return ((try? session.loadDeliveries()) ?? [])
             .filter { wanted.contains($0.id) }
             .map(DeliveryEntity.init(from:))
     }
 
     @MainActor
     func suggestedEntities() async throws -> [DeliveryEntity] {
-        await deliveryManager.refresh()
-        return deliveryManager.deliveries
+        ((try? session.loadDeliveries()) ?? [])
             .prefix(10)
             .map(DeliveryEntity.init(from:))
     }
@@ -82,10 +79,7 @@ struct DeliveryEntityQuery: EntityQuery {
 /// Lets Spotlight results and Siri open a specific delivery in the app.
 struct OpenDeliveryIntent: OpenIntent {
     static let title: LocalizedStringResource = "Open Delivery"
-    static let description = IntentDescription(
-        "Opens a delivery's details in Stork.",
-        categoryName: "Deliveries"
-    )
+    static let description = IntentDescription("Opens a delivery's details in Stork.", categoryName: "Deliveries")
 
     @Parameter(title: "Delivery")
     var target: DeliveryEntity

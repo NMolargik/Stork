@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import StorkCore
 
 // MARK: - Lock Screen Entry
 struct LockScreenEntry: TimelineEntry {

@@ -8,6 +8,8 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import StorkCore
+import StorkDesignSystem
 
 // MARK: - Interactive Widget Entry
 struct InteractiveWidgetEntry: TimelineEntry {

@@ -2,36 +2,19 @@
 //  StorkWatchApp.swift
 //  StorkWatch Watch App
 //
-//  Created by Nick Molargik on 1/17/26.
+//  Thin entry point: builds `WatchSession` (the watch composition root) and hosts the
+//  content view. No direct SwiftData — the store lives behind the repository.
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct StorkWatchApp: App {
-    let modelContainer: ModelContainer
-
-    init() {
-        do {
-            let cloudKitContainerID = "iCloud.com.molargiksoftware.Stork"
-            let config = ModelConfiguration(
-                groupContainer: .identifier(AppGroup.id),
-                cloudKitDatabase: .private(cloudKitContainerID)
-            )
-            modelContainer = try ModelContainer(
-                for: Delivery.self, Baby.self, DeliveryTag.self,
-                configurations: config
-            )
-        } catch {
-            fatalError("Failed to create ModelContainer: \(error)")
-        }
-    }
+    @State private var session = WatchSession()
 
     var body: some Scene {
         WindowGroup {
-            WatchContentView()
-                .modelContainer(modelContainer)
+            WatchContentView(session: session)
         }
     }
 }

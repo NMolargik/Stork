@@ -2,12 +2,14 @@
 //  StatsIntents.swift
 //  Stork
 //
-//  Read-only intents that expose Stork's aggregate statistics to Siri,
-//  Shortcuts, and Apple Intelligence. Counts only — no patient data.
+//  Read-only intents exposing Stork's aggregate statistics to Siri, Shortcuts, and Apple
+//  Intelligence. Counts only — no patient data.
 //
 
 import AppIntents
 import Foundation
+import StorkCore
+import StorkComposition
 
 struct BabiesThisWeekIntent: AppIntent {
     static let title: LocalizedStringResource = "Babies This Week"
@@ -16,15 +18,12 @@ struct BabiesThisWeekIntent: AppIntent {
         categoryName: "Statistics"
     )
 
-    @Dependency
-    private var deliveryManager: DeliveryManager
+    @Dependency private var session: SessionController
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<Int> {
-        await deliveryManager.refresh()
-
         let week = WeekMath.weekRange()
-        let count = deliveryManager.deliveries
+        let count = ((try? session.loadDeliveries()) ?? [])
             .filter { week.contains($0.date) }
             .reduce(0) { $0 + ($1.babies?.count ?? $1.babyCount) }
 
@@ -44,15 +43,11 @@ struct CareerTotalsIntent: AppIntent {
         categoryName: "Statistics"
     )
 
-    @Dependency
-    private var deliveryManager: DeliveryManager
+    @Dependency private var session: SessionController
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<Int> {
-        await deliveryManager.refresh()
-
-        let totals = deliveryManager.milestoneTotals
-
+        let totals = session.loadCareerTotals()
         return .result(
             value: totals.babies,
             dialog: "You've delivered \(totals.babies) \(totals.babies == 1 ? "baby" : "babies") across \(totals.deliveries) \(totals.deliveries == 1 ? "delivery" : "deliveries"). Incredible work!"
