@@ -12,38 +12,38 @@ struct TimeOfDayCard: View {
     let deliveries: [Delivery]
 
     var body: some View {
-        InsightCard(title: "Time of Day", systemImage: "clock.fill", accent: .storkPurple) {
+        InsightCard(title: String(localized: "Time of Day", bundle: .module), systemImage: "clock.fill", accent: .storkPurple) {
             let stats = DeliveryStatistics.timeOfDayStats(deliveries: deliveries)
             VStack(alignment: .leading, spacing: 12) {
                 if stats.total > 0 {
                     if let peakHour = stats.peakHour {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Peak Hour").font(.caption).foregroundStyle(.secondary)
+                                Text("Peak Hour", bundle: .module).font(.caption).foregroundStyle(.secondary)
                                 Text(formatHour(peakHour)).font(.title2.bold()).foregroundStyle(.storkPurple)
                             }
                             Spacer()
                             VStack(alignment: .trailing, spacing: 2) {
-                                Text("\(stats.peakCount)").font(.title2.bold())
-                                Text("deliveries").font(.caption).foregroundStyle(.secondary)
+                                Text("\(stats.peakCount)", bundle: .module).font(.title2.bold())
+                                Text("deliveries", bundle: .module).font(.caption).foregroundStyle(.secondary)
                             }
                         }
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Peak hour is \(formatHour(peakHour)) with \(stats.peakCount) deliveries")
+                        .accessibilityLabel(Text("Peak hour is \(formatHour(peakHour)) with \(stats.peakCount) deliveries", bundle: .module))
                     }
 
                     Divider()
 
                     let shifts = stats.shiftBreakdown
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("By Shift").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                        Text("By Shift", bundle: .module).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
                         HStack(spacing: 8) {
-                            ShiftPill(label: "Night", count: shifts.night, total: stats.total, color: .indigo)
-                            ShiftPill(label: "Morning", count: shifts.morning, total: stats.total, color: .orange)
+                            ShiftPill(label: String(localized: "Night", bundle: .module), count: shifts.night, total: stats.total, color: .indigo)
+                            ShiftPill(label: String(localized: "Morning", bundle: .module), count: shifts.morning, total: stats.total, color: .orange)
                         }
                         HStack(spacing: 8) {
-                            ShiftPill(label: "Afternoon", count: shifts.afternoon, total: stats.total, color: .yellow)
-                            ShiftPill(label: "Evening", count: shifts.evening, total: stats.total, color: .blue)
+                            ShiftPill(label: String(localized: "Afternoon", bundle: .module), count: shifts.afternoon, total: stats.total, color: .yellow)
+                            ShiftPill(label: String(localized: "Evening", bundle: .module), count: shifts.evening, total: stats.total, color: .blue)
                         }
                     }
                 } else {

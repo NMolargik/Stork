@@ -13,17 +13,17 @@ struct BabyMeasurementsCard: View {
     let deliveries: [Delivery]
 
     var body: some View {
-        InsightCard(title: "Baby Measurements", systemImage: "ruler", accent: .storkOrange) {
+        InsightCard(title: String(localized: "Baby Measurements", bundle: .module), systemImage: "ruler", accent: .storkOrange) {
             let stats = DeliveryStatistics.babyMeasurementStats(deliveries: deliveries)
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 8) {
-                    Chip(icon: "scalemass.fill", caption: "Avg Weight",
+                    Chip(icon: "scalemass.fill", caption: String(localized: "Avg Weight", bundle: .module),
                          value: UnitConversion.weightDisplay(stats.averageWeight, useMetric: useMetricUnits))
-                    Chip(icon: "ruler.fill", caption: "Avg Height",
+                    Chip(icon: "ruler.fill", caption: String(localized: "Avg Height", bundle: .module),
                          value: UnitConversion.heightDisplay(stats.averageHeight, useMetric: useMetricUnits))
                 }
                 if stats.count == 0 {
-                    Label("No babies logged yet.", systemImage: "tray.fill")
+                    Label(String(localized: "No babies logged yet.", bundle: .module), systemImage: "tray.fill")
                         .foregroundStyle(.secondary).labelStyle(.titleOnly)
                 }
             }
@@ -46,7 +46,7 @@ struct BabyMeasurementsCard: View {
             .padding(.horizontal, 10).padding(.vertical, 6)
             .background(.ultraThinMaterial, in: Capsule())
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("\(caption): \(value)")
+            .accessibilityLabel(Text("\(caption): \(value)", bundle: .module))
         }
     }
 }

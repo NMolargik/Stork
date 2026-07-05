@@ -13,13 +13,13 @@ struct SexDistributionCard: View {
     let deliveries: [Delivery]
 
     var body: some View {
-        InsightCard(title: "Sex Distribution", systemImage: "chart.pie.fill", accent: .storkPurple) {
+        InsightCard(title: String(localized: "Sex Distribution", bundle: .module), systemImage: "chart.pie.fill", accent: .storkPurple) {
             let stats = DeliveryStatistics.sexDistribution(deliveries: deliveries)
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 8) {
-                    SexPill(label: "Male", percentage: stats.malePercentage, color: .storkBlue)
-                    SexPill(label: "Female", percentage: stats.femalePercentage, color: .storkPink)
-                    SexPill(label: "Loss", percentage: stats.lossPercentage, color: .storkPurple)
+                    SexPill(label: String(localized: "Male", bundle: .module), percentage: stats.malePercentage, color: .storkBlue)
+                    SexPill(label: String(localized: "Female", bundle: .module), percentage: stats.femalePercentage, color: .storkPink)
+                    SexPill(label: String(localized: "Loss", bundle: .module), percentage: stats.lossPercentage, color: .storkPurple)
                 }
                 if stats.total > 0 {
                     ZStack {
@@ -34,18 +34,18 @@ struct SexDistributionCard: View {
                             }
                         }
                         .frame(height: 220)
-                        .accessibilityLabel("Pie chart showing sex distribution: \(stats.maleCount) male, \(stats.femaleCount) female, \(stats.lossCount) loss")
+                        .accessibilityLabel(Text("Pie chart showing sex distribution: \(stats.maleCount) male, \(stats.femaleCount) female, \(stats.lossCount) loss", bundle: .module))
 
                         VStack(spacing: 2) {
-                            Text("Babies").font(.caption).foregroundStyle(.secondary)
+                            Text("Babies", bundle: .module).font(.caption).foregroundStyle(.secondary)
                             AnimatedInteger(value: stats.total, font: .title2, fontWeight: .bold)
                         }
                         .allowsHitTesting(false)
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Total babies: \(stats.total)")
+                        .accessibilityLabel(Text("Total babies: \(stats.total)", bundle: .module))
                     }
                 } else {
-                    Label("No babies logged yet.", systemImage: "tray.fill")
+                    Label(String(localized: "No babies logged yet.", bundle: .module), systemImage: "tray.fill")
                         .foregroundStyle(.secondary).labelStyle(.titleOnly)
                 }
             }
@@ -64,7 +64,7 @@ struct SexDistributionCard: View {
                     Text(label).font(.caption2).foregroundStyle(.secondary)
                     HStack(spacing: 0) {
                         AnimatedNumber(value: percentage, format: "%.0f", font: .subheadline, fontWeight: .semibold, color: color)
-                        Text("%").font(.subheadline).fontWeight(.semibold)
+                        Text("%", bundle: .module).font(.subheadline).fontWeight(.semibold)
                     }
                 }
             }

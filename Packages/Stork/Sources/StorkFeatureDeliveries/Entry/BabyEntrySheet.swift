@@ -29,17 +29,17 @@ struct BabyEntrySheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Sex") {
-                    Picker("Sex", selection: $entry.sex) {
+                Section(String(localized: "Sex", bundle: .module)) {
+                    Picker(String(localized: "Sex", bundle: .module), selection: $entry.sex) {
                         ForEach(Sex.allCases) { sex in
                             Text(sex.rawValue.capitalized).tag(sex)
                         }
                     }
                     .pickerStyle(.segmented)
-                    .accessibilityLabel("Baby sex")
+                    .accessibilityLabel(Text("Baby sex", bundle: .module))
                 }
 
-                Section("Weight") {
+                Section(String(localized: "Weight", bundle: .module)) {
                     HStack {
                         TextField(useMetricUnits ? "Weight (kg)" : "Weight (oz)", value: $entry.weight, format: .number)
                             .keyboardType(.decimalPad)
@@ -48,7 +48,7 @@ struct BabyEntrySheet: View {
                     }
                 }
 
-                Section("Height") {
+                Section(String(localized: "Height", bundle: .module)) {
                     HStack {
                         TextField(useMetricUnits ? "Height (cm)" : "Height (in)", value: $entry.height, format: .number)
                             .keyboardType(.decimalPad)
@@ -57,9 +57,9 @@ struct BabyEntrySheet: View {
                     }
                 }
 
-                Section("Additional Info") {
-                    Toggle("NICU Stay", isOn: $entry.nicuStay)
-                    Toggle("Nurse Catch", isOn: $entry.nurseCatch)
+                Section(String(localized: "Additional Info", bundle: .module)) {
+                    Toggle(String(localized: "NICU Stay", bundle: .module), isOn: $entry.nicuStay)
+                    Toggle(String(localized: "Nurse Catch", bundle: .module), isOn: $entry.nurseCatch)
                 }
             }
             .navigationTitle(entry.id == nil ? "Add Baby" : "Edit Baby")
@@ -72,7 +72,7 @@ struct BabyEntrySheet: View {
                     .disabled(!entry.isValid)
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
                 }
             }
         }

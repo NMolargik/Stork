@@ -14,8 +14,8 @@ import StorkDesignSystem
 /// First-run tip guiding the user to record their first delivery.
 public struct NewDeliveryTip: Tip {
     public init() {}
-    public var title: Text { Text("Record a Delivery") }
-    public var message: Text? { Text("Tap here to start tracking your first delivery.") }
+    public var title: Text { Text("Record a Delivery", bundle: .module) }
+    public var message: Text? { Text("Tap here to start tracking your first delivery.", bundle: .module) }
     public var image: Image? { Image(systemName: "plus.circle.fill") }
 }
 
@@ -62,7 +62,7 @@ public struct AddDeliveryToolbarButton: View {
 
         var body: some View {
             Button(action: action) {
-                Label("Add", systemImage: "plus")
+                Label(String(localized: "Add", bundle: .module), systemImage: "plus")
                     .imageScale(.large)
                     .bold()
             }

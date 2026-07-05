@@ -50,7 +50,7 @@ struct InsightCard<Content: View>: View {
         .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .hoverEffect(.lift)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("\(title) statistics")
+        .accessibilityLabel(Text("\(title) statistics", bundle: .module))
     }
 }
 #endif

@@ -12,24 +12,24 @@ struct PersonalBestsCard: View {
     let deliveries: [Delivery]
 
     var body: some View {
-        InsightCard(title: "Personal Bests", systemImage: "trophy.fill", accent: .storkOrange) {
+        InsightCard(title: String(localized: "Personal Bests", bundle: .module), systemImage: "trophy.fill", accent: .storkOrange) {
             let stats = DeliveryStatistics.personalBests(deliveries: deliveries)
             VStack(alignment: .leading, spacing: 12) {
                 if stats.mostDeliveriesInDay != nil || stats.longestStreak > 0 {
                     if let best = stats.mostDeliveriesInDay {
-                        BestRow(icon: "sun.max.fill", title: "Most in a Day", value: "\(best.count)",
+                        BestRow(icon: "sun.max.fill", title: String(localized: "Most in a Day", bundle: .module), value: "\(best.count)",
                                 subtitle: formatDate(best.date, style: .medium), color: .orange)
                     }
                     if let best = stats.mostDeliveriesInWeek {
-                        BestRow(icon: "calendar.badge.clock", title: "Most in a Week", value: "\(best.count)",
-                                subtitle: "Week of \(formatDate(best.weekStart, style: .short))", color: .blue)
+                        BestRow(icon: "calendar.badge.clock", title: String(localized: "Most in a Week", bundle: .module), value: "\(best.count)",
+                                subtitle: String(localized: "Week of \(formatDate(best.weekStart, style: .short))", bundle: .module), color: .blue)
                     }
                     if let best = stats.mostDeliveriesInMonth {
-                        BestRow(icon: "calendar", title: "Most in a Month", value: "\(best.count)",
+                        BestRow(icon: "calendar", title: String(localized: "Most in a Month", bundle: .module), value: "\(best.count)",
                                 subtitle: formatDate(best.monthStart, style: .monthYear), color: .purple)
                     }
                     if let best = stats.mostBabiesInDay {
-                        BestRow(icon: "figure.2.and.child.holdinghands", title: "Most Babies in a Day", value: "\(best.count)",
+                        BestRow(icon: "figure.2.and.child.holdinghands", title: String(localized: "Most Babies in a Day", bundle: .module), value: "\(best.count)",
                                 subtitle: formatDate(best.date, style: .medium), color: .pink)
                     }
                     if stats.longestStreak > 1 {
@@ -37,13 +37,13 @@ struct PersonalBestsCard: View {
                         HStack {
                             Image(systemName: "flame.fill").foregroundStyle(.orange)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Longest Streak").font(.caption).foregroundStyle(.secondary)
-                                Text("\(stats.longestStreak) consecutive days").font(.subheadline.bold())
+                                Text("Longest Streak", bundle: .module).font(.caption).foregroundStyle(.secondary)
+                                Text("\(stats.longestStreak) consecutive days", bundle: .module).font(.subheadline.bold())
                             }
                             Spacer()
                         }
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Longest streak: \(stats.longestStreak) consecutive days with deliveries")
+                        .accessibilityLabel(Text("Longest streak: \(stats.longestStreak) consecutive days with deliveries", bundle: .module))
                     }
                 } else {
                     EmptyCardLabel()
@@ -70,7 +70,7 @@ struct PersonalBestsCard: View {
                 Text(value).font(.title2.bold()).foregroundStyle(color)
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("\(title): \(value), \(subtitle)")
+            .accessibilityLabel(Text("\(title): \(value), \(subtitle)", bundle: .module))
         }
     }
 

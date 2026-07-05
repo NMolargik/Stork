@@ -45,14 +45,14 @@ public struct JarHistoryView: View {
                 PageIndicator(months: months, deliveries: deliveries, selectedPage: selectedPage)
                     .padding(.bottom, 8)
             }
-            .navigationTitle("Jar History")
+            .navigationTitle(Text("Jar History", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button { dismiss() } label: { Image(systemName: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
-                        .accessibilityLabel("Close jar history")
+                        .accessibilityLabel(Text("Close jar history", bundle: .module))
                 }
             }
         }
@@ -73,7 +73,7 @@ public struct JarHistoryView: View {
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Page \(selectedPage + 1) of \(months.count)")
+            .accessibilityLabel(Text("Page \(selectedPage + 1) of \(months.count)", bundle: .module))
         }
 
         private func dotColor(for index: Int) -> Color {

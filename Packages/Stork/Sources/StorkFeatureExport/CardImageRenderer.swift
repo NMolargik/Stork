@@ -149,13 +149,13 @@ struct ShareableStatCardView: View {
                 }
                 .frame(height: 16)
                 HStack(spacing: 16) {
-                    legendItem(color: .storkBlue, label: "Vaginal", value: vaginal, total: total)
-                    legendItem(color: .storkOrange, label: "C-Section", value: cSection, total: total)
-                    legendItem(color: .storkPurple, label: "VBAC", value: vbac, total: total)
+                    legendItem(color: .storkBlue, label: String(localized: "Vaginal", bundle: .module), value: vaginal, total: total)
+                    legendItem(color: .storkOrange, label: String(localized: "C-Section", bundle: .module), value: cSection, total: total)
+                    legendItem(color: .storkPurple, label: String(localized: "VBAC", bundle: .module), value: vbac, total: total)
                 }
                 .font(.caption)
             } else {
-                Text("No data").foregroundStyle(.secondary)
+                Text("No data", bundle: .module).foregroundStyle(.secondary)
             }
         }
     }
@@ -163,7 +163,7 @@ struct ShareableStatCardView: View {
     private func legendItem(color: Color, label: String, value: Int, total: Int) -> some View {
         HStack(spacing: 4) {
             Circle().fill(color).frame(width: 8, height: 8)
-            Text("\(label): \(String(format: "%.0f", Double(value) / Double(total) * 100))%")
+            Text("\(label): \(String(format: "%.0f", Double(value) / Double(total) * 100))%", bundle: .module)
         }
     }
 
@@ -176,20 +176,20 @@ struct ShareableStatCardView: View {
         return VStack(spacing: 12) {
             if total > 0 {
                 HStack(spacing: 20) {
-                    statColumn(value: male, label: "Boys", color: .storkBlue)
-                    statColumn(value: female, label: "Girls", color: .storkPink)
-                    if loss > 0 { statColumn(value: loss, label: "Loss", color: .storkPurple) }
+                    statColumn(value: male, label: String(localized: "Boys", bundle: .module), color: .storkBlue)
+                    statColumn(value: female, label: String(localized: "Girls", bundle: .module), color: .storkPink)
+                    if loss > 0 { statColumn(value: loss, label: String(localized: "Loss", bundle: .module), color: .storkPurple) }
                 }
-                Text("\(total) total babies").font(.caption).foregroundStyle(.secondary)
+                Text("\(total) total babies", bundle: .module).font(.caption).foregroundStyle(.secondary)
             } else {
-                Text("No data").foregroundStyle(.secondary)
+                Text("No data", bundle: .module).foregroundStyle(.secondary)
             }
         }
     }
 
     private func statColumn(value: Int, label: String, color: Color) -> some View {
         VStack {
-            Text("\(value)").font(.title2.bold()).foregroundStyle(color)
+            Text("\(value)", bundle: .module).font(.title2.bold()).foregroundStyle(color)
             Text(label).font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -200,8 +200,8 @@ struct ShareableStatCardView: View {
         let avg = total > 0 ? Double(babies) / Double(total) : 0
         return VStack(spacing: 8) {
             Text(String(format: "%.1f", avg)).font(.system(size: 44, weight: .bold, design: .rounded)).foregroundStyle(.storkPink)
-            Text("babies per delivery").font(.subheadline).foregroundStyle(.secondary)
-            Text("\(total) deliveries, \(babies) babies").font(.caption).foregroundStyle(.tertiary)
+            Text("babies per delivery", bundle: .module).font(.subheadline).foregroundStyle(.secondary)
+            Text("\(total) deliveries, \(babies) babies", bundle: .module).font(.caption).foregroundStyle(.tertiary)
         }
     }
 
@@ -211,7 +211,7 @@ struct ShareableStatCardView: View {
         let percent = total > 0 ? Double(epidural) / Double(total) * 100 : 0
         return VStack(spacing: 8) {
             Text(String(format: "%.1f%%", percent)).font(.system(size: 44, weight: .bold, design: .rounded)).foregroundStyle(.red)
-            Text("epidural usage").font(.subheadline).foregroundStyle(.secondary)
+            Text("epidural usage", bundle: .module).font(.subheadline).foregroundStyle(.secondary)
         }
     }
 
@@ -222,7 +222,7 @@ struct ShareableStatCardView: View {
         let percent = total > 0 ? Double(nicu) / Double(total) * 100 : 0
         return VStack(spacing: 8) {
             Text(String(format: "%.1f%%", percent)).font(.system(size: 44, weight: .bold, design: .rounded)).foregroundStyle(.red)
-            Text("NICU stays").font(.subheadline).foregroundStyle(.secondary)
+            Text("NICU stays", bundle: .module).font(.subheadline).foregroundStyle(.secondary)
         }
     }
 
@@ -230,7 +230,7 @@ struct ShareableStatCardView: View {
         let babies = deliveries.flatMap { $0.babies ?? [] }
         let total = babies.count
         guard total > 0 else {
-            return AnyView(Text("No data").foregroundStyle(.secondary))
+            return AnyView(Text("No data", bundle: .module).foregroundStyle(.secondary))
         }
         let avgWeight = babies.reduce(0.0) { $0 + $1.weight } / Double(total)
         let avgHeight = babies.reduce(0.0) { $0 + $1.height } / Double(total)
@@ -239,12 +239,12 @@ struct ShareableStatCardView: View {
                 VStack {
                     Image(systemName: "scalemass.fill").foregroundStyle(.storkOrange)
                     Text(UnitConversion.weightDisplay(avgWeight, useMetric: useMetricUnits)).font(.title3.bold())
-                    Text("avg weight").font(.caption).foregroundStyle(.secondary)
+                    Text("avg weight", bundle: .module).font(.caption).foregroundStyle(.secondary)
                 }
                 VStack {
                     Image(systemName: "ruler.fill").foregroundStyle(.storkOrange)
                     Text(UnitConversion.heightDisplay(avgHeight, useMetric: useMetricUnits)).font(.title3.bold())
-                    Text("avg height").font(.caption).foregroundStyle(.secondary)
+                    Text("avg height", bundle: .module).font(.caption).foregroundStyle(.secondary)
                 }
             }
         )

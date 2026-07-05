@@ -78,7 +78,7 @@ private struct DayCell: View {
     var body: some View {
         Button(action: onTap) {
             VStack(spacing: 4) {
-                Text("\(calendar.component(.day, from: date))")
+                Text("\(calendar.component(.day, from: date))", bundle: .module)
                     .font(.body)
                     .fontWeight(isToday ? .bold : .regular)
                     .foregroundStyle(isSelected ? .white : (isToday ? .storkPurple : .primary))
@@ -89,7 +89,7 @@ private struct DayCell: View {
                             Circle().fill(dotColor(for: deliveriesForDay[index])).frame(width: 6, height: 6)
                         }
                         if deliveriesForDay.count > 3 {
-                            Text("+").font(.system(size: 8)).foregroundStyle(.secondary)
+                            Text("+", bundle: .module).font(.system(size: 8)).foregroundStyle(.secondary)
                         }
                     }
                 } else {
@@ -122,8 +122,8 @@ private struct DayCell: View {
         if isToday { dateString = "Today, \(dateString)" }
         if deliveriesForDay.isEmpty { return dateString }
         let babyCount = deliveriesForDay.reduce(0) { $0 + ($1.babies?.count ?? $1.babyCount) }
-        let deliveryPart = deliveriesForDay.count == 1 ? String(localized: "1 delivery") : String(localized: "\(deliveriesForDay.count) deliveries")
-        let babyPart = babyCount == 1 ? String(localized: "1 baby") : String(localized: "\(babyCount) babies")
+        let deliveryPart = deliveriesForDay.count == 1 ? String(localized: "1 delivery", bundle: .module) : String(localized: "\(deliveriesForDay.count) deliveries", bundle: .module)
+        let babyPart = babyCount == 1 ? String(localized: "1 baby", bundle: .module) : String(localized: "\(babyCount) babies", bundle: .module)
         return "\(dateString), \(deliveryPart), \(babyPart)"
     }
 }

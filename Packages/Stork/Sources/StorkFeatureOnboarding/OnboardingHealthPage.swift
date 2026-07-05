@@ -35,7 +35,7 @@ struct OnboardingHealthPage: View {
                 .padding(.top, 24)
 
                 VStack(spacing: 0) {
-                    OnboardingFeatureRow(icon: "figure.walk", iconColor: .green, title: "Step Counter", description: "Track your daily steps during shifts.")
+                    OnboardingFeatureRow(icon: "figure.walk", iconColor: .green, title: String(localized: "Step Counter", bundle: .module), description: String(localized: "Track your daily steps during shifts.", bundle: .module))
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -44,8 +44,8 @@ struct OnboardingHealthPage: View {
 
                 if healthManager.isAuthorized {
                     VStack(spacing: 8) {
-                        Text("Today's Steps").font(.subheadline).foregroundStyle(.secondary)
-                        Text("\(healthManager.todayStepCount)").font(.system(size: 48, weight: .bold, design: .rounded))
+                        Text("Today's Steps", bundle: .module).font(.subheadline).foregroundStyle(.secondary)
+                        Text("\(healthManager.todayStepCount)", bundle: .module).font(.system(size: 48, weight: .bold, design: .rounded))
                     }
                     .padding().frame(maxWidth: 500)
                     .background(Color(uiColor: .secondarySystemGroupedBackground))
@@ -57,7 +57,7 @@ struct OnboardingHealthPage: View {
                     Button {
                         if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
                     } label: {
-                        Label("Open Settings", systemImage: "gear")
+                        Label(String(localized: "Open Settings", bundle: .module), systemImage: "gear")
                             .font(.headline).frame(maxWidth: .infinity).frame(height: 50)
                             .background(Color.secondary.opacity(0.2)).foregroundStyle(.primary)
                             .clipShape(RoundedRectangle(cornerRadius: 14))

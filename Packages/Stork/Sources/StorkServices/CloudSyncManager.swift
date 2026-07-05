@@ -26,11 +26,11 @@ public final class CloudSyncManager {
 
         public var displayText: String {
             switch self {
-            case .idle: "Ready"
-            case .syncing: "Syncing..."
-            case .synced(let date): "Last synced \(date.formatted(.relative(presentation: .named)))"
-            case .error(let message): "Error: \(message)"
-            case .offline: "Offline"
+            case .idle: String(localized: "Ready", bundle: .module)
+            case .syncing: String(localized: "Syncing...", bundle: .module)
+            case .synced(let date): String(localized: "Last synced \(date.formatted(.relative(presentation: .named)))", bundle: .module)
+            case .error(let message): String(localized: "Error: \(message)", bundle: .module)
+            case .offline: String(localized: "Offline", bundle: .module)
             }
         }
 

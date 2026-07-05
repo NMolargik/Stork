@@ -174,7 +174,7 @@ private struct SymbolRenderingModifier: ViewModifier {
     VStack(spacing: 16) {
         DetailRowView(style: .feature, systemImage: "heart.fill", title: "Feature Row", tint: .storkPink)
         DetailRowView(style: .insight, systemImage: "chart.bar.fill", title: "Insight Row", subtitle: "With a subtitle", tint: .storkBlue) {
-            Text("12").bold()
+            Text("12", bundle: .module).bold()
         }
     }
     .padding()

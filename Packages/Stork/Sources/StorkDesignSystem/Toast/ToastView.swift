@@ -81,7 +81,7 @@ public struct ToastView: View {
                         .background(Circle().fill(.white.opacity(0.2)))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Dismiss")
+                .accessibilityLabel(Text("Dismiss", bundle: .module))
             }
         }
     }
@@ -128,9 +128,9 @@ public extension View {
         @State private var toastManager = ToastManager()
         var body: some View {
             VStack(spacing: 20) {
-                Button("Show Success") { toastManager.showSuccess("Delivery saved") }
-                Button("Show Info") { toastManager.show(message: "Syncing with iCloud…", style: .info, icon: "icloud.fill") }
-                Button("Show Error") { toastManager.show(message: "Something went wrong", style: .error) }
+                Button(String(localized: "Show Success", bundle: .module)) { toastManager.showSuccess(String(localized: "Delivery saved", bundle: .module)) }
+                Button(String(localized: "Show Info", bundle: .module)) { toastManager.show(message: String(localized: "Syncing with iCloud…", bundle: .module), style: .info, icon: "icloud.fill") }
+                Button(String(localized: "Show Error", bundle: .module)) { toastManager.show(message: String(localized: "Something went wrong", bundle: .module), style: .error) }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .toastContainer()

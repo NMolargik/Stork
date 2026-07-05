@@ -19,10 +19,10 @@ nonisolated public enum AppTab: String, CaseIterable, Identifiable, Sendable {
 
     public var localizedTitle: LocalizedStringResource {
         switch self {
-        case .dashboard: "Dashboard"
-        case .list: "Deliveries"
-        case .calendar: "Calendar"
-        case .settings: "Settings"
+        case .dashboard: LocalizedStringResource("Dashboard", bundle: .atURL(Bundle.module.bundleURL))
+        case .list: LocalizedStringResource("Deliveries", bundle: .atURL(Bundle.module.bundleURL))
+        case .calendar: LocalizedStringResource("Calendar", bundle: .atURL(Bundle.module.bundleURL))
+        case .settings: LocalizedStringResource("Settings", bundle: .atURL(Bundle.module.bundleURL))
         }
     }
 

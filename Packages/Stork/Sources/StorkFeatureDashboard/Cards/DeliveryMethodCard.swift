@@ -12,7 +12,7 @@ struct DeliveryMethodCard: View {
     let deliveries: [Delivery]
 
     var body: some View {
-        InsightCard(title: "Delivery Method", systemImage: "hands.and.sparkles.fill", accent: .storkBlue) {
+        InsightCard(title: String(localized: "Delivery Method", bundle: .module), systemImage: "hands.and.sparkles.fill", accent: .storkBlue) {
             let stats = DeliveryStatistics.deliveryMethodStats(deliveries: deliveries)
             VStack(alignment: .leading, spacing: 12) {
                 if stats.total > 0 {
@@ -28,9 +28,9 @@ struct DeliveryMethodCard: View {
                     .accessibilityHidden(true)
 
                     FlowLayout(spacing: 8) {
-                        MethodPill(label: "Vaginal", value: v, color: DeliveryMethod.vaginal.accentColor)
-                        MethodPill(label: "C-Section", value: c, color: DeliveryMethod.cSection.accentColor)
-                        MethodPill(label: "VBAC", value: vb, color: DeliveryMethod.vBac.accentColor)
+                        MethodPill(label: String(localized: "Vaginal", bundle: .module), value: v, color: DeliveryMethod.vaginal.accentColor)
+                        MethodPill(label: String(localized: "C-Section", bundle: .module), value: c, color: DeliveryMethod.cSection.accentColor)
+                        MethodPill(label: String(localized: "VBAC", bundle: .module), value: vb, color: DeliveryMethod.vBac.accentColor)
                     }
                     .font(.caption)
                 } else {
@@ -50,7 +50,7 @@ struct DeliveryMethodCard: View {
                 Image(systemName: "circle.fill").font(.caption2).accessibilityHidden(true)
                 Text(label)
                 AnimatedNumber(value: value, format: "%.0f", font: .caption, fontWeight: .regular, color: color)
-                Text("%")
+                Text("%", bundle: .module)
             }
             .lineLimit(1)
             .fixedSize()
@@ -67,7 +67,7 @@ struct DeliveryMethodCard: View {
 /// Shared "nothing logged yet" placeholder for dashboard cards.
 struct EmptyCardLabel: View {
     var body: some View {
-        Label("No deliveries logged yet.", systemImage: "tray.fill")
+        Label(String(localized: "No deliveries logged yet.", bundle: .module), systemImage: "tray.fill")
             .foregroundStyle(.secondary)
             .labelStyle(.titleOnly)
     }

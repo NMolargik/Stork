@@ -42,9 +42,9 @@ struct ShareCardView: View {
                 }
                 .padding(.vertical, 8)
             } header: {
-                Text("Statistics Cards")
+                Text("Statistics Cards", bundle: .module)
             } footer: {
-                Text("Tap a card to preview and share it.")
+                Text("Tap a card to preview and share it.", bundle: .module)
             }
 
             if !availableMilestones.isEmpty {
@@ -56,7 +56,7 @@ struct ShareCardView: View {
                             HStack {
                                 Image(systemName: "star.fill").foregroundStyle(.yellow)
                                 VStack(alignment: .leading) {
-                                    Text("\(milestone.count) \(milestone.type.displayName)").font(.headline)
+                                    Text("\(milestone.count) \(milestone.type.displayName)", bundle: .module).font(.headline)
                                     Text(milestone.type.displayTemplate(count: milestone.count)).font(.caption).foregroundStyle(.secondary)
                                 }
                                 Spacer()
@@ -68,19 +68,19 @@ struct ShareCardView: View {
                         .buttonStyle(.plain)
                     }
                 } header: {
-                    Text("Milestones Achieved")
+                    Text("Milestones Achieved", bundle: .module)
                 } footer: {
-                    Text("Share your achievements with colleagues!")
+                    Text("Share your achievements with colleagues!", bundle: .module)
                 }
             }
 
-            Section("Options") {
-                Toggle("Include Watermark", isOn: $includeWatermark)
+            Section(String(localized: "Options", bundle: .module)) {
+                Toggle(String(localized: "Include Watermark", bundle: .module), isOn: $includeWatermark)
                     .onChange(of: includeWatermark) { _, _ in regenerateImage() }
             }
 
             if let image = renderedImage {
-                Section("Preview") {
+                Section(String(localized: "Preview", bundle: .module)) {
                     VStack {
                         Image(uiImage: image)
                             .resizable().scaledToFit()
@@ -88,7 +88,7 @@ struct ShareCardView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .shadow(radius: 4)
                         ShareLink(item: Image(uiImage: image), preview: SharePreview("Stork Statistics", image: Image(uiImage: image))) {
-                            Label("Share Image", systemImage: "square.and.arrow.up")
+                            Label(String(localized: "Share Image", bundle: .module), systemImage: "square.and.arrow.up")
                                 .foregroundStyle(.white).frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
@@ -99,7 +99,7 @@ struct ShareCardView: View {
                 }
             }
         }
-        .navigationTitle("Share Cards")
+        .navigationTitle(Text("Share Cards", bundle: .module))
         .navigationBarTitleDisplayMode(.inline)
     }
 

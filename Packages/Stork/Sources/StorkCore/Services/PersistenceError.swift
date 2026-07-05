@@ -19,8 +19,8 @@ nonisolated public enum PersistenceError: Error, Equatable, LocalizedError {
         // Resolves in `Bundle.main` at runtime — translations live in the app target's
         // `Localizable.xcstrings` (see the localization policy in CLAUDE.md).
         switch self {
-        case .fetchFailed(let detail): String(localized: "Couldn't load your deliveries. (\(detail))")
-        case .saveFailed(let detail): String(localized: "Couldn't save your changes. (\(detail))")
+        case .fetchFailed(let detail): String(localized: "Couldn't load your deliveries. (\(detail))", bundle: .module)
+        case .saveFailed(let detail): String(localized: "Couldn't save your changes. (\(detail))", bundle: .module)
         }
     }
 }

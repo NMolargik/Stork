@@ -18,20 +18,20 @@ struct OnboardingPrivacyPage: View {
                         .font(.system(size: 64)).foregroundStyle(.storkPurple)
                         .symbolEffect(.bounce, value: hasAppeared)
                         .accessibilityHidden(true)
-                    Text("Your Privacy Matters").font(.title.bold())
-                    Text("Stork is designed to keep your data private and secure.")
+                    Text("Your Privacy Matters", bundle: .module).font(.title.bold())
+                    Text("Stork is designed to keep your data private and secure.", bundle: .module)
                         .font(.body).foregroundStyle(.secondary).multilineTextAlignment(.center).padding(.horizontal)
                 }
                 .padding(.top, 24)
 
                 VStack(spacing: 0) {
-                    PrivacyRow(icon: "iphone", iconColor: .storkBlue, title: "On-Device Storage", description: "Your data stays on your device and in your personal iCloud.")
+                    PrivacyRow(icon: "iphone", iconColor: .storkBlue, title: String(localized: "On-Device Storage", bundle: .module), description: String(localized: "Your data stays on your device and in your personal iCloud.", bundle: .module))
                     Divider().padding(.leading, 56)
-                    PrivacyRow(icon: "person.fill.questionmark", iconColor: .storkOrange, title: "No Patient Data", description: "Only your personal delivery stats are tracked.")
+                    PrivacyRow(icon: "person.fill.questionmark", iconColor: .storkOrange, title: String(localized: "No Patient Data", bundle: .module), description: String(localized: "Only your personal delivery stats are tracked.", bundle: .module))
                     Divider().padding(.leading, 56)
-                    PrivacyRow(icon: "building.2", iconColor: .storkPink, title: "No Hospital Data", description: "We don't store where deliveries occur.")
+                    PrivacyRow(icon: "building.2", iconColor: .storkPink, title: String(localized: "No Hospital Data", bundle: .module), description: String(localized: "We don't store where deliveries occur.", bundle: .module))
                     Divider().padding(.leading, 56)
-                    PrivacyRow(icon: "checkmark.shield.fill", iconColor: .green, title: "HIPAA Compliant", description: "No Protected Health Information is collected.")
+                    PrivacyRow(icon: "checkmark.shield.fill", iconColor: .green, title: String(localized: "HIPAA Compliant", bundle: .module), description: String(localized: "No Protected Health Information is collected.", bundle: .module))
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))

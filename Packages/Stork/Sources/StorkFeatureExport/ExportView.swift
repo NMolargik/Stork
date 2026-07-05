@@ -22,12 +22,12 @@ public struct ExportView: View {
     public var body: some View {
         List {
             Section {
-                exportRow(icon: "doc.richtext.fill", color: .storkPurple, title: "PDF Report", subtitle: "Generate a summary report with charts") { showPDFOptions = true }
-                exportRow(icon: "tablecells.fill", color: .storkBlue, title: "CSV Export", subtitle: "Export data for spreadsheets or backup") { showCSVOptions = true }
+                exportRow(icon: "doc.richtext.fill", color: .storkPurple, title: String(localized: "PDF Report", bundle: .module), subtitle: String(localized: "Generate a summary report with charts", bundle: .module)) { showPDFOptions = true }
+                exportRow(icon: "tablecells.fill", color: .storkBlue, title: String(localized: "CSV Export", bundle: .module), subtitle: String(localized: "Export data for spreadsheets or backup", bundle: .module)) { showCSVOptions = true }
             } header: {
-                Text("Export Data")
+                Text("Export Data", bundle: .module)
             } footer: {
-                Text("Export your delivery records for analysis, backup, or professional portfolios.")
+                Text("Export your delivery records for analysis, backup, or professional portfolios.", bundle: .module)
             }
 
             Section {
@@ -37,23 +37,23 @@ public struct ExportView: View {
                     HStack {
                         Image(systemName: "photo.on.rectangle.angled").font(.title2).foregroundStyle(.storkPink).frame(width: 40).accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Share Cards").font(.headline)
-                            Text("Share statistics and milestones as images").font(.caption).foregroundStyle(.secondary)
+                            Text("Share Cards", bundle: .module).font(.headline)
+                            Text("Share statistics and milestones as images", bundle: .module).font(.caption).foregroundStyle(.secondary)
                         }
                     }
                 }
             } header: {
-                Text("Share")
+                Text("Share", bundle: .module)
             } footer: {
-                Text("Create shareable images of your statistics cards and milestone achievements.")
+                Text("Create shareable images of your statistics cards and milestone achievements.", bundle: .module)
             }
 
-            Section("Your Data") {
-                LabeledContent("Total Deliveries") { Text("\(model.deliveries.count)").foregroundStyle(.secondary) }
-                LabeledContent("Total Babies") { Text("\(model.totalBabies)").foregroundStyle(.secondary) }
+            Section(String(localized: "Your Data", bundle: .module)) {
+                LabeledContent(String(localized: "Total Deliveries", bundle: .module)) { Text("\(model.deliveries.count)", bundle: .module).foregroundStyle(.secondary) }
+                LabeledContent(String(localized: "Total Babies", bundle: .module)) { Text("\(model.totalBabies)", bundle: .module).foregroundStyle(.secondary) }
             }
         }
-        .navigationTitle("Export & Share")
+        .navigationTitle(Text("Export & Share", bundle: .module))
         .onAppear { model.load() }
         .sheet(isPresented: $showCSVOptions) { CSVExportOptionsView(model: model) }
         .sheet(isPresented: $showPDFOptions) { PDFReportOptionsView(model: model) }

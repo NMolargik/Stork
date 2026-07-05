@@ -37,7 +37,7 @@ public struct DeliveryListView: View {
                 ListBody(model: model)
             }
         }
-        .searchable(text: $searchText, prompt: Text("Search notes, tags, and methods"))
+        .searchable(text: $searchText, prompt: Text("Search notes, tags, and methods", bundle: .module))
         .onChange(of: searchText) { _, newValue in model.setSearchText(newValue) }
         .onAppear { model.load() }
         .toolbar {
@@ -50,8 +50,8 @@ public struct DeliveryListView: View {
                           : "line.3.horizontal.decrease.circle")
                         .contentTransition(.symbolEffect(.replace))
                 }
-                .accessibilityLabel("Filter deliveries")
-                .accessibilityHint("Opens filter options for the delivery list")
+                .accessibilityLabel(Text("Filter deliveries", bundle: .module))
+                .accessibilityHint(Text("Opens filter options for the delivery list", bundle: .module))
                 .keyboardShortcut("f", modifiers: .command)
                 .hoverEffect(.highlight)
             }
@@ -70,14 +70,14 @@ public struct DeliveryListView: View {
         var body: some View {
             ScrollView {
                 ContentUnavailableView {
-                    Label("No Deliveries Yet", systemImage: "list.bullet.rectangle")
+                    Label(String(localized: "No Deliveries Yet", bundle: .module), systemImage: "list.bullet.rectangle")
                 } description: {
-                    Text("Your logged deliveries will appear here.")
+                    Text("Your logged deliveries will appear here.", bundle: .module)
                 } actions: {
                     Button {
                         showingEntrySheet = true
                     } label: {
-                        Label("Log a Delivery", systemImage: "plus")
+                        Label(String(localized: "Log a Delivery", bundle: .module), systemImage: "plus")
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -93,11 +93,11 @@ public struct DeliveryListView: View {
         var body: some View {
             if searchText.isEmpty {
                 ContentUnavailableView {
-                    Label("No Matches", systemImage: "line.3.horizontal.decrease.circle")
+                    Label(String(localized: "No Matches", bundle: .module), systemImage: "line.3.horizontal.decrease.circle")
                 } description: {
-                    Text("No deliveries match the current filters.")
+                    Text("No deliveries match the current filters.", bundle: .module)
                 } actions: {
-                    Button("Clear Filters") { model.clearFilters(keepingSearch: searchText) }
+                    Button(String(localized: "Clear Filters", bundle: .module)) { model.clearFilters(keepingSearch: searchText) }
                 }
             } else {
                 ContentUnavailableView.search(text: searchText)
@@ -130,10 +130,10 @@ public struct DeliveryListView: View {
                                         Haptics.error()
                                         model.delete(delivery)
                                     } label: {
-                                        Label("Delete", systemImage: "trash")
+                                        Label(String(localized: "Delete", bundle: .module), systemImage: "trash")
                                     }
-                                    .accessibilityLabel("Delete delivery")
-                                    .accessibilityHint("Permanently removes this delivery")
+                                    .accessibilityLabel(Text("Delete delivery", bundle: .module))
+                                    .accessibilityHint(Text("Permanently removes this delivery", bundle: .module))
                                 }
                                 .listRowBackground(Color.clear)
                                 .listRowSeparator(.hidden)

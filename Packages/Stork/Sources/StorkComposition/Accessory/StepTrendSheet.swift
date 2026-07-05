@@ -19,16 +19,16 @@ struct StepTrendSheet: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
                 if !manager.isAuthorized {
-                    ContentUnavailableView("Steps Unavailable", systemImage: "figure.walk",
-                                           description: Text("Grant Stork access to step data in the Health app, or pair an Apple Watch to track steps."))
+                    ContentUnavailableView(String(localized: "Steps Unavailable", bundle: .module), systemImage: "figure.walk",
+                                           description: Text("Grant Stork access to step data in the Health app, or pair an Apple Watch to track steps.", bundle: .module))
                 } else if manager.weeklyStepCounts.isEmpty {
-                    ProgressView("Loading steps…").frame(maxWidth: .infinity, maxHeight: .infinity)
+                    ProgressView(String(localized: "Loading steps…", bundle: .module)).frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     let weekTotal = manager.weeklyStepCounts.reduce(0) { $0 + $1.steps }
                     let dailyAverage = weekTotal / max(manager.weeklyStepCounts.count, 1)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("7-Day Average").font(.caption).foregroundStyle(.secondary)
-                        Text("\(dailyAverage.formatted()) steps").font(.title2).bold().monospacedDigit()
+                        Text("7-Day Average", bundle: .module).font(.caption).foregroundStyle(.secondary)
+                        Text("\(dailyAverage.formatted()) steps", bundle: .module).font(.title2).bold().monospacedDigit()
                     }
                     .padding(.horizontal)
                     .accessibilityElement(children: .combine)
@@ -48,19 +48,19 @@ struct StepTrendSheet: View {
                     .chartYAxis { AxisMarks(position: .leading) }
                     .chartXAxis { AxisMarks(values: .stride(by: .day)) { _ in AxisValueLabel(format: .dateTime.weekday(.abbreviated)) } }
                     .padding(.horizontal)
-                    .accessibilityLabel("Daily step counts for the last 7 days")
+                    .accessibilityLabel(Text("Daily step counts for the last 7 days", bundle: .module))
 
                     Spacer()
                 }
             }
             .padding(.top)
-            .navigationTitle("Steps This Week")
+            .navigationTitle(Text("Steps This Week", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button { dismiss() } label: { Image(systemName: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
-                        .accessibilityLabel("Close")
+                        .accessibilityLabel(Text("Close", bundle: .module))
                 }
             }
         }

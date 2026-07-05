@@ -28,8 +28,8 @@ struct OnboardingCompletePage: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 80)).foregroundStyle(.green)
                     .symbolEffect(.bounce, value: showContent).accessibilityHidden(true)
-                Text("You're All Set!").font(.largeTitle.bold())
-                Text("Here's what you can do with Stork").font(.body).foregroundStyle(.secondary)
+                Text("You're All Set!", bundle: .module).font(.largeTitle.bold())
+                Text("Here's what you can do with Stork", bundle: .module).font(.body).foregroundStyle(.secondary)
             }
             .opacity(showContent ? 1 : 0)
             .offset(y: showContent ? 0 : 20)
@@ -65,7 +65,7 @@ struct OnboardingCompletePage: View {
                 onFinish()
             } label: {
                 HStack(spacing: 8) {
-                    Text("Enter Stork").font(.headline)
+                    Text("Enter Stork", bundle: .module).font(.headline)
                     Image(systemName: "arrow.right").font(.headline).accessibilityHidden(true)
                 }
                 .frame(maxWidth: .infinity).frame(height: 42)

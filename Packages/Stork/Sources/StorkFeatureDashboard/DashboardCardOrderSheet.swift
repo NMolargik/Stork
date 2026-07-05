@@ -28,16 +28,16 @@ struct DashboardCardOrderSheet: View {
                 CardsSection(cardOrder: $cardOrder)
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("Reorder Cards")
+            .navigationTitle(Text("Reorder Cards", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(String(localized: "Save", bundle: .module)) {
                         onSave(cardOrder)
                         dismiss()
                     }
@@ -50,12 +50,12 @@ struct DashboardCardOrderSheet: View {
 
     private struct JarSection: View {
         var body: some View {
-            Section("Fixed Position") {
+            Section(String(localized: "Fixed Position", bundle: .module)) {
                 HStack(spacing: 12) {
                     Image(systemName: "circle.hexagongrid.fill").font(.title2).foregroundStyle(.storkPink).frame(width: 32).accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Marble Jar").font(.body)
-                        Text("Always at top").font(.caption).foregroundStyle(.secondary)
+                        Text("Marble Jar", bundle: .module).font(.body)
+                        Text("Always at top", bundle: .module).font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer()
                     Image(systemName: "lock.fill").foregroundStyle(.secondary).accessibilityHidden(true)
@@ -86,9 +86,9 @@ struct DashboardCardOrderSheet: View {
                 }
                 .onMove { cardOrder.move(fromOffsets: $0, toOffset: $1) }
             } header: {
-                Text("Drag to Reorder")
+                Text("Drag to Reorder", bundle: .module)
             } footer: {
-                Text("Drag cards to customize your dashboard layout.")
+                Text("Drag cards to customize your dashboard layout.", bundle: .module)
             }
             .environment(\.editMode, .constant(.active))
         }

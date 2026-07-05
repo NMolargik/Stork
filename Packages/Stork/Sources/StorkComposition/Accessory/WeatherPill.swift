@@ -20,16 +20,16 @@ struct WeatherPill: View {
             if manager.isFetching {
                 HStack(spacing: 8) {
                     ProgressView().scaleEffect(0.8)
-                    Text("Loading...").font(.subheadline).foregroundStyle(.secondary)
+                    Text("Loading...", bundle: .module).font(.subheadline).foregroundStyle(.secondary)
                 }
-                .accessibilityLabel("Loading...")
+                .accessibilityLabel(Text("Loading...", bundle: .module))
             } else if manager.error != nil {
                 HStack(spacing: 6) {
                     Image(systemName: "exclamationmark.triangle.fill").imageScale(.medium)
-                    Text("Unavailable").font(.footnote).foregroundStyle(.secondary)
+                    Text("Unavailable", bundle: .module).font(.footnote).foregroundStyle(.secondary)
                         .onTapGesture { Task { await manager.refresh() } }
                 }
-                .accessibilityLabel("Weather unavailable")
+                .accessibilityLabel(Text("Weather unavailable", bundle: .module))
             } else {
                 HStack(spacing: 8) {
                     manager.condition?.weatherSymbolView().imageScale(.medium)
@@ -42,7 +42,7 @@ struct WeatherPill: View {
                 .popover(isPresented: $showAttribution, arrowEdge: .bottom) { AttributionPopover() }
                 .task { await manager.refresh() }
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel("Current weather")
+                .accessibilityLabel(Text("Current weather", bundle: .module))
             }
         }
         .padding(.horizontal, 12)
@@ -52,9 +52,9 @@ struct WeatherPill: View {
     private struct AttributionPopover: View {
         var body: some View {
             VStack(spacing: 12) {
-                HStack(spacing: 4) { Image(systemName: "apple.logo"); Text("Weather") }.font(.headline)
+                HStack(spacing: 4) { Image(systemName: "apple.logo"); Text("Weather", bundle: .module) }.font(.headline)
                 Link(destination: URL(string: "https://weatherkit.apple.com/legal-attribution.html")!) {
-                    Text("Legal Attribution").font(.subheadline).foregroundStyle(.blue)
+                    Text("Legal Attribution", bundle: .module).font(.subheadline).foregroundStyle(.blue)
                 }
             }
             .padding()

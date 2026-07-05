@@ -39,18 +39,18 @@ struct CSVExportOptionsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Date Range") {
-                    Picker("Date Range", selection: $dateRange) {
+                Section(String(localized: "Date Range", bundle: .module)) {
+                    Picker(String(localized: "Date Range", bundle: .module), selection: $dateRange) {
                         ForEach(ExportDateRange.allCases) { Text($0.displayName).tag($0) }
                     }
                     if dateRange == .custom {
-                        DatePicker("Start Date", selection: $customStartDate, displayedComponents: .date)
-                        DatePicker("End Date", selection: $customEndDate, displayedComponents: .date)
+                        DatePicker(String(localized: "Start Date", bundle: .module), selection: $customStartDate, displayedComponents: .date)
+                        DatePicker(String(localized: "End Date", bundle: .module), selection: $customEndDate, displayedComponents: .date)
                     }
                 }
 
                 Section {
-                    Picker("Row Format", selection: $rowFormat) {
+                    Picker(String(localized: "Row Format", bundle: .module), selection: $rowFormat) {
                         ForEach(CSVRowFormat.allCases) { format in
                             VStack(alignment: .leading) {
                                 Text(format.displayName)
@@ -61,20 +61,20 @@ struct CSVExportOptionsView: View {
                     }
                     .pickerStyle(.inline)
                 } header: {
-                    Text("Format")
+                    Text("Format", bundle: .module)
                 } footer: {
-                    Text("Per-baby format includes detailed measurements for each baby.")
+                    Text("Per-baby format includes detailed measurements for each baby.", bundle: .module)
                 }
 
-                Section("Preview") {
-                    LabeledContent("Deliveries") { Text("\(filteredDeliveries.count)").foregroundStyle(.secondary) }
-                    LabeledContent("Rows to Export") { Text("\(rowCount)").foregroundStyle(.secondary) }
-                    LabeledContent("Units") { Text(useMetricUnits ? "Metric" : "Imperial").foregroundStyle(.secondary) }
+                Section(String(localized: "Preview", bundle: .module)) {
+                    LabeledContent(String(localized: "Deliveries", bundle: .module)) { Text("\(filteredDeliveries.count)", bundle: .module).foregroundStyle(.secondary) }
+                    LabeledContent(String(localized: "Rows to Export", bundle: .module)) { Text("\(rowCount)", bundle: .module).foregroundStyle(.secondary) }
+                    LabeledContent(String(localized: "Units", bundle: .module)) { Text(useMetricUnits ? "Metric" : "Imperial").foregroundStyle(.secondary) }
                 }
 
                 Section {
                     if let url = exportURL {
-                        ShareLink(item: url) { Label("Share CSV File", systemImage: "square.and.arrow.up") }
+                        ShareLink(item: url) { Label(String(localized: "Share CSV File", bundle: .module), systemImage: "square.and.arrow.up") }
                             .tint(.storkBlue)
                     } else {
                         Button {
@@ -89,13 +89,13 @@ struct CSVExportOptionsView: View {
                     }
                 }
             }
-            .navigationTitle("Export CSV")
+            .navigationTitle(Text("Export CSV", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .cancellationAction) { Button(String(localized: "Cancel", bundle: .module)) { dismiss() } }
             }
-            .alert("Export Error", isPresented: $showError) {
-                Button("OK", role: .cancel) {}
+            .alert(Text("Export Error", bundle: .module), isPresented: $showError) {
+                Button(String(localized: "OK", bundle: .module), role: .cancel) {}
             } message: {
                 Text(errorMessage)
             }

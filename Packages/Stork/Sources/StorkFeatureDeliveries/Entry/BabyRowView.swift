@@ -38,13 +38,13 @@ struct BabyRowView: View {
                         Image(systemName: "cross.circle.fill")
                             .font(.caption2)
                             .foregroundColor(.storkOrange)
-                            .accessibilityLabel("NICU stay")
+                            .accessibilityLabel(Text("NICU stay", bundle: .module))
                     }
                     if baby.nurseCatch {
                         Image(systemName: "person.2.circle.fill")
                             .font(.caption2)
                             .foregroundColor(.green)
-                            .accessibilityLabel("Nurse catch")
+                            .accessibilityLabel(Text("Nurse catch", bundle: .module))
                     }
                 }
             }
@@ -62,7 +62,7 @@ struct BabyRowView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(isDeleting)
-                .accessibilityLabel("Edit baby")
+                .accessibilityLabel(Text("Edit baby", bundle: .module))
 
                 Button {
                     guard !isDeleting else { return }
@@ -78,7 +78,7 @@ struct BabyRowView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(isDeleting)
-                .accessibilityLabel("Delete baby")
+                .accessibilityLabel(Text("Delete baby", bundle: .module))
             }
         }
         .padding()

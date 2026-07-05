@@ -55,8 +55,8 @@ public struct DeliveryCalendarView: View {
                 Divider().padding(.top, 16)
 
                 if deliveriesForSelectedDate.isEmpty {
-                    ContentUnavailableView("No Deliveries", systemImage: "calendar.badge.checkmark",
-                                           description: Text("No deliveries recorded on \(formattedDate(selectedDate))"))
+                    ContentUnavailableView(String(localized: "No Deliveries", bundle: .module), systemImage: "calendar.badge.checkmark",
+                                           description: Text("No deliveries recorded on \(formattedDate(selectedDate))", bundle: .module))
                         .padding(.top, 40)
                 } else {
                     SelectedDaySection(
@@ -73,7 +73,7 @@ public struct DeliveryCalendarView: View {
             .padding(.bottom, 16)
         }
         .background(Color(uiColor: .systemGroupedBackground))
-        .navigationTitle("Calendar")
+        .navigationTitle(Text("Calendar", bundle: .module))
         .onAppear { model.load() }
         .task { await model.refresh() }
     }
@@ -87,7 +87,7 @@ public struct DeliveryCalendarView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
-                Text("^[\(deliveries.count) delivery](inflect: true), ^[\(babyCount) baby](inflect: true) on \(dateLabel)")
+                Text("^[\(deliveries.count) delivery](inflect: true), ^[\(babyCount) baby](inflect: true) on \(dateLabel)", bundle: .module)
                     .font(.footnote).foregroundStyle(.secondary).textCase(.uppercase)
                     .padding(.horizontal, 20).padding(.top, 16).padding(.bottom, 8)
 
@@ -149,13 +149,13 @@ private struct MonthHeaderView: View {
     var body: some View {
         HStack {
             Button(action: onPrevious) { Image(systemName: "chevron.left").font(.title3).fontWeight(.semibold) }
-                .buttonStyle(.plain).accessibilityLabel("Previous month")
+                .buttonStyle(.plain).accessibilityLabel(Text("Previous month", bundle: .module))
             Spacer()
             Text(monthYearString).font(.title2).fontWeight(.bold)
             Spacer()
             Button(action: onNext) { Image(systemName: "chevron.right").font(.title3).fontWeight(.semibold) }
-                .buttonStyle(.plain).accessibilityLabel("Next month")
-            Button(action: onToday) { Text("Today").font(.subheadline).fontWeight(.medium) }
+                .buttonStyle(.plain).accessibilityLabel(Text("Next month", bundle: .module))
+            Button(action: onToday) { Text("Today", bundle: .module).font(.subheadline).fontWeight(.medium) }
                 .buttonStyle(.bordered).padding(.leading, 8)
         }
     }
@@ -167,7 +167,7 @@ private struct MethodFilterView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                FilterChip(label: "All", color: .gray, isSelected: selectedMethod == nil) { selectedMethod = nil }
+                FilterChip(label: String(localized: "All", bundle: .module), color: .gray, isSelected: selectedMethod == nil) { selectedMethod = nil }
                 ForEach(DeliveryMethod.allCases, id: \.self) { method in
                     FilterChip(label: method.displayName, color: method.accentColor, isSelected: selectedMethod == method) { selectedMethod = method }
                 }
@@ -210,21 +210,21 @@ private struct DeliveryCalendarRowView: View {
                     Circle().fill(baby.sex.color).frame(width: 8, height: 8)
                 }
                 if babyCount > 5 {
-                    Text("+\(babyCount - 5)").font(.caption2).foregroundStyle(.secondary)
+                    Text("+\(babyCount - 5)", bundle: .module).font(.caption2).foregroundStyle(.secondary)
                 }
             }
             VStack(alignment: .leading, spacing: 4) {
                 Text(timeString).font(.headline)
-                Text("^[\(babyCount) baby](inflect: true) • \(delivery.deliveryMethod.displayName)")
+                Text("^[\(babyCount) baby](inflect: true) • \(delivery.deliveryMethod.displayName)", bundle: .module)
                     .font(.subheadline).foregroundStyle(.secondary)
             }
             Spacer()
             HStack(spacing: 8) {
                 if delivery.epiduralUsed {
-                    Image(systemName: "syringe").imageScale(.small).foregroundStyle(.storkBlue).accessibilityLabel("Epidural used")
+                    Image(systemName: "syringe").imageScale(.small).foregroundStyle(.storkBlue).accessibilityLabel(Text("Epidural used", bundle: .module))
                 }
                 if delivery.babies?.contains(where: { $0.nicuStay }) == true {
-                    Image(systemName: "cross.circle").imageScale(.small).foregroundStyle(.orange).accessibilityLabel("NICU stay")
+                    Image(systemName: "cross.circle").imageScale(.small).foregroundStyle(.orange).accessibilityLabel(Text("NICU stay", bundle: .module))
                 }
             }
         }

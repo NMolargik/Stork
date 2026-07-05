@@ -40,7 +40,7 @@ public struct TagChipView: View {
         .background(tag.color.opacity(0.15), in: Capsule())
         .overlay(Capsule().strokeBorder(tag.color.opacity(0.3), lineWidth: 1))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Tag: \(tag.name)")
+        .accessibilityLabel(Text("Tag: \(tag.name)", bundle: .module))
         .accessibilityHint(onRemove != nil ? "Double tap to remove" : "")
     }
 }

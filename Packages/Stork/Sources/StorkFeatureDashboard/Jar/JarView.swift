@@ -74,8 +74,8 @@ public struct JarView: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Delivery jar for \(monthLabel ?? monthText())")
-        .accessibilityValue("\(boyCount) boys, \(girlCount) girls, \(lossCount) losses")
+        .accessibilityLabel(Text("Delivery jar for \(monthLabel ?? monthText())", bundle: .module))
+        .accessibilityValue(Text("\(boyCount) boys, \(girlCount) girls, \(lossCount) losses", bundle: .module))
         .onAppear {
             if #available(iOS 26.0, *) { scene.useFrostEffect = false }
             scene.onReady = {

@@ -53,11 +53,11 @@ public struct SettingsView<ExportDestination: View>: View {
             model.startNetworkMonitoring()
         }
         .onDisappear { model.stopNetworkMonitoring() }
-        .alert("Delete All Deliveries?", isPresented: $showDeleteAllAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete All", role: .destructive) { Task { await deleteAll() } }
+        .alert(Text("Delete All Deliveries?", bundle: .module), isPresented: $showDeleteAllAlert) {
+            Button(String(localized: "Cancel", bundle: .module), role: .cancel) {}
+            Button(String(localized: "Delete All", bundle: .module), role: .destructive) { Task { await deleteAll() } }
         } message: {
-            Text("This will permanently delete all \(model.deliveryCount) delivery records and their associated baby data. This action cannot be undone.")
+            Text("This will permanently delete all \(model.deliveryCount) delivery records and their associated baby data. This action cannot be undone.", bundle: .module)
         }
     }
 
@@ -77,10 +77,10 @@ private struct PreferencesSection: View {
 
     var body: some View {
         Section {
-            Toggle(isOn: $useMetricUnits) { Label("Metric Units", systemImage: "ruler") }
+            Toggle(isOn: $useMetricUnits) { Label(String(localized: "Metric Units", bundle: .module), systemImage: "ruler") }
                 .tint(.storkPurple)
                 .onChange(of: useMetricUnits) { _, _ in Haptics.lightImpact() }
-            Toggle(isOn: $useDayMonthYearDates) { Label("Day–Month–Year Dates", systemImage: "calendar") }
+            Toggle(isOn: $useDayMonthYearDates) { Label(String(localized: "Day–Month–Year Dates", bundle: .module), systemImage: "calendar") }
                 .tint(.storkPurple)
                 .onChange(of: useDayMonthYearDates) { _, _ in Haptics.lightImpact() }
         }
@@ -109,7 +109,7 @@ private struct AppIconSection: View {
     ]
 
     var body: some View {
-        Section("App Icon") {
+        Section(String(localized: "App Icon", bundle: .module)) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(iconOptions) { option in
@@ -136,7 +136,7 @@ private struct AppIconSection: View {
                             }
                             .buttonStyle(.plain)
                             .hoverEffect(.lift)
-                            .accessibilityLabel("\(option.color.capitalized) app icon")
+                            .accessibilityLabel(Text("\(option.color.capitalized) app icon", bundle: .module))
                             .accessibilityAddTraits(selectedIconColor == option.color ? [.isSelected] : [])
 
                             if selectedIconColor == option.color {
@@ -183,7 +183,7 @@ private struct SyncSection: View {
                 Image(systemName: cloudSyncManager.syncStatus.systemImage)
                     .font(.title3).foregroundStyle(syncStatusColor).frame(width: 24)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("iCloud").font(.body)
+                    Text("iCloud", bundle: .module).font(.body)
                     Text(cloudSyncManager.syncStatus.displayText).font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
@@ -194,19 +194,19 @@ private struct SyncSection: View {
                         Haptics.lightImpact()
                         Task { await triggerManualSync() }
                     } label: {
-                        Text("Sync").font(.subheadline.bold()).foregroundStyle(.storkBlue)
+                        Text("Sync", bundle: .module).font(.subheadline.bold()).foregroundStyle(.storkBlue)
                     }
                     .buttonStyle(.plain)
                 }
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("iCloud Sync Status")
+            .accessibilityLabel(Text("iCloud Sync Status", bundle: .module))
             .accessibilityValue(cloudSyncManager.syncStatus.displayText)
         } header: {
-            Text("Backup & Sync")
+            Text("Backup & Sync", bundle: .module)
         } footer: {
             if !cloudSyncManager.isCloudAvailable {
-                Text("Sign in to iCloud in Settings to enable sync.")
+                Text("Sign in to iCloud in Settings to enable sync.", bundle: .module)
             }
         }
     }
@@ -226,12 +226,12 @@ private struct DataSection<Destination: View>: View {
     var body: some View {
         Section {
             NavigationLink { exportDestination() } label: {
-                Label("Export & Share", systemImage: "square.and.arrow.up")
+                Label(String(localized: "Export & Share", bundle: .module), systemImage: "square.and.arrow.up")
             }
         } header: {
-            Text("Data")
+            Text("Data", bundle: .module)
         } footer: {
-            Text("Export delivery records as PDF or CSV, or share your statistics.")
+            Text("Export delivery records as PDF or CSV, or share your statistics.", bundle: .module)
         }
     }
 }
@@ -257,7 +257,7 @@ private struct DangerZoneSection: View {
             .buttonStyle(.plain)
             .disabled(isDeleting)
         } footer: {
-            Text("This will permanently remove all \(model.deliveryCount) deliveries.")
+            Text("This will permanently remove all \(model.deliveryCount) deliveries.", bundle: .module)
         }
     }
 }
@@ -294,7 +294,7 @@ private struct DebugSection: View {
                 Text(seedingSummary).font(.caption).foregroundStyle(.secondary)
             }
         } header: {
-            Label("Developer", systemImage: "hammer.fill")
+            Label(String(localized: "Developer", bundle: .module), systemImage: "hammer.fill")
         }
     }
 }
@@ -304,13 +304,13 @@ private struct AboutSection: View {
     var model: SettingsModel
 
     var body: some View {
-        Section("About") {
-            LabeledContent("Version", value: model.appVersion)
-            LabeledContent("Developer") {
+        Section(String(localized: "About", bundle: .module)) {
+            LabeledContent(String(localized: "Version", bundle: .module), value: model.appVersion)
+            LabeledContent(String(localized: "Developer", bundle: .module)) {
                 Link("Nick Molargik", destination: URL(string: "https://www.linkedin.com/in/nicholas-molargik/")!)
                     .foregroundStyle(.storkBlue)
             }
-            LabeledContent("Publisher") {
+            LabeledContent(String(localized: "Publisher", bundle: .module)) {
                 Link("Molargik Software LLC", destination: URL(string: "https://www.molargiksoftware.com")!)
                     .foregroundStyle(.storkBlue)
             }
@@ -323,17 +323,17 @@ private struct AttributionsSection: View {
         Section {
             Link(destination: URL(string: "https://weatherkit.apple.com/legal-attribution.html")!) {
                 HStack {
-                    Label { Text(" Weather") } icon: { Image(systemName: "apple.logo") }
+                    Label { Text(" Weather", bundle: .module) } icon: { Image(systemName: "apple.logo") }
                     Spacer()
                     Image(systemName: "arrow.up.right").font(.footnote).foregroundStyle(.secondary)
                 }
             }
             .foregroundStyle(.primary)
-            .accessibilityLabel("Apple Weather attribution")
+            .accessibilityLabel(Text("Apple Weather attribution", bundle: .module))
         } header: {
-            Text("Attributions")
+            Text("Attributions", bundle: .module)
         } footer: {
-            Text("Weather data provided by Apple Weather.")
+            Text("Weather data provided by Apple Weather.", bundle: .module)
         }
     }
 }

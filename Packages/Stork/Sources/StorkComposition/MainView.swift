@@ -125,7 +125,7 @@ public struct MainView: View {
                     NavigationStack {
                         DashboardView(model: dashboardModel, showingReorderSheet: $showingReorderSheet)
                             .minimizeToolbarOnScrollIfAvailable()
-                            .navigationTitle("Stork")
+                            .navigationTitle(Text("Stork", bundle: .module))
                             .toolbar { DashboardToolbar(showingEntrySheet: $showingEntrySheet, showingReorderSheet: $showingReorderSheet) }
                     }
                 }
@@ -181,7 +181,7 @@ public struct MainView: View {
         var body: some ToolbarContent {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showingReorderSheet = true } label: { Image(systemName: "arrow.up.arrow.down") }
-                    .accessibilityLabel("Reorder cards")
+                    .accessibilityLabel(Text("Reorder cards", bundle: .module))
                     .keyboardShortcut("r", modifiers: .command)
                     .hoverEffect(.highlight)
             }

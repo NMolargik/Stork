@@ -24,15 +24,15 @@ nonisolated public enum DashboardCard: String, CaseIterable, Codable, Identifiab
 
     public var displayName: String {
         switch self {
-        case .deliveryMethod: "Delivery Method"
-        case .epiduralNicu: "Epidural & NICU"
-        case .babyCount: "Baby Count"
-        case .babyMeasurements: "Baby Measurements"
-        case .sexDistribution: "Sex Distribution"
-        case .timeOfDay: "Time of Day"
-        case .dayOfWeek: "Day of Week"
-        case .yearOverYear: "Year Over Year"
-        case .personalBests: "Personal Bests"
+        case .deliveryMethod: String(localized: "Delivery Method", bundle: .module)
+        case .epiduralNicu: String(localized: "Epidural & NICU", bundle: .module)
+        case .babyCount: String(localized: "Baby Count", bundle: .module)
+        case .babyMeasurements: String(localized: "Baby Measurements", bundle: .module)
+        case .sexDistribution: String(localized: "Sex Distribution", bundle: .module)
+        case .timeOfDay: String(localized: "Time of Day", bundle: .module)
+        case .dayOfWeek: String(localized: "Day of Week", bundle: .module)
+        case .yearOverYear: String(localized: "Year Over Year", bundle: .module)
+        case .personalBests: String(localized: "Personal Bests", bundle: .module)
         }
     }
 

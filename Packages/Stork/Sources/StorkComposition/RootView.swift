@@ -57,7 +57,7 @@ public struct RootView: View {
     private func handleMainEntry() {
         guard !didShowSyncToast, wasReturningUser else { return }
         didShowSyncToast = true
-        toast.show(message: "Syncing with iCloud…", style: .info, icon: "icloud.fill")
+        toast.show(message: String(localized: "Syncing with iCloud…", bundle: .module), style: .info, icon: "icloud.fill")
     }
 }
 #endif

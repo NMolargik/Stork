@@ -14,24 +14,24 @@ struct DayOfWeekCard: View {
     private typealias Days = DeliveryStatistics.DayOfWeekStats
 
     var body: some View {
-        InsightCard(title: "Day of Week", systemImage: "calendar", accent: .storkPink) {
+        InsightCard(title: String(localized: "Day of Week", bundle: .module), systemImage: "calendar", accent: .storkPink) {
             let stats = DeliveryStatistics.dayOfWeekStats(deliveries: deliveries)
             VStack(alignment: .leading, spacing: 12) {
                 if stats.total > 0 {
                     if let busiestDay = stats.busiestDay {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Busiest Day").font(.caption).foregroundStyle(.secondary)
+                                Text("Busiest Day", bundle: .module).font(.caption).foregroundStyle(.secondary)
                                 Text(Days.fullDayNames[busiestDay]).font(.title2.bold()).foregroundStyle(.storkPink)
                             }
                             Spacer()
                             VStack(alignment: .trailing, spacing: 2) {
-                                Text("\(stats.busiestCount)").font(.title2.bold())
-                                Text("total deliveries on this day of the week").font(.caption).foregroundStyle(.secondary)
+                                Text("\(stats.busiestCount)", bundle: .module).font(.title2.bold())
+                                Text("total deliveries on this day of the week", bundle: .module).font(.caption).foregroundStyle(.secondary)
                             }
                         }
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Busiest day is \(Days.fullDayNames[busiestDay]) with \(stats.busiestCount) deliveries")
+                        .accessibilityLabel(Text("Busiest day is \(Days.fullDayNames[busiestDay]) with \(stats.busiestCount) deliveries", bundle: .module))
                     }
 
                     Divider()
@@ -48,7 +48,7 @@ struct DayOfWeekCard: View {
                                 Text(Days.dayNames[weekday]).font(.caption2).foregroundStyle(.secondary)
                             }
                             .accessibilityElement(children: .combine)
-                            .accessibilityLabel("\(Days.fullDayNames[weekday]): \(count) deliveries")
+                            .accessibilityLabel(Text("\(Days.fullDayNames[weekday]): \(count) deliveries", bundle: .module))
                         }
                     }
                     .frame(maxWidth: .infinity)

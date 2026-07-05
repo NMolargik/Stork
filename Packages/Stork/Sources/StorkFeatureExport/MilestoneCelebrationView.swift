@@ -48,7 +48,7 @@ public struct MilestoneCelebrationView: View {
 
                 VStack(spacing: 8) {
                     Text(prefixText).font(.title3).foregroundStyle(.secondary)
-                    Text("\(milestone.count)")
+                    Text("\(milestone.count)", bundle: .module)
                         .font(.system(size: 72, weight: .bold, design: .rounded))
                         .foregroundStyle(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
                     Text(suffixText).font(.title3).foregroundStyle(.secondary)
@@ -56,13 +56,13 @@ public struct MilestoneCelebrationView: View {
                 .opacity(showContent ? 1 : 0)
                 .offset(y: showContent ? 0 : 20)
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel("\(prefixText) \(milestone.count) \(suffixText)")
+                .accessibilityLabel(Text("\(prefixText) \(milestone.count) \(suffixText)", bundle: .module))
 
                 VStack(spacing: 12) {
                     Button {
                         onShare()
                     } label: {
-                        Label("Share Achievement", systemImage: "square.and.arrow.up")
+                        Label(String(localized: "Share Achievement", bundle: .module), systemImage: "square.and.arrow.up")
                             .font(.headline).foregroundStyle(.white).frame(maxWidth: .infinity).padding(.vertical, 14)
                             .background(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
                             .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -70,7 +70,7 @@ public struct MilestoneCelebrationView: View {
                     Button {
                         dismissWithAnimation()
                     } label: {
-                        Text("Continue")
+                        Text("Continue", bundle: .module)
                             .font(.headline).foregroundStyle(.primary).frame(maxWidth: .infinity).padding(.vertical, 14)
                             .background(Color(uiColor: .tertiarySystemBackground))
                             .clipShape(RoundedRectangle(cornerRadius: 12))

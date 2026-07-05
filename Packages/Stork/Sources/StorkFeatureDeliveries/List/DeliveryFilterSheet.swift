@@ -69,9 +69,9 @@ struct DeliveryFilterSheet: View {
 
     private var babyCountDisplayText: String {
         if let count = tempFilter.babyCount, count > 0 {
-            return String(localized: "^[\(count) baby](inflect: true)")
+            return String(localized: "^[\(count) baby](inflect: true)", bundle: .module)
         }
-        return String(localized: "Any number of babies")
+        return String(localized: "Any number of babies", bundle: .module)
     }
 
     private func applyFilters() {
@@ -83,28 +83,28 @@ struct DeliveryFilterSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Date Range") {
-                    Toggle("Filter by Date Range", isOn: $isDateRangeEnabled)
+                Section(String(localized: "Date Range", bundle: .module)) {
+                    Toggle(String(localized: "Filter by Date Range", bundle: .module), isOn: $isDateRangeEnabled)
                     if isDateRangeEnabled {
-                        DatePicker("Start Date", selection: $startDate, displayedComponents: [.date])
-                        DatePicker("End Date", selection: $endDate, displayedComponents: [.date])
+                        DatePicker(String(localized: "Start Date", bundle: .module), selection: $startDate, displayedComponents: [.date])
+                        DatePicker(String(localized: "End Date", bundle: .module), selection: $endDate, displayedComponents: [.date])
                     }
                 }
 
-                Section("Baby Count") {
+                Section(String(localized: "Baby Count", bundle: .module)) {
                     Stepper(value: babyCountBinding, in: 0...10) {
                         Text(babyCountDisplayText)
                     }
                 }
 
-                Section("Delivery Method") {
+                Section(String(localized: "Delivery Method", bundle: .module)) {
                     ForEach(DeliveryMethod.allCases, id: \.self) { method in
                         Toggle(method.displayName, isOn: deliveryMethodBinding(for: method))
                     }
                 }
 
-                Section("Epidural") {
-                    Toggle("Epidural Used Only", isOn: $tempFilter.epiduralUsedOnly)
+                Section(String(localized: "Epidural", bundle: .module)) {
+                    Toggle(String(localized: "Epidural Used Only", bundle: .module), isOn: $tempFilter.epiduralUsedOnly)
                         .tint(.red)
                 }
 
@@ -120,27 +120,27 @@ struct DeliveryFilterSheet: View {
                             .tint(.storkPurple)
                         }
                     } header: {
-                        Text("Tags")
+                        Text("Tags", bundle: .module)
                     } footer: {
-                        Text("Shows deliveries with ANY of the selected tags")
+                        Text("Shows deliveries with ANY of the selected tags", bundle: .module)
                     }
                 }
 
-                Section("Notes") {
-                    Toggle("Has Notes", isOn: $tempFilter.hasNotesOnly)
+                Section(String(localized: "Notes", bundle: .module)) {
+                    Toggle(String(localized: "Has Notes", bundle: .module), isOn: $tempFilter.hasNotesOnly)
                         .tint(.storkOrange)
                 }
             }
-            .navigationTitle("Filter Deliveries")
+            .navigationTitle(Text("Filter Deliveries", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Reset") {
+                    Button(String(localized: "Reset", bundle: .module)) {
                         let searchText = tempFilter.searchText
                         tempFilter = DeliveryFilter()
                         tempFilter.searchText = searchText

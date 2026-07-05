@@ -26,7 +26,7 @@ public struct SplashView: View {
         VStack {
             Spacer()
 
-            Text("Stork")
+            Text("Stork", bundle: .module)
                 .font(.system(size: hSizeClass == .regular ? 90 : 60)).bold()
                 .opacity(titleVisible ? 1 : 0)
                 .scaleEffect(titleVisible ? 1 : 0.7)
@@ -34,7 +34,7 @@ public struct SplashView: View {
                 .padding(.bottom, 5)
                 .accessibilityAddTraits(.isHeader)
 
-            Text("for labor & delivery professionals")
+            Text("for labor & delivery professionals", bundle: .module)
                 .font(hSizeClass == .regular ? .title : .title3).fontWeight(.semibold)
                 .foregroundStyle(.secondary)
                 .opacity(subtitleVisible ? 1 : 0)
@@ -51,7 +51,7 @@ public struct SplashView: View {
                 .scaleEffect(subtitleVisible ? 1 : 0)
                 .animation(.bouncy(duration: 0.6).delay(0.8), value: subtitleVisible)
                 .padding()
-                .accessibilityLabel("Stork app logo")
+                .accessibilityLabel(Text("Stork app logo", bundle: .module))
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) { isPulsing = true }
                 }
@@ -63,7 +63,7 @@ public struct SplashView: View {
                 onContinue()
             } label: {
                 HStack(spacing: 8) {
-                    Text("Get Started").bold()
+                    Text("Get Started", bundle: .module).bold()
                     Image(systemName: "arrow.right.circle.fill")
                 }
                 .padding()
@@ -76,8 +76,8 @@ public struct SplashView: View {
             .opacity(buttonVisible ? 1 : 0)
             .scaleEffect(buttonVisible ? 1 : 0.98)
             .animation(.easeOut(duration: 0.5).delay(1.2), value: buttonVisible)
-            .accessibilityLabel("Get Started")
-            .accessibilityHint("Tap to begin using Stork")
+            .accessibilityLabel(Text("Get Started", bundle: .module))
+            .accessibilityHint(Text("Tap to begin using Stork", bundle: .module))
 
             Spacer()
         }

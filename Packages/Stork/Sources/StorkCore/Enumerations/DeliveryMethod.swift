@@ -17,18 +17,18 @@ nonisolated public enum DeliveryMethod: String, CaseIterable, Codable, Hashable,
     /// Short user-facing label.
     public var description: String {
         switch self {
-        case .vaginal: "Vaginal"
-        case .cSection: "C-Section"
-        case .vBac: "VBAC"
+        case .vaginal: String(localized: "Vaginal", bundle: .module)
+        case .cSection: String(localized: "C-Section", bundle: .module)
+        case .vBac: String(localized: "VBAC", bundle: .module)
         }
     }
 
     /// Full user-facing name.
     public var displayName: String {
         switch self {
-        case .vaginal: "Vaginal"
-        case .cSection: "Cesarean"
-        case .vBac: "VBAC"
+        case .vaginal: String(localized: "Vaginal", bundle: .module)
+        case .cSection: String(localized: "Cesarean", bundle: .module)
+        case .vBac: String(localized: "VBAC", bundle: .module)
         }
     }
 }

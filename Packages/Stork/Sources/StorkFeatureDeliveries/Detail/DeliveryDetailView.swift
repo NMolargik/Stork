@@ -45,25 +45,25 @@ public struct DeliveryDetailView: View {
             }
         }
         .background(Color(uiColor: .systemGroupedBackground))
-        .navigationTitle("Delivery")
+        .navigationTitle(Text("Delivery", bundle: .module))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button { showEditSheet = true } label: { Label("Edit", systemImage: "pencil") }
+                Button { showEditSheet = true } label: { Label(String(localized: "Edit", bundle: .module), systemImage: "pencil") }
                     .hoverEffect(.highlight)
             }
             ToolbarItem(placement: .topBarTrailing) {
-                Button(role: .destructive) { showDeleteConfirm = true } label: { Label("Delete", systemImage: "trash") }
+                Button(role: .destructive) { showDeleteConfirm = true } label: { Label(String(localized: "Delete", bundle: .module), systemImage: "trash") }
             }
         }
-        .confirmationDialog("Delete this delivery?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
-            Button("Delete", role: .destructive) {
+        .confirmationDialog(Text("Delete this delivery?", bundle: .module), isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+            Button(String(localized: "Delete", bundle: .module), role: .destructive) {
                 dismiss()
                 onDelete()
             }
-            Button("Cancel", role: .cancel) {}
+            Button(String(localized: "Cancel", bundle: .module), role: .cancel) {}
         } message: {
-            Text("This action cannot be undone.")
+            Text("This action cannot be undone.", bundle: .module)
         }
         .sheet(isPresented: $showEditSheet) {
             DeliveryEntryView(model: makeEditModel()) { _ in onEdited() }
@@ -112,7 +112,7 @@ public struct DeliveryDetailView: View {
                     }
                     .padding(.vertical, 32)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("Delivery date")
+                    .accessibilityLabel(Text("Delivery date", bundle: .module))
                     .accessibilityValue(delivery.date.formatted(date: .complete, time: .shortened))
                 }
                 .frame(maxWidth: .infinity)
@@ -133,11 +133,11 @@ public struct DeliveryDetailView: View {
         var body: some View {
             HStack(spacing: 12) {
                 StatPill(icon: "figure.and.child.holdinghands", value: "\(babies.count)",
-                         label: babies.count == 1 ? String(localized: "Baby") : String(localized: "Babies"), color: .storkBlue)
+                         label: babies.count == 1 ? String(localized: "Baby", bundle: .module) : String(localized: "Babies", bundle: .module), color: .storkBlue)
                 StatPill(icon: delivery.deliveryMethod.detailIcon, value: delivery.deliveryMethod.description,
-                         label: "Method", color: delivery.deliveryMethod.accentColor)
+                         label: String(localized: "Method", bundle: .module), color: delivery.deliveryMethod.accentColor)
                 StatPill(icon: "syringe.fill", value: delivery.epiduralUsed ? "Yes" : "No",
-                         label: "Epidural", color: delivery.epiduralUsed ? .red : .secondary)
+                         label: String(localized: "Epidural", bundle: .module), color: delivery.epiduralUsed ? .red : .secondary)
             }
         }
     }
@@ -187,7 +187,7 @@ public struct DeliveryDetailView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
-                SectionHeader(title: "Babies", icon: "heart.fill", color: .pink)
+                SectionHeader(title: String(localized: "Babies", bundle: .module), icon: "heart.fill", color: .pink)
                 ForEach(Array(babies.enumerated()), id: \.element.id) { index, baby in
                     BabyCard(baby: baby, index: index + 1)
                 }
@@ -206,8 +206,8 @@ public struct DeliveryDetailView: View {
                 HStack {
                     HStack(spacing: 8) {
                         Circle().fill(baby.sex.color).frame(width: 12, height: 12)
-                        Text("Baby \(index)").font(.subheadline).fontWeight(.semibold)
-                        Text("(\(baby.sex.displayName))").font(.subheadline).foregroundStyle(.secondary)
+                        Text("Baby \(index)", bundle: .module).font(.subheadline).fontWeight(.semibold)
+                        Text("(\(baby.sex.displayName))", bundle: .module).font(.subheadline).foregroundStyle(.secondary)
                     }
                     Spacer()
                     Text(baby.birthday.formatted(.dateTime.hour().minute())).font(.caption).foregroundStyle(.secondary)
@@ -215,27 +215,27 @@ public struct DeliveryDetailView: View {
                 .padding(.horizontal, 16).padding(.vertical, 12)
                 .background(baby.sex.color.opacity(0.1))
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel("Baby \(index), \(baby.sex.displayName), born at \(baby.birthday.formatted(.dateTime.hour().minute()))")
+                .accessibilityLabel(Text("Baby \(index), \(baby.sex.displayName), born at \(baby.birthday.formatted(.dateTime.hour().minute()))", bundle: .module))
 
                 HStack(spacing: 0) {
                     Measurement(icon: "scalemass.fill", color: .storkOrange,
-                                value: UnitConversion.weightDisplay(baby.weight, useMetric: useMetricUnits), label: "Weight")
+                                value: UnitConversion.weightDisplay(baby.weight, useMetric: useMetricUnits), label: String(localized: "Weight", bundle: .module))
                     Divider().frame(height: 50)
                     Measurement(icon: "ruler", color: .green,
-                                value: UnitConversion.heightDisplay(baby.height, useMetric: useMetricUnits), label: "Length")
+                                value: UnitConversion.heightDisplay(baby.height, useMetric: useMetricUnits), label: String(localized: "Length", bundle: .module))
                 }
 
                 if baby.nurseCatch || baby.nicuStay {
                     Divider()
                     HStack(spacing: 12) {
                         if baby.nurseCatch {
-                            Label("Nurse Catch", systemImage: "stethoscope")
+                            Label(String(localized: "Nurse Catch", bundle: .module), systemImage: "stethoscope")
                                 .font(.caption).fontWeight(.medium).foregroundStyle(.white)
                                 .padding(.horizontal, 12).padding(.vertical, 6)
                                 .background(.red.gradient, in: Capsule())
                         }
                         if baby.nicuStay {
-                            Label("NICU Stay", systemImage: "bed.double.fill")
+                            Label(String(localized: "NICU Stay", bundle: .module), systemImage: "bed.double.fill")
                                 .font(.caption).fontWeight(.medium).foregroundStyle(.white)
                                 .padding(.horizontal, 12).padding(.vertical, 6)
                                 .background(.orange.gradient, in: Capsule())
@@ -274,7 +274,7 @@ public struct DeliveryDetailView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
-                SectionHeader(title: "Tags", icon: "tag.fill", color: .storkPurple)
+                SectionHeader(title: String(localized: "Tags", bundle: .module), icon: "tag.fill", color: .storkPurple)
                 FlowLayout(spacing: 8) {
                     ForEach(tags) { tag in TagChipView(tag: tag) }
                 }
@@ -291,7 +291,7 @@ public struct DeliveryDetailView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
-                SectionHeader(title: "Notes", icon: "note.text", color: .storkOrange)
+                SectionHeader(title: String(localized: "Notes", bundle: .module), icon: "note.text", color: .storkOrange)
                 Text(notes)
                     .font(.body).foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)

@@ -28,7 +28,7 @@ struct TagPickerSheet: View {
         NavigationStack {
             List {
                 if model.availableTags.isEmpty {
-                    Section("Suggested Tags") {
+                    Section(String(localized: "Suggested Tags", bundle: .module)) {
                         ForEach(DeliveryTag.presets, id: \.name) { preset in
                             Button {
                                 model.createAndSelectTag(name: preset.name, colorHex: preset.colorHex)
@@ -43,7 +43,7 @@ struct TagPickerSheet: View {
                         }
                     }
                 } else {
-                    Section("Your Tags") {
+                    Section(String(localized: "Your Tags", bundle: .module)) {
                         ForEach(model.availableTags) { tag in
                             Button {
                                 model.toggleTag(tag)
@@ -60,8 +60,8 @@ struct TagPickerSheet: View {
                     }
                 }
 
-                Section("Create New Tag") {
-                    TextField("Tag name", text: $newTagName)
+                Section(String(localized: "Create New Tag", bundle: .module)) {
+                    TextField(String(localized: "Tag name", bundle: .module), text: $newTagName)
                         .textInputAutocapitalization(.words)
 
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -86,14 +86,14 @@ struct TagPickerSheet: View {
                         model.createAndSelectTag(name: newTagName, colorHex: selectedColorHex)
                         newTagName = ""
                     } label: {
-                        Label("Create Tag", systemImage: "plus.circle.fill")
+                        Label(String(localized: "Create Tag", bundle: .module), systemImage: "plus.circle.fill")
                     }
                     .disabled(newTagName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     .tint(.storkPurple)
                 }
 
                 if !model.selectedTags.isEmpty {
-                    Section("Selected (\(model.selectedTags.count))") {
+                    Section(String(localized: "Selected (\(model.selectedTags.count))", bundle: .module)) {
                         FlowLayout(spacing: 8) {
                             ForEach(model.selectedTags) { tag in
                                 TagChipView(tag: tag) { model.removeTag(id: tag.id) }
@@ -103,11 +103,11 @@ struct TagPickerSheet: View {
                     }
                 }
             }
-            .navigationTitle("Tags")
+            .navigationTitle(Text("Tags", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                    Button(String(localized: "Done", bundle: .module)) { dismiss() }
                 }
             }
             .onAppear { model.loadTags() }

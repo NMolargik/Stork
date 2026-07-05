@@ -1,76 +1,116 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "": {},
-    "%@": {
-      "extractionState": "stale",
+    "%": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@"
+            "value": "%"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@"
+            "value": "%"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@"
+            "value": "%"
           }
         }
       }
     },
-    "%@ %@": {
+    "%@ %@ %@ percent": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %@"
+            "value": "%@ %@ %@ por ciento"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %@"
+            "value": "%@ %@ %@ pour cent"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %@"
+            "value": "%@ %@ %@パーセント"
           }
         }
       }
     },
-    "%@ %lld %@": {
-      "extractionState": "stale",
+    "%@ baby, %@%@%@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %lld %@"
+            "value": "Bebé %@, %@%@%@"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %lld %@"
+            "value": "Bébé %@, %@%@%@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %lld %@"
+            "value": "%@の赤ちゃん、%@%@%@"
           }
         }
       }
     },
-    "%@ app icon": {},
+    "%@ deliveries: %@ percent": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partos %@: %@ por ciento"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : %@ pour cent des accouchements"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@分娩：%@パーセント"
+          }
+        }
+      }
+    },
+    "%@ shift: %@ percent, %lld deliveries": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turno %@: %@ por ciento, %lld partos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quart %@ : %@ pour cent, %lld accouchements"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@シフト：%@パーセント、分娩%lld件"
+          }
+        }
+      }
+    },
     "%@ statistics": {
       "localizations": {
         "es": {
@@ -93,28 +133,6 @@
         }
       }
     },
-    "%@ — %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        }
-      }
-    },
     "%@, %@": {
       "localizations": {
         "es": {
@@ -133,6 +151,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@, %@"
+          }
+        }
+      }
+    },
+    "%@: %@ percent": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@ por ciento"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : %@ pour cent"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@：%@パーセント"
+          }
+        }
+      }
+    },
+    "%@: %@%%": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@%%"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : %@ %%"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@%%"
           }
         }
       }
@@ -177,51 +239,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@：分娩%lld件"
-          }
-        }
-      }
-    },
-    "%lld": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
-          }
-        }
-      }
-    },
-    "%lld %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld %@"
           }
         }
       }
@@ -292,6 +309,50 @@
         }
       }
     },
+    "%lld boys, %lld girls, %lld losses": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld niños, %lld niñas, %lld pérdidas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld garçons, %lld filles, %lld pertes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "男の子%lld人、女の子%lld人、死産%lld件"
+          }
+        }
+      }
+    },
+    "%lld consecutive days": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld días consecutivos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jours consécutifs"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld日連続"
+          }
+        }
+      }
+    },
     "%lld deliveries": {
       "localizations": {
         "es": {
@@ -310,6 +371,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "分娩%lld件"
+          }
+        }
+      }
+    },
+    "%lld deliveries, %lld babies": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld partos, %lld bebés"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld accouchements, %lld bébés"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩%lld件、赤ちゃん%lld人"
+          }
+        }
+      }
+    },
+    "%lld: %lld deliveries, %lld babies": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld: %lld partos, %lld bebés"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld : %lld accouchements, %lld bébés"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld：分娩%lld件、赤ちゃん%lld人"
           }
         }
       }
@@ -380,8 +485,7 @@
         }
       }
     },
-    "1 Baby": {
-      "extractionState": "stale",
+    "1 baby": {
       "localizations": {
         "es": {
           "stringUnit": {
@@ -403,48 +507,46 @@
         }
       }
     },
-    "1 baby delivered": {
-      "extractionState": "stale",
+    "1 delivery": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 bebé nacido"
+            "value": "1 parto"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 bébé né"
+            "value": "1 accouchement"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "赤ちゃん1人誕生"
+            "value": "分娩1件"
           }
         }
       }
     },
-    "7-day average": {
-      "extractionState": "stale",
+    "12": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "promedio de 7 días"
+            "value": "12"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "moyenne sur 7 jours"
+            "value": "12"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "7日間平均"
+            "value": "12"
           }
         }
       }
@@ -471,277 +573,156 @@
         }
       }
     },
-    "Add A Baby": {
-      "extractionState": "stale",
+    "Afternoon": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Agregar un bebé"
+            "value": "Tarde"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajouter un bébé"
+            "value": "Après-midi"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "赤ちゃんを追加"
+            "value": "午後"
           }
         }
       }
     },
-    "Add at least one baby to enable": {
-      "extractionState": "stale",
+    "All": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Agrega al menos un bebé para habilitar"
+            "value": "Todos"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajoutez au moins un bébé pour activer"
+            "value": "Tous"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "有効にするには赤ちゃんを1人以上追加してください"
+            "value": "すべて"
           }
         }
       }
     },
-    "Add baby": {
-      "extractionState": "stale",
+    "Always at top": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Agregar bebé"
+            "value": "Siempre arriba"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajouter un bébé"
+            "value": "Toujours en haut"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "赤ちゃんを追加"
+            "value": "常に最上部"
           }
         }
       }
     },
-    "Add personal memories about this delivery": {
-      "extractionState": "stale",
+    "Average": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Agrega recuerdos personales sobre este parto"
+            "value": "Promedio"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajoutez des souvenirs personnels de cet accouchement"
+            "value": "Moyenne"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この分娩についての個人的な思い出を追加"
+            "value": "平均"
           }
         }
       }
     },
-    "Add tags": {
-      "extractionState": "stale",
+    "Average %@ babies per delivery. Total %lld deliveries, %lld babies.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Agregar etiquetas"
+            "value": "Promedio de %@ bebés por parto. Total: %lld partos, %lld bebés."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajouter des étiquettes"
+            "value": "Moyenne de %@ bébés par accouchement. Total de %lld accouchements, %lld bébés."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タグを追加"
+            "value": "1回の分娩あたり平均%@人の赤ちゃん。合計で分娩%lld件、赤ちゃん%lld人です。"
           }
         }
       }
     },
-    "Adjust to filter by number of babies per delivery": {
-      "extractionState": "stale",
+    "Avg Height": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajusta para filtrar por número de bebés por parto"
+            "value": "Talla prom."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajustez pour filtrer selon le nombre de bébés par accouchement"
+            "value": "Taille moy."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "1回の分娩での赤ちゃんの人数で絞り込むには調整します"
+            "value": "平均身長"
           }
         }
       }
     },
-    "And how many girls?": {
+    "Avg Weight": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "¿Y cuántas niñas?"
+            "value": "Peso prom."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Et combien de filles?"
+            "value": "Poids moy."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "女の子は何人ですか？"
-          }
-        }
-      }
-    },
-    "App version %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versión de la app %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version de l'app %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アプリバージョン%@"
-          }
-        }
-      }
-    },
-    "Applies the selected filters to the delivery list": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aplica los filtros seleccionados a la lista de partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Applique les filtres sélectionnés à la liste des accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選択したフィルターを分娩リストに適用します"
-          }
-        }
-      }
-    },
-    "Apply filters": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aplicar filtros"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Appliquer les filtres"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "フィルターを適用"
-          }
-        }
-      }
-    },
-    "Average height: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Talla promedio: %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taille moyenne : %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "平均身長：%@"
-          }
-        }
-      }
-    },
-    "Average weight: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Peso promedio: %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Poids moyen : %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "平均体重：%@"
+            "value": "平均体重"
           }
         }
       }
@@ -768,24 +749,46 @@
         }
       }
     },
-    "Babies This Week": {
+    "Babies per Delivery": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bebés esta semana"
+            "value": "Bebés por parto"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bébés cette semaine"
+            "value": "Bébés par accouchement"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今週の赤ちゃん"
+            "value": "分娩あたりの赤ちゃん数"
+          }
+        }
+      }
+    },
+    "Babies:": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bebés:"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bébés :"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃん："
           }
         }
       }
@@ -812,70 +815,134 @@
         }
       }
     },
-    "Baby count filter": {
-      "extractionState": "stale",
+    "Baby %lld": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Filtro de número de bebés"
+            "value": "Bebé %lld"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Filtre du nombre de bébés"
+            "value": "Bébé %lld"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "赤ちゃんの人数フィルター"
+            "value": "赤ちゃん%lld"
           }
         }
       }
     },
-    "Boys": {
+    "Baby %lld: %@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niños"
+            "value": "Bebé %lld: %@"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Garçons"
+            "value": "Bébé %lld : %@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "男の子"
+            "value": "赤ちゃん%lld：%@"
           }
         }
       }
     },
-    "Boys: %lld": {
-      "extractionState": "stale",
+    "Baby Measurements": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niños: %lld"
+            "value": "Medidas del bebé"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Garçons : %lld"
+            "value": "Mesures du bébé"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "男の子：%lld"
+            "value": "赤ちゃんの測定値"
+          }
+        }
+      }
+    },
+    "Busiest Day": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día más ocupado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour le plus occupé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最も忙しい曜日"
+          }
+        }
+      }
+    },
+    "Busiest day is %@ with %lld deliveries": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El día más ocupado es %@ con %lld partos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le jour le plus occupé est %@ avec %lld accouchements"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最も忙しい曜日は%@で、分娩%lld件です"
+          }
+        }
+      }
+    },
+    "By Shift": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por turno"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Par quart de travail"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シフト別"
           }
         }
       }
@@ -924,69 +991,112 @@
         }
       }
     },
-    "Career Delivery Totals": {
+    "Cancel": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Totales de partos de carrera"
+            "value": "Cancelar"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Totaux d'accouchements en carrière"
+            "value": "Annuler"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "キャリア通算の分娩数"
+            "value": "キャンセル"
           }
         }
       }
     },
-    "Career Totals": {
+    "Chart showing babies delivered over time by month": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Totales de carrera"
+            "value": "Gráfico que muestra los bebés nacidos a lo largo del tiempo por mes"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Totaux en carrière"
+            "value": "Graphique montrant les bébés mis au monde au fil des mois"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "キャリア通算"
+            "value": "月別の赤ちゃん誕生数の推移を示すグラフです"
           }
         }
       }
     },
-    "Couldn't delete delivery": {
-      "extractionState": "stale",
+    "Close": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se pudo eliminar el parto"
+            "value": "Cerrar"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de supprimer l'accouchement"
+            "value": "Fermer"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "分娩を削除できませんでした"
+            "value": "閉じる"
+          }
+        }
+      }
+    },
+    "Close jar history": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerrar historial del frasco"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer l'historique du pot"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ジャーの履歴を閉じる"
+          }
+        }
+      }
+    },
+    "Content": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contenido"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contenu"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コンテンツ"
           }
         }
       }
@@ -1009,29 +1119,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "件数"
-          }
-        }
-      }
-    },
-    "Customize the order of dashboard cards": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personaliza el orden de las tarjetas del panel"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personnalisez l'ordre des cartes du tableau de bord"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ダッシュボードカードの順序をカスタマイズします"
           }
         }
       }
@@ -1102,71 +1189,46 @@
         }
       }
     },
-    "Date and time must be between %@ and %@.": {
-      "extractionState": "stale",
+    "Day": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La fecha y hora deben estar entre %@ y %@."
+            "value": "Día"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "La date et l'heure doivent être entre %@ et %@."
+            "value": "Jour"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "日時は%@から%@までの間である必要があります。"
+            "value": "日"
           }
         }
       }
     },
-    "Date cannot be changed when editing": {
-      "extractionState": "stale",
+    "Day of Week": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La fecha no se puede cambiar al editar"
+            "value": "Día de la semana"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "La date ne peut pas être changée en mode édition"
+            "value": "Jour de la semaine"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "編集時は日付を変更できません"
-          }
-        }
-      }
-    },
-    "Delete all deliveries": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eliminar todos los partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer tous les accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "すべての分娩を削除"
+            "value": "曜日"
           }
         }
       }
@@ -1193,6 +1255,28 @@
         }
       }
     },
+    "Deliveries:": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partos:"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accouchements :"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩："
+          }
+        }
+      }
+    },
     "Delivery": {
       "localizations": {
         "es": {
@@ -1211,29 +1295,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "分娩"
-          }
-        }
-      }
-    },
-    "Delivery Details": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Detalles del parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Détails de l'accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩の詳細"
           }
         }
       }
@@ -1260,324 +1321,68 @@
         }
       }
     },
-    "Delivery Not Found": {
-      "extractionState": "stale",
+    "Delivery jar for %@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Parto no encontrado"
+            "value": "Frasco de partos de %@"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Accouchement introuvable"
+            "value": "Pot d'accouchements de %@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "分娩が見つかりません"
+            "value": "%@の分娩ジャー"
           }
         }
       }
     },
-    "Delivery date: %@": {
-      "extractionState": "stale",
+    "Drag cards to customize your dashboard layout.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fecha del parto: %@"
+            "value": "Arrastra las tarjetas para personalizar tu panel."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date de l'accouchement : %@"
+            "value": "Glissez les cartes pour personnaliser la disposition de votre tableau de bord."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "分娩日：%@"
+            "value": "カードをドラッグしてダッシュボードのレイアウトをカスタマイズしましょう。"
           }
         }
       }
     },
-    "Delivery details": {
-      "extractionState": "stale",
+    "Drag to Reorder": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detalles del parto"
+            "value": "Arrastra para reordenar"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Détails de l'accouchement"
+            "value": "Glisser pour réorganiser"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "分娩の詳細"
-          }
-        }
-      }
-    },
-    "Delivery method: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Método de parto: %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Méthode d'accouchement : %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩方法：%@"
-          }
-        }
-      }
-    },
-    "Discards changes and closes the form": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descarta los cambios y cierra el formulario"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annule les modifications et ferme le formulaire"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "変更を破棄してフォームを閉じます"
-          }
-        }
-      }
-    },
-    "Discards filter changes": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descarta los cambios de filtros"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annule les modifications des filtres"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "フィルターの変更を破棄します"
-          }
-        }
-      }
-    },
-    "Enable to filter deliveries within a specific date range": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa para filtrar partos dentro de un rango de fechas específico"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activez pour filtrer les accouchements dans une plage de dates précise"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "有効にすると特定の期間内の分娩で絞り込めます"
-          }
-        }
-      }
-    },
-    "Enable to show only deliveries that have personal notes": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa para mostrar solo partos con notas personales"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activez pour afficher seulement les accouchements avec des notes personnelles"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "有効にすると個人メモのある分娩のみ表示します"
-          }
-        }
-      }
-    },
-    "Enable to show only deliveries where epidural was used": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa para mostrar solo partos en los que se usó epidural"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activez pour afficher seulement les accouchements avec péridurale"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "有効にすると硬膜外麻酔を使用した分娩のみ表示します"
-          }
-        }
-      }
-    },
-    "End date": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fecha de fin"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Date de fin"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "終了日"
-          }
-        }
-      }
-    },
-    "End date must be after start date": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La fecha de fin debe ser posterior a la fecha de inicio"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La date de fin doit être après la date de début"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "終了日は開始日より後にしてください"
-          }
-        }
-      }
-    },
-    "Enter the baby's height": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingresa la talla del bebé"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entrez la taille du bébé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃんの身長を入力します"
-          }
-        }
-      }
-    },
-    "Enter the baby's weight": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingresa el peso del bebé"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entrez le poids du bébé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃんの体重を入力します"
-          }
-        }
-      }
-    },
-    "Enter weight and height to enable": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingresa peso y talla para habilitar"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entrez le poids et la taille pour activer"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "有効にするには体重と身長を入力してください"
+            "value": "ドラッグして並べ替え"
           }
         }
       }
@@ -1604,7 +1409,29 @@
         }
       }
     },
-    "Epidural Used": {
+    "Epidural usage: %@ percent of deliveries": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uso de epidural: %@ por ciento de los partos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisation de la péridurale : %@ pour cent des accouchements"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "硬膜外麻酔の使用：分娩の%@パーセント"
+          }
+        }
+      }
+    },
+    "Epidural used": {
       "localizations": {
         "es": {
           "stringUnit": {
@@ -1626,179 +1453,40 @@
         }
       }
     },
-    "Epidural used only": {
-      "extractionState": "stale",
+    "Evening": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Solo con epidural"
+            "value": "Tarde-noche"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Péridurale utilisée seulement"
+            "value": "Soir"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "硬膜外麻酔使用のみ"
+            "value": "夕方"
           }
         }
       }
     },
-    "Epidural: %@": {
-      "extractionState": "stale",
+    "Female": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Epidural: %@"
+            "value": "Niña"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Péridurale : %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "硬膜外麻酔：%@"
-          }
-        }
-      }
-    },
-    "Error: Date must be within the last 3 days": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Error: la fecha debe estar dentro de los últimos 3 días"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erreur : la date doit se situer dans les 3 derniers jours"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "エラー：日付は過去3日以内である必要があります"
-          }
-        }
-      }
-    },
-    "Export and Share": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exportar y compartir"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exportation et partage"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "書き出しと共有"
-          }
-        }
-      }
-    },
-    "Export data or share statistics as images": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exporta datos o comparte estadísticas como imágenes"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exportez des données ou partagez des statistiques en images"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "データの書き出しや統計の画像共有"
-          }
-        }
-      }
-    },
-    "Filter by date range": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filtrar por rango de fechas"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filtrer par plage de dates"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "期間で絞り込み"
-          }
-        }
-      }
-    },
-    "Finish delivery": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finalizar parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminer l'accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩を完了"
-          }
-        }
-      }
-    },
-    "Girls": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niñas"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filles"
+            "value": "Fille"
           }
         },
         "ja": {
@@ -1809,202 +1497,156 @@
         }
       }
     },
-    "Girls: %lld": {
-      "extractionState": "stale",
+    "Fixed Position": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niñas: %lld"
+            "value": "Posición fija"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Filles : %lld"
+            "value": "Position fixe"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "女の子：%lld"
+            "value": "固定位置"
           }
         }
       }
     },
-    "Go": {
+    "Format": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ir"
+            "value": "Formato"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aller"
+            "value": "Format"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "移動"
+            "value": "形式"
           }
         }
       }
     },
-    "Has notes": {
-      "extractionState": "stale",
+    "Height": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Con notas"
+            "value": "Talla"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avec notes"
+            "value": "Taille"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "メモあり"
+            "value": "身長"
           }
         }
       }
     },
-    "How many babies you've delivered this week (Sunday through Saturday).": {
+    "History": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cuántos bebés has atendido esta semana (de domingo a sábado)."
+            "value": "Historial"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le nombre de bébés que vous avez mis au monde cette semaine (du dimanche au samedi)."
+            "value": "Historique"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今週（日曜日から土曜日）に取り上げた赤ちゃんの人数です。"
+            "value": "履歴"
           }
         }
       }
     },
-    "How many boys?": {
+    "Jar History": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "¿Cuántos niños?"
+            "value": "Historial del frasco"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Combien de garçons?"
+            "value": "Historique du pot"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "男の子は何人ですか？"
+            "value": "ジャーの履歴"
           }
         }
       }
     },
-    "Log Delivery": {
+    "Longest Streak": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registrar parto"
+            "value": "Racha más larga"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enregistrer l'accouchement"
+            "value": "Plus longue série"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "分娩を記録"
+            "value": "最長連続日数"
           }
         }
       }
     },
-    "Log a ${method} delivery with ${boys} boys and ${girls} girls": {
+    "Longest streak: %lld consecutive days with deliveries": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registrar un parto ${method} con ${boys} niños y ${girls} niñas"
+            "value": "Racha más larga: %lld días consecutivos con partos"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enregistrer un accouchement ${method} avec ${boys} garçons et ${girls} filles"
+            "value": "Plus longue série : %lld jours consécutifs avec accouchements"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "男の子${boys}人と女の子${girls}人の${method}分娩を記録"
-          }
-        }
-      }
-    },
-    "Log a Delivery": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrar un parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer un accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩を記録"
-          }
-        }
-      }
-    },
-    "Logged %lld %@. Great work!": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registraste %lld %@. ¡Gran trabajo!"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vous avez enregistré %lld %@. Excellent travail!"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld人の%@を記録しました。お疲れさまでした！"
+            "value": "最長連続記録：分娩のある日が%lld日連続"
           }
         }
       }
@@ -2031,138 +1673,354 @@
         }
       }
     },
-    "Loss: %lld": {
-      "extractionState": "stale",
+    "Male": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pérdidas: %lld"
+            "value": "Niño"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pertes : %lld"
+            "value": "Garçon"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "死産：%lld"
+            "value": "男の子"
           }
         }
       }
     },
-    "Losses": {
+    "Marble Jar": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pérdidas"
+            "value": "Frasco de canicas"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pertes"
+            "value": "Pot de billes"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "死産"
+            "value": "マーブルジャー"
           }
         }
       }
     },
-    "Manage Tags": {
-      "extractionState": "stale",
+    "Metric": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gestionar etiquetas"
+            "value": "Métrico"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gérer les étiquettes"
+            "value": "Métrique"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タグを管理"
+            "value": "メートル法"
           }
         }
       }
     },
-    "N I C U stays: %@ percent of babies": {
-      "extractionState": "stale",
+    "Month": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Estancias en U C I N: %@ por ciento de los bebés"
+            "value": "Mes"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Séjours à l'U S I N : %@ pour cent des bébés"
+            "value": "Mois"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "NICU入院：赤ちゃんの%@パーセント"
+            "value": "月"
           }
         }
       }
     },
-    "NICU stay required": {
-      "extractionState": "stale",
+    "Morning": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Requirió estancia en UCIN"
+            "value": "Mañana"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Séjour à l'USIN requis"
+            "value": "Matin"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "NICU入院が必要"
+            "value": "朝"
           }
         }
       }
     },
-    "New Delivery": {
+    "Most Babies in a Day": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nuevo parto"
+            "value": "Más bebés en un día"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nouvel accouchement"
+            "value": "Plus de bébés en une journée"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "新規分娩"
+            "value": "1日の最多赤ちゃん数"
+          }
+        }
+      }
+    },
+    "Most in a Day": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más en un día"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record en une journée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1日の最多"
+          }
+        }
+      }
+    },
+    "Most in a Month": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más en un mes"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record en un mois"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1か月の最多"
+          }
+        }
+      }
+    },
+    "Most in a Week": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más en una semana"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record en une semaine"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1週間の最多"
+          }
+        }
+      }
+    },
+    "NICU": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UCIN"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "USIN"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NICU"
+          }
+        }
+      }
+    },
+    "NICU Stay": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estancia en UCIN"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séjour à l'USIN"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NICU入院"
+          }
+        }
+      }
+    },
+    "NICU Stays": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estancias en UCIN"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séjours à l'USIN"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NICU入院"
+          }
+        }
+      }
+    },
+    "NICU stay": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estancia en UCIN"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séjour à l'USIN"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NICU入院"
+          }
+        }
+      }
+    },
+    "NICU stays": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estancias en UCIN"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séjours à l'USIN"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NICU入院"
+          }
+        }
+      }
+    },
+    "Next month": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mes siguiente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mois suivant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "翌月"
+          }
+        }
+      }
+    },
+    "Night": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noche"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "夜間"
           }
         }
       }
@@ -2189,866 +2047,354 @@
         }
       }
     },
-    "No babies added yet.": {
-      "extractionState": "stale",
+    "No Deliveries": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aún no se han agregado bebés."
+            "value": "Sin partos"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun bébé ajouté pour l'instant."
+            "value": "Aucun accouchement"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "まだ赤ちゃんが追加されていません。"
+            "value": "分娩なし"
           }
         }
       }
     },
-    "No babies delivered yet this week.": {
+    "No babies logged yet.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aún no hay bebés esta semana."
+            "value": "Aún no hay bebés registrados."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun bébé mis au monde cette semaine."
+            "value": "Aucun bébé enregistré pour l'instant."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今週はまだ赤ちゃんの記録がありません。"
+            "value": "まだ赤ちゃんが記録されていません。"
           }
         }
       }
     },
-    "No babies recorded for this delivery": {
-      "extractionState": "stale",
+    "No deliveries logged yet.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No hay bebés registrados para este parto"
+            "value": "Aún no hay partos registrados."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun bébé enregistré pour cet accouchement"
+            "value": "Aucun accouchement enregistré pour l'instant."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この分娩には赤ちゃんが記録されていません"
+            "value": "まだ分娩が記録されていません。"
           }
         }
       }
     },
-    "No babies recorded for this delivery.": {
-      "extractionState": "stale",
+    "No deliveries recorded on %@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No hay bebés registrados para este parto."
+            "value": "No hay partos registrados el %@"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun bébé enregistré pour cet accouchement."
+            "value": "Aucun accouchement enregistré le %@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この分娩には赤ちゃんが記録されていません。"
+            "value": "%@には分娩の記録がありません"
           }
         }
       }
     },
-    "No babies recorded.": {
-      "extractionState": "stale",
+    "Page %lld of %lld": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No hay bebés registrados."
+            "value": "Página %lld de %lld"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun bébé enregistré."
+            "value": "Page %lld sur %lld"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "赤ちゃんの記録がありません。"
+            "value": "ページ %lld / %lld"
           }
         }
       }
     },
-    "No deliveries yet. Your logged deliveries will appear here.": {
-      "extractionState": "stale",
+    "Peak Hour": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aún no hay partos. Tus partos registrados aparecerán aquí."
+            "value": "Hora pico"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun accouchement pour l'instant. Vos accouchements enregistrés apparaîtront ici."
+            "value": "Heure de pointe"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "まだ分娩がありません。記録した分娩がここに表示されます。"
+            "value": "ピーク時間帯"
           }
         }
       }
     },
-    "No tags added.": {
-      "extractionState": "stale",
+    "Peak hour is %@ with %lld deliveries": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No hay etiquetas."
+            "value": "La hora pico es %@ con %lld partos"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune étiquette ajoutée."
+            "value": "L'heure de pointe est %@ avec %lld accouchements"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タグが追加されていません。"
+            "value": "ピーク時間帯は%@で、分娩%lld件です"
           }
         }
       }
     },
-    "No tags added. Tags help you find memorable deliveries later.": {
-      "extractionState": "stale",
+    "Personal Bests": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No hay etiquetas. Las etiquetas te ayudan a encontrar partos memorables más adelante."
+            "value": "Récords personales"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune étiquette ajoutée. Les étiquettes vous aident à retrouver plus tard les accouchements mémorables."
+            "value": "Records personnels"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タグが追加されていません。タグを付けると、思い出に残る分娩を後で見つけやすくなります。"
+            "value": "自己ベスト"
           }
         }
       }
     },
-    "Notes: %@": {
-      "extractionState": "stale",
+    "Pie chart showing sex distribution: %lld male, %lld female, %lld loss": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notas: %@"
+            "value": "Gráfico circular de distribución por sexo: %lld niños, %lld niñas, %lld pérdidas"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes : %@"
+            "value": "Diagramme circulaire de la répartition des sexes : %lld garçons, %lld filles, %lld pertes"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "メモ：%@"
+            "value": "性別の内訳を示す円グラフ：男の子%lld人、女の子%lld人、死産%lld件"
           }
         }
       }
     },
-    "Nothing logged — a delivery needs at least one baby.": {
+    "Previous month": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se registró nada — un parto necesita al menos un bebé."
+            "value": "Mes anterior"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rien n'a été enregistré — un accouchement nécessite au moins un bébé."
+            "value": "Mois précédent"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "記録されませんでした — 分娩には赤ちゃんが1人以上必要です。"
+            "value": "前月"
           }
         }
       }
     },
-    "Open Delivery": {
+    "Progress": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abrir parto"
+            "value": "Progreso"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvrir l'accouchement"
+            "value": "Progression"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "分娩を開く"
+            "value": "進捗"
           }
         }
       }
     },
-    "Opens Apple Weather legal attribution page": {
-      "extractionState": "stale",
+    "Reorder Cards": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abre la página de atribución legal de Apple Weather"
+            "value": "Reordenar tarjetas"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvre la page d'attribution légale d'Apple Weather"
+            "value": "Réorganiser les cartes"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple Weatherの法的帰属表示ページを開きます"
+            "value": "カードを並べ替え"
           }
         }
       }
     },
-    "Opens LinkedIn profile": {
-      "extractionState": "stale",
+    "Save": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abre el perfil de LinkedIn"
+            "value": "Guardar"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvre le profil LinkedIn"
+            "value": "Enregistrer"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "LinkedInプロフィールを開きます"
+            "value": "保存"
           }
         }
       }
     },
-    "Opens Stork to the new delivery form.": {
+    "Sex": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abre Stork en el formulario de nuevo parto."
+            "value": "Sexo"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvre Stork sur le formulaire de nouvel accouchement."
+            "value": "Sexe"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Storkの新規分娩フォームを開きます。"
+            "value": "性別"
           }
         }
       }
     },
-    "Opens a delivery's details in Stork.": {
+    "Sex Distribution": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abre los detalles de un parto en Stork."
+            "value": "Distribución por sexo"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvre les détails d'un accouchement dans Stork."
+            "value": "Répartition par sexe"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Storkで分娩の詳細を開きます。"
+            "value": "性別の分布"
           }
         }
       }
     },
-    "Opens form to add a new baby to this delivery": {
-      "extractionState": "stale",
+    "Share": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abre el formulario para agregar un nuevo bebé a este parto"
+            "value": "Compartir"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvre le formulaire pour ajouter un nouveau bébé à cet accouchement"
+            "value": "Partager"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この分娩に新しい赤ちゃんを追加するフォームを開きます"
-          }
-        }
-      }
-    },
-    "Opens form to edit this baby's information": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abre el formulario para editar la información de este bebé"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ouvre le formulaire pour modifier les informations de ce bébé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この赤ちゃんの情報を編集するフォームを開きます"
-          }
-        }
-      }
-    },
-    "Opens picker to add tags to this delivery": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abre el selector para agregar etiquetas a este parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ouvre le sélecteur pour ajouter des étiquettes à cet accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この分娩にタグを追加するピッカーを開きます"
-          }
-        }
-      }
-    },
-    "Opens publisher website": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abre el sitio web del editor"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ouvre le site Web de l'éditeur"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "発行元のWebサイトを開きます"
-          }
-        }
-      }
-    },
-    "Options": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opciones"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Options"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オプション"
-          }
-        }
-      }
-    },
-    "Permanently removes all delivery records": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elimina permanentemente todos los registros de partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprime définitivement tous les dossiers d'accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "すべての分娩記録を完全に削除します"
-          }
-        }
-      }
-    },
-    "Preview Onboarding": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vista previa de la introducción"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prévisualiser l'introduction"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オンボーディングをプレビュー"
-          }
-        }
-      }
-    },
-    "Private notes for memorable deliveries. No PHI.": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notas privadas para partos memorables. Sin información de pacientes (PHI)."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notes privées pour les accouchements mémorables. Aucun renseignement personnel sur la santé."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "思い出に残る分娩のための個人メモです。PHIは記載しないでください。"
-          }
-        }
-      }
-    },
-    "Quickly log a delivery you performed. You can add details like measurements later in Stork.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra rápidamente un parto que atendiste. Puedes agregar detalles como las medidas más tarde en Stork."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrez rapidement un accouchement que vous avez effectué. Vous pourrez ajouter des détails comme les mesures plus tard dans Stork."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "担当した分娩をすばやく記録します。測定値などの詳細は、後からStorkで追加できます。"
-          }
-        }
-      }
-    },
-    "Refresh Deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actualizar partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actualiser les accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩を更新"
-          }
-        }
-      }
-    },
-    "Removes this baby from the delivery": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quita este bebé del parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retire ce bébé de l'accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この赤ちゃんを分娩から削除します"
-          }
-        }
-      }
-    },
-    "Reshuffle": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mezclar de nuevo"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remélanger"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "再シャッフル"
-          }
-        }
-      }
-    },
-    "Save changes": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardar cambios"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer les modifications"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "変更を保存"
-          }
-        }
-      }
-    },
-    "Saves the baby information": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guarda la información del bebé"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistre les informations du bébé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃんの情報を保存します"
-          }
-        }
-      }
-    },
-    "Saves the delivery record": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guarda el registro del parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistre le dossier d'accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩記録を保存します"
-          }
-        }
-      }
-    },
-    "Select male, female, or loss": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecciona niño, niña o pérdida"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélectionnez garçon, fille ou perte"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "男の子、女の子、または死産を選択します"
-          }
-        }
-      }
-    },
-    "Select the beginning of the date range": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecciona el inicio del rango de fechas"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélectionnez le début de la plage de dates"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "期間の開始日を選択します"
-          }
-        }
-      }
-    },
-    "Select the date and time of delivery": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecciona la fecha y hora del parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélectionnez la date et l'heure de l'accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩の日時を選択します"
-          }
-        }
-      }
-    },
-    "Select the end of the date range": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecciona el fin del rango de fechas"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélectionnez la fin de la plage de dates"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "期間の終了日を選択します"
-          }
-        }
-      }
-    },
-    "Select vaginal, C-section, or V-BAC": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecciona vaginal, cesárea o PVDC"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélectionnez vaginal, césarienne ou AVAC"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "経腟、帝王切開、またはVBACを選択します"
-          }
-        }
-      }
-    },
-    "Settings": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Configuración"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réglages"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定"
-          }
-        }
-      }
-    },
-    "Start a New Delivery": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Iniciar un nuevo parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Commencer un nouvel accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新しい分娩を開始"
-          }
-        }
-      }
-    },
-    "Start date": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fecha de inicio"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Date de début"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開始日"
+            "value": "共有"
           }
         }
       }
@@ -3097,322 +2443,112 @@
         }
       }
     },
-    "Switch between Month–Day–Year and Day–Month–Year formats for dates": {
-      "extractionState": "stale",
+    "Time of Day": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cambia entre los formatos de fecha mes–día–año y día–mes–año"
+            "value": "Hora del día"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Basculez entre les formats de date mois–jour–année et jour–mois–année"
+            "value": "Heure de la journée"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "日付の形式を月–日–年と日–月–年で切り替えます"
+            "value": "時間帯"
           }
         }
       }
     },
-    "Switch between imperial and metric units for weight and length measurements": {
-      "extractionState": "stale",
+    "Today": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cambia entre unidades imperiales y métricas para las medidas de peso y longitud"
+            "value": "Hoy"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Basculez entre les unités impériales et métriques pour les mesures de poids et de longueur"
+            "value": "Aujourd'hui"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "体重と身長の単位をヤード・ポンド法とメートル法で切り替えます"
+            "value": "今日"
           }
         }
       }
     },
-    "Sync": {
+    "Total babies: %lld": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sincronización"
+            "value": "Total de bebés: %lld"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchronisation"
+            "value": "Total de bébés : %lld"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "同期"
+            "value": "赤ちゃん合計：%lld"
           }
         }
       }
     },
-    "Sync with iCloud": {
+    "Unavailable": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sincronizar con iCloud"
+            "value": "No disponible"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchroniser avec iCloud"
+            "value": "Non disponible"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloudと同期"
+            "value": "利用不可"
           }
         }
       }
     },
-    "Synced with iCloud": {
-      "extractionState": "stale",
+    "Units": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sincronizado con iCloud"
+            "value": "Unidades"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchronisé avec iCloud"
+            "value": "Unités"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloudと同期しました"
-          }
-        }
-      }
-    },
-    "Tap month label to view jar history": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca la etiqueta del mes para ver el historial del frasco"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Touchez le nom du mois pour voir l'historique du pot"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "月ラベルをタップするとジャーの履歴を表示します"
-          }
-        }
-      }
-    },
-    "Tap to view weather attribution": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca para ver la atribución del clima"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Touchez pour voir l'attribution météo"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タップして天気の帰属表示を表示します"
-          }
-        }
-      }
-    },
-    "Test Milestone": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Probar hito"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tester un jalon"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "マイルストーンをテスト"
-          }
-        }
-      }
-    },
-    "The selected delivery could not be loaded.": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo cargar el parto seleccionado."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'accouchement sélectionné n'a pas pu être chargé."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選択された分娩を読み込めませんでした。"
-          }
-        }
-      }
-    },
-    "Toggle if baby required NICU care": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa si el bebé requirió cuidados en UCIN"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activez si le bébé a nécessité des soins à l'USIN"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃんにNICUケアが必要だった場合に切り替えます"
-          }
-        }
-      }
-    },
-    "Toggle if delivery was a nurse catch": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa si el parto fue atendido por enfermera"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activez si l'accouchement a été fait par l'infirmière"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩がナースキャッチだった場合に切り替えます"
-          }
-        }
-      }
-    },
-    "Toggle whether an epidural was administered": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa si se administró epidural"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Indiquez si une péridurale a été administrée"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "硬膜外麻酔を実施したかどうかを切り替えます"
-          }
-        }
-      }
-    },
-    "Use day month year date format": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usar formato de fecha día mes año"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Utiliser le format de date jour mois année"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日–月–年の日付形式を使用"
-          }
-        }
-      }
-    },
-    "Use metric units": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usar unidades métricas"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Utiliser les unités métriques"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "メートル法を使用"
+            "value": "単位"
           }
         }
       }
@@ -3461,91 +2597,156 @@
         }
       }
     },
-    "Weight (g)": {
-      "extractionState": "stale",
+    "Week of %@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Peso (g)"
+            "value": "Semana del %@"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Poids (g)"
+            "value": "Semaine du %@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "体重（g）"
+            "value": "%@の週"
           }
         }
       }
     },
-    "You've delivered %lld %@ across %lld %@. Incredible work!": {
+    "Weight": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Has atendido %lld %@ en %lld %@. ¡Un trabajo increíble!"
+            "value": "Peso"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vous avez mis au monde %lld %@ en %lld %@. Un travail incroyable!"
+            "value": "Poids"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "これまでに%lld人の%@を%lld件の%@で取り上げました。素晴らしい実績です！"
+            "value": "体重"
           }
         }
       }
     },
-    "You've delivered %lld %@ this week.": {
+    "Weight: %@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Has atendido %lld %@ esta semana."
+            "value": "Peso: %@"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vous avez mis au monde %lld %@ cette semaine."
+            "value": "Poids : %@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今週は%lld人の%@を取り上げました。"
+            "value": "体重：%@"
           }
         }
       }
     },
-    "Your career totals: deliveries performed and babies delivered.": {
+    "Year over Year": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tus totales de carrera: partos realizados y bebés atendidos."
+            "value": "Año tras año"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vos totaux de carrière : accouchements effectués et bébés mis au monde."
+            "value": "D'une année à l'autre"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "キャリア通算：担当した分娩数と取り上げた赤ちゃんの人数です。"
+            "value": "前年比"
+          }
+        }
+      }
+    },
+    "^[%lld baby](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bebé](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bébé](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃん%lld人"
+          }
+        }
+      }
+    },
+    "^[%lld baby](inflect: true) • %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bebé](inflect: true) • %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bébé](inflect: true) • %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃん%lld人 • %@"
+          }
+        }
+      }
+    },
+    "^[%lld delivery](inflect: true), ^[%lld baby](inflect: true) on %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld parto](inflect: true), ^[%lld bebé](inflect: true) el %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld accouchement](inflect: true), ^[%lld bébé](inflect: true) le %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩%lld件、赤ちゃん%lld人（%@）"
           }
         }
       }
@@ -3568,6 +2769,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "赤ちゃん"
+          }
+        }
+      }
+    },
+    "babies / delivery": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bebés / parto"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bébés / accouchement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人/分娩"
+          }
+        }
+      }
+    },
+    "babies per delivery": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bebés por parto"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bébés par accouchement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩あたりの赤ちゃん"
           }
         }
       }
@@ -3616,28 +2861,6 @@
         }
       }
     },
-    "iCloud": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud"
-          }
-        }
-      }
-    },
     "in": {
       "localizations": {
         "es": {
@@ -3656,6 +2879,94 @@
           "stringUnit": {
             "state": "translated",
             "value": "in"
+          }
+        }
+      }
+    },
+    "kg": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
+        }
+      }
+    },
+    "total deliveries on this day of the week": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "partos totales en este día de la semana"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "accouchements au total ce jour de la semaine"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この曜日の分娩総数"
+          }
+        }
+      }
+    },
+    "vs %lld: %lld deliveries, %lld babies": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vs %lld: %lld partos, %lld bebés"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vs %lld : %lld accouchements, %lld bébés"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vs %lld：分娩%lld件、赤ちゃん%lld人"
+          }
+        }
+      }
+    },
+    "•": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•"
           }
         }
       }

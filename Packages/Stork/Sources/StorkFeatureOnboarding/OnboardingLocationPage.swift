@@ -41,7 +41,7 @@ struct OnboardingLocationPage: View {
                 .padding(.top, 24)
 
                 VStack(spacing: 0) {
-                    OnboardingFeatureRow(icon: "sun.max.fill", iconColor: .yellow, title: "Local Weather", description: "See current conditions on your dashboard.")
+                    OnboardingFeatureRow(icon: "sun.max.fill", iconColor: .yellow, title: String(localized: "Local Weather", bundle: .module), description: String(localized: "See current conditions on your dashboard.", bundle: .module))
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -64,7 +64,7 @@ struct OnboardingLocationPage: View {
             Button {
                 if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
             } label: {
-                Label("Open Settings", systemImage: "gear")
+                Label(String(localized: "Open Settings", bundle: .module), systemImage: "gear")
                     .font(.headline).frame(maxWidth: .infinity).frame(height: 50)
                     .background(Color.secondary.opacity(0.2)).foregroundStyle(.primary)
                     .clipShape(RoundedRectangle(cornerRadius: 14))

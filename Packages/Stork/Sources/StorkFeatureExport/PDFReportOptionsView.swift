@@ -36,28 +36,28 @@ struct PDFReportOptionsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Report Period") {
-                    Picker("Date Range", selection: $dateRange) {
+                Section(String(localized: "Report Period", bundle: .module)) {
+                    Picker(String(localized: "Date Range", bundle: .module), selection: $dateRange) {
                         ForEach(ExportDateRange.allCases) { Text($0.displayName).tag($0) }
                     }
                     if dateRange == .custom {
-                        DatePicker("Start Date", selection: $customStartDate, displayedComponents: .date)
-                        DatePicker("End Date", selection: $customEndDate, displayedComponents: .date)
+                        DatePicker(String(localized: "Start Date", bundle: .module), selection: $customStartDate, displayedComponents: .date)
+                        DatePicker(String(localized: "End Date", bundle: .module), selection: $customEndDate, displayedComponents: .date)
                     }
                 }
 
                 Section {
-                    LabeledContent("Deliveries") { Text("\(filteredDeliveries.count)").foregroundStyle(.secondary) }
-                    LabeledContent("Babies") { Text("\(totalBabies)").foregroundStyle(.secondary) }
+                    LabeledContent(String(localized: "Deliveries", bundle: .module)) { Text("\(filteredDeliveries.count)", bundle: .module).foregroundStyle(.secondary) }
+                    LabeledContent(String(localized: "Babies", bundle: .module)) { Text("\(totalBabies)", bundle: .module).foregroundStyle(.secondary) }
                 } header: {
-                    Text("Preview")
+                    Text("Preview", bundle: .module)
                 } footer: {
-                    Text("The report will include delivery method breakdown, sex distribution, and summary statistics.")
+                    Text("The report will include delivery method breakdown, sex distribution, and summary statistics.", bundle: .module)
                 }
 
                 Section {
                     if let url = exportURL {
-                        ShareLink(item: url) { Label("Share PDF Report", systemImage: "square.and.arrow.up") }
+                        ShareLink(item: url) { Label(String(localized: "Share PDF Report", bundle: .module), systemImage: "square.and.arrow.up") }
                             .tint(.storkPurple)
                     } else {
                         Button {
@@ -66,9 +66,9 @@ struct PDFReportOptionsView: View {
                             HStack {
                                 if model.manager.isExporting {
                                     ProgressView().controlSize(.small)
-                                    Text("Generating...")
+                                    Text("Generating...", bundle: .module)
                                 } else {
-                                    Text("Generate PDF Report")
+                                    Text("Generate PDF Report", bundle: .module)
                                 }
                             }
                         }
@@ -76,17 +76,17 @@ struct PDFReportOptionsView: View {
                     }
 
                     if model.manager.isExporting && model.manager.exportProgress > 0 {
-                        ProgressView(value: model.manager.exportProgress) { Text("Progress") }
+                        ProgressView(value: model.manager.exportProgress) { Text("Progress", bundle: .module) }
                     }
                 }
             }
-            .navigationTitle("PDF Report")
+            .navigationTitle(Text("PDF Report", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .cancellationAction) { Button(String(localized: "Cancel", bundle: .module)) { dismiss() } }
             }
-            .alert("Export Error", isPresented: $showError) {
-                Button("OK", role: .cancel) {}
+            .alert(Text("Export Error", bundle: .module), isPresented: $showError) {
+                Button(String(localized: "OK", bundle: .module), role: .cancel) {}
             } message: {
                 Text(errorMessage)
             }

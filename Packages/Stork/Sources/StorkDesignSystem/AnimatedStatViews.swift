@@ -80,7 +80,7 @@ public struct AnimatedPercentage: View {
         HStack(spacing: 0) {
             Text(String(format: "%.1f", displayedValue))
                 .contentTransition(.numericText(value: displayedValue))
-            Text("%")
+            Text("%", bundle: .module)
         }
         .font(font)
         .fontWeight(fontWeight)
@@ -195,7 +195,7 @@ public struct AnimatedStatText: View {
         .font(font)
         .fontWeight(fontWeight)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(String(format: format, value)) \(suffix)")
+        .accessibilityLabel(Text("\(String(format: format, value)) \(suffix)", bundle: .module))
         .onAppear {
             guard !hasAppeared else { return }
             hasAppeared = true
@@ -232,12 +232,12 @@ public struct AnimatedInteger: View {
     }
 
     public var body: some View {
-        Text("\(displayedValue)")
+        Text("\(displayedValue)", bundle: .module)
             .font(font)
             .fontWeight(fontWeight)
             .foregroundStyle(color)
             .contentTransition(.numericText(value: Double(displayedValue)))
-            .accessibilityLabel("\(value)")
+            .accessibilityLabel(Text("\(value)", bundle: .module))
             .onAppear {
                 guard !hasAppeared else { return }
                 hasAppeared = true

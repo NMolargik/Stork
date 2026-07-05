@@ -20,12 +20,12 @@ nonisolated public enum ExportDateRange: String, CaseIterable, Identifiable, Sen
 
     public var displayName: String {
         switch self {
-        case .thisMonth: "This Month"
-        case .lastMonth: "Last Month"
-        case .thisYear: "This Year"
-        case .lastYear: "Last Year"
-        case .allTime: "All Time"
-        case .custom: "Custom Range"
+        case .thisMonth: String(localized: "This Month", bundle: .module)
+        case .lastMonth: String(localized: "Last Month", bundle: .module)
+        case .thisYear: String(localized: "This Year", bundle: .module)
+        case .lastYear: String(localized: "Last Year", bundle: .module)
+        case .allTime: String(localized: "All Time", bundle: .module)
+        case .custom: String(localized: "Custom Range", bundle: .module)
         }
     }
 
@@ -67,15 +67,15 @@ nonisolated public enum CSVRowFormat: String, CaseIterable, Identifiable, Sendab
 
     public var displayName: String {
         switch self {
-        case .perDelivery: "One Row per Delivery"
-        case .perBaby: "One Row per Baby"
+        case .perDelivery: String(localized: "One Row per Delivery", bundle: .module)
+        case .perBaby: String(localized: "One Row per Baby", bundle: .module)
         }
     }
 
     public var description: String {
         switch self {
-        case .perDelivery: "Summary format with baby count"
-        case .perBaby: "Detailed format with individual baby data"
+        case .perDelivery: String(localized: "Summary format with baby count", bundle: .module)
+        case .perBaby: String(localized: "Detailed format with individual baby data", bundle: .module)
         }
     }
 }

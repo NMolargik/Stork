@@ -47,7 +47,7 @@ public struct OnboardingView: View {
                 .frame(maxWidth: 500)
                 .padding(.horizontal, 24).padding(.top, 16).padding(.bottom, 8)
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Step \(currentIndex + 1) of \(steps.count)")
+                .accessibilityLabel(Text("Step \(currentIndex + 1) of \(steps.count)", bundle: .module))
             }
 
             TabView(selection: $model.currentStep) {
@@ -71,7 +71,7 @@ public struct OnboardingView: View {
                             if model.isRequestingPermission {
                                 ProgressView().tint(.white)
                             } else {
-                                Text("Continue").font(.headline)
+                                Text("Continue", bundle: .module).font(.headline)
                             }
                         }
                         .frame(maxWidth: .infinity).frame(height: 38)

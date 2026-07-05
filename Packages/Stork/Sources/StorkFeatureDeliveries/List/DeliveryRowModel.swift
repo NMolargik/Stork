@@ -120,9 +120,9 @@ final class DeliveryRowModel {
 
     private static func computeAccessibilitySummary(delivery: Delivery, male: Int, female: Int, loss: Int) -> String {
         var parts: [String] = ["Delivered on \(delivery.date.formatted(date: .abbreviated, time: .shortened))"]
-        if male > 0 { parts.append(String(localized: "^[\(male) boy](inflect: true)")) }
-        if female > 0 { parts.append(String(localized: "^[\(female) girl](inflect: true)")) }
-        if loss > 0 { parts.append(String(localized: "^[\(loss) loss](inflect: true)")) }
+        if male > 0 { parts.append(String(localized: "^[\(male) boy](inflect: true)", bundle: .module)) }
+        if female > 0 { parts.append(String(localized: "^[\(female) girl](inflect: true)", bundle: .module)) }
+        if loss > 0 { parts.append(String(localized: "^[\(loss) loss](inflect: true)", bundle: .module)) }
         return parts.joined(separator: ", ")
     }
 }

@@ -18,12 +18,12 @@ nonisolated public enum OnboardingStep: CaseIterable, Sendable {
 
     public var title: String {
         switch self {
-        case .privacy: "Your Privacy"
-        case .location: "Location"
+        case .privacy: String(localized: "Your Privacy", bundle: .module)
+        case .location: String(localized: "Location", bundle: .module)
         #if !os(visionOS)
-        case .health: "Step Count"
+        case .health: String(localized: "Step Count", bundle: .module)
         #endif
-        case .complete: "You're All Set"
+        case .complete: String(localized: "You're All Set", bundle: .module)
         }
     }
 }

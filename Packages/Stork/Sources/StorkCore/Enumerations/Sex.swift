@@ -17,25 +17,25 @@ nonisolated public enum Sex: String, Codable, Hashable, CaseIterable, Identifiab
 
     public var description: String {
         switch self {
-        case .male: "Male"
-        case .female: "Female"
-        case .loss: "Loss"
+        case .male: String(localized: "Male", bundle: .module)
+        case .female: String(localized: "Female", bundle: .module)
+        case .loss: String(localized: "Loss", bundle: .module)
         }
     }
 
     public var displayName: String {
         switch self {
-        case .male: "Boy"
-        case .female: "Girl"
-        case .loss: "Loss"
+        case .male: String(localized: "Boy", bundle: .module)
+        case .female: String(localized: "Girl", bundle: .module)
+        case .loss: String(localized: "Loss", bundle: .module)
         }
     }
 
     public var displayShort: String {
         switch self {
-        case .male: "M"
-        case .female: "F"
-        case .loss: "Loss"
+        case .male: String(localized: "M", bundle: .module)
+        case .female: String(localized: "F", bundle: .module)
+        case .loss: String(localized: "Loss", bundle: .module)
         }
     }
 }

@@ -38,7 +38,7 @@ public struct DeliveryEntryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }
@@ -74,9 +74,9 @@ public struct DeliveryEntryView: View {
                     set: { if !$0 { saveErrorMessage = nil } }
                 )
             ) {
-                Button("OK", role: .cancel) {}
+                Button(String(localized: "OK", bundle: .module), role: .cancel) {}
             } message: {
-                Text(saveErrorMessage ?? String(localized: "An unknown error occurred. Please try again."))
+                Text(saveErrorMessage ?? String(localized: "An unknown error occurred. Please try again.", bundle: .module))
             }
         }
     }
@@ -87,24 +87,24 @@ public struct DeliveryEntryView: View {
         @Bindable var model: DeliveryEntryModel
 
         var body: some View {
-            Section("Details") {
-                DatePicker("Date", selection: $model.date, in: model.dateRange, displayedComponents: [.date, .hourAndMinute])
+            Section(String(localized: "Details", bundle: .module)) {
+                DatePicker(String(localized: "Date", bundle: .module), selection: $model.date, in: model.dateRange, displayedComponents: [.date, .hourAndMinute])
                     .datePickerStyle(.compact)
                     .disabled(model.isEditing)
                     .onChange(of: model.date) { _, _ in model.clampDate() }
-                    .accessibilityLabel("Delivery date and time")
+                    .accessibilityLabel(Text("Delivery date and time", bundle: .module))
 
-                Picker("Delivery Method", selection: $model.deliveryMethod) {
+                Picker(String(localized: "Delivery Method", bundle: .module), selection: $model.deliveryMethod) {
                     ForEach(DeliveryMethod.allCases, id: \.self) { method in
                         Text(method.description).tag(method)
                     }
                 }
                 .pickerStyle(.segmented)
-                .accessibilityLabel("Delivery method")
+                .accessibilityLabel(Text("Delivery method", bundle: .module))
 
-                Toggle("Epidural Used", isOn: $model.epiduralUsed)
+                Toggle(String(localized: "Epidural Used", bundle: .module), isOn: $model.epiduralUsed)
                     .tint(.red)
-                    .accessibilityLabel("Epidural used")
+                    .accessibilityLabel(Text("Epidural used", bundle: .module))
             }
         }
     }
@@ -133,16 +133,16 @@ public struct DeliveryEntryView: View {
                     editingBaby = nil
                     model.showingBabySheet = true
                 } label: {
-                    Label("Add Baby", systemImage: "plus")
+                    Label(String(localized: "Add Baby", bundle: .module), systemImage: "plus")
                 }
                 .tint(.storkBlue)
                 .listItemTint(.storkBlue)
                 .hoverEffect(.highlight)
             } header: {
-                Text("Babies")
+                Text("Babies", bundle: .module)
             } footer: {
                 if model.babies.isEmpty {
-                    Text("At least one baby is required.").foregroundStyle(.red)
+                    Text("At least one baby is required.", bundle: .module).foregroundStyle(.red)
                 }
             }
         }
@@ -165,15 +165,15 @@ public struct DeliveryEntryView: View {
                 Button {
                     model.showingTagSheet = true
                 } label: {
-                    Label("Add Tags", systemImage: "tag")
+                    Label(String(localized: "Add Tags", bundle: .module), systemImage: "tag")
                 }
                 .tint(.storkPurple)
                 .listItemTint(.storkPurple)
                 .hoverEffect(.highlight)
             } header: {
-                Text("Tags")
+                Text("Tags", bundle: .module)
             } footer: {
-                Text("Examples: \"Teaching Moment\", \"First Solo\", \"Night Shift\". Do not include patient information.")
+                Text("Examples: \"Teaching Moment\", \"First Solo\", \"Night Shift\". Do not include patient information.", bundle: .module)
             }
         }
     }
@@ -183,13 +183,13 @@ public struct DeliveryEntryView: View {
 
         var body: some View {
             Section {
-                TextField("Add a personal note...", text: $model.notes, axis: .vertical)
+                TextField(String(localized: "Add a personal note...", bundle: .module), text: $model.notes, axis: .vertical)
                     .lineLimit(3...6)
-                    .accessibilityLabel("Delivery notes")
+                    .accessibilityLabel(Text("Delivery notes", bundle: .module))
             } header: {
-                Text("Notes")
+                Text("Notes", bundle: .module)
             } footer: {
-                Text("Private notes for memorable deliveries. No PHI - just personal memories like \"twins on Christmas!\"")
+                Text("Private notes for memorable deliveries. No PHI - just personal memories like \"twins on Christmas!\"", bundle: .module)
             }
         }
     }

@@ -19,7 +19,7 @@ struct MilestoneCardView: View {
                 .font(.system(size: 50)).foregroundStyle(.yellow)
                 .shadow(color: .yellow.opacity(0.5), radius: 10)
             Text(prefixText).font(.title3).foregroundStyle(.secondary)
-            Text("\(count)")
+            Text("\(count)", bundle: .module)
                 .font(.system(size: 72, weight: .bold, design: .rounded))
                 .foregroundStyle(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
             Text(suffixText).font(.title3).foregroundStyle(.secondary)

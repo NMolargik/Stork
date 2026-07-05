@@ -14,7 +14,7 @@ struct BabyCountCard: View {
     let deliveries: [Delivery]
 
     var body: some View {
-        InsightCard(title: "Babies per Delivery", systemImage: "figure.2.and.child.holdinghands", accent: .storkPink) {
+        InsightCard(title: String(localized: "Babies per Delivery", bundle: .module), systemImage: "figure.2.and.child.holdinghands", accent: .storkPink) {
             let average = DeliveryStatistics.averageBabyCount(deliveries: deliveries)
             let monthlyCounts = DeliveryStatistics.monthlyBabyCounts(deliveries: deliveries)
             let allLabels = monthlyCounts.labels
@@ -24,13 +24,13 @@ struct BabyCountCard: View {
 
             VStack(alignment: .leading, spacing: 12) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Average").font(.caption).foregroundStyle(.secondary)
-                    AnimatedStatText(value: average, format: "%.1f", suffix: "babies / delivery", font: .title3, fontWeight: .semibold)
+                    Text("Average", bundle: .module).font(.caption).foregroundStyle(.secondary)
+                    AnimatedStatText(value: average, format: "%.1f", suffix: String(localized: "babies / delivery", bundle: .module), font: .title3, fontWeight: .semibold)
                     HStack(spacing: 4) {
-                        Text("Deliveries:")
+                        Text("Deliveries:", bundle: .module)
                         AnimatedInteger(value: totals.deliveries, font: .footnote, color: .secondary)
-                        Text("•")
-                        Text("Babies:")
+                        Text("•", bundle: .module)
+                        Text("Babies:", bundle: .module)
                         AnimatedInteger(value: totals.babies, font: .footnote, color: .secondary)
                     }
                     .font(.footnote).foregroundStyle(.secondary)
@@ -66,7 +66,7 @@ struct BabyCountCard: View {
                             }
                         }
                     }
-                    .accessibilityLabel("Chart showing babies delivered over time by month")
+                    .accessibilityLabel(Text("Chart showing babies delivered over time by month", bundle: .module))
                 } else {
                     EmptyCardLabel()
                 }

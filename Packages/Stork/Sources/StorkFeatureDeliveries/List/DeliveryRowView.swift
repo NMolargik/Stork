@@ -55,9 +55,9 @@ struct DeliveryRowView: View {
                     Spacer()
 
                     HStack(spacing: 8) {
-                        Badge(name: model.nicuSymbolName, label: "NICU", model: model)
-                        Badge(name: model.epiduralSymbolName, label: "Epidural", model: model)
-                        Badge(name: model.cSectionSymbolName, label: "C-section", model: model)
+                        Badge(name: model.nicuSymbolName, label: String(localized: "NICU", bundle: .module), model: model)
+                        Badge(name: model.epiduralSymbolName, label: String(localized: "Epidural", bundle: .module), model: model)
+                        Badge(name: model.cSectionSymbolName, label: String(localized: "C-section", bundle: .module), model: model)
                     }
                 }
             }
@@ -119,7 +119,7 @@ struct DeliveryRowView: View {
                     }
                 }
                 .animation(.easeInOut(duration: 0.3), value: total)
-                .accessibilityLabel("Sex distribution: \(model.maleCount) boys, \(model.femaleCount) girls, \(model.lossCount) losses")
+                .accessibilityLabel(Text("Sex distribution: \(model.maleCount) boys, \(model.femaleCount) girls, \(model.lossCount) losses", bundle: .module))
             }
         }
     }
