@@ -30,7 +30,9 @@ struct StorkCommands: Commands {
             Button("Deliveries") { router.open(.deliveries) }.keyboardShortcut("2", modifiers: .command)
             Button("Calendar") { router.open(.calendar) }.keyboardShortcut("3", modifiers: .command)
             Divider()
-            Button("Settings") { router.open(.settings) }.keyboardShortcut(",", modifiers: .command)
+            // Not ⌘, — that's reserved for the system-provided Settings… menu item on
+            // Mac/Catalyst, and duplicating it triggers a UIMenuBuilder conflict.
+            Button("Settings") { router.open(.settings) }.keyboardShortcut("4", modifiers: .command)
         }
 
         CommandMenu("Data") {

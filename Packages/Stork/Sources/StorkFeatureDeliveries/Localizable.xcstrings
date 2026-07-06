@@ -1,28 +1,6 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "%": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%"
-          }
-        }
-      }
-    },
     "%@ baby, %@%@%@": {
       "localizations": {
         "es": {
@@ -45,95 +23,8 @@
         }
       }
     },
-    "%@ — %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        }
-      }
-    },
-    "%@, %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        }
-      }
-    },
-    "%@: %@, %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@: %@, %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ : %@, %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@: %@, %@"
-          }
-        }
-      }
-    },
-    "%@: %lld deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@: %lld partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ : %lld accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@：分娩%lld件"
-          }
-        }
-      }
-    },
     "%lld Babies": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -153,73 +44,8 @@
             "value": "赤ちゃん%lld人"
           }
         }
-      }
-    },
-    "%lld babies": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bebés"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bébés"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃん%lld人"
-          }
-        }
-      }
-    },
-    "%lld boys, %lld girls, %lld losses": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld niños, %lld niñas, %lld pérdidas"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld garçons, %lld filles, %lld pertes"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "男の子%lld人、女の子%lld人、死産%lld件"
-          }
-        }
-      }
-    },
-    "%lld deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩%lld件"
-          }
-        }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "(%@)": {
       "localizations": {
@@ -241,53 +67,11 @@
             "value": "(%@)"
           }
         }
-      }
-    },
-    "+": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+"
-          }
-        }
-      }
-    },
-    "+%lld": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld"
-          }
-        }
-      }
+      },
+      "shouldTranslate": false
     },
     "12": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -307,7 +91,8 @@
             "value": "12"
           }
         }
-      }
+      },
+      "shouldTranslate": false
     },
     "Add": {
       "localizations": {
@@ -442,6 +227,7 @@
       }
     },
     "Any number": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -461,7 +247,8 @@
             "value": "指定なし"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "Any number of babies": {
       "localizations": {
@@ -551,28 +338,6 @@
         }
       }
     },
-    "Babies:": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bebés:"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bébés :"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃん："
-          }
-        }
-      }
-    },
     "Baby": {
       "localizations": {
         "es": {
@@ -640,6 +405,7 @@
       }
     },
     "Baby %lld: %@": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -659,7 +425,8 @@
             "value": "赤ちゃん%lld：%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "Baby Count": {
       "localizations": {
@@ -727,28 +494,6 @@
         }
       }
     },
-    "Calendar": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendario"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendrier"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "カレンダー"
-          }
-        }
-      }
-    },
     "Cancel": {
       "localizations": {
         "es": {
@@ -793,29 +538,8 @@
         }
       }
     },
-    "Close": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerrar"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fermer"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "閉じる"
-          }
-        }
-      }
-    },
     "Content": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -835,7 +559,8 @@
             "value": "コンテンツ"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "Couldn't Save Delivery": {
       "localizations": {
@@ -855,28 +580,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "分娩を保存できませんでした"
-          }
-        }
-      }
-    },
-    "Count": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cantidad"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nombre"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "件数"
           }
         }
       }
@@ -969,28 +672,6 @@
         }
       }
     },
-    "Day": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Día"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jour"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日"
-          }
-        }
-      }
-    },
     "Delete": {
       "localizations": {
         "es": {
@@ -1075,50 +756,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "この分娩を削除しますか？"
-          }
-        }
-      }
-    },
-    "Deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩"
-          }
-        }
-      }
-    },
-    "Deliveries:": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partos:"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accouchements :"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩："
           }
         }
       }
@@ -1273,28 +910,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "詳細"
-          }
-        }
-      }
-    },
-    "Dismiss": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descartar"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ignorer"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "閉じる"
           }
         }
       }
@@ -1629,28 +1244,6 @@
         }
       }
     },
-    "Format": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Formato"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Format"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "形式"
-          }
-        }
-      }
-    },
     "Has Notes": {
       "localizations": {
         "es": {
@@ -1783,28 +1376,6 @@
         }
       }
     },
-    "Imperial": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Imperial"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impérial"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ヤード・ポンド法"
-          }
-        }
-      }
-    },
     "Length": {
       "localizations": {
         "es": {
@@ -1867,50 +1438,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "方法"
-          }
-        }
-      }
-    },
-    "Metric": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Métrico"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Métrique"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "メートル法"
-          }
-        }
-      }
-    },
-    "Month": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mes"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mois"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "月"
           }
         }
       }
@@ -2021,28 +1548,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "いいえ"
-          }
-        }
-      }
-    },
-    "No Deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sin partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩なし"
           }
         }
       }
@@ -2223,28 +1728,6 @@
         }
       }
     },
-    "Options": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opciones"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Options"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オプション"
-          }
-        }
-      }
-    },
     "Permanently removes this delivery": {
       "localizations": {
         "es": {
@@ -2263,28 +1746,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "この分娩を完全に削除します"
-          }
-        }
-      }
-    },
-    "Preview": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vista previa"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aperçu"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレビュー"
           }
         }
       }
@@ -2509,28 +1970,6 @@
         }
       }
     },
-    "Stork": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork"
-          }
-        }
-      }
-    },
     "Suggested Tags": {
       "localizations": {
         "es": {
@@ -2575,28 +2014,6 @@
         }
       }
     },
-    "Tag: %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Etiqueta: %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Étiquette : %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タグ：%@"
-          }
-        }
-      }
-    },
     "Tags": {
       "localizations": {
         "es": {
@@ -2620,6 +2037,7 @@
       }
     },
     "Tags: %@": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -2639,7 +2057,8 @@
             "value": "タグ：%@"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "Tap here to start tracking your first delivery.": {
       "localizations": {
@@ -2681,50 +2100,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "この操作は取り消せません。"
-          }
-        }
-      }
-    },
-    "Unavailable": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No disponible"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Non disponible"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "利用不可"
-          }
-        }
-      }
-    },
-    "Units": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unidades"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unités"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "単位"
           }
         }
       }
@@ -2993,28 +2368,6 @@
         }
       }
     },
-    "babies": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bebés"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bébés"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃん"
-          }
-        }
-      }
-    },
     "cm": {
       "localizations": {
         "es": {
@@ -3033,50 +2386,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "cm"
-          }
-        }
-      }
-    },
-    "deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩"
-          }
-        }
-      }
-    },
-    "g": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
           }
         }
       }
@@ -3143,28 +2452,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "oz"
-          }
-        }
-      }
-    },
-    "•": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
           }
         }
       }

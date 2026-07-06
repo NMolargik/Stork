@@ -45,271 +45,8 @@
         }
       }
     },
-    "%@ statistics": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estadísticas de %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Statistiques de %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@の統計"
-          }
-        }
-      }
-    },
-    "%@ — %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ — %@"
-          }
-        }
-      }
-    },
-    "%@, %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        }
-      }
-    },
-    "%@: %@, %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@: %@, %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ : %@, %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@: %@, %@"
-          }
-        }
-      }
-    },
-    "%@: %lld deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@: %lld partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ : %lld accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@：分娩%lld件"
-          }
-        }
-      }
-    },
-    "%lld babies": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bebés"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bébés"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃん%lld人"
-          }
-        }
-      }
-    },
-    "%lld deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩%lld件"
-          }
-        }
-      }
-    },
-    "%lld deliveries, %lld babies": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld partos, %lld bebés"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld accouchements, %lld bébés"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩%lld件、赤ちゃん%lld人"
-          }
-        }
-      }
-    },
-    "%lld: %lld deliveries, %lld babies": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld: %lld partos, %lld bebés"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld : %lld accouchements, %lld bébés"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld：分娩%lld件、赤ちゃん%lld人"
-          }
-        }
-      }
-    },
-    "(%@)": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "(%@)"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "(%@)"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "(%@)"
-          }
-        }
-      }
-    },
-    "+": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+"
-          }
-        }
-      }
-    },
-    "+%lld": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld"
-          }
-        }
-      }
-    },
     "12": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -329,7 +66,8 @@
             "value": "12"
           }
         }
-      }
+      },
+      "shouldTranslate": false
     },
     "About": {
       "localizations": {
@@ -353,29 +91,8 @@
         }
       }
     },
-    "Add": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agregar"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "追加"
-          }
-        }
-      }
-    },
     "Add Sample Data (1 Year)": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -395,7 +112,8 @@
             "value": "サンプルデータを追加（1年分）"
           }
         }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "App Icon": {
       "localizations": {
@@ -463,50 +181,6 @@
         }
       }
     },
-    "Babies": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bebés"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bébés"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃん"
-          }
-        }
-      }
-    },
-    "Baby": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bebé"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bébé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃん"
-          }
-        }
-      }
-    },
     "Backup & Sync": {
       "localizations": {
         "es": {
@@ -525,28 +199,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "バックアップと同期"
-          }
-        }
-      }
-    },
-    "Calendar": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendario"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendrier"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "カレンダー"
           }
         }
       }
@@ -574,6 +226,7 @@
       }
     },
     "Content": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -593,29 +246,8 @@
             "value": "コンテンツ"
           }
         }
-      }
-    },
-    "Count": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cantidad"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nombre"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "件数"
-          }
-        }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "Data": {
       "localizations": {
@@ -639,50 +271,6 @@
         }
       }
     },
-    "Date": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fecha"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Date"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日付"
-          }
-        }
-      }
-    },
-    "Day": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Día"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jour"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日"
-          }
-        }
-      }
-    },
     "Day–Month–Year Dates": {
       "localizations": {
         "es": {
@@ -701,28 +289,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "日–月–年形式の日付"
-          }
-        }
-      }
-    },
-    "Delete": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eliminar"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "削除"
           }
         }
       }
@@ -815,72 +381,6 @@
         }
       }
     },
-    "Deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩"
-          }
-        }
-      }
-    },
-    "Deliveries:": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partos:"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accouchements :"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩："
-          }
-        }
-      }
-    },
-    "Delivery": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Parto"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accouchement"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩"
-          }
-        }
-      }
-    },
     "Developer": {
       "localizations": {
         "es": {
@@ -899,28 +399,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "開発者"
-          }
-        }
-      }
-    },
-    "Epidural": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Epidural"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Péridurale"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "硬膜外麻酔"
           }
         }
       }
@@ -969,72 +447,6 @@
         }
       }
     },
-    "Format": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Formato"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Format"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "形式"
-          }
-        }
-      }
-    },
-    "Loss": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pérdida"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Perte"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "死産"
-          }
-        }
-      }
-    },
-    "Metric": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Métrico"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Métrique"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "メートル法"
-          }
-        }
-      }
-    },
     "Metric Units": {
       "localizations": {
         "es": {
@@ -1079,50 +491,6 @@
         }
       }
     },
-    "Month": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mes"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mois"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "月"
-          }
-        }
-      }
-    },
-    "NICU": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UCIN"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "USIN"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "NICU"
-          }
-        }
-      }
-    },
     "Nick Molargik": {
       "localizations": {
         "es": {
@@ -1141,72 +509,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nick Molargik"
-          }
-        }
-      }
-    },
-    "No": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Non"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "いいえ"
-          }
-        }
-      }
-    },
-    "Options": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opciones"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Options"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オプション"
-          }
-        }
-      }
-    },
-    "Progress": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Progreso"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Progression"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "進捗"
           }
         }
       }
@@ -1234,6 +536,7 @@
       }
     },
     "Seeding…": {
+      "extractionState": "manual",
       "localizations": {
         "es": {
           "stringUnit": {
@@ -1253,73 +556,8 @@
             "value": "サンプルデータを作成中…"
           }
         }
-      }
-    },
-    "Settings": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Configuración"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réglages"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定"
-          }
-        }
-      }
-    },
-    "Sex": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sexo"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sexe"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "性別"
-          }
-        }
-      }
-    },
-    "Share": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compartir"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "共有"
-          }
-        }
-      }
+      },
+      "shouldGenerateSymbol": false
     },
     "Sign in to iCloud in Settings to enable sync.": {
       "localizations": {
@@ -1343,28 +581,6 @@
         }
       }
     },
-    "Stork": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork"
-          }
-        }
-      }
-    },
     "Sync": {
       "localizations": {
         "es": {
@@ -1383,28 +599,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "同期"
-          }
-        }
-      }
-    },
-    "This action cannot be undone.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Esta acción no se puede deshacer."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cette action est irréversible."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この操作は取り消せません。"
           }
         }
       }
@@ -1453,50 +647,6 @@
         }
       }
     },
-    "Units": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unidades"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unités"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "単位"
-          }
-        }
-      }
-    },
-    "VBAC": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PVDC"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AVAC"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "VBAC"
-          }
-        }
-      }
-    },
     "Version": {
       "localizations": {
         "es": {
@@ -1519,28 +669,6 @@
         }
       }
     },
-    "Weather": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clima"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Météo"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "天気"
-          }
-        }
-      }
-    },
     "Weather data provided by Apple Weather.": {
       "localizations": {
         "es": {
@@ -1559,72 +687,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "気象データはApple Weatherにより提供されています。"
-          }
-        }
-      }
-    },
-    "babies": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bebés"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bébés"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃん"
-          }
-        }
-      }
-    },
-    "deliveries": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "partos"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "accouchements"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分娩"
-          }
-        }
-      }
-    },
-    "g": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
           }
         }
       }
@@ -1669,50 +731,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud同期の状況"
-          }
-        }
-      }
-    },
-    "in": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "in"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "po"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "in"
-          }
-        }
-      }
-    },
-    "kg": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "kg"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "kg"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "kg"
           }
         }
       }
