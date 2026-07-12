@@ -41,7 +41,7 @@ public extension View {
     func minimizeToolbarOnScrollIfAvailable() -> some View {
         #if os(iOS)
         if #available(iOS 27.0, *) {
-            toolbarMinimizeBehavior(.onScrollDown)
+            toolbarMinimizationBehavior(.onScrollDown)
         } else {
             self
         }
