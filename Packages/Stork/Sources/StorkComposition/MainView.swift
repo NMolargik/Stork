@@ -30,6 +30,7 @@ public struct MainView: View {
     @State private var showingEntrySheet = false
     @State private var showingReorderSheet = false
     @State private var showingStepTrend = false
+    @State private var showingWeatherAttribution = false
     @State private var listPath = NavigationPath()
     @State private var pendingCelebration: MilestoneCelebration?
     @State private var milestoneShareImage: IdentifiableImage?
@@ -56,6 +57,7 @@ public struct MainView: View {
                 showingEntrySheet: $showingEntrySheet,
                 showingReorderSheet: $showingReorderSheet,
                 showingStepTrend: $showingStepTrend,
+                showingWeatherAttribution: $showingWeatherAttribution,
                 listPath: $listPath,
                 onReloadAll: reloadAll
             )
@@ -69,6 +71,9 @@ public struct MainView: View {
             }
         }
         .sheet(item: $milestoneShareImage) { ShareSheet(items: [$0.image]) }
+        .sheet(isPresented: $showingWeatherAttribution) {
+            WeatherAttributionSheet { showingWeatherAttribution = false }
+        }
         .sheet(isPresented: $showingEntrySheet) {
             DeliveryEntryView(model: session.makeDeliveryEntryModel()) { celebration in
                 reloadAll()
@@ -116,6 +121,7 @@ public struct MainView: View {
         @Binding var showingEntrySheet: Bool
         @Binding var showingReorderSheet: Bool
         @Binding var showingStepTrend: Bool
+        @Binding var showingWeatherAttribution: Bool
         @Binding var listPath: NavigationPath
         let onReloadAll: () -> Void
 
@@ -159,7 +165,7 @@ public struct MainView: View {
                     StepCountPill(manager: session.healthManager) { showingStepTrend = true }
                     #endif
                     Spacer()
-                    WeatherPill(manager: session.weatherManager)
+                    WeatherPill(manager: session.weatherManager) { showingWeatherAttribution = true }
                 }
             }
         }

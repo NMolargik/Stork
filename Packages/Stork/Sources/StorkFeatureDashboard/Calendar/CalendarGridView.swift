@@ -27,7 +27,9 @@ struct CalendarGridView: View {
                 }
             }
             LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(daysInMonth(), id: \.self) { date in
+                // Identify by grid position, not the date: the leading/trailing blanks are all
+                // nil, so `id: \.self` collides those slots to one ID (undefined layout).
+                ForEach(Array(daysInMonth().enumerated()), id: \.offset) { _, date in
                     if let date {
                         DayCell(
                             date: date,

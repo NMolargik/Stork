@@ -59,9 +59,13 @@ struct BabyCountCard: View {
                     }
                     .chartXAxis {
                         AxisMarks(values: shownLabels) { value in
-                            AxisValueLabel(anchor: .topLeading) {
+                            // Angle the month labels via Charts' built-in `orientation:`. A manual
+                            // `.rotationEffect` here makes Charts derive a custom-UnitPoint pivot,
+                            // which the iOS 27 SDK rejects with a console warning; the named
+                            // orientation uses supported anchors internally.
+                            AxisValueLabel(orientation: .verticalReversed) {
                                 if let label = value.as(String.self) {
-                                    Text(Self.abbrevLabel(label)).rotationEffect(.degrees(45))
+                                    Text(Self.abbrevLabel(label))
                                 }
                             }
                         }

@@ -12,8 +12,12 @@ import StorkServices
 
 struct WeatherPill: View {
     let manager: WeatherManager
+    /// Signals a tap on the loaded pill. The attribution sheet is presented by the stable
+    /// root (`MainView`), never from here — a sheet presented inside the tab-bar bottom
+    /// accessory is torn down with the accessory on the next weather refresh and dismisses
+    /// itself immediately.
+    let onShowAttribution: () -> Void
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits = false
-    @State private var showAttribution = false
 
     var body: some View {
         Group {
@@ -38,8 +42,7 @@ struct WeatherPill: View {
                     }
                 }
                 .contentShape(Rectangle())
-                .onTapGesture { showAttribution = true }
-                .popover(isPresented: $showAttribution, arrowEdge: .bottom) { AttributionPopover() }
+                .onTapGesture { onShowAttribution() }
                 .task { await manager.refresh() }
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("Current weather", bundle: .module))
@@ -48,18 +51,35 @@ struct WeatherPill: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
     }
+}
 
-    private struct AttributionPopover: View {
-        var body: some View {
-            VStack(spacing: 12) {
-                HStack(spacing: 4) { Image(systemName: "apple.logo"); Text("Weather", bundle: .module) }.font(.headline)
+/// Centered modal for the WeatherKit legal attribution. Presented from `MainView`'s stable
+/// root — see `WeatherPill.onShowAttribution`.
+struct WeatherAttributionSheet: View {
+    let onClose: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 16) {
+                HStack(spacing: 6) {
+                    Image(systemName: "apple.logo")
+                    Text("Weather", bundle: .module)
+                }
+                .font(.title2.bold())
+
                 Link(destination: URL(string: "https://weatherkit.apple.com/legal-attribution.html")!) {
-                    Text("Legal Attribution", bundle: .module).font(.subheadline).foregroundStyle(.blue)
+                    Text("Legal Attribution", bundle: .module).font(.headline).foregroundStyle(.blue)
                 }
             }
-            .padding()
-            .presentationCompactAdaptation(.popover)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button { onClose() } label: { Image(systemName: "xmark") }
+                        .accessibilityLabel(Text("Close", bundle: .module))
+                }
+            }
         }
+        .presentationDetents([.medium])
     }
 }
 #endif
