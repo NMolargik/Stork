@@ -25,7 +25,7 @@ public final class HealthManager {
 
     /// Guards against redundant work when several entry points (MainView, the step pill, and
     /// the tab-bar accessory re-instantiating its content) all kick off setup at launch.
-    @ObservationIgnored private var isRequestingAuthorization = false
+    @ObservationIgnored private var authorizationRequest: Task<Void, Never>?
     @ObservationIgnored private var isObserving = false
 
     /// Live-updating total steps for the current calendar day (midnight -> now).
@@ -50,16 +50,24 @@ public final class HealthManager {
     // MARK: - Authorization
 
     public func requestAuthorization() async {
-        // Already granted, or a request is already in flight — nothing to redo. The synchronous
-        // guard-and-set runs before the first `await`, so on the serial MainActor concurrent
-        // launch callers collapse to a single real request.
+        // Already granted — nothing to redo.
         if isAuthorized { return }
-        guard !isRequestingAuthorization else { return }
-        isRequestingAuthorization = true
-        defer {
-            isRequestingAuthorization = false
-            hasRequestedAuthorization = true
+        // A request is already in flight: join it rather than bail, so every launch caller
+        // (MainView, the step pill, the re-instantiated accessory) returns with the *final*
+        // `isAuthorized` and can safely start observing. Bailing early left later callers
+        // seeing `false` and logging "called without authorization".
+        if let inFlight = authorizationRequest {
+            await inFlight.value
+            return
         }
+        let request = Task { await performAuthorizationRequest() }
+        authorizationRequest = request
+        await request.value
+        authorizationRequest = nil
+    }
+
+    private func performAuthorizationRequest() async {
+        defer { hasRequestedAuthorization = true }
 
         guard reader.isHealthDataAvailable else {
             isAuthorized = false

@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EB2E2E332EB9244A00D0149A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E322EB9244A00D0149A /* WidgetKit.framework */; };
-		EB2E2E352EB9244A00D0149A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E342EB9244A00D0149A /* SwiftUI.framework */; };
-		EB2E2E402EB9244B00D0149A /* StorkWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		EB38FE0D2F1C2CED0050EAC4 /* StorkWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = EB38FDED2F1C2CEC0050EAC4 /* StorkWatch Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DEC0DE000000000000000011 /* StorkCore in Frameworks */ = {isa = PBXBuildFile; productRef = DEC0DE000000000000000010 /* StorkCore */; };
 		DEC0DE000000000000000015 /* StorkComposition in Frameworks */ = {isa = PBXBuildFile; productRef = DEC0DE000000000000000014 /* StorkComposition */; };
 		DEC0DE000000000000000021 /* StorkCore in Frameworks */ = {isa = PBXBuildFile; productRef = DEC0DE000000000000000020 /* StorkCore */; };
@@ -20,26 +16,11 @@
 		DEC0DE000000000000000033 /* StorkServices in Frameworks */ = {isa = PBXBuildFile; productRef = DEC0DE000000000000000032 /* StorkServices */; };
 		DEC0DE000000000000000035 /* StorkDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = DEC0DE000000000000000034 /* StorkDesignSystem */; };
 		DEC0DE000000000000000037 /* StorkData in Frameworks */ = {isa = PBXBuildFile; productRef = DEC0DE000000000000000036 /* StorkData */; };
+		EB2E2E332EB9244A00D0149A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E322EB9244A00D0149A /* WidgetKit.framework */; };
+		EB2E2E352EB9244A00D0149A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2E2E342EB9244A00D0149A /* SwiftUI.framework */; };
+		EB2E2E402EB9244B00D0149A /* StorkWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EB2E2E302EB9244A00D0149A /* StorkWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EB38FE0D2F1C2CED0050EAC4 /* StorkWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = EB38FDED2F1C2CEC0050EAC4 /* StorkWatch Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/Stork;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		DEC0DE000000000000000010 /* StorkCore */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkCore; };
-		DEC0DE000000000000000014 /* StorkComposition */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkComposition; };
-		DEC0DE000000000000000020 /* StorkCore */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkCore; };
-		DEC0DE000000000000000022 /* StorkData */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkData; };
-		DEC0DE000000000000000024 /* StorkDesignSystem */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkDesignSystem; };
-		DEC0DE000000000000000030 /* StorkCore */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkCore; };
-		DEC0DE000000000000000032 /* StorkServices */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkServices; };
-		DEC0DE000000000000000034 /* StorkDesignSystem */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkDesignSystem; };
-		DEC0DE000000000000000036 /* StorkData */ = {isa = XCSwiftPackageProductDependency; package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */; productName = StorkData; };
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin PBXContainerItemProxy section */
 		EB2E2E3E2EB9244B00D0149A /* PBXContainerItemProxy */ = {
@@ -1327,6 +1308,61 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Stork;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DEC0DE000000000000000010 /* StorkCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkCore;
+		};
+		DEC0DE000000000000000014 /* StorkComposition */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkComposition;
+		};
+		DEC0DE000000000000000020 /* StorkCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkCore;
+		};
+		DEC0DE000000000000000022 /* StorkData */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkData;
+		};
+		DEC0DE000000000000000024 /* StorkDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkDesignSystem;
+		};
+		DEC0DE000000000000000030 /* StorkCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkCore;
+		};
+		DEC0DE000000000000000032 /* StorkServices */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkServices;
+		};
+		DEC0DE000000000000000034 /* StorkDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkDesignSystem;
+		};
+		DEC0DE000000000000000036 /* StorkData */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEC0DE000000000000000001 /* XCLocalSwiftPackageReference "Packages/Stork" */;
+			productName = StorkData;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EB020D342E89FDD000D9C239 /* Project object */;
 }
