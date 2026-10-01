@@ -12,11 +12,10 @@
 build/
 DerivedData/
 .xcscmblueprint
-.xcuserdatad/
-*.xcworkspace/xcuserdata/
+xcuserdata/
 
 # SwiftPM
-/.build/
+.build/
 .swiftpm/xcode/package.xcworkspace/
 Package.resolved
 

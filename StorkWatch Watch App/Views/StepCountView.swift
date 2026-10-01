@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import StorkServices
 
 struct StepCountView: View {
-    @Bindable var healthManager: WatchHealthManager
+    let healthManager: HealthManager
 
     var body: some View {
         VStack(spacing: 16) {
@@ -16,6 +17,7 @@ struct StepCountView: View {
             HStack {
                 Image(systemName: "figure.walk")
                     .foregroundStyle(.green)
+                    .accessibilityHidden(true)
                 Text("Steps")
                     .font(.headline)
             }
@@ -43,6 +45,9 @@ struct StepCountView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Steps today")
+                .accessibilityValue("\(healthManager.todayStepCount)")
 
                 // Goal progress
                 let progress = min(Double(healthManager.todayStepCount) / 10000.0 * 100, 100)
@@ -56,6 +61,7 @@ struct StepCountView: View {
                     Image(systemName: "heart.text.square")
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
 
                     Text("Health Access Required")
                         .font(.subheadline)
@@ -82,5 +88,5 @@ struct StepCountView: View {
 }
 
 #Preview {
-    StepCountView(healthManager: WatchHealthManager())
+    StepCountView(healthManager: HealthManager())
 }

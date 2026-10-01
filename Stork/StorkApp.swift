@@ -2,67 +2,55 @@
 //  StorkApp.swift
 //  Stork
 //
-//  Created by Nick Molargik on 9/28/25.
+//  The thin @main entry point. Builds the `SessionController` composition root (injecting
+//  the app-side Spotlight indexer), registers it for App Intents, and hosts `RootView`
+//  from the StorkComposition package. All architecture lives in `Packages/Stork`.
 //
 
 import SwiftUI
-import SwiftData
+import AppIntents
 import TipKit
+import StorkCore
+import StorkComposition
 
 @main
 struct StorkApp: App {
-    private let sharedModelContainer: ModelContainer
+    @UIApplicationDelegateAdaptor(QuickActionAppDelegate.self) private var appDelegate
+    @State private var quickActions = QuickActionRelay.shared
+
+    @State private var session: SessionController
+    @State private var router = AppRouter()
 
     init() {
-        let cloudKitContainerID = "iCloud.com.molargiksoftware.Stork"
+        let session = SessionController(indexer: SpotlightDeliveryIndexer())
+        _session = State(initialValue: session)
 
-        do {
-            let config = ModelConfiguration(
-                cloudKitDatabase: .private(cloudKitContainerID)
-            )
+        // Expose the session to App Intents (@Dependency) so Siri/Shortcuts can
+        // log deliveries and read stats through the same use-cases.
+        AppDependencyManager.shared.add(dependency: session)
 
-            sharedModelContainer = try ModelContainer(
-                for: Delivery.self, Baby.self, DeliveryTag.self,
-                configurations: config
-            )
-        } catch {
-            fatalError("[Stork] Failed to initialize ModelContainer: \(error)")
-        }
-
-        // Configure TipKit
-        try? Tips.configure([
-            .displayFrequency(.immediate)
-        ])
+        try? Tips.configure([.displayFrequency(.immediate)])
     }
-
-    @State private var pendingDeepLink: DeepLink?
 
     var body: some Scene {
         WindowGroup {
-            ContentView(pendingDeepLink: $pendingDeepLink)
-                .modelContainer(sharedModelContainer)
+            RootView()
+                .environment(session)
+                .environment(router)
                 .onOpenURL { url in
-                    handleDeepLink(url)
+                    if let link = DeepLink(url: url) { router.open(link) }
                 }
+                .task { consumeQuickAction() }
+                .onChange(of: quickActions.url) { _, _ in consumeQuickAction() }
+        }
+        .commands {
+            StorkCommands(router: router, session: session)
         }
     }
 
-    private func handleDeepLink(_ url: URL) {
-        guard url.scheme == "stork" else { return }
-
-        switch url.host {
-        case "new-delivery":
-            pendingDeepLink = .newDelivery
-        case "dashboard":
-            pendingDeepLink = .dashboard
-        case "deliveries":
-            if url.pathComponents.contains("week") {
-                pendingDeepLink = .weeklyDeliveries
-            } else {
-                pendingDeepLink = .deliveries
-            }
-        default:
-            break
-        }
+    private func consumeQuickAction() {
+        guard let url = quickActions.url else { return }
+        quickActions.url = nil
+        if let link = DeepLink(url: url) { router.open(link) }
     }
 }

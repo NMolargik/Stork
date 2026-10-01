@@ -8,6 +8,8 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import StorkCore
+import StorkDesignSystem
 
 // MARK: - Interactive Widget Entry
 struct InteractiveWidgetEntry: TimelineEntry {
@@ -61,7 +63,7 @@ struct InteractiveWidgetProvider: TimelineProvider {
             let todayBabies = todayDeliveries.reduce(0) { $0 + ($1.babies?.count ?? 0) }
 
             // Weekly data
-            let week = currentWeekRange(now: now)
+            let week = WeekMath.weekRange(containing: now)
             let weekStart = week.start
             let weekEnd = week.end
             var weekDesc = FetchDescriptor<Delivery>()
@@ -126,6 +128,9 @@ struct InteractiveSmallView: View {
                 .foregroundStyle(.white)
                 .clipShape(Capsule())
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("New delivery")
+            .accessibilityValue("\(entry.todayBabies) babies today, \(entry.weeklyBabies) babies this week")
         }
     }
 }
@@ -189,6 +194,9 @@ struct InteractiveMediumView: View {
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("New delivery")
+            .accessibilityValue("\(entry.todayBabies) babies today, \(entry.weeklyBabies) babies this week")
         }
     }
 }

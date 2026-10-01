@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
-import SwiftData
+import StorkCore
+import StorkDesignSystem
 import WatchKit
+import os
 
 struct QuickEntryView: View {
-    @Environment(\.modelContext) private var modelContext
+    let model: WatchDeliveryModel
 
     @State private var boyCount: Int = 0
     @State private var girlCount: Int = 0
@@ -34,6 +36,7 @@ struct QuickEntryView: View {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                         .foregroundStyle(.storkBlue)
+                        .accessibilityHidden(true)
                     Text("Quick Entry")
                         .font(.headline)
                 }
@@ -110,64 +113,26 @@ struct QuickEntryView: View {
     }
 
     private func saveDelivery() {
-        // Create babies based on counts
-        var babies: [Baby] = []
-
-        for _ in 0..<boyCount {
-            let baby = Baby(sex: .male)
-            babies.append(baby)
-        }
-        for _ in 0..<girlCount {
-            let baby = Baby(sex: .female)
-            babies.append(baby)
-        }
-        for _ in 0..<lossCount {
-            let baby = Baby(sex: .loss)
-            babies.append(baby)
-        }
-
-        // Create delivery
-        let delivery = Delivery(
-            date: Date(),
-            babies: babies,
-            babyCount: totalBabies,
-            deliveryMethod: deliveryMethod,
-            epiduralUsed: false,
-            notes: "Added from Watch - may lack baby details."
-        )
-
-        // Link babies to delivery
-        for baby in babies {
-            baby.delivery = delivery
-        }
-
-        // Save
-        modelContext.insert(delivery)
         do {
-            try modelContext.save()
-            savedDelivery = delivery
+            // The use-case runs the shared save side effects (app-group counts,
+            // complication reloads) and returns real milestone detection.
+            let result = try model.log(
+                boys: boyCount,
+                girls: girlCount,
+                losses: lossCount,
+                method: deliveryMethod
+            )
+            savedDelivery = result.delivery
             showingConfirmation = true
 
-            // Haptic feedback for milestone check
-            WatchHaptics.success()
-
-            // Check for milestone
-            checkMilestone()
-        } catch {
-            print("Failed to save delivery: \(error)")
-            WatchHaptics.error()
-        }
-    }
-
-    private func checkMilestone() {
-        // Query total babies
-        let descriptor = FetchDescriptor<Baby>()
-        if let allBabies = try? modelContext.fetch(descriptor) {
-            let total = allBabies.count
-            let milestones = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]
-            if milestones.contains(total) {
+            if result.milestone != nil {
                 WatchHaptics.milestone()
+            } else {
+                WatchHaptics.success()
             }
+        } catch {
+            Log.deliveries.error("Failed to save delivery: \(error.localizedDescription)")
+            WatchHaptics.error()
         }
     }
 
@@ -187,11 +152,21 @@ struct StepperRow: View {
     let color: Color
     let systemImage: String
 
+    /// Singular, lowercased form of the row label for button accessibility labels.
+    private var singularLabel: String {
+        switch label {
+        case "Boys": return "boy"
+        case "Girls": return "girl"
+        default: return label.lowercased()
+        }
+    }
+
     var body: some View {
         HStack {
             Image(systemName: systemImage)
                 .foregroundStyle(color)
                 .frame(width: 24)
+                .accessibilityHidden(true)
 
             Text(label)
                 .font(.subheadline)
@@ -211,6 +186,7 @@ struct StepperRow: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(count == 0)
+                .accessibilityLabel("Remove \(singularLabel)")
 
                 Text("\(count)")
                     .font(.system(.body, design: .rounded, weight: .semibold))
@@ -228,9 +204,13 @@ struct StepperRow: View {
                         .foregroundStyle(color)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Add \(singularLabel)")
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityValue("\(count)")
     }
 }
 
@@ -244,12 +224,13 @@ struct ConfirmationView: View {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 50))
                 .foregroundStyle(.green)
+                .accessibilityHidden(true)
 
             Text("Saved!")
                 .font(.headline)
 
             if let delivery = delivery {
-                Text("\(delivery.babyCount) \(delivery.babyCount == 1 ? "baby" : "babies")")
+                Text("^[\(delivery.babyCount) baby](inflect: true)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -266,6 +247,20 @@ struct ConfirmationView: View {
     }
 }
 
-#Preview {
-    QuickEntryView()
+#if DEBUG
+private struct PreviewLoadDeliveries: LoadDeliveries {
+    func callAsFunction() throws(PersistenceError) -> [Delivery] { [] }
 }
+
+private struct PreviewLogDelivery: LogDelivery {
+    @discardableResult
+    func callAsFunction(_ delivery: Delivery) throws(PersistenceError) -> MilestoneCelebration? { nil }
+}
+
+#Preview {
+    QuickEntryView(model: WatchDeliveryModel(
+        loadDeliveries: PreviewLoadDeliveries(),
+        logDelivery: PreviewLogDelivery()
+    ))
+}
+#endif

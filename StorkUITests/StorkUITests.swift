@@ -13,9 +13,16 @@ final class StorkUITests: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
-        app = XCUIApplication()
-        app.launchArguments = ["UI_TESTING"]
-        app.launch()
+        // XCUIApplication is MainActor-isolated in the Xcode 27 SDK, and `setUpWithError`
+        // is a nonisolated override point (marking it — or the class — @MainActor would
+        // mismatch the superclass). XCTest runs setUp on the main thread, so assume the
+        // isolation rather than hop.
+        app = MainActor.assumeIsolated {
+            let application = XCUIApplication()
+            application.launchArguments = ["UI_TESTING"]
+            application.launch()
+            return application
+        }
     }
 
     override func tearDownWithError() throws {
@@ -337,9 +344,16 @@ final class DeliveryDetailUITests: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
-        app = XCUIApplication()
-        app.launchArguments = ["UI_TESTING"]
-        app.launch()
+        // XCUIApplication is MainActor-isolated in the Xcode 27 SDK, and `setUpWithError`
+        // is a nonisolated override point (marking it — or the class — @MainActor would
+        // mismatch the superclass). XCTest runs setUp on the main thread, so assume the
+        // isolation rather than hop.
+        app = MainActor.assumeIsolated {
+            let application = XCUIApplication()
+            application.launchArguments = ["UI_TESTING"]
+            application.launch()
+            return application
+        }
     }
 
     override func tearDownWithError() throws {
@@ -422,9 +436,16 @@ final class DashboardViewUITests: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
-        app = XCUIApplication()
-        app.launchArguments = ["UI_TESTING"]
-        app.launch()
+        // XCUIApplication is MainActor-isolated in the Xcode 27 SDK, and `setUpWithError`
+        // is a nonisolated override point (marking it — or the class — @MainActor would
+        // mismatch the superclass). XCTest runs setUp on the main thread, so assume the
+        // isolation rather than hop.
+        app = MainActor.assumeIsolated {
+            let application = XCUIApplication()
+            application.launchArguments = ["UI_TESTING"]
+            application.launch()
+            return application
+        }
     }
 
     override func tearDownWithError() throws {

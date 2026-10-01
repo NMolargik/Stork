@@ -4,16 +4,4 @@
    <FileRef
       location = "self:">
    </FileRef>
-   <FileRef
-      location = "group:OnboardingUserInfoPage.swift">
-   </FileRef>
-   <FileRef
-      location = "group:OnboardingLocationPage.swift">
-   </FileRef>
-   <FileRef
-      location = "group:OnboardingHealthPage.swift">
-   </FileRef>
-   <FileRef
-      location = "group:OnboardingCompletePage.swift">
-   </FileRef>
 </Workspace>

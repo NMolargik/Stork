@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import StorkCore
 
 // MARK: - Lock Screen Entry
 struct LockScreenEntry: TimelineEntry {
@@ -62,7 +63,7 @@ struct LockScreenProvider: TimelineProvider {
             let todayBabies = todayDeliveries.reduce(0) { $0 + ($1.babies?.count ?? 0) }
 
             // Weekly babies
-            let week = currentWeekRange(now: now)
+            let week = WeekMath.weekRange(containing: now)
             let weekStart = week.start
             let weekEnd = week.end
             var weekDesc = FetchDescriptor<Delivery>()
@@ -107,6 +108,9 @@ struct CircularLockScreenView: View {
                     .monospacedDigit()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Babies this week")
+        .accessibilityValue("\(entry.weeklyBabies)")
     }
 }
 
@@ -143,6 +147,9 @@ struct RectangularLockScreenView: View {
                     .monospacedDigit()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Babies")
+        .accessibilityValue("\(entry.weeklyBabies) this week, \(entry.todayBabies) today")
     }
 }
 
@@ -158,6 +165,7 @@ struct InlineLockScreenView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
+                .accessibilityHidden(true)
         }
     }
 }
@@ -247,6 +255,9 @@ struct CareerCircularView: View {
                     .foregroundStyle(.secondary)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Career total babies")
+        .accessibilityValue("\(entry.careerTotal)")
     }
 }
 
@@ -261,6 +272,7 @@ struct CareerInlineView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
+                .accessibilityHidden(true)
         }
     }
 }

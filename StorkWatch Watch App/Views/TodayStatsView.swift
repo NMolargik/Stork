@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-import SwiftData
+import StorkCore
+import StorkServices
+import StorkDesignSystem
 
 struct TodayStatsView: View {
-    @Environment(\.modelContext) private var modelContext
-
     let deliveries: [Delivery]
-    let healthManager: WatchHealthManager
+    let healthManager: HealthManager
 
     @State private var isRefreshing = false
 
@@ -41,8 +41,8 @@ struct TodayStatsView: View {
     }
 
     private var weekBabyCount: Int {
-        let week = currentWeekRange()
-        let weekDeliveries = deliveries.filter { $0.date >= week.start && $0.date < week.end }
+        let week = WeekMath.weekRange()
+        let weekDeliveries = deliveries.filter { week.contains($0.date) }
         return weekDeliveries.reduce(0) { $0 + ($1.babies?.count ?? 0) }
     }
 
@@ -55,6 +55,7 @@ struct TodayStatsView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
+                        .accessibilityHidden(true)
 
                     Text("Today")
                         .font(.headline)
@@ -75,6 +76,9 @@ struct TodayStatsView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Babies today")
+                .accessibilityValue("\(todayBabyCount)")
 
                 // Sex breakdown pills
                 if todayBabyCount > 0 {
@@ -97,6 +101,9 @@ struct TodayStatsView: View {
                             .font(.title3.bold())
                             .monospacedDigit()
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Babies this week")
+                    .accessibilityValue("\(weekBabyCount)")
                     Spacer()
                     VStack(alignment: .trailing, spacing: 2) {
                         Text("Deliveries")
@@ -106,6 +113,9 @@ struct TodayStatsView: View {
                             .font(.title3.bold())
                             .monospacedDigit()
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Deliveries today")
+                    .accessibilityValue("\(todayDeliveries.count)")
                 }
                 .padding(.horizontal, 8)
             }
@@ -150,24 +160,12 @@ struct StatPill: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(color.opacity(0.2), in: Capsule())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label)
+        .accessibilityValue("\(count)")
     }
 }
 
-// MARK: - Week Range Helper
-struct WeekRange {
-    let start: Date
-    let end: Date
-}
-
-func currentWeekRange(now: Date = Date()) -> WeekRange {
-    var calendar = Calendar(identifier: .gregorian)
-    calendar.firstWeekday = 1 // Sunday
-    let weekday = calendar.component(.weekday, from: now)
-    let start = calendar.startOfDay(for: calendar.date(byAdding: .day, value: -(weekday - 1), to: now)!)
-    let end = calendar.date(byAdding: .day, value: 7, to: start)!
-    return WeekRange(start: start, end: end)
-}
-
 #Preview {
-    TodayStatsView(deliveries: [], healthManager: WatchHealthManager())
+    TodayStatsView(deliveries: [], healthManager: HealthManager())
 }
