@@ -185,6 +185,72 @@
       },
       "shouldGenerateSymbol": false
     },
+    "Locked. Unlock with Stork Pro.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado. Desbloquéalo con Stork Pro."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verrouillé. Déverrouillez avec Stork Pro."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック中。Stork Proでロック解除できます。"
+          }
+        }
+      }
+    },
+    "One-time purchase. Share cards, exports, insights, and more.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compra única. Tarjetas para compartir, exportaciones, análisis y más."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achat unique. Cartes de partage, exportations, analyses et plus."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一度きりの購入。共有カード、書き出し、インサイトなど。"
+          }
+        }
+      }
+    },
+    "PRO": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRO"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRO"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRO"
+          }
+        }
+      }
+    },
     "Show Error": {
       "extractionState": "manual",
       "localizations": {
@@ -281,6 +347,28 @@
       },
       "shouldGenerateSymbol": false
     },
+    "Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        }
+      }
+    },
     "Syncing with iCloud…": {
       "extractionState": "manual",
       "localizations": {
@@ -323,6 +411,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "タグ：%@"
+          }
+        }
+      }
+    },
+    "Unlock Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouiller Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proをロック解除"
           }
         }
       }

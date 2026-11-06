@@ -23,6 +23,7 @@ let package = Package(
         .library(name: "StorkFeatureOnboarding",    targets: ["StorkFeatureOnboarding"]),
         .library(name: "StorkFeatureSettings",      targets: ["StorkFeatureSettings"]),
         .library(name: "StorkFeatureExport",        targets: ["StorkFeatureExport"]),
+        .library(name: "StorkFeaturePro",           targets: ["StorkFeaturePro"]),
         .library(name: "StorkComposition",          targets: ["StorkComposition"]),
     ],
 
@@ -75,8 +76,13 @@ let package = Package(
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .target(
+            name: "StorkFeaturePro",
+            dependencies: ["StorkCore", "StorkDesignSystem", "StorkServices"],
+            swiftSettings: [.defaultIsolation(MainActor.self)]
+        ),
+        .target(
             name: "StorkComposition",
-            dependencies: ["StorkCore", "StorkData", "StorkServices", "StorkDesignSystem", "StorkFeatureDeliveries", "StorkFeatureDashboard", "StorkFeatureOnboarding", "StorkFeatureSettings", "StorkFeatureExport"],
+            dependencies: ["StorkCore", "StorkData", "StorkServices", "StorkDesignSystem", "StorkFeatureDeliveries", "StorkFeatureDashboard", "StorkFeatureOnboarding", "StorkFeatureSettings", "StorkFeatureExport", "StorkFeaturePro"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
 

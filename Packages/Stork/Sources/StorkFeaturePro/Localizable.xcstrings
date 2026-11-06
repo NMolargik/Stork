@@ -1,0 +1,336 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ — one time. No subscription.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ — pago único. Sin suscripción."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ — paiement unique. Aucun abonnement."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ — 一度きりのお支払い。サブスクリプションではありません。"
+          }
+        }
+      }
+    },
+    "Close": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerrar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "閉じる"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "続ける"
+          }
+        }
+      }
+    },
+    "Family Sharing included. Bought Stork before it went free? Pro is already yours — tap Restore Purchases if it isn't showing.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incluye En familia. ¿Compraste Stork antes de que fuera gratis? Pro ya es tuyo: toca Restaurar compras si no aparece."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage familial inclus. Vous avez acheté Stork avant qu’il devienne gratuit? Pro est déjà à vous — touchez Restaurer les achats s’il n’apparaît pas."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファミリー共有に対応。無料化前にStorkを購入された方は、すでにProをご利用いただけます。表示されない場合は「購入を復元」をタップしてください。"
+          }
+        }
+      }
+    },
+    "Go further with Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Llega más lejos con Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allez plus loin avec Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proでさらに活用"
+          }
+        }
+      }
+    },
+    "Loading price…": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargando precio…"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chargement du prix…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "価格を読み込み中…"
+          }
+        }
+      }
+    },
+    "Logging deliveries, your stats, the jar, the calendar, Siri, and the Watch app stay free forever. Pro adds the extras.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar partos, tus estadísticas, el frasco, el calendario, Siri y la app del Watch siguen siendo gratis para siempre. Pro añade los extras."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La saisie des accouchements, vos statistiques, le bocal, le calendrier, Siri et l’app Watch restent gratuits pour toujours. Pro ajoute les extras."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩の記録、統計、ジャー、カレンダー、Siri、Watchアプリはずっと無料です。Proは追加機能を提供します。"
+          }
+        }
+      }
+    },
+    "Privacy Policy": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidad"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライバシーポリシー"
+          }
+        }
+      }
+    },
+    "Restore Purchases": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar compras"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer les achats"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入を復元"
+          }
+        }
+      }
+    },
+    "Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        }
+      }
+    },
+    "Stork Pro is unlocked. Thank you!": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro está desbloqueado. ¡Gracias!"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro est déverrouillé. Merci!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proはロック解除済みです。ありがとうございます！"
+          }
+        }
+      }
+    },
+    "Stork is now free with an optional Stork Pro upgrade. Because you bought Stork before the change, every Pro feature is unlocked for you — forever, on every device signed in to your Apple Account.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork ahora es gratis con una mejora opcional a Stork Pro. Como compraste Stork antes del cambio, todas las funciones Pro están desbloqueadas para ti, para siempre y en todos los dispositivos con tu cuenta de Apple."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork est maintenant gratuit, avec une mise à niveau Stork Pro facultative. Comme vous avez acheté Stork avant ce changement, toutes les fonctions Pro sont déverrouillées pour vous — pour toujours, sur chaque appareil connecté à votre compte Apple."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは無料になり、Stork Proへのアップグレードはオプションになりました。変更前にStorkを購入いただいたため、すべてのPro機能が永久にロック解除されています。同じApple Accountでサインインしたすべてのデバイスで利用できます。"
+          }
+        }
+      }
+    },
+    "Terms of Use": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Términos de uso"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions d’utilisation"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "利用規約"
+          }
+        }
+      }
+    },
+    "Thank you for supporting Stork": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gracias por apoyar a Stork"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci de soutenir Stork"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkを応援いただきありがとうございます"
+          }
+        }
+      }
+    },
+    "Unlock Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouiller Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proをロック解除"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
