@@ -6,6 +6,10 @@
 //  per hour to limit cost. WeatherKit is reached through `WeatherProviding` and location
 //  through `LocationProviding`, so both are testable with fakes.
 //
+//  Since 3.0 the only caller is the Pro weather-at-delivery snapshot
+//  (`DeliveryWeatherCapturing`): weather — and therefore location — is requested only
+//  while the user is logging a delivery, never at launch or in the background.
+//
 
 import Foundation
 import CoreLocation
@@ -16,7 +20,7 @@ import StorkCore
 
 @MainActor
 @Observable
-public final class WeatherManager {
+public final class WeatherManager: DeliveryWeatherCapturing {
 
     @ObservationIgnored private let provider: any WeatherProviding
     public private(set) var locationProvider: (any LocationProviding)?
@@ -27,6 +31,7 @@ public final class WeatherManager {
 
     public private(set) var temperature: Measurement<UnitTemperature>?
     public private(set) var condition: WeatherCondition?
+    public private(set) var symbolName: String?
 
     /// Only successful requests advance this cooldown.
     public var refreshCooldownInterval: TimeInterval = 60 * 60
@@ -78,7 +83,43 @@ public final class WeatherManager {
         let current = try await provider.currentConditions(for: location)
         temperature = current.temperature
         condition = current.condition
+        symbolName = current.symbolName
         lastUpdated = Date()
+    }
+
+    // MARK: - Delivery snapshot (DeliveryWeatherCapturing)
+
+    /// Current conditions as a storable snapshot. Reuses the hourly cache when fresh,
+    /// otherwise requests a one-shot location and asks WeatherKit.
+    public func captureCurrentWeather() async throws -> DeliveryWeather {
+        if isInCooldown, let snapshot = cachedSnapshot { return snapshot }
+
+        guard let locationProvider else { throw WeatherError.locationProviderMissing }
+        let location: CLLocation
+        do {
+            location = try await locationProvider.currentLocation()
+        } catch {
+            self.error = WeatherError.locationUnavailable
+            throw WeatherError.locationUnavailable
+        }
+        do {
+            try await fetch(for: location)
+        } catch {
+            let mapped = (error as? WeatherError) ?? WeatherError.weatherServiceFailed
+            self.error = mapped
+            throw mapped
+        }
+        guard let snapshot = cachedSnapshot else { throw WeatherError.weatherServiceFailed }
+        return snapshot
+    }
+
+    private var cachedSnapshot: DeliveryWeather? {
+        guard let temperature, let condition else { return nil }
+        return DeliveryWeather(
+            temperatureCelsius: temperature.converted(to: .celsius).value,
+            conditionName: condition.rawValue,
+            symbolName: symbolName ?? condition.weatherSymbolName
+        )
     }
 
     private var isInCooldown: Bool {

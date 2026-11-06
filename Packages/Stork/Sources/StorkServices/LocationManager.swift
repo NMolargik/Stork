@@ -3,7 +3,9 @@
 //  StorkServices
 //
 //  CoreLocation wrapper conforming to `LocationProviding`: a one-shot `currentLocation()`
-//  and an `AsyncStream` of updates, with observable authorization state.
+//  with observable authorization state. Deliberately *only* when-in-use, one-shot
+//  (`requestLocation`), never continuous updates or Always authorization — location exists
+//  solely to attach a weather snapshot while the user is logging a delivery.
 //
 
 import Foundation
@@ -20,7 +22,6 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate, Locatio
     public private(set) var lastLocation: CLLocation?
 
     private let manager = CLLocationManager()
-    private var streamContinuation: AsyncStream<CLLocation>.Continuation?
     private var oneShotContinuation: CheckedContinuation<CLLocation, Error>?
 
     public override init() {
@@ -64,22 +65,6 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate, Locatio
         }
     }
 
-    // MARK: - Continuous updates
-
-    public func locationUpdates() -> AsyncStream<CLLocation> {
-        requestAuthorization()
-        manager.startUpdatingLocation()
-        return AsyncStream { continuation in
-            self.streamContinuation = continuation
-            continuation.onTermination = { _ in
-                Task { @MainActor in
-                    self.manager.stopUpdatingLocation()
-                    self.streamContinuation = nil
-                }
-            }
-        }
-    }
-
     // MARK: - CLLocationManagerDelegate
 
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -97,7 +82,6 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate, Locatio
             oneShotContinuation = nil
             cont.resume(returning: last)
         }
-        streamContinuation?.yield(last)
     }
 
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

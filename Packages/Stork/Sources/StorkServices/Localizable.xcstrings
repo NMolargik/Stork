@@ -25,6 +25,28 @@
       },
       "shouldGenerateSymbol": false
     },
+    "Couldn't load Stork Pro. Check your connection and try again.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo cargar Stork Pro. Comprueba tu conexión e inténtalo de nuevo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de charger Stork Pro. Vérifiez votre connexion et réessayez."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proを読み込めませんでした。接続を確認してもう一度お試しください。"
+          }
+        }
+      }
+    },
     "Error: %@": {
       "localizations": {
         "es": {
@@ -69,6 +91,28 @@
         }
       }
     },
+    "No Stork Pro purchase was found for this Apple Account.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se encontró ninguna compra de Stork Pro para esta cuenta de Apple."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun achat de Stork Pro n’a été trouvé pour ce compte Apple."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このApple AccountではStork Proの購入が見つかりませんでした。"
+          }
+        }
+      }
+    },
     "Offline": {
       "localizations": {
         "es": {
@@ -91,6 +135,28 @@
         }
       }
     },
+    "Purchase failed: %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La compra falló: %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de l’achat : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入に失敗しました: %@"
+          }
+        }
+      }
+    },
     "Ready": {
       "localizations": {
         "es": {
@@ -109,6 +175,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "準備完了"
+          }
+        }
+      }
+    },
+    "Restore failed: %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La restauración falló: %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de la restauration : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "復元に失敗しました: %@"
+          }
+        }
+      }
+    },
+    "Stork Pro isn't available right now.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro no está disponible ahora mismo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro n’est pas offert pour le moment."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proは現在ご利用いただけません。"
           }
         }
       }
