@@ -9,10 +9,10 @@ import StorkFeatureDashboard
 
 public extension SessionController {
     func makeDashboardModel() -> DashboardModel {
-        DashboardModel(loadDeliveries: loadDeliveries)
+        DashboardModel(loadDeliveries: loadDeliveries, entitlement: entitlement)
     }
 
     func makeCalendarModel() -> CalendarModel {
-        CalendarModel(loadDeliveries: loadDeliveries)
+        CalendarModel(loadDeliveries: loadDeliveries, entitlement: entitlement)
     }
 }

@@ -232,6 +232,28 @@
         }
       }
     },
+    "Location is used only if you choose to add a weather snapshot while logging, and is never stored.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La ubicación solo se usa si eliges añadir una captura del clima al registrar, y nunca se guarda."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La position n’est utilisée que si vous choisissez d’ajouter un aperçu météo lors de la saisie, et n’est jamais enregistrée."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "位置情報は、記録時に天気のスナップショットを追加することを選んだ場合にのみ使用され、保存されることはありません。"
+          }
+        }
+      }
+    },
     "No Hospital Data": {
       "localizations": {
         "es": {
@@ -294,6 +316,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "保護対象保健情報は収集されません。"
+          }
+        }
+      }
+    },
+    "No Tracking": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin rastreo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun suivi"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トラッキングなし"
           }
         }
       }

@@ -2,7 +2,8 @@
 //  OnboardingModel.swift
 //  StorkFeatureOnboarding
 //
-//  Drives the onboarding step machine and requests location/health permissions.
+//  Drives the onboarding step machine and requests the Health permission. Location is
+//  not requested during onboarding (only when a Pro user attaches a weather snapshot).
 //
 
 #if os(iOS)
@@ -21,22 +22,12 @@ public final class OnboardingModel {
 
     public init() {}
 
-    /// Advances the flow, requesting permissions inline. On the location/health pages the
-    /// user taps Continue again after the system dialog resolves.
-    public func handleContinueTapped(locationManager: LocationManager, healthManager: HealthManager) async {
+    /// Advances the flow, requesting permissions inline. On the health page the user taps
+    /// Continue again after the system dialog resolves.
+    public func handleContinueTapped(healthManager: HealthManager) async {
         switch currentStep {
         case .privacy:
-            currentStep = .location
-
-        case .location:
-            if locationManager.authorizationStatus == .notDetermined {
-                isRequestingPermission = true
-                locationManager.requestAuthorization()
-                try? await Task.sleep(for: .milliseconds(500))
-                isRequestingPermission = false
-            } else {
-                currentStep = healthManager.isStepTrackingSupported ? .health : .complete
-            }
+            currentStep = healthManager.isStepTrackingSupported ? .health : .complete
 
         case .health:
             if !healthManager.hasRequestedAuthorization {

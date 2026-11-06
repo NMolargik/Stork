@@ -4,7 +4,8 @@
 //
 //  One adaptive `TabView` for every platform (tab bar on iPhone, switchable sidebar on
 //  iPad/Mac). Builds each screen's view model from `SessionController` factories, owns the
-//  add-delivery sheet, milestone celebration, deep-link routing, and the bottom accessory.
+//  add-delivery sheet, milestone celebration, deep-link routing, the bottom accessory, and
+//  the Stork Pro paywall (presented from this stable root for every gated feature).
 //
 
 #if os(iOS)
@@ -16,6 +17,7 @@ import StorkFeatureDeliveries
 import StorkFeatureDashboard
 import StorkFeatureSettings
 import StorkFeatureExport
+import StorkFeaturePro
 
 public struct MainView: View {
     private let session: SessionController
@@ -30,10 +32,11 @@ public struct MainView: View {
     @State private var showingEntrySheet = false
     @State private var showingReorderSheet = false
     @State private var showingStepTrend = false
-    @State private var showingWeatherAttribution = false
     @State private var listPath = NavigationPath()
     @State private var pendingCelebration: MilestoneCelebration?
     @State private var milestoneShareImage: IdentifiableImage?
+    /// The gated feature the user tapped; non-nil presents the paywall.
+    @State private var paywallFeature: ProFeature?
 
     public init(session: SessionController) {
         self.session = session
@@ -57,7 +60,6 @@ public struct MainView: View {
                 showingEntrySheet: $showingEntrySheet,
                 showingReorderSheet: $showingReorderSheet,
                 showingStepTrend: $showingStepTrend,
-                showingWeatherAttribution: $showingWeatherAttribution,
                 listPath: $listPath,
                 onReloadAll: reloadAll
             )
@@ -70,10 +72,19 @@ public struct MainView: View {
                     .zIndex(100)
             }
         }
-        .sheet(item: $milestoneShareImage) { ShareSheet(items: [$0.image]) }
-        .sheet(isPresented: $showingWeatherAttribution) {
-            WeatherAttributionSheet { showingWeatherAttribution = false }
+        .sheet(item: $milestoneShareImage) { item in
+            ShareSheet(items: [item.image]) { completed in
+                if completed { session.noteMilestoneCardShared() }
+            }
         }
+        .sheet(item: $paywallFeature) { feature in
+            StorkProPaywallView(store: session.storeManager, highlighted: feature)
+        }
+        .sheet(isPresented: grandfatherThankYouBinding) {
+            GrandfatherThankYouView { session.storeManager.markGrandfatherThankYouShown() }
+        }
+        .environment(\.isProUnlocked, session.storeManager.isProUnlocked)
+        .environment(\.requestProUpgrade, ProUpgradeRequest { feature in paywallFeature = feature })
         .sheet(isPresented: $showingEntrySheet) {
             DeliveryEntryView(model: session.makeDeliveryEntryModel()) { celebration in
                 reloadAll()
@@ -121,7 +132,6 @@ public struct MainView: View {
         @Binding var showingEntrySheet: Bool
         @Binding var showingReorderSheet: Bool
         @Binding var showingStepTrend: Bool
-        @Binding var showingWeatherAttribution: Bool
         @Binding var listPath: NavigationPath
         let onReloadAll: () -> Void
 
@@ -159,15 +169,14 @@ public struct MainView: View {
                 }
             }
             .tabViewStyle(.sidebarAdaptable)
+            #if canImport(HealthKit)
             .tabViewBottomAccessoryIfAvailable {
                 HStack(spacing: 12) {
-                    #if canImport(HealthKit)
                     StepCountPill(manager: session.healthManager) { showingStepTrend = true }
-                    #endif
                     Spacer()
-                    WeatherPill(manager: session.weatherManager) { showingWeatherAttribution = true }
                 }
             }
+            #endif
         }
 
         private func deliveryDetail(_ delivery: Delivery) -> DeliveryDetailView {
@@ -200,6 +209,14 @@ public struct MainView: View {
 
     // MARK: - Helpers
 
+    /// Presents the one-time thank-you for pre-3.0 buyers; dismissing records it as shown.
+    private var grandfatherThankYouBinding: Binding<Bool> {
+        Binding(
+            get: { session.storeManager.shouldShowGrandfatherThankYou && paywallFeature == nil },
+            set: { if !$0 { session.storeManager.markGrandfatherThankYouShown() } }
+        )
+    }
+
     private func reloadAll() {
         listModel.load()
         dashboardModel.load()
@@ -219,31 +236,24 @@ public struct MainView: View {
                 router.select(.list)
                 listPath.append(match)
             }
+        case .pro:
+            // Locked widgets link here; the celebration overlay (if any) stays underneath.
+            paywallFeature = .lockScreenWidgets
         case .dashboard, .deliveries, .weeklyDeliveries, .calendar, .settings:
             break // router.open already selected the tab
         }
     }
 
+    /// Milestone share cards are Stork Pro: free users land on the paywall in context.
     private func shareMilestone(_ milestone: MilestoneCelebration) {
+        guard session.storeManager.isProUnlocked else {
+            paywallFeature = .milestoneShareCards
+            return
+        }
         let type: CardImageRenderer.MilestoneType = milestone.type == .babies ? .babies : .deliveries
         if let image = exportModel.manager.renderMilestoneCard(count: milestone.count, milestoneType: type) {
             milestoneShareImage = IdentifiableImage(image: image)
         }
     }
-}
-
-// MARK: - Helper types
-
-struct IdentifiableImage: Identifiable {
-    let id = UUID()
-    let image: UIImage
-}
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 #endif

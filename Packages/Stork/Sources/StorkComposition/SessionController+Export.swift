@@ -10,7 +10,9 @@ import StorkFeatureExport
 
 public extension SessionController {
     func makeExportModel() -> ExportModel {
-        ExportModel(loadDeliveries: loadDeliveries)
+        let model = ExportModel(loadDeliveries: loadDeliveries, entitlement: entitlement)
+        model.onMilestoneCardShared = { [weak self] in self?.noteMilestoneCardShared() }
+        return model
     }
 }
 #endif

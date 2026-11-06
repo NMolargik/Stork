@@ -58,12 +58,29 @@ public final class SessionController {
 
     // MARK: Environmental managers
 
+    /// Owned only so `weatherManager` can take a one-shot when-in-use fix while the user
+    /// logs a delivery. Nothing else reads location.
     public let locationManager: LocationManager
     public let weatherManager: WeatherManager
     public let cloudSyncManager: CloudSyncManager
     #if canImport(HealthKit) && !os(visionOS)
     public let healthManager: HealthManager
     #endif
+
+    // MARK: Stork Pro
+
+    /// StoreKit 2 purchase/grandfather state; also the `EntitlementProviding` every
+    /// feature view model is handed.
+    public let storeManager: StoreManager
+    public var entitlement: any EntitlementProviding { storeManager }
+
+    private let milestoneShareReview: MilestoneShareReviewPolicy
+
+    /// Call when a career-milestone share card was actually shared; prompts for a review
+    /// the first time only.
+    public func noteMilestoneCardShared() {
+        milestoneShareReview.milestoneCardShared()
+    }
 
     /// Triggers a manual iCloud sync (exposed so the app's menu commands needn't import
     /// the services layer directly).
@@ -119,6 +136,9 @@ public final class SessionController {
         let location = LocationManager()
         locationManager = location
         weatherManager = WeatherManager(locationProvider: location)
+
+        storeManager = StoreManager()
+        milestoneShareReview = MilestoneShareReviewPolicy(storage: UserDefaults.standard, requester: reviewRequester)
         #if canImport(HealthKit) && !os(visionOS)
         healthManager = HealthManager()
         #endif

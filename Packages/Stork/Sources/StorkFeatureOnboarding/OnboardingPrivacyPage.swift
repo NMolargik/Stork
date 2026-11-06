@@ -31,6 +31,8 @@ struct OnboardingPrivacyPage: View {
                     Divider().padding(.leading, 56)
                     PrivacyRow(icon: "building.2", iconColor: .storkPink, title: String(localized: "No Hospital Data", bundle: .module), description: String(localized: "We don't store where deliveries occur.", bundle: .module))
                     Divider().padding(.leading, 56)
+                    PrivacyRow(icon: "location.slash", iconColor: .storkPurple, title: String(localized: "No Tracking", bundle: .module), description: String(localized: "Location is used only if you choose to add a weather snapshot while logging, and is never stored.", bundle: .module))
+                    Divider().padding(.leading, 56)
                     PrivacyRow(icon: "checkmark.shield.fill", iconColor: .green, title: String(localized: "HIPAA Compliant", bundle: .module), description: String(localized: "No Protected Health Information is collected.", bundle: .module))
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground))

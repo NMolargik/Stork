@@ -47,7 +47,6 @@ public struct RootView: View {
             wasReturningUser = isOnboardingComplete
             stage = isOnboardingComplete ? .main : .splash
         }
-        .environment(session.locationManager)
         #if canImport(HealthKit) && !os(visionOS)
         .environment(session.healthManager)
         #endif

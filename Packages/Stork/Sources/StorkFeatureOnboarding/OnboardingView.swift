@@ -2,8 +2,8 @@
 //  OnboardingView.swift
 //  StorkFeatureOnboarding
 //
-//  Paged onboarding: privacy → location → (step count) → complete, with inline permission
-//  requests. The Step Count page is skipped where it can't work (Mac/Vision).
+//  Paged onboarding: privacy → (step count) → complete, with inline permission requests.
+//  The Step Count page is skipped where it can't work (Mac/Vision).
 //
 
 #if os(iOS)
@@ -13,7 +13,6 @@ import StorkDesignSystem
 import StorkServices
 
 public struct OnboardingView: View {
-    @Environment(LocationManager.self) private var locationManager
     @Environment(HealthManager.self) private var healthManager
 
     private let onFinished: () -> Void
@@ -52,7 +51,6 @@ public struct OnboardingView: View {
 
             TabView(selection: $model.currentStep) {
                 OnboardingPrivacyPage().tag(OnboardingStep.privacy)
-                OnboardingLocationPage().tag(OnboardingStep.location)
                 if healthManager.isStepTrackingSupported {
                     OnboardingHealthPage().tag(OnboardingStep.health)
                 }
@@ -65,7 +63,7 @@ public struct OnboardingView: View {
                 VStack(spacing: 12) {
                     Button {
                         Haptics.mediumImpact()
-                        Task { await model.handleContinueTapped(locationManager: locationManager, healthManager: healthManager) }
+                        Task { await model.handleContinueTapped(healthManager: healthManager) }
                     } label: {
                         HStack(spacing: 8) {
                             if model.isRequestingPermission {

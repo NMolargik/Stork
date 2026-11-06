@@ -12,7 +12,8 @@ public extension SessionController {
         SettingsModel(
             loadDeliveries: loadDeliveries,
             deleteAllDeliveries: deleteAllDeliveries,
-            logDelivery: logDelivery
+            logDelivery: logDelivery,
+            entitlement: entitlement
         )
     }
 }

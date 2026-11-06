@@ -20,14 +20,17 @@ public extension SessionController {
         )
     }
 
-    /// A new-or-edit delivery entry model.
+    /// A new-or-edit delivery entry model. The weather manager is the Pro snapshot source
+    /// (and the only path that ever asks for location).
     func makeDeliveryEntryModel(existing: Delivery? = nil) -> DeliveryEntryModel {
         DeliveryEntryModel(
             existingDelivery: existing,
             logDelivery: logDelivery,
             updateDelivery: updateDelivery,
             loadTags: loadTags,
-            saveTag: saveTag
+            saveTag: saveTag,
+            entitlement: entitlement,
+            weatherCapture: weatherManager
         )
     }
 }
