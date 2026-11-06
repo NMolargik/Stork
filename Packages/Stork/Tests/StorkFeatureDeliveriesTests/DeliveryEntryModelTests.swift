@@ -40,21 +40,129 @@ struct DeliveryEntryModelTests {
         #expect(model.canFinish)
     }
 
-    @Test("clampDate pins a new delivery inside the last-3-days window")
-    func clampDate() {
-        let model = Make.entryModel(data: FakeDeliveryData())
-        model.date = Date(timeIntervalSinceNow: -30 * 24 * 3600) // a month ago
-        model.clampDate()
-        #expect(model.dateRange.contains(model.date))
+    // MARK: - Back-dating (any past date, never the future)
+
+    @Test("A new delivery can be back-dated to any past date", arguments: [
+        1.0, 4.0, 30.0, 400.0, 3650.0   // days ago
+    ])
+    func backDatingAnyPastDate(daysAgo: Double) throws {
+        let opened = Date(timeIntervalSince1970: 1_800_000_000)
+        let data = FakeDeliveryData()
+        let model = Make.entryModel(data: data, now: opened)
+        model.upsert(Baby(sex: .female))
+        model.date = opened.addingTimeInterval(-daysAgo * 24 * 3600)
+
+        model.clampDate()   // must not move a past date
+
+        #expect(model.date == opened.addingTimeInterval(-daysAgo * 24 * 3600))
+        #expect(model.canFinish)
+        try model.save()
+        #expect(data.loggedDeliveries.first?.date == model.date)
     }
 
-    @Test("An old delivery being edited stays valid despite the 3-day window")
-    func editingBypassesDateWindow() {
+    @Test("A future date is invalid until clamped back to the moment the form opened")
+    func futureDateClampsToNow() {
+        let opened = Date(timeIntervalSince1970: 1_800_000_000)
+        let model = Make.entryModel(data: FakeDeliveryData(), now: opened)
+        model.upsert(Baby(sex: .male))
+        model.date = opened.addingTimeInterval(3600)
+
+        #expect(!model.canFinish)
+        model.clampDate()
+        #expect(model.date == opened)
+        #expect(model.canFinish)
+    }
+
+    @Test("The upper bound is fixed when the form opens so validation can't drift")
+    func upperBoundIsFixedAtOpen() {
+        let opened = Date(timeIntervalSince1970: 1_800_000_000)
+        let model = Make.entryModel(data: FakeDeliveryData(), now: opened)
+        #expect(model.dateUpperBound == opened)
+        #expect(model.date == opened)   // a fresh form always validates
+    }
+
+    @Test("An old delivery being edited stays valid and clampDate is a no-op")
+    func editingKeepsOriginalDate() {
         let old = Make.delivery(date: Date(timeIntervalSinceNow: -90 * 24 * 3600))
         let model = Make.entryModel(data: FakeDeliveryData(), existing: old)
         #expect(model.canFinish)
-        model.clampDate()   // must be a no-op for edits
+        model.clampDate()
         #expect(model.date == old.date)
+    }
+
+    // MARK: - Weather snapshot gating (Stork Pro)
+
+    @Test("Without a weather source the form never offers a snapshot")
+    func noWeatherSourceHidesWeather() {
+        let model = Make.entryModel(data: FakeDeliveryData(), entitlement: FakeEntitlement(unlocked: true))
+        #expect(!model.supportsWeather)
+        #expect(!model.canCaptureWeather)
+    }
+
+    @Test("Free users see the weather row but cannot capture")
+    func freeUserCannotCaptureWeather() async {
+        let weather = FakeWeatherCapture()
+        let model = Make.entryModel(data: FakeDeliveryData(), entitlement: FakeEntitlement(), weather: weather)
+        #expect(model.supportsWeather)
+        #expect(!model.isProUnlocked)
+        #expect(!model.canCaptureWeather)
+
+        await model.captureWeather()
+
+        #expect(weather.captureCount == 0)   // location is never requested for a locked feature
+        #expect(model.weather == nil)
+    }
+
+    @Test("Pro users capture a snapshot that is saved with the delivery")
+    func proUserCapturesAndSavesWeather() async throws {
+        let data = FakeDeliveryData()
+        let weather = FakeWeatherCapture()
+        let model = Make.entryModel(data: data, entitlement: FakeEntitlement(unlocked: true), weather: weather)
+        model.upsert(Baby(sex: .female))
+        #expect(model.canCaptureWeather)
+
+        await model.captureWeather()
+        #expect(weather.captureCount == 1)
+        #expect(model.weather == weather.snapshot)
+
+        try model.save()
+        #expect(data.loggedDeliveries.first?.weather == weather.snapshot)
+        #expect(data.loggedDeliveries.first?.weatherTemperatureCelsius == 21)
+    }
+
+    @Test("Unlocking Pro mid-form enables capture without rebuilding the model")
+    func entitlementIsReadLive() {
+        let entitlement = FakeEntitlement()
+        let model = Make.entryModel(data: FakeDeliveryData(), entitlement: entitlement, weather: FakeWeatherCapture())
+        #expect(!model.canCaptureWeather)
+        entitlement.isProUnlocked = true
+        #expect(model.canCaptureWeather)
+    }
+
+    @Test("Back-dated deliveries older than 24 hours can't take a live snapshot")
+    func oldDeliveryCannotCaptureWeather() {
+        let opened = Date(timeIntervalSince1970: 1_800_000_000)
+        let model = Make.entryModel(data: FakeDeliveryData(), entitlement: FakeEntitlement(unlocked: true), weather: FakeWeatherCapture(), now: opened)
+        model.date = opened.addingTimeInterval(-2 * 24 * 3600)
+        #expect(!model.isDateRecentEnoughForWeather)
+        #expect(!model.canCaptureWeather)
+
+        model.date = opened.addingTimeInterval(-6 * 3600)
+        #expect(model.canCaptureWeather)
+    }
+
+    @Test("Weather capture failures surface as a message and leave no snapshot")
+    func weatherFailureSurfaces() async {
+        let weather = FakeWeatherCapture()
+        weather.errorToThrow = NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "no fix"])
+        let model = Make.entryModel(data: FakeDeliveryData(), entitlement: FakeEntitlement(unlocked: true), weather: weather)
+
+        await model.captureWeather()
+
+        #expect(model.weather == nil)
+        #expect(model.weatherErrorMessage == "no fix")
+        model.removeWeather()
+        #expect(model.weatherErrorMessage == nil)
     }
 
     // MARK: - Babies

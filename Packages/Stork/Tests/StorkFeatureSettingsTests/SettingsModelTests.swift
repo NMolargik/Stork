@@ -12,10 +12,17 @@ import StorkCore
 @testable import StorkFeatureSettings
 
 @MainActor
+private final class FakeEntitlement: EntitlementProviding {
+    var isProUnlocked: Bool
+    init(unlocked: Bool = false) { isProUnlocked = unlocked }
+}
+
+@MainActor
 private final class FakeStore {
     var deliveries: [Delivery] = []
     var errorToThrow: PersistenceError?
     private(set) var deleteAllCalls = 0
+    let entitlement = FakeEntitlement()
 
     struct Load: LoadDeliveries {
         let store: FakeStore
@@ -47,7 +54,8 @@ private final class FakeStore {
         SettingsModel(
             loadDeliveries: Load(store: self),
             deleteAllDeliveries: DeleteAll(store: self),
-            logDelivery: Log(store: self)
+            logDelivery: Log(store: self),
+            entitlement: entitlement
         )
     }
 }
@@ -83,6 +91,20 @@ struct SettingsModelTests {
         model.deleteAll()
 
         #expect(model.lastError != nil)
+    }
+
+    @Test("Only the primary icon is selectable without Stork Pro")
+    func iconGating() {
+        let store = FakeStore()
+        let model = store.makeModel()
+
+        #expect(model.canSelectIcon(SettingsModel.primaryIconColor))
+        #expect(!model.canSelectIcon("blue"))
+        #expect(!model.canSelectIcon("pink"))
+
+        store.entitlement.isProUnlocked = true
+        #expect(model.isProUnlocked)
+        #expect(model.canSelectIcon("blue"))
     }
 
     @Test("appVersion reads a non-empty version string")

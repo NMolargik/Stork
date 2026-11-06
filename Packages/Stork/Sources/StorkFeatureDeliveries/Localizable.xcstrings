@@ -160,6 +160,28 @@
         }
       }
     },
+    "Add Weather Snapshot": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir captura del clima"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un aperçu météo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "天気のスナップショットを追加"
+          }
+        }
+      }
+    },
     "Add a personal note...": {
       "localizations": {
         "es": {
@@ -1794,6 +1816,28 @@
         }
       }
     },
+    "Remove weather snapshot": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar captura del clima"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer l’aperçu météo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "天気のスナップショットを削除"
+          }
+        }
+      }
+    },
     "Reset": {
       "localizations": {
         "es": {
@@ -2100,6 +2144,94 @@
           "stringUnit": {
             "state": "translated",
             "value": "この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "Uses your location once, only when you tap. Nothing about where you work is stored — just the temperature and sky.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa tu ubicación una sola vez, solo cuando tocas. No se guarda nada sobre dónde trabajas: solo la temperatura y el cielo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilise votre position une seule fois, uniquement quand vous appuyez. Rien sur votre lieu de travail n’est enregistré — seulement la température et le ciel."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップしたときにだけ、一度位置情報を使用します。勤務先に関する情報は保存されず、気温と空の様子だけが記録されます。"
+          }
+        }
+      }
+    },
+    "Weather": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clima"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Météo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "天気"
+          }
+        }
+      }
+    },
+    "Weather at delivery": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clima en el parto"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Météo lors de l’accouchement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩時の天気"
+          }
+        }
+      }
+    },
+    "Weather snapshots use current conditions, so they're available for deliveries within the last 24 hours.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las capturas del clima usan las condiciones actuales, así que están disponibles para partos de las últimas 24 horas."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les aperçus météo utilisent les conditions actuelles; ils sont donc offerts pour les accouchements des dernières 24 heures."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "天気のスナップショットは現在の気象状況を使うため、過去24時間以内の分娩でのみ利用できます。"
           }
         }
       }

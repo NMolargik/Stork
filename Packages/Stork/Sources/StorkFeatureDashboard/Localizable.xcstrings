@@ -1243,6 +1243,28 @@
         }
       }
     },
+    "Heat Map": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mapa de calor"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carte thermique"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ヒートマップ"
+          }
+        }
+      }
+    },
     "History": {
       "localizations": {
         "es": {
@@ -1729,6 +1751,28 @@
         }
       }
     },
+    "Opens Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proを開きます"
+          }
+        }
+      }
+    },
     "Page %lld of %lld": {
       "localizations": {
         "es": {
@@ -1989,6 +2033,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "赤ちゃん合計：%lld"
+          }
+        }
+      }
+    },
+    "Unlock": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouiller"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック解除"
+          }
+        }
+      }
+    },
+    "Unlock insight cards with Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquea las tarjetas de análisis con Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouillez les cartes d’analyse avec Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proでインサイトカードをロック解除"
           }
         }
       }

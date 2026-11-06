@@ -31,8 +31,9 @@ public struct SettingsView<ExportDestination: View>: View {
 
     public var body: some View {
         Form {
+            ProSection(model: model)
             PreferencesSection()
-            AppIconSection(iconManager: iconManager, pendingIconColor: $pendingIconColor)
+            AppIconSection(model: model, iconManager: iconManager, pendingIconColor: $pendingIconColor)
             SyncSection(model: model)
             DataSection(exportDestination: exportDestination)
             DangerZoneSection(model: model, isDeleting: isDeleting, showDeleteAllAlert: $showDeleteAllAlert)
@@ -71,6 +72,38 @@ public struct SettingsView<ExportDestination: View>: View {
 
 // MARK: - Sections
 
+/// Stork Pro status: the unlock row for free users, a thank-you for everyone else.
+private struct ProSection: View {
+    var model: SettingsModel
+    @Environment(\.requestProUpgrade) private var requestProUpgrade
+
+    var body: some View {
+        Section {
+            if model.isProUnlocked {
+                HStack(spacing: 12) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.title2)
+                        .foregroundStyle(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .top, endPoint: .bottom))
+                        .frame(width: 40)
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Stork Pro", bundle: .module).font(.headline)
+                        Text("Unlocked. Thank you for supporting Stork!", bundle: .module).font(.caption).foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+                .accessibilityElement(children: .combine)
+            } else {
+                ProUpsellRow()
+            }
+        } footer: {
+            if !model.isProUnlocked {
+                Text("Already bought Stork before it went free? Open Stork Pro and tap Restore Purchases.", bundle: .module)
+            }
+        }
+    }
+}
+
 private struct PreferencesSection: View {
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits = false
     @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates = false
@@ -88,11 +121,13 @@ private struct PreferencesSection: View {
 }
 
 private struct AppIconSection: View {
+    var model: SettingsModel
     var iconManager: IconManager
     @Binding var pendingIconColor: String?
 
     @Environment(\.scenePhase) private var scenePhase
-    @AppStorage(AppStorageKeys.selectedIconColor) private var selectedIconColor = "purple"
+    @Environment(\.requestProUpgrade) private var requestProUpgrade
+    @AppStorage(AppStorageKeys.selectedIconColor) private var selectedIconColor = SettingsModel.primaryIconColor
 
     private struct IconOption: Identifiable {
         let color: String
@@ -109,14 +144,18 @@ private struct AppIconSection: View {
     ]
 
     var body: some View {
-        Section(String(localized: "App Icon", bundle: .module)) {
+        Section {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(iconOptions) { option in
                         ZStack(alignment: .topTrailing) {
                             Button {
-                                selectedIconColor = option.color
                                 Haptics.lightImpact()
+                                guard model.canSelectIcon(option.color) else {
+                                    requestProUpgrade(.alternateAppIcons)
+                                    return
+                                }
+                                selectedIconColor = option.color
                                 if scenePhase == .active {
                                     Task { await iconManager.changeAppIcon(to: option.color) }
                                 } else {
@@ -137,11 +176,18 @@ private struct AppIconSection: View {
                             .buttonStyle(.plain)
                             .hoverEffect(.lift)
                             .accessibilityLabel(Text("\(option.color.capitalized) app icon", bundle: .module))
+                            .accessibilityHint(model.canSelectIcon(option.color) ? Text(verbatim: "") : Text("Locked. Unlock with Stork Pro.", bundle: .module))
                             .accessibilityAddTraits(selectedIconColor == option.color ? [.isSelected] : [])
 
                             if selectedIconColor == option.color {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.storkPurple)
+                                    .background(.white, in: Circle())
+                                    .offset(x: -4, y: 4)
+                                    .accessibilityHidden(true)
+                            } else if !model.canSelectIcon(option.color) {
+                                Image(systemName: "lock.circle.fill")
+                                    .foregroundStyle(.secondary)
                                     .background(.white, in: Circle())
                                     .offset(x: -4, y: 4)
                                     .accessibilityHidden(true)
@@ -153,6 +199,15 @@ private struct AppIconSection: View {
             }
             .scrollClipDisabled()
             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+        } header: {
+            HStack {
+                Text("App Icon", bundle: .module)
+                if !model.isProUnlocked { ProBadge() }
+            }
+        } footer: {
+            if !model.isProUnlocked {
+                Text("Alternate icons are part of Stork Pro.", bundle: .module)
+            }
         }
     }
 }

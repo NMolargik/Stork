@@ -85,6 +85,27 @@ final class FakeDeliveryData {
     }
 }
 
+/// Switchable Stork Pro entitlement.
+@MainActor
+final class FakeEntitlement: EntitlementProviding {
+    var isProUnlocked: Bool
+    init(unlocked: Bool = false) { isProUnlocked = unlocked }
+}
+
+/// Scripted weather source: returns `snapshot` or throws `errorToThrow`, counting calls.
+@MainActor
+final class FakeWeatherCapture: DeliveryWeatherCapturing {
+    var snapshot = DeliveryWeather(temperatureCelsius: 21, conditionName: "partlyCloudy", symbolName: "cloud.sun.fill")
+    var errorToThrow: Error?
+    private(set) var captureCount = 0
+
+    func captureCurrentWeather() async throws -> DeliveryWeather {
+        captureCount += 1
+        if let errorToThrow { throw errorToThrow }
+        return snapshot
+    }
+}
+
 /// Convenience builders so each test reads as intent, not wiring.
 @MainActor
 enum Make {
@@ -96,13 +117,22 @@ enum Make {
         )
     }
 
-    static func entryModel(data: FakeDeliveryData, existing: Delivery? = nil) -> DeliveryEntryModel {
+    static func entryModel(
+        data: FakeDeliveryData,
+        existing: Delivery? = nil,
+        entitlement: FakeEntitlement = FakeEntitlement(),
+        weather: FakeWeatherCapture? = nil,
+        now: Date = .now
+    ) -> DeliveryEntryModel {
         DeliveryEntryModel(
             existingDelivery: existing,
             logDelivery: FakeDeliveryData.LogNew(data: data),
             updateDelivery: FakeDeliveryData.Update(data: data),
             loadTags: FakeDeliveryData.LoadAllTags(data: data),
-            saveTag: FakeDeliveryData.Save(data: data)
+            saveTag: FakeDeliveryData.Save(data: data),
+            entitlement: entitlement,
+            weatherCapture: weather,
+            now: now
         )
     }
 

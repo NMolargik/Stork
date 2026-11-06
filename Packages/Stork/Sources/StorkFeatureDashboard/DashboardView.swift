@@ -29,11 +29,11 @@ public struct DashboardView: View {
 
                 if hSizeClass == .regular {
                     HStack(alignment: .top, spacing: 16) {
-                        VStack(spacing: 16) { ForEach(columnCards(even: true)) { CardView(card: $0, deliveries: model.deliveries) } }
-                        VStack(spacing: 16) { ForEach(columnCards(even: false)) { CardView(card: $0, deliveries: model.deliveries) } }
+                        VStack(spacing: 16) { ForEach(columnCards(even: true)) { card(for: $0) } }
+                        VStack(spacing: 16) { ForEach(columnCards(even: false)) { card(for: $0) } }
                     }
                 } else {
-                    ForEach(model.cardOrder) { CardView(card: $0, deliveries: model.deliveries) }
+                    ForEach(model.cardOrder) { card(for: $0) }
                 }
             }
             .frame(maxWidth: 1000)
@@ -54,6 +54,42 @@ public struct DashboardView: View {
 
     private func columnCards(even: Bool) -> [DashboardCard] {
         model.cardOrder.enumerated().filter { ($0.offset % 2 == 0) == even }.map(\.element)
+    }
+
+    @ContentBuilder
+    private func card(for card: DashboardCard) -> some View {
+        if model.isLocked(card) {
+            LockedInsightCard(card: card)
+        } else {
+            CardView(card: card, deliveries: model.deliveries)
+        }
+    }
+
+    /// Teaser for a Pro insight card: same chrome and title, lock in place of the chart.
+    private struct LockedInsightCard: View {
+        let card: DashboardCard
+        @Environment(\.requestProUpgrade) private var requestProUpgrade
+
+        var body: some View {
+            Button {
+                Haptics.lightImpact()
+                requestProUpgrade(.insightCards)
+            } label: {
+                InsightCard(title: card.displayName, systemImage: card.systemImage, accent: .storkPurple) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "lock.fill").font(.title3).foregroundStyle(.secondary).accessibilityHidden(true)
+                        Text("Unlock insight cards with Stork Pro", bundle: .module)
+                            .font(.subheadline).foregroundStyle(.secondary)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                        ProBadge()
+                    }
+                    .frame(minHeight: 50)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(Text("Opens Stork Pro", bundle: .module))
+        }
     }
 
     private struct JarSection: View {

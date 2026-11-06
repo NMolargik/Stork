@@ -17,6 +17,7 @@ public final class SettingsModel {
     private let loadDeliveriesUseCase: any LoadDeliveries
     private let deleteAllDeliveriesUseCase: any DeleteAllDeliveries
     private let logDeliveryUseCase: any LogDelivery
+    private let entitlement: any EntitlementProviding
 
     public private(set) var deliveries: [Delivery] = []
     public private(set) var lastError: PersistenceError?
@@ -27,11 +28,26 @@ public final class SettingsModel {
     public init(
         loadDeliveries: any LoadDeliveries,
         deleteAllDeliveries: any DeleteAllDeliveries,
-        logDelivery: any LogDelivery
+        logDelivery: any LogDelivery,
+        entitlement: any EntitlementProviding
     ) {
         self.loadDeliveriesUseCase = loadDeliveries
         self.deleteAllDeliveriesUseCase = deleteAllDeliveries
         self.logDeliveryUseCase = logDelivery
+        self.entitlement = entitlement
+    }
+
+    // MARK: - Stork Pro
+
+    public var isProUnlocked: Bool { entitlement.isProUnlocked }
+
+    /// The default icon's color key — always available, even without Stork Pro.
+    public static let primaryIconColor = "purple"
+
+    /// Alternate icons are Pro. The primary (purple) icon is always selectable so a free
+    /// user can get back to it.
+    public func canSelectIcon(_ color: String) -> Bool {
+        isProUnlocked || color == Self.primaryIconColor
     }
 
     public var deliveryCount: Int { deliveries.count }

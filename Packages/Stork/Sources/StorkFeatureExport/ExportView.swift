@@ -12,6 +12,7 @@ import StorkDesignSystem
 
 public struct ExportView: View {
     @Bindable private var model: ExportModel
+    @Environment(\.requestProUpgrade) private var requestProUpgrade
     @State private var showCSVOptions = false
     @State private var showPDFOptions = false
 
@@ -21,13 +22,25 @@ public struct ExportView: View {
 
     public var body: some View {
         List {
+            if !model.isProUnlocked {
+                Section { ProUpsellRow(feature: .pdfExport) }
+            }
+
             Section {
-                exportRow(icon: "doc.richtext.fill", color: .storkPurple, title: String(localized: "PDF Report", bundle: .module), subtitle: String(localized: "Generate a summary report with charts", bundle: .module)) { showPDFOptions = true }
-                exportRow(icon: "tablecells.fill", color: .storkBlue, title: String(localized: "CSV Export", bundle: .module), subtitle: String(localized: "Export data for spreadsheets or backup", bundle: .module)) { showCSVOptions = true }
+                exportRow(icon: "doc.richtext.fill", color: .storkPurple, title: String(localized: "PDF Report", bundle: .module), subtitle: String(localized: "Generate a summary report with charts", bundle: .module), locked: !model.isProUnlocked) {
+                    if model.isProUnlocked { showPDFOptions = true } else { requestProUpgrade(.pdfExport) }
+                }
+                exportRow(icon: "tablecells.fill", color: .storkBlue, title: String(localized: "CSV Export", bundle: .module), subtitle: String(localized: "Export data for spreadsheets or backup", bundle: .module), locked: !model.isProUnlocked) {
+                    if model.isProUnlocked { showCSVOptions = true } else { requestProUpgrade(.csvExport) }
+                }
             } header: {
                 Text("Export Data", bundle: .module)
             } footer: {
-                Text("Export your delivery records for analysis, backup, or professional portfolios.", bundle: .module)
+                if model.isProUnlocked {
+                    Text("Export your delivery records for analysis, backup, or professional portfolios.", bundle: .module)
+                } else {
+                    Text("PDF and CSV export are part of Stork Pro. Your data is always yours — logging and viewing stay free.", bundle: .module)
+                }
             }
 
             Section {
@@ -60,7 +73,7 @@ public struct ExportView: View {
     }
 
     @ContentBuilder
-    private func exportRow(icon: String, color: Color, title: String, subtitle: String, action: @escaping () -> Void) -> some View {
+    private func exportRow(icon: String, color: Color, title: String, subtitle: String, locked: Bool = false, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
                 Image(systemName: icon).font(.title2).foregroundStyle(color).frame(width: 40).accessibilityHidden(true)
@@ -69,10 +82,12 @@ public struct ExportView: View {
                     Text(subtitle).font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
+                if locked { ProBadge() }
                 Image(systemName: "chevron.right").foregroundStyle(.tertiary).accessibilityHidden(true)
             }
         }
         .buttonStyle(.plain)
+        .accessibilityHint(locked ? Text("Locked. Unlock with Stork Pro.", bundle: .module) : Text(verbatim: ""))
     }
 }
 #endif

@@ -301,6 +301,28 @@
         }
       }
     },
+    "Career milestone cards are part of Stork Pro.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las tarjetas de hitos de carrera forman parte de Stork Pro."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les cartes de jalons de carrière font partie de Stork Pro."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャリアマイルストーンカードはStork Proの機能です。"
+          }
+        }
+      }
+    },
     "Content": {
       "extractionState": "manual",
       "localizations": {
@@ -787,6 +809,28 @@
         }
       }
     },
+    "Locked. Unlock with Stork Pro.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado. Desbloquéalo con Stork Pro."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verrouillé. Déverrouillez avec Stork Pro."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック中。Stork Proでロック解除できます。"
+          }
+        }
+      }
+    },
     "Loss": {
       "localizations": {
         "es": {
@@ -959,6 +1003,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "PDFレポート"
+          }
+        }
+      }
+    },
+    "PDF and CSV export are part of Stork Pro. Your data is always yours — logging and viewing stay free.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La exportación a PDF y CSV forma parte de Stork Pro. Tus datos siempre son tuyos: registrar y consultar sigue siendo gratis."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’exportation PDF et CSV fait partie de Stork Pro. Vos données restent les vôtres — la saisie et la consultation demeurent gratuites."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFとCSVの書き出しはStork Proの機能です。データは常にあなたのものです。記録と閲覧は無料のままです。"
           }
         }
       }

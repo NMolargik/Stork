@@ -34,21 +34,21 @@ struct DashboardModelTests {
 
     @Test("Card order defaults to the declaration order on first launch")
     func defaultCardOrder() {
-        let model = DashboardModel(loadDeliveries: FakeLoadDeliveries(), store: FakeKeyValueStore())
+        let model = DashboardModel(loadDeliveries: FakeLoadDeliveries(), entitlement: FakeEntitlement(), store: FakeKeyValueStore())
         #expect(model.cardOrder == DashboardCard.defaultOrder)
     }
 
     @Test("saveOrder persists through the seam and survives a fresh model")
     func orderPersists() {
         let store = FakeKeyValueStore()
-        let model = DashboardModel(loadDeliveries: FakeLoadDeliveries(), store: store)
+        let model = DashboardModel(loadDeliveries: FakeLoadDeliveries(), entitlement: FakeEntitlement(), store: store)
 
         let reversed = Array(DashboardCard.defaultOrder.reversed())
         model.saveOrder(reversed)
         #expect(model.cardOrder == reversed)
 
         // A brand-new model over the same store sees the saved order.
-        let rebuilt = DashboardModel(loadDeliveries: FakeLoadDeliveries(), store: store)
+        let rebuilt = DashboardModel(loadDeliveries: FakeLoadDeliveries(), entitlement: FakeEntitlement(), store: store)
         #expect(rebuilt.cardOrder == reversed)
     }
 
@@ -81,6 +81,7 @@ struct DashboardModelTests {
 
         let model = DashboardModel(
             loadDeliveries: FakeLoadDeliveries(deliveries: [thisMonth, lastYear]),
+            entitlement: FakeEntitlement(),
             store: FakeKeyValueStore()
         )
         model.load()
@@ -89,5 +90,63 @@ struct DashboardModelTests {
         #expect(counts.boy == 1)
         #expect(counts.girl == 1)
         #expect(counts.loss == 0)
+    }
+}
+
+
+// MARK: - Stork Pro gating
+
+@MainActor
+private final class FakeEntitlement: EntitlementProviding {
+    var isProUnlocked: Bool
+    init(unlocked: Bool = false) { isProUnlocked = unlocked }
+}
+
+@Suite("Dashboard Pro Gating Tests")
+@MainActor
+struct DashboardProGatingTests {
+
+    @Test("Insight cards are locked for free users; basic count cards never are")
+    func lockedCardsForFreeUsers() {
+        let model = DashboardModel(loadDeliveries: FakeLoadDeliveries(), entitlement: FakeEntitlement(unlocked: false), store: FakeKeyValueStore())
+
+        for card in DashboardCard.allCases {
+            #expect(model.isLocked(card) == card.requiresPro, "\(card) lock state should follow requiresPro")
+        }
+        #expect(!model.isLocked(.deliveryMethod))
+        #expect(!model.isLocked(.babyCount))
+        #expect(model.isLocked(.yearOverYear))
+        #expect(model.isLocked(.personalBests))
+    }
+
+    @Test("Nothing is locked once Pro is unlocked, and the change is observed live")
+    func unlockClearsLocks() {
+        let entitlement = FakeEntitlement(unlocked: false)
+        let model = DashboardModel(loadDeliveries: FakeLoadDeliveries(), entitlement: entitlement, store: FakeKeyValueStore())
+        #expect(model.isLocked(.timeOfDay))
+
+        entitlement.isProUnlocked = true
+
+        #expect(model.isProUnlocked)
+        #expect(DashboardCard.allCases.allSatisfy { !model.isLocked($0) })
+    }
+
+    @Test("Locked cards keep their place in the saved order (data is never hidden)")
+    func lockedCardsStayInOrder() {
+        let model = DashboardModel(loadDeliveries: FakeLoadDeliveries(), entitlement: FakeEntitlement(unlocked: false), store: FakeKeyValueStore())
+        #expect(model.cardOrder == DashboardCard.defaultOrder)
+        #expect(model.cardOrder.contains(.yearOverYear))
+    }
+
+    @Test("Calendar heat map renders only for Pro users who turned it on")
+    func heatMapGating() {
+        let entitlement = FakeEntitlement(unlocked: false)
+        let model = CalendarModel(loadDeliveries: FakeLoadDeliveries(), entitlement: entitlement)
+        #expect(!model.showsHeatMap(preferenceEnabled: true))
+        #expect(!model.showsHeatMap(preferenceEnabled: false))
+
+        entitlement.isProUnlocked = true
+        #expect(model.showsHeatMap(preferenceEnabled: true))
+        #expect(!model.showsHeatMap(preferenceEnabled: false))
     }
 }

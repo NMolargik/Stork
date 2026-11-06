@@ -18,7 +18,7 @@ public final class IconManager {
     private var retryCount = 0
     private let maxRetries = 3
 
-    private let primaryIconColorKey = "purple"
+    private let primaryIconColorKey = SettingsModel.primaryIconColor
     private let alternateIconKeyForColor: [String: String] = [
         "blue": "IconBlue",
         "pink": "IconPink",

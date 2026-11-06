@@ -30,6 +30,9 @@ public struct DeliveryEntryView: View {
         NavigationStack {
             Form {
                 DetailsSection(model: model)
+                if model.supportsWeather {
+                    WeatherSection(model: model, useMetricUnits: useMetricUnits)
+                }
                 BabiesSection(model: model, editingBaby: $editingBaby)
                 TagsSection(model: model)
                 NotesSection(model: model)
@@ -88,7 +91,7 @@ public struct DeliveryEntryView: View {
 
         var body: some View {
             Section(String(localized: "Details", bundle: .module)) {
-                DatePicker(String(localized: "Date", bundle: .module), selection: $model.date, in: model.dateRange, displayedComponents: [.date, .hourAndMinute])
+                DatePicker(String(localized: "Date", bundle: .module), selection: $model.date, in: ...model.dateUpperBound, displayedComponents: [.date, .hourAndMinute])
                     .datePickerStyle(.compact)
                     .disabled(model.isEditing)
                     .onChange(of: model.date) { _, _ in model.clampDate() }
@@ -105,6 +108,79 @@ public struct DeliveryEntryView: View {
                 Toggle(String(localized: "Epidural Used", bundle: .module), isOn: $model.epiduralUsed)
                     .tint(.red)
                     .accessibilityLabel(Text("Epidural used", bundle: .module))
+            }
+        }
+    }
+
+    /// Stork Pro: attach the conditions outside to this delivery. Free users see the
+    /// locked row and reach the paywall in context; location is requested only here.
+    private struct WeatherSection: View {
+        @Bindable var model: DeliveryEntryModel
+        let useMetricUnits: Bool
+        @Environment(\.requestProUpgrade) private var requestProUpgrade
+
+        var body: some View {
+            Section {
+                if !model.isProUnlocked {
+                    Button {
+                        Haptics.lightImpact()
+                        requestProUpgrade(.weatherAtDelivery)
+                    } label: {
+                        HStack {
+                            Label(String(localized: "Add Weather Snapshot", bundle: .module), systemImage: "cloud.sun.fill")
+                            Spacer()
+                            ProBadge()
+                        }
+                    }
+                    .hoverEffect(.highlight)
+                } else if let weather = model.weather {
+                    HStack(spacing: 12) {
+                        Image(systemName: weather.symbolName)
+                            .symbolRenderingMode(.multicolor)
+                            .font(.title2)
+                            .accessibilityHidden(true)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(weather.temperatureString(useMetric: useMetricUnits)).font(.headline)
+                            Text(weather.conditionDisplayName).font(.caption).foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Button(role: .destructive) {
+                            Haptics.lightImpact()
+                            model.removeWeather()
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel(Text("Remove weather snapshot", bundle: .module))
+                    }
+                    .accessibilityElement(children: .combine)
+                } else {
+                    Button {
+                        Haptics.lightImpact()
+                        Task { await model.captureWeather() }
+                    } label: {
+                        HStack {
+                            Label(String(localized: "Add Weather Snapshot", bundle: .module), systemImage: "cloud.sun.fill")
+                            Spacer()
+                            if model.isCapturingWeather { ProgressView().controlSize(.small) }
+                        }
+                    }
+                    .disabled(!model.canCaptureWeather || model.isCapturingWeather)
+                    .tint(.storkBlue)
+                    .listItemTint(.storkBlue)
+                    .hoverEffect(.highlight)
+                }
+            } header: {
+                Text("Weather", bundle: .module)
+            } footer: {
+                if let message = model.weatherErrorMessage {
+                    Text(message).foregroundStyle(.red)
+                } else if model.isProUnlocked && !model.isDateRecentEnoughForWeather && model.weather == nil {
+                    Text("Weather snapshots use current conditions, so they're available for deliveries within the last 24 hours.", bundle: .module)
+                } else {
+                    Text("Uses your location once, only when you tap. Nothing about where you work is stored — just the temperature and sky.", bundle: .module)
+                }
             }
         }
     }

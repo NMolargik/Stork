@@ -4,7 +4,9 @@
 //
 //  Drives the new/edit delivery form. Holds the editable fields, validates them, manages
 //  the tag list through the tag use-cases, and on `save()` routes to `logDelivery` (new,
-//  returning any crossed milestone) or `updateDelivery` (edit).
+//  returning any crossed milestone) or `updateDelivery` (edit). Deliveries may be dated
+//  any time in the past (`DeliveryDateRule`); the Pro weather snapshot is offered through
+//  the `DeliveryWeatherCapturing` seam and gated by `EntitlementProviding`.
 //
 
 import Foundation
@@ -22,6 +24,8 @@ public final class DeliveryEntryModel {
     public var babies: [Baby]
     public var notes: String
     public var selectedTags: [DeliveryTag]
+    /// The attached weather snapshot (Stork Pro), if any.
+    public var weather: DeliveryWeather?
 
     // Sheet presentation
     public var showingBabySheet = false
@@ -40,13 +44,22 @@ public final class DeliveryEntryModel {
     private let updateDeliveryUseCase: any UpdateDelivery
     private let loadTagsUseCase: any LoadTags
     private let saveTagUseCase: any SaveTag
+    private let entitlement: any EntitlementProviding
+    private let weatherCapture: (any DeliveryWeatherCapturing)?
 
+    /// - Parameters:
+    ///   - entitlement: Decides whether the weather snapshot (Pro) is offered.
+    ///   - weatherCapture: The weather source; `nil` hides the snapshot entirely (watch, tests).
+    ///   - now: The moment the form opened — the latest date a delivery may have.
     public init(
         existingDelivery: Delivery? = nil,
         logDelivery: any LogDelivery,
         updateDelivery: any UpdateDelivery,
         loadTags: any LoadTags,
-        saveTag: any SaveTag
+        saveTag: any SaveTag,
+        entitlement: any EntitlementProviding,
+        weatherCapture: (any DeliveryWeatherCapturing)? = nil,
+        now: Date = .now
     ) {
         self.existing = existingDelivery
         self.isEditing = existingDelivery != nil
@@ -54,13 +67,14 @@ public final class DeliveryEntryModel {
         self.updateDeliveryUseCase = updateDelivery
         self.loadTagsUseCase = loadTags
         self.saveTagUseCase = saveTag
+        self.entitlement = entitlement
+        self.weatherCapture = weatherCapture
 
-        // Anchor the allowed window to the moment the form opens. A computed range
-        // re-reading `.now` on every access drifts: a date clamped to the lower bound
-        // lands *outside* the very next range, leaving `canFinish` stuck false.
-        let opened = Date.now
-        let lower = Calendar.current.date(byAdding: .day, value: -3, to: opened) ?? opened
-        self.dateRange = lower...opened
+        // Anchor the upper bound to the moment the form opens. A bound re-reading `.now`
+        // on every access drifts: a date clamped to it lands *outside* the very next
+        // check, leaving `canFinish` stuck false.
+        let opened = now
+        self.dateUpperBound = opened
 
         if let delivery = existingDelivery {
             date = delivery.date
@@ -69,6 +83,7 @@ public final class DeliveryEntryModel {
             babies = delivery.babies ?? []
             notes = delivery.notes ?? ""
             selectedTags = delivery.tags ?? []
+            weather = delivery.weather
         } else {
             date = opened   // the range's upper bound, so a fresh form always validates
             deliveryMethod = .vaginal
@@ -81,18 +96,56 @@ public final class DeliveryEntryModel {
 
     // MARK: - Validation
 
-    /// New deliveries must fall within the 3 days before the form was opened (edits keep
-    /// their original date). Fixed at init so clamping and validation agree.
-    public let dateRange: ClosedRange<Date>
+    /// The latest allowed delivery date (the moment the form opened). There is no earliest
+    /// date: nurses back-date entries to any past shift. Edits keep their original date.
+    public let dateUpperBound: Date
 
     public var canFinish: Bool {
-        !babies.isEmpty && (isEditing || dateRange.contains(date))
+        !babies.isEmpty && (isEditing || DeliveryDateRule.isAllowed(date, now: dateUpperBound))
     }
 
+    /// Pulls a future-dated entry back to the upper bound; past dates are left alone.
     public func clampDate() {
         guard !isEditing else { return }
-        if date < dateRange.lowerBound { date = dateRange.lowerBound }
-        else if date > dateRange.upperBound { date = dateRange.upperBound }
+        date = DeliveryDateRule.clamped(date, now: dateUpperBound)
+    }
+
+    // MARK: - Weather snapshot (Stork Pro)
+
+    public var isProUnlocked: Bool { entitlement.isProUnlocked }
+
+    /// Whether this form offers a weather snapshot at all (a capture source exists).
+    public var supportsWeather: Bool { weatherCapture != nil }
+
+    /// Current conditions only describe a recent delivery; older entries can't take a snapshot.
+    public var isDateRecentEnoughForWeather: Bool {
+        DeliveryDateRule.allowsWeatherSnapshot(date, now: dateUpperBound)
+    }
+
+    /// True when tapping "Add Weather" should actually capture (Pro + source + recent date).
+    public var canCaptureWeather: Bool {
+        supportsWeather && isProUnlocked && isDateRecentEnoughForWeather
+    }
+
+    public private(set) var isCapturingWeather = false
+    public private(set) var weatherErrorMessage: String?
+
+    /// Requests a one-shot location and the current conditions, attaching them to the form.
+    public func captureWeather() async {
+        guard canCaptureWeather, let weatherCapture, !isCapturingWeather else { return }
+        isCapturingWeather = true
+        weatherErrorMessage = nil
+        defer { isCapturingWeather = false }
+        do {
+            weather = try await weatherCapture.captureCurrentWeather()
+        } catch {
+            weatherErrorMessage = error.localizedDescription
+        }
+    }
+
+    public func removeWeather() {
+        weather = nil
+        weatherErrorMessage = nil
     }
 
     // MARK: - Babies
@@ -165,6 +218,7 @@ public final class DeliveryEntryModel {
             existing.notes = trimmedNotes
             existing.tags = selectedTags
             existing.babies = babies
+            existing.weather = weather
             try updateDeliveryUseCase(existing)
             return nil
         } else {
@@ -177,6 +231,7 @@ public final class DeliveryEntryModel {
                 notes: trimmedNotes,
                 tags: selectedTags
             )
+            delivery.weather = weather
             return try logDeliveryUseCase(delivery)
         }
     }

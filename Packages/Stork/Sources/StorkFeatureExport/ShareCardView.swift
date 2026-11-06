@@ -11,11 +11,13 @@ import StorkDesignSystem
 struct ShareCardView: View {
     let model: ExportModel
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits = false
+    @Environment(\.requestProUpgrade) private var requestProUpgrade
 
     @State private var selectedCard: CardImageRenderer.CardType?
     @State private var selectedMilestone: MilestoneOption?
     @State private var renderedImage: UIImage?
     @State private var includeWatermark = true
+    @State private var milestoneShareImage: IdentifiableImage?
 
     private var totalBabies: Int { model.totalBabies }
     private var totalDeliveries: Int { model.deliveries.count }
@@ -51,7 +53,12 @@ struct ShareCardView: View {
                 Section {
                     ForEach(availableMilestones) { milestone in
                         Button {
-                            selectMilestone(milestone)
+                            if model.isProUnlocked {
+                                selectMilestone(milestone)
+                            } else {
+                                Haptics.lightImpact()
+                                requestProUpgrade(.milestoneShareCards)
+                            }
                         } label: {
                             HStack {
                                 Image(systemName: "star.fill").foregroundStyle(.yellow)
@@ -60,17 +67,24 @@ struct ShareCardView: View {
                                     Text(milestone.type.displayTemplate(count: milestone.count)).font(.caption).foregroundStyle(.secondary)
                                 }
                                 Spacer()
-                                if selectedMilestone == milestone {
+                                if !model.isProUnlocked {
+                                    ProBadge()
+                                } else if selectedMilestone == milestone {
                                     Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
                                 }
                             }
                         }
                         .buttonStyle(.plain)
+                        .accessibilityHint(model.isProUnlocked ? Text(verbatim: "") : Text("Locked. Unlock with Stork Pro.", bundle: .module))
                     }
                 } header: {
                     Text("Milestones Achieved", bundle: .module)
                 } footer: {
-                    Text("Share your achievements with colleagues!", bundle: .module)
+                    if model.isProUnlocked {
+                        Text("Share your achievements with colleagues!", bundle: .module)
+                    } else {
+                        Text("Career milestone cards are part of Stork Pro.", bundle: .module)
+                    }
                 }
             }
 
@@ -87,13 +101,27 @@ struct ShareCardView: View {
                             .frame(maxHeight: 300)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .shadow(radius: 4)
-                        ShareLink(item: Image(uiImage: image), preview: SharePreview("Stork Statistics", image: Image(uiImage: image))) {
-                            Label(String(localized: "Share Image", bundle: .module), systemImage: "square.and.arrow.up")
-                                .foregroundStyle(.white).frame(maxWidth: .infinity)
+                        if selectedMilestone != nil {
+                            // Milestone cards go through ShareSheet so a completed share can
+                            // trigger the one-time review prompt.
+                            Button {
+                                milestoneShareImage = IdentifiableImage(image: image)
+                            } label: {
+                                Label(String(localized: "Share Image", bundle: .module), systemImage: "square.and.arrow.up")
+                                    .foregroundStyle(.white).frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.storkBlue)
+                            .padding(.top, 8)
+                        } else {
+                            ShareLink(item: Image(uiImage: image), preview: SharePreview("Stork Statistics", image: Image(uiImage: image))) {
+                                Label(String(localized: "Share Image", bundle: .module), systemImage: "square.and.arrow.up")
+                                    .foregroundStyle(.white).frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.storkBlue)
+                            .padding(.top, 8)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.storkBlue)
-                        .padding(.top, 8)
                     }
                     .padding(.vertical, 8)
                 }
@@ -101,6 +129,11 @@ struct ShareCardView: View {
         }
         .navigationTitle(Text("Share Cards", bundle: .module))
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $milestoneShareImage) { item in
+            ShareSheet(items: [item.image]) { completed in
+                if completed { model.noteMilestoneCardShared() }
+            }
+        }
     }
 
     private func selectStatCard(_ cardType: CardImageRenderer.CardType) {

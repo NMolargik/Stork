@@ -173,6 +173,7 @@ public struct DeliveryDetailView: View {
         var body: some View {
             VStack(spacing: 20) {
                 if !babies.isEmpty { BabiesSection(babies: babies) }
+                if let weather = delivery.weather { WeatherSection(weather: weather) }
                 if let tags = delivery.tags, !tags.isEmpty { TagsSection(tags: tags) }
                 if let notes = delivery.notes, !notes.isEmpty { NotesSection(notes: notes) }
             }
@@ -266,6 +267,35 @@ public struct DeliveryDetailView: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel(label)
             .accessibilityValue(value)
+        }
+    }
+
+    private struct WeatherSection: View {
+        let weather: DeliveryWeather
+        @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 12) {
+                SectionHeader(title: String(localized: "Weather", bundle: .module), icon: "cloud.sun.fill", color: .storkBlue)
+                HStack(spacing: 16) {
+                    Image(systemName: weather.symbolName)
+                        .symbolRenderingMode(.multicolor)
+                        .font(.system(size: 36))
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(weather.temperatureString(useMetric: useMetricUnits)).font(.title2.bold())
+                        Text(weather.conditionDisplayName).font(.subheadline).foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(uiColor: .secondarySystemGroupedBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("Weather at delivery", bundle: .module))
+                .accessibilityValue("\(weather.temperatureString(useMetric: useMetricUnits)), \(weather.conditionDisplayName)")
+            }
         }
     }
 

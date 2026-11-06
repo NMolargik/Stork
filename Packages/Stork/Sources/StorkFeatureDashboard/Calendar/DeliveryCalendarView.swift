@@ -14,6 +14,8 @@ import StorkDesignSystem
 public struct DeliveryCalendarView: View {
     @Bindable private var model: CalendarModel
     @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates: Bool = false
+    @AppStorage(AppStorageKeys.calendarHeatMapEnabled) private var heatMapEnabled: Bool = false
+    @Environment(\.requestProUpgrade) private var requestProUpgrade
     private let onDeliverySelected: ((UUID) -> Void)?
 
     @State private var selectedDate = Date()
@@ -49,8 +51,18 @@ public struct DeliveryCalendarView: View {
                 MethodFilterView(selectedMethod: $selectedMethod)
                     .padding(.horizontal).padding(.bottom, 8)
 
-                CalendarGridView(displayedMonth: displayedMonth, selectedDate: $selectedDate, deliveries: filteredDeliveries)
-                    .padding(.horizontal)
+                HeatMapToggle(isProUnlocked: model.isProUnlocked, heatMapEnabled: $heatMapEnabled) {
+                    requestProUpgrade(.calendarHeatMap)
+                }
+                .padding(.horizontal).padding(.bottom, 8)
+
+                CalendarGridView(
+                    displayedMonth: displayedMonth,
+                    selectedDate: $selectedDate,
+                    deliveries: filteredDeliveries,
+                    showsHeatMap: model.showsHeatMap(preferenceEnabled: heatMapEnabled)
+                )
+                .padding(.horizontal)
 
                 Divider().padding(.top, 16)
 
@@ -131,6 +143,37 @@ public struct DeliveryCalendarView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter.string(from: date)
+    }
+}
+
+/// Dots ↔ heat map switch. Locked (Stork Pro) users see the badge and reach the paywall.
+private struct HeatMapToggle: View {
+    let isProUnlocked: Bool
+    @Binding var heatMapEnabled: Bool
+    let onLockedTap: () -> Void
+
+    var body: some View {
+        HStack {
+            Label(String(localized: "Heat Map", bundle: .module), systemImage: "square.grid.3x3.fill")
+                .font(.subheadline)
+            if !isProUnlocked { ProBadge() }
+            Spacer()
+            if isProUnlocked {
+                Toggle(String(localized: "Heat Map", bundle: .module), isOn: $heatMapEnabled)
+                    .labelsHidden()
+                    .tint(.storkPurple)
+                    .onChange(of: heatMapEnabled) { _, _ in Haptics.lightImpact() }
+            } else {
+                Button {
+                    Haptics.lightImpact()
+                    onLockedTap()
+                } label: {
+                    Text("Unlock", bundle: .module).font(.subheadline.weight(.semibold))
+                }
+                .buttonStyle(.bordered)
+                .tint(.storkPurple)
+            }
+        }
     }
 }
 
