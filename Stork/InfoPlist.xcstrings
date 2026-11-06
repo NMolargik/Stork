@@ -1,278 +1,249 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "Babies This Week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bebés esta semana"
+  "sourceLanguage": "en",
+  "strings": {
+    "Babies This Week": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bebés esta semana"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bébés cette semaine"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bébés cette semaine"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今週の赤ちゃん"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今週の赤ちゃん"
           }
         }
       }
     },
-    "Calendar" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendario"
+    "CFBundleDisplayName": {
+      "comment": "Bundle display name",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendrier"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カレンダー"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
           }
         }
       }
     },
-    "CFBundleDisplayName" : {
-      "comment" : "Bundle display name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork"
           }
         }
       }
     },
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
+    "Calendar": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendario"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendrier"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カレンダー"
           }
         }
       }
     },
-    "New Delivery" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nuevo parto"
+    "NSHealthShareUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork reads your health data just to display your step count for the day."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nouvel accouchement"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork lee tus datos de salud solo para mostrar tu conteo de pasos del día."
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新規分娩"
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork lit vos données de santé uniquement pour afficher votre nombre de pas de la journée."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは今日の歩数を表示する目的でのみヘルスケアデータを読み取ります。"
           }
         }
       }
     },
-    "NSHealthShareUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork reads your health data just to display your step count for the day."
+    "NSHealthUpdateUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork reads your daily step count to display a pedometer."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork lee tus datos de salud solo para mostrar tu conteo de pasos del día."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork lee tu conteo diario de pasos para mostrar un podómetro."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork lit vos données de santé uniquement pour afficher votre nombre de pas de la journée."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork lit votre nombre de pas quotidien pour afficher un podomètre."
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Storkは今日の歩数を表示する目的でのみヘルスケアデータを読み取ります。"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは歩数計を表示するために毎日の歩数を読み取ります。"
           }
         }
       }
     },
-    "NSHealthUpdateUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork reads your daily step count to display a pedometer."
+    "NSLocationWhenInUseUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork uses your location once, only when you choose to attach a weather snapshot to a delivery. Your location is never stored."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork lee tu conteo diario de pasos para mostrar un podómetro."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork usa tu ubicación una sola vez, solo cuando eliges adjuntar una captura del clima a un parto. Tu ubicación nunca se guarda."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork lit votre nombre de pas quotidien pour afficher un podomètre."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork utilise votre position une seule fois, uniquement lorsque vous choisissez de joindre un aperçu météo à un accouchement. Votre position n’est jamais enregistrée."
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Storkは歩数計を表示するために毎日の歩数を読み取ります。"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは、分娩に天気のスナップショットを添付することを選んだときにのみ、一度だけ位置情報を使用します。位置情報は保存されません。"
           }
         }
       }
     },
-    "NSLocationAlwaysAndWhenInUseUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork uses your location to show local weather conditions."
+    "NSWeatherUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork fetches the current weather only when you choose to attach a weather snapshot to a delivery."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork usa tu ubicación para mostrar las condiciones del clima locales."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork obtiene el clima actual solo cuando eliges adjuntar una captura del clima a un parto."
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork utilise votre position pour afficher les conditions météo locales."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork récupère la météo actuelle uniquement lorsque vous choisissez de joindre un aperçu météo à un accouchement."
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Storkは現地の天気を表示するために位置情報を使用します。"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは、分娩に天気のスナップショットを添付することを選んだときにのみ、現在の天気を取得します。"
           }
         }
       }
     },
-    "NSLocationWhenInUseUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork uses your location to show local weather conditions."
+    "New Delivery": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuevo parto"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork usa tu ubicación para mostrar las condiciones del clima locales."
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouvel accouchement"
           }
         },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork utilise votre position pour afficher les conditions météo locales."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Storkは現地の天気を表示するために位置情報を使用します。"
-          }
-        }
-      }
-    },
-    "NSWeatherUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork uses weather data to show you current weather conditions."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork usa datos meteorológicos para mostrarte las condiciones del clima actuales."
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stork utilise les données météo pour vous montrer les conditions météorologiques actuelles."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Storkは現在の天気を表示するために天気データを使用します。"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新規分娩"
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Stork is an app for labor & delivery nurses to track the deliveries they perform while staying HIPAA-conscious (no patient-identifying data, no hospital/location correlation). SwiftUI + SwiftData with iCloud/CloudKit private-database sync.
 
+**Business model (3.0+):** free download with a one-time **Stork Pro** unlock (`com.nickmolargik.stork.pro.lifetime`, non-consumable, Family Sharing). Free forever: logging deliveries (every field, any past date), basic stat cards, the marble jar, calendar, Watch app, basic Home Screen widgets, Spotlight, Siri. Pro: career milestone share cards, PDF/CSV export, insight cards, calendar heat map, alternate app icons, weather-at-delivery, Lock Screen + interactive widgets. **Data is never locked.** Pre-3.0 buyers are grandfathered (see Stork Pro below).
+
 The app is a **thin app target on top of an SPM umbrella package** (`Packages/Stork`) of layered, single-responsibility modules — clean architecture in the style of StreetIQ's SCOUT. Dependencies point **inward**: features depend on the design system and core; data implements core's protocols; **core depends on nothing** (Foundation + SwiftData only).
 
 ## Build & Run
@@ -45,9 +47,9 @@ xcodebuild build -workspace Stork.xcworkspace -scheme Stork \
    │ StorkFeature*    │   │ StorkServices   │   │ StorkData      │
    │ Deliveries ·     │   │ Weather/Location│   │ Default*Repo · │
    │ Dashboard ·      │   │ /Health managers│   │ StorkStore     │
-   │ Onboarding ·     │   │ + their seams   │   │ (CloudKit) ·   │
-   │ Settings · Export│   └────────┬────────┘   │ seam impls ·   │
-   │ (views + VMs)    │            │            │ CloudSync      │
+   │ Onboarding ·     │   │ + StoreManager  │   │ (CloudKit) ·   │
+   │ Settings · Export│   │ + their seams   │   │ seam impls ·   │
+   │ · Pro (paywall)  │   └────────┬────────┘   │ CloudSync      │
    └───┬──────────┬───┘            │            └───────┬────────┘
        │ uses     │ uses           │ implements         │ implements
    ┌───▼──────┐ ┌─▼────────────────▼────────────────────▼───────┐
@@ -74,13 +76,22 @@ xcodebuild build -workspace Stork.xcworkspace -scheme Stork \
 `DefaultDeliveryRepository` (owns the `ModelContext`; runs every save's side effects in one place — app-group fallback counts, widget refresh, Spotlight reindex, review-at-5th — and returns a crossed `MilestoneCelebration`), `DefaultTagRepository`, `StorkStore.makeContainer(inMemory:)` (CloudKit private DB; container id `iCloud.com.molargiksoftware.Stork`), seam impls (`WidgetCenterReloader`, `AppStoreReviewRequester`), `CloudSyncManager`.
 
 ### StorkServices (system-framework managers, depend on Core)
-`WeatherManager` (1/hour cooldown), `LocationManager`, `HealthManager` (gated `#if canImport(HealthKit) && !os(visionOS)`), their seams (`WeatherProviding`, `LocationProviding`, `StepCountReading`), weather/location errors, `WeatherCondition` styling. `CloudSyncManager` also lives here.
+`WeatherManager` (1/hour cooldown; conforms to Core's `DeliveryWeatherCapturing` — the **only** caller of location), `LocationManager` (one-shot, when-in-use only — never continuous updates or Always), `HealthManager` (gated `#if canImport(HealthKit) && !os(visionOS)`), `StoreManager` (StoreKit 2, see Stork Pro), their seams (`WeatherProviding`, `LocationProviding`, `StepCountReading`), weather/location errors, `WeatherCondition` styling. `CloudSyncManager` also lives here.
+
+### Stork Pro (entitlements)
+- **Core**: `EntitlementProviding` seam (`isProUnlocked`), `ProFeature` catalog + `StorkProProduct.id`, `DashboardCard.requiresPro`, `GrandfatherPolicy`/`VersionNumber` (pure), `MilestoneShareReviewPolicy`, `DeliveryDateRule`, `DeliveryWeather` (+ three optional columns on `Delivery`).
+- **Services**: `StoreManager: EntitlementProviding` — purchase/restore, `Transaction.updates`, caches the verdict in `UserDefaults`, mirrors `isProUnlocked` into the app group (`SharedDefaultsKey.isProUnlocked`) for the widget extension, runs the grandfather check once via `AppTransaction`.
+- **Grandfathering**: `originalAppVersion` on iOS is the *build number*. Paid-era builds were < 300; 3.0 ships as build **300** and every later build must stay ≥ 300. Only `environment == .production` qualifies (sandbox/TestFlight report placeholders). One-time thank-you sheet (`GrandfatherThankYouView`).
+- **Gating pattern**: every feature view model takes `entitlement: any EntitlementProviding` (tests use a fake) and exposes `isProUnlocked`/`isLocked(...)`. Views mark locked controls with `ProBadge`/`ProLockIcon`/`.proLocked(_:feature:)` (DesignSystem) and call `@Environment(\.requestProUpgrade)` — the composition root (`MainView`) presents `StorkProPaywallView` (StorkFeaturePro) from its stable root. Never present the paywall from inside a list row or tab accessory.
+- **Widgets** read the app-group flag; Lock Screen + Quick Start widgets render `ProLockedWidgetView` (links `stork://pro`) when locked.
+- **Review prompts**: 5th delivery (repository) and the first completed milestone-card share (`MilestoneShareReviewPolicy`, fed by `ShareSheet`'s completion). No others.
+- Local testing: `Stork/Configuration.storekit` is attached to the `Stork` scheme.
 
 ### StorkDesignSystem (depends on Core)
 Brand colors (`storkBlue`/`storkPink`/`storkPurple`/`storkOrange`, defined in code on `ShapeStyle where Self == Color` so they work as both `Color` and in `.foregroundStyle`/`.fill`/`.tint`); `DeliveryMethod.accentColor`, `Sex.color`, `DeliveryTag.color`, `Color(hex:)`; `AdaptiveGlassModifier`, `Haptics`, the toast stack (`ToastManager`/`ToastItem`/`ToastView`/`.toastContainer()`), animated stat views, `DetailRowView`, `TagChipView`/`FlowLayout`, `SparkleText`, shared view modifiers.
 
 ### StorkFeature* (one per area, depend on Core + DesignSystem [+ Services])
-`Deliveries`, `Dashboard` (cards + SpriteKit Jar + Calendar), `Onboarding`, `Settings`, `Export`. Each screen is a `#if os(iOS)` SwiftUI view backed by a **cross-platform `@Observable` view model** that depends on use-case *protocols* — never SwiftData, `@Query`, or `modelContext` directly. View files are iOS-gated so host `swift test` runs simulator-free; view models stay cross-platform.
+`Deliveries`, `Dashboard` (cards + SpriteKit Jar + Calendar), `Onboarding`, `Settings`, `Export`, `Pro` (paywall + grandfather thank-you; depends on Services for `StoreManager`). Each screen is a `#if os(iOS)` SwiftUI view backed by a **cross-platform `@Observable` view model** that depends on use-case *protocols* — never SwiftData, `@Query`, or `modelContext` directly. View files are iOS-gated so host `swift test` runs simulator-free; view models stay cross-platform.
 
 ### StorkComposition (top of graph — the composition root)
 `SessionController` (`@MainActor @Observable`) builds the whole dependency graph in `init` (container → repositories → use-cases → managers → cloud sync) and vends per-screen view models via `make…Model()` factories. `RootView` (splash → onboarding → main) and `MainView` (the one adaptive `TabView`) live here, plus the bottom-accessory pills. App-specific seams that need app-target types (the Spotlight indexer) are injected in.
@@ -120,7 +131,8 @@ Brand colors (`storkBlue`/`storkPink`/`storkPurple`/`storkOrange`, defined in co
 
 ## Gotchas
 - All iPhone orientations enabled; keep layouts flexible (iOS 27 dynamic resizing). Don't reference `UIScreen.main` — use `onScrollVisibilityChange` / GeometryReader.
-- WeatherKit calls cooled to 1/hour (`WeatherManager.refreshCooldownInterval`) — don't add extra refresh triggers.
+- WeatherKit calls cooled to 1/hour (`WeatherManager.refreshCooldownInterval`) — don't add extra refresh triggers. Weather (and therefore location) is fetched **only** when a Pro user taps "Add Weather Snapshot" in the delivery form; there is no launch-time weather, no onboarding location page, no `location` background mode, and no `NSLocationAlwaysAndWhenInUseUsageDescription`. Keep it that way — the privacy nutrition label says location is not linked and not used in the background.
+- Deliveries can be dated any time in the past (`DeliveryDateRule`): no lower bound, upper bound = the moment the form opened.
 - The hospital feature was deliberately removed for privacy (HIPAA). Don't reintroduce facility tracking.
 - Weeks are Sunday–Saturday on a pinned `en_US_POSIX` calendar (`WeekMath.sundayFirstCalendar`) — locale-default calendars break widget/app agreement.
 - Widget + watch targets `import` package products (no more `membershipExceptions` for shared code). If a target needs another module, add it to that target's `packageProductDependencies` in `project.pbxproj`.

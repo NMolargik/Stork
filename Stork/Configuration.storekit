@@ -1,0 +1,81 @@
+{
+  "identifier": "C6289A26-D48F-4E3B-8800-3ECA9C2BD62B",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "4.99",
+      "familyShareable": true,
+      "internalID": "FB383A72-DC8A-40B5-9915-B29021648471",
+      "localizations": [
+        {
+          "description": "Milestone share cards, PDF & CSV export, insight cards, calendar heat map, alternate icons, weather at delivery, and Lock Screen & interactive widgets. One-time purchase.",
+          "displayName": "Stork Pro",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.nickmolargik.stork.pro.lifetime",
+      "referenceName": "Stork Pro (Lifetime)",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_applicationInternalID": "",
+    "_developerTeamID": "R8Q8DM58C6",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": 0,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": [
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Load Products"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Purchase"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Verification"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "App Store Sync"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Subscription Status"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "App Transaction"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Manage Subscriptions Sheet"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Refund Request Sheet"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}

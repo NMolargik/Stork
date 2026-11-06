@@ -14,7 +14,7 @@
 		</dict>
 	</array>
 	<key>NSWeatherUsageDescription</key>
-	<string>Stork uses weather data to show you current weather conditions.</string>
+	<string>Stork fetches the current weather only when you choose to attach a weather snapshot to a delivery.</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -44,9 +44,7 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>location</string>
 		<string>remote-notification</string>
-		<string>fetch</string>
 	</array>
 </dict>
 </plist>

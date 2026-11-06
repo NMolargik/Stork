@@ -34,7 +34,7 @@ Stork helps nurses, midwives, and obstetricians track deliveries with comprehens
 - **iCloud Sync**: Seamless multi-device synchronization via CloudKit
 - **Siri & Shortcuts**: App Intents to log a delivery, check babies-this-week, and review career totals — plus `stork://` deep links and Spotlight indexing
 - **HealthKit**: Step count tracking during shifts
-- **WeatherKit**: Weather conditions at time of delivery
+- **WeatherKit**: Optional weather snapshot attached when logging a delivery (Stork Pro; location requested only at that moment)
 - **Widgets**: Home screen and lock screen widgets for quick stats
 - **Apple Watch**: Companion app for quick entry and today's stats
 - **Localization**: English, Spanish, French (Canada), and Japanese
@@ -60,7 +60,8 @@ Enable these in your Xcode project:
 - HealthKit (including background delivery)
 - App Groups
 - WeatherKit
-- Background Modes (location, remote notifications, fetch)
+- Background Modes (remote notifications — CloudKit sync)
+- In-App Purchase: Stork Pro one-time unlock (`com.nickmolargik.stork.pro.lifetime`, Family Sharing)
 
 ## Architecture
 
