@@ -287,6 +287,28 @@
         }
       }
     },
+    "Locked. Open Stork to unlock.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado. Abre Stork para desbloquear."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verrouillé. Ouvrez Stork pour déverrouiller."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック中。Storkを開いてロック解除してください。"
+          }
+        }
+      }
+    },
     "New": {
       "localizations": {
         "es": {
@@ -397,6 +419,28 @@
         }
       }
     },
+    "Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Pro"
+          }
+        }
+      }
+    },
     "This Week": {
       "localizations": {
         "es": {
@@ -437,6 +481,72 @@
           "stringUnit": {
             "state": "translated",
             "value": "今日"
+          }
+        }
+      }
+    },
+    "Unlock Lock Screen widgets": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquea los widgets de la pantalla de bloqueo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouillez les widgets de l’écran verrouillé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面ウィジェットをロック解除"
+          }
+        }
+      }
+    },
+    "Unlock Stork Pro": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear Stork Pro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouiller Stork Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork Proをロック解除"
+          }
+        }
+      }
+    },
+    "Unlock interactive widgets in Stork": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquea los widgets interactivos en Stork"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouillez les widgets interactifs dans Stork"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkでインタラクティブウィジェットをロック解除"
           }
         }
       }

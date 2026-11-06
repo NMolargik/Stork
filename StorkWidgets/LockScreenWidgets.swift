@@ -16,6 +16,8 @@ struct LockScreenEntry: TimelineEntry {
     let weeklyBabies: Int
     let todayBabies: Int
     let careerTotal: Int
+    /// Lock Screen widgets are Stork Pro; placeholders always render unlocked.
+    var isProUnlocked: Bool = true
 }
 
 // MARK: - Lock Screen Provider
@@ -82,10 +84,11 @@ struct LockScreenProvider: TimelineProvider {
                 date: now,
                 weeklyBabies: weeklyBabies,
                 todayBabies: todayBabies,
-                careerTotal: careerTotal
+                careerTotal: careerTotal,
+                isProUnlocked: isProUnlocked()
             )
         } catch {
-            return LockScreenEntry(date: Date(), weeklyBabies: 0, todayBabies: 0, careerTotal: 0)
+            return LockScreenEntry(date: Date(), weeklyBabies: 0, todayBabies: 0, careerTotal: 0, isProUnlocked: isProUnlocked())
         }
     }
 }
@@ -193,6 +196,15 @@ struct LockScreenWidgetEntryView: View {
     let entry: LockScreenEntry
 
     var body: some View {
+        if !entry.isProUnlocked {
+            ProLockedWidgetView()
+        } else {
+            unlocked
+        }
+    }
+
+    @ViewBuilder
+    private var unlocked: some View {
         switch family {
         case .accessoryCircular:
             CircularLockScreenView(entry: entry)
@@ -228,6 +240,15 @@ struct CareerTotalLockScreenEntryView: View {
     let entry: LockScreenEntry
 
     var body: some View {
+        if !entry.isProUnlocked {
+            ProLockedWidgetView()
+        } else {
+            unlocked
+        }
+    }
+
+    @ViewBuilder
+    private var unlocked: some View {
         switch family {
         case .accessoryCircular:
             CareerCircularView(entry: entry)

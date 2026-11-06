@@ -42,6 +42,54 @@ func readBabiesCountFallback() -> Int {
     return max(defaults.integer(forKey: SharedDefaultsKey.babiesThisWeekCount), 0)
 }
 
+// MARK: - Stork Pro
+
+/// The app mirrors its StoreKit entitlement into the app group; the extension has no
+/// store session of its own. Lock Screen and interactive widgets are Pro; the basic Home
+/// Screen widgets (Babies This Week, Career Total) stay free.
+func isProUnlocked() -> Bool {
+    guard let defaults = UserDefaults(suiteName: AppGroup.id) else { return false }
+    return defaults.bool(forKey: SharedDefaultsKey.isProUnlocked)
+}
+
+/// What a locked Pro widget shows: a lock and a link into the paywall.
+struct ProLockedWidgetView: View {
+    @Environment(\.widgetFamily) private var family
+
+    var body: some View {
+        Group {
+            switch family {
+            case .accessoryCircular:
+                ZStack {
+                    AccessoryWidgetBackground()
+                    Image(systemName: "lock.fill").font(.title3)
+                }
+            case .accessoryInline:
+                Label("Unlock Stork Pro", systemImage: "lock.fill")
+            case .accessoryRectangular:
+                HStack(spacing: 8) {
+                    Image(systemName: "lock.fill").font(.title3)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Stork Pro").font(.headline)
+                        Text("Unlock Lock Screen widgets").font(.caption2).foregroundStyle(.secondary)
+                    }
+                }
+            default:
+                VStack(spacing: 8) {
+                    Image(systemName: "lock.fill").font(.title).foregroundStyle(.storkPurple)
+                    Text("Stork Pro").font(.headline)
+                    Text("Unlock interactive widgets in Stork").font(.caption2).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                }
+                .padding()
+            }
+        }
+        .widgetURL(URL(string: "stork://pro"))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Stork Pro")
+        .accessibilityValue("Locked. Open Stork to unlock.")
+    }
+}
+
 // MARK: - Timeline
 
 struct DeliveriesWeekEntry: TimelineEntry {

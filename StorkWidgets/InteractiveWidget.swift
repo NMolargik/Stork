@@ -17,6 +17,8 @@ struct InteractiveWidgetEntry: TimelineEntry {
     let todayBabies: Int
     let todayDeliveries: Int
     let weeklyBabies: Int
+    /// The interactive Quick Start widget is Stork Pro; placeholders always render unlocked.
+    var isProUnlocked: Bool = true
 }
 
 // MARK: - Interactive Widget Provider
@@ -77,10 +79,11 @@ struct InteractiveWidgetProvider: TimelineProvider {
                 date: now,
                 todayBabies: todayBabies,
                 todayDeliveries: todayDeliveries.count,
-                weeklyBabies: weeklyBabies
+                weeklyBabies: weeklyBabies,
+                isProUnlocked: isProUnlocked()
             )
         } catch {
-            return InteractiveWidgetEntry(date: Date(), todayBabies: 0, todayDeliveries: 0, weeklyBabies: 0)
+            return InteractiveWidgetEntry(date: Date(), todayBabies: 0, todayDeliveries: 0, weeklyBabies: 0, isProUnlocked: isProUnlocked())
         }
     }
 }
@@ -221,6 +224,15 @@ struct QuickStartWidgetEntryView: View {
     let entry: InteractiveWidgetEntry
 
     var body: some View {
+        if !entry.isProUnlocked {
+            ProLockedWidgetView()
+        } else {
+            unlocked
+        }
+    }
+
+    @ViewBuilder
+    private var unlocked: some View {
         switch family {
         case .systemSmall:
             InteractiveSmallView(entry: entry)
