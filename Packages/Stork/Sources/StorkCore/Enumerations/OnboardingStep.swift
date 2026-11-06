@@ -3,14 +3,14 @@
 //  StorkCore
 //
 //  The ordered onboarding pages. Step Count is skipped on visionOS (no HealthKit
-//  step source).
+//  step source). There is deliberately no location page: location is requested only
+//  when a Pro user attaches a weather snapshot while logging a delivery.
 //
 
 import Foundation
 
 nonisolated public enum OnboardingStep: CaseIterable, Sendable {
     case privacy
-    case location
     #if !os(visionOS)
     case health
     #endif
@@ -19,7 +19,6 @@ nonisolated public enum OnboardingStep: CaseIterable, Sendable {
     public var title: String {
         switch self {
         case .privacy: String(localized: "Your Privacy", bundle: .module)
-        case .location: String(localized: "Location", bundle: .module)
         #if !os(visionOS)
         case .health: String(localized: "Step Count", bundle: .module)
         #endif

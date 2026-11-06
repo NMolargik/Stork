@@ -18,6 +18,8 @@ nonisolated public enum SharedDefaultsKey {
     public static let babiesThisWeekCount = "babiesThisWeekCount"
     public static let careerTotalBabies = "careerTotalBabies"
     public static let careerTotalDeliveries = "careerTotalDeliveries"
+    /// Mirrors the Stork Pro entitlement for the widget extension (which has no StoreKit session).
+    public static let isProUnlocked = "isProUnlocked"
 }
 
 /// WidgetKit timeline kinds, shared so the app can request reloads by kind.

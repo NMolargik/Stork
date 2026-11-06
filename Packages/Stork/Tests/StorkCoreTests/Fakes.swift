@@ -20,3 +20,10 @@ final class FakeKeyValueStore: KeyValueStoring {
     func set(_ value: Bool, forKey defaultName: String) { storage[defaultName] = value }
     func set(_ value: Int, forKey defaultName: String) { storage[defaultName] = value }
 }
+
+/// Records review-prompt requests.
+@MainActor
+final class FakeReviewRequester: ReviewRequesting {
+    private(set) var requestCount = 0
+    func requestReview() { requestCount += 1 }
+}

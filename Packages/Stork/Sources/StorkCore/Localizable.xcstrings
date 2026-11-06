@@ -94,6 +94,28 @@
         }
       }
     },
+    "Alternate app icons": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iconos alternativos de la app"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icônes d’app alternatives"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "代替アプリアイコン"
+          }
+        }
+      }
+    },
     "Baby %lld: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -206,6 +228,28 @@
         }
       }
     },
+    "CSV export": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportación CSV"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportation CSV"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV書き出し"
+          }
+        }
+      }
+    },
     "Calendar": {
       "localizations": {
         "es": {
@@ -224,6 +268,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "カレンダー"
+          }
+        }
+      }
+    },
+    "Calendar heat map": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mapa de calor del calendario"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carte thermique du calendrier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カレンダーのヒートマップ"
+          }
+        }
+      }
+    },
+    "Career milestone share cards": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarjetas para compartir hitos de carrera"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cartes de partage des jalons de carrière"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャリアマイルストーンの共有カード"
           }
         }
       }
@@ -514,6 +602,50 @@
         }
       }
     },
+    "Insight cards": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarjetas de análisis"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cartes d’analyse"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インサイトカード"
+          }
+        }
+      }
+    },
+    "Interactive widgets": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets interactivos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets interactifs"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インタラクティブウィジェット"
+          }
+        }
+      }
+    },
     "Last Month": {
       "localizations": {
         "es": {
@@ -576,6 +708,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "位置情報"
+          }
+        }
+      }
+    },
+    "Lock Screen widgets": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets de la pantalla de bloqueo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets de l’écran verrouillé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面ウィジェット"
           }
         }
       }
@@ -686,6 +840,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "分娩ごとに1行"
+          }
+        }
+      }
+    },
+    "PDF reports": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informes PDF"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapports PDF"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFレポート"
           }
         }
       }
@@ -906,6 +1082,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "経腟"
+          }
+        }
+      }
+    },
+    "Weather at delivery": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clima en el parto"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Météo lors de l’accouchement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩時の天気"
           }
         }
       }

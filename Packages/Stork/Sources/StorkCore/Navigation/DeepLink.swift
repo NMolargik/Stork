@@ -16,6 +16,8 @@ nonisolated public enum DeepLink: Equatable, Sendable {
     case delivery(UUID)
     case calendar
     case settings
+    /// Opens the Stork Pro paywall (locked widgets link here).
+    case pro
 
     /// Parses a `stork://` URL. Returns `nil` for unrecognized URLs.
     public init?(url: URL) {
@@ -37,6 +39,8 @@ nonisolated public enum DeepLink: Equatable, Sendable {
             self = .calendar
         case "settings":
             self = .settings
+        case "pro":
+            self = .pro
         default:
             return nil
         }
@@ -48,7 +52,7 @@ nonisolated public enum DeepLink: Equatable, Sendable {
         case .newDelivery, .dashboard:        .dashboard
         case .deliveries, .weeklyDeliveries, .delivery:  .list
         case .calendar:                       .calendar
-        case .settings:                       .settings
+        case .settings, .pro:                 .settings
         }
     }
 }

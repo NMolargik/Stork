@@ -22,6 +22,12 @@ public final class Delivery {
     public var notes: String?
     @Relationship(inverse: \DeliveryTag.deliveries) public var tags: [DeliveryTag]?
 
+    // Optional weather snapshot (Stork Pro). Stored flat so CloudKit's lightweight
+    // migration adds three nullable columns; read/write through `weather`.
+    public var weatherTemperatureCelsius: Double?
+    public var weatherConditionName: String?
+    public var weatherSymbolName: String?
+
     public init(
         id: UUID = UUID(),
         date: Date,
@@ -40,6 +46,19 @@ public final class Delivery {
         self.epiduralUsed = epiduralUsed
         self.notes = notes
         self.tags = tags
+    }
+
+    /// The attached weather snapshot, if the delivery has one.
+    public var weather: DeliveryWeather? {
+        get {
+            guard let weatherTemperatureCelsius, let weatherConditionName, let weatherSymbolName else { return nil }
+            return DeliveryWeather(temperatureCelsius: weatherTemperatureCelsius, conditionName: weatherConditionName, symbolName: weatherSymbolName)
+        }
+        set {
+            weatherTemperatureCelsius = newValue?.temperatureCelsius
+            weatherConditionName = newValue?.conditionName
+            weatherSymbolName = newValue?.symbolName
+        }
     }
 }
 

@@ -14,4 +14,12 @@ nonisolated public enum AppStorageKeys {
     public static let useDayMonthYearDates = "useDayMonthYearDates"
     public static let selectedIconColor = "selectedIconColor"
     public static let dashboardCardOrder = "homeCardOrder"
+    public static let calendarHeatMapEnabled = "calendarHeatMapEnabled"
+
+    // Stork Pro entitlement cache (StoreManager). Cached so gating works offline and the
+    // grandfather check doesn't re-query the App Store receipt every launch.
+    public static let proPurchased = "StorkPro.isPurchased"
+    public static let proGrandfathered = "StorkPro.isGrandfathered"
+    public static let proGrandfatherChecked = "StorkPro.didCheckGrandfather"
+    public static let proGrandfatherThankYouShown = "StorkPro.didShowGrandfatherThankYou"
 }
