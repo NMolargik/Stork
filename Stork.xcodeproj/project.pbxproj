@@ -901,6 +901,7 @@
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StorkWidgets/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = StorkWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -938,6 +939,7 @@
 				DEVELOPMENT_TEAM = R8Q8DM58C6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StorkWidgets/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = StorkWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -977,6 +979,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "StorkWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
@@ -1015,6 +1018,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "StorkWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
