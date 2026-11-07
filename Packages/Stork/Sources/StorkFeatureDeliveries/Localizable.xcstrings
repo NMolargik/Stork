@@ -1464,6 +1464,50 @@
         }
       }
     },
+    "My Role": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi función"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon rôle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分の役割"
+          }
+        }
+      }
+    },
+    "My role at this birth": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi función en este parto"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon rôle lors de cet accouchement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この分娩での自分の役割"
+          }
+        }
+      }
+    },
     "NICU": {
       "localizations": {
         "es": {
@@ -1636,6 +1680,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "現在のフィルターに一致する分娩はありません。"
+          }
+        }
+      }
+    },
+    "Not recorded": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin registrar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non indiqué"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未記録"
           }
         }
       }
@@ -1856,6 +1922,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "リセット"
+          }
+        }
+      }
+    },
+    "Role": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Función"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rôle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "役割"
           }
         }
       }

@@ -47,7 +47,9 @@ public final class PDFReportGenerator {
             y = drawSummaryStats(config: configuration, yPosition: y); progressCallback?(0.4)
             y = drawDeliveryMethodSection(config: configuration, yPosition: y); progressCallback?(0.6)
             if y > pageHeight - 250 { context.beginPage(); y = margin }
-            _ = drawSexDistributionSection(config: configuration, yPosition: y); progressCallback?(0.8)
+            y = drawSexDistributionSection(config: configuration, yPosition: y); progressCallback?(0.7)
+            if y > pageHeight - 200 { context.beginPage(); y = margin }
+            _ = drawRoleSection(config: configuration, yPosition: y); progressCallback?(0.8)
             drawFooter(yPosition: pageHeight - margin); progressCallback?(1.0)
         }
     }
@@ -143,6 +145,19 @@ public final class PDFReportGenerator {
             let percent = Double(count) / Double(total) * 100
             UIBezierPath(ovalIn: CGRect(x: margin, y: y + 2, width: 10, height: 10)).fill(with: color)
             "\(name): \(count) (\(String(format: "%.1f", percent))%)".draw(at: CGPoint(x: margin + 16, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
+            y += 18
+        }
+        return y + 16
+    }
+
+    private func drawRoleSection(config: Configuration, yPosition: CGFloat) -> CGFloat {
+        let stats = DeliveryStatistics.roleBreakdown(deliveries: config.deliveries)
+        guard !stats.isEmpty else { return yPosition }
+        var y = yPosition
+        "My Role".draw(at: CGPoint(x: margin, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 18, weight: .semibold), .foregroundColor: UIColor.black])
+        y += 28
+        for stat in stats {
+            "\(stat.role.displayName): \(stat.deliveries) deliveries, \(stat.babies) babies".draw(at: CGPoint(x: margin + 16, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
             y += 18
         }
         return y + 16

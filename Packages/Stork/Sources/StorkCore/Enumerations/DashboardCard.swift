@@ -19,6 +19,7 @@ nonisolated public enum DashboardCard: String, CaseIterable, Codable, Identifiab
     case dayOfWeek
     case yearOverYear
     case personalBests
+    case roleBreakdown
 
     public var id: String { rawValue }
 
@@ -33,6 +34,7 @@ nonisolated public enum DashboardCard: String, CaseIterable, Codable, Identifiab
         case .dayOfWeek: String(localized: "Day of Week", bundle: .module)
         case .yearOverYear: String(localized: "Year Over Year", bundle: .module)
         case .personalBests: String(localized: "Personal Bests", bundle: .module)
+        case .roleBreakdown: String(localized: "My Role", bundle: .module)
         }
     }
 
@@ -47,6 +49,7 @@ nonisolated public enum DashboardCard: String, CaseIterable, Codable, Identifiab
         case .dayOfWeek: "calendar"
         case .yearOverYear: "chart.line.uptrend.xyaxis"
         case .personalBests: "trophy"
+        case .roleBreakdown: "person.2.badge.gearshape"
         }
     }
 

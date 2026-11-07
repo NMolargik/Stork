@@ -45,10 +45,10 @@ public final class CSVExporter {
     private func headers(for format: CSVRowFormat) -> String {
         switch format {
         case .perDelivery:
-            ["delivery_id", "date", "delivery_method", "epidural_used", "baby_count"].joined(separator: ",")
+            ["delivery_id", "date", "delivery_method", "epidural_used", "baby_count", "role"].joined(separator: ",")
         case .perBaby:
             ["delivery_id", "delivery_date", "delivery_method", "epidural_used", "baby_id", "baby_birthday",
-             "sex", "weight", "weight_unit", "height", "height_unit", "nurse_catch", "nicu_stay"].joined(separator: ",")
+             "sex", "weight", "weight_unit", "height", "height_unit", "nurse_catch", "nicu_stay", "role"].joined(separator: ",")
         }
     }
 
@@ -70,6 +70,7 @@ public final class CSVExporter {
             delivery.deliveryMethod.rawValue,
             delivery.epiduralUsed ? "true" : "false",
             String(delivery.babyCount),
+            delivery.role?.rawValue ?? "",
         ].map(escapeCSV).joined(separator: ",")
     }
 
@@ -79,7 +80,7 @@ public final class CSVExporter {
             dateFormatter.string(from: delivery.date),
             delivery.deliveryMethod.rawValue,
             delivery.epiduralUsed ? "true" : "false",
-        ] + Array(repeating: "", count: 9)).map(escapeCSV).joined(separator: ",")
+        ] + Array(repeating: "", count: 9) + [delivery.role?.rawValue ?? ""]).map(escapeCSV).joined(separator: ",")
     }
 
     private func babyRow(delivery: Delivery, baby: Baby, useMetric: Bool) -> String {
@@ -101,6 +102,7 @@ public final class CSVExporter {
             heightUnit,
             baby.nurseCatch ? "true" : "false",
             baby.nicuStay ? "true" : "false",
+            delivery.role?.rawValue ?? "",
         ].map(escapeCSV).joined(separator: ",")
     }
 

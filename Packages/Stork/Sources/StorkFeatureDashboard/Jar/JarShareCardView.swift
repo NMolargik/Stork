@@ -53,7 +53,7 @@ struct JarShareCardView: View {
 
             HStack {
                 // Remembrance is deliberately outside this number.
-                Text("\(summary.delivered) babies delivered", bundle: .module).font(.subheadline.weight(.semibold))
+                Text("Babies delivered: \(summary.delivered)", bundle: .module).font(.subheadline.weight(.semibold))
                 Spacer()
                 Image("storkicon").resizable().scaledToFit().frame(width: 20, height: 20)
             }
@@ -73,7 +73,7 @@ struct JarShareCardView: View {
             Circle().fill(category.color).frame(width: 10, height: 10)
             Text(category.displayName).font(.caption)
             Spacer()
-            Text("\(count)").font(.caption.weight(.semibold)).monospacedDigit()
+            Text(verbatim: "\(count)").font(.caption.weight(.semibold)).monospacedDigit()
         }
     }
 

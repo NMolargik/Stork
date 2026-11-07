@@ -39,7 +39,7 @@ struct CSVExporterTests {
     func perDeliveryRows() throws {
         let lines = try export([makeDelivery(), makeDelivery()], format: .perDelivery)
         #expect(lines.count == 3)
-        #expect(lines[0] == "delivery_id,date,delivery_method,epidural_used,baby_count")
+        #expect(lines[0] == "delivery_id,date,delivery_method,epidural_used,baby_count,role")
         #expect(lines[1].contains("vaginal"))
         #expect(lines[1].contains("true"))
     }
@@ -56,6 +56,18 @@ struct CSVExporterTests {
     func perBabyNoBabies() throws {
         let lines = try export([makeDelivery()], format: .perBaby)
         #expect(lines.count == 2)
+    }
+
+    @Test("Role is exported in both row formats, empty when unrecorded")
+    func roleColumn() throws {
+        let d = makeDelivery(babies: [Baby(sex: .male)])
+        d.role = .chargeNurse
+        #expect(try export([d], format: .perDelivery)[1].hasSuffix(",chargeNurse"))
+        #expect(try export([d], format: .perBaby)[1].hasSuffix(",chargeNurse"))
+        let none = makeDelivery()
+        #expect(try export([none], format: .perDelivery)[1].hasSuffix(","))
+        let header = try export([none], format: .perBaby)[0].components(separatedBy: ",").count
+        #expect(try export([none], format: .perBaby)[1].components(separatedBy: ",").count == header)
     }
 
     @Test("Metric export converts weight to grams and height to centimeters")

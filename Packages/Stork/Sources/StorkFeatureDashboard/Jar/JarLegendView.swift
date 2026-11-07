@@ -79,7 +79,7 @@ struct JarLegendView: View {
             HStack(spacing: 6) {
                 Circle().fill(category.color).frame(width: 10, height: 10)
                 Text(category.displayName).font(.footnote)
-                Text("\(count)").font(.footnote.weight(.semibold)).monospacedDigit()
+                Text(verbatim: "\(count)").font(.footnote.weight(.semibold)).monospacedDigit()
             }
             .padding(.horizontal, 10).padding(.vertical, 6)
             .background(Capsule().fill(isSelected ? category.color.opacity(0.25) : Color.secondary.opacity(0.12)))

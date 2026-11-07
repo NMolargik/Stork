@@ -133,6 +133,7 @@ public struct DashboardView: View {
             case .dayOfWeek: DayOfWeekCard(deliveries: deliveries)
             case .yearOverYear: YearOverYearCard(deliveries: deliveries)
             case .personalBests: PersonalBestsCard(deliveries: deliveries)
+            case .roleBreakdown: RoleBreakdownCard(deliveries: deliveries)
             }
         }
     }
