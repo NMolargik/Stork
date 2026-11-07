@@ -18,7 +18,7 @@ struct YearOverYearCard: View {
                 if stats.currentYearDeliveries > 0 || stats.previousYearDeliveries > 0 {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(stats.currentYear)", bundle: .module).font(.caption).foregroundStyle(.secondary)
+                            Text(verbatim: String(stats.currentYear)).font(.caption).foregroundStyle(.secondary)
                             HStack(alignment: .firstTextBaseline, spacing: 4) {
                                 Text("\(stats.currentYearDeliveries)", bundle: .module).font(.title.bold()).foregroundStyle(.storkBlue)
                                 Text("deliveries", bundle: .module).font(.caption).foregroundStyle(.secondary)
@@ -39,7 +39,7 @@ struct YearOverYearCard: View {
                             if let growth = stats.deliveryGrowth { GrowthIndicator(label: String(localized: "Deliveries", bundle: .module), growth: growth) }
                             if let growth = stats.babyGrowth { GrowthIndicator(label: String(localized: "Babies", bundle: .module), growth: growth) }
                         }
-                        Text("vs \(stats.currentYear - 1): \(stats.previousYearDeliveries) deliveries, \(stats.previousYearBabies) babies", bundle: .module)
+                        Text("vs \(String(stats.currentYear - 1)): \(stats.previousYearDeliveries) deliveries, \(stats.previousYearBabies) babies", bundle: .module)
                             .font(.caption).foregroundStyle(.tertiary)
                     }
 
@@ -49,7 +49,7 @@ struct YearOverYearCard: View {
                             Text("History", bundle: .module).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
                             ForEach(stats.yearlyData.dropFirst().prefix(3), id: \.year) { yearData in
                                 HStack {
-                                    Text("\(yearData.year)", bundle: .module).font(.caption).foregroundStyle(.secondary).frame(width: 50, alignment: .leading)
+                                    Text(verbatim: String(yearData.year)).font(.caption).foregroundStyle(.secondary).frame(width: 50, alignment: .leading)
                                     Text("\(yearData.deliveries) deliveries", bundle: .module).font(.caption)
                                     Spacer()
                                     Text("\(yearData.babies) babies", bundle: .module).font(.caption).foregroundStyle(.secondary)

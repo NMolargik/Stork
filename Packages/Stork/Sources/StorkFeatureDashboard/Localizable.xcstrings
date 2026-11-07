@@ -2589,24 +2589,24 @@
         }
       }
     },
-    "vs %lld: %lld deliveries, %lld babies": {
+    "vs %@: %lld deliveries, %lld babies": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "vs %lld: %lld partos, %lld bebés"
+            "value": "vs %@: %lld partos, %lld bebés"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "vs %lld : %lld accouchements, %lld bébés"
+            "value": "vs %@ : %lld accouchements, %lld bébés"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "vs %lld：分娩%lld件、赤ちゃん%lld人"
+            "value": "vs %@：分娩%lld件、赤ちゃん%lld人"
           }
         }
       }
