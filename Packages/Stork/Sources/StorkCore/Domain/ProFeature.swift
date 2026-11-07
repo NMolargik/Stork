@@ -63,7 +63,7 @@ public extension DashboardCard {
     /// Insight cards (trends and records) are Pro; the basic count cards stay free.
     var requiresPro: Bool {
         switch self {
-        case .deliveryMethod, .epiduralNicu, .babyCount, .sexDistribution: false
+        case .deliveryMethod, .epiduralNicu, .babyCount, .sexDistribution, .roleBreakdown: false
         case .babyMeasurements, .timeOfDay, .dayOfWeek, .yearOverYear, .personalBests: true
         }
     }

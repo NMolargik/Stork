@@ -269,6 +269,28 @@
         }
       }
     },
+    "Choose which roles count toward your headline birth total. Deliveries with no role recorded always count. Every delivery stays in your history either way.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige qué funciones cuentan en tu total principal de partos. Los partos sin función registrada siempre cuentan. Todos los partos permanecen en tu historial."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez les rôles comptés dans votre total d’accouchements. Les accouchements sans rôle indiqué sont toujours comptés. Chaque accouchement reste dans votre historique."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メインの分娩総数に含める役割を選びます。役割が未記録の分娩は常にカウントされます。どの分娩も履歴には残ります。"
+          }
+        }
+      }
+    },
     "Content": {
       "extractionState": "manual",
       "localizations": {
@@ -597,6 +619,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "発行元"
+          }
+        }
+      }
+    },
+    "Roles Counted in Totals": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funciones incluidas en los totales"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rôles comptés dans les totaux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合計に含める役割"
           }
         }
       }

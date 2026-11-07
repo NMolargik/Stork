@@ -134,6 +134,58 @@ public enum DeliveryStatistics {
         return (boy, girl, loss)
     }
 
+    /// One marble per baby delivered in the month containing `date`. Babies of a multiple
+    /// birth share a `linkID`.
+    public static func jarMarbles(
+        deliveries: [Delivery],
+        asOf date: Date = .now,
+        calendar: Calendar = .current
+    ) -> [JarMarble] {
+        let startOfMonth = WeekMath.startOfMonth(for: date, calendar: calendar)
+        let endExclusive = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? date
+        var marbles: [JarMarble] = []
+        for delivery in deliveries where delivery.date >= startOfMonth && delivery.date < endExclusive {
+            let babies = delivery.babies ?? []
+            let link: UUID? = babies.count > 1 ? delivery.id : nil
+            for baby in babies {
+                marbles.append(JarMarble(
+                    id: baby.id,
+                    category: JarMarble.category(sex: baby.sex, nurseCatch: baby.nurseCatch),
+                    isCSection: delivery.deliveryMethod == .cSection,
+                    linkID: link,
+                    sex: baby.sex,
+                    nurseCatch: baby.nurseCatch
+                ))
+            }
+        }
+        return marbles
+    }
+
+    // MARK: - Roles
+
+    public struct RoleStat: Identifiable, Equatable, Sendable {
+        public let role: BirthRole
+        public let deliveries: Int
+        public let babies: Int
+        public var id: BirthRole { role }
+    }
+
+    /// Per-role delivery and baby counts (roles with no deliveries omitted), most first.
+    public static func roleBreakdown(deliveries: [Delivery]) -> [RoleStat] {
+        BirthRole.allCases.compactMap { role in
+            let matching = deliveries.filter { $0.role == role }
+            guard !matching.isEmpty else { return nil }
+            return RoleStat(role: role, deliveries: matching.count, babies: matching.reduce(0) { $0 + $1.babyCount })
+        }
+        .sorted { $0.deliveries > $1.deliveries }
+    }
+
+    /// Headline totals honoring the user's role-counting setting. Deliveries with no
+    /// recorded role always count.
+    public static func totals(deliveries: [Delivery], counting: BirthRoleCounting) -> (deliveries: Int, babies: Int) {
+        totals(deliveries: deliveries.filter { counting.counts($0.role) })
+    }
+
     // MARK: - Method / epidural / NICU
 
     public static func deliveryMethodStats(deliveries: [Delivery]) -> DeliveryMethodStats {

@@ -34,6 +34,13 @@ struct DeliveryRowView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                     Spacer()
+                    if let roleName = model.roleName {
+                        Text(roleName)
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 8).padding(.vertical, 3)
+                            .background(Capsule().fill(.white.opacity(0.25)))
+                    }
                 }
 
                 HStack {

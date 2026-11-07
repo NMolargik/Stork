@@ -11,7 +11,16 @@ import StorkDesignSystem
 
 struct BabyCountCard: View {
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    let deliveries: [Delivery]
+    let allDeliveries: [Delivery]
+    @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
+
+    init(deliveries: [Delivery]) { allDeliveries = deliveries }
+
+    /// Deliveries whose role counts toward the headline total (Settings → Roles).
+    private var deliveries: [Delivery] {
+        let counting = BirthRoleCounting(storedValue: excludedRoles)
+        return allDeliveries.filter { counting.counts($0.role) }
+    }
 
     var body: some View {
         InsightCard(title: String(localized: "Babies per Delivery", bundle: .module), systemImage: "figure.2.and.child.holdinghands", accent: .storkPink) {

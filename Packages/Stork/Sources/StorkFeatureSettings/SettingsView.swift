@@ -33,6 +33,7 @@ public struct SettingsView<ExportDestination: View>: View {
         Form {
             ProSection(model: model)
             PreferencesSection()
+            RolesSection()
             AppIconSection(model: model, iconManager: iconManager, pendingIconColor: $pendingIconColor)
             SyncSection(model: model)
             DataSection(exportDestination: exportDestination)
@@ -117,6 +118,35 @@ private struct PreferencesSection: View {
                 .tint(.storkPurple)
                 .onChange(of: useDayMonthYearDates) { _, _ in Haptics.lightImpact() }
         }
+    }
+}
+
+private struct RolesSection: View {
+    @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
+
+    var body: some View {
+        Section {
+            ForEach(BirthRole.allCases) { role in
+                Toggle(isOn: binding(for: role)) { Label(role.displayName, systemImage: role.systemImage) }
+                    .tint(.storkPurple)
+            }
+        } header: {
+            Text("Roles Counted in Totals", bundle: .module)
+        } footer: {
+            Text("Choose which roles count toward your headline birth total. Deliveries with no role recorded always count. Every delivery stays in your history either way.", bundle: .module)
+        }
+    }
+
+    private func binding(for role: BirthRole) -> Binding<Bool> {
+        Binding(
+            get: { BirthRoleCounting(storedValue: excludedRoles).counts(role) },
+            set: { counted in
+                var counting = BirthRoleCounting(storedValue: excludedRoles)
+                counting.set(role, counted: counted)
+                excludedRoles = counting.storedValue
+                Haptics.lightImpact()
+            }
+        )
     }
 }
 

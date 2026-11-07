@@ -338,6 +338,50 @@
         }
       }
     },
+    "Charge": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coordinación"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Responsable"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チャージ"
+          }
+        }
+      }
+    },
+    "Charge Nurse": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enfermera coordinadora"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infirmière responsable"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チャージナース"
+          }
+        }
+      }
+    },
     "Couldn't load your deliveries. (%@)": {
       "localizations": {
         "es": {
@@ -514,6 +558,28 @@
         }
       }
     },
+    "Doula": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doula"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doula"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドゥーラ"
+          }
+        }
+      }
+    },
     "Epidural & NICU": {
       "localizations": {
         "es": {
@@ -598,6 +664,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "女の子"
+          }
+        }
+      }
+    },
+    "In remembrance": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En memoria"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En souvenir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追悼"
           }
         }
       }
@@ -800,6 +888,72 @@
         }
       }
     },
+    "Midwife": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matrona"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sage-femme"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "助産師"
+          }
+        }
+      }
+    },
+    "My Role": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi función"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon rôle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分の役割"
+          }
+        }
+      }
+    },
+    "Nurse catch": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recibida por enfermería"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reçu par l’infirmière"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "看護師が取り上げ"
+          }
+        }
+      }
+    },
     "One Row per Baby": {
       "localizations": {
         "es": {
@@ -844,6 +998,28 @@
         }
       }
     },
+    "Other": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autre"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その他"
+          }
+        }
+      }
+    },
     "PDF reports": {
       "localizations": {
         "es": {
@@ -884,6 +1060,94 @@
           "stringUnit": {
             "state": "translated",
             "value": "自己ベスト"
+          }
+        }
+      }
+    },
+    "Preceptor": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preceptora"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préceptrice"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プリセプター"
+          }
+        }
+      }
+    },
+    "Primary": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Principal"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Principale"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "担当"
+          }
+        }
+      }
+    },
+    "Primary Nurse": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enfermera principal"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infirmière principale"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "担当看護師"
+          }
+        }
+      }
+    },
+    "Resident": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Residente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résident"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "研修医"
           }
         }
       }
@@ -950,6 +1214,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "歩数"
+          }
+        }
+      }
+    },
+    "Student": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estudiante"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Étudiante"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "学生"
           }
         }
       }
@@ -1038,6 +1324,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "時間帯"
+          }
+        }
+      }
+    },
+    "Transition": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transición"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transition"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移行期"
+          }
+        }
+      }
+    },
+    "Transition / Baby Nurse": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enfermera de transición / del bebé"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infirmière de transition / du bébé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移行期／新生児担当看護師"
           }
         }
       }

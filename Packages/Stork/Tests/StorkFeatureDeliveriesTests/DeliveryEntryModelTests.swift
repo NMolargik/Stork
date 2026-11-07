@@ -90,6 +90,27 @@ struct DeliveryEntryModelTests {
         #expect(model.date == old.date)
     }
 
+    // MARK: - Role
+
+    @Test("Role defaults to not recorded, saves on new deliveries, and prefills + updates on edit")
+    func roleSavesAndEdits() throws {
+        let data = FakeDeliveryData()
+        let model = Make.entryModel(data: data)
+        #expect(model.role == nil)
+        model.upsert(Baby(sex: .female))
+        model.role = .transitionNurse
+        try model.save()
+        #expect(data.loggedDeliveries.first?.role == .transitionNurse)
+
+        let existing = Make.delivery()
+        existing.role = .preceptor
+        let edit = Make.entryModel(data: data, existing: existing)
+        #expect(edit.role == .preceptor)
+        edit.role = nil
+        try edit.save()
+        #expect(existing.role == nil)
+    }
+
     // MARK: - Weather snapshot gating (Stork Pro)
 
     @Test("Without a weather source the form never offers a snapshot")

@@ -13,10 +13,12 @@ import StorkDesignSystem
 public struct JarHistoryView: View {
     @Environment(\.dismiss) private var dismiss
     private let deliveries: [Delivery]
+    private let isProUnlocked: Bool
     @State private var selectedPage = 0
 
-    public init(deliveries: [Delivery]) {
+    public init(deliveries: [Delivery], isProUnlocked: Bool = false) {
         self.deliveries = deliveries
+        self.isProUnlocked = isProUnlocked
     }
 
     private let months: [(date: Date, key: String)] = {
@@ -35,8 +37,7 @@ public struct JarHistoryView: View {
         NavigationStack {
             TabView(selection: $selectedPage) {
                 ForEach(Array(months.enumerated()), id: \.element.key) { index, month in
-                    let counts = DeliveryStatistics.monthlyJarCounts(deliveries: deliveries, asOf: month.date)
-                    JarHistoryPage(boyCount: counts.boy, girlCount: counts.girl, lossCount: counts.loss, monthDate: month.date, monthKey: month.key)
+                    JarHistoryPage(marbles: DeliveryStatistics.jarMarbles(deliveries: deliveries, asOf: month.date), monthDate: month.date, monthKey: month.key, isProUnlocked: isProUnlocked)
                         .tag(index)
                 }
             }
@@ -78,24 +79,27 @@ public struct JarHistoryView: View {
 
         private func dotColor(for index: Int) -> Color {
             if index == selectedPage { return .storkOrange }
-            let counts = DeliveryStatistics.monthlyJarCounts(deliveries: deliveries, asOf: months[index].date)
-            return (counts.boy + counts.girl + counts.loss) > 0 ? .storkBlue : .gray.opacity(0.4)
+            return !DeliveryStatistics.jarMarbles(deliveries: deliveries, asOf: months[index].date).isEmpty ? .storkBlue : .gray.opacity(0.4)
         }
     }
 }
 
 private struct JarHistoryPage: View {
-    let boyCount: Int
-    let girlCount: Int
-    let lossCount: Int
+    let marbles: [JarMarble]
     let monthDate: Date
     let monthKey: String
+    let isProUnlocked: Bool
     @State private var reshuffle = false
+    @State private var selection: JarCategory?
 
     var body: some View {
-        JarView(boyCount: boyCount, girlCount: girlCount, lossCount: lossCount, monthLabel: monthLabel(), reshuffle: $reshuffle)
-            .id(monthKey)
-            .padding(.horizontal)
+        VStack(spacing: 12) {
+            JarView(marbles: marbles, highlight: selection, monthLabel: monthLabel(), reshuffle: $reshuffle)
+                .id(monthKey)
+            JarLegendView(marbles: marbles, monthDate: monthDate, isProUnlocked: isProUnlocked, selection: $selection)
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 40)
     }
 
     private func monthLabel() -> String {

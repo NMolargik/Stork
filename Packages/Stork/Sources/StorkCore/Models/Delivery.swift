@@ -22,6 +22,10 @@ public final class Delivery {
     public var notes: String?
     @Relationship(inverse: \DeliveryTag.deliveries) public var tags: [DeliveryTag]?
 
+    /// The part the user played (nil = not recorded). Additive optional column, so
+    /// CloudKit's lightweight migration just adds a nullable field.
+    public var role: BirthRole?
+
     // Optional weather snapshot (Stork Pro). Stored flat so CloudKit's lightweight
     // migration adds three nullable columns; read/write through `weather`.
     public var weatherTemperatureCelsius: Double?
@@ -36,7 +40,8 @@ public final class Delivery {
         deliveryMethod: DeliveryMethod,
         epiduralUsed: Bool,
         notes: String? = nil,
-        tags: [DeliveryTag] = []
+        tags: [DeliveryTag] = [],
+        role: BirthRole? = nil
     ) {
         self.id = id
         self.date = date
@@ -46,6 +51,7 @@ public final class Delivery {
         self.epiduralUsed = epiduralUsed
         self.notes = notes
         self.tags = tags
+        self.role = role
     }
 
     /// The attached weather snapshot, if the delivery has one.
