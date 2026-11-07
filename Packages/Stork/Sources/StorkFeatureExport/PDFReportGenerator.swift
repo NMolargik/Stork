@@ -150,6 +150,11 @@ public final class PDFReportGenerator {
         return y + 16
     }
 
+    private func roleLine(_ stat: DeliveryStatistics.RoleStat) -> String {
+        let counts = String(localized: "^[\(stat.deliveries) delivery](inflect: true), ^[\(stat.babies) baby](inflect: true)", bundle: .module)
+        return "\(stat.role.displayName): \(counts)"
+    }
+
     private func drawRoleSection(config: Configuration, yPosition: CGFloat) -> CGFloat {
         let stats = DeliveryStatistics.roleBreakdown(deliveries: config.deliveries)
         guard !stats.isEmpty else { return yPosition }
@@ -157,7 +162,7 @@ public final class PDFReportGenerator {
         "My Role".draw(at: CGPoint(x: margin, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 18, weight: .semibold), .foregroundColor: UIColor.black])
         y += 28
         for stat in stats {
-            "\(stat.role.displayName): \(stat.deliveries) deliveries, \(stat.babies) babies".draw(at: CGPoint(x: margin + 16, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
+            roleLine(stat).draw(at: CGPoint(x: margin + 16, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
             y += 18
         }
         return y + 16
