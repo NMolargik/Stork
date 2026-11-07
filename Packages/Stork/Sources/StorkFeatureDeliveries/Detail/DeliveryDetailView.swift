@@ -138,6 +138,10 @@ public struct DeliveryDetailView: View {
                          label: String(localized: "Method", bundle: .module), color: delivery.deliveryMethod.accentColor)
                 StatPill(icon: "syringe.fill", value: delivery.epiduralUsed ? "Yes" : "No",
                          label: String(localized: "Epidural", bundle: .module), color: delivery.epiduralUsed ? .red : .secondary)
+                if let role = delivery.role {
+                    StatPill(icon: role.systemImage, value: role.shortName,
+                             label: String(localized: "Role", bundle: .module), color: .storkPurple)
+                }
             }
         }
     }

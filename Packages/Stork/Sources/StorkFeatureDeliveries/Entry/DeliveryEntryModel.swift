@@ -21,6 +21,8 @@ public final class DeliveryEntryModel {
     public var date: Date
     public var deliveryMethod: DeliveryMethod
     public var epiduralUsed: Bool
+    /// The part the user played; nil = not recorded.
+    public var role: BirthRole?
     public var babies: [Baby]
     public var notes: String
     public var selectedTags: [DeliveryTag]
@@ -80,6 +82,7 @@ public final class DeliveryEntryModel {
             date = delivery.date
             deliveryMethod = delivery.deliveryMethod
             epiduralUsed = delivery.epiduralUsed
+            role = delivery.role
             babies = delivery.babies ?? []
             notes = delivery.notes ?? ""
             selectedTags = delivery.tags ?? []
@@ -88,6 +91,7 @@ public final class DeliveryEntryModel {
             date = opened   // the range's upper bound, so a fresh form always validates
             deliveryMethod = .vaginal
             epiduralUsed = true
+            role = nil
             babies = []
             notes = ""
             selectedTags = []
@@ -214,6 +218,7 @@ public final class DeliveryEntryModel {
             existing.date = date
             existing.deliveryMethod = deliveryMethod
             existing.epiduralUsed = epiduralUsed
+            existing.role = role
             existing.babyCount = babies.count
             existing.notes = trimmedNotes
             existing.tags = selectedTags
@@ -232,6 +237,7 @@ public final class DeliveryEntryModel {
                 tags: selectedTags
             )
             delivery.weather = weather
+            delivery.role = role
             return try logDeliveryUseCase(delivery)
         }
     }

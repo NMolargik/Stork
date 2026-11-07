@@ -108,6 +108,14 @@ public struct DeliveryEntryView: View {
                 Toggle(String(localized: "Epidural Used", bundle: .module), isOn: $model.epiduralUsed)
                     .tint(.red)
                     .accessibilityLabel(Text("Epidural used", bundle: .module))
+
+                Picker(String(localized: "My Role", bundle: .module), selection: $model.role) {
+                    Text("Not recorded", bundle: .module).tag(BirthRole?.none)
+                    ForEach(BirthRole.allCases) { role in
+                        Label(role.displayName, systemImage: role.systemImage).tag(BirthRole?.some(role))
+                    }
+                }
+                .accessibilityLabel(Text("My role at this birth", bundle: .module))
             }
         }
     }

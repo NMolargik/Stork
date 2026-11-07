@@ -22,6 +22,7 @@ final class DeliveryRowModel {
     let showsNICUIcon: Bool
     let showsEpiduralIcon: Bool
     let showsCSectionIcon: Bool
+    let roleName: String?
     let babySummary: String
     let gradientColors: [Color]
     let accessibilitySummary: String
@@ -63,6 +64,7 @@ final class DeliveryRowModel {
         showsNICUIcon = babies.contains { $0.nicuStay }
         showsEpiduralIcon = delivery.epiduralUsed
         showsCSectionIcon = delivery.deliveryMethod == .cSection
+        roleName = delivery.role?.shortName
         babySummary = Self.computeBabySummary(male: male, female: female, loss: loss)
         gradientColors = Self.computeGradientColors(male: male, female: female, loss: loss)
         accessibilitySummary = Self.computeAccessibilitySummary(delivery: delivery, male: male, female: female, loss: loss)
@@ -120,6 +122,7 @@ final class DeliveryRowModel {
 
     private static func computeAccessibilitySummary(delivery: Delivery, male: Int, female: Int, loss: Int) -> String {
         var parts: [String] = ["Delivered on \(delivery.date.formatted(date: .abbreviated, time: .shortened))"]
+        if let role = delivery.role { parts.append(role.displayName) }
         if male > 0 { parts.append(String(localized: "^[\(male) boy](inflect: true)", bundle: .module)) }
         if female > 0 { parts.append(String(localized: "^[\(female) girl](inflect: true)", bundle: .module)) }
         if loss > 0 { parts.append(String(localized: "^[\(loss) loss](inflect: true)", bundle: .module)) }
