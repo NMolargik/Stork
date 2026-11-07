@@ -151,7 +151,8 @@ public final class PDFReportGenerator {
     }
 
     private func roleLine(_ stat: DeliveryStatistics.RoleStat) -> String {
-        let counts = String(localized: "^[\(stat.deliveries) delivery](inflect: true), ^[\(stat.babies) baby](inflect: true)", bundle: .module)
+        // Inflection markup is only resolved by AttributedString(localized:), not String(localized:).
+        let counts = String(AttributedString(localized: "^[\(stat.deliveries) delivery](inflect: true), ^[\(stat.babies) baby](inflect: true)", bundle: .module).characters)
         return "\(stat.role.displayName): \(counts)"
     }
 
