@@ -65,14 +65,21 @@ final class MarbleScene: SKScene {
 
     override func didChangeSize(_ oldSize: CGSize) {
         super.didChangeSize(oldSize)
-        removeAllActions()
+        // Don't `removeAllActions()` here: SpriteKit reports the size more than once while
+        // SwiftUI lays the jar out, and cancelling would kill the drop sequence that
+        // `maybeSignalReady()` just started, leaving the jar permanently empty.
         updateFrostFrame()
         rebuildWalls()
         maybeSignalReady()
         if isReady { flushPending() }
     }
 
+    /// Twin "string" color: white vanishes on the light jar, so it flips with the appearance.
+    private var linkColor: SKColor = SKColor.darkGray.withAlphaComponent(0.8)
+
     func applyAppearance(isDark: Bool) {
+        linkColor = isDark ? SKColor.white.withAlphaComponent(0.85) : SKColor.darkGray.withAlphaComponent(0.8)
+        for link in links { link.line.strokeColor = linkColor }
         guard useFrostEffect else { return }
         frostNode.fillColor = SKColor.white.withAlphaComponent(isDark ? 0.18 : 0.08)
     }
@@ -191,7 +198,7 @@ final class MarbleScene: SKScene {
                 joint.maxLength = radius * 4.5
                 physicsWorld.add(joint)
                 let line = SKShapeNode()
-                line.strokeColor = SKColor.white.withAlphaComponent(0.85)
+                line.strokeColor = linkColor
                 line.lineWidth = 1.5
                 line.zPosition = 0.5
                 addChild(line)
