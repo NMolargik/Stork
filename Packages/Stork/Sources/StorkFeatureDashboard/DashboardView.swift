@@ -95,18 +95,22 @@ public struct DashboardView: View {
     private struct JarSection: View {
         var model: DashboardModel
         @Binding var jarShuffle: Bool
+        @State private var selection: JarCategory?
 
         var body: some View {
-            let monthly = model.monthlyJarCounts
-            JarView(
-                boyCount: monthly.boy,
-                girlCount: monthly.girl,
-                lossCount: monthly.loss,
-                history: AnyView(JarHistoryView(deliveries: model.deliveries)),
-                reshuffle: $jarShuffle
-            )
-            .id(WeekMath.startOfMonth(for: Date()))
-            .frame(height: 250)
+            let marbles = model.jarMarbles
+            VStack(spacing: 12) {
+                JarView(
+                    marbles: marbles,
+                    highlight: selection,
+                    history: AnyView(JarHistoryView(deliveries: model.deliveries, isProUnlocked: model.isProUnlocked)),
+                    reshuffle: $jarShuffle
+                )
+                .id(WeekMath.startOfMonth(for: Date()))
+                .frame(height: 250)
+
+                JarLegendView(marbles: marbles, monthDate: Date(), isProUnlocked: model.isProUnlocked, selection: $selection)
+            }
         }
     }
 

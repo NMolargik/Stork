@@ -10,27 +10,26 @@
 import SwiftUI
 import SpriteKit
 import StorkCore
+import StorkDesignSystem
 
 public struct JarView: View {
-    let boyCount: Int
-    let girlCount: Int
-    let lossCount: Int
+    let marbles: [JarMarble]
+    /// Dims every marble outside this category (legend tap-to-filter).
+    var highlight: JarCategory?
     var monthLabel: String?
     /// Optional history destination: tapping the month label presents this.
     var history: AnyView?
     @Binding var reshuffle: Bool
 
     public init(
-        boyCount: Int,
-        girlCount: Int,
-        lossCount: Int,
+        marbles: [JarMarble],
+        highlight: JarCategory? = nil,
         monthLabel: String? = nil,
         history: AnyView? = nil,
         reshuffle: Binding<Bool>
     ) {
-        self.boyCount = boyCount
-        self.girlCount = girlCount
-        self.lossCount = lossCount
+        self.marbles = marbles
+        self.highlight = highlight
         self.monthLabel = monthLabel
         self.history = history
         _reshuffle = reshuffle
@@ -45,10 +44,6 @@ public struct JarView: View {
     }()
     @State private var containerSize: CGSize = .zero
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    @State private var prevBoy = 0
-    @State private var prevGirl = 0
-    @State private var prevLoss = 0
-    @State private var didInitialDrop = false
     @State private var sizeClassDebounceTask: Task<Void, Never>?
     @Environment(\.colorScheme) private var colorScheme
     private let tilt = TiltManager()
@@ -75,28 +70,26 @@ public struct JarView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Delivery jar for \(monthLabel ?? monthText())", bundle: .module))
-        .accessibilityValue(Text("\(boyCount) boys, \(girlCount) girls, \(lossCount) losses", bundle: .module))
+        .accessibilityValue(accessibilitySummary)
         .onAppear {
             if #available(iOS 26.0, *) { scene.useFrostEffect = false }
             scene.onReady = {
                 scene.applyAppearance(isDark: colorScheme == .dark)
-                ensureInitialDropIfNeeded()
-                dropDeltasIfNeeded()
+                scene.sync(marbles: marbles)
+                scene.setHighlight(highlight)
             }
             scene.containerCornerRadius = cornerRadius
             scene.applyAppearance(isDark: colorScheme == .dark)
+            scene.sync(marbles: marbles)
         }
         .onDisappear {
             if isMotionActive { tilt.stop(); isMotionActive = false }
         }
-        .onChange(of: boyCount) { _, _ in ensureInitialDropIfNeeded(); dropDeltasIfNeeded() }
-        .onChange(of: girlCount) { _, _ in ensureInitialDropIfNeeded(); dropDeltasIfNeeded() }
-        .onChange(of: lossCount) { _, _ in ensureInitialDropIfNeeded(); dropDeltasIfNeeded() }
+        .onChange(of: marbles) { _, new in scene.sync(marbles: new) }
+        .onChange(of: highlight) { _, new in scene.setHighlight(new) }
         .onChange(of: reshuffle) { _, should in
             guard should else { return }
-            scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
-                prevBoy = boyCount; prevGirl = girlCount; prevLoss = lossCount; didInitialDrop = true
-            }
+            scene.resetAndRespawn(marbles: marbles) { scene.setHighlight(highlight) }
             DispatchQueue.main.async { self.reshuffle = false }
         }
         .onChange(of: colorScheme) { _, _ in scene.applyAppearance(isDark: colorScheme == .dark) }
@@ -104,11 +97,14 @@ public struct JarView: View {
             sizeClassDebounceTask?.cancel()
             sizeClassDebounceTask = Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 350_000_000)
-                scene.resetAndRespawn(blue: boyCount, pink: girlCount, purple: lossCount) {
-                    prevBoy = boyCount; prevGirl = girlCount; prevLoss = lossCount; didInitialDrop = true
-                }
+                scene.resetAndRespawn(marbles: marbles) { scene.setHighlight(highlight) }
             }
         }
+    }
+
+    private var accessibilitySummary: Text {
+        let s = JarSummary(marbles: marbles)
+        return Text("\(s.boy) boys, \(s.girl) girls, \(s.nurseCatch) nurse catches, \(s.remembrance) in remembrance", bundle: .module)
     }
 
     private struct MonthOverlay: View {
@@ -139,22 +135,6 @@ public struct JarView: View {
                 .padding(.top, 8)
             }
         }
-    }
-
-    private func ensureInitialDropIfNeeded() {
-        guard !didInitialDrop else { return }
-        guard boyCount + girlCount + lossCount > 0 else { return }
-        if scene.hasAnyMarbles() {
-            prevBoy = boyCount; prevGirl = girlCount; prevLoss = lossCount; didInitialDrop = true
-            return
-        }
-        scene.enqueue(blue: boyCount, pink: girlCount, purple: lossCount)
-        prevBoy = boyCount; prevGirl = girlCount; prevLoss = lossCount; didInitialDrop = true
-    }
-
-    private func dropDeltasIfNeeded() {
-        scene.enqueue(blue: max(0, boyCount - prevBoy), pink: max(0, girlCount - prevGirl), purple: max(0, lossCount - prevLoss))
-        prevBoy = boyCount; prevGirl = girlCount; prevLoss = lossCount
     }
 
     private func monthText() -> String {
