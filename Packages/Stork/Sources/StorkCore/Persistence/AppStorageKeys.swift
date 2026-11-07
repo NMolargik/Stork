@@ -14,6 +14,8 @@ nonisolated public enum AppStorageKeys {
     public static let useDayMonthYearDates = "useDayMonthYearDates"
     public static let selectedIconColor = "selectedIconColor"
     public static let dashboardCardOrder = "homeCardOrder"
+    /// Comma-separated `BirthRole` raw values excluded from the headline total (empty = all count).
+    public static let excludedBirthRoles = "excludedBirthRoles"
     public static let calendarHeatMapEnabled = "calendarHeatMapEnabled"
 
     // Stork Pro entitlement cache (StoreManager). Cached so gating works offline and the
