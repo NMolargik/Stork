@@ -104,13 +104,6 @@ struct JarShareCardView: View {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(Color.secondary.opacity(0.08))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.secondary.opacity(0.3), lineWidth: 1))
-            // Twin strings first, under the marbles.
-            ForEach(Array(items.enumerated()), id: \.offset) { i, marble in
-                if i > 0, let link = marble.linkID, items[i - 1].linkID == link {
-                    Path { p in p.move(to: point(i - 1)); p.addLine(to: point(i)) }
-                        .stroke(Color.primary.opacity(0.6), lineWidth: 2)
-                }
-            }
             ForEach(Array(items.enumerated()), id: \.offset) { i, marble in
                 let c = point(i)
                 Circle()
@@ -120,6 +113,13 @@ struct JarShareCardView: View {
                     }
                     .frame(width: diameter - 2, height: diameter - 2)
                     .position(c)
+            }
+            // Twin strings drawn over the marbles (they touch, so underneath they'd be hidden).
+            ForEach(Array(items.enumerated()), id: \.offset) { i, marble in
+                if i > 0, let link = marble.linkID, items[i - 1].linkID == link {
+                    Path { p in p.move(to: point(i - 1)); p.addLine(to: point(i)) }
+                        .stroke(Color.primary.opacity(0.6), lineWidth: 2.5)
+                }
             }
         }
         .frame(width: cardWidth - 40, height: height)
