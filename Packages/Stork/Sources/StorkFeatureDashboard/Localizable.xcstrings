@@ -889,6 +889,28 @@
         }
       }
     },
+    "Busiest day": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día más ocupado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journée la plus occupée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最も忙しかった日"
+          }
+        }
+      }
+    },
     "Busiest day is %@ with %lld deliveries": {
       "localizations": {
         "es": {
@@ -907,6 +929,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "最も忙しい曜日は%@で、分娩%lld件です"
+          }
+        }
+      }
+    },
+    "Busiest month": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mes más ocupado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mois le plus occupé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最も忙しかった月"
+          }
+        }
+      }
+    },
+    "Busiest month: %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mes más ocupado: %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mois le plus occupé : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最も忙しかった月：%@"
           }
         }
       }
@@ -1039,6 +1105,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "ジャーの履歴を閉じる"
+          }
+        }
+      }
+    },
+    "Compared with %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En comparación con %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Par rapport à %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@との比較"
           }
         }
       }
@@ -1199,6 +1287,72 @@
         }
       }
     },
+    "Dismiss": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descartar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "閉じる"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
+          }
+        }
+      }
+    },
+    "Down %lld%% from %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %% menos que en %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %% de moins qu’en %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@より%1$lld%%減"
+          }
+        }
+      }
+    },
     "Drag cards to customize your dashboard layout.": {
       "localizations": {
         "es": {
@@ -1353,6 +1507,28 @@
         }
       }
     },
+    "First birth of the year": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primer nacimiento del año"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Première naissance de l’année"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今年最初の誕生"
+          }
+        }
+      }
+    },
     "Fixed Position": {
       "localizations": {
         "es": {
@@ -1371,6 +1547,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "固定位置"
+          }
+        }
+      }
+    },
+    "Format": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "形式"
           }
         }
       }
@@ -1463,6 +1661,28 @@
         }
       }
     },
+    "Include on shared image": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incluir en la imagen compartida"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inclure dans l’image partagée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共有画像に含める"
+          }
+        }
+      }
+    },
     "Jar History": {
       "localizations": {
         "es": {
@@ -1497,6 +1717,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plus longue série"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最長連続日数"
+          }
+        }
+      }
+    },
+    "Longest streak": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Racha más larga"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus longue séquence"
           }
         },
         "ja": {
@@ -1727,6 +1969,28 @@
         }
       }
     },
+    "Most recent birth": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nacimiento más reciente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naissance la plus récente"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "直近の誕生"
+          }
+        }
+      }
+    },
     "My Role": {
       "localizations": {
         "es": {
@@ -1745,6 +2009,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "自分の役割"
+          }
+        }
+      }
+    },
+    "My Year in Births": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi año en nacimientos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon année en naissances"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私の分娩の1年"
           }
         }
       }
@@ -1905,6 +2191,28 @@
         }
       }
     },
+    "No births to wrap yet": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no hay nacimientos para el resumen"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune naissance à résumer pour l’instant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まとめる分娩がまだありません"
+          }
+        }
+      }
+    },
     "No deliveries logged yet.": {
       "localizations": {
         "es": {
@@ -1945,6 +2253,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@には分娩の記録がありません"
+          }
+        }
+      }
+    },
+    "Only you see this unless you turn it on.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo tú ves esto, a menos que lo actives."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous seul le voyez, sauf si vous l’activez."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オンにしない限り、あなただけに表示されます。"
           }
         }
       }
@@ -2081,6 +2411,28 @@
         }
       }
     },
+    "Preview of your shareable summary": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista previa de tu resumen para compartir"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu de votre résumé à partager"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共有用まとめのプレビュー"
+          }
+        }
+      }
+    },
     "Previous month": {
       "localizations": {
         "es": {
@@ -2121,6 +2473,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "分娩に役割を記録すると、ここに表示されます。"
+          }
+        }
+      }
+    },
+    "Remembered: %lld": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En memoria: %lld"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En souvenir : %lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追悼：%lld"
           }
         }
       }
@@ -2191,6 +2565,28 @@
         }
       }
     },
+    "Share Image": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartir imagen"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager l’image"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像を共有"
+          }
+        }
+      }
+    },
     "Share Jar": {
       "localizations": {
         "es": {
@@ -2231,6 +2627,116 @@
           "stringUnit": {
             "state": "translated",
             "value": "今月の瓶の画像を共有します"
+          }
+        }
+      }
+    },
+    "Square": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuadrado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carré"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正方形"
+          }
+        }
+      }
+    },
+    "Story": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historia"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Story"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストーリー"
+          }
+        }
+      }
+    },
+    "Thank you for being there.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gracias por estar ahí."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci d’avoir été là."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "そばにいてくれてありがとう。"
+          }
+        }
+      }
+    },
+    "The image has no names and no patient information.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La imagen no incluye nombres ni información de pacientes."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’image ne contient aucun nom ni aucune information sur les patients."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像には名前や患者情報は含まれません。"
+          }
+        }
+      }
+    },
+    "The same as %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Igual que en %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pareil qu’en %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@と同じ"
           }
         }
       }
@@ -2345,6 +2851,28 @@
         }
       }
     },
+    "Up %lld%% from %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %% más que en %@"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %% de plus qu’en %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@より%1$lld%%増"
+          }
+        }
+      }
+    },
     "VBAC": {
       "localizations": {
         "es": {
@@ -2385,6 +2913,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "経腟"
+          }
+        }
+      }
+    },
+    "View Wrap": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver resumen"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir le bilan"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まとめを見る"
           }
         }
       }
@@ -2435,6 +2985,50 @@
       },
       "shouldGenerateSymbol": false
     },
+    "Who Arrived": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quiénes llegaron"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qui est arrivé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "誕生した赤ちゃん"
+          }
+        }
+      }
+    },
+    "Year": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Año"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Année"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年"
+          }
+        }
+      }
+    },
     "Year over Year": {
       "localizations": {
         "es": {
@@ -2453,6 +3047,160 @@
           "stringUnit": {
             "state": "translated",
             "value": "前年比"
+          }
+        }
+      }
+    },
+    "Your %@ Wrap is ready": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu resumen de %@ está listo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre bilan de %@ est prêt"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@年のまとめができました"
+          }
+        }
+      }
+    },
+    "Your Rhythm": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu ritmo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre rythme"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたのリズム"
+          }
+        }
+      }
+    },
+    "Your Role": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu rol"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre rôle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの役割"
+          }
+        }
+      }
+    },
+    "Your Wrap appears once you log a birth": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu resumen aparece cuando registres un nacimiento"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre bilan apparaît dès que vous enregistrez une naissance"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩を記録するとまとめが表示されます"
+          }
+        }
+      }
+    },
+    "Your Year in Births": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu año en nacimientos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre année en naissances"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの分娩の1年"
+          }
+        }
+      }
+    },
+    "Your Year, Shared": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu año, para compartir"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre année, à partager"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1年をシェア"
+          }
+        }
+      }
+    },
+    "^[%lld baby](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bebé](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bébé](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃん%lld人"
           }
         }
       }
@@ -2479,6 +3227,72 @@
         }
       }
     },
+    "^[%lld boy](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld niño](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld garçon](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "男の子%lld人"
+          }
+        }
+      }
+    },
+    "^[%lld day](inflect: true) in a row": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld día](inflect: true) seguido"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld jour](inflect: true) de suite"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld日連続"
+          }
+        }
+      }
+    },
+    "^[%lld delivery](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld parto](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld accouchement](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩%lld件"
+          }
+        }
+      }
+    },
     "^[%lld delivery](inflect: true), ^[%lld baby](inflect: true) on %@": {
       "localizations": {
         "es": {
@@ -2497,6 +3311,72 @@
           "stringUnit": {
             "state": "translated",
             "value": "分娩%lld件、赤ちゃん%lld人（%@）"
+          }
+        }
+      }
+    },
+    "^[%lld girl](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld niña](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld fille](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "女の子%lld人"
+          }
+        }
+      }
+    },
+    "^[%lld multiple birth](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld parto múltiple](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld naissance multiple](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "多胎分娩%lld件"
+          }
+        }
+      }
+    },
+    "^[%lld nurse catch](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld recepción por enfermería](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld réception par l’infirmière](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "看護師が取り上げ%lld人"
           }
         }
       }

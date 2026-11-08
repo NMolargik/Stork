@@ -7,6 +7,7 @@
 //  Wrap. Compiled out of release builds entirely.
 //
 //    -StorkDebugNow 2026-12-05      pretend today is this date (seasonal dashboard card)
+//    -StorkInMemoryStore 1          in-memory store (unsigned simulator builds cannot open CloudKit)
 //    -StorkSeedWrapSample 1         seed two years of sample births when the store is empty
 //    -StorkOpenWrap 2026            present the Wrap for that year on the dashboard
 //    -StorkWrapPage 3               start the Wrap on this page index
@@ -30,6 +31,7 @@ nonisolated public enum DebugLaunchOptions {
         return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: day)
     }
 
+    public static var inMemoryStore: Bool { defaults.bool(forKey: "StorkInMemoryStore") }
     public static var seedWrapSample: Bool { defaults.bool(forKey: "StorkSeedWrapSample") }
     public static var openWrapYear: Int? { defaults.object(forKey: "StorkOpenWrap") == nil ? nil : defaults.integer(forKey: "StorkOpenWrap") }
     public static var wrapPage: Int { defaults.integer(forKey: "StorkWrapPage") }

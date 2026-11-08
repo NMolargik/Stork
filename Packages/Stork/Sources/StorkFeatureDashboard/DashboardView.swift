@@ -16,6 +16,7 @@ public struct DashboardView: View {
     @Binding private var showingReorderSheet: Bool
     @Environment(\.horizontalSizeClass) private var hSizeClass
     @State private var jarShuffle = false
+    @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
 
     public init(model: DashboardModel, showingReorderSheet: Binding<Bool>) {
         self.model = model
@@ -25,6 +26,14 @@ public struct DashboardView: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                if let wrapYear = model.wrapPromptYear(counting: BirthRoleCounting(storedValue: excludedRoles)) {
+                    YearWrapPromptCard(
+                        year: wrapYear,
+                        onOpen: { model.presentedWrapYear = wrapYear },
+                        onDismiss: { withAnimation { model.dismissWrapPrompt(year: wrapYear) } }
+                    )
+                    .transition(.opacity)
+                }
                 JarSection(model: model, jarShuffle: $jarShuffle)
 
                 if hSizeClass == .regular {
@@ -45,11 +54,25 @@ public struct DashboardView: View {
             jarShuffle = true
             await model.refresh()
         }
-        .onAppear { model.load() }
+        .onAppear {
+            model.load()
+            #if DEBUG
+            if let year = DebugLaunchOptions.openWrapYear, model.presentedWrapYear == nil { model.presentedWrapYear = year }
+            #endif
+        }
+        .sheet(item: wrapSelection) { selection in
+            YearWrapView(model: model.makeWrapModel(year: selection.year, counting: BirthRoleCounting(storedValue: excludedRoles)))
+                .presentationDetents([.large])
+                .presentationSizing(.page)
+        }
         .sheet(isPresented: $showingReorderSheet) {
             DashboardCardOrderSheet(currentOrder: model.cardOrder) { model.saveOrder($0) }
                 .presentationDetents([.large])
         }
+    }
+
+    private var wrapSelection: Binding<WrapSelection?> {
+        Binding(get: { model.presentedWrapYear.map(WrapSelection.init) }, set: { model.presentedWrapYear = $0?.year })
     }
 
     private func columnCards(even: Bool) -> [DashboardCard] {

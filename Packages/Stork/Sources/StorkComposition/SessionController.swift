@@ -102,7 +102,11 @@ public final class SessionController {
         reviewRequester: (any ReviewRequesting)? = AppStoreReviewRequester()
     ) {
         do {
+            #if DEBUG
+            container = try StorkStore.makeContainer(inMemory: inMemory || DebugLaunchOptions.inMemoryStore)
+            #else
             container = try StorkStore.makeContainer(inMemory: inMemory)
+            #endif
         } catch {
             fatalError("[Stork] Failed to open the local store: \(error)")
         }
@@ -150,5 +154,14 @@ public final class SessionController {
         // refresh from one signal (background sync, no blocking screen).
         cloudSync.configure(with: container.mainContext)
         cloudSync.onRemoteChange = { changes.notify() }
+
+        #if DEBUG
+        // `-StorkSeedWrapSample 1`: two years of sample births for verifying the Year Wrap.
+        if DebugLaunchOptions.seedWrapSample, ((try? loadDeliveries()) ?? []).isEmpty {
+            // Straight into the context: skips the review prompt and milestone side effects.
+            for delivery in DebugSampleBirths.twoYears() { container.mainContext.insert(delivery) }
+            try? container.mainContext.save()
+        }
+        #endif
     }
 }

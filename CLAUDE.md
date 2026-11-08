@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Stork is an app for labor & delivery nurses to track the deliveries they perform while staying HIPAA-conscious (no patient-identifying data, no hospital/location correlation). SwiftUI + SwiftData with iCloud/CloudKit private-database sync.
 
-**Business model (3.0+):** free download with a one-time **Stork Pro** unlock (`com.nickmolargik.stork.pro.lifetime`, non-consumable, Family Sharing). Free forever: logging deliveries (every field, any past date), basic stat cards, the marble jar, calendar, Watch app, basic Home Screen widgets, Spotlight, Siri. Pro: career milestone share cards, PDF/CSV export, insight cards, calendar heat map, alternate app icons, weather-at-delivery, Lock Screen + interactive widgets. **Data is never locked.** Pre-3.0 buyers are grandfathered (see Stork Pro below).
+**Business model (3.0+):** free download with a one-time **Stork Pro** unlock (`com.nickmolargik.stork.pro.lifetime`, non-consumable, Family Sharing). Free forever: logging deliveries (every field, any past date), basic stat cards, the marble jar, calendar, Watch app, basic Home Screen widgets, Spotlight, Siri. Pro: career milestone share cards, PDF/CSV export, insight cards, calendar heat map, alternate app icons, weather-at-delivery, Lock Screen + interactive widgets. **Data is never locked.** The year-end **Wrap** ("Your Year in Births") is free for everyone: it is a shareable acquisition hook, so never gate it. Pre-3.0 buyers are grandfathered (see Stork Pro below).
 
 The app is a **thin app target on top of an SPM umbrella package** (`Packages/Stork`) of layered, single-responsibility modules — clean architecture in the style of StreetIQ's SCOUT. Dependencies point **inward**: features depend on the design system and core; data implements core's protocols; **core depends on nothing** (Foundation + SwiftData only).
 
@@ -98,6 +98,9 @@ Brand colors (`storkBlue`/`storkPink`/`storkPurple`/`storkOrange`, defined in co
 
 ### App target (`Stork/`) — thin
 `StorkApp` (~40 lines): builds `SessionController(indexer: SpotlightDeliveryIndexer())`, registers it with `AppDependencyManager` for App Intents, hosts `RootView`. Plus `QuickActions`, `StorkCommands`, and `Intents/`. The package products are linked in `project.pbxproj` (`packageProductDependencies` + `XCSwiftPackageProductDependency` + `XCLocalSwiftPackageReference`); the app folder is still folder-synchronized but now contains only the shell.
+
+## Year Wrap
+Pure builder `YearWrap` (StorkCore) feeds `YearWrapModel` + `YearWrapView` (StorkFeatureDashboard/Wrap). Losses are never celebrated: every figure is live births only, losses appear only as the separate "Remembered: N" line, which stays off the shared image unless the user opts in. The prompt card shows Dec 1 to Jan 31 for the year just ending; the toolbar sparkles menu opens any year with data. DEBUG launch arguments (`DebugLaunchOptions`: `-StorkInMemoryStore`, `-StorkSeedWrapSample`, `-StorkDebugNow`, `-StorkOpenWrap`, `-StorkWrapPage`, `-StorkExportWrapImages`) drive simulator verification; unsigned simulator builds need `-StorkInMemoryStore 1` because CloudKit traps without entitlements.
 
 ## App Intents — `Stork/Intents/`
 `LogDeliveryIntent` (background logging via `session.logDelivery`; `donate(reflecting:)` on manual UI saves so Siri learns usage — never donate from `perform()`), `BabiesThisWeekIntent` / `CareerTotalsIntent` (read-only stats), `StartDeliveryEntryIntent` + `OpenDeliveryIntent` (`stork://` scheme), `StorkShortcuts`. Intents read the session via `@Dependency var session: SessionController`.

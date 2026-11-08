@@ -54,6 +54,8 @@ nonisolated public struct YearWrapStats: Equatable, Sendable {
     public let boys: Int
     public let girls: Int
     public let nurseCatches: Int
+    /// Marble tallies for the year (nurse catch wins over sex, as in the jar). Live births only.
+    public let jar: JarSummary
     /// Deliveries of exactly two babies born.
     public let twinSets: Int
     /// Deliveries of three or more babies born.
@@ -109,6 +111,7 @@ public enum YearWrap {
 
         var babies = 0, boys = 0, girls = 0, nurseCatches = 0
         var twinSets = 0, higherSets = 0
+        var jar = JarSummary()
         var vaginal = 0, cSection = 0, vBac = 0
         var byMonthBabies = [Int](repeating: 0, count: 12)
         var byMonthDeliveries = [Int](repeating: 0, count: 12)
@@ -122,6 +125,14 @@ public enum YearWrap {
             boys += kids.count { $0.sex == .male }
             girls += kids.count { $0.sex == .female }
             nurseCatches += kids.count { $0.nurseCatch }
+            for kid in kids {
+                switch JarMarble.category(sex: kid.sex, nurseCatch: kid.nurseCatch) {
+                case .boy: jar.boy += 1
+                case .girl: jar.girl += 1
+                case .nurseCatch: jar.nurseCatch += 1
+                case .remembrance: break
+                }
+            }
             if n == 2 { twinSets += 1 } else if n > 2 { higherSets += 1 }
             switch delivery.deliveryMethod {
             case .vaginal: vaginal += 1
@@ -182,6 +193,7 @@ public enum YearWrap {
             boys: boys,
             girls: girls,
             nurseCatches: nurseCatches,
+            jar: jar,
             twinSets: twinSets,
             higherMultipleSets: higherSets,
             vaginal: vaginal,

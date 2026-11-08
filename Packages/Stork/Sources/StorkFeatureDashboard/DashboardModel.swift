@@ -21,10 +21,24 @@ public final class DashboardModel {
     public private(set) var deliveries: [Delivery] = []
     public var cardOrder: [DashboardCard]
 
-    public init(loadDeliveries: any LoadDeliveries, entitlement: any EntitlementProviding, store: any KeyValueStoring = UserDefaults.standard) {
+    /// The Wrap year currently presented (sheet), set by the dashboard card or toolbar menu.
+    public var presentedWrapYear: Int?
+    private let now: () -> Date
+
+    public init(
+        loadDeliveries: any LoadDeliveries,
+        entitlement: any EntitlementProviding,
+        store: any KeyValueStoring = UserDefaults.standard,
+        now: @escaping () -> Date = { Date() }
+    ) {
         self.loadDeliveriesUseCase = loadDeliveries
         self.entitlement = entitlement
         self.store = store
+        #if DEBUG
+        self.now = { DebugLaunchOptions.now ?? now() }
+        #else
+        self.now = now
+        #endif
         self.cardOrder = DashboardCard.loadOrder(from: store)
     }
 
@@ -61,5 +75,29 @@ public final class DashboardModel {
 
     public func jarCounts(forMonthStarting monthStart: Date) -> (boy: Int, girl: Int, loss: Int) {
         DeliveryStatistics.monthlyJarCounts(deliveries: deliveries, asOf: monthStart)
+    }
+
+    // MARK: - Year Wrap (free for everyone; deliberately not gated by Stork Pro)
+
+    /// Years that have a Wrap, newest first, honoring the "what counts toward my total" setting.
+    public func wrapYears(counting: BirthRoleCounting) -> [Int] {
+        YearWrap.availableYears(deliveries: deliveries, counting: counting)
+    }
+
+    /// The year to invite the user to view (December 1 through January 31, the year just
+    /// ending), or nil when out of season, already dismissed, or that year has no data.
+    public func wrapPromptYear(counting: BirthRoleCounting) -> Int? {
+        guard let year = YearWrapSeason.promptYear(now: now()),
+              store.integer(forKey: AppStorageKeys.wrapPromptDismissedYear) != year,
+              wrapYears(counting: counting).contains(year) else { return nil }
+        return year
+    }
+
+    public func dismissWrapPrompt(year: Int) {
+        store.set(year, forKey: AppStorageKeys.wrapPromptDismissedYear)
+    }
+
+    public func makeWrapModel(year: Int, counting: BirthRoleCounting) -> YearWrapModel {
+        YearWrapModel(deliveries: deliveries, year: year, counting: counting, store: store)
     }
 }
