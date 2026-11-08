@@ -170,6 +170,12 @@ public final class SessionController {
             for delivery in DebugSampleBirths.twoYears() { container.mainContext.insert(delivery) }
             try? container.mainContext.save()
         }
+        if DebugLaunchOptions.seedPastBirths, ((try? loadDeliveries()) ?? []).isEmpty {
+            let years = PastBirths.years(from: 2018, to: 2022, average: 140)
+            let splits = PastBirthsSplits(multiplesPercent: 3, lossesPercent: 1, boysPercent: 51)
+            for delivery in PastBirths.makeDeliveries(years: years, splits: splits, role: .primaryNurse) { container.mainContext.insert(delivery) }
+            try? container.mainContext.save()
+        }
         #endif
     }
 }

@@ -2895,6 +2895,28 @@
           }
         }
       }
+    },
+    "Note may include an identifier": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La nota podría incluir un identificador"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La note pourrait contenir un identifiant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモに識別情報が含まれている可能性があります"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

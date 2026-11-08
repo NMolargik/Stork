@@ -37,9 +37,17 @@ public struct DeliveryEntryView: View {
                 TagsSection(model: model)
                 NotesSection(model: model)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle(model.isEditing ? "Edit Delivery" : "New Delivery")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // The keyboard covers the inline warning, so a short reminder rides above it.
+                ToolbarItem(placement: .keyboard) {
+                    if !model.noteIdentifierKinds.isEmpty {
+                        Label(String(localized: "Note may include an identifier", bundle: .module), systemImage: "hand.raised.fill")
+                            .font(.footnote).foregroundStyle(.orange)
+                    }
+                }
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
                         .keyboardShortcut(.escape, modifiers: [])
@@ -274,7 +282,8 @@ public struct DeliveryEntryView: View {
                 } icon: {
                     Image(systemName: "hand.raised.fill").foregroundStyle(.orange)
                 }
-                Text(kinds.map(\.label).joined(separator: " \u{00B7} "))
+                // A name field already implies "looks like a name": show one, not both.
+                Text(kinds.filter { !($0 == .personName && kinds.contains(.nameField)) }.map(\.label).joined(separator: " \u{00B7} "))
                     .font(.caption2).foregroundStyle(.secondary)
                     .padding(.leading, 28)
             }
@@ -288,13 +297,14 @@ public struct DeliveryEntryView: View {
 
         var body: some View {
             Section {
-                TextField(String(localized: "Add a personal note...", bundle: .module), text: $model.notes, axis: .vertical)
-                    .lineLimit(3...6)
-                    .accessibilityLabel(Text("Delivery notes", bundle: .module))
+                // Above the field, not below it: the keyboard covers anything under a focused note.
                 let kinds = model.noteIdentifierKinds
                 if !kinds.isEmpty {
                     IdentifierWarning(kinds: kinds)
                 }
+                TextField(String(localized: "Add a personal note...", bundle: .module), text: $model.notes, axis: .vertical)
+                    .lineLimit(3...6)
+                    .accessibilityLabel(Text("Delivery notes", bundle: .module))
             } header: {
                 Text("Notes", bundle: .module)
             } footer: {
