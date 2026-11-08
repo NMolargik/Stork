@@ -18,6 +18,18 @@ private extension Int {
 
 public enum DeliveryStatistics {
 
+    // MARK: - Estimated past births
+    //
+    // Past-births summaries (`Delivery.isEstimated`) count toward the career totals, the
+    // sex split, the role breakdown and year-over-year. Everything keyed to a day, hour,
+    // month, streak or an individual delivery's details skips them, because their date is
+    // a placeholder inside the year and they carry no per-delivery data.
+
+    /// Individually logged deliveries only.
+    public static func logged(_ deliveries: [Delivery]) -> [Delivery] {
+        deliveries.filter { !$0.isEstimated }
+    }
+
     // MARK: - Result types
 
     public struct DeliveryMethodStats {
@@ -106,13 +118,13 @@ public enum DeliveryStatistics {
     // MARK: - Totals
 
     public static func totals(deliveries: [Delivery]) -> (deliveries: Int, babies: Int) {
-        (deliveries.count, deliveries.reduce(0) { $0 + $1.babyCount })
+        (deliveries.reduce(0) { $0 + $1.deliveryWeight }, deliveries.reduce(0) { $0 + $1.babyCount })
     }
 
     public static func averageBabyCount(deliveries: [Delivery]) -> Double {
-        guard !deliveries.isEmpty else { return 0 }
-        let totalBabies = deliveries.reduce(0) { $0 + $1.babyCount }
-        return Double(totalBabies) / Double(deliveries.count)
+        let (count, babies) = totals(deliveries: deliveries)
+        guard count > 0 else { return 0 }
+        return Double(babies) / Double(count)
     }
 
     // MARK: - Current month (jar)
@@ -125,7 +137,7 @@ public enum DeliveryStatistics {
         let startOfMonth = WeekMath.startOfMonth(for: date, calendar: calendar)
         let endExclusive = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? date
 
-        let babies = deliveries
+        let babies = logged(deliveries)
             .filter { $0.date >= startOfMonth && $0.date < endExclusive }
             .flatMap { $0.babies ?? [] }
         let boy = babies.count { $0.sex == .male }
@@ -144,7 +156,7 @@ public enum DeliveryStatistics {
         let startOfMonth = WeekMath.startOfMonth(for: date, calendar: calendar)
         let endExclusive = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? date
         var marbles: [JarMarble] = []
-        for delivery in deliveries where delivery.date >= startOfMonth && delivery.date < endExclusive {
+        for delivery in logged(deliveries) where delivery.date >= startOfMonth && delivery.date < endExclusive {
             let babies = delivery.babies ?? []
             let link: UUID? = babies.count > 1 ? delivery.id : nil
             for baby in babies {
@@ -175,7 +187,7 @@ public enum DeliveryStatistics {
         BirthRole.allCases.compactMap { role in
             let matching = deliveries.filter { $0.role == role }
             guard !matching.isEmpty else { return nil }
-            return RoleStat(role: role, deliveries: matching.count, babies: matching.reduce(0) { $0 + $1.babyCount })
+            return RoleStat(role: role, deliveries: matching.reduce(0) { $0 + $1.deliveryWeight }, babies: matching.reduce(0) { $0 + $1.babyCount })
         }
         .sorted { $0.deliveries > $1.deliveries }
     }
@@ -188,8 +200,9 @@ public enum DeliveryStatistics {
 
     // MARK: - Method / epidural / NICU
 
-    public static func deliveryMethodStats(deliveries: [Delivery]) -> DeliveryMethodStats {
-        DeliveryMethodStats(
+    public static func deliveryMethodStats(deliveries all: [Delivery]) -> DeliveryMethodStats {
+        let deliveries = logged(all)
+        return DeliveryMethodStats(
             vaginalCount: deliveries.count { $0.deliveryMethod == .vaginal },
             cSectionCount: deliveries.count { $0.deliveryMethod == .cSection },
             vBacCount: deliveries.count { $0.deliveryMethod == .vBac },
@@ -197,14 +210,15 @@ public enum DeliveryStatistics {
         )
     }
 
-    public static func epiduralUsagePercentage(deliveries: [Delivery]) -> Double {
+    public static func epiduralUsagePercentage(deliveries all: [Delivery]) -> Double {
+        let deliveries = logged(all)
         guard !deliveries.isEmpty else { return 0 }
         let epiduralCount = deliveries.count { $0.epiduralUsed }
         return (Double(epiduralCount) / Double(deliveries.count)) * 100
     }
 
     public static func nicuStayPercentage(deliveries: [Delivery]) -> Double {
-        let allBabies = deliveries.flatMap { $0.babies ?? [] }
+        let allBabies = logged(deliveries).flatMap { $0.babies ?? [] }
         guard !allBabies.isEmpty else { return 0 }
         let nicuCount = allBabies.count { $0.nicuStay }
         return (Double(nicuCount) / Double(allBabies.count)) * 100
@@ -213,7 +227,7 @@ public enum DeliveryStatistics {
     // MARK: - Babies
 
     public static func babyMeasurementStats(deliveries: [Delivery]) -> BabyMeasurementStats {
-        let allBabies = deliveries.flatMap { $0.babies ?? [] }
+        let allBabies = logged(deliveries).flatMap { $0.babies ?? [] }
         guard !allBabies.isEmpty else {
             return BabyMeasurementStats(averageWeight: 0, averageHeight: 0, count: 0)
         }
@@ -228,16 +242,16 @@ public enum DeliveryStatistics {
     }
 
     public static func sexDistribution(deliveries: [Delivery]) -> SexDistributionStats {
-        let allBabies = deliveries.flatMap { $0.babies ?? [] }
-        return SexDistributionStats(
-            maleCount: allBabies.count { $0.sex == .male },
-            femaleCount: allBabies.count { $0.sex == .female },
-            lossCount: allBabies.count { $0.sex == .loss },
-            total: allBabies.count
-        )
+        let allBabies = logged(deliveries).flatMap { $0.babies ?? [] }
+        let estimated = deliveries.filter(\.isEstimated)
+        let male = allBabies.count { $0.sex == .male } + estimated.reduce(0) { $0 + $1.estimatedBoys }
+        let female = allBabies.count { $0.sex == .female } + estimated.reduce(0) { $0 + $1.estimatedGirls }
+        let loss = allBabies.count { $0.sex == .loss } + estimated.reduce(0) { $0 + $1.estimatedLosses }
+        return SexDistributionStats(maleCount: male, femaleCount: female, lossCount: loss, total: male + female + loss)
     }
 
-    public static func monthlyBabyCounts(deliveries: [Delivery], calendar: Calendar = .current) -> MonthlyBabyCounts {
+    public static func monthlyBabyCounts(deliveries all: [Delivery], calendar: Calendar = .current) -> MonthlyBabyCounts {
+        let deliveries = logged(all)
         guard !deliveries.isEmpty else { return MonthlyBabyCounts(labels: [], counts: []) }
         var monthlyCounts: [Date: Int] = [:]
         for delivery in deliveries {
@@ -255,7 +269,8 @@ public enum DeliveryStatistics {
 
     // MARK: - Timing patterns
 
-    public static func timeOfDayStats(deliveries: [Delivery], calendar: Calendar = .current) -> TimeOfDayStats {
+    public static func timeOfDayStats(deliveries all: [Delivery], calendar: Calendar = .current) -> TimeOfDayStats {
+        let deliveries = logged(all)
         var hourCounts: [Int: Int] = [:]
         for delivery in deliveries {
             let hour = calendar.component(.hour, from: delivery.date)
@@ -270,7 +285,8 @@ public enum DeliveryStatistics {
         )
     }
 
-    public static func dayOfWeekStats(deliveries: [Delivery], calendar: Calendar = .current) -> DayOfWeekStats {
+    public static func dayOfWeekStats(deliveries all: [Delivery], calendar: Calendar = .current) -> DayOfWeekStats {
+        let deliveries = logged(all)
         var dayCounts: [Int: Int] = [:]
         for delivery in deliveries {
             let weekday = calendar.component(.weekday, from: delivery.date)
@@ -295,7 +311,7 @@ public enum DeliveryStatistics {
 
         for delivery in deliveries {
             let year = calendar.component(.year, from: delivery.date)
-            yearlyDeliveries[year, default: 0] += 1
+            yearlyDeliveries[year, default: 0] += delivery.deliveryWeight
             yearlyBabies[year, default: 0] += delivery.babyCount
         }
 
@@ -315,7 +331,8 @@ public enum DeliveryStatistics {
         )
     }
 
-    public static func personalBests(deliveries: [Delivery], calendar: Calendar = .current) -> PersonalBests {
+    public static func personalBests(deliveries all: [Delivery], calendar: Calendar = .current) -> PersonalBests {
+        let deliveries = logged(all)
         guard !deliveries.isEmpty else {
             return PersonalBests(
                 mostDeliveriesInDay: nil,

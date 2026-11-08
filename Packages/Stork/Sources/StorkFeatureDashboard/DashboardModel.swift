@@ -64,6 +64,15 @@ public final class DashboardModel {
         DashboardCard.saveOrder(order, to: store)
     }
 
+    /// Individually logged deliveries (the jar, calendar and month pages skip estimated
+    /// past-birth summaries because those have no real date).
+    public var loggedDeliveries: [Delivery] { DeliveryStatistics.logged(deliveries) }
+
+    /// Babies from estimated past-birth summaries, shown as a footnote under the jar.
+    public var estimatedBabyCount: Int {
+        deliveries.reduce(0) { $0 + ($1.isEstimated ? $1.babyCount : 0) }
+    }
+
     public var monthlyJarCounts: (boy: Int, girl: Int, loss: Int) {
         DeliveryStatistics.monthlyJarCounts(deliveries: deliveries)
     }

@@ -24,7 +24,7 @@ struct BabiesThisWeekIntent: AppIntent {
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<Int> {
         let week = WeekMath.weekRange()
         let count = ((try? session.loadDeliveries()) ?? [])
-            .filter { week.contains($0.date) }
+            .filter { !$0.isEstimated && week.contains($0.date) }
             .reduce(0) { $0 + ($1.babies?.count ?? $1.babyCount) }
 
         return .result(

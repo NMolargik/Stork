@@ -37,6 +37,11 @@ public protocol DeliveryRepository: AnyObject {
     @discardableResult
     func add(_ delivery: Delivery) throws(PersistenceError) -> MilestoneCelebration?
 
+    /// Inserts many deliveries in one transaction (Add Past Births, CSV import) with one
+    /// side-effect pass. Milestones crossed by the batch are marked celebrated silently:
+    /// importing a career should not fire a confetti card.
+    func addAll(_ deliveries: [Delivery]) throws(PersistenceError)
+
     /// Persists edits to an already-inserted delivery, running save side effects.
     func update(_ delivery: Delivery) throws(PersistenceError)
 
@@ -50,7 +55,28 @@ public protocol DeliveryRepository: AnyObject {
     func careerTotals() -> CareerTotals
 }
 
+public extension DeliveryRepository {
+    /// Fallback for simple repositories: one insert per delivery.
+    func addAll(_ deliveries: [Delivery]) throws(PersistenceError) {
+        for delivery in deliveries { try add(delivery) }
+    }
+}
+
 // MARK: - Use cases
+
+/// Imports a batch of deliveries (estimated past births or CSV rows) in one transaction.
+@MainActor
+public protocol ImportDeliveries {
+    func callAsFunction(_ deliveries: [Delivery]) throws(PersistenceError)
+}
+
+public struct ImportDeliveriesUseCase: ImportDeliveries {
+    private let repository: any DeliveryRepository
+    public init(repository: any DeliveryRepository) { self.repository = repository }
+    public func callAsFunction(_ deliveries: [Delivery]) throws(PersistenceError) {
+        try repository.addAll(deliveries)
+    }
+}
 
 /// Loads all deliveries, newest first.
 @MainActor

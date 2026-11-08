@@ -35,7 +35,8 @@ public final class ExportModel {
     }
 
     public func load() {
-        deliveries = (try? loadDeliveriesUseCase()) ?? []
+        // Estimated past-birth summaries have no real dates or details, so exports skip them.
+        deliveries = ((try? loadDeliveriesUseCase()) ?? []).filter { !$0.isEstimated }
     }
 
     public var totalBabies: Int {

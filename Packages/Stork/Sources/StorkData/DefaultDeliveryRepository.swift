@@ -63,9 +63,13 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
     }
 
     public func careerTotals() -> CareerTotals {
-        CareerTotals(
-            deliveries: (try? context.fetchCount(FetchDescriptor<Delivery>())) ?? 0,
-            babies: (try? context.fetchCount(FetchDescriptor<Baby>())) ?? 0
+        // Estimated past-birth summaries and imported rows without a sex carry no Baby
+        // rows, so the denormalized `babyCount` is the source of truth (falling back to
+        // the relationship for any legacy delivery that never set it).
+        let all = (try? context.fetch(FetchDescriptor<Delivery>())) ?? []
+        return CareerTotals(
+            deliveries: all.reduce(0) { $0 + $1.deliveryWeight },
+            babies: all.reduce(0) { $0 + ($1.babyCount > 0 ? $1.babyCount : ($1.babies?.count ?? 0)) }
         )
     }
 
@@ -78,6 +82,16 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
         try persistAndPropagate()
         maybeRequestReviewIfFifthEver()
         return checkForMilestone()
+    }
+
+    public func addAll(_ deliveries: [Delivery]) throws(PersistenceError) {
+        for delivery in deliveries {
+            context.insert(delivery)
+            for baby in delivery.babies ?? [] { baby.delivery = delivery }
+        }
+        try persistAndPropagate()
+        // Silently mark every milestone the batch crossed as celebrated.
+        while checkForMilestone() != nil {}
     }
 
     public func update(_ delivery: Delivery) throws(PersistenceError) {
@@ -134,7 +148,7 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
         let week = WeekMath.weekRange()
         let (start, end) = (week.start, week.end)
         var descriptor = FetchDescriptor<Delivery>()
-        descriptor.predicate = #Predicate<Delivery> { $0.date >= start && $0.date < end }
+        descriptor.predicate = #Predicate<Delivery> { $0.date >= start && $0.date < end && !$0.isEstimated }
         do {
             let weekly = try context.fetch(descriptor)
             let total = weekly.reduce(0) { sum, d in

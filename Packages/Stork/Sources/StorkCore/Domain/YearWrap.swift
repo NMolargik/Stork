@@ -91,7 +91,7 @@ public enum YearWrap {
         calendar: Calendar = .current
     ) -> [Int] {
         var years: Set<Int> = []
-        for delivery in deliveries where counting.counts(delivery.role) && liveBabies(delivery) > 0 {
+        for delivery in deliveries where !delivery.isEstimated && counting.counts(delivery.role) && liveBabies(delivery) > 0 {
             years.insert(calendar.component(.year, from: delivery.date))
         }
         return years.sorted(by: >)
@@ -104,7 +104,7 @@ public enum YearWrap {
         counting: BirthRoleCounting = BirthRoleCounting(),
         calendar: Calendar = .current
     ) -> YearWrapStats? {
-        let counted = all.filter { counting.counts($0.role) }
+        let counted = all.filter { !$0.isEstimated && counting.counts($0.role) }
         let inYear = counted.filter { calendar.component(.year, from: $0.date) == year }
         let live = inYear.filter { liveBabies($0) > 0 }
         guard !live.isEmpty else { return nil }

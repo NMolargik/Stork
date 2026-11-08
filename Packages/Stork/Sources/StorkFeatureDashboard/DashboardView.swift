@@ -126,13 +126,23 @@ public struct DashboardView: View {
                 JarView(
                     marbles: marbles,
                     highlight: selection,
-                    history: AnyView(JarHistoryView(deliveries: model.deliveries, isProUnlocked: model.isProUnlocked)),
+                    history: AnyView(JarHistoryView(deliveries: model.loggedDeliveries, isProUnlocked: model.isProUnlocked)),
                     reshuffle: $jarShuffle
                 )
                 .id(WeekMath.startOfMonth(for: Date()))
                 .frame(height: 250)
 
                 JarLegendView(marbles: marbles, monthDate: Date(), isProUnlocked: model.isProUnlocked, selection: $selection)
+
+                if model.estimatedBabyCount > 0 {
+                    Label {
+                        Text("Plus ^[\(model.estimatedBabyCount) earlier baby](inflect: true), estimated. These are in your career totals, not this month's jar.", bundle: .module)
+                    } icon: {
+                        Image(systemName: "sparkles").accessibilityHidden(true)
+                    }
+                    .font(.caption).foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
         }
     }
