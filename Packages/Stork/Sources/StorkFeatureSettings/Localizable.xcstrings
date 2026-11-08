@@ -1637,28 +1637,6 @@
         }
       }
     },
-    "Leave a field blank to skip it. Without a boys percentage, these births stay out of the boy and girl split.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deja un campo en blanco para omitirlo. Sin un porcentaje de niños, estos partos quedan fuera de la distribución niño/niña."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laissez un champ vide pour l'ignorer. Sans pourcentage de garçons, ces accouchements restent hors de la répartition garçon/fille."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "空欄の項目はスキップされます。男の子の割合を入れない場合、これらの分娩は男女の内訳に含まれません。"
-          }
-        }
-      }
-    },
     "Lock After": {
       "localizations": {
         "es": {
@@ -2033,24 +2011,46 @@
         }
       }
     },
-    "Skip": {
+    "Optional": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Omitir"
+            "value": "Opcional"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorer"
+            "value": "Facultatif"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "省略"
+            "value": "任意"
+          }
+        }
+      }
+    },
+    "Blank fields are skipped. Without a boys percentage, these births stay out of the boy and girl split.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los campos en blanco se omiten. Sin un porcentaje de niños, estos partos quedan fuera de la distribución niño/niña."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les champs vides sont ignorés. Sans pourcentage de garçons, ces accouchements restent hors de la répartition garçon/fille."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "空欄の項目はスキップされます。男の子の割合を入れない場合、これらの分娩は男女の内訳に含まれません。"
           }
         }
       }

@@ -170,7 +170,7 @@ public struct MainView: View {
             }
             .tabViewStyle(.sidebarAdaptable)
             #if canImport(HealthKit)
-            .tabViewBottomAccessoryIfAvailable {
+            .tabViewBottomAccessoryIfAvailable(isEnabled: router.selectedTab == .dashboard) {
                 HStack(spacing: 12) {
                     StepCountPill(manager: session.healthManager) { showingStepTrend = true }
                     Spacer()

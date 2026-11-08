@@ -112,16 +112,18 @@ struct AddPastBirthsView: View {
         } header: {
             Text("Optional Details", bundle: .module)
         } footer: {
-            Text("Leave a field blank to skip it. Without a boys percentage, these births stay out of the boy and girl split.", bundle: .module)
+            Text("Blank fields are skipped. Without a boys percentage, these births stay out of the boy and girl split.", bundle: .module)
         }
     }
 
     private func percentField(_ title: LocalizedStringKey, detail: LocalizedStringKey, value: Binding<Int?>) -> some View {
         LabeledContent {
             HStack(spacing: 4) {
-                TextField(String(localized: "Skip", bundle: .module), value: value, format: .number.grouping(.never))
-                    .keyboardType(.numberPad).multilineTextAlignment(.trailing).frame(maxWidth: 70)
-                Text(verbatim: "%").foregroundStyle(.secondary)
+                TextField(String(localized: "Optional", bundle: .module), value: value, format: .number.grouping(.never))
+                    .keyboardType(.numberPad).multilineTextAlignment(.trailing).frame(maxWidth: 90)
+                if value.wrappedValue != nil {
+                    Text(verbatim: "%").foregroundStyle(.secondary)
+                }
             }
         } label: {
             VStack(alignment: .leading, spacing: 0) {
