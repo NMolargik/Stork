@@ -122,19 +122,38 @@ private struct PreferencesSection: View {
     }
 }
 
+/// Nine toggles used to sit inline and push Data and Privacy off screen. They now live one tap away.
 private struct RolesSection: View {
     @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
 
+    private var countedSummary: String {
+        let counting = BirthRoleCounting(storedValue: excludedRoles)
+        let counted = BirthRole.allCases.filter { counting.counts($0) }.count
+        return "\(counted)/\(BirthRole.allCases.count)"
+    }
+
     var body: some View {
         Section {
-            ForEach(BirthRole.allCases) { role in
-                Toggle(isOn: binding(for: role)) { Label(role.displayName, systemImage: role.systemImage) }
-                    .tint(.storkPurple)
+            NavigationLink {
+                Form {
+                    Section {
+                        ForEach(BirthRole.allCases) { role in
+                            Toggle(isOn: binding(for: role)) { Label(role.displayName, systemImage: role.systemImage) }
+                                .tint(.storkPurple)
+                        }
+                    } footer: {
+                        Text("Choose which roles count toward your headline birth total. Deliveries with no role recorded always count. Every delivery stays in your history either way.", bundle: .module)
+                    }
+                }
+                .navigationTitle(Text("Roles Counted in Totals", bundle: .module))
+                .navigationBarTitleDisplayMode(.inline)
+            } label: {
+                LabeledContent {
+                    Text(countedSummary).foregroundStyle(.secondary)
+                } label: {
+                    Label(String(localized: "Roles Counted in Totals", bundle: .module), systemImage: "person.2")
+                }
             }
-        } header: {
-            Text("Roles Counted in Totals", bundle: .module)
-        } footer: {
-            Text("Choose which roles count toward your headline birth total. Deliveries with no role recorded always count. Every delivery stays in your history either way.", bundle: .module)
         }
     }
 

@@ -75,22 +75,27 @@ public struct DashboardMoreMenu: View {
     public var body: some View {
         let years = model.wrapYears(counting: BirthRoleCounting(storedValue: excludedRoles))
         Menu {
-            Section(String(localized: "Your Year in Births", bundle: .module)) {
-                if years.isEmpty {
-                    Text("Your Wrap appears once you log a birth", bundle: .module)
-                } else {
+            if years.count > 1 {
+                Menu {
                     ForEach(years, id: \.self) { year in
-                        Button {
-                            model.presentedWrapYear = year
-                        } label: {
-                            Label(String(year), systemImage: "sparkles")
-                        }
+                        Button(String(year)) { model.presentedWrapYear = year }
                     }
+                } label: {
+                    Label(String(localized: "Year in Births…", bundle: .module), systemImage: "sparkles")
                 }
+            } else if let year = years.first {
+                Button { model.presentedWrapYear = year } label: {
+                    Label(String(localized: "Year in Births…", bundle: .module), systemImage: "sparkles")
+                }
+            } else {
+                Button {} label: {
+                    Label(String(localized: "Year in Births…", bundle: .module), systemImage: "sparkles")
+                }
+                .disabled(true)
             }
             Section {
                 Button { showingReorderSheet = true } label: {
-                    Label(String(localized: "Reorder Cards", bundle: .module), systemImage: "arrow.up.arrow.down")
+                    Label(String(localized: "Reorder Cards…", bundle: .module), systemImage: "arrow.up.arrow.down")
                 }
                 .keyboardShortcut("r", modifiers: .command)
             }

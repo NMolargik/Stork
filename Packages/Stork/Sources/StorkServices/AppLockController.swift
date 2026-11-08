@@ -8,6 +8,7 @@
 //  cannot authenticate at all it never traps the user out: it stays unlocked.
 //
 
+#if !os(watchOS)
 import Foundation
 import Observation
 import StorkCore
@@ -117,3 +118,4 @@ public final class AppLockController {
         return true
     }
 }
+#endif

@@ -26,6 +26,7 @@ public protocol BiometricAuthenticating {
     func authenticate(reason: String) async -> AuthenticationResult
 }
 
+#if !os(watchOS)
 /// `LAPolicy.deviceOwnerAuthentication`: Face ID / Touch ID, falling back to the device
 /// passcode. Nothing is stored; the system does the matching.
 @MainActor
@@ -67,3 +68,4 @@ public struct LocalAuthenticator: BiometricAuthenticating {
         }
     }
 }
+#endif
