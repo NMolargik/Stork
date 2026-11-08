@@ -20,16 +20,19 @@ public extension View {
         modifier(StatPillBackground())
     }
 
-    /// Attaches a tab-bar bottom accessory where it belongs — an iPhone/iPad idiom.
-    /// No-op on visionOS, and on Mac ("Designed for iPad", `isiOSAppOnMac`), where a
-    /// floating bottom accessory reads as out of place under the Mac window chrome.
+    /// Attaches a tab-bar bottom accessory where it belongs: an iPhone/iPad idiom on
+    /// iOS 26+. `isEnabled: false` removes the accessory (and its space) entirely on
+    /// 26.1+; on 26.0 it is simply not attached. No-op on visionOS and on Mac
+    /// ("Designed for iPad"), where a floating accessory reads as out of place.
     @ContentBuilder
-    func tabViewBottomAccessoryIfAvailable<Accessory: View>(@ContentBuilder _ accessory: () -> Accessory) -> some View {
+    func tabViewBottomAccessoryIfAvailable<Accessory: View>(isEnabled: Bool = true, @ContentBuilder _ accessory: () -> Accessory) -> some View {
         #if os(iOS)
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            self
-        } else {
+        if #available(iOS 26.1, *), !ProcessInfo.processInfo.isiOSAppOnMac {
+            tabViewBottomAccessory(isEnabled: isEnabled, content: accessory)
+        } else if #available(iOS 26.0, *), !ProcessInfo.processInfo.isiOSAppOnMac, isEnabled {
             tabViewBottomAccessory(content: accessory)
+        } else {
+            self
         }
         #else
         self
