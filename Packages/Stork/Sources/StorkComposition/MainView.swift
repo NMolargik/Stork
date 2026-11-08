@@ -196,13 +196,7 @@ public struct MainView: View {
 
         var body: some ToolbarContent {
             ToolbarItem(placement: .topBarTrailing) {
-                YearWrapMenu(model: model)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button { showingReorderSheet = true } label: { Image(systemName: "arrow.up.arrow.down") }
-                    .accessibilityLabel(Text("Reorder cards", bundle: .module))
-                    .keyboardShortcut("r", modifiers: .command)
-                    .hoverEffect(.highlight)
+                DashboardMoreMenu(model: model, showingReorderSheet: $showingReorderSheet)
             }
             ToolbarSpacer(.fixed, placement: .topBarTrailing)
             ToolbarItem(placement: .confirmationAction) {

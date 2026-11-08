@@ -243,6 +243,35 @@
           }
         }
       }
+    },
+    "NSFaceIDUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork uses Face ID only to unlock the app when you turn on Require Face ID. Nothing about your face is stored or shared."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork usa Face ID solo para desbloquear la app cuando activas Requerir Face ID. Nada sobre tu rostro se guarda ni se comparte."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork utilise Face ID uniquement pour déverrouiller l'app lorsque vous activez Exiger Face ID. Rien sur votre visage n'est enregistré ni partagé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StorkはFace IDを「Face IDを必須にする」をオンにしたときのアプリのロック解除にのみ使用します。顔に関する情報が保存・共有されることはありません。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -26,6 +26,20 @@ public final class Delivery {
     /// CloudKit's lightweight migration just adds a nullable field.
     public var role: BirthRole?
 
+    // Estimated past births (Add Past Births). A "summary" delivery stands in for a whole
+    // year of births recorded from memory: `isEstimated` marks it, `estimatedDeliveries`
+    // is how many deliveries it represents, `babyCount` how many babies, and the three
+    // split counts are the known part of the sex breakdown (boys + girls + losses may be
+    // less than `babyCount`; the rest is unknown). It owns no `Baby` rows and sits at a
+    // placeholder date inside its year, so date-based stats must skip it (see
+    // `DeliveryStatistics`). Additive columns with defaults, so CloudKit migration is
+    // lightweight and old devices simply see ordinary one-delivery records.
+    public var isEstimated: Bool = false
+    public var estimatedDeliveries: Int = 0
+    public var estimatedBoys: Int = 0
+    public var estimatedGirls: Int = 0
+    public var estimatedLosses: Int = 0
+
     // Optional weather snapshot (Stork Pro). Stored flat so CloudKit's lightweight
     // migration adds three nullable columns; read/write through `weather`.
     public var weatherTemperatureCelsius: Double?
@@ -52,6 +66,12 @@ public final class Delivery {
         self.notes = notes
         self.tags = tags
         self.role = role
+    }
+
+    /// How many deliveries this record counts as: 1 for a real delivery, the estimated
+    /// total for a past-births summary.
+    public var deliveryWeight: Int {
+        isEstimated ? max(0, estimatedDeliveries) : 1
     }
 
     /// The attached weather snapshot, if the delivery has one.

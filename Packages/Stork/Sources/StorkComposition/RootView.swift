@@ -21,6 +21,7 @@ public struct RootView: View {
     @State private var stage: AppStage = .splash
     @State private var didShowSyncToast = false
     @State private var wasReturningUser = false
+    @Environment(\.scenePhase) private var scenePhase
 
     public init() {}
 
@@ -43,6 +44,22 @@ public struct RootView: View {
         }
         .toastContainer()
         .environment(toast)
+        .environment(session.appLock)
+        // Covers everything while locked, and while the app switcher snapshot is taken.
+        .overlay {
+            if session.appLock.isLocked || (session.appLock.isEnabled && scenePhase != .active) {
+                AppLockView(lock: session.appLock)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: session.appLock.isLocked)
+        .onChange(of: scenePhase) { _, phase in
+            switch phase {
+            case .background: session.appLock.sceneDidEnterBackground()
+            case .active: session.appLock.sceneDidBecomeActive()
+            default: break
+            }
+        }
         .task {
             wasReturningUser = isOnboardingComplete
             stage = isOnboardingComplete ? .main : .splash

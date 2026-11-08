@@ -37,9 +37,17 @@ public struct DeliveryEntryView: View {
                 TagsSection(model: model)
                 NotesSection(model: model)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle(model.isEditing ? "Edit Delivery" : "New Delivery")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // The keyboard covers the inline warning, so a short reminder rides above it.
+                ToolbarItem(placement: .keyboard) {
+                    if !model.noteIdentifierKinds.isEmpty {
+                        Label(String(localized: "Note may include an identifier", bundle: .module), systemImage: "hand.raised.fill")
+                            .font(.footnote).foregroundStyle(.orange)
+                    }
+                }
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
                         .keyboardShortcut(.escape, modifiers: [])
@@ -262,11 +270,38 @@ public struct DeliveryEntryView: View {
         }
     }
 
+    /// A calm, inline nudge. Orange rather than red, no alert, and saving stays enabled.
+    private struct IdentifierWarning: View {
+        let kinds: [IdentifierKind]
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 4) {
+                Label {
+                    Text("This note may include something that identifies a patient. Stork works best without it, so consider removing it. You can still save.", bundle: .module)
+                        .font(.footnote)
+                } icon: {
+                    Image(systemName: "hand.raised.fill").foregroundStyle(.orange)
+                }
+                // A name field already implies "looks like a name": show one, not both.
+                Text(kinds.filter { !($0 == .personName && kinds.contains(.nameField)) }.map(\.label).joined(separator: " \u{00B7} "))
+                    .font(.caption2).foregroundStyle(.secondary)
+                    .padding(.leading, 28)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier("identifierWarning")
+        }
+    }
+
     private struct NotesSection: View {
         @Bindable var model: DeliveryEntryModel
 
         var body: some View {
             Section {
+                // Above the field, not below it: the keyboard covers anything under a focused note.
+                let kinds = model.noteIdentifierKinds
+                if !kinds.isEmpty {
+                    IdentifierWarning(kinds: kinds)
+                }
                 TextField(String(localized: "Add a personal note...", bundle: .module), text: $model.notes, axis: .vertical)
                     .lineLimit(3...6)
                     .accessibilityLabel(Text("Delivery notes", bundle: .module))
@@ -275,6 +310,18 @@ public struct DeliveryEntryView: View {
             } footer: {
                 Text("Private notes for memorable deliveries. No PHI - just personal memories like \"twins on Christmas!\"", bundle: .module)
             }
+        }
+    }
+}
+
+private extension IdentifierKind {
+    var label: String {
+        switch self {
+        case .medicalRecordNumber: String(localized: "Looks like a record number", bundle: .module)
+        case .dateOfBirth: String(localized: "Looks like a date of birth", bundle: .module)
+        case .nameField: String(localized: "Looks like a name field", bundle: .module)
+        case .personName: String(localized: "Looks like a person's name", bundle: .module)
+        case .contactDetail: String(localized: "Looks like contact details", bundle: .module)
         }
     }
 }

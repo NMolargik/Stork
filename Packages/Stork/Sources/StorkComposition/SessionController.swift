@@ -34,6 +34,7 @@ public final class SessionController {
 
     public let loadDeliveries: any LoadDeliveries
     public let logDelivery: any LogDelivery
+    public let importDeliveries: any ImportDeliveries
     public let updateDelivery: any UpdateDelivery
     public let deleteDelivery: any DeleteDelivery
     public let deleteAllDeliveries: any DeleteAllDeliveries
@@ -55,6 +56,10 @@ public final class SessionController {
     public let loadTags: any LoadTags
     public let saveTag: any SaveTag
     public let deleteTag: any DeleteTag
+
+    // MARK: Privacy lock
+
+    public let appLock: AppLockController
 
     // MARK: Environmental managers
 
@@ -128,6 +133,7 @@ public final class SessionController {
 
         loadDeliveries = LoadDeliveriesUseCase(repository: deliveries)
         logDelivery = LogDeliveryUseCase(repository: deliveries)
+        importDeliveries = ImportDeliveriesUseCase(repository: deliveries)
         updateDelivery = UpdateDeliveryUseCase(repository: deliveries)
         deleteDelivery = DeleteDeliveryUseCase(repository: deliveries)
         deleteAllDeliveries = DeleteAllDeliveriesUseCase(repository: deliveries)
@@ -136,6 +142,8 @@ public final class SessionController {
         loadTags = LoadTagsUseCase(repository: tagRepository)
         saveTag = SaveTagUseCase(repository: tagRepository)
         deleteTag = DeleteTagUseCase(repository: tagRepository)
+
+        appLock = AppLockController()
 
         let location = LocationManager()
         locationManager = location
@@ -160,6 +168,12 @@ public final class SessionController {
         if DebugLaunchOptions.seedWrapSample, ((try? loadDeliveries()) ?? []).isEmpty {
             // Straight into the context: skips the review prompt and milestone side effects.
             for delivery in DebugSampleBirths.twoYears() { container.mainContext.insert(delivery) }
+            try? container.mainContext.save()
+        }
+        if DebugLaunchOptions.seedPastBirths, ((try? loadDeliveries()) ?? []).isEmpty {
+            let years = PastBirths.years(from: 2018, to: 2022, average: 140)
+            let splits = PastBirthsSplits(multiplesPercent: 3, lossesPercent: 1, boysPercent: 51)
+            for delivery in PastBirths.makeDeliveries(years: years, splits: splits, role: .primaryNurse) { container.mainContext.insert(delivery) }
             try? container.mainContext.save()
         }
         #endif

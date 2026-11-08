@@ -22,6 +22,11 @@ nonisolated public enum AppStorageKeys {
     /// The Wrap year whose dashboard invitation the user dismissed.
     public static let wrapPromptDismissedYear = "wrapPromptDismissedYear"
 
+    /// Privacy lock (free for everyone): require Face ID / Touch ID / passcode to open Stork.
+    public static let requireBiometricLock = "requireBiometricLock"
+    /// Seconds in the background before the lock re-engages (`AppLockPolicy.timeoutOptions`).
+    public static let lockTimeoutSeconds = "lockTimeoutSeconds"
+
     // Stork Pro entitlement cache (StoreManager). Cached so gating works offline and the
     // grandfather check doesn't re-query the App Store receipt every launch.
     public static let proPurchased = "StorkPro.isPurchased"

@@ -32,7 +32,7 @@ func babiesThisWeekCount() throws -> Int {
     }
     let deliveries = try context.fetch(desc)
     return deliveries.reduce(0) { sum, delivery in
-        sum + (delivery.babies?.count ?? 0)
+        sum + (delivery.babyCount > 0 ? delivery.babyCount : (delivery.babies?.count ?? 0))
     }
 }
 

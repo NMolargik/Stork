@@ -17,6 +17,7 @@ public final class SettingsModel {
     private let loadDeliveriesUseCase: any LoadDeliveries
     private let deleteAllDeliveriesUseCase: any DeleteAllDeliveries
     private let logDeliveryUseCase: any LogDelivery
+    private let importDeliveriesUseCase: any ImportDeliveries
     private let entitlement: any EntitlementProviding
 
     public private(set) var deliveries: [Delivery] = []
@@ -29,11 +30,13 @@ public final class SettingsModel {
         loadDeliveries: any LoadDeliveries,
         deleteAllDeliveries: any DeleteAllDeliveries,
         logDelivery: any LogDelivery,
+        importDeliveries: any ImportDeliveries,
         entitlement: any EntitlementProviding
     ) {
         self.loadDeliveriesUseCase = loadDeliveries
         self.deleteAllDeliveriesUseCase = deleteAllDeliveries
         self.logDeliveryUseCase = logDelivery
+        self.importDeliveriesUseCase = importDeliveries
         self.entitlement = entitlement
     }
 
@@ -50,7 +53,18 @@ public final class SettingsModel {
         isProUnlocked || color == Self.primaryIconColor
     }
 
-    public var deliveryCount: Int { deliveries.count }
+    /// Deliveries on record, counting each estimated past-birth summary as the births it stands for.
+    public var deliveryCount: Int { deliveries.reduce(0) { $0 + $1.deliveryWeight } }
+
+    // MARK: - Backfill and import (free)
+
+    public func makeAddPastBirthsModel() -> AddPastBirthsModel {
+        AddPastBirthsModel(importDeliveries: importDeliveriesUseCase)
+    }
+
+    public func makeCSVImportModel() -> CSVImportModel {
+        CSVImportModel(loadDeliveries: loadDeliveriesUseCase, importDeliveries: importDeliveriesUseCase)
+    }
 
     public func load() {
         do {

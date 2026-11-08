@@ -888,6 +888,2272 @@
           }
         }
       }
+    },
+    "About ^[%lld birth](inflect: true) and ^[%lld baby](inflect: true) across ^[%lld year](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unos ^[%lld parto](inflect: true) y ^[%lld bebé](inflect: true) en ^[%lld año](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Environ ^[%lld accouchement](inflect: true) et ^[%lld bébé](inflect: true) sur ^[%lld année](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "約%1$lld件の分娩、赤ちゃん%2$lld人(%3$lld年分)"
+          }
+        }
+      }
+    },
+    "Add": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加"
+          }
+        }
+      }
+    },
+    "Add Past Births": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir partos pasados"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter des accouchements passés"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "過去の分娩を追加"
+          }
+        }
+      }
+    },
+    "Add Year": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir año"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une année"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年を追加"
+          }
+        }
+      }
+    },
+    "Added ^[%lld estimated birth](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se añadieron ^[%lld parto estimado](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld accouchement estimé](inflect: true) ajouté(s)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推定の分娩%lld件を追加しました"
+          }
+        }
+      }
+    },
+    "After 1 minute": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tras 1 minuto"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après 1 minute"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1分後"
+          }
+        }
+      }
+    },
+    "After 15 minutes": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tras 15 minutos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après 15 minutes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "15分後"
+          }
+        }
+      }
+    },
+    "After 5 minutes": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tras 5 minutos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après 5 minutes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5分後"
+          }
+        }
+      }
+    },
+    "Already in Stork. Skipped unless you import duplicates.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ya está en Stork. Se omite a menos que importes duplicados."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déjà dans Stork. Ignoré, sauf si vous importez les doublons."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すでにStorkにあります。重複をインポートしない限りスキップされます。"
+          }
+        }
+      }
+    },
+    "Average per year": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promedio por año"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moyenne par année"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年間の平均"
+          }
+        }
+      }
+    },
+    "Births": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accouchements"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩数"
+          }
+        }
+      }
+    },
+    "Births per year must be between 0 and 2,000.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los partos por año deben estar entre 0 y 2,000."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le nombre d'accouchements par année doit être entre 0 et 2 000."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年間の分娩数は0から2,000の間にしてください。"
+          }
+        }
+      }
+    },
+    "Both are free. Estimated years count toward your totals but never appear in day, month or time statistics.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambas son gratis. Los años estimados cuentan en tus totales pero nunca aparecen en las estadísticas por día, mes u hora."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les deux sont gratuits. Les années estimées comptent dans vos totaux, mais n'apparaissent jamais dans les statistiques par jour, mois ou heure."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "どちらも無料です。推定の年は合計に含まれますが、日・月・時間帯の統計には表示されません。"
+          }
+        }
+      }
+    },
+    "Choose CSV File": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir archivo CSV"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un fichier CSV"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSVファイルを選択"
+          }
+        }
+      }
+    },
+    "Choose a Different File": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir otro archivo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un autre fichier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "別のファイルを選択"
+          }
+        }
+      }
+    },
+    "Choose years from 1950 up to this year, with the start before the end.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige años desde 1950 hasta este año, con el inicio antes del final."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez des années de 1950 jusqu'à cette année, le début précédant la fin."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1950年から今年までの年を選び、開始を終了より前にしてください。"
+          }
+        }
+      }
+    },
+    "Columns": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Columnas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colonnes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列"
+          }
+        }
+      }
+    },
+    "Columns Not Imported": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Columnas no importadas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colonnes non importées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インポートされない列"
+          }
+        }
+      }
+    },
+    "Confirm it is you to change Stork's lock.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirma que eres tú para cambiar el bloqueo de Stork."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmez votre identité pour modifier le verrouillage de Stork."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkのロック設定を変更するには、本人確認をしてください。"
+          }
+        }
+      }
+    },
+    "Could not save. Please try again.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo guardar. Inténtalo de nuevo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d'enregistrer. Veuillez réessayer."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存できませんでした。もう一度お試しください。"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
+          }
+        }
+      }
+    },
+    "Download Template": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargar plantilla"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Télécharger le modèle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレートをダウンロード"
+          }
+        }
+      }
+    },
+    "Each year can only be listed once.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada año solo puede aparecer una vez."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque année ne peut figurer qu'une seule fois."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同じ年は一度しか指定できません。"
+          }
+        }
+      }
+    },
+    "Enter a number of births to see the total.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingresa un número de partos para ver el total."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisissez un nombre d'accouchements pour voir le total."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩数を入力すると合計が表示されます。"
+          }
+        }
+      }
+    },
+    "Entry": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrada"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisie"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "入力方法"
+          }
+        }
+      }
+    },
+    "Export your records, or bring in births from before you started using Stork.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporta tus registros o trae partos anteriores a que empezaras a usar Stork."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportez vos données, ou ajoutez des accouchements d'avant que vous utilisiez Stork."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録を書き出すか、Storkを使い始める前の分娩を取り込めます。"
+          }
+        }
+      }
+    },
+    "Face ID": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face ID"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face ID"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face ID"
+          }
+        }
+      }
+    },
+    "File": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archivo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fichier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイル"
+          }
+        }
+      }
+    },
+    "From": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desde"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始"
+          }
+        }
+      }
+    },
+    "Immediately": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inmediatamente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Immédiatement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すぐに"
+          }
+        }
+      }
+    },
+    "Import": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インポート"
+          }
+        }
+      }
+    },
+    "Import duplicates anyway": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar duplicados de todos modos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importer quand même les doublons"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重複もインポート"
+          }
+        }
+      }
+    },
+    "Import from CSV": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar desde CSV"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importer depuis un CSV"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSVからインポート"
+          }
+        }
+      }
+    },
+    "Imported ^[%lld birth](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se importaron ^[%lld parto](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld accouchement importé](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩%lld件をインポートしました"
+          }
+        }
+      }
+    },
+    "Leave a field blank to skip it. Without a boys percentage, these births stay out of the boy and girl split.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deja un campo en blanco para omitirlo. Sin un porcentaje de niños, estos partos quedan fuera de la distribución niño/niña."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laissez un champ vide pour l'ignorer. Sans pourcentage de garçons, ces accouchements restent hors de la répartition garçon/fille."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "空欄の項目はスキップされます。男の子の割合を入れない場合、これらの分娩は男女の内訳に含まれません。"
+          }
+        }
+      }
+    },
+    "Lock After": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear tras"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verrouiller après"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロックまでの時間"
+          }
+        }
+      }
+    },
+    "Needs Attention": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requiere atención"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À vérifier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要確認"
+          }
+        }
+      }
+    },
+    "No date column found. Add a column named date and try again.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se encontró una columna de fecha. Agrega una columna llamada date e inténtalo de nuevo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune colonne de date trouvée. Ajoutez une colonne nommée date et réessayez."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日付の列が見つかりません。「date」という列を追加してもう一度お試しください。"
+          }
+        }
+      }
+    },
+    "Not recorded": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin registrar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non consigné"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未記録"
+          }
+        }
+      }
+    },
+    "Optic ID": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optic ID"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optic ID"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optic ID"
+          }
+        }
+      }
+    },
+    "Optional Details": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalles opcionales"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détails facultatifs"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "任意の詳細"
+          }
+        }
+      }
+    },
+    "Passcode": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code d'accès"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスコード"
+          }
+        }
+      }
+    },
+    "Past Births & Import": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partos pasados e importar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accouchements passés et importation"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "過去の分娩とインポート"
+          }
+        }
+      }
+    },
+    "Preview": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista previa"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プレビュー"
+          }
+        }
+      }
+    },
+    "Privacy": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacidad"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confidentialité"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライバシー"
+          }
+        }
+      }
+    },
+    "Ready to Import": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo para importar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prêt à importer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インポート可能"
+          }
+        }
+      }
+    },
+    "Require Face ID": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requerir Face ID"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exiger Face ID"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face IDを必須にする"
+          }
+        }
+      }
+    },
+    "Round numbers are fine. A rough yearly average is enough.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los números redondos están bien. Un promedio anual aproximado basta."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les nombres ronds conviennent. Une moyenne annuelle approximative suffit."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おおよその数で構いません。年間のだいたいの平均で十分です。"
+          }
+        }
+      }
+    },
+    "Row %lld": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fila %lld"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligne %lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld行目"
+          }
+        }
+      }
+    },
+    "Saved as estimated. They count toward your totals, sex split and years, are marked Estimated in your list, and can be deleted any time.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se guardan como estimados. Cuentan en tus totales, distribución por sexo y años, aparecen marcados como Estimado en tu lista y puedes eliminarlos cuando quieras."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrés comme estimés. Ils comptent dans vos totaux, la répartition par sexe et les années, sont marqués Estimé dans votre liste et peuvent être supprimés à tout moment."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推定として保存されます。合計、男女の内訳、年ごとの数に含まれ、リストでは「推定」と表示され、いつでも削除できます。"
+          }
+        }
+      }
+    },
+    "Set a passcode in the iOS Settings app to use this lock.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura un código en la app Ajustes de iOS para usar este bloqueo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Définissez un code dans l'app Réglages d'iOS pour utiliser ce verrouillage."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このロックを使うには、iOSの設定アプリでパスコードを設定してください。"
+          }
+        }
+      }
+    },
+    "Showing the first 25 of %lld rows.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrando las primeras 25 de %lld filas."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affichage des 25 premières lignes sur %lld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld行のうち最初の25行を表示しています。"
+          }
+        }
+      }
+    },
+    "Skip": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "省略"
+          }
+        }
+      }
+    },
+    "Stork is a private log of the births you have been part of. It is built so that it never needs to know who anyone is.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork es un registro privado de los partos en los que has participado. Está hecho para que nunca necesite saber quién es nadie."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork est un journal privé des accouchements auxquels vous avez participé. Il est conçu pour ne jamais avoir besoin de savoir qui que ce soit."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは、あなたが関わった分娩の個人的な記録です。誰が誰であるかを知る必要がないように作られています。"
+          }
+        }
+      }
+    },
+    "Stork never imports names or patient identifiers. Columns such as name, MRN or date of birth are dropped automatically, and so are notes that look like them.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork nunca importa nombres ni identificadores de pacientes. Las columnas como nombre, MRN o fecha de nacimiento se descartan automáticamente, igual que las notas que se parecen a ellas."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork n'importe jamais de noms ni d'identifiants de patients. Les colonnes comme nom, NDM ou date de naissance sont automatiquement ignorées, tout comme les notes qui y ressemblent."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは名前や患者の識別情報を一切インポートしません。名前、MRN、生年月日などの列は自動的に除外され、それらに似たメモも除外されます。"
+          }
+        }
+      }
+    },
+    "That file could not be opened.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo abrir ese archivo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d'ouvrir ce fichier."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "そのファイルを開けませんでした。"
+          }
+        }
+      }
+    },
+    "That file could not be read as text.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo leer ese archivo como texto."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de lire ce fichier comme du texte."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "そのファイルをテキストとして読み取れませんでした。"
+          }
+        }
+      }
+    },
+    "These columns look like patient identifiers, so Stork ignored them.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estas columnas parecen identificadores de pacientes, por lo que Stork las ignoró."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ces colonnes ressemblent à des identifiants de patients, Stork les a donc ignorées."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これらの列は患者の識別情報のように見えるため、Storkは無視しました。"
+          }
+        }
+      }
+    },
+    "This file is empty.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este archivo está vacío."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce fichier est vide."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このファイルは空です。"
+          }
+        }
+      }
+    },
+    "To": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hasta"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "終了"
+          }
+        }
+      }
+    },
+    "Touch ID": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch ID"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch ID"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch ID"
+          }
+        }
+      }
+    },
+    "Uses %@, with your device passcode as the fallback. Free for everyone.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa %@, con el código de tu dispositivo como alternativa. Gratis para todos."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilise %@, avec le code de votre appareil en solution de rechange. Gratuit pour tous."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@を使用し、代替としてデバイスのパスコードを使います。すべてのユーザーが無料で利用できます。"
+          }
+        }
+      }
+    },
+    "What to avoid": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qué evitar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À éviter"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "避けるべきこと"
+          }
+        }
+      }
+    },
+    "Where it lives": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dónde se guarda"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Où c'est conservé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存される場所"
+          }
+        }
+      }
+    },
+    "Why This Is Safe to Keep": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por qué es seguro conservarlo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pourquoi il est sûr de conserver ceci"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安心して保存できる理由"
+          }
+        }
+      }
+    },
+    "Year": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Año"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Année"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年"
+          }
+        }
+      }
+    },
+    "Year Range": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rango de años"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage d'années"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "期間"
+          }
+        }
+      }
+    },
+    "Year by Year": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Año por año"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Année par année"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年ごと"
+          }
+        }
+      }
+    },
+    "Years": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Años"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Années"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年"
+          }
+        }
+      }
+    },
+    "You will see a preview before anything is added.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verás una vista previa antes de añadir nada."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous verrez un aperçu avant que quoi que ce soit soit ajouté."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加する前にプレビューが表示されます。"
+          }
+        }
+      }
+    },
+    "Your role": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu rol"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre rôle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの役割"
+          }
+        }
+      }
+    },
+    "Enter approximate totals for each year of your career.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingresa totales aproximados de cada año de tu carrera."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisissez des totaux approximatifs pour chaque année de votre carrière."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャリアの各年について、おおよその合計を入力します。"
+          }
+        }
+      }
+    },
+    "Bring in individual births from a spreadsheet.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trae partos individuales desde una hoja de cálculo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importez des accouchements individuels depuis un tableur."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スプレッドシートから個々の分娩を取り込みます。"
+          }
+        }
+      }
+    },
+    "ready": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "listas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "prêtes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "準備完了"
+          }
+        }
+      }
+    },
+    "duplicates": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "duplicados"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "doublons"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重複"
+          }
+        }
+      }
+    },
+    "errors": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "errores"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "erreurs"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エラー"
+          }
+        }
+      }
+    },
+    "Required. 2026-03-14 or 3/14/2026": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obligatoria. 2026-03-14 o 3/14/2026"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obligatoire. 2026-03-14 ou 3/14/2026"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "必須。2026-03-14 または 3/14/2026"
+          }
+        }
+      }
+    },
+    "boy, girl or loss. Use boy;girl for twins": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "boy, girl o loss. Usa boy;girl para gemelos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "boy, girl ou loss. Utilisez boy;girl pour des jumeaux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "boy、girl、lossのいずれか。双子はboy;girlのように指定"
+          }
+        }
+      }
+    },
+    "1 to 6": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 a 6"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 à 6"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1から6"
+          }
+        }
+      }
+    },
+    "primary nurse, midwife, doula and so on": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "primary nurse, midwife, doula, etc."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "primary nurse, midwife, doula, etc."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "primary nurse、midwife、doulaなど"
+          }
+        }
+      }
+    },
+    "vaginal, cesarean or vbac": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vaginal, cesarean o vbac"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vaginal, cesarean ou vbac"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vaginal、cesarean、vbacのいずれか"
+          }
+        }
+      }
+    },
+    "Short personal notes": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notas personales breves"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Courtes notes personnelles"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "短い個人的なメモ"
+          }
+        }
+      }
+    },
+    "Twins or more": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemelos o más"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumeaux ou plus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "双子以上"
+          }
+        }
+      }
+    },
+    "% of births": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% de los partos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% des accouchements"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩に対する%"
+          }
+        }
+      }
+    },
+    "Losses": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pérdidas"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pertes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "死産"
+          }
+        }
+      }
+    },
+    "% of babies": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% de los bebés"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% des bébés"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃんに対する%"
+          }
+        }
+      }
+    },
+    "Boys": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niños"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garçons"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "男の子"
+          }
+        }
+      }
+    },
+    "% of live babies": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% de los bebés vivos"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% des bébés vivants"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生まれた赤ちゃんに対する%"
+          }
+        }
+      }
+    },
+    "What Stork stores": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qué guarda Stork"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce que Stork conserve"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkが保存するもの"
+          }
+        }
+      }
+    },
+    "Dates and times, delivery method, whether an epidural was used, each baby's sex, weight and length, your role, and any short note or tag you choose to add.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechas y horas, método de parto, si hubo epidural, el sexo, peso y talla de cada bebé, tu rol y cualquier nota breve o etiqueta que decidas añadir."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dates et heures, mode d'accouchement, recours ou non à la péridurale, sexe, poids et taille de chaque bébé, votre rôle, ainsi que toute courte note ou étiquette que vous choisissez d'ajouter."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日付と時刻、分娩方法、硬膜外麻酔の有無、各赤ちゃんの性別・体重・身長、あなたの役割、そして追加することにした短いメモやタグ。"
+          }
+        }
+      }
+    },
+    "What it never asks for": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo que nunca pide"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce qu'il ne demande jamais"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "求めないもの"
+          }
+        }
+      }
+    },
+    "No patient or baby names, medical record numbers, dates of birth, hospital or unit, and no account or sign-in.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin nombres de pacientes ni bebés, números de expediente, fechas de nacimiento, hospital o unidad, y sin cuenta ni inicio de sesión."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun nom de patient ou de bébé, numéro de dossier, date de naissance, hôpital ou unité, et aucun compte ni connexion."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "患者や赤ちゃんの名前、診療記録番号、生年月日、病院や部署は不要で、アカウントやサインインもありません。"
+          }
+        }
+      }
+    },
+    "Stays on your device": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se queda en tu dispositivo"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reste sur votre appareil"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デバイス内に保存"
+          }
+        }
+      }
+    },
+    "Your log lives on your iPhone, iPad and Apple Watch. There are no Stork servers, no analytics about your births and no advertising.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu registro vive en tu iPhone, iPad y Apple Watch. No hay servidores de Stork, ni analíticas sobre tus partos, ni publicidad."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre journal reste sur votre iPhone, iPad et Apple Watch. Il n'y a aucun serveur Stork, aucune analyse de vos accouchements et aucune publicité."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録はiPhone、iPad、Apple Watchに保存されます。Storkのサーバーはなく、分娩に関する分析や広告もありません。"
+          }
+        }
+      }
+    },
+    "Private iCloud only": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo iCloud privado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud privé seulement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライベートなiCloudのみ"
+          }
+        }
+      }
+    },
+    "If iCloud is on, your log syncs through your own private iCloud database. Molargik Software cannot see it, and neither can anyone else.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si iCloud está activado, tu registro se sincroniza mediante tu propia base de datos privada de iCloud. Molargik Software no puede verlo, ni nadie más."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si iCloud est activé, votre journal se synchronise via votre propre base de données iCloud privée. Molargik Software ne peut pas le voir, et personne d'autre non plus."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloudがオンの場合、記録はあなた専用のプライベートなiCloudデータベースで同期されます。Molargik Softwareを含め、誰も閲覧できません。"
+          }
+        }
+      }
+    },
+    "Optional lock": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueo opcional"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verrouillage facultatif"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オプションのロック"
+          }
+        }
+      }
+    },
+    "Turn on Require Face ID in Privacy to ask for Face ID or your passcode when Stork opens.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activa Requerir Face ID en Privacidad para pedir Face ID o tu código al abrir Stork."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez Exiger Face ID dans Confidentialité pour demander Face ID ou votre code à l'ouverture de Stork."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「プライバシー」で「Face IDを必須にする」をオンにすると、Storkを開くときにFace IDまたはパスコードが求められます。"
+          }
+        }
+      }
+    },
+    "Keep notes free of identifiers": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantén las notas sin identificadores"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gardez les notes sans identifiants"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモに識別情報を入れない"
+          }
+        }
+      }
+    },
+    "Write \"twins on Christmas Eve\", not a name or a date of birth. Stork warns you if a note looks like it has an identifier, and it never imports them from a CSV.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribe \"gemelos en Nochebuena\", no un nombre ni una fecha de nacimiento. Stork te avisa si una nota parece tener un identificador y nunca los importa desde un CSV."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écrivez « jumeaux la veille de Noël », pas un nom ni une date de naissance. Stork vous avertit si une note semble contenir un identifiant, et n'en importe jamais depuis un CSV."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前や生年月日ではなく「クリスマスイブに双子」のように書いてください。メモに識別情報らしきものがあるとStorkが知らせ、CSVからは一切インポートしません。"
+          }
+        }
+      }
+    },
+    "Why that matters": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por qué importa"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pourquoi c'est important"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なぜ重要か"
+          }
+        }
+      }
+    },
+    "A log with no identifiers is just your own career memories, which is why it is safe to keep for years. Follow your employer's policies too: they come first.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un registro sin identificadores son solo tus recuerdos de carrera, por eso es seguro conservarlo durante años. Sigue también las políticas de tu empleador: tienen prioridad."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un journal sans identifiants n'est que vos souvenirs de carrière, ce qui le rend sûr à conserver pendant des années. Suivez aussi les politiques de votre employeur : elles ont préséance."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "識別情報のない記録は、あなた自身のキャリアの思い出にすぎないため、長年安心して保存できます。勤務先の方針にも従ってください。そちらが優先されます。"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "削除"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

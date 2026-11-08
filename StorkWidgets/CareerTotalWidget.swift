@@ -50,8 +50,8 @@ struct CareerTotalProvider: TimelineProvider {
             let deliveryDesc = FetchDescriptor<Delivery>()
             let deliveries = try context.fetch(deliveryDesc)
 
-            let totalDeliveries = deliveries.count
-            let totalBabies = deliveries.reduce(0) { $0 + ($1.babies?.count ?? 0) }
+            let totalDeliveries = deliveries.reduce(0) { $0 + $1.deliveryWeight }
+            let totalBabies = deliveries.reduce(0) { $0 + ($1.babyCount > 0 ? $1.babyCount : ($1.babies?.count ?? 0)) }
 
             return CareerTotalEntry(
                 date: Date(),

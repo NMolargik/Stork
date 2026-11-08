@@ -138,4 +138,23 @@ struct DeliveryRepositoryTests {
         #expect(await iterator.next() != nil)
         #expect(await iterator.next() != nil)
     }
+
+    @Test("addAll inserts a batch in one side-effect pass and counts estimated births in career totals")
+    func addAllBatch() throws {
+        let harness = try Harness()
+        let estimated = PastBirths.makeDeliveries(years: [PastBirthsYear(year: 2018, births: 120), PastBirthsYear(year: 2019, births: 130)], splits: PastBirthsSplits(multiplesPercent: 10))
+        let before = harness.indexer.reindexedBatches.count
+        try harness.repository.addAll(estimated + [makeDelivery(babyCount: 2)])
+        #expect(harness.indexer.reindexedBatches.count == before + 1)
+        #expect(try harness.repository.deliveries().count == 3)
+        // 120 + 130 + 1 deliveries; 132 + 143 + 2 babies
+        #expect(harness.repository.careerTotals() == CareerTotals(deliveries: 251, babies: 277))
+    }
+
+    @Test("A batch that crosses milestones celebrates nothing and does not re-fire on the next add")
+    func addAllIsSilent() throws {
+        let harness = try Harness()
+        try harness.repository.addAll(PastBirths.makeDeliveries(years: [PastBirthsYear(year: 2010, births: 600)]))
+        #expect(try harness.repository.add(makeDelivery()) == nil)
+    }
 }

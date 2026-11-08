@@ -36,7 +36,8 @@ public struct SettingsView<ExportDestination: View>: View {
             RolesSection()
             AppIconSection(model: model, iconManager: iconManager, pendingIconColor: $pendingIconColor)
             SyncSection(model: model)
-            DataSection(exportDestination: exportDestination)
+            DataSection(model: model, exportDestination: exportDestination)
+            PrivacySection()
             DangerZoneSection(model: model, isDeleting: isDeleting, showDeleteAllAlert: $showDeleteAllAlert)
             #if DEBUG
             DebugSection(model: model)
@@ -121,19 +122,38 @@ private struct PreferencesSection: View {
     }
 }
 
+/// Nine toggles used to sit inline and push Data and Privacy off screen. They now live one tap away.
 private struct RolesSection: View {
     @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
 
+    private var countedSummary: String {
+        let counting = BirthRoleCounting(storedValue: excludedRoles)
+        let counted = BirthRole.allCases.filter { counting.counts($0) }.count
+        return "\(counted)/\(BirthRole.allCases.count)"
+    }
+
     var body: some View {
         Section {
-            ForEach(BirthRole.allCases) { role in
-                Toggle(isOn: binding(for: role)) { Label(role.displayName, systemImage: role.systemImage) }
-                    .tint(.storkPurple)
+            NavigationLink {
+                Form {
+                    Section {
+                        ForEach(BirthRole.allCases) { role in
+                            Toggle(isOn: binding(for: role)) { Label(role.displayName, systemImage: role.systemImage) }
+                                .tint(.storkPurple)
+                        }
+                    } footer: {
+                        Text("Choose which roles count toward your headline birth total. Deliveries with no role recorded always count. Every delivery stays in your history either way.", bundle: .module)
+                    }
+                }
+                .navigationTitle(Text("Roles Counted in Totals", bundle: .module))
+                .navigationBarTitleDisplayMode(.inline)
+            } label: {
+                LabeledContent {
+                    Text(countedSummary).foregroundStyle(.secondary)
+                } label: {
+                    Label(String(localized: "Roles Counted in Totals", bundle: .module), systemImage: "person.2")
+                }
             }
-        } header: {
-            Text("Roles Counted in Totals", bundle: .module)
-        } footer: {
-            Text("Choose which roles count toward your headline birth total. Deliveries with no role recorded always count. Every delivery stays in your history either way.", bundle: .module)
         }
     }
 
@@ -306,6 +326,7 @@ private struct SyncSection: View {
 }
 
 private struct DataSection<Destination: View>: View {
+    var model: SettingsModel
     let exportDestination: () -> Destination
 
     var body: some View {
@@ -313,10 +334,76 @@ private struct DataSection<Destination: View>: View {
             NavigationLink { exportDestination() } label: {
                 Label(String(localized: "Export & Share", bundle: .module), systemImage: "square.and.arrow.up")
             }
+            NavigationLink { PastBirthsHubView(model: model) } label: {
+                Label(String(localized: "Past Births & Import", bundle: .module), systemImage: "tray.and.arrow.down")
+            }
         } header: {
             Text("Data", bundle: .module)
         } footer: {
-            Text("Export delivery records as PDF or CSV, or share your statistics.", bundle: .module)
+            Text("Export your records, or bring in births from before you started using Stork.", bundle: .module)
+        }
+    }
+}
+
+/// Everything privacy in one place: the optional lock and the explanation of what Stork keeps.
+private struct PrivacySection: View {
+    @Environment(AppLockController.self) private var lock
+    @AppStorage(AppStorageKeys.lockTimeoutSeconds) private var timeout = AppLockPolicy.defaultTimeout
+
+    private var methodName: String {
+        switch lock.biometricKind {
+        case .faceID: String(localized: "Face ID", bundle: .module)
+        case .touchID: String(localized: "Touch ID", bundle: .module)
+        case .opticID: String(localized: "Optic ID", bundle: .module)
+        case .none: String(localized: "Passcode", bundle: .module)
+        }
+    }
+
+    var body: some View {
+        Section {
+            Toggle(isOn: Binding(
+                get: { lock.isEnabled },
+                set: { newValue in
+                    Task {
+                        let ok = await lock.setEnabled(newValue, reason: String(localized: "Confirm it is you to change Stork's lock.", bundle: .module))
+                        ok ? Haptics.lightImpact() : Haptics.error()
+                    }
+                }
+            )) {
+                Label(String(localized: "Require Face ID", bundle: .module), systemImage: "faceid")
+            }
+            .tint(.storkPurple)
+
+            if lock.isEnabled {
+                Picker(selection: $timeout) {
+                    ForEach(AppLockPolicy.timeoutOptions, id: \.self) { seconds in
+                        Text(Self.label(for: seconds)).tag(seconds)
+                    }
+                } label: {
+                    Label(String(localized: "Lock After", bundle: .module), systemImage: "timer")
+                }
+            }
+
+            NavigationLink { PrivacyTrustView() } label: {
+                Label(String(localized: "Why This Is Safe to Keep", bundle: .module), systemImage: "lock.shield")
+            }
+        } header: {
+            Text("Privacy", bundle: .module)
+        } footer: {
+            if lock.lastFailure == .unavailable && !lock.isEnabled {
+                Text("Set a passcode in the iOS Settings app to use this lock.", bundle: .module).foregroundStyle(.red)
+            } else {
+                Text("Uses \(methodName), with your device passcode as the fallback. Free for everyone.", bundle: .module)
+            }
+        }
+    }
+
+    private static func label(for seconds: Int) -> String {
+        switch seconds {
+        case 0: String(localized: "Immediately", bundle: .module)
+        case 60: String(localized: "After 1 minute", bundle: .module)
+        case 300: String(localized: "After 5 minutes", bundle: .module)
+        default: String(localized: "After 15 minutes", bundle: .module)
         }
     }
 }

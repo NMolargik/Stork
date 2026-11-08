@@ -29,7 +29,7 @@ public final class CalendarModel {
     }
 
     public func load() {
-        deliveries = (try? loadDeliveriesUseCase()) ?? []
+        deliveries = ((try? loadDeliveriesUseCase()) ?? []).filter { !$0.isEstimated }
     }
 
     public func refresh() async { load() }

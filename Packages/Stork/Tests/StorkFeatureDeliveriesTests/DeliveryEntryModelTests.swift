@@ -40,6 +40,21 @@ struct DeliveryEntryModelTests {
         #expect(model.canFinish)
     }
 
+    // MARK: - Identifier warning
+
+    @Test("A note that looks like an identifier raises the warning without blocking the save")
+    func identifierWarning() {
+        let existing = Make.delivery(babyCount: 1, method: .vaginal, notes: "")
+        let model = Make.entryModel(data: FakeDeliveryData(), existing: existing)
+        #expect(model.noteIdentifierKinds.isEmpty)
+        model.notes = "Mom: Jane, MRN 4455667"
+        #expect(model.noteIdentifierKinds.contains(.nameField))
+        #expect(model.noteIdentifierKinds.contains(.medicalRecordNumber))
+        #expect(model.canFinish)
+        model.notes = "Twins on Christmas Eve"
+        #expect(model.noteIdentifierKinds.isEmpty)
+    }
+
     // MARK: - Back-dating (any past date, never the future)
 
     @Test("A new delivery can be back-dated to any past date", arguments: [

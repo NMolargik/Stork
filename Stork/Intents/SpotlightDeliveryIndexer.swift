@@ -22,7 +22,7 @@ struct SpotlightDeliveryIndexer: DeliveryIndexing {
     init() {}
 
     func reindex(_ deliveries: [Delivery]) {
-        let entities = deliveries.map(DeliveryEntity.init(from:))
+        let entities = deliveries.filter { !$0.isEstimated }.map(DeliveryEntity.init(from:))
 
         var hasher = Hasher()
         for entity in entities {

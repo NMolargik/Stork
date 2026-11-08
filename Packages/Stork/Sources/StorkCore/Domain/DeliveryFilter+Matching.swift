@@ -12,6 +12,9 @@ public extension DeliveryFilter {
 
     /// Whether `delivery` passes every active criterion of this filter.
     func matches(_ delivery: Delivery) -> Bool {
+        // Estimated past-birth summaries have no date, method or notes to filter on.
+        if delivery.isEstimated { return false }
+
         if let dateRange, !dateRange.contains(delivery.date) {
             return false
         }

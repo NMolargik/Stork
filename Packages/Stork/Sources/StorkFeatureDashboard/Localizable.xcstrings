@@ -3513,6 +3513,94 @@
         }
       },
       "shouldTranslate": false
+    },
+    "More": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その他"
+          }
+        }
+      }
+    },
+    "Plus ^[%lld earlier baby](inflect: true), estimated. These are in your career totals, not this month's jar.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más ^[%lld bebé anterior](inflect: true), estimado. Están en tus totales de carrera, no en el frasco de este mes."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus ^[%lld bébé antérieur](inflect: true), estimé. Ils figurent dans vos totaux de carrière, pas dans le bocal de ce mois."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "さらに以前の赤ちゃん%lld人(推定)。キャリア合計には含まれますが、今月のジャーには含まれません。"
+          }
+        }
+      }
+    },
+    "Year in Births…": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu año en partos…"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre année en accouchements…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今年の分娩まとめ…"
+          }
+        }
+      }
+    },
+    "Reorder Cards…": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reordenar tarjetas…"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réorganiser les cartes…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カードを並べ替え…"
+          }
+        }
+      }
     }
   },
   "version": "1.1"

@@ -22,6 +22,7 @@ private final class FakeStore {
     var deliveries: [Delivery] = []
     var errorToThrow: PersistenceError?
     private(set) var deleteAllCalls = 0
+    fileprivate(set) var importCalls = 0
     let entitlement = FakeEntitlement()
 
     struct Load: LoadDeliveries {
@@ -50,11 +51,21 @@ private final class FakeStore {
         }
     }
 
+    struct Import: ImportDeliveries {
+        let store: FakeStore
+        func callAsFunction(_ deliveries: [Delivery]) throws(PersistenceError) {
+            if let error = store.errorToThrow { throw error }
+            store.importCalls += 1
+            store.deliveries.append(contentsOf: deliveries)
+        }
+    }
+
     func makeModel() -> SettingsModel {
         SettingsModel(
             loadDeliveries: Load(store: self),
             deleteAllDeliveries: DeleteAll(store: self),
             logDelivery: Log(store: self),
+            importDeliveries: Import(store: self),
             entitlement: entitlement
         )
     }
