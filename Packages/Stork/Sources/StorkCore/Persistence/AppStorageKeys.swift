@@ -17,6 +17,10 @@ nonisolated public enum AppStorageKeys {
     /// Comma-separated `BirthRole` raw values excluded from the headline total (empty = all count).
     public static let excludedBirthRoles = "excludedBirthRoles"
     public static let calendarHeatMapEnabled = "calendarHeatMapEnabled"
+    /// Whether the shared Year Wrap image carries the gentle "Remembered: N" line. Off by default.
+    public static let wrapShareIncludesRemembrance = "wrapShareIncludesRemembrance"
+    /// The Wrap year whose dashboard invitation the user dismissed.
+    public static let wrapPromptDismissedYear = "wrapPromptDismissedYear"
 
     // Stork Pro entitlement cache (StoreManager). Cached so gating works offline and the
     // grandfather check doesn't re-query the App Store receipt every launch.

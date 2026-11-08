@@ -142,7 +142,7 @@ public struct MainView: View {
                         DashboardView(model: dashboardModel, showingReorderSheet: $showingReorderSheet)
                             .minimizeToolbarOnScrollIfAvailable()
                             .navigationTitle(Text("Stork", bundle: .module))
-                            .toolbar { DashboardToolbar(showingEntrySheet: $showingEntrySheet, showingReorderSheet: $showingReorderSheet) }
+                            .toolbar { DashboardToolbar(model: dashboardModel, showingEntrySheet: $showingEntrySheet, showingReorderSheet: $showingReorderSheet) }
                     }
                 }
                 Tab(String(localized: AppTab.list.localizedTitle), systemImage: AppTab.list.systemImage, value: .list) {
@@ -190,10 +190,14 @@ public struct MainView: View {
     }
 
     private struct DashboardToolbar: ToolbarContent {
+        let model: DashboardModel
         @Binding var showingEntrySheet: Bool
         @Binding var showingReorderSheet: Bool
 
         var body: some ToolbarContent {
+            ToolbarItem(placement: .topBarTrailing) {
+                YearWrapMenu(model: model)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showingReorderSheet = true } label: { Image(systemName: "arrow.up.arrow.down") }
                     .accessibilityLabel(Text("Reorder cards", bundle: .module))
