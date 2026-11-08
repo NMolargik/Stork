@@ -62,6 +62,7 @@ public final class AppLockController {
     // MARK: - Scene lifecycle
 
     public func sceneDidEnterBackground() {
+        lastFailure = nil   // a fresh return gets a fresh automatic prompt
         guard isEnabled, !isLocked else { return }
         backgroundedAt = now()
     }

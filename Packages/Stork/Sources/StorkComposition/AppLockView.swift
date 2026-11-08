@@ -39,7 +39,10 @@ struct AppLockView: View {
             .padding()
         }
         .task(id: scenePhase) {
-            if scenePhase == .active { unlock() }
+            // The system sheet bounces the scene inactive and active again; only prompt
+            // automatically when the last attempt did not fail or get cancelled, or Cancel
+            // would just bring the prompt straight back.
+            if scenePhase == .active, lock.lastFailure == nil { unlock() }
         }
         .accessibilityElement(children: .contain)
     }

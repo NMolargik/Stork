@@ -125,3 +125,17 @@ struct AppLockControllerTests {
         #expect(make(enabled: true, timeout: 0).0.timeoutSeconds == 0)
     }
 }
+
+@Suite("AppLockController retries")
+@MainActor
+struct AppLockRetryTests {
+    @Test("A cancelled attempt is remembered so the view does not re-prompt, and cleared on the next background trip")
+    func cancelThenBackground() async {
+        let (lock, auth, _) = make(enabled: true)
+        auth.result = .cancelled
+        await lock.unlock(reason: "x")
+        #expect(lock.lastFailure == .cancelled && lock.isLocked)
+        lock.sceneDidEnterBackground()
+        #expect(lock.lastFailure == nil)
+    }
+}
