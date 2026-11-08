@@ -12,6 +12,7 @@
 //    -StorkOpenWrap 2026            present the Wrap for that year on the dashboard
 //    -StorkWrapPage 3               start the Wrap on this page index
 //    -StorkWrapIncludeRemembrance 1 turn the share-image remembrance toggle on
+//    -StorkImportCSVPath <file>     preload this CSV into the Import from CSV screen
 //    -StorkExportWrapImages 1       write the share images to Documents/WrapShare
 //
 
@@ -36,6 +37,7 @@ nonisolated public enum DebugLaunchOptions {
     public static var openWrapYear: Int? { defaults.object(forKey: "StorkOpenWrap") == nil ? nil : defaults.integer(forKey: "StorkOpenWrap") }
     public static var wrapPage: Int { defaults.integer(forKey: "StorkWrapPage") }
     public static var wrapIncludeRemembrance: Bool { defaults.bool(forKey: "StorkWrapIncludeRemembrance") }
+    public static var importCSVPath: String? { defaults.string(forKey: "StorkImportCSVPath") }
     public static var exportWrapImages: Bool { defaults.bool(forKey: "StorkExportWrapImages") }
 }
 #endif

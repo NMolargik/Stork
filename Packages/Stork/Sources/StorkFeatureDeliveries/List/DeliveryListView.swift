@@ -109,7 +109,8 @@ public struct DeliveryListView: View {
         var model: DeliveryListModel
 
         var body: some View {
-            let source = model.visibleDeliveries
+            let source = DeliveryStatistics.logged(model.visibleDeliveries)
+            let estimated = model.visibleDeliveries.filter(\.isEstimated).sorted { $0.date > $1.date }
             let months = model.monthStarts(from: source)
 
             List {
@@ -139,6 +140,25 @@ public struct DeliveryListView: View {
                                 .listRowSeparator(.hidden)
                                 .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20))
                             }
+                        }
+                    }
+                }
+
+                if !estimated.isEmpty {
+                    Section(header: Text("Earlier Career (Estimated)", bundle: .module).font(.title2.bold())) {
+                        ForEach(estimated) { delivery in
+                            EstimatedBirthsRow(delivery: delivery)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        Haptics.error()
+                                        model.delete(delivery)
+                                    } label: {
+                                        Label(String(localized: "Delete", bundle: .module), systemImage: "trash")
+                                    }
+                                }
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                                .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20))
                         }
                     }
                 }

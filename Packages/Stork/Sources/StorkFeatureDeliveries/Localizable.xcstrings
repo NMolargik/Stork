@@ -2675,6 +2675,226 @@
           }
         }
       }
+    },
+    "About ^[%lld birth](inflect: true) · ^[%lld baby](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unos ^[%lld parto](inflect: true) · ^[%lld bebé](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Environ ^[%lld accouchement](inflect: true) · ^[%lld bébé](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "約%lld件の分娩 · 赤ちゃん%lld人"
+          }
+        }
+      }
+    },
+    "Earlier Career (Estimated)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carrera anterior (estimado)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carrière antérieure (estimé)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以前のキャリア(推定)"
+          }
+        }
+      }
+    },
+    "Estimated": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推定"
+          }
+        }
+      }
+    },
+    "Estimated past births. Swipe to delete.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partos pasados estimados. Desliza para eliminar."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accouchements passés estimés. Balayez pour supprimer."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推定の過去の分娩です。スワイプして削除できます。"
+          }
+        }
+      }
+    },
+    "Looks like a date of birth": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parece una fecha de nacimiento"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressemble à une date de naissance"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生年月日のようです"
+          }
+        }
+      }
+    },
+    "Looks like a name field": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parece un campo de nombre"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressemble à un champ de nom"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前の欄のようです"
+          }
+        }
+      }
+    },
+    "Looks like a person's name": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parece el nombre de una persona"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressemble à un nom de personne"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人名のようです"
+          }
+        }
+      }
+    },
+    "Looks like a record number": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parece un número de expediente"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressemble à un numéro de dossier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録番号のようです"
+          }
+        }
+      }
+    },
+    "Looks like contact details": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parece información de contacto"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressemble à des coordonnées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連絡先のようです"
+          }
+        }
+      }
+    },
+    "This note may include something that identifies a patient. Stork works best without it, so consider removing it. You can still save.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta nota podría incluir algo que identifica a un paciente. Stork funciona mejor sin ello, así que considera quitarlo. Aún puedes guardar."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette note pourrait contenir un élément qui identifie un patient. Stork fonctionne mieux sans, pensez à le retirer. Vous pouvez quand même enregistrer."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このメモには患者を特定できる情報が含まれている可能性があります。Storkには不要なため、削除をご検討ください。そのまま保存することもできます。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

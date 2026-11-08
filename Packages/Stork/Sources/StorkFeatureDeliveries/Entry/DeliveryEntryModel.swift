@@ -25,6 +25,10 @@ public final class DeliveryEntryModel {
     public var role: BirthRole?
     public var babies: [Baby]
     public var notes: String
+
+    /// Identifier-like patterns spotted in the note (on-device heuristics only). Drives a
+    /// gentle inline warning; it never blocks saving.
+    public var noteIdentifierKinds: [IdentifierKind] { IdentifierHeuristics.detect(in: notes) }
     public var selectedTags: [DeliveryTag]
     /// The attached weather snapshot (Stork Pro), if any.
     public var weather: DeliveryWeather?

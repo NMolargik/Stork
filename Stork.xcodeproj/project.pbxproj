@@ -807,6 +807,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Stork uses Face ID only to unlock the app when you turn on Require Face ID. Nothing about your face is stored or shared.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork uses your location once, only when you choose to attach a weather snapshot to a delivery. Your location is never stored.";
@@ -858,6 +859,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Stork uses Face ID only to unlock the app when you turn on Require Face ID. Nothing about your face is stored or shared.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Stork uses your location once, only when you choose to attach a weather snapshot to a delivery. Your location is never stored.";
@@ -981,6 +983,7 @@
 				INFOPLIST_FILE = "StorkWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Stork uses Face ID only to unlock the app when you turn on Require Face ID. Nothing about your face is stored or shared.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1020,6 +1023,7 @@
 				INFOPLIST_FILE = "StorkWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = Stork;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Stork uses Face ID only to unlock the app when you turn on Require Face ID. Nothing about your face is stored or shared.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Stork reads your health data just to display your step count for the day.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Stork reads your daily step count to display a pedometer.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

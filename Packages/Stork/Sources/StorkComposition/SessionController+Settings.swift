@@ -13,6 +13,7 @@ public extension SessionController {
             loadDeliveries: loadDeliveries,
             deleteAllDeliveries: deleteAllDeliveries,
             logDelivery: logDelivery,
+            importDeliveries: importDeliveries,
             entitlement: entitlement
         )
     }

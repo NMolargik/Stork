@@ -60,31 +60,44 @@ struct YearWrapPromptCard: View {
     }
 }
 
-/// Toolbar menu: open the Wrap for any year with data.
-public struct YearWrapMenu: View {
+/// The dashboard's single overflow menu: the Year Wrap (one entry per year with data) and
+/// card reordering. One button instead of two keeps the toolbar down to "more" and "add".
+public struct DashboardMoreMenu: View {
     private let model: DashboardModel
+    @Binding private var showingReorderSheet: Bool
     @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
 
-    public init(model: DashboardModel) { self.model = model }
+    public init(model: DashboardModel, showingReorderSheet: Binding<Bool>) {
+        self.model = model
+        _showingReorderSheet = showingReorderSheet
+    }
 
     public var body: some View {
         let years = model.wrapYears(counting: BirthRoleCounting(storedValue: excludedRoles))
         Menu {
-            if years.isEmpty {
-                Text("Your Wrap appears once you log a birth", bundle: .module)
-            } else {
-                ForEach(years, id: \.self) { year in
-                    Button {
-                        model.presentedWrapYear = year
-                    } label: {
-                        Label(String(year), systemImage: "sparkles")
+            Section(String(localized: "Your Year in Births", bundle: .module)) {
+                if years.isEmpty {
+                    Text("Your Wrap appears once you log a birth", bundle: .module)
+                } else {
+                    ForEach(years, id: \.self) { year in
+                        Button {
+                            model.presentedWrapYear = year
+                        } label: {
+                            Label(String(year), systemImage: "sparkles")
+                        }
                     }
                 }
             }
+            Section {
+                Button { showingReorderSheet = true } label: {
+                    Label(String(localized: "Reorder Cards", bundle: .module), systemImage: "arrow.up.arrow.down")
+                }
+                .keyboardShortcut("r", modifiers: .command)
+            }
         } label: {
-            Image(systemName: "sparkles")
+            Image(systemName: "ellipsis.circle")
         }
-        .accessibilityLabel(Text("Your Year in Births", bundle: .module))
+        .accessibilityLabel(Text("More", bundle: .module))
         .hoverEffect(.highlight)
     }
 }

@@ -1549,6 +1549,314 @@
           }
         }
       }
+    },
+    "Missing date.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falta la fecha."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date manquante."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日付がありません。"
+          }
+        }
+      }
+    },
+    "Could not read the date \"%@\". Use YYYY-MM-DD.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo leer la fecha \"%@\". Usa AAAA-MM-DD."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de lire la date « %@ ». Utilisez AAAA-MM-JJ."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日付「%@」を読み取れません。YYYY-MM-DD の形式を使ってください。"
+          }
+        }
+      }
+    },
+    "The date is in the future.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fecha está en el futuro."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La date est dans le futur."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日付が未来です。"
+          }
+        }
+      }
+    },
+    "The date is before %lld.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fecha es anterior a %lld."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La date est antérieure à %lld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日付が%lld年より前です。"
+          }
+        }
+      }
+    },
+    "Unrecognized sex \"%@\". Use boy, girl or loss.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sexo no reconocido \"%@\". Usa niño, niña o pérdida."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sexe non reconnu « %@ ». Utilisez garçon, fille ou perte."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "性別「%@」を認識できません。男の子、女の子、または死産を使ってください。"
+          }
+        }
+      }
+    },
+    "Babies must be a number from 1 to 6.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los bebés deben ser un número del 1 al 6."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le nombre de bébés doit être de 1 à 6."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃんの数は1から6の数字にしてください。"
+          }
+        }
+      }
+    },
+    "Babies is %lld but %lld sexes are listed.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bebés es %1$lld pero hay %2$lld sexos indicados."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le nombre de bébés est %1$lld, mais %2$lld sexes sont indiqués."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃんの数は%1$lld人ですが、性別が%2$lld件指定されています。"
+          }
+        }
+      }
+    },
+    "Too many rows. Import is limited to %lld rows at a time.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demasiadas filas. La importación se limita a %lld filas a la vez."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop de lignes. L'importation est limitée à %lld lignes à la fois."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行数が多すぎます。一度にインポートできるのは%lld行までです。"
+          }
+        }
+      }
+    },
+    "Role \"%@\" not recognized; left blank.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rol \"%@\" no reconocido; se dejó en blanco."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rôle « %@ » non reconnu; laissé vide."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "役割「%@」を認識できないため、空欄にしました。"
+          }
+        }
+      }
+    },
+    "Method \"%@\" not recognized; counted as vaginal.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Método \"%@\" no reconocido; se contó como vaginal."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode « %@ » non reconnu; compté comme vaginal."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "方法「%@」を認識できないため、経腟分娩として扱いました。"
+          }
+        }
+      }
+    },
+    "Notes dropped: they looked like a name, date of birth or record number.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notas omitidas: parecían un nombre, una fecha de nacimiento o un número de expediente."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes ignorées : elles ressemblaient à un nom, une date de naissance ou un numéro de dossier."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモを除外しました。名前、生年月日、または記録番号のように見えます。"
+          }
+        }
+      }
+    },
+    "No sex given; babies are counted but not in the boy/girl split.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin sexo indicado; los bebés se cuentan pero no entran en la distribución niño/niña."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun sexe indiqué; les bébés sont comptés, mais pas dans la répartition garçon/fille."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "性別の指定がないため、赤ちゃんは数に含まれますが、男女の内訳には含まれません。"
+          }
+        }
+      }
+    },
+    "Same as an earlier row in this file.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Igual que una fila anterior de este archivo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identique à une ligne précédente de ce fichier."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このファイル内の前の行と同じです。"
+          }
+        }
+      }
+    },
+    "^[%lld baby](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bebé](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld bébé](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃん%lld人"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
