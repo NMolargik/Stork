@@ -3154,6 +3154,72 @@
           }
         }
       }
+    },
+    "Rate Stork": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valorar Stork"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évaluer Stork"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkを評価"
+          }
+        }
+      }
+    },
+    "Share Stork": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartir Stork"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager Stork"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkを共有"
+          }
+        }
+      }
+    },
+    "Stork is a delivery log for labor and delivery nurses, midwives and OBs.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork es un registro de partos para enfermeras de labor y parto, parteras y obstetras."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stork est un registre d'accouchements pour les infirmières de travail et d'accouchement, les sages-femmes et les obstétriciens."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkは、分娩看護師、助産師、産科医のための分娩記録アプリです。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

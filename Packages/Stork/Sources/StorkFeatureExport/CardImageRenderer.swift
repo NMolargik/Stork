@@ -97,6 +97,7 @@ struct ShareableStatCardView: View {
                 HStack {
                     Spacer()
                     Image("storkicon").resizable().scaledToFit().frame(width: 20, height: 20)
+                    Text(verbatim: "Stork").font(.system(size: 13, weight: .bold, design: .rounded)).foregroundStyle(.secondary)
                 }
             }
         }

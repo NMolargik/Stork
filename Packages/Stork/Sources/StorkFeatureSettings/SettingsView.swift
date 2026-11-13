@@ -486,6 +486,15 @@ private struct AboutSection: View {
                 Link("Molargik Software LLC", destination: URL(string: "https://www.molargiksoftware.com")!)
                     .foregroundStyle(.storkBlue)
             }
+            Link(destination: URL(string: "https://apps.apple.com/app/id6740038476?action=write-review")!) {
+                Label(String(localized: "Rate Stork", bundle: .module), systemImage: "star.fill")
+            }
+            ShareLink(
+                item: URL(string: "https://molargiksoftware.com/go/stork?ct=share_app")!,
+                message: Text("Stork is a delivery log for labor and delivery nurses, midwives and OBs.", bundle: .module)
+            ) {
+                Label(String(localized: "Share Stork", bundle: .module), systemImage: "square.and.arrow.up")
+            }
         }
     }
 }

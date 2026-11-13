@@ -23,7 +23,11 @@ struct MilestoneCardView: View {
                 .font(.system(size: 72, weight: .bold, design: .rounded))
                 .foregroundStyle(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
             Text(suffixText).font(.title3).foregroundStyle(.secondary)
-            Image("storkicon").resizable().scaledToFit().frame(width: 28, height: 28).padding(.top, 8)
+            HStack(spacing: 8) {
+                Image("storkicon").resizable().scaledToFit().frame(width: 28, height: 28)
+                Text(verbatim: "Stork").font(.system(size: 18, weight: .bold, design: .rounded)).foregroundStyle(.secondary)
+            }
+            .padding(.top, 8)
         }
         .padding(40)
         .frame(width: 380, height: 480)
