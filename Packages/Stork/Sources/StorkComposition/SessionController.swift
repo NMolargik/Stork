@@ -79,12 +79,17 @@ public final class SessionController {
     public let storeManager: StoreManager
     public var entitlement: any EntitlementProviding { storeManager }
 
-    private let milestoneShareReview: MilestoneShareReviewPolicy
+    private let reviewPrompt: ReviewPromptPolicy
 
-    /// Call when a career-milestone share card was actually shared; prompts for a review
-    /// the first time only.
+    /// Call when a calm, user-chosen moment completes (see `ReviewPromptPolicy.Moment`);
+    /// the policy decides whether a rating prompt may appear.
+    public func noteReviewMoment(_ moment: ReviewPromptPolicy.Moment) {
+        reviewPrompt.record(moment)
+    }
+
+    /// Call when a career-milestone share card was actually shared from Share Cards.
     public func noteMilestoneCardShared() {
-        milestoneShareReview.milestoneCardShared()
+        reviewPrompt.record(.milestoneCardShared)
     }
 
     /// Triggers a manual iCloud sync (exposed so the app's menu commands needn't import
@@ -125,7 +130,6 @@ public final class SessionController {
         let deliveries = DefaultDeliveryRepository(
             container: container,
             indexer: indexer,
-            reviewRequester: reviewRequester,
             changeCenter: changes
         )
         deliveryRepository = deliveries
@@ -150,7 +154,11 @@ public final class SessionController {
         weatherManager = WeatherManager(locationProvider: location)
 
         storeManager = StoreManager()
-        milestoneShareReview = MilestoneShareReviewPolicy(storage: UserDefaults.standard, requester: reviewRequester)
+        reviewPrompt = ReviewPromptPolicy(
+            storage: UserDefaults.standard,
+            requester: reviewRequester,
+            appVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
+        )
         #if canImport(HealthKit) && !os(visionOS)
         healthManager = HealthManager()
         #endif

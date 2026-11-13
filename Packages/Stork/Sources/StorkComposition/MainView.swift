@@ -73,9 +73,8 @@ public struct MainView: View {
             }
         }
         .sheet(item: $milestoneShareImage) { item in
-            ShareSheet(items: [item.image]) { completed in
-                if completed { session.noteMilestoneCardShared() }
-            }
+            // Shared straight from the celebration that follows a log: never a review moment.
+            ShareSheet(items: [item.image])
         }
         .sheet(item: $paywallFeature) { feature in
             StorkProPaywallView(store: session.storeManager, highlighted: feature)
@@ -84,6 +83,7 @@ public struct MainView: View {
             GrandfatherThankYouView { session.storeManager.markGrandfatherThankYouShown() }
         }
         .environment(\.isProUnlocked, session.storeManager.isProUnlocked)
+        .environment(\.noteReviewMoment, ReviewMomentNotifier { session.noteReviewMoment($0) })
         .environment(\.requestProUpgrade, ProUpgradeRequest { feature in paywallFeature = feature })
         .sheet(isPresented: $showingEntrySheet) {
             DeliveryEntryView(model: session.makeDeliveryEntryModel()) { celebration in

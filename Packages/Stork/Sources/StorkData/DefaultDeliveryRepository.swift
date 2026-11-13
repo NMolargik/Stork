@@ -25,10 +25,7 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
     private let widgetReloader: any WidgetTimelineReloading
     private let defaults: any KeyValueStoring
     private let indexer: (any DeliveryIndexing)?
-    private let reviewRequester: (any ReviewRequesting)?
     private let changeCenter: DeliveryChangeCenter?
-
-    private static let reviewPromptFifthKey = "DeliveryManager.hasPromptedForFifthReview"
 
     public init(
         container: ModelContainer,
@@ -36,7 +33,6 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
         widgetReloader: any WidgetTimelineReloading = WidgetCenterReloader(),
         milestoneTracker: MilestoneTracker? = nil,
         indexer: (any DeliveryIndexing)? = nil,
-        reviewRequester: (any ReviewRequesting)? = nil,
         changeCenter: DeliveryChangeCenter? = nil
     ) {
         self.container = container
@@ -45,7 +41,6 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
         self.widgetReloader = widgetReloader
         self.milestoneTracker = milestoneTracker ?? MilestoneTracker(storage: defaults)
         self.indexer = indexer
-        self.reviewRequester = reviewRequester
         self.changeCenter = changeCenter
     }
 
@@ -80,7 +75,6 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
         context.insert(delivery)
         for baby in delivery.babies ?? [] { baby.delivery = delivery }
         try persistAndPropagate()
-        maybeRequestReviewIfFifthEver()
         return checkForMilestone()
     }
 
@@ -171,16 +165,5 @@ public final class DefaultDeliveryRepository: DeliveryRepository {
             totalBabies: totals.babies,
             totalDeliveries: totals.deliveries
         )
-    }
-
-    // MARK: - Review prompting
-
-    /// Asks for an App Store review exactly once, when the 5th delivery is logged.
-    private func maybeRequestReviewIfFifthEver() {
-        guard let reviewRequester else { return }
-        guard !defaults.bool(forKey: Self.reviewPromptFifthKey) else { return }
-        guard careerTotals().deliveries == 5 else { return }
-        defaults.set(true, forKey: Self.reviewPromptFifthKey)
-        reviewRequester.requestReview()
     }
 }

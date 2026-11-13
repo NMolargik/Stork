@@ -26,6 +26,7 @@ struct CSVImportView: View {
     @Bindable var model: CSVImportModel
     @Environment(\.dismiss) private var dismiss
     @Environment(ToastManager.self) private var toast
+    @Environment(\.noteReviewMoment) private var noteReviewMoment
 
     @State private var showingPicker = false
     @State private var showingTemplateExporter = false
@@ -228,6 +229,7 @@ struct CSVImportView: View {
                 toast.showSuccess(String(localized: "Imported ^[\(n) birth](inflect: true)", bundle: .module))
             }
             dismiss()
+            noteReviewMoment(.csvImported)
         } else {
             Haptics.error()
         }

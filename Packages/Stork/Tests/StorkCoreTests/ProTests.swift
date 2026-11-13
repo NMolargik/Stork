@@ -122,45 +122,6 @@ struct DeliveryDateRuleTests {
     }
 }
 
-// MARK: - Review prompt after first milestone share
-
-@Suite("MilestoneShareReviewPolicy Tests")
-@MainActor
-struct MilestoneShareReviewPolicyTests {
-
-    @Test("Prompts exactly once across repeated shares")
-    func promptsOnce() {
-        let storage = FakeKeyValueStore()
-        let requester = FakeReviewRequester()
-        let policy = MilestoneShareReviewPolicy(storage: storage, requester: requester)
-
-        policy.milestoneCardShared()
-        policy.milestoneCardShared()
-        policy.milestoneCardShared()
-
-        #expect(requester.requestCount == 1)
-        #expect(storage.bool(forKey: MilestoneShareReviewPolicy.defaultStorageKey))
-    }
-
-    @Test("The prompt flag persists across relaunch through storage")
-    func persistsAcrossRelaunch() {
-        let storage = FakeKeyValueStore()
-        MilestoneShareReviewPolicy(storage: storage, requester: FakeReviewRequester()).milestoneCardShared()
-
-        let requester = FakeReviewRequester()
-        MilestoneShareReviewPolicy(storage: storage, requester: requester).milestoneCardShared()
-
-        #expect(requester.requestCount == 0)
-    }
-
-    @Test("No requester (watch) means no prompt and no flag")
-    func noRequester() {
-        let storage = FakeKeyValueStore()
-        MilestoneShareReviewPolicy(storage: storage, requester: nil).milestoneCardShared()
-        #expect(!storage.bool(forKey: MilestoneShareReviewPolicy.defaultStorageKey))
-    }
-}
-
 // MARK: - Weather value
 
 @Suite("DeliveryWeather Tests")

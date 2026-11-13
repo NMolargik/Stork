@@ -20,7 +20,6 @@ private struct Harness {
     let repository: DefaultDeliveryRepository
     let widgetReloader: FakeWidgetReloader
     let indexer: FakeDeliveryIndexer
-    let reviewRequester: FakeReviewRequester
     let changeCenter = DeliveryChangeCenter()
 
     init(milestoneStore: FakeKeyValueStore = FakeKeyValueStore()) throws {
@@ -31,14 +30,12 @@ private struct Harness {
         container = try ModelContainer(for: Delivery.self, Baby.self, DeliveryTag.self, configurations: config)
         widgetReloader = FakeWidgetReloader()
         indexer = FakeDeliveryIndexer()
-        reviewRequester = FakeReviewRequester()
         repository = DefaultDeliveryRepository(
             container: container,
             defaults: FakeKeyValueStore(),
             widgetReloader: widgetReloader,
             milestoneTracker: MilestoneTracker(storage: milestoneStore),
             indexer: indexer,
-            reviewRequester: reviewRequester,
             changeCenter: changeCenter
         )
     }
@@ -107,15 +104,6 @@ struct DeliveryRepositoryTests {
         #expect(harness.repository.careerTotals() == CareerTotals(deliveries: 0, babies: 0))
         // Exactly one more widget reload — not one per deleted delivery.
         #expect(harness.widgetReloader.reloadedKinds.count == reloadsAfterAdds + 1)
-    }
-
-    @Test("The fifth delivery triggers a review request exactly once")
-    func reviewOnFifth() throws {
-        let harness = try Harness()
-        for _ in 0..<5 { try harness.repository.add(makeDelivery()) }
-        #expect(harness.reviewRequester.requestCount == 1)
-        try harness.repository.add(makeDelivery())
-        #expect(harness.reviewRequester.requestCount == 1)
     }
 
     @Test("Crossing the 50-delivery milestone is returned from add")

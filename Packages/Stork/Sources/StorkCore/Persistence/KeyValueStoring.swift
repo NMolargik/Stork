@@ -12,6 +12,7 @@ import Foundation
 nonisolated public protocol KeyValueStoring: AnyObject {
     func bool(forKey defaultName: String) -> Bool
     func integer(forKey defaultName: String) -> Int
+    func string(forKey defaultName: String) -> String?
     func stringArray(forKey defaultName: String) -> [String]?
     func data(forKey defaultName: String) -> Data?
     func set(_ value: Any?, forKey defaultName: String)

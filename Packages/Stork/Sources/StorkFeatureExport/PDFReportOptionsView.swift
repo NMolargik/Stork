@@ -20,6 +20,8 @@ struct PDFReportOptionsView: View {
     @State private var customEndDate = Date()
     @State private var exportURL: URL?
     @State private var showError = false
+    @State private var showShareSheet = false
+    @Environment(\.noteReviewMoment) private var noteReviewMoment
     @State private var errorMessage = ""
 
     private var filteredDeliveries: [Delivery] {
@@ -57,7 +59,7 @@ struct PDFReportOptionsView: View {
 
                 Section {
                     if let url = exportURL {
-                        ShareLink(item: url) { Label(String(localized: "Share PDF Report", bundle: .module), systemImage: "square.and.arrow.up") }
+                        Button { showShareSheet = true } label: { Label(String(localized: "Share PDF Report", bundle: .module), systemImage: "square.and.arrow.up") }
                             .tint(.storkPurple)
                     } else {
                         Button {
@@ -84,6 +86,13 @@ struct PDFReportOptionsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button(String(localized: "Cancel", bundle: .module)) { dismiss() } }
+            }
+            .sheet(isPresented: $showShareSheet) {
+                if let exportURL {
+                    ShareSheet(items: [exportURL]) { completed in
+                        if completed { noteReviewMoment(.exportShared) }
+                    }
+                }
             }
             .alert(Text("Export Error", bundle: .module), isPresented: $showError) {
                 Button(String(localized: "OK", bundle: .module), role: .cancel) {}

@@ -12,6 +12,7 @@ private final class WrapFakeStore: KeyValueStoring {
     var storage: [String: Any] = [:]
     func bool(forKey defaultName: String) -> Bool { storage[defaultName] as? Bool ?? false }
     func integer(forKey defaultName: String) -> Int { storage[defaultName] as? Int ?? 0 }
+    func string(forKey defaultName: String) -> String? { storage[defaultName] as? String }
     func stringArray(forKey defaultName: String) -> [String]? { nil }
     func data(forKey defaultName: String) -> Data? { nil }
     func set(_ value: Any?, forKey defaultName: String) { storage[defaultName] = value }

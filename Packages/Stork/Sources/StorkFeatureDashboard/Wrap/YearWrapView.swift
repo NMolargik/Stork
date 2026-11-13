@@ -23,6 +23,7 @@ public struct YearWrapView: View {
     @State private var page: Int
     @State private var shareImage: IdentifiableImage?
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.noteReviewMoment) private var noteReviewMoment
 
     public init(model: YearWrapModel) {
         _model = State(initialValue: model)
@@ -72,7 +73,12 @@ public struct YearWrapView: View {
             }
         }
         .sheet(item: $shareImage) { item in
-            ShareSheet(items: [item.image])
+            ShareSheet(items: [item.image]) { completed in
+                if completed { noteWrapMoment(.yearWrapShared) }
+            }
+        }
+        .onChange(of: page) { _, newPage in
+            if newPage == model.pages.count - 1 { noteWrapMoment(.yearWrapViewedToEnd) }
         }
         #if DEBUG
         .task { exportDebugImages() }
@@ -96,6 +102,13 @@ public struct YearWrapView: View {
             share(stats: stats, format: format)
         }
         }
+    }
+
+    /// A year with losses ends on a screen that carries the remembrance line, so it never
+    /// counts as a review moment.
+    private func noteWrapMoment(_ moment: ReviewPromptPolicy.Moment) {
+        guard let stats = model.stats, stats.remembrance == 0 else { return }
+        noteReviewMoment(moment)
     }
 
     private func share(stats: YearWrapStats, format: YearWrapModel.ShareFormat) {
