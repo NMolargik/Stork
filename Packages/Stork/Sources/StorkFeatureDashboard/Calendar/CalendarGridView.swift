@@ -127,7 +127,7 @@ private struct DayCell: View {
                 } else if !deliveriesForDay.isEmpty {
                     HStack(spacing: 2) {
                         ForEach(deliveriesForDay.prefix(3).indices, id: \.self) { index in
-                            Circle().fill(dotColor(for: deliveriesForDay[index])).frame(width: 6, height: 6)
+                            Circle().fill(dotStyle(for: deliveriesForDay[index])).frame(width: 6, height: 6)
                         }
                         if deliveriesForDay.count > 3 {
                             Text("+", bundle: .module).font(.system(size: 8)).foregroundStyle(.secondary)
@@ -146,14 +146,16 @@ private struct DayCell: View {
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 
-    private func dotColor(for delivery: Delivery) -> Color {
+    /// Same rule as the list row's gradient: blue for boys, pink for girls, purple for a loss,
+    /// blended when a delivery has several. A single colour is solid.
+    private func dotStyle(for delivery: Delivery) -> AnyShapeStyle {
         let babies = delivery.babies ?? []
-        let hasMale = babies.contains { $0.sex == .male }
-        let hasFemale = babies.contains { $0.sex == .female }
-        if hasMale && hasFemale { return .storkPurple }
-        if hasMale { return .storkBlue }
-        if hasFemale { return .storkPink }
-        return .gray
+        let colors = Array(repeating: Color.storkBlue, count: babies.count { $0.sex == .male })
+            + Array(repeating: Color.storkPink, count: babies.count { $0.sex == .female })
+            + Array(repeating: Color.storkPurple, count: babies.count { $0.sex == .loss })
+        guard let first = colors.first else { return AnyShapeStyle(Color.gray) }
+        if Set(colors.map { "\($0)" }).count == 1 { return AnyShapeStyle(first) }
+        return AnyShapeStyle(LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing))
     }
 
     private var accessibilityLabel: String {

@@ -104,20 +104,6 @@ struct SettingsModelTests {
         #expect(model.lastError != nil)
     }
 
-    @Test("Only the primary icon is selectable without Stork Pro")
-    func iconGating() {
-        let store = FakeStore()
-        let model = store.makeModel()
-
-        #expect(model.canSelectIcon(SettingsModel.primaryIconColor))
-        #expect(!model.canSelectIcon("blue"))
-        #expect(!model.canSelectIcon("pink"))
-
-        store.entitlement.isProUnlocked = true
-        #expect(model.isProUnlocked)
-        #expect(model.canSelectIcon("blue"))
-    }
-
     @Test("appVersion reads a non-empty version string")
     func appVersion() {
         let model = FakeStore().makeModel()

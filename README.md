@@ -1,4 +1,4 @@
-<img src="Icons/icon-blue-preview.png" alt="Stork Blue" width="96" height="96"> <img src="Icons/icon-pink-preview.png" alt="Stork Pink" width="96" height="96"> <img src="Icons/icon-orange-preview.png" alt="Stork Orange" width="96" height="96"> <img src="Icons/icon-purple-preview.png" alt="Stork Purple" width="96" height="96">
+<img src="Icons/AppIcon.png" alt="Stork" width="96" height="96">
 
 # Stork
 
@@ -73,7 +73,7 @@ Stork (app target — thin shell) · StorkWidgetsExtension · StorkWatch
             ├── StorkFeature*   Deliveries · Dashboard · Onboarding · Settings · Export
             ├── StorkServices   Weather / Location / Health managers + seams
             ├── StorkData       SwiftData repositories · CloudKit store · cloud sync
-            ├── StorkDesignSystem  brand colors · glass · haptics · toasts · stat views
+            ├── StorkDesignSystem  brand colors · glass · haptics · inline status · stat views
             └── StorkCore       models · statistics · protocols · navigation (pure)
 ```
 
@@ -113,7 +113,7 @@ Stork.xcworkspace               # Open this
 │   │   ├── StorkCore/          # Models, domain, protocols, navigation
 │   │   ├── StorkData/          # SwiftData repositories, CloudKit store
 │   │   ├── StorkServices/      # Weather, location, health
-│   │   ├── StorkDesignSystem/  # Colors, glass, haptics, toasts
+│   │   ├── StorkDesignSystem/  # Colors, glass, haptics, inline status
 │   │   ├── StorkFeatureDeliveries/   # List, entry, detail
 │   │   ├── StorkFeatureDashboard/    # Cards, marble jar, calendar
 │   │   ├── StorkFeatureOnboarding/
@@ -152,4 +152,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Author
 
-Molargik Software LLC
+Farside Software LLC (formerly Molargik Software LLC)

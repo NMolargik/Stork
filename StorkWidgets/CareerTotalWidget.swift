@@ -9,6 +9,7 @@ import WidgetKit
 import SwiftUI
 import SwiftData
 import StorkCore
+import StorkDesignSystem
 
 // MARK: - Career Total Entry
 struct CareerTotalEntry: TimelineEntry {
@@ -74,9 +75,7 @@ struct CareerTotalSmallView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            Image("storkicon")
-                .resizable()
-                .scaledToFit()
+            WidgetStorkMark()
                 .frame(width: 20, height: 20)
 
             Text("\(entry.totalBabies)")

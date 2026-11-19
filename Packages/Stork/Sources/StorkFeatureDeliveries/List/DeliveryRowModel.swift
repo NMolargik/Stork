@@ -34,7 +34,7 @@ final class DeliveryRowModel {
 
     var nicuSymbolName: String? { showsNICUIcon ? "bed.double" : nil }
     var epiduralSymbolName: String? { showsEpiduralIcon ? "syringe.fill" : nil }
-    var cSectionSymbolName: String? { showsCSectionIcon ? "c.circle" : nil }
+    var cSectionSymbolName: String? { showsCSectionIcon ? "scissors" : nil }
 
     var iconForegroundColor: Color { .black }
     var iconBackgroundColor: Color { .white }

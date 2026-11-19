@@ -22,7 +22,12 @@ struct PDFReportOptionsView: View {
     @State private var showError = false
     @State private var showShareSheet = false
     @Environment(\.noteReviewMoment) private var noteReviewMoment
+    @Environment(\.horizontalSizeClass) private var hSizeClass
+    @State private var layout = LayoutProbe()
     @State private var errorMessage = ""
+
+    private var usesTwoColumns: Bool { layout.usesTwoColumns(isRegularWidth: hSizeClass == .regular) }
+    private var customInterval: DateInterval? { dateRange == .custom ? DateInterval(start: customStartDate, end: customEndDate) : nil }
 
     private var filteredDeliveries: [Delivery] {
         guard dateRange != .allTime else { return model.deliveries }
@@ -36,56 +41,18 @@ struct PDFReportOptionsView: View {
     }
 
     var body: some View {
+        stack
+            .presentationSizing(.page)
+    }
+
+    private var stack: some View {
         NavigationStack {
-            Form {
-                Section(String(localized: "Report Period", bundle: .module)) {
-                    Picker(String(localized: "Date Range", bundle: .module), selection: $dateRange) {
-                        ForEach(ExportDateRange.allCases) { Text($0.displayName).tag($0) }
-                    }
-                    if dateRange == .custom {
-                        DatePicker(String(localized: "Start Date", bundle: .module), selection: $customStartDate, displayedComponents: .date)
-                        DatePicker(String(localized: "End Date", bundle: .module), selection: $customEndDate, displayedComponents: .date)
-                    }
-                }
-
-                Section {
-                    LabeledContent(String(localized: "Deliveries", bundle: .module)) { Text("\(filteredDeliveries.count)", bundle: .module).foregroundStyle(.secondary) }
-                    LabeledContent(String(localized: "Babies", bundle: .module)) { Text("\(totalBabies)", bundle: .module).foregroundStyle(.secondary) }
-                } header: {
-                    Text("Preview", bundle: .module)
-                } footer: {
-                    Text("The report will include delivery method breakdown, sex distribution, and summary statistics.", bundle: .module)
-                }
-
-                Section {
-                    if let url = exportURL {
-                        Button { showShareSheet = true } label: { Label(String(localized: "Share PDF Report", bundle: .module), systemImage: "square.and.arrow.up") }
-                            .tint(.storkPurple)
-                    } else {
-                        Button {
-                            Task { await generatePDF() }
-                        } label: {
-                            HStack {
-                                if model.manager.isExporting {
-                                    ProgressView().controlSize(.small)
-                                    Text("Generating...", bundle: .module)
-                                } else {
-                                    Text("Generate PDF Report", bundle: .module)
-                                }
-                            }
-                        }
-                        .disabled(model.manager.isExporting || filteredDeliveries.isEmpty)
-                    }
-
-                    if model.manager.isExporting && model.manager.exportProgress > 0 {
-                        ProgressView(value: model.manager.exportProgress) { Text("Progress", bundle: .module) }
-                    }
-                }
-            }
+            content
+            .containerLayoutProbe { layout = $0 }
             .navigationTitle(Text("PDF Report", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button(String(localized: "Cancel", bundle: .module)) { dismiss() } }
+                ToolbarItem(placement: .cancellationAction) { Button(role: .cancel) { dismiss() } label: { Label(String(localized: "Cancel", bundle: .module), systemImage: "xmark") } }
             }
             .sheet(isPresented: $showShareSheet) {
                 if let exportURL {
@@ -100,6 +67,68 @@ struct PDFReportOptionsView: View {
                 Text(errorMessage)
             }
             .onChange(of: dateRange) { _, _ in exportURL = nil }
+        }
+    }
+
+    private var optionsForm: some View {
+        Form {
+            Section(String(localized: "Report Period", bundle: .module)) {
+                Picker(String(localized: "Date Range", bundle: .module), selection: $dateRange) {
+                    ForEach(ExportDateRange.allCases) { Text($0.displayName).tag($0) }
+                }
+                if dateRange == .custom {
+                    DatePicker(String(localized: "Start Date", bundle: .module), selection: $customStartDate, displayedComponents: .date)
+                    DatePicker(String(localized: "End Date", bundle: .module), selection: $customEndDate, displayedComponents: .date)
+                }
+            }
+
+            Section {
+                LabeledContent(String(localized: "Deliveries", bundle: .module)) { Text("\(filteredDeliveries.count)", bundle: .module).foregroundStyle(.secondary) }
+                LabeledContent(String(localized: "Babies", bundle: .module)) { Text("\(totalBabies)", bundle: .module).foregroundStyle(.secondary) }
+            } header: {
+                Text("Preview", bundle: .module)
+            } footer: {
+                Text("The report will include delivery method breakdown, sex distribution, and summary statistics.", bundle: .module)
+            }
+
+            Section {
+                if exportURL != nil {
+                    Button { showShareSheet = true } label: { Label(String(localized: "Share PDF Report", bundle: .module), systemImage: "square.and.arrow.up") }
+                        .tint(.storkPurple)
+                } else {
+                    Button {
+                        Task { await generatePDF() }
+                    } label: {
+                        HStack {
+                            if model.manager.isExporting {
+                                ProgressView().controlSize(.small)
+                                Text("Generating...", bundle: .module)
+                            } else {
+                                Text("Generate PDF Report", bundle: .module)
+                            }
+                        }
+                    }
+                    .disabled(model.manager.isExporting || filteredDeliveries.isEmpty)
+                }
+
+                if model.manager.isExporting && model.manager.exportProgress > 0 {
+                    ProgressView(value: model.manager.exportProgress) { Text("Progress", bundle: .module) }
+                }
+            }
+        }
+    }
+
+    /// Options alone on iPhone (and the folded Duo); options left and a live preview right on a wide screen.
+    @ViewBuilder
+    private var content: some View {
+        if usesTwoColumns {
+            SplitColumns {
+                optionsForm
+            } trailing: {
+                PDFReportPreviewPane(deliveries: filteredDeliveries, dateRange: dateRange, customInterval: customInterval, useMetricUnits: useMetricUnits, useDayMonthYearDates: useDayMonthYearDates)
+            }
+        } else {
+            optionsForm
         }
     }
 

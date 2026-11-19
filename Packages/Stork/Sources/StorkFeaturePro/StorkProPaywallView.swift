@@ -21,7 +21,7 @@ public struct StorkProPaywallView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    public static let privacyPolicyURL = URL(string: "https://molargiksoftware.com/privacy")!
+    public static let privacyPolicyURL = Company.privacy
     public static let termsOfUseURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
 
     /// - Parameters:
@@ -35,8 +35,9 @@ public struct StorkProPaywallView: View {
     }
 
     private var orderedFeatures: [ProFeature] {
-        guard let highlighted else { return ProFeature.allCases }
-        return [highlighted] + ProFeature.allCases.filter { $0 != highlighted }
+        let all = ProFeature.allCases
+        guard let highlighted else { return all }
+        return [highlighted] + all.filter { $0 != highlighted }
     }
 
     public var body: some View {
@@ -58,8 +59,7 @@ public struct StorkProPaywallView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button { dismiss() } label: { Image(systemName: "xmark") }
-                        .accessibilityLabel(Text("Close", bundle: .module))
+                    Button { dismiss() } label: { Label(String(localized: "Close", bundle: .module), systemImage: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
                 }
             }

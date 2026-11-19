@@ -2,7 +2,7 @@
 //  SettingsView.swift
 //  StorkFeatureSettings
 //
-//  Preferences, app-icon picker, iCloud sync status, an export link (provided by the
+//  Preferences, iCloud sync status, an export link (provided by the
 //  caller), delete-all, and About. Generic over its export destination so Settings stays
 //  decoupled from the Export feature module.
 //
@@ -17,12 +17,10 @@ public struct SettingsView<ExportDestination: View>: View {
     @Bindable private var model: SettingsModel
     private let exportDestination: () -> ExportDestination
 
-    @Environment(\.scenePhase) private var scenePhase
-
-    @State private var iconManager = IconManager()
-    @State private var pendingIconColor: String?
-    @State private var showDeleteAllAlert = false
-    @State private var isDeleting = false
+    @Environment(\.settingsSelection) private var selection
+    #if DEBUG
+    @State private var debugPush: String? = DebugLaunchOptions.settingsPush
+    #endif
 
     public init(model: SettingsModel, @ViewBuilder exportDestination: @escaping () -> ExportDestination) {
         self.model = model
@@ -30,25 +28,25 @@ public struct SettingsView<ExportDestination: View>: View {
     }
 
     public var body: some View {
-        Form {
-            ProSection(model: model)
-            PreferencesSection()
-            RolesSection()
-            AppIconSection(model: model, iconManager: iconManager, pendingIconColor: $pendingIconColor)
-            SyncSection(model: model)
-            DataSection(model: model, exportDestination: exportDestination)
-            PrivacySection()
-            DangerZoneSection(model: model, isDeleting: isDeleting, showDeleteAllAlert: $showDeleteAllAlert)
-            #if DEBUG
-            DebugSection(model: model)
-            #endif
-            AboutSection(model: model)
-            AttributionsSection()
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active, let color = pendingIconColor {
-                pendingIconColor = nil
-                Task { await iconManager.changeAppIcon(to: color) }
+        Group {
+            if selection != nil {
+                // Wide layouts: categories only; every control lives on the page beside the list.
+                SettingsCategoryList(model: model)
+            } else {
+                Form {
+                    ProSection(model: model)
+                    PreferencesSection()
+                    RolesSection()
+                    SyncSection(model: model)
+                    DataSection()
+                    PrivacySection()
+                    DangerZoneSection(model: model)
+                    #if DEBUG
+                    DebugSection(model: model)
+                    #endif
+                    AboutSection(model: model)
+                    AttributionsSection()
+                }
             }
         }
         .onAppear {
@@ -56,26 +54,27 @@ public struct SettingsView<ExportDestination: View>: View {
             model.startNetworkMonitoring()
         }
         .onDisappear { model.stopNetworkMonitoring() }
-        .alert(Text("Delete All Deliveries?", bundle: .module), isPresented: $showDeleteAllAlert) {
-            Button(String(localized: "Cancel", bundle: .module), role: .cancel) {}
-            Button(String(localized: "Delete All", bundle: .module), role: .destructive) { Task { await deleteAll() } }
-        } message: {
-            Text("This will permanently delete all \(model.deliveryCount) delivery records and their associated baby data. This action cannot be undone.", bundle: .module)
+        .navigationDestination(for: SettingsDestination.self) { destination in
+            SettingsDestinationView(destination: destination, model: model, exportDestination: exportDestination)
         }
-    }
-
-    private func deleteAll() async {
-        isDeleting = true
-        defer { isDeleting = false }
-        model.deleteAll()
-        Haptics.mediumImpact()
+        #if DEBUG
+        .navigationDestination(isPresented: Binding(get: { debugPush != nil && selection == nil }, set: { if !$0 { debugPush = nil } })) {
+            switch debugPush {
+            case "privacy": PrivacyTrustView()
+            case "pastbirths": PastBirthsHubView(model: model)
+            case "addpast": AddPastBirthsView(model: model.makeAddPastBirthsModel())
+            case "csv": CSVImportView(model: model.makeCSVImportModel())
+            default: exportDestination()
+            }
+        }
+        #endif
     }
 }
 
 // MARK: - Sections
 
 /// Stork Pro status: the unlock row for free users, a thank-you for everyone else.
-private struct ProSection: View {
+struct ProSection: View {
     var model: SettingsModel
     @Environment(\.requestProUpgrade) private var requestProUpgrade
 
@@ -106,7 +105,7 @@ private struct ProSection: View {
     }
 }
 
-private struct PreferencesSection: View {
+struct PreferencesSection: View {
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits = false
     @AppStorage(AppStorageKeys.useDayMonthYearDates) private var useDayMonthYearDates = false
 
@@ -123,31 +122,14 @@ private struct PreferencesSection: View {
 }
 
 /// Nine toggles used to sit inline and push Data and Privacy off screen. They now live one tap away.
-private struct RolesSection: View {
+struct RolesSection: View {
     @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
 
-    private var countedSummary: String {
-        let counting = BirthRoleCounting(storedValue: excludedRoles)
-        let counted = BirthRole.allCases.filter { counting.counts($0) }.count
-        return "\(counted)/\(BirthRole.allCases.count)"
-    }
+    private var countedSummary: String { RolesSummary.text(for: excludedRoles) }
 
     var body: some View {
         Section {
-            NavigationLink {
-                Form {
-                    Section {
-                        ForEach(BirthRole.allCases) { role in
-                            Toggle(isOn: binding(for: role)) { Label(role.displayName, systemImage: role.systemImage) }
-                                .tint(.storkPurple)
-                        }
-                    } footer: {
-                        Text("Choose which roles count toward your headline birth total. Deliveries with no role recorded always count. Every delivery stays in your history either way.", bundle: .module)
-                    }
-                }
-                .navigationTitle(Text("Roles Counted in Totals", bundle: .module))
-                .navigationBarTitleDisplayMode(.inline)
-            } label: {
+            SettingsRowLink(.roles) {
                 LabeledContent {
                     Text(countedSummary).foregroundStyle(.secondary)
                 } label: {
@@ -156,113 +138,9 @@ private struct RolesSection: View {
             }
         }
     }
-
-    private func binding(for role: BirthRole) -> Binding<Bool> {
-        Binding(
-            get: { BirthRoleCounting(storedValue: excludedRoles).counts(role) },
-            set: { counted in
-                var counting = BirthRoleCounting(storedValue: excludedRoles)
-                counting.set(role, counted: counted)
-                excludedRoles = counting.storedValue
-                Haptics.lightImpact()
-            }
-        )
-    }
 }
 
-private struct AppIconSection: View {
-    var model: SettingsModel
-    var iconManager: IconManager
-    @Binding var pendingIconColor: String?
-
-    @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.requestProUpgrade) private var requestProUpgrade
-    @AppStorage(AppStorageKeys.selectedIconColor) private var selectedIconColor = SettingsModel.primaryIconColor
-
-    private struct IconOption: Identifiable {
-        let color: String
-        let asset: String
-        let uiColor: Color
-        var id: String { color }
-    }
-
-    private let iconOptions: [IconOption] = [
-        .init(color: "purple", asset: "icon-purple-preview", uiColor: .storkPurple),
-        .init(color: "blue", asset: "icon-blue-preview", uiColor: .storkBlue),
-        .init(color: "pink", asset: "icon-pink-preview", uiColor: .storkPink),
-        .init(color: "orange", asset: "icon-orange-preview", uiColor: .storkOrange),
-    ]
-
-    var body: some View {
-        Section {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(iconOptions) { option in
-                        ZStack(alignment: .topTrailing) {
-                            Button {
-                                Haptics.lightImpact()
-                                guard model.canSelectIcon(option.color) else {
-                                    requestProUpgrade(.alternateAppIcons)
-                                    return
-                                }
-                                selectedIconColor = option.color
-                                if scenePhase == .active {
-                                    Task { await iconManager.changeAppIcon(to: option.color) }
-                                } else {
-                                    pendingIconColor = option.color
-                                }
-                            } label: {
-                                Image(option.asset)
-                                    .resizable().scaledToFit()
-                                    .frame(width: 72, height: 72)
-                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                            .stroke(option.uiColor, lineWidth: 3)
-                                            .opacity(selectedIconColor == option.color ? 1 : 0)
-                                    )
-                                    .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            }
-                            .buttonStyle(.plain)
-                            .hoverEffect(.lift)
-                            .accessibilityLabel(Text("\(option.color.capitalized) app icon", bundle: .module))
-                            .accessibilityHint(model.canSelectIcon(option.color) ? Text(verbatim: "") : Text("Locked. Unlock with Stork Pro.", bundle: .module))
-                            .accessibilityAddTraits(selectedIconColor == option.color ? [.isSelected] : [])
-
-                            if selectedIconColor == option.color {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.storkPurple)
-                                    .background(.white, in: Circle())
-                                    .offset(x: -4, y: 4)
-                                    .accessibilityHidden(true)
-                            } else if !model.canSelectIcon(option.color) {
-                                Image(systemName: "lock.circle.fill")
-                                    .foregroundStyle(.secondary)
-                                    .background(.white, in: Circle())
-                                    .offset(x: -4, y: 4)
-                                    .accessibilityHidden(true)
-                            }
-                        }
-                    }
-                }
-                .padding(.vertical, 4)
-            }
-            .scrollClipDisabled()
-            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-        } header: {
-            HStack {
-                Text("App Icon", bundle: .module)
-                if !model.isProUnlocked { ProBadge() }
-            }
-        } footer: {
-            if !model.isProUnlocked {
-                Text("Alternate icons are part of Stork Pro.", bundle: .module)
-            }
-        }
-    }
-}
-
-private struct SyncSection: View {
+struct SyncSection: View {
     var model: SettingsModel
 
     @Environment(CloudSyncManager.self) private var cloudSyncManager
@@ -275,6 +153,7 @@ private struct SyncSection: View {
         case .synced: .green
         case .error: .red
         case .offline: .orange
+        case .signedOut: .secondary
         }
     }
 
@@ -325,16 +204,13 @@ private struct SyncSection: View {
     }
 }
 
-private struct DataSection<Destination: View>: View {
-    var model: SettingsModel
-    let exportDestination: () -> Destination
-
+struct DataSection: View {
     var body: some View {
         Section {
-            NavigationLink { exportDestination() } label: {
+            SettingsRowLink(.export) {
                 Label(String(localized: "Export & Share", bundle: .module), systemImage: "square.and.arrow.up")
             }
-            NavigationLink { PastBirthsHubView(model: model) } label: {
+            SettingsRowLink(.pastBirths) {
                 Label(String(localized: "Past Births & Import", bundle: .module), systemImage: "tray.and.arrow.down")
             }
         } header: {
@@ -346,7 +222,7 @@ private struct DataSection<Destination: View>: View {
 }
 
 /// Everything privacy in one place: the optional lock and the explanation of what Stork keeps.
-private struct PrivacySection: View {
+struct PrivacySection: View {
     @Environment(AppLockController.self) private var lock
     @AppStorage(AppStorageKeys.lockTimeoutSeconds) private var timeout = AppLockPolicy.defaultTimeout
 
@@ -408,10 +284,17 @@ private struct PrivacySection: View {
     }
 }
 
-private struct DangerZoneSection: View {
+struct DangerZoneSection: View {
     var model: SettingsModel
-    let isDeleting: Bool
-    @Binding var showDeleteAllAlert: Bool
+    @State private var showDeleteAllAlert = false
+    @State private var isDeleting = false
+
+    private func deleteAll() async {
+        isDeleting = true
+        defer { isDeleting = false }
+        model.deleteAll()
+        Haptics.mediumImpact()
+    }
 
     var body: some View {
         Section {
@@ -431,11 +314,17 @@ private struct DangerZoneSection: View {
         } footer: {
             Text("This will permanently remove all \(model.deliveryCount) deliveries.", bundle: .module)
         }
+        .alert(Text("Delete All Deliveries?", bundle: .module), isPresented: $showDeleteAllAlert) {
+            Button(String(localized: "Cancel", bundle: .module), role: .cancel) {}
+            Button(String(localized: "Delete All", bundle: .module), role: .destructive) { Task { await deleteAll() } }
+        } message: {
+            Text("This will permanently delete all \(model.deliveryCount) delivery records and their associated baby data. This action cannot be undone.", bundle: .module)
+        }
     }
 }
 
 #if DEBUG
-private struct DebugSection: View {
+struct DebugSection: View {
     var model: SettingsModel
 
     @State private var isSeeding = false
@@ -472,7 +361,7 @@ private struct DebugSection: View {
 }
 #endif
 
-private struct AboutSection: View {
+struct AboutSection: View {
     var model: SettingsModel
 
     var body: some View {
@@ -483,14 +372,14 @@ private struct AboutSection: View {
                     .foregroundStyle(.storkBlue)
             }
             LabeledContent(String(localized: "Publisher", bundle: .module)) {
-                Link("Molargik Software LLC", destination: URL(string: "https://www.molargiksoftware.com")!)
+                Link(Company.name, destination: Company.website)
                     .foregroundStyle(.storkBlue)
             }
             Link(destination: URL(string: "https://apps.apple.com/app/id6740038476?action=write-review")!) {
                 Label(String(localized: "Rate Stork", bundle: .module), systemImage: "star.fill")
             }
             ShareLink(
-                item: URL(string: "https://molargiksoftware.com/go/stork?ct=share_app")!,
+                item: Company.appPage,
                 message: Text("Stork is a delivery log for labor and delivery nurses, midwives and OBs.", bundle: .module)
             ) {
                 Label(String(localized: "Share Stork", bundle: .module), systemImage: "square.and.arrow.up")
@@ -499,7 +388,7 @@ private struct AboutSection: View {
     }
 }
 
-private struct AttributionsSection: View {
+struct AttributionsSection: View {
     var body: some View {
         Section {
             Link(destination: URL(string: "https://weatherkit.apple.com/legal-attribution.html")!) {

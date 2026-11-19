@@ -27,7 +27,7 @@ nonisolated public enum DeliveryMethod: String, CaseIterable, Codable, Hashable,
     public var displayName: String {
         switch self {
         case .vaginal: String(localized: "Vaginal", bundle: .module)
-        case .cSection: String(localized: "Cesarean", bundle: .module)
+        case .cSection: String(localized: "C-Section", bundle: .module)
         case .vBac: String(localized: "VBAC", bundle: .module)
         }
     }

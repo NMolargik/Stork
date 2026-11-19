@@ -76,6 +76,21 @@ public final class DeliveryListModel {
         filter.searchText = searchText
     }
 
+    // MARK: - Selection (two-column layouts)
+
+    /// The delivery the user picked in the list; drives the detail pane when the list and the
+    /// detail sit side by side (iPad regular width, unfolded iPhone Duo).
+    public var selectedDeliveryID: UUID?
+
+    /// The delivery the detail pane shows: the user's pick while it is still in the filtered
+    /// list, otherwise the most recent logged delivery, so the pane is never empty while there
+    /// is anything to show. Nil only when no logged delivery matches the filters.
+    public var selectedDelivery: Delivery? {
+        let logged = DeliveryStatistics.logged(visibleDeliveries)
+        if let id = selectedDeliveryID, let picked = logged.first(where: { $0.id == id }) { return picked }
+        return logged.max { $0.date < $1.date }
+    }
+
     // MARK: - Grouping (newest months first)
 
     public func monthStarts(from deliveries: [Delivery]) -> [Date] {

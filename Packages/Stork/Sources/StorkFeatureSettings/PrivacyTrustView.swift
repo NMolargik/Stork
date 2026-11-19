@@ -25,7 +25,7 @@ struct PrivacyTrustView: View {
 
             Section {
                 point("iphone", "Stays on your device", "Your log lives on your iPhone, iPad and Apple Watch. There are no Stork servers, no analytics about your births and no advertising.")
-                point("icloud.fill", "Private iCloud only", "If iCloud is on, your log syncs through your own private iCloud database. Molargik Software cannot see it, and neither can anyone else.")
+                point("icloud.fill", "Private iCloud only", "If iCloud is on, your log syncs through your own private iCloud database. Farside Software cannot see it, and neither can anyone else.")
                 point("faceid", "Optional lock", "Turn on Require Face ID in Privacy to ask for Face ID or your passcode when Stork opens.")
             } header: {
                 Text("Where it lives", bundle: .module)

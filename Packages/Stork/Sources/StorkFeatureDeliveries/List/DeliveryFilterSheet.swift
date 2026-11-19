@@ -135,16 +135,18 @@ struct DeliveryFilterSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
+                    Button(role: .cancel) { dismiss() } label: { Label(String(localized: "Cancel", bundle: .module), systemImage: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(String(localized: "Reset", bundle: .module)) {
+                    Button {
                         let searchText = tempFilter.searchText
                         tempFilter = DeliveryFilter()
                         tempFilter.searchText = searchText
                         isDateRangeEnabled = false
+                    } label: {
+                        Label(String(localized: "Reset", bundle: .module), systemImage: "arrow.counterclockwise")
                     }
                     .disabled({
                         var withoutSearch = tempFilter
@@ -154,7 +156,7 @@ struct DeliveryFilterSheet: View {
                     .hoverEffect(.highlight)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Apply", action: applyFilters)
+                    Button(role: .confirm, action: applyFilters) { Label(String(localized: "Apply", bundle: .module), systemImage: "checkmark") }
                         .disabled(isDateRangeEnabled && endDate < startDate)
                         .keyboardShortcut(.return, modifiers: .command)
                         .hoverEffect(.highlight)

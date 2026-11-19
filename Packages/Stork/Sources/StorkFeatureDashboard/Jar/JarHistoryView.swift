@@ -50,10 +50,9 @@ public struct JarHistoryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button { dismiss() } label: { Image(systemName: "xmark") }
+                    Button { dismiss() } label: { Label(String(localized: "Close jar history", bundle: .module), systemImage: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
-                        .accessibilityLabel(Text("Close jar history", bundle: .module))
                 }
             }
         }

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Stork is an app for labor & delivery nurses to track the deliveries they perform while staying HIPAA-conscious (no patient-identifying data, no hospital/location correlation). SwiftUI + SwiftData with iCloud/CloudKit private-database sync.
 
-**Business model (3.0+):** free download with a one-time **Stork Pro** unlock (`com.nickmolargik.stork.pro.lifetime`, non-consumable, Family Sharing). Free forever: logging deliveries (every field, any past date), basic stat cards, the marble jar, calendar, Watch app, basic Home Screen widgets, Spotlight, Siri. Pro: career milestone share cards, PDF/CSV export, insight cards, calendar heat map, alternate app icons, weather-at-delivery, Lock Screen + interactive widgets. **Data is never locked.** The year-end **Wrap** ("Your Year in Births") is free for everyone: it is a shareable acquisition hook, so never gate it. Pre-3.0 buyers are grandfathered (see Stork Pro below).
+**Business model (3.0+):** free download with a one-time **Stork Pro** unlock (`com.nickmolargik.stork.pro.lifetime`, non-consumable, Family Sharing). Free forever: logging deliveries (every field, any past date), basic stat cards, the marble jar, calendar, Watch app, basic Home Screen widgets, Spotlight, Siri. Pro: career milestone share cards, PDF/CSV export, insight cards, calendar heat map, jar sharing, weather-at-delivery, Lock Screen + interactive widgets. **Data is never locked.** The year-end **Wrap** ("Your Year in Births") is free for everyone: it is a shareable acquisition hook, so never gate it. Pre-3.0 buyers are grandfathered (see Stork Pro below).
 
 The app is a **thin app target on top of an SPM umbrella package** (`Packages/Stork`) of layered, single-responsibility modules — clean architecture in the style of StreetIQ's SCOUT. Dependencies point **inward**: features depend on the design system and core; data implements core's protocols; **core depends on nothing** (Foundation + SwiftData only).
 
@@ -57,13 +57,13 @@ xcodebuild build -workspace Stork.xcworkspace -scheme Stork \
    │ colors · │ │ @Model types · enums · domain (stats/filter/   │
    │ glass ·  │ │ milestones/weekmath/units) · navigation        │
    │ haptics ·│ │ (AppRouter/AppTab/DeepLink) · repository &      │
-   │ toast    │ │ use-case PROTOCOLS · service seams · Log        │
+   │ status   │ │ use-case PROTOCOLS · service seams · Log        │
    └──────────┘ └────────────────────────────────────────────────┘
 ```
 
 ### StorkCore (pure — Foundation + SwiftData only, host-tested)
 - **Models** (`@Model`): `Delivery`, `Baby`, `DeliveryTag`. CloudKit-friendly (defaults on all properties, optional relationships). `.sample` factories are `#if DEBUG`.
-- **Enumerations** (`nonisolated`): `DeliveryMethod`, `Sex`, `AppStage`, `ToastStyle`, `OnboardingStep`, `DashboardCard`, `ExportDateRange`/`CSVRowFormat`.
+- **Enumerations** (`nonisolated`): `DeliveryMethod`, `Sex`, `AppStage`, `OnboardingStep`, `DashboardCard`, `ExportDateRange`/`CSVRowFormat`.
 - **Domain**: `DeliveryStatistics` (every dashboard stat, pure static funcs with injectable `Calendar`/`Date`), `DeliveryFilter` + `+Matching`, `MilestoneTracker` (persists behind `KeyValueStoring`), `WeekMath` (the single source of truth for Sunday–Saturday weeks, `nonisolated`), `UnitConversion`.
 - **Navigation**: `AppTab`, `DeepLink`, `AppURLScheme`, `AppRouter` (`@Observable`).
 - **Services (protocols only)**: `DeliveryRepository`/`TagRepository` + single-verb use-cases (`LoadDeliveries`, `LogDelivery`, `UpdateDelivery`, `DeleteDelivery`, `DeleteAllDeliveries`, `LoadCareerTotals`, `LoadTags`, `SaveTag`, `DeleteTag` — each a `protocol` + `…UseCase` struct with `callAsFunction`); `CareerTotals` value type; seams `KeyValueStoring`, `WidgetTimelineReloading`, `DeliveryIndexing`, `ReviewRequesting`. Nothing outside the composition root touches a repository directly — always go through a use-case (even App Intents).
@@ -88,7 +88,7 @@ xcodebuild build -workspace Stork.xcworkspace -scheme Stork \
 - Local testing: `Stork/Configuration.storekit` is attached to the `Stork` scheme.
 
 ### StorkDesignSystem (depends on Core)
-Brand colors (`storkBlue`/`storkPink`/`storkPurple`/`storkOrange`, defined in code on `ShapeStyle where Self == Color` so they work as both `Color` and in `.foregroundStyle`/`.fill`/`.tint`); `DeliveryMethod.accentColor`, `Sex.color`, `DeliveryTag.color`, `Color(hex:)`; `AdaptiveGlassModifier`, `Haptics`, the toast stack (`ToastManager`/`ToastItem`/`ToastView`/`.toastContainer()`), animated stat views, `DetailRowView`, `TagChipView`/`FlowLayout`, `SparkleText`, shared view modifiers.
+Brand colors (`storkBlue`/`storkPink`/`storkPurple`/`storkOrange`, defined in code on `ShapeStyle where Self == Color` so they work as both `Color` and in `.foregroundStyle`/`.fill`/`.tint`); `DeliveryMethod.accentColor`, `Sex.color`, `DeliveryTag.color`, `Color(hex:)`; `AdaptiveGlassModifier`, `Haptics`, inline status (`StatusCenter` + `.statusSubtitle()`: transient saved/imported status shows in the screen's navigation subtitle for a few seconds; real failures use an alert; Pro limits go straight to the paywall; never add toasts), animated stat views, `DetailRowView`, `TagChipView`/`FlowLayout`, `SparkleText`, shared view modifiers.
 
 ### StorkFeature* (one per area, depend on Core + DesignSystem [+ Services])
 `Deliveries`, `Dashboard` (cards + SpriteKit Jar + Calendar), `Onboarding`, `Settings`, `Export`, `Pro` (paywall + grandfather thank-you; depends on Services for `StoreManager`). Each screen is a `#if os(iOS)` SwiftUI view backed by a **cross-platform `@Observable` view model** that depends on use-case *protocols* — never SwiftData, `@Query`, or `modelContext` directly. View files are iOS-gated so host `swift test` runs simulator-free; view models stay cross-platform.

@@ -1,103 +1,73 @@
 {
-  "features" : [
-    "refractivity"
-  ],
-  "fill" : {
-    "linear-gradient" : [
-      "display-p3:0.97598,0.94086,1.00000,1.00000",
-      "display-p3:0.37646,0.21179,1.00000,1.00000"
-    ],
-    "orientation" : {
-      "start" : {
-        "x" : 0.5,
-        "y" : 0
-      },
-      "stop" : {
-        "x" : 0.5,
-        "y" : 0.7
-      }
-    }
-  },
-  "groups" : [
+  "fill-specializations" : [
     {
-      "blur-material" : null,
-      "layers" : [
-        {
-          "image-name" : "stork 2.svg",
-          "name" : "stork 2",
-          "position" : {
-            "scale" : 1.36,
-            "translation-in-points" : [
-              6.99628752375952,
-              124.64592539343789
-            ]
-          }
-        }
-      ],
-      "lighting" : "individual",
-      "refractivity" : {
-        "depth" : 0,
-        "enabled" : true,
-        "strength" : 0
-      },
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.6
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
+      "value" : {
+        "linear-gradient" : [
+          "display-p3:1.00000,1.00000,1.00000,1.00000",
+          "srgb:0.91373,0.90980,0.93725,1.00000"
+        ]
       }
     },
     {
+      "appearance" : "dark",
+      "value" : {
+        "linear-gradient" : [
+          "display-p3:0.20392,0.18824,0.23922,1.00000",
+          "srgb:0.07059,0.06275,0.08235,1.00000"
+        ]
+      }
+    }
+  ],
+  "groups" : [
+    {
       "layers" : [
         {
-          "image-name" : "beak.svg",
-          "name" : "beak",
-          "position" : {
-            "scale" : 1.36,
-            "translation-in-points" : [
-              5.552593395638041,
-              125.88046102776627
-            ]
-          }
+          "image-name" : "3-front-lid.svg",
+          "name" : "3-front-lid"
         }
       ],
+      "name" : "front",
       "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
+        "kind" : "layer-color",
+        "opacity" : 0.4
       },
       "translucency" : {
         "enabled" : false,
-        "value" : 0.5
+        "value" : 0.3
       }
     },
     {
       "layers" : [
         {
-          "image-name" : "sack 3.svg",
-          "name" : "sack 3",
-          "position" : {
-            "scale" : 1.36,
-            "translation-in-points" : [
-              -28.825791327993784,
-              163.9732729808254
-            ]
-          }
+          "image-name" : "2-middle-marbles.svg",
+          "name" : "2-middle-marbles"
         }
       ],
-      "refractivity" : {
-        "depth" : 0,
-        "enabled" : true,
-        "strength" : 0.5
+      "name" : "middle",
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.4
       },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.3
+      }
+    },
+    {
+      "layers" : [
+        {
+          "image-name" : "1-back-jar.svg",
+          "name" : "1-back-jar"
+        }
+      ],
+      "name" : "back",
       "shadow" : {
         "kind" : "neutral",
-        "opacity" : 0.6
+        "opacity" : 0.3
       },
       "translucency" : {
         "enabled" : true,
-        "value" : 0.52
+        "value" : 0.4
       }
     }
   ],

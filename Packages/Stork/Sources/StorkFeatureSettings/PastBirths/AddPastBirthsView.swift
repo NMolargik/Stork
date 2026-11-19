@@ -14,7 +14,7 @@ import StorkDesignSystem
 struct AddPastBirthsView: View {
     @Bindable var model: AddPastBirthsModel
     @Environment(\.dismiss) private var dismiss
-    @Environment(ToastManager.self) private var toast
+    @Environment(StatusCenter.self) private var status
 
     var body: some View {
         Form {
@@ -26,7 +26,7 @@ struct AddPastBirthsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button(String(localized: "Add", bundle: .module)) { save() }
+                Button { save() } label: { Label(String(localized: "Add", bundle: .module), systemImage: "plus") }
                     .buttonStyle(.borderedProminent)
                     .tint(.storkBlue)
                     .disabled(!model.canSave)
@@ -157,7 +157,7 @@ struct AddPastBirthsView: View {
         if model.save() {
             Haptics.success()
             if let n = model.savedBirths {
-                toast.showSuccess(String(localized: "Added ^[\(n) estimated birth](inflect: true)", bundle: .module))
+                status.show(String(localized: "Added ^[\(n) estimated birth](inflect: true)", bundle: .module))
             }
             dismiss()
         } else {

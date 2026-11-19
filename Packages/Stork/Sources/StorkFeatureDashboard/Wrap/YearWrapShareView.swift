@@ -113,7 +113,7 @@ struct YearWrapShareView: View {
 struct YearWrapWordmark: View {
     var body: some View {
         HStack(spacing: 5) {
-            Image("stork").renderingMode(.template).resizable().scaledToFit().frame(width: 16, height: 16).accessibilityHidden(true)
+            StorkMark().frame(width: 16, height: 16)
             Text(verbatim: "Stork")
                 .font(.system(size: 14, weight: .bold, design: .rounded))
         }

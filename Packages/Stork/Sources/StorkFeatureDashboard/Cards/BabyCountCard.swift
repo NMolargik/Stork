@@ -10,7 +10,6 @@ import StorkCore
 import StorkDesignSystem
 
 struct BabyCountCard: View {
-    @Environment(\.horizontalSizeClass) private var hSizeClass
     let allDeliveries: [Delivery]
     @AppStorage(AppStorageKeys.excludedBirthRoles) private var excludedRoles = ""
 
@@ -26,9 +25,11 @@ struct BabyCountCard: View {
         InsightCard(title: String(localized: "Babies per Delivery", bundle: .module), systemImage: "figure.2.and.child.holdinghands", accent: .storkPink) {
             let average = DeliveryStatistics.averageBabyCount(deliveries: deliveries)
             let monthlyCounts = DeliveryStatistics.monthlyBabyCounts(deliveries: deliveries)
-            let allLabels = monthlyCounts.labels
-            let stride = (hSizeClass == .compact && allLabels.count > 8) ? 2 : 1
-            let shownLabels = allLabels.enumerated().compactMap { $0.offset % stride == 0 ? $0.element : nil }
+            // The statistic is newest-first; the chart reads oldest to newest, left to right.
+            let allLabels = Array(monthlyCounts.labels.reversed())
+            let allCounts = Array(monthlyCounts.counts.reversed())
+            // About six horizontal labels on every device, however many months there are.
+            let stride = max(1, Int((Double(allLabels.count) / 6).rounded(.up)))
             let totals = DeliveryStatistics.totals(deliveries: deliveries)
 
             VStack(alignment: .leading, spacing: 12) {
@@ -47,9 +48,10 @@ struct BabyCountCard: View {
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("Average \(String(format: "%.1f", average)) babies per delivery. Total \(totals.deliveries) deliveries, \(totals.babies) babies.")
 
-                if !monthlyCounts.labels.isEmpty {
+                if !allLabels.isEmpty {
+                    Text("Babies each month", bundle: .module).font(.caption).foregroundStyle(.secondary)
                     Chart {
-                        ForEach(Array(zip(monthlyCounts.labels, monthlyCounts.counts)), id: \.0) { label, count in
+                        ForEach(Array(zip(allLabels, allCounts)), id: \.0) { label, count in
                             AreaMark(x: .value("Month", label), y: .value("Babies", count))
                                 .foregroundStyle(LinearGradient(colors: [.storkPink.opacity(0.35), .clear], startPoint: .top, endPoint: .bottom))
                                 .interpolationMethod(.catmullRom)
@@ -67,14 +69,16 @@ struct BabyCountCard: View {
                         }
                     }
                     .chartXAxis {
-                        AxisMarks(values: shownLabels) { value in
+                        AxisMarks(values: .automatic) { value in
                             // Use the String initializer, not the `{ content }` closure form: in
                             // the iOS 27 SDK the closure form routes through Charts' custom
                             // UnitPoint-anchor path and logs "Custom UnitPoint values are not
-                            // supported" whatever it contains. The built-in orientation angles
-                            // the month labels to avoid collisions.
-                            if let label = value.as(String.self) {
-                                AxisValueLabel(Self.abbrevLabel(label), orientation: .verticalReversed)
+                            // supported" whatever it contains. Only about six labels are shown,
+                            // so they stay horizontal.
+                            // Thinned here (not through the `values:` list, which a categorical
+                            // axis does not honour) to every stride-th month.
+                            if let label = value.as(String.self), let index = allLabels.firstIndex(of: label), index % stride == 0 {
+                                AxisValueLabel(Self.abbrevLabel(label))
                             }
                         }
                     }

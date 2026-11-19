@@ -145,6 +145,28 @@
       },
       "shouldTranslate": false
     },
+    "^[%lld more row](inflect: true)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld fila más](inflect: true)"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld ligne de plus](inflect: true)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ほか%lld行"
+          }
+        }
+      }
+    },
     "Babies": {
       "localizations": {
         "es": {
@@ -387,6 +409,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "統計カードやマイルストーン達成を共有用の画像として作成できます。"
+          }
+        }
+      }
+    },
+    "CSV preview": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista previa del CSV"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu du CSV"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSVのプレビュー"
           }
         }
       }
@@ -941,6 +985,28 @@
         }
       }
     },
+    "Nothing to Preview": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nada que previsualizar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien à prévisualiser"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プレビューはありません"
+          }
+        }
+      }
+    },
     "OK": {
       "localizations": {
         "es": {
@@ -1025,6 +1091,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "PDFとCSVの書き出しはStork Proの機能です。データは常にあなたのものです。記録と閲覧は無料のままです。"
+          }
+        }
+      }
+    },
+    "PDF report preview": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista previa del informe en PDF"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu du rapport PDF"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDFレポートのプレビュー"
           }
         }
       }
@@ -1471,6 +1559,28 @@
         }
       }
     },
+    "There are no deliveries in this period.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay partos en este período."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun accouchement durant cette période."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この期間の分娩はありません。"
+          }
+        }
+      }
+    },
     "Total Babies": {
       "localizations": {
         "es": {
@@ -1841,6 +1951,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "分娩%lld件、赤ちゃん%lld人"
+          }
+        }
+      }
+    },
+    "Yes": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sí"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oui"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はい"
+          }
+        }
+      }
+    },
+    "No": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いいえ"
           }
         }
       }

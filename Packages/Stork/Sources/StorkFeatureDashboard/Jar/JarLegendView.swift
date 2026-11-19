@@ -53,7 +53,7 @@ struct JarLegendView: View {
                 .font(.caption).foregroundStyle(.secondary)
             }
             if !marbles.isEmpty {
-                Button(action: share) {
+                Button(action: shareTapped) {
                     HStack(spacing: 6) {
                         Label(String(localized: "Share Jar", bundle: .module), systemImage: "square.and.arrow.up")
                         if !isProUnlocked { ProBadge() }
@@ -62,7 +62,7 @@ struct JarLegendView: View {
                 }
                 .buttonStyle(.bordered)
                 .accessibilityHint(isProUnlocked ? Text("Shares a picture of this month's jar", bundle: .module)
-                                                 : Text("Free users share a lower-resolution picture. Stork Pro shares full resolution.", bundle: .module))
+                                                 : Text("Sharing the jar is a Stork Pro feature.", bundle: .module))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -92,15 +92,24 @@ struct JarLegendView: View {
     }
 
     @MainActor
+    private func shareTapped() {
+        guard isProUnlocked else {
+            Haptics.lightImpact()
+            requestProUpgrade(.jarSharing)
+            return
+        }
+        share()
+    }
+
+    @MainActor
     private func share() {
         Haptics.lightImpact()
         let renderer = ImageRenderer(
-            content: JarShareCardView(marbles: marbles, monthDate: monthDate, highResolution: isProUnlocked)
+            content: JarShareCardView(marbles: marbles, monthDate: monthDate, highResolution: true)
                 .environment(\.colorScheme, .light)
         )
-        // Pro: full 3× image. Free: a lower-resolution (1×) variant — still a fine picture
-        // for a message, just not poster quality. Data is never locked.
-        renderer.scale = isProUnlocked ? 3.0 : 1.0
+        // Sharing the jar is Pro (4.0): always the full 3× image.
+        renderer.scale = 3.0
         if let image = renderer.uiImage { shareImage = IdentifiableImage(image: image) }
     }
 }

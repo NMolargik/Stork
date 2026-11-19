@@ -58,9 +58,8 @@ struct StepTrendSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button { dismiss() } label: { Image(systemName: "xmark") }
+                    Button { dismiss() } label: { Label(String(localized: "Close", bundle: .module), systemImage: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
-                        .accessibilityLabel(Text("Close", bundle: .module))
                 }
             }
         }

@@ -24,7 +24,7 @@ struct MilestoneCardView: View {
                 .foregroundStyle(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
             Text(suffixText).font(.title3).foregroundStyle(.secondary)
             HStack(spacing: 8) {
-                Image("storkicon").resizable().scaledToFit().frame(width: 28, height: 28)
+                StorkMark().frame(width: 28, height: 28)
                 Text(verbatim: "Stork").font(.system(size: 18, weight: .bold, design: .rounded)).foregroundStyle(.secondary)
             }
             .padding(.top, 8)

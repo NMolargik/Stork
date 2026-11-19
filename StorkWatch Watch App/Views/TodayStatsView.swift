@@ -51,10 +51,8 @@ struct TodayStatsView: View {
             VStack(spacing: 12) {
                 // Today header
                 HStack {
-                    Image("storkicon")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
+                    StorkMark()
+                .frame(width: 20, height: 20)
                         .accessibilityHidden(true)
 
                     Text("Today")

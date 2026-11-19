@@ -23,6 +23,8 @@ public final class CloudSyncManager {
         case synced(Date)
         case error(String)
         case offline
+        /// No iCloud account on this device: nothing syncs, whatever the store reports.
+        case signedOut
 
         public var displayText: String {
             switch self {
@@ -31,6 +33,7 @@ public final class CloudSyncManager {
             case .synced(let date): String(localized: "Last synced \(date.formatted(.relative(presentation: .named)))", bundle: .module)
             case .error(let message): String(localized: "Error: \(message)", bundle: .module)
             case .offline: String(localized: "Offline", bundle: .module)
+            case .signedOut: String(localized: "Not signed in to iCloud", bundle: .module)
             }
         }
 
@@ -40,13 +43,13 @@ public final class CloudSyncManager {
             case .syncing: "arrow.triangle.2.circlepath.icloud"
             case .synced: "checkmark.icloud"
             case .error: "exclamationmark.icloud"
-            case .offline: "icloud.slash"
+            case .offline, .signedOut: "icloud.slash"
             }
         }
 
         public var color: String {
             switch self {
-            case .idle: "secondary"
+            case .idle, .signedOut: "secondary"
             case .syncing: "blue"
             case .synced: "green"
             case .error: "red"
@@ -70,7 +73,12 @@ public final class CloudSyncManager {
     private var isNetworkAvailable: Bool = true
     private var notificationObservers: [Any] = []
 
-    public init() {}
+    /// Whether an iCloud account is signed in. Injected so tests can drive both states.
+    private let cloudAvailability: @MainActor () -> Bool
+
+    public init(cloudAvailability: @escaping @MainActor () -> Bool = { FileManager.default.ubiquityIdentityToken != nil }) {
+        self.cloudAvailability = cloudAvailability
+    }
 
     public func configure(with context: ModelContext) {
         self.modelContext = context
@@ -110,6 +118,16 @@ public final class CloudSyncManager {
         }
         notificationObservers.append(importObserver)
 
+        // Signing in or out of iCloud while the app runs changes what the status should say.
+        let identityObserver = NotificationCenter.default.addObserver(
+            forName: NSNotification.Name.NSUbiquityIdentityDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in self?.updateSyncStatus() }
+        }
+        notificationObservers.append(identityObserver)
+
         updateSyncStatus()
     }
 
@@ -130,6 +148,7 @@ public final class CloudSyncManager {
     }
 
     private func handleRemoteChange() {
+        guard isCloudAvailable else { return updateSyncStatus() }
         lastSyncDate = Date()
         hasReceivedRemoteChange = true
         updateSyncStatus()
@@ -137,12 +156,17 @@ public final class CloudSyncManager {
     }
 
     private func handleStoreChange() {
+        // The store also reports "did change" when it loads a purely local store; without an
+        // iCloud account that is not a sync, so it must not read as "Last synced".
+        guard isCloudAvailable else { return updateSyncStatus() }
         lastSyncDate = Date()
         updateSyncStatus()
     }
 
     private func updateSyncStatus() {
-        if !isNetworkAvailable {
+        if !isCloudAvailable {
+            syncStatus = .signedOut
+        } else if !isNetworkAvailable {
             syncStatus = .offline
         } else if isSyncing {
             syncStatus = .syncing
@@ -157,6 +181,10 @@ public final class CloudSyncManager {
 
     /// Triggers a manual sync by saving the context and refreshing.
     public func triggerSync() async {
+        guard isCloudAvailable else {
+            syncStatus = .signedOut
+            return
+        }
         guard isNetworkAvailable else {
             syncStatus = .offline
             return
@@ -183,6 +211,6 @@ public final class CloudSyncManager {
 
     /// Whether iCloud is available on this device.
     public var isCloudAvailable: Bool {
-        FileManager.default.ubiquityIdentityToken != nil
+        cloudAvailability()
     }
 }

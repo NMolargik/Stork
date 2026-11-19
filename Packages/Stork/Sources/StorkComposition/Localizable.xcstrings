@@ -252,6 +252,62 @@
         }
       }
     },
+    "Delivery saved": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delivery saved"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parto guardado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accouchement enregistré"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩を保存しました"
+          }
+        }
+      }
+    },
+    "Delivery updated": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delivery updated"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parto actualizado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accouchement mis à jour"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩を更新しました"
+          }
+        }
+      }
+    },
     "Grant Stork access to step data in the Health app, or pair an Apple Watch to track steps.": {
       "localizations": {
         "es": {
@@ -474,24 +530,24 @@
         }
       }
     },
-    "Syncing with iCloud…": {
+    "Stork is locked": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sincronizando con iCloud…"
+            "value": "Stork está bloqueado"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchronisation avec iCloud…"
+            "value": "Stork est verrouillé"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloudと同期中…"
+            "value": "Storkはロックされています"
           }
         }
       }
@@ -542,6 +598,28 @@
         }
       }
     },
+    "That did not work. Try again.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No funcionó. Inténtalo de nuevo."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela n'a pas fonctionné. Réessayez."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "うまくいきませんでした。もう一度お試しください。"
+          }
+        }
+      }
+    },
     "Today's steps": {
       "localizations": {
         "es": {
@@ -586,6 +664,50 @@
         }
       }
     },
+    "Unlock": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouiller"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック解除"
+          }
+        }
+      }
+    },
+    "Unlock Stork to see your births.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquea Stork para ver tus partos."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouillez Stork pour voir vos accouchements."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storkのロックを解除して分娩記録を表示します。"
+          }
+        }
+      }
+    },
     "Weather": {
       "localizations": {
         "es": {
@@ -626,94 +748,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "天気を取得できません"
-          }
-        }
-      }
-    },
-    "Stork is locked": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork está bloqueado"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stork est verrouillé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Storkはロックされています"
-          }
-        }
-      }
-    },
-    "Unlock": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloquear"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Déverrouiller"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ロック解除"
-          }
-        }
-      }
-    },
-    "That did not work. Try again.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No funcionó. Inténtalo de nuevo."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cela n'a pas fonctionné. Réessayez."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "うまくいきませんでした。もう一度お試しください。"
-          }
-        }
-      }
-    },
-    "Unlock Stork to see your births.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloquea Stork para ver tus partos."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Déverrouillez Stork pour voir vos accouchements."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Storkのロックを解除して分娩記録を表示します。"
           }
         }
       }

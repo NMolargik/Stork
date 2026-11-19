@@ -77,9 +77,12 @@ public final class DashboardModel {
         DeliveryStatistics.monthlyJarCounts(deliveries: deliveries)
     }
 
+    /// The date the jar's month follows (the debug "now" override, if any).
+    public var jarDate: Date { now() }
+
     /// One marble per baby this month, categorized for the jar.
     public var jarMarbles: [JarMarble] {
-        DeliveryStatistics.jarMarbles(deliveries: deliveries)
+        DeliveryStatistics.jarMarbles(deliveries: deliveries, asOf: now())
     }
 
     public func jarCounts(forMonthStarting monthStart: Date) -> (boy: Int, girl: Int, loss: Int) {

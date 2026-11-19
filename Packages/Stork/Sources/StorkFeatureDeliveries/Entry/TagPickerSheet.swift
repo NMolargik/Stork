@@ -107,7 +107,7 @@ struct TagPickerSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "Done", bundle: .module)) { dismiss() }
+                    Button(role: .confirm) { dismiss() } label: { Label(String(localized: "Done", bundle: .module), systemImage: "checkmark") }
                 }
             }
             .onAppear { model.loadTags() }

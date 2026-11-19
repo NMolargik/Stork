@@ -81,6 +81,7 @@ public final class HealthManager {
             // HealthKit hides read-permission state, so a non-throwing request is the only
             // signal — treat it as granted. A nil/zero count means "no samples" (iPad), not denied.
             isAuthorized = true
+            UserDefaults.standard.set(true, forKey: AppStorageKeys.healthAccessRequested)
             let initial = try? await reader.todayStepCount()
             todayStepCount = initial ?? 0
             lastError = nil
@@ -92,6 +93,15 @@ public final class HealthManager {
             lastError = error
             Log.health.error("Authorization failed: \(error.localizedDescription)")
         }
+    }
+
+    /// Launch entry point: resumes step tracking only if the user already answered the Health
+    /// request (iOS shows no sheet again for a request it has already recorded). Never prompts
+    /// for the first time; that happens from onboarding or an explicit "Connect Health" tap.
+    public func resumeIfPreviouslyRequested() async {
+        guard UserDefaults.standard.bool(forKey: AppStorageKeys.healthAccessRequested) else { return }
+        await requestAuthorization()
+        startObservingStepCount()
     }
 
     // MARK: - Observing

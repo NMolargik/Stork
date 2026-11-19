@@ -25,7 +25,7 @@ struct CSVTemplateDocument: FileDocument {
 struct CSVImportView: View {
     @Bindable var model: CSVImportModel
     @Environment(\.dismiss) private var dismiss
-    @Environment(ToastManager.self) private var toast
+    @Environment(StatusCenter.self) private var status
     @Environment(\.noteReviewMoment) private var noteReviewMoment
 
     @State private var showingPicker = false
@@ -44,7 +44,7 @@ struct CSVImportView: View {
         .toolbar {
             if model.preview != nil {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "Import", bundle: .module)) { runImport() }
+                    Button { runImport() } label: { Label(String(localized: "Import", bundle: .module), systemImage: "square.and.arrow.down") }
                         .buttonStyle(.borderedProminent).tint(.storkBlue)
                         .disabled(model.importableCount == 0)
                 }
@@ -226,7 +226,7 @@ struct CSVImportView: View {
         if model.performImport() {
             Haptics.success()
             if let n = model.importedCount {
-                toast.showSuccess(String(localized: "Imported ^[\(n) birth](inflect: true)", bundle: .module))
+                status.show(String(localized: "Imported ^[\(n) birth](inflect: true)", bundle: .module))
             }
             dismiss()
             noteReviewMoment(.csvImported)

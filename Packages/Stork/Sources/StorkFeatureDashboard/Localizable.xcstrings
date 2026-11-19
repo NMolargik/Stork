@@ -1573,24 +1573,24 @@
         }
       }
     },
-    "Free users share a lower-resolution picture. Stork Pro shares full resolution.": {
+    "Sharing the jar is a Stork Pro feature.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Los usuarios gratuitos comparten una imagen de menor resolución. Stork Pro la comparte en resolución completa."
+            "value": "Compartir el tarro es una función de Stork Pro."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les utilisateurs gratuits partagent une image de moindre résolution. Stork Pro la partage en pleine résolution."
+            "value": "Le partage du bocal est une fonctionnalité de Stork Pro."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "無料版は低解像度の画像を共有します。Stork Pro なら高解像度で共有できます。"
+            "value": "ジャーの共有は Stork Pro の機能です。"
           }
         }
       }
@@ -3598,6 +3598,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "カードを並べ替え…"
+          }
+        }
+      }
+    },
+    "Babies each month": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bebés por mes"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bébés par mois"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月ごとの赤ちゃんの数"
           }
         }
       }

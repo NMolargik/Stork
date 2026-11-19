@@ -8,7 +8,9 @@
 #if os(iOS)
 import Foundation
 import UIKit
+import SwiftUI
 import StorkCore
+import StorkDesignSystem
 
 @MainActor
 public final class PDFReportGenerator {
@@ -36,6 +38,11 @@ public final class PDFReportGenerator {
 
     public init() {}
 
+    /// The app's colours for the page: always the light appearance, whatever the device shows.
+    private static func ui(_ color: Color) -> UIColor {
+        UIColor(color).resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
+    }
+
     public func generate(configuration: Configuration, progressCallback: ((Double) -> Void)? = nil) async throws -> Data {
         let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: UIGraphicsPDFRendererFormat())
@@ -56,9 +63,17 @@ public final class PDFReportGenerator {
 
     private func drawHeader(config: Configuration, yPosition: CGFloat) -> CGFloat {
         var y = yPosition
-        "Delivery Report".draw(at: CGPoint(x: margin, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 28, weight: .bold), .foregroundColor: UIColor.black])
+        // The jar mark beside the title, drawn from the same code the app uses.
+        var titleX = margin
+        let markRenderer = ImageRenderer(content: StorkMark().frame(width: 40, height: 40))
+        markRenderer.scale = 4
+        if let mark = markRenderer.uiImage {
+            mark.draw(in: CGRect(x: margin, y: y - 2, width: 40, height: 40))
+            titleX += 50
+        }
+        "Delivery Report".draw(at: CGPoint(x: titleX, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 28, weight: .bold), .foregroundColor: UIColor.black])
         y += 36
-        dateRangeDescription(config: config).draw(at: CGPoint(x: margin, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.darkGray])
+        dateRangeDescription(config: config).draw(at: CGPoint(x: titleX, y: y), withAttributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.darkGray])
         y += 30
         let divider = UIBezierPath()
         divider.move(to: CGPoint(x: margin, y: y))
@@ -78,17 +93,21 @@ public final class PDFReportGenerator {
         let totalBabies = deliveries.reduce(0) { $0 + ($1.babies?.count ?? $1.babyCount) }
         let epiduralCount = deliveries.count { $0.epiduralUsed }
         let epiduralPercent = totalDeliveries > 0 ? Double(epiduralCount) / Double(totalDeliveries) * 100 : 0
-        let stats = [("Total Deliveries", "\(totalDeliveries)"), ("Total Babies", "\(totalBabies)"), ("Epidural Usage", String(format: "%.1f%%", epiduralPercent))]
+        let stats = [
+            ("Total Deliveries", "\(totalDeliveries)", Self.ui(.storkBlue)),
+            ("Total Babies", "\(totalBabies)", Self.ui(.storkPink).darkened(by: 0.35)),
+            ("Epidural Usage", String(format: "%.1f%%", epiduralPercent), Self.ui(.storkOrange)),
+        ]
         let statWidth = contentWidth / CGFloat(stats.count)
         for (index, stat) in stats.enumerated() {
-            drawStatBox(label: stat.0, value: stat.1, at: CGPoint(x: margin + CGFloat(index) * statWidth, y: y), width: statWidth - 10)
+            drawStatBox(label: stat.0, value: stat.1, color: stat.2, at: CGPoint(x: margin + CGFloat(index) * statWidth, y: y), width: statWidth - 10)
         }
         return y + 70
     }
 
-    private func drawStatBox(label: String, value: String, at point: CGPoint, width: CGFloat) {
+    private func drawStatBox(label: String, value: String, color: UIColor, at point: CGPoint, width: CGFloat) {
         let path = UIBezierPath(roundedRect: CGRect(x: point.x, y: point.y, width: width, height: 50), cornerRadius: 8)
-        UIColor.systemGray.setFill()
+        color.setFill()
         path.fill()
         let valueAttrs: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 22, weight: .bold), .foregroundColor: UIColor.white]
         let valueSize = value.size(withAttributes: valueAttrs)
@@ -106,9 +125,9 @@ public final class PDFReportGenerator {
         let total = deliveries.count
         guard total > 0 else { return y }
         let methods = [
-            ("Vaginal", deliveries.count { $0.deliveryMethod == .vaginal }, UIColor.systemBlue),
-            ("C-Section", deliveries.count { $0.deliveryMethod == .cSection }, UIColor.systemOrange),
-            ("VBAC", deliveries.count { $0.deliveryMethod == .vBac }, UIColor.systemPurple),
+            ("Vaginal", deliveries.count { $0.deliveryMethod == .vaginal }, Self.ui(DeliveryMethod.vaginal.accentColor)),
+            ("C-Section", deliveries.count { $0.deliveryMethod == .cSection }, Self.ui(DeliveryMethod.cSection.accentColor)),
+            ("VBAC", deliveries.count { $0.deliveryMethod == .vBac }, Self.ui(DeliveryMethod.vBac.accentColor)),
         ]
         let barHeight: CGFloat = 24
         var xOffset: CGFloat = margin
@@ -137,9 +156,9 @@ public final class PDFReportGenerator {
         let total = allBabies.count
         guard total > 0 else { return y }
         let sexes = [
-            ("Boys", allBabies.count { $0.sex == .male }, UIColor.systemBlue),
-            ("Girls", allBabies.count { $0.sex == .female }, UIColor.systemPink),
-            ("Loss", allBabies.count { $0.sex == .loss }, UIColor.systemPurple),
+            ("Boys", allBabies.count { $0.sex == .male }, Self.ui(Sex.male.color)),
+            ("Girls", allBabies.count { $0.sex == .female }, Self.ui(Sex.female.color)),
+            ("Loss", allBabies.count { $0.sex == .loss }, Self.ui(Sex.loss.color)),
         ]
         for (name, count, color) in sexes {
             let percent = Double(count) / Double(total) * 100
@@ -179,12 +198,23 @@ public final class PDFReportGenerator {
     }
 
     private func dateRangeDescription(config: Configuration) -> String {
-        if config.dateRange == .custom, let interval = config.customDateInterval {
-            let df = DateFormatter()
-            df.dateStyle = .medium
-            return "\(df.string(from: interval.start)) – \(df.string(from: interval.end))"
+        let dates = config.deliveries.map(\.date)
+        guard let days = ReportPeriod.days(range: config.dateRange, custom: config.customDateInterval, deliveryDates: dates) else {
+            return config.dateRange.displayName
         }
-        return config.dateRange.displayName
+        let formatter = DateIntervalFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: days.start, to: days.end)
+    }
+}
+
+private extension UIColor {
+    /// The colour with its brightness reduced, so white text on it stays readable.
+    func darkened(by amount: CGFloat) -> UIColor {
+        var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        guard getHue(&h, saturation: &s, brightness: &b, alpha: &a) else { return self }
+        return UIColor(hue: h, saturation: s, brightness: b * (1 - amount), alpha: a)
     }
 }
 

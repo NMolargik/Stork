@@ -233,7 +233,7 @@ nonisolated public enum DeliveryCSVImport {
             }
         }
 
-        guard let dateColumn = columns[.date] else {
+        guard columns[.date] != nil else {
             return CSVImportPreview(rows: [], droppedColumns: dropped, ignoredColumns: ignored, missingDateColumn: true, isEmptyFile: false)
         }
 

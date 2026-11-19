@@ -18,28 +18,58 @@ import StorkDesignSystem
 public struct DeliveryListView: View {
     @Bindable private var model: DeliveryListModel
     @Binding private var showingEntrySheet: Bool
+    /// Builds the detail for a delivery; when given, wide layouts (iPad regular width, unfolded
+    /// iPhone Duo) show the list on the left and the selected delivery's detail on the right.
+    private let detail: ((Delivery) -> DeliveryDetailView)?
+    /// Reports whether the list is currently showing the side-by-side layout, so the embedding
+    /// screen can select a delivery (deep link, Spotlight) instead of pushing over the split view.
+    @Binding private var isShowingSplit: Bool
 
+    @Environment(\.horizontalSizeClass) private var hSizeClass
+    @State private var layout = LayoutProbe()
     @State private var showingFilterSheet = false
     @State private var searchText = ""
 
-    public init(model: DeliveryListModel, showingEntrySheet: Binding<Bool>) {
+    public init(
+        model: DeliveryListModel,
+        showingEntrySheet: Binding<Bool>,
+        isShowingSplit: Binding<Bool> = .constant(false),
+        detail: ((Delivery) -> DeliveryDetailView)? = nil
+    ) {
         self.model = model
         _showingEntrySheet = showingEntrySheet
+        _isShowingSplit = isShowingSplit
+        self.detail = detail
+    }
+
+    private var usesSplit: Bool {
+        detail != nil && layout.usesTwoColumns(isRegularWidth: hSizeClass == .regular)
     }
 
     public var body: some View {
         Group {
             if model.deliveries.isEmpty {
                 EmptyState(model: model, showingEntrySheet: $showingEntrySheet)
-            } else if model.visibleDeliveries.isEmpty {
-                NoMatchesState(model: model, searchText: searchText)
+            } else if usesSplit, let detail {
+                SplitColumns {
+                    listContent(splitSelection: true)
+                } trailing: {
+                    DetailPane(model: model, detail: detail)
+                }
             } else {
-                ListBody(model: model)
+                listContent(splitSelection: false)
             }
         }
+        .containerLayoutProbe { layout = $0 }
+        .onChange(of: usesSplit, initial: true) { _, split in isShowingSplit = split }
         .searchable(text: $searchText, prompt: Text("Search notes, tags, and methods", bundle: .module))
         .onChange(of: searchText) { _, newValue in model.setSearchText(newValue) }
-        .onAppear { model.load() }
+        .onAppear {
+            model.load()
+            #if DEBUG
+            if DebugLaunchOptions.openSheet == "filter" { showingFilterSheet = true }
+            #endif
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -61,7 +91,36 @@ public struct DeliveryListView: View {
         }
     }
 
+    @ViewBuilder
+    private func listContent(splitSelection: Bool) -> some View {
+        if model.visibleDeliveries.isEmpty {
+            NoMatchesState(model: model, searchText: searchText)
+        } else {
+            ListBody(model: model, splitSelection: splitSelection)
+        }
+    }
+
     // MARK: - States
+
+    /// The right-hand pane: the selected delivery's detail, or a calm placeholder when the
+    /// filters leave nothing to show.
+    private struct DetailPane: View {
+        var model: DeliveryListModel
+        let detail: (Delivery) -> DeliveryDetailView
+
+        var body: some View {
+            if let delivery = model.selectedDelivery {
+                detail(delivery)
+                    .id(delivery.id)
+            } else {
+                ContentUnavailableView {
+                    Label(String(localized: "No Delivery Selected", bundle: .module), systemImage: "rectangle.on.rectangle.slash")
+                } description: {
+                    Text("Choose a delivery from the list to see its details here.", bundle: .module)
+                }
+            }
+        }
+    }
 
     private struct EmptyState: View {
         var model: DeliveryListModel
@@ -107,6 +166,8 @@ public struct DeliveryListView: View {
 
     private struct ListBody: View {
         var model: DeliveryListModel
+        /// Side-by-side layout: rows select into the detail pane instead of pushing.
+        var splitSelection = false
 
         var body: some View {
             let source = DeliveryStatistics.logged(model.visibleDeliveries)
@@ -119,13 +180,7 @@ public struct DeliveryListView: View {
                     if !monthDeliveries.isEmpty {
                         Section(header: Text(WeekMath.monthHeaderTitle(for: monthStart)).font(.title2.bold())) {
                             ForEach(monthDeliveries) { delivery in
-                                NavigationLink(value: delivery) {
-                                    DeliveryRowView(delivery: delivery)
-                                        .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                                        .hoverEffect(.lift)
-                                }
-                                .navigationLinkIndicatorVisibility(.hidden)
-                                .buttonStyle(.plain)
+                                row(for: delivery)
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button(role: .destructive) {
                                         Haptics.error()
@@ -164,9 +219,38 @@ public struct DeliveryListView: View {
                 }
             }
             .listStyle(.plain)
-            .frame(maxWidth: 760)
+            .frame(maxWidth: splitSelection ? .infinity : 760)
             .frame(maxWidth: .infinity)
             .refreshable { await model.refresh() }
+        }
+
+        @ViewBuilder
+        private func row(for delivery: Delivery) -> some View {
+            if splitSelection {
+                let isSelected = model.selectedDelivery?.id == delivery.id
+                Button {
+                    Haptics.lightImpact()
+                    model.selectedDeliveryID = delivery.id
+                } label: {
+                    DeliveryRowView(delivery: delivery)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .strokeBorder(Color.primary.opacity(isSelected ? 0.85 : 0), lineWidth: 3)
+                        }
+                        .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .hoverEffect(.lift)
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
+            } else {
+                NavigationLink(value: delivery) {
+                    DeliveryRowView(delivery: delivery)
+                        .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .hoverEffect(.lift)
+                }
+                .navigationLinkIndicatorVisibility(.hidden)
+                .buttonStyle(.plain)
+            }
         }
     }
 }

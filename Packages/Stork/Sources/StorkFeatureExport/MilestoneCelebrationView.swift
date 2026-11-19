@@ -16,6 +16,7 @@ public struct MilestoneCelebrationView: View {
     private let onShare: () -> Void
 
     @State private var showContent = false
+    @State private var layout = LayoutProbe()
     @State private var confettiPieces: [ConfettiPiece] = []
 
     private let confettiColors: [Color] = [.storkBlue, .storkPink, .storkPurple, .storkOrange, .yellow, .green]
@@ -38,61 +39,88 @@ public struct MilestoneCelebrationView: View {
             .ignoresSafeArea()
             .accessibilityHidden(true)
 
-            VStack(spacing: 24) {
-                Image(systemName: "star.fill")
-                    .font(.system(size: 60)).foregroundStyle(.yellow)
-                    .shadow(color: .yellow.opacity(0.6), radius: 20)
-                    .scaleEffect(showContent ? 1.0 : 0.3)
-                    .rotationEffect(.degrees(showContent ? 0 : -30))
-                    .accessibilityHidden(true)
-
-                VStack(spacing: 8) {
-                    Text(prefixText).font(.title3).foregroundStyle(.secondary)
-                    Text("\(milestone.count)", bundle: .module)
-                        .font(.system(size: 72, weight: .bold, design: .rounded))
-                        .foregroundStyle(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
-                    Text(suffixText).font(.title3).foregroundStyle(.secondary)
+            if let fold = layout.foldCenterX {
+                // Unfolded Duo: the celebration stays in the leading half, the share and
+                // continue buttons take the trailing half.
+                let widths = SplitColumns<EmptyView, EmptyView>.columnWidths(total: layout.width, foldCenterX: fold)
+                HStack(spacing: 0) {
+                    card(showsActions: false)
+                        .frame(width: widths.leading)
+                    Color.clear.frame(width: widths.gap, height: 1)
+                    actions
+                        .padding(32)
+                        .frame(maxWidth: 340)
+                        .frame(width: widths.trailing)
+                        .scaleEffect(showContent ? 1.0 : 0.8)
+                        .opacity(showContent ? 1 : 0)
                 }
-                .opacity(showContent ? 1 : 0)
-                .offset(y: showContent ? 0 : 20)
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("\(prefixText) \(milestone.count) \(suffixText)", bundle: .module))
-
-                VStack(spacing: 12) {
-                    Button {
-                        onShare()
-                    } label: {
-                        Label(String(localized: "Share Achievement", bundle: .module), systemImage: "square.and.arrow.up")
-                            .font(.headline).foregroundStyle(.white).frame(maxWidth: .infinity).padding(.vertical, 14)
-                            .background(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                    Button {
-                        dismissWithAnimation()
-                    } label: {
-                        Text("Continue", bundle: .module)
-                            .font(.headline).foregroundStyle(.primary).frame(maxWidth: .infinity).padding(.vertical, 14)
-                            .background(Color(uiColor: .tertiarySystemBackground))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                }
-                .opacity(showContent ? 1 : 0)
-                .offset(y: showContent ? 0 : 30)
-
-                Image("storkicon").resizable().scaledToFit().frame(width: 24, height: 24).accessibilityHidden(true)
+            } else {
+                card(showsActions: true)
+                    .centeredAwayFromHinge()
             }
-            .padding(32)
-            .frame(maxWidth: 340)
-            .background(RoundedRectangle(cornerRadius: 28, style: .continuous).fill(Color(uiColor: .systemBackground)))
-            .overlay(
-                RoundedRectangle(cornerRadius: 28, style: .continuous)
-                    .strokeBorder(LinearGradient(colors: [.white.opacity(0.3), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 2)
-            )
-            .shadow(color: .black.opacity(0.3), radius: 30, x: 0, y: 20)
-            .scaleEffect(showContent ? 1.0 : 0.8)
-            .opacity(showContent ? 1 : 0)
         }
+        .containerLayoutProbe { layout = $0 }
         .onAppear { startAnimations() }
+    }
+
+    private func card(showsActions: Bool) -> some View {
+        VStack(spacing: 24) {
+            Image(systemName: "star.fill")
+                .font(.system(size: 60)).foregroundStyle(.yellow)
+                .shadow(color: .yellow.opacity(0.6), radius: 20)
+                .scaleEffect(showContent ? 1.0 : 0.3)
+                .rotationEffect(.degrees(showContent ? 0 : -30))
+                .accessibilityHidden(true)
+
+            VStack(spacing: 8) {
+                Text(prefixText).font(.title3).foregroundStyle(.secondary)
+                Text("\(milestone.count)", bundle: .module)
+                    .font(.system(size: 72, weight: .bold, design: .rounded))
+                    .foregroundStyle(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
+                Text(suffixText).font(.title3).foregroundStyle(.secondary)
+            }
+            .opacity(showContent ? 1 : 0)
+            .offset(y: showContent ? 0 : 20)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(Text("\(prefixText) \(milestone.count) \(suffixText)", bundle: .module))
+
+            if showsActions { actions }
+
+            StorkMark().frame(width: 24, height: 24).accessibilityHidden(true)
+        }
+        .padding(32)
+        .frame(maxWidth: 340)
+        .background(RoundedRectangle(cornerRadius: 28, style: .continuous).fill(Color(uiColor: .systemBackground)))
+        .overlay(
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .strokeBorder(LinearGradient(colors: [.white.opacity(0.3), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 2)
+        )
+        .shadow(color: .black.opacity(0.3), radius: 30, x: 0, y: 20)
+        .scaleEffect(showContent ? 1.0 : 0.8)
+        .opacity(showContent ? 1 : 0)
+    }
+
+    private var actions: some View {
+        VStack(spacing: 12) {
+            Button {
+                onShare()
+            } label: {
+                Label(String(localized: "Share Achievement", bundle: .module), systemImage: "square.and.arrow.up")
+                    .font(.headline).foregroundStyle(.white).frame(maxWidth: .infinity).padding(.vertical, 14)
+                    .background(LinearGradient(colors: [.storkBlue, .storkPurple], startPoint: .leading, endPoint: .trailing))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            Button {
+                dismissWithAnimation()
+            } label: {
+                Text("Continue", bundle: .module)
+                    .font(.headline).foregroundStyle(.primary).frame(maxWidth: .infinity).padding(.vertical, 14)
+                    .background(Color(uiColor: .tertiarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+        }
+        .opacity(showContent ? 1 : 0)
+        .offset(y: showContent ? 0 : 30)
     }
 
     private var prefixText: String {

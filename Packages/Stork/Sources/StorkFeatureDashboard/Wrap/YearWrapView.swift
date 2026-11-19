@@ -22,6 +22,7 @@ public struct YearWrapView: View {
     @State private var model: YearWrapModel
     @State private var page: Int
     @State private var shareImage: IdentifiableImage?
+    @State private var layout = LayoutProbe()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.noteReviewMoment) private var noteReviewMoment
 
@@ -38,26 +39,37 @@ public struct YearWrapView: View {
         NavigationStack {
             Group {
                 if let stats = model.stats {
-                    TabView(selection: $page) {
-                        ForEach(Array(model.pages.enumerated()), id: \.offset) { index, kind in
-                            WrapPageContainer(kind: kind) {
-                                pageContent(kind, stats: stats)
+                    if let fold = layout.foldCenterX {
+                        // Unfolded Duo: the story and its page dots stay in the leading half,
+                        // the share controls take the trailing half.
+                        let widths = SplitColumns<EmptyView, EmptyView>.columnWidths(total: layout.width, foldCenterX: fold)
+                        HStack(spacing: 0) {
+                            pager(stats: stats, splitsAtFold: true).frame(width: widths.leading)
+                            Color.clear.frame(width: widths.gap, height: 1)
+                            ScrollView {
+                                WrapShareControls(model: model, stats: stats) { format in share(stats: stats, format: format) }
+                                    .frame(maxWidth: 420)
+                                    .padding(.horizontal, 24)
+                                    .padding(.vertical, 24)
+                                    .frame(maxWidth: .infinity)
                             }
-                            .tag(index)
+                            .scrollBounceBehavior(.basedOnSize)
+                            .frame(width: widths.trailing)
                         }
+                    } else {
+                        pager(stats: stats, splitsAtFold: false)
                     }
-                    .tabViewStyle(.page(indexDisplayMode: .always))
-                    .indexViewStyle(.page(backgroundDisplayMode: .always))
                 } else {
                     ContentUnavailableView(String(localized: "No births to wrap yet", bundle: .module), systemImage: "sparkles")
                 }
             }
+            .containerLayoutProbe { layout = $0 }
             .background(background.ignoresSafeArea())
             .navigationTitle(Text("Your Year in Births", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Done", bundle: .module)) { dismiss() }
+                    Button(role: .cancel) { dismiss() } label: { Label(String(localized: "Done", bundle: .module), systemImage: "xmark") }
                 }
                 if model.years.count > 1 {
                     ToolbarItem(placement: .primaryAction) {
@@ -85,20 +97,33 @@ public struct YearWrapView: View {
         #endif
     }
 
+    private func pager(stats: YearWrapStats, splitsAtFold: Bool) -> some View {
+        TabView(selection: $page) {
+            ForEach(Array(model.pages.enumerated()), id: \.offset) { index, kind in
+                WrapPageContainer(kind: kind, centersAwayFromHinge: !splitsAtFold) {
+                    pageContent(kind, stats: stats, showsShareControls: !splitsAtFold)
+                }
+                .tag(index)
+            }
+        }
+        .tabViewStyle(.page(indexDisplayMode: .always))
+        .indexViewStyle(.page(backgroundDisplayMode: .always))
+    }
+
     private var background: some View {
         LinearGradient(colors: [Color.storkBlue.opacity(0.22), Color.storkPink.opacity(0.12), Color(uiColor: .systemBackground)],
                        startPoint: .topLeading, endPoint: .bottomTrailing)
     }
 
     @ViewBuilder
-    private func pageContent(_ kind: YearWrapModel.Page, stats: YearWrapStats) -> some View {
+    private func pageContent(_ kind: YearWrapModel.Page, stats: YearWrapStats, showsShareControls: Bool) -> some View {
         switch kind {
         case .intro: IntroPage(stats: stats)
         case .arrivals: ArrivalsPage(stats: stats)
         case .roles: RolesPage(stats: stats)
         case .rhythm: RhythmPage(stats: stats)
         case .comparison: ComparisonPage(stats: stats)
-        case .summary: SummaryPage(model: model, stats: stats) { format in
+        case .summary: SummaryPage(model: model, stats: stats, showsShareControls: showsShareControls) { format in
             share(stats: stats, format: format)
         }
         }
@@ -140,6 +165,7 @@ public struct YearWrapView: View {
 
 private struct WrapPageContainer<Content: View>: View {
     let kind: YearWrapModel.Page
+    var centersAwayFromHinge = true
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -153,7 +179,15 @@ private struct WrapPageContainer<Content: View>: View {
                     .frame(maxWidth: .infinity, minHeight: geo.size.height)
             }
             .scrollBounceBehavior(.basedOnSize)
+            .modifier(OptionalHingeCentering(isEnabled: centersAwayFromHinge))
         }
+    }
+}
+
+private struct OptionalHingeCentering: ViewModifier {
+    let isEnabled: Bool
+    @ViewBuilder func body(content: Content) -> some View {
+        if isEnabled { content.centeredAwayFromHinge() } else { content }
     }
 }
 
@@ -385,6 +419,8 @@ private struct ComparisonPage: View {
 private struct SummaryPage: View {
     @Bindable var model: YearWrapModel
     let stats: YearWrapStats
+    /// False on the unfolded Duo, where the controls sit in the trailing half instead.
+    var showsShareControls = true
     let onShare: (YearWrapModel.ShareFormat) -> Void
 
     var body: some View {
@@ -393,11 +429,7 @@ private struct SummaryPage: View {
         VStack(spacing: 16) {
             PageTitle(text: Text("Your Year, Shared", bundle: .module))
 
-            Picker(String(localized: "Format", bundle: .module), selection: $model.shareFormat) {
-                Text("Story", bundle: .module).tag(YearWrapModel.ShareFormat.story)
-                Text("Square", bundle: .module).tag(YearWrapModel.ShareFormat.square)
-            }
-            .pickerStyle(.segmented)
+            if showsShareControls { FormatPicker(model: model) }
 
             YearWrapShareView(stats: stats, format: model.shareFormat, remembrance: model.remembranceForImage)
                 .fixedSize()
@@ -407,6 +439,36 @@ private struct SummaryPage: View {
                 .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text("Preview of your shareable summary", bundle: .module))
+
+            if showsShareControls {
+                WrapShareControls(model: model, stats: stats, showsFormatPicker: false, onShare: onShare)
+            }
+        }
+    }
+}
+
+private struct FormatPicker: View {
+    @Bindable var model: YearWrapModel
+    var body: some View {
+        Picker(String(localized: "Format", bundle: .module), selection: $model.shareFormat) {
+            Text("Story", bundle: .module).tag(YearWrapModel.ShareFormat.story)
+            Text("Square", bundle: .module).tag(YearWrapModel.ShareFormat.square)
+        }
+        .pickerStyle(.segmented)
+    }
+}
+
+/// The format picker, the Share button, the privacy note and the "Remembered" opt-in. Under the
+/// preview on one screen; in the trailing half on the unfolded Duo.
+private struct WrapShareControls: View {
+    @Bindable var model: YearWrapModel
+    let stats: YearWrapStats
+    var showsFormatPicker = true
+    let onShare: (YearWrapModel.ShareFormat) -> Void
+
+    var body: some View {
+        VStack(spacing: 16) {
+            if showsFormatPicker { FormatPicker(model: model) }
 
             Button { onShare(model.shareFormat) } label: {
                 Label(String(localized: "Share Image", bundle: .module), systemImage: "square.and.arrow.up")

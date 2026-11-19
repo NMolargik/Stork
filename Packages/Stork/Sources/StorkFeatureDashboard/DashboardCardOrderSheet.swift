@@ -32,14 +32,16 @@ struct DashboardCardOrderSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
+                    Button(role: .cancel) { dismiss() } label: { Label(String(localized: "Cancel", bundle: .module), systemImage: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "Save", bundle: .module)) {
+                    Button(role: .confirm) {
                         onSave(cardOrder)
                         dismiss()
+                    } label: {
+                        Label(String(localized: "Save", bundle: .module), systemImage: "checkmark")
                     }
                     .keyboardShortcut(.return, modifiers: .command)
                     .hoverEffect(.highlight)

@@ -113,6 +113,28 @@
         }
       }
     },
+    "Not signed in to iCloud": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin sesión en iCloud"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non connecté à iCloud"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloudにサインインしていません"
+          }
+        }
+      }
+    },
     "Offline": {
       "localizations": {
         "es": {

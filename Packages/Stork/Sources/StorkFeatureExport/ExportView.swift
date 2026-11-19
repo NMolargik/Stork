@@ -67,7 +67,14 @@ public struct ExportView: View {
             }
         }
         .navigationTitle(Text("Export & Share", bundle: .module))
-        .onAppear { model.load() }
+        .onAppear {
+            model.load()
+            #if DEBUG
+            // Simulator verification: `-StorkOpenSheet exportcsv|exportpdf`.
+            if DebugLaunchOptions.openSheet == "exportcsv" { showCSVOptions = true }
+            if DebugLaunchOptions.openSheet == "exportpdf" { showPDFOptions = true }
+            #endif
+        }
         .sheet(isPresented: $showCSVOptions) { CSVExportOptionsView(model: model) }
         .sheet(isPresented: $showPDFOptions) { PDFReportOptionsView(model: model) }
     }

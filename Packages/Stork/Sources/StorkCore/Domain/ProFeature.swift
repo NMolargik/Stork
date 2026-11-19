@@ -15,10 +15,10 @@ nonisolated public enum ProFeature: String, CaseIterable, Identifiable, Sendable
     case csvExport
     case insightCards
     case calendarHeatMap
-    case alternateAppIcons
     case weatherAtDelivery
     case lockScreenWidgets
     case interactiveWidgets
+    case jarSharing
 
     public var id: String { rawValue }
 
@@ -30,10 +30,10 @@ nonisolated public enum ProFeature: String, CaseIterable, Identifiable, Sendable
         case .csvExport: String(localized: "CSV export", bundle: .module)
         case .insightCards: String(localized: "Insight cards", bundle: .module)
         case .calendarHeatMap: String(localized: "Calendar heat map", bundle: .module)
-        case .alternateAppIcons: String(localized: "Alternate app icons", bundle: .module)
         case .weatherAtDelivery: String(localized: "Weather at delivery", bundle: .module)
         case .lockScreenWidgets: String(localized: "Lock Screen widgets", bundle: .module)
         case .interactiveWidgets: String(localized: "Interactive widgets", bundle: .module)
+        case .jarSharing: String(localized: "Share your jar", bundle: .module)
         }
     }
 
@@ -44,10 +44,10 @@ nonisolated public enum ProFeature: String, CaseIterable, Identifiable, Sendable
         case .csvExport: "tablecells.fill"
         case .insightCards: "chart.line.uptrend.xyaxis"
         case .calendarHeatMap: "calendar.badge.clock"
-        case .alternateAppIcons: "app.badge.fill"
         case .weatherAtDelivery: "cloud.sun.fill"
         case .lockScreenWidgets: "lock.iphone"
         case .interactiveWidgets: "rectangle.3.group.fill"
+        case .jarSharing: "square.and.arrow.up.fill"
         }
     }
 }

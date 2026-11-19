@@ -55,7 +55,7 @@ struct JarShareCardView: View {
                 // Remembrance is deliberately outside this number.
                 Text("Babies delivered: \(summary.delivered)", bundle: .module).font(.subheadline.weight(.semibold))
                 Spacer()
-                Image("storkicon").resizable().scaledToFit().frame(width: 20, height: 20)
+                StorkMark().frame(width: 20, height: 20)
             }
         }
         .padding(20)

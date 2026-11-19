@@ -44,15 +44,6 @@ public final class SettingsModel {
 
     public var isProUnlocked: Bool { entitlement.isProUnlocked }
 
-    /// The default icon's color key — always available, even without Stork Pro.
-    public static let primaryIconColor = "purple"
-
-    /// Alternate icons are Pro. The primary (purple) icon is always selectable so a free
-    /// user can get back to it.
-    public func canSelectIcon(_ color: String) -> Bool {
-        isProUnlocked || color == Self.primaryIconColor
-    }
-
     /// Deliveries on record, counting each estimated past-birth summary as the births it stands for.
     public var deliveryCount: Int { deliveries.reduce(0) { $0 + $1.deliveryWeight } }
 

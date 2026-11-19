@@ -13,6 +13,8 @@ import StorkDesignSystem
 
 public struct DeliveryEntryView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var hSizeClass
+    @State private var layout = LayoutProbe()
     @AppStorage(AppStorageKeys.useMetricUnits) private var useMetricUnits: Bool = false
 
     @Bindable private var model: DeliveryEntryModel
@@ -27,16 +29,14 @@ public struct DeliveryEntryView: View {
     }
 
     public var body: some View {
+        stack
+            .presentationSizing(.page)
+    }
+
+    private var stack: some View {
         NavigationStack {
-            Form {
-                DetailsSection(model: model)
-                if model.supportsWeather {
-                    WeatherSection(model: model, useMetricUnits: useMetricUnits)
-                }
-                BabiesSection(model: model, editingBaby: $editingBaby)
-                TagsSection(model: model)
-                NotesSection(model: model)
-            }
+            formContent
+            .containerLayoutProbe { layout = $0 }
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle(model.isEditing ? "Edit Delivery" : "New Delivery")
             .navigationBarTitleDisplayMode(.inline)
@@ -49,12 +49,12 @@ public struct DeliveryEntryView: View {
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
+                    Button(role: .cancel) { dismiss() } label: { Label(String(localized: "Cancel", bundle: .module), systemImage: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(model.isEditing ? "Save" : "Finish") {
+                    Button(role: .confirm) {
                         do {
                             let celebration = try model.save()
                             onFinish(celebration)
@@ -63,6 +63,8 @@ public struct DeliveryEntryView: View {
                             // Keep the sheet open — the user's entries are still intact.
                             saveErrorMessage = error.localizedDescription
                         }
+                    } label: {
+                        Label(model.isEditing ? String(localized: "Save", bundle: .module) : String(localized: "Finish", bundle: .module), systemImage: "checkmark")
                     }
                     .disabled(!model.canFinish)
                     .keyboardShortcut(.return, modifiers: .command)
@@ -92,6 +94,43 @@ public struct DeliveryEntryView: View {
         }
     }
 
+    // MARK: - Layout
+
+    private var usesTwoColumns: Bool { layout.usesTwoColumns(isRegularWidth: hSizeClass == .regular) }
+
+    /// One form on iPhone (and the folded Duo); two on a wide screen: details and babies on
+    /// the left, tags, notes and weather on the right, so the whole form is in view at once.
+    @ViewBuilder
+    private var formContent: some View {
+        if usesTwoColumns {
+            SplitColumns {
+                Form {
+                    DetailsSection(model: model)
+                    BabiesSection(model: model, editingBaby: $editingBaby)
+                }
+            } trailing: {
+                Form {
+                    TagsSection(model: model)
+                    NotesSection(model: model)
+                    if model.supportsWeather {
+                        WeatherSection(model: model, useMetricUnits: useMetricUnits)
+                    }
+                }
+            }
+            .background(Color(uiColor: .systemGroupedBackground))
+        } else {
+            Form {
+                DetailsSection(model: model)
+                BabiesSection(model: model, editingBaby: $editingBaby)
+                TagsSection(model: model)
+                NotesSection(model: model)
+                if model.supportsWeather {
+                    WeatherSection(model: model, useMetricUnits: useMetricUnits)
+                }
+            }
+        }
+    }
+
     // MARK: - Sections
 
     private struct DetailsSection: View {
@@ -114,7 +153,6 @@ public struct DeliveryEntryView: View {
                 .accessibilityLabel(Text("Delivery method", bundle: .module))
 
                 Toggle(String(localized: "Epidural Used", bundle: .module), isOn: $model.epiduralUsed)
-                    .tint(.red)
                     .accessibilityLabel(Text("Epidural used", bundle: .module))
 
                 Picker(String(localized: "My Role", bundle: .module), selection: $model.role) {
@@ -234,7 +272,8 @@ public struct DeliveryEntryView: View {
                 Text("Babies", bundle: .module)
             } footer: {
                 if model.babies.isEmpty {
-                    Text("At least one baby is required.", bundle: .module).foregroundStyle(.red)
+                    // A neutral hint, not an error: nothing has been attempted yet (Finish stays disabled).
+                    Text("At least one baby is required.", bundle: .module).foregroundStyle(.secondary)
                 }
             }
         }

@@ -9,6 +9,7 @@ import WidgetKit
 import SwiftUI
 import SwiftData
 import StorkCore
+import StorkDesignSystem
 
 // MARK: - Lock Screen Entry
 struct LockScreenEntry: TimelineEntry {
@@ -101,10 +102,8 @@ struct CircularLockScreenView: View {
         ZStack {
             AccessoryWidgetBackground()
             VStack(spacing: 0) {
-                Image("storkicon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
+                WidgetStorkMark()
+                .frame(width: 20, height: 20)
                 
                 Text("\(entry.weeklyBabies)")
                     .font(.system(size: 20, weight: .bold, design: .rounded))
@@ -124,10 +123,8 @@ struct RectangularLockScreenView: View {
     var body: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Image("storkicon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
+                WidgetStorkMark()
+                .frame(width: 20, height: 20)
 
                 HStack(spacing: 4) {
                     Text("\(entry.weeklyBabies)")
@@ -164,9 +161,7 @@ struct InlineLockScreenView: View {
         Label {
             Text("\(entry.weeklyBabies) babies this week")
         } icon: {
-            Image("storkicon")
-                .resizable()
-                .scaledToFit()
+            WidgetStorkMark()
                 .frame(width: 20, height: 20)
                 .accessibilityHidden(true)
         }
@@ -289,9 +284,7 @@ struct CareerInlineView: View {
         Label {
             Text("\(entry.careerTotal) career babies")
         } icon: {
-            Image("storkicon")
-                .resizable()
-                .scaledToFit()
+            WidgetStorkMark()
                 .frame(width: 20, height: 20)
                 .accessibilityHidden(true)
         }

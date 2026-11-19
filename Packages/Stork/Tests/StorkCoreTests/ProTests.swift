@@ -82,6 +82,8 @@ struct ProFeatureTests {
             #expect(!feature.systemImage.isEmpty)
         }
         #expect(ProFeature.allCases.count == 9)
+        #expect(ProFeature.allCases.contains(.jarSharing))
+        #expect(ProFeature.jarSharing.displayName == "Share your jar")
     }
 
     @Test("stork://pro deep-links to the paywall on the Settings tab")

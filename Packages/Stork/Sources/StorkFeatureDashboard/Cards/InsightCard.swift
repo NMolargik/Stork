@@ -28,6 +28,7 @@ struct InsightCard<Content: View>: View {
                 if let systemImage {
                     Label(title, systemImage: systemImage)
                         .font(.headline.weight(.semibold))
+                        .lineLimit(1).minimumScaleFactor(0.7)
                         .symbolRenderingMode(.palette)
                         .foregroundStyle(accent, .primary)
                 } else {

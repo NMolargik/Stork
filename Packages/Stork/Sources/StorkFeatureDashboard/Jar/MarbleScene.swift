@@ -20,12 +20,18 @@ final class MarbleScene: SKScene {
 
     private let frostNode = SKShapeNode()
     private var spawnY: CGFloat { size.height - 10 }
-    private var marbleRadius: CGFloat {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return max(20, min(size.width, size.height) * 0.025)
-        } else {
-            return max(18, min(size.width, size.height) * 0.025)
-        }
+    /// Wide layouts ask for larger marbles so a month fills a sensible part of the panel.
+    var marbleScale: CGFloat = 1
+    private var marbleRadius: CGFloat { baseMarbleRadius * marbleScale }
+    private var baseMarbleRadius: CGFloat {
+        // Scale with the scene, not the device idiom: roomy scenes (iPad, iPhone Duo inner
+        // display) get a slightly larger floor.
+        let shortSide = min(size.width, size.height)
+        let base = max(shortSide > 600 ? 20 : 18, shortSide * 0.025)
+        // Wide layouts (iPad, the open Duo) have a tall, wide jar: scale the marbles with its
+        // width so a typical month fills a sensible part of it. Phones stay as they were.
+        guard size.width > 440 else { return base }
+        return max(base, min(size.width * 0.055, 40))
     }
 
     var onReady: (() -> Void)? { didSet { maybeSignalReady() } }

@@ -16,7 +16,7 @@ struct BabyMeasurementsCard: View {
         InsightCard(title: String(localized: "Baby Measurements", bundle: .module), systemImage: "ruler", accent: .storkOrange) {
             let stats = DeliveryStatistics.babyMeasurementStats(deliveries: deliveries)
             VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 8) {
+                HStack(alignment: .top, spacing: 8) {
                     Chip(icon: "scalemass.fill", caption: String(localized: "Avg Weight", bundle: .module),
                          value: UnitConversion.weightDisplay(stats.averageWeight, useMetric: useMetricUnits))
                     Chip(icon: "ruler.fill", caption: String(localized: "Avg Height", bundle: .module),
@@ -37,7 +37,7 @@ struct BabyMeasurementsCard: View {
 
         var body: some View {
             HStack(spacing: 6) {
-                Image(systemName: icon).accessibilityHidden(true)
+                Image(systemName: icon).frame(width: 24, height: 24).accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 0) {
                     Text(caption).font(.caption2)
                     Text(value).font(.subheadline).fontWeight(.semibold)

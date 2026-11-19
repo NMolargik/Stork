@@ -19,9 +19,8 @@ struct AppLockView: View {
         ZStack {
             Rectangle().fill(.background).ignoresSafeArea()
             VStack(spacing: 20) {
-                Image("storkicon")
-                    .resizable().scaledToFit().frame(width: 56, height: 56)
-                    .foregroundStyle(.storkPurple)
+                StorkMark()
+                    .frame(width: 56, height: 56)
                     .accessibilityHidden(true)
                 Text("Stork is locked", bundle: .module).font(.title2.bold())
                 if lock.isLocked {

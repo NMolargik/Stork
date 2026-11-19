@@ -19,6 +19,8 @@ public struct JarView: View {
     var monthLabel: String?
     /// Optional history destination: tapping the month label presents this.
     var history: AnyView?
+    /// Multiplies the marble size (wide layouts give the jar a roomier panel).
+    var marbleScale: CGFloat = 1
     @Binding var reshuffle: Bool
 
     public init(
@@ -26,8 +28,10 @@ public struct JarView: View {
         highlight: JarCategory? = nil,
         monthLabel: String? = nil,
         history: AnyView? = nil,
+        marbleScale: CGFloat = 1,
         reshuffle: Binding<Bool>
     ) {
+        self.marbleScale = marbleScale
         self.marbles = marbles
         self.highlight = highlight
         self.monthLabel = monthLabel
@@ -57,7 +61,10 @@ public struct JarView: View {
                 .ignoresSafeArea(edges: .bottom)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                 .modifier(JarGlassBackground(cornerRadius: cornerRadius))
-                .onChange(of: newSize) { _, new in containerSize = new }
+                .onChange(of: newSize) { old, new in
+                    containerSize = new
+                    respawnIfResized(from: old, to: new)
+                }
         }
         .onScrollVisibilityChange(threshold: 0.01) { setVisible($0) }
         .overlay(alignment: .top) {
@@ -78,6 +85,7 @@ public struct JarView: View {
                 scene.sync(marbles: marbles)
                 scene.setHighlight(highlight)
             }
+            scene.marbleScale = marbleScale
             scene.containerCornerRadius = cornerRadius
             scene.applyAppearance(isDark: colorScheme == .dark)
             scene.sync(marbles: marbles)
@@ -99,6 +107,18 @@ public struct JarView: View {
                 try? await Task.sleep(nanoseconds: 350_000_000)
                 scene.resetAndRespawn(marbles: marbles) { scene.setHighlight(highlight) }
             }
+        }
+    }
+
+    /// The jar can change shape a lot at once (iPhone Duo unfolding, iPad rotating): walls move,
+    /// so marbles are dropped again once the size settles rather than left outside them.
+    private func respawnIfResized(from old: CGSize, to new: CGSize) {
+        guard old.width > 10, new.width > 10, abs(new.width - old.width) / old.width > 0.25 else { return }
+        sizeClassDebounceTask?.cancel()
+        sizeClassDebounceTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 350_000_000)
+            guard !Task.isCancelled else { return }
+            scene.resetAndRespawn(marbles: marbles) { scene.setHighlight(highlight) }
         }
     }
 
@@ -141,7 +161,11 @@ public struct JarView: View {
         let df = DateFormatter()
         df.locale = .current
         df.dateFormat = "LLLL"
+        #if DEBUG
+        return df.string(from: DebugLaunchOptions.now ?? Date())
+        #else
         return df.string(from: Date())
+        #endif
     }
 
     private func setVisible(_ nowVisible: Bool) {

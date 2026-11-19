@@ -26,8 +26,16 @@ nonisolated public enum UnitConversion {
             let grams = ounces * ouncesToGrams
             return "\(Int(round(grams))) g"
         } else {
-            return String(format: "%.1f oz", ounces)
+            let split = poundsAndOunces(ounces)
+            return split.pounds > 0 ? "\(split.pounds) lb \(split.ounces) oz" : "\(split.ounces) oz"
         }
+    }
+
+    /// Whole pounds and whole ounces (0...15) for a weight in ounces, rounded to the nearest
+    /// ounce, so 15.6 oz carries to "1 lb 0 oz" rather than showing 16 oz.
+    public static func poundsAndOunces(_ ounces: Double) -> (pounds: Int, ounces: Int) {
+        let total = Int(max(ounces, 0).rounded())
+        return (total / 16, total % 16)
     }
 
     /// Formats height (stored in inches) for display.
@@ -48,9 +56,8 @@ nonisolated public enum UnitConversion {
             weightString = String(format: "%.1f kg", weightOunces * ouncesToKilograms)
             heightString = String(format: "%.1f cm", heightInches * inchesToCentimeters)
         } else {
-            let lbs = Int(weightOunces / 16)
-            let oz = Int(weightOunces.truncatingRemainder(dividingBy: 16))
-            weightString = "\(lbs) lb \(oz) oz"
+            let split = poundsAndOunces(weightOunces)
+            weightString = "\(split.pounds) lb \(split.ounces) oz"
 
             let ft = Int(heightInches / 12)
             let inch = Int(heightInches.truncatingRemainder(dividingBy: 12))

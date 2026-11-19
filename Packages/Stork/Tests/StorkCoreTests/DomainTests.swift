@@ -273,3 +273,24 @@ struct DeepLinkParsingTests {
         #expect(DeepLink(url: URL(string: "stork://delivery")!) == nil)
     }
 }
+
+@Suite("Imperial weight display")
+struct ImperialWeightDisplayTests {
+    @Test func showsPoundsAndOunces() {
+        #expect(UnitConversion.weightDisplay(123.0, useMetric: false) == "7 lb 11 oz")
+        #expect(UnitConversion.weightDisplay(119.6, useMetric: false) == "7 lb 8 oz")
+    }
+
+    @Test func carriesRoundedOuncesIntoPounds() {
+        #expect(UnitConversion.poundsAndOunces(15.6) == (1, 0))
+        #expect(UnitConversion.weightDisplay(15.6, useMetric: false) == "1 lb 0 oz")
+    }
+
+    @Test func underAPoundIsOuncesOnly() {
+        #expect(UnitConversion.weightDisplay(9.0, useMetric: false) == "9 oz")
+    }
+
+    @Test func metricIsUnchanged() {
+        #expect(UnitConversion.weightDisplay(100, useMetric: true) == "2835 g")
+    }
+}

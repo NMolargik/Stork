@@ -42,52 +42,89 @@ public struct DeliveryCalendarView: View {
         deliveriesForSelectedDate.reduce(0) { $0 + ($1.babies?.count ?? $1.babyCount) }
     }
 
+    @Environment(\.horizontalSizeClass) private var hSizeClass
+    @State private var layout = LayoutProbe()
+
+    private var usesTwoColumns: Bool { layout.usesTwoColumns(isRegularWidth: hSizeClass == .regular) }
+
     public var body: some View {
+        Group {
+            if usesTwoColumns { splitBody } else { stackedBody }
+        }
+        .containerLayoutProbe { layout = $0 }
+        .background(Color(uiColor: .systemGroupedBackground))
+        .navigationTitle(Text("Calendar", bundle: .module))
+        .onAppear { model.load() }
+        .task { await model.refresh() }
+    }
+
+    private var stackedBody: some View {
         ScrollView {
             VStack(spacing: 0) {
-                MonthHeaderView(displayedMonth: $displayedMonth, onPrevious: { changeMonth(by: -1) }, onNext: { changeMonth(by: 1) }, onToday: goToToday)
-                    .padding(.horizontal).padding(.vertical, 8)
-
-                MethodFilterView(selectedMethod: $selectedMethod)
-                    .padding(.horizontal).padding(.bottom, 8)
-
-                HeatMapToggle(isProUnlocked: model.isProUnlocked, heatMapEnabled: $heatMapEnabled) {
-                    requestProUpgrade(.calendarHeatMap)
-                }
-                .padding(.horizontal).padding(.bottom, 8)
-
-                CalendarGridView(
-                    displayedMonth: displayedMonth,
-                    selectedDate: $selectedDate,
-                    deliveries: filteredDeliveries,
-                    showsHeatMap: model.showsHeatMap(preferenceEnabled: heatMapEnabled)
-                )
-                .padding(.horizontal)
-
+                monthGrid
                 Divider().padding(.top, 16)
-
-                if deliveriesForSelectedDate.isEmpty {
-                    ContentUnavailableView(String(localized: "No Deliveries", bundle: .module), systemImage: "calendar.badge.checkmark",
-                                           description: Text("No deliveries recorded on \(formattedDate(selectedDate))", bundle: .module))
-                        .padding(.top, 40)
-                } else {
-                    SelectedDaySection(
-                        deliveries: deliveriesForSelectedDate,
-                        babyCount: babyCountForSelectedDate,
-                        dateLabel: formattedDate(selectedDate),
-                        onDeliverySelected: onDeliverySelected,
-                        useDayMonthYear: useDayMonthYearDates
-                    )
-                }
+                dayContent
             }
             .frame(maxWidth: 700)
             .frame(maxWidth: .infinity)
             .padding(.bottom, 16)
         }
-        .background(Color(uiColor: .systemGroupedBackground))
-        .navigationTitle(Text("Calendar", bundle: .module))
-        .onAppear { model.load() }
-        .task { await model.refresh() }
+    }
+
+    /// The unfolded iPhone Duo and iPad in regular width: the month on the left, the chosen
+    /// day's deliveries on the right.
+    private var splitBody: some View {
+        SplitColumns {
+            ScrollView {
+                monthGrid.padding(.bottom, 16)
+            }
+        } trailing: {
+            ScrollView {
+                dayContent.padding(.bottom, 16)
+            }
+        }
+        .frame(maxWidth: layout.hasFold ? .infinity : 1400)
+        .frame(maxWidth: .infinity)
+    }
+
+    private var monthGrid: some View {
+        VStack(spacing: 0) {
+            MonthHeaderView(displayedMonth: $displayedMonth, onPrevious: { changeMonth(by: -1) }, onNext: { changeMonth(by: 1) }, onToday: goToToday)
+                .padding(.horizontal).padding(.vertical, 8)
+
+            MethodFilterView(selectedMethod: $selectedMethod)
+                .padding(.horizontal).padding(.bottom, 8)
+
+            HeatMapToggle(isProUnlocked: model.isProUnlocked, heatMapEnabled: $heatMapEnabled) {
+                requestProUpgrade(.calendarHeatMap)
+            }
+            .padding(.horizontal).padding(.bottom, 8)
+
+            CalendarGridView(
+                displayedMonth: displayedMonth,
+                selectedDate: $selectedDate,
+                deliveries: filteredDeliveries,
+                showsHeatMap: model.showsHeatMap(preferenceEnabled: heatMapEnabled)
+            )
+            .padding(.horizontal)
+        }
+    }
+
+    @ViewBuilder
+    private var dayContent: some View {
+        if deliveriesForSelectedDate.isEmpty {
+            ContentUnavailableView(String(localized: "No Deliveries", bundle: .module), systemImage: "calendar.badge.checkmark",
+                                   description: Text("No deliveries recorded on \(formattedDate(selectedDate))", bundle: .module))
+                .padding(.top, 40)
+        } else {
+            SelectedDaySection(
+                deliveries: deliveriesForSelectedDate,
+                babyCount: babyCountForSelectedDate,
+                dateLabel: formattedDate(selectedDate),
+                onDeliverySelected: onDeliverySelected,
+                useDayMonthYear: useDayMonthYearDates
+            )
+        }
     }
 
     private struct SelectedDaySection: View {

@@ -147,10 +147,8 @@ struct InteractiveMediumView: View {
             HStack(spacing: 16) {
                 // Left side - Stats
                 VStack(alignment: .leading, spacing: 12) {
-                    Image("storkicon")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
+                    WidgetStorkMark()
+                .frame(width: 20, height: 20)
 
                     HStack(spacing: 16) {
                         VStack(alignment: .leading, spacing: 2) {

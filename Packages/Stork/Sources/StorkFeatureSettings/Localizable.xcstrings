@@ -23,28 +23,6 @@
         }
       }
     },
-    "%@ app icon": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ícono de la app %@"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Icône de l'app %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@のアプリアイコン"
-          }
-        }
-      }
-    },
     "12": {
       "extractionState": "manual",
       "localizations": {
@@ -133,50 +111,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "無料化前にStorkを購入された方は、Stork Proを開いて「購入を復元」をタップしてください。"
-          }
-        }
-      }
-    },
-    "Alternate icons are part of Stork Pro.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Los iconos alternativos forman parte de Stork Pro."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les icônes alternatives font partie de Stork Pro."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "代替アイコンはStork Proの機能です。"
-          }
-        }
-      }
-    },
-    "App Icon": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ícono de la app"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Icône de l'app"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アプリアイコン"
           }
         }
       }
@@ -314,6 +248,28 @@
         }
       },
       "shouldGenerateSymbol": false
+    },
+    "Danger Zone": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona de peligro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone dangereuse"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "危険ゾーン"
+          }
+        }
+      }
     },
     "Data": {
       "localizations": {
@@ -513,24 +469,24 @@
         }
       }
     },
-    "Locked. Unlock with Stork Pro.": {
+    "General": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bloqueado. Desbloquéalo con Stork Pro."
+            "value": "General"
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verrouillé. Déverrouillez avec Stork Pro."
+            "value": "Général"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ロック中。Stork Proでロック解除できます。"
+            "value": "一般"
           }
         }
       }
@@ -553,28 +509,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "メートル法の単位"
-          }
-        }
-      }
-    },
-    "Molargik Software LLC": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Molargik Software LLC"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Molargik Software LLC"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Molargik Software LLC"
           }
         }
       }
@@ -2979,24 +2913,24 @@
         }
       }
     },
-    "If iCloud is on, your log syncs through your own private iCloud database. Molargik Software cannot see it, and neither can anyone else.": {
+    "If iCloud is on, your log syncs through your own private iCloud database. Farside Software cannot see it, and neither can anyone else.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si iCloud está activado, tu registro se sincroniza mediante tu propia base de datos privada de iCloud. Molargik Software no puede verlo, ni nadie más."
+            "value": "Si iCloud está activado, tu registro se sincroniza mediante tu propia base de datos privada de iCloud. Farside Software no puede verlo, ni nadie más."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si iCloud est activé, votre journal se synchronise via votre propre base de données iCloud privée. Molargik Software ne peut pas le voir, et personne d'autre non plus."
+            "value": "Si iCloud est activé, votre journal se synchronise via votre propre base de données iCloud privée. Farside Software ne peut pas le voir, et personne d'autre non plus."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloudがオンの場合、記録はあなた専用のプライベートなiCloudデータベースで同期されます。Molargik Softwareを含め、誰も閲覧できません。"
+            "value": "iCloudがオンの場合、記録はあなた専用のプライベートなiCloudデータベースで同期されます。Farside Softwareを含め、誰も閲覧できません。"
           }
         }
       }

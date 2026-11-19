@@ -31,14 +31,20 @@ struct StepCountPill: View {
                 .accessibilityValue(Text("\(manager.todayStepCount)", bundle: .module))
                 .accessibilityHint(Text("Tap to view weekly step trend", bundle: .module))
             } else {
-                HStack(spacing: 8) {
-                    Image(systemName: "figure.walk").imageScale(.medium).foregroundStyle(.storkPurple)
-                    Text("Connect Health", bundle: .module).font(.footnote).foregroundStyle(.secondary)
+                Button {
+                    Haptics.lightImpact()
+                    Task {
+                        await manager.requestAuthorization()
+                        manager.startObservingStepCount()
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "figure.walk").imageScale(.medium).foregroundStyle(.storkPurple)
+                        Text("Connect Health", bundle: .module).font(.footnote).foregroundStyle(.secondary)
+                    }
+                    .contentShape(Rectangle())
                 }
-                .task {
-                    await manager.requestAuthorization()
-                    manager.startObservingStepCount()
-                }
+                .buttonStyle(.plain)
                 .accessibilityLabel(Text("Connect Health to show pedometer", bundle: .module))
             }
         }

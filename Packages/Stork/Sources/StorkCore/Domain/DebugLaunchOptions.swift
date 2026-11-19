@@ -15,6 +15,13 @@
 //    -StorkWrapIncludeRemembrance 1 turn the share-image remembrance toggle on
 //    -StorkImportCSVPath <file>     preload this CSV into the Import from CSV screen
 //    -StorkExportWrapImages 1       write the share images to Documents/WrapShare
+//    -StorkOpenLink <host>          open a stork:// deep link on launch (pro, settings, calendar, deliveries, new-delivery)
+//    -StorkOpenSheet <name>         present a sheet on launch: reorder, trend, filter, firstDelivery
+//    -StorkDebugPro 1               force Stork Pro on (to capture Pro screens; never in release builds)
+//    -StorkJarMarbleScale 1.3       multiply the dashboard jar's marble size (fuller-looking jar for store shots)
+//    -StorkScrollToCard 1           scroll the stacked dashboard so this card (index in the card order) is at the top
+//    -StorkHideHealthPill 1         hide the Connect Health / step pill (store screenshots)
+//    -StorkSettingsPush <name>      push a Settings screen on launch: privacy, pastbirths, export, addpast, csv, roles
 //
 
 #if DEBUG
@@ -40,6 +47,13 @@ nonisolated public enum DebugLaunchOptions {
     public static var wrapPage: Int { defaults.integer(forKey: "StorkWrapPage") }
     public static var wrapIncludeRemembrance: Bool { defaults.bool(forKey: "StorkWrapIncludeRemembrance") }
     public static var importCSVPath: String? { defaults.string(forKey: "StorkImportCSVPath") }
+    public static var openLink: String? { defaults.string(forKey: "StorkOpenLink") }
+    public static var openSheet: String? { defaults.string(forKey: "StorkOpenSheet") }
+    public static var settingsPush: String? { defaults.string(forKey: "StorkSettingsPush") }
+    public static var jarMarbleScale: CGFloat? { defaults.object(forKey: "StorkJarMarbleScale") == nil ? nil : CGFloat(defaults.double(forKey: "StorkJarMarbleScale")) }
+    public static var scrollToCard: Int? { defaults.object(forKey: "StorkScrollToCard") == nil ? nil : defaults.integer(forKey: "StorkScrollToCard") }
+    public static var hideHealthPill: Bool { defaults.bool(forKey: "StorkHideHealthPill") }
+    public static var forcePro: Bool { defaults.bool(forKey: "StorkDebugPro") }
     public static var exportWrapImages: Bool { defaults.bool(forKey: "StorkExportWrapImages") }
 }
 #endif

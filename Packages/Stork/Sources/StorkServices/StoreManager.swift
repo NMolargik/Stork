@@ -37,7 +37,12 @@ public final class StoreManager: EntitlementProviding {
     /// One-time "thank you" for grandfathered users, shown by the composition root.
     public private(set) var shouldShowGrandfatherThankYou = false
 
-    public var isProUnlocked: Bool { isPurchased || isGrandfathered }
+    public var isProUnlocked: Bool {
+        #if DEBUG
+        if DebugLaunchOptions.forcePro { return true }
+        #endif
+        return isPurchased || isGrandfathered
+    }
 
     @ObservationIgnored private let defaults: any KeyValueStoring
     @ObservationIgnored private let sharedDefaults: (any KeyValueStoring)?

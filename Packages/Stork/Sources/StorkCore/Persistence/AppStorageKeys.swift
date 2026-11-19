@@ -12,7 +12,10 @@ nonisolated public enum AppStorageKeys {
     public static let isOnboardingComplete = "isOnboardingComplete"
     public static let useMetricUnits = "useMetricUnits"
     public static let useDayMonthYearDates = "useDayMonthYearDates"
-    public static let selectedIconColor = "selectedIconColor"
+    /// Set once the Health read-access request has been made (the system sheet has been shown
+    /// and answered). From then on launch can resume step tracking silently; before it, nothing
+    /// asks for Health access except the onboarding Step Count page or the user tapping Connect.
+    public static let healthAccessRequested = "healthAccessRequested"
     public static let dashboardCardOrder = "homeCardOrder"
     /// Comma-separated `BirthRole` raw values excluded from the headline total (empty = all count).
     public static let excludedBirthRoles = "excludedBirthRoles"

@@ -19,6 +19,8 @@ public struct DeliveryDetailView: View {
     private let onDelete: () -> Void
     private let makeEditModel: () -> DeliveryEntryModel
     private let onEdited: () -> Void
+    /// Shown beside the list (two-column layouts) rather than pushed: the list keeps the title.
+    private let isEmbedded: Bool
 
     @State private var showDeleteConfirm = false
     @State private var showEditSheet = false
@@ -27,8 +29,10 @@ public struct DeliveryDetailView: View {
         delivery: Delivery,
         onDelete: @escaping () -> Void,
         makeEditModel: @escaping () -> DeliveryEntryModel,
-        onEdited: @escaping () -> Void = {}
+        onEdited: @escaping () -> Void = {},
+        isEmbedded: Bool = false
     ) {
+        self.isEmbedded = isEmbedded
         self.delivery = delivery
         self.onDelete = onDelete
         self.makeEditModel = makeEditModel
@@ -45,8 +49,7 @@ public struct DeliveryDetailView: View {
             }
         }
         .background(Color(uiColor: .systemGroupedBackground))
-        .navigationTitle(Text("Delivery", bundle: .module))
-        .navigationBarTitleDisplayMode(.inline)
+        .modifier(PushedTitle(isEmbedded: isEmbedded))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showEditSheet = true } label: { Label(String(localized: "Edit", bundle: .module), systemImage: "pencil") }
@@ -68,6 +71,21 @@ public struct DeliveryDetailView: View {
         .sheet(isPresented: $showEditSheet) {
             DeliveryEntryView(model: makeEditModel()) { _ in onEdited() }
                 .interactiveDismissDisabled()
+        }
+    }
+
+    /// Pushed, the detail names itself; embedded beside the list, the list's title stays.
+    private struct PushedTitle: ViewModifier {
+        let isEmbedded: Bool
+        func body(content: Content) -> some View {
+            if isEmbedded {
+                content
+            } else {
+                content
+                    .navigationTitle(Text("Delivery", bundle: .module))
+                    .statusSubtitle()
+                    .navigationBarTitleDisplayMode(.inline)
+            }
         }
     }
 
@@ -94,7 +112,7 @@ public struct DeliveryDetailView: View {
         }
 
         var body: some View {
-            VStack(spacing: 0) {
+            VStack(spacing: 12) {
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: gradientColors), startPoint: .topLeading, endPoint: .bottomTrailing)
                         .overlay(Rectangle().fill(.white.opacity(0.15)))
@@ -116,12 +134,16 @@ public struct DeliveryDetailView: View {
                     .accessibilityValue(delivery.date.formatted(date: .complete, time: .shortened))
                 }
                 .frame(maxWidth: .infinity)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .padding(.horizontal, 16)
+                .frame(maxWidth: 700)
 
                 QuickStatsRow(delivery: delivery)
-                    .frame(maxWidth: 700)
                     .padding(.horizontal, 16)
-                    .offset(y: -24)
+                    .frame(maxWidth: 700)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 8)
         }
     }
 
@@ -143,6 +165,8 @@ public struct DeliveryDetailView: View {
                              label: String(localized: "Role", bundle: .module), color: .storkPurple)
                 }
             }
+            // All chips share the tallest one's height, so a value that wraps never makes them differ.
+            .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -155,11 +179,17 @@ public struct DeliveryDetailView: View {
         var body: some View {
             VStack(spacing: 6) {
                 Image(systemName: icon).font(.title3).foregroundStyle(color).frame(height: 30)
-                Text(value).font(.subheadline.bold()).lineLimit(1).minimumScaleFactor(0.8)
+                // A single word (e.g. "C-Section") stays on one line and scales down;
+                // multi-word values may wrap to two lines. Never truncated or hyphenated.
+                Text(value.replacingOccurrences(of: "-", with: "\u{2011}"))
+                    .font(.subheadline.bold())
+                    .lineLimit(value.contains(" ") ? 2 : 1)
+                    .minimumScaleFactor(0.6)
+                    .multilineTextAlignment(.center)
                 Text(label).font(.caption2).foregroundStyle(.secondary)
             }
             .padding(12)
-            .frame(maxWidth: .infinity, maxHeight: 85)
+            .frame(maxWidth: .infinity, minHeight: 85, maxHeight: .infinity)
             .statPillBackground()
             .accessibilityElement(children: .combine)
             .accessibilityLabel(label)
@@ -263,7 +293,7 @@ public struct DeliveryDetailView: View {
 
         var body: some View {
             VStack(spacing: 4) {
-                Image(systemName: icon).font(.title2).foregroundStyle(color)
+                Image(systemName: icon).font(.title2).foregroundStyle(color).frame(height: 32)
                 Text(value).font(.headline).fontWeight(.bold)
                 Text(label).font(.caption2).foregroundStyle(.secondary)
             }

@@ -65,14 +65,16 @@ struct BabyEntrySheet: View {
             .navigationTitle(entry.id == nil ? "Add Baby" : "Edit Baby")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(entry.id == nil ? "Add" : "Save") {
+                    Button(role: .confirm) {
                         model.upsert(entry.makeBaby(useMetricUnits: useMetricUnits))
                         dismiss()
+                    } label: {
+                        Label(entry.id == nil ? String(localized: "Add", bundle: .module) : String(localized: "Save", bundle: .module), systemImage: "checkmark")
                     }
                     .disabled(!entry.isValid)
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Cancel", bundle: .module)) { dismiss() }
+                    Button(role: .cancel) { dismiss() } label: { Label(String(localized: "Cancel", bundle: .module), systemImage: "xmark") }
                 }
             }
         }

@@ -116,4 +116,52 @@ struct DeliveryListModelTests {
         #expect(model.deliveries.count == 1)
         #expect(model.lastError == nil)
     }
+
+    // MARK: - Selection (two-column layouts)
+
+    @Test("With nothing picked the detail pane shows the most recent logged delivery")
+    func selectionDefaultsToMostRecent() {
+        let data = FakeDeliveryData()
+        let older = Make.delivery(date: Date(timeIntervalSinceNow: -86_400 * 5))
+        let newest = Make.delivery(date: Date(timeIntervalSinceNow: -3_600))
+        data.deliveries = [older, newest]
+        let model = Make.listModel(data: data)
+        model.load()
+
+        #expect(model.selectedDelivery?.id == newest.id)
+    }
+
+    @Test("A picked delivery stays selected, and falls back when it is filtered out or deleted")
+    func selectionFollowsPickAndFallsBack() {
+        let data = FakeDeliveryData()
+        let older = Make.delivery(date: Date(timeIntervalSinceNow: -86_400 * 5), method: .cSection)
+        let newest = Make.delivery(date: Date(timeIntervalSinceNow: -3_600), method: .vaginal)
+        data.deliveries = [older, newest]
+        let model = Make.listModel(data: data)
+        model.load()
+
+        model.selectedDeliveryID = older.id
+        #expect(model.selectedDelivery?.id == older.id)
+
+        // A filter that hides the pick moves the pane to the best visible delivery.
+        model.filter.deliveryMethod = [.vaginal]
+        #expect(model.selectedDelivery?.id == newest.id)
+
+        model.filter = DeliveryFilter()
+        model.delete(older)
+        #expect(model.selectedDelivery?.id == newest.id)
+    }
+
+    @Test("No deliveries (or none matching) leaves the detail pane empty")
+    func selectionEmpty() {
+        let data = FakeDeliveryData()
+        let model = Make.listModel(data: data)
+        model.load()
+        #expect(model.selectedDelivery == nil)
+
+        data.deliveries = [Make.delivery(method: .vaginal)]
+        model.load()
+        model.filter.deliveryMethod = [.cSection]
+        #expect(model.selectedDelivery == nil)
+    }
 }

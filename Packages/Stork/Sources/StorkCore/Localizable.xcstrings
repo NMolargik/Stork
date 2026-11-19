@@ -94,28 +94,6 @@
         }
       }
     },
-    "Alternate app icons": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Iconos alternativos de la app"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Icônes d’app alternatives"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "代替アプリアイコン"
-          }
-        }
-      }
-    },
     "Baby %lld: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -730,6 +708,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "インタラクティブウィジェット"
+          }
+        }
+      }
+    },
+    "Share your jar": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparte tu tarro"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez votre bocal"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ジャーを共有"
           }
         }
       }

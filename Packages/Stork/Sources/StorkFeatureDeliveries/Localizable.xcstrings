@@ -538,6 +538,28 @@
         }
       }
     },
+    "Choose a delivery from the list to see its details here.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un parto de la lista para ver sus detalles aquí."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un accouchement dans la liste pour en voir les détails ici."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リストから分娩を選ぶと、ここに詳細が表示されます。"
+          }
+        }
+      }
+    },
     "Clear Filters": {
       "localizations": {
         "es": {
@@ -1636,6 +1658,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "まだ分娩がありません"
+          }
+        }
+      }
+    },
+    "No Delivery Selected": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún parto seleccionado"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun accouchement sélectionné"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分娩が選択されていません"
           }
         }
       }

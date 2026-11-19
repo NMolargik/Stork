@@ -33,6 +33,7 @@ struct PastBirthsHubView: View {
             }
         }
         .navigationTitle(Text("Past Births & Import", bundle: .module))
+        .statusSubtitle()
         .navigationBarTitleDisplayMode(.inline)
     }
 
