@@ -1,155 +1,83 @@
-<img src="Icons/AppIcon.png" alt="Stork" width="96" height="96">
+<p align="center">
+  <img src="Docs/readme/icon.png" width="128" height="128" alt="Stork app icon">
+</p>
 
-# Stork
+<h1 align="center">Stork</h1>
 
-A professional iOS app for healthcare professionals to track baby deliveries and maintain career statistics.
+<p align="center"><strong>Track the deliveries you perform, visualize trends, and celebrate every birth.</strong></p>
 
-## Overview
+<p align="center">
+  <a href="https://apps.apple.com/us/app/stork-l-d-companion/id6740038476">App Store</a> &middot;
+  <a href="https://farsidesoftware.com/stork">Product page</a> &middot;
+  <a href="https://farsidesoftware.com/support">Support</a> &middot;
+  <a href="https://farsidesoftware.com/privacy">Privacy policy</a>
+</p>
 
-Stork helps nurses, midwives, and obstetricians track deliveries with comprehensive data capture, career milestone tracking, and rich analytics. Built with SwiftUI and SwiftData for iOS 27, it features seamless iCloud sync, HealthKit integration, Siri and Shortcuts support, home screen widgets, and an Apple Watch companion.
+<p align="center">
+  <img src="Docs/readme/shot-1.png" height=380 alt="Dashboard with the Delivery Jar">
+  <img src="Docs/readme/shot-2.png" height=380 alt="Your career in numbers">
+  <img src="Docs/readme/shot-3.png" height=380 alt="Calendar with a delivery heat map">
+  <img src="Docs/readme/shot-4.png" height=380 alt="Your Year in Births">
+</p>
 
-## Features
+Stork is a private logbook for Labor and Delivery nurses, midwives, and OB-GYNs. Log each delivery in seconds, watch your career take shape, and keep your data in your own iCloud. This repository is the current codebase, which is Stork 4.0.
 
-### Delivery Tracking
-- Record deliveries with method (vaginal, C-section, VBAC), epidural usage, and notes
-- Track multiple babies per delivery with sex, weight, height, and NICU status
-- Custom tagging system with presets and unlimited custom tags
-- Search plus a unified filter pipeline across methods, tags, and date ranges
+## What it does
 
-### Analytics Dashboard
-- **Marble Jar**: Interactive SpriteKit visualization of monthly deliveries with device tilt physics
-- **Reorderable Cards**: Insight cards including delivery methods, epidural usage, time-of-day patterns, year-over-year trends, and personal bests
-- Calendar view with delivery heat map
+- **Delivery log.** Record method, epidural use, NICU stays, nurse catches, tags, and notes, with one or more babies per delivery, and back-date any entry. Search and filter by notes, tags, method, and date.
+- **Delivery Jar.** Each delivery adds a marble to an interactive SpriteKit jar that reacts to device tilt.
+- **Dashboard.** Delivery counts, methods, time-of-day and day-of-week patterns, year-over-year growth, and personal bests, with a calendar and heat map.
+- **Your Year in Births.** A year-end recap you can share.
+- **Career milestones.** Milestone detection and shareable milestone cards.
+- **Export.** PDF reports and CSV, per delivery or per baby, with metric or imperial units.
+- **Across your devices.** An Apple Watch app, widgets, Siri and Shortcuts, Spotlight, and iCloud sync.
+- **iPhone Duo.** Unfolded, Stork uses both screens: the jar beside your stats, the list beside the detail, and the calendar beside the chosen day.
 
-### Career Milestones
-- Automatic detection and celebration of milestones (100, 500, 1,000+ babies)
-- Shareable milestone cards for social media
+Logging and your stats are free. Stork Pro is a one-time purchase that unlocks milestone and jar sharing, PDF and CSV export, insight cards and the heat map, weather at each delivery, and Lock Screen widgets. Stork is available in English, Spanish, Canadian French, and Japanese.
 
-### Data Export
-- **PDF Reports**: Professional summaries with embedded charts
-- **CSV Export**: Per-delivery or per-baby formats with unit conversion
-- Configurable date ranges and metric/imperial units
+## Platforms and requirements
 
-### Platform Integration
-- **iCloud Sync**: Seamless multi-device synchronization via CloudKit
-- **Siri & Shortcuts**: App Intents to log a delivery, check babies-this-week, and review career totals — plus `stork://` deep links and Spotlight indexing
-- **HealthKit**: Step count tracking during shifts
-- **WeatherKit**: Optional weather snapshot attached when logging a delivery (Stork Pro; location requested only at that moment)
-- **Widgets**: Home screen and lock screen widgets for quick stats
-- **Apple Watch**: Companion app for quick entry and today's stats
-- **Localization**: English, Spanish, French (Canada), and Japanese
+- iPhone and iPad (iOS 26 or later) and Apple Watch (watchOS 26.2 or later). It also runs on Mac and Apple Vision as a compatible iPad app.
+- To build: Xcode 27 and an Apple Developer account for the CloudKit, HealthKit, and WeatherKit capabilities.
 
-## Requirements
+## Building
 
-- iOS 27.0+ / watchOS 27.0+ (also runs on Apple Vision as "Designed for iPad")
-- Xcode 27 beta (iOS 27 SDK)
-- Apple Developer account (for CloudKit and HealthKit capabilities)
+1. Clone the repository and open `Stork.xcworkspace`, not the bare `.xcodeproj`. It resolves the local package in `Packages/Stork`.
+2. Set your signing team and update the bundle identifiers and the App Group and iCloud container identifiers.
+3. Enable the capabilities: iCloud (CloudKit, private database), HealthKit, App Groups, WeatherKit, and Background Modes (remote notifications, for CloudKit sync).
+4. The Stork Pro unlock is a non-consumable in-app purchase with Family Sharing. Add your own product identifier for it.
+5. Build and run the `Stork` scheme.
 
-## Setup
-
-1. Clone the repository
-2. **Open `Stork.xcworkspace`** (not the bare `.xcodeproj`) — it resolves the local Swift package
-3. Configure signing with your Apple Developer account
-4. Update bundle identifiers and App Group/iCloud container identifiers
-5. Build and run
-
-### Required Capabilities
-
-Enable these in your Xcode project:
-- iCloud (CloudKit with private database)
-- HealthKit (including background delivery)
-- App Groups
-- WeatherKit
-- Background Modes (remote notifications — CloudKit sync)
-- In-App Purchase: Stork Pro one-time unlock (`com.nickmolargik.stork.pro.lifetime`, Family Sharing)
-
-## Architecture
-
-Stork is a **thin app target on top of an SPM umbrella package** (`Packages/Stork`) of layered, single-responsibility modules. Dependencies point inward: features depend on the design system and core; data implements core's protocols; core depends on nothing.
-
-```
-Stork (app target — thin shell) · StorkWidgetsExtension · StorkWatch
-    └── StorkComposition        SessionController (composition root) + RootView/MainView
-            ├── StorkFeature*   Deliveries · Dashboard · Onboarding · Settings · Export
-            ├── StorkServices   Weather / Location / Health managers + seams
-            ├── StorkData       SwiftData repositories · CloudKit store · cloud sync
-            ├── StorkDesignSystem  brand colors · glass · haptics · inline status · stat views
-            └── StorkCore       models · statistics · protocols · navigation (pure)
-```
-
-### Key Components
-
-| Component | Responsibility |
-|-----------|---------------|
-| `SessionController` | Composition root: builds the dependency graph and vends per-screen view models |
-| `DeliveryRepository` / `TagRepository` | Protocol boundaries over SwiftData, consumed through single-verb use-cases with typed errors |
-| `DeliveryStatistics` | Pure, injectable-clock statistics behind every dashboard card |
-| `MilestoneTracker` / `WeekMath` | Milestone detection and the single source of truth for Sunday–Saturday weeks |
-| `WeatherManager` / `LocationManager` / `HealthManager` | System-framework services behind protocol seams (1-hour weather cooldown) |
-| `CloudSyncManager` | iCloud sync status and CloudKit import notifications |
-
-### Key Patterns
-
-- **Repositories + use-cases**: views never touch SwiftData; every read/write goes through a single-verb use-case (`LogDelivery`, `LoadCareerTotals`, …) with typed `throws(PersistenceError)`
-- **Observable view models over protocol seams**: each feature screen is backed by a cross-platform `@Observable` model, unit-tested on macOS against in-memory fakes — no simulator required
-- **Change stream**: one multicast `AsyncStream` notifies every screen after each successful write, including CloudKit imports
-- **Side effects in one place**: each save runs its widget refresh, Spotlight reindex, app-group counts, and review-prompt logic inside the repository
-
-### Data Layer
-
-- **SwiftData** with iCloud CloudKit sync (`Delivery`, `Baby`, `DeliveryTag`)
-- **App Groups** for widget data sharing
-- **AppStorage** for user preferences
-
-## Project Structure
-
-```
-Stork.xcworkspace               # Open this
-├── Stork/                      # Thin app target
-│   ├── StorkApp.swift          # Session wiring, ~40 lines
-│   └── Intents/                # App Intents, entities, Spotlight indexer
-├── Packages/Stork/             # The real app (SPM umbrella package)
-│   ├── Sources/
-│   │   ├── StorkCore/          # Models, domain, protocols, navigation
-│   │   ├── StorkData/          # SwiftData repositories, CloudKit store
-│   │   ├── StorkServices/      # Weather, location, health
-│   │   ├── StorkDesignSystem/  # Colors, glass, haptics, inline status
-│   │   ├── StorkFeatureDeliveries/   # List, entry, detail
-│   │   ├── StorkFeatureDashboard/    # Cards, marble jar, calendar
-│   │   ├── StorkFeatureOnboarding/
-│   │   ├── StorkFeatureSettings/
-│   │   ├── StorkFeatureExport/       # PDF/CSV
-│   │   └── StorkComposition/   # SessionController, RootView, MainView
-│   └── Tests/                  # Host-run suite (swift test, no simulator)
-├── StorkTests/                 # App-glue tests (hosted)
-├── StorkWidgets/               # Home screen widgets
-├── StorkWatch Watch App/       # watchOS companion
-└── Scripts/                    # Localization pinning tooling
-```
-
-## Testing
-
-The bulk of the suite lives in the package and runs on the Mac host in seconds — no simulator:
+Run the package tests, which need no simulator:
 
 ```sh
 cd Packages/Stork && swift test
 ```
 
-Domain, repositories, services, and feature view models (over fake use-cases) are all covered there. The hosted `StorkTests` target covers app-target glue only.
+## Architecture
+
+Stork is a thin app target on top of an SPM umbrella package of layered modules. Dependencies point inward: features depend on the design system and core, data implements core's protocols, and core depends on nothing.
+
+```
+Stork (app target, thin shell) · StorkWidgetsExtension · StorkWatch
+    └── StorkComposition        SessionController (composition root) + RootView/MainView
+            ├── StorkFeature*   Deliveries · Dashboard · Onboarding · Settings · Export
+            ├── StorkServices   Weather, location, and health managers behind seams
+            ├── StorkData       SwiftData repositories · CloudKit store · cloud sync
+            ├── StorkDesignSystem  brand colors · glass · haptics · stat views
+            └── StorkCore       models · statistics · protocols · navigation (pure)
+```
+
+- **Repositories and use-cases.** Views never touch SwiftData. Every read and write goes through a single-verb use-case with typed errors.
+- **Observable view models over protocol seams.** Each feature screen has a cross-platform `@Observable` model, unit-tested on the Mac against in-memory fakes.
+- **One change stream.** A multicast `AsyncStream` notifies every screen after each write, including CloudKit imports.
+
+`CLAUDE.md` has the module-by-module detail.
 
 ## Privacy
 
-Stork is designed with privacy in mind:
-- All data stored in your private iCloud container
-- No patient-identifying data captured
-- Location accuracy limited to 100 meters
-- No analytics or tracking
-- No hospital data stored (removed for HIPAA considerations)
+Your data is stored in your private iCloud container. Stork is built so you never enter patient details or facility information, only your own stats. Location accuracy is limited, and there are no accounts, no analytics, and no tracking.
 
-## License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Author
-
-Farside Software LLC (formerly Molargik Software LLC)
+Made by [Farside Software LLC](https://farsidesoftware.com). Released under the MIT License, see [LICENSE](LICENSE).
