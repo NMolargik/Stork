@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+// MARK: - Intro gate
+
+/// The count-up plays when the stats first appear, not every time a layout change (a window
+/// resize across the two-column breakpoint) rebuilds the cards, which would flash zeros.
+enum StatIntro {
+    private static var openedAt: Date?
+    private static let window: TimeInterval = 4
+
+    static func shouldAnimate() -> Bool {
+        guard let openedAt else { openedAt = Date(); return true }
+        return Date().timeIntervalSince(openedAt) < window
+    }
+}
+
 // MARK: - Animated Number
 
 /// Animates number changes with a counting effect.
@@ -44,7 +58,7 @@ public struct AnimatedNumber: View {
             .onAppear {
                 guard !hasAppeared else { return }
                 hasAppeared = true
-                withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value }
+                if StatIntro.shouldAnimate() { withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value } } else { displayedValue = value }
             }
             .onChange(of: value) { _, newValue in
                 withAnimation(.spring(duration: 0.6, bounce: 0.15)) { displayedValue = newValue }
@@ -90,7 +104,7 @@ public struct AnimatedPercentage: View {
         .onAppear {
             guard !hasAppeared else { return }
             hasAppeared = true
-            withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value }
+            if StatIntro.shouldAnimate() { withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value } } else { displayedValue = value }
         }
         .onChange(of: value) { _, newValue in
             withAnimation(.spring(duration: 0.6, bounce: 0.15)) { displayedValue = newValue }
@@ -148,6 +162,10 @@ public struct AnimatedProgressBar: View {
         .onAppear {
             guard !hasAppeared else { return }
             hasAppeared = true
+            guard StatIntro.shouldAnimate() else {
+                displayedSegments = segments.map { $0.value }
+                return
+            }
             displayedSegments = segments.map { _ in 0 }
             withAnimation(.spring(duration: 1.0, bounce: 0.2)) {
                 displayedSegments = segments.map { $0.value }
@@ -199,7 +217,7 @@ public struct AnimatedStatText: View {
         .onAppear {
             guard !hasAppeared else { return }
             hasAppeared = true
-            withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value }
+            if StatIntro.shouldAnimate() { withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value } } else { displayedValue = value }
         }
         .onChange(of: value) { _, newValue in
             withAnimation(.spring(duration: 0.6, bounce: 0.15)) { displayedValue = newValue }
@@ -241,7 +259,7 @@ public struct AnimatedInteger: View {
             .onAppear {
                 guard !hasAppeared else { return }
                 hasAppeared = true
-                withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value }
+                if StatIntro.shouldAnimate() { withAnimation(.spring(duration: 0.8, bounce: 0.2)) { displayedValue = value } } else { displayedValue = value }
             }
             .onChange(of: value) { _, newValue in
                 withAnimation(.spring(duration: 0.6, bounce: 0.15)) { displayedValue = newValue }
