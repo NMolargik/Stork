@@ -48,6 +48,7 @@ nonisolated public extension GeometryProxy {
 /// What an adaptive layout reads from its container in one geometry pass.
 nonisolated public struct LayoutProbe: Equatable, Sendable {
     public var width: CGFloat
+    public var height: CGFloat
     public var hasFold: Bool
     public var isFoldActive: Bool
     /// Where a vertical fold sits across the container (container coordinates), if any.
@@ -58,8 +59,9 @@ nonisolated public struct LayoutProbe: Equatable, Sendable {
     /// the device is closed, where the system reports no reserved region.
     public var hasVerticalBar: Bool
 
-    public init(width: CGFloat = 0, hasFold: Bool = false, isFoldActive: Bool = false, foldCenterX: CGFloat? = nil, hasVerticalBar: Bool = false) {
+    public init(width: CGFloat = 0, height: CGFloat = 0, hasFold: Bool = false, isFoldActive: Bool = false, foldCenterX: CGFloat? = nil, hasVerticalBar: Bool = false) {
         self.width = width
+        self.height = height
         self.hasFold = hasFold
         self.isFoldActive = isFoldActive
         self.foldCenterX = foldCenterX
@@ -67,7 +69,7 @@ nonisolated public struct LayoutProbe: Equatable, Sendable {
     }
 
     public init(_ proxy: GeometryProxy) {
-        self.init(width: proxy.size.width, hasFold: proxy.hasFoldIfAvailable, isFoldActive: proxy.isFoldActiveIfAvailable, foldCenterX: proxy.foldCenterXIfAvailable, hasVerticalBar: Self.isVerticalBar(proxy.safeAreaInsets))
+        self.init(width: proxy.size.width, height: proxy.size.height, hasFold: proxy.hasFoldIfAvailable, isFoldActive: proxy.isFoldActiveIfAvailable, foldCenterX: proxy.foldCenterXIfAvailable, hasVerticalBar: Self.isVerticalBar(proxy.safeAreaInsets))
     }
 
     /// The vertical-bar test (see `hasVerticalBar`). Which device this is comes from

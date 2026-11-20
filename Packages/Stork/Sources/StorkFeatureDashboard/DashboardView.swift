@@ -30,7 +30,19 @@ public struct DashboardView: View {
     /// accessory the system does not inset iPad content for).
     private static let pillClearance: CGFloat = 84
 
-    private var usesTwoColumns: Bool { layout.usesTwoColumns(isRegularWidth: hSizeClass == .regular) }
+    /// Two columns need a landscape-ish window: in a tall one (portrait iPad, narrow Stage Manager
+    /// window) the jar column would sit half empty, so the page flows as one centered column.
+    private var usesTwoColumns: Bool {
+        layout.usesTwoColumns(isRegularWidth: hSizeClass == .regular)
+            && (layout.hasFold || layout.height <= layout.width)
+    }
+
+    /// The stacked jar scales with the window so a short window still shows more than the jar.
+    private var stackedJarHeight: CGFloat {
+        guard layout.height > 0 else { return 250 }
+        let roomy = layout.width >= 640 ? min(layout.width * 0.55, 400) : 250
+        return min(roomy, max(layout.height * 0.36, 150))
+    }
 
     public var body: some View {
         Group {
@@ -65,7 +77,7 @@ public struct DashboardView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     wrapPrompt
-                    JarSection(model: model, jarShuffle: $jarShuffle)
+                    JarSection(model: model, jarShuffle: $jarShuffle, jarHeight: stackedJarHeight)
 
                     ForEach(model.cardOrder) { card(for: $0) }
                 }
