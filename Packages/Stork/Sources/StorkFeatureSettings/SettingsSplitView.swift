@@ -55,6 +55,58 @@ extension View {
     func settingsTitleDisplayMode() -> some View { modifier(SettingsTitleDisplayMode()) }
 }
 
+extension SettingsDestination {
+    /// The page's title, shown as the pane header on iPad's split layout.
+    var title: Text {
+        switch self {
+        case .general: Text("General", bundle: .module)
+        case .roles: Text("Roles Counted in Totals", bundle: .module)
+        case .icloud: Text("iCloud", bundle: .module)
+        case .export: Text("Export & Share", bundle: .module)
+        case .pastBirths: Text("Past Births & Import", bundle: .module)
+        case .privacy: Text("Privacy", bundle: .module)
+        case .about: Text("About", bundle: .module)
+        case .dangerZone: Text("Danger Zone", bundle: .module)
+        }
+    }
+}
+
+/// On iPad the tab bar floats in the top row, and an empty navigation bar under it left a wide
+/// gap above each pane's title. The pane roots hide their bar and draw the large title (and
+/// the transient status line) themselves, directly under the tab bar. The Duo keeps its
+/// navigation strip and the system titles.
+private struct SplitPaneHeader: ViewModifier {
+    let title: Text
+    @Environment(StatusCenter.self) private var status: StatusCenter?
+
+    func body(content: Content) -> some View {
+        if PhoneDuo.isDuo {
+            content
+        } else {
+            content
+                .toolbarVisibility(.hidden, for: .navigationBar)
+                .safeAreaInset(edge: .top, spacing: 0) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        title
+                            .font(.largeTitle.bold())
+                            .accessibilityAddTraits(.isHeader)
+                        if let message = status?.message {
+                            Text(verbatim: message).font(.subheadline).foregroundStyle(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .padding(.bottom, 4)
+                }
+        }
+    }
+}
+
+extension View {
+    fileprivate func splitPaneHeader(_ title: Text) -> some View { modifier(SplitPaneHeader(title: title)) }
+}
+
 /// A trailing disclosure chevron in the system indicator's size, weight and tertiary color.
 private struct DisclosureChevron: View {
     var body: some View {
@@ -259,13 +311,20 @@ public struct SettingsSplitView<ExportDestination: View>: View {
                     .ignoresSafeArea(.container, edges: PhoneDuo.isDuo ? .trailing : [])
                     .navigationTitle(Text(AppTab.settings.localizedTitle))
                     .statusSubtitle()
+                    .splitPaneHeader(Text(AppTab.settings.localizedTitle))
                     .environment(\.settingsSelection, $selection)
             }
-            Rectangle()
-                .fill(hasFold ? AnyShapeStyle(.clear) : AnyShapeStyle(.separator))
-                .ignoresSafeArea()
+            // A hairline in the middle of the gap, kept to the content area so it never runs up
+            // through the tab bar.
+            Color.clear
+                .overlay {
+                    if !hasFold {
+                        Rectangle().fill(.separator).frame(width: 0.5)
+                    }
+                }
             NavigationStack {
                 SettingsDestinationView(destination: selection ?? .default, model: model, exportDestination: exportDestination)
+                    .splitPaneHeader((selection ?? .default).title)
                     .id(selection)
                     .environment(\.settingsSelection, $selection)
             }
