@@ -76,6 +76,8 @@ struct OnboardingHeader: View {
     let subtitle: String
     /// The tighter hero for short windows (the folded iPhone Duo, iPhone landscape).
     var compact = false
+    /// Dropped on the shortest windows so the scrolling body gets the room.
+    var showsSymbol = true
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var bounce = false
@@ -88,6 +90,7 @@ struct OnboardingHeader: View {
     var body: some View {
         let box = compact ? compactSymbolBox : symbolBox
         VStack(spacing: compact ? OnboardingMetrics.sm : OnboardingMetrics.lg) {
+            if showsSymbol {
             Image(systemName: systemImage)
                 .font(.system(size: compact ? compactSymbolSize : symbolSize, weight: .medium))
                 .symbolRenderingMode(.hierarchical)
@@ -98,6 +101,7 @@ struct OnboardingHeader: View {
                 .background(RoundedRectangle(cornerRadius: box * 0.26, style: .continuous).fill(tint.opacity(0.18)))
                 .overlay(RoundedRectangle(cornerRadius: box * 0.26, style: .continuous).strokeBorder(.quaternary))
                 .accessibilityHidden(true)
+            }
 
             VStack(spacing: compact ? OnboardingMetrics.xs : OnboardingMetrics.sm) {
                 Text(title)

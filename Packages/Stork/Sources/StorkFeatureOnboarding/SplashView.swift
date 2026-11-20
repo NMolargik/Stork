@@ -56,7 +56,36 @@ public struct SplashView: View {
 
     // MARK: Flat layout (iPhone, iPad, folded Duo)
 
+    @ViewBuilder
     private func flatLayout(size: CGSize) -> some View {
+        if size.height < 640 {
+            shortLayout(size: size)
+        } else {
+            centeredLayout(size: size)
+        }
+    }
+
+    /// A short window (the smallest Stage Manager window): the mark, the text and the button
+    /// stack in normal flow at full size, scrolling if even that does not fit, instead of the
+    /// launch-screen position that would shrink the text to nothing.
+    private func shortLayout(size: CGSize) -> some View {
+        ScrollView {
+            VStack(spacing: OnboardingMetrics.lg) {
+                mark
+                    .frame(width: 96, height: 96)
+                titleBlock
+                    .opacity(showsText ? 1 : 0)
+                startButton
+                    .frame(maxWidth: OnboardingMetrics.readableWidth)
+                    .padding(.horizontal, OnboardingMetrics.xl)
+            }
+            .frame(maxWidth: .infinity, minHeight: size.height - 48)
+            .padding(.top, 48)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+    }
+
+    private func centeredLayout(size: CGSize) -> some View {
         // The Duo's vertical bar takes the trailing edge: centre in what is left of it.
         let usable = size.width - (probe.hasVerticalBar ? trailingInset : 0)
         let side = markSide(height: size.height)

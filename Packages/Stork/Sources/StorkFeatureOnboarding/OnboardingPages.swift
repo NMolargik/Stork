@@ -52,7 +52,8 @@ struct OnboardingFeaturePage: View {
                 tint: presentation.tint,
                 title: presentation.title,
                 subtitle: presentation.subtitle,
-                compact: compact
+                compact: compact,
+                showsSymbol: !(scrolling && probe.height > 0 && probe.height < 560)
             )
         } trail: {
             VStack(spacing: OnboardingMetrics.lg) {
