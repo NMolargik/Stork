@@ -958,6 +958,50 @@
         }
       }
     },
+    "Discard": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descartar"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abandonner"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "破棄"
+          }
+        }
+      }
+    },
+    "Discard this delivery?": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Descartar este parto?"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abandonner cet accouchement?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この分娩を破棄しますか?"
+          }
+        }
+      }
+    },
     "Done": {
       "localizations": {
         "es": {
@@ -1416,6 +1460,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "インチ単位の身長"
+          }
+        }
+      }
+    },
+    "Keep Editing": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguir editando"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer la modification"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編集を続ける"
           }
         }
       }
@@ -2474,6 +2540,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "オンス単位の体重"
+          }
+        }
+      }
+    },
+    "What you entered won't be saved.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo que ingresó no se guardará."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce que vous avez saisi ne sera pas enregistré."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "入力した内容は保存されません。"
           }
         }
       }

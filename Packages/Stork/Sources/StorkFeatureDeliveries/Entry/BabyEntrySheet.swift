@@ -41,7 +41,7 @@ struct BabyEntrySheet: View {
 
                 Section(String(localized: "Weight", bundle: .module)) {
                     HStack {
-                        TextField(useMetricUnits ? "Weight (kg)" : "Weight (oz)", value: $entry.weight, format: .number)
+                        TextField(useMetricUnits ? "Weight (kg)" : "Weight (oz)", value: $entry.weight, format: .number.precision(.fractionLength(0...2)))
                             .keyboardType(.decimalPad)
                             .accessibilityLabel(useMetricUnits ? "Weight in kilograms" : "Weight in ounces")
                         Text(useMetricUnits ? "kg" : "oz").accessibilityHidden(true)
@@ -50,7 +50,7 @@ struct BabyEntrySheet: View {
 
                 Section(String(localized: "Height", bundle: .module)) {
                     HStack {
-                        TextField(useMetricUnits ? "Height (cm)" : "Height (in)", value: $entry.height, format: .number)
+                        TextField(useMetricUnits ? "Height (cm)" : "Height (in)", value: $entry.height, format: .number.precision(.fractionLength(0...2)))
                             .keyboardType(.decimalPad)
                             .accessibilityLabel(useMetricUnits ? "Height in centimeters" : "Height in inches")
                         Text(useMetricUnits ? "cm" : "in").accessibilityHidden(true)

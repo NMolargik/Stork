@@ -49,7 +49,9 @@ public struct DeliveryEntryView: View {
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) { dismiss() } label: { Label(String(localized: "Cancel", bundle: .module), systemImage: "xmark") }
+                    Button(role: .cancel) {
+                        if hasUnsavedEntries { confirmingDiscard = true } else { dismiss() }
+                    } label: { Label(String(localized: "Cancel", bundle: .module), systemImage: "xmark") }
                         .keyboardShortcut(.escape, modifiers: [])
                         .hoverEffect(.highlight)
                 }
@@ -70,6 +72,16 @@ public struct DeliveryEntryView: View {
                     .keyboardShortcut(.return, modifiers: .command)
                     .hoverEffect(.highlight)
                 }
+            }
+            .confirmationDialog(
+                String(localized: "Discard this delivery?", bundle: .module),
+                isPresented: $confirmingDiscard,
+                titleVisibility: .visible
+            ) {
+                Button(String(localized: "Discard", bundle: .module), role: .destructive) { dismiss() }
+                Button(String(localized: "Keep Editing", bundle: .module), role: .cancel) {}
+            } message: {
+                Text("What you entered won't be saved.", bundle: .module)
             }
             .sheet(isPresented: $model.showingBabySheet) {
                 BabyEntrySheet(model: model, useMetricUnits: useMetricUnits, editingBaby: editingBaby)
@@ -95,6 +107,13 @@ public struct DeliveryEntryView: View {
     }
 
     // MARK: - Layout
+
+    @State private var confirmingDiscard = false
+
+    /// A new delivery with something entered: Cancel asks before throwing it away.
+    private var hasUnsavedEntries: Bool {
+        !model.isEditing && (!model.babies.isEmpty || !model.notes.isEmpty || !model.selectedTags.isEmpty)
+    }
 
     private var usesTwoColumns: Bool { layout.usesTwoColumns(isRegularWidth: hSizeClass == .regular) }
 

@@ -34,7 +34,7 @@ struct PastBirthsHubView: View {
         }
         .navigationTitle(Text("Past Births & Import", bundle: .module))
         .statusSubtitle()
-        .navigationBarTitleDisplayMode(.inline)
+        .settingsTitleDisplayMode()
     }
 
     private func hubRow(title: LocalizedStringKey, detail: LocalizedStringKey, systemImage: String) -> some View {
