@@ -46,7 +46,7 @@ public struct StorkProPaywallView: View {
                 VStack(spacing: 24) {
                     header
                     featureList
-                    purchaseBlock
+                    familyNote
                     legal
                 }
                 .frame(maxWidth: 560)
@@ -55,6 +55,15 @@ public struct StorkProPaywallView: View {
                 .padding(.bottom, 24)
             }
             .background(Color(uiColor: .systemGroupedBackground))
+            // The buy button, price and Restore stay on screen however short the window is.
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                purchaseBlock
+                    .frame(maxWidth: 560)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(.bar)
+            }
             .navigationTitle(Text("Stork Pro", bundle: .module))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -164,7 +173,11 @@ public struct StorkProPaywallView: View {
                     .foregroundStyle(.red)
                     .multilineTextAlignment(.center)
             }
+        }
+    }
 
+    private var familyNote: some View {
+        VStack(spacing: 12) {
             Text("Family Sharing included. Bought Stork before it went free? Pro is already yours — tap Restore Purchases if it isn't showing.", bundle: .module)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
