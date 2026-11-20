@@ -8,7 +8,7 @@
 //  app-group fallback counts, Spotlight reindex, milestone detection, review prompt).
 //
 //  Each operation also gets a thin single-verb use-case wrapper so view models depend on
-//  one verb rather than the whole repository — mirroring SCOUT's repository/use-case split.
+//  one verb rather than the whole repository — the repository/use-case split used across the Farside apps.
 //  Failures are typed (`throws(PersistenceError)`) so callers catch a concrete error.
 //  Everything is MainActor-isolated because it touches the `@Model` types.
 //

@@ -8,7 +8,7 @@ Stork is an app for labor & delivery nurses to track the deliveries they perform
 
 **Business model (3.0+):** free download with a one-time **Stork Pro** unlock (`com.nickmolargik.stork.pro.lifetime`, non-consumable, Family Sharing). Free forever: logging deliveries (every field, any past date), basic stat cards, the marble jar, calendar, Watch app, basic Home Screen widgets, Spotlight, Siri. Pro: career milestone share cards, PDF/CSV export, insight cards, calendar heat map, jar sharing, weather-at-delivery, Lock Screen + interactive widgets. **Data is never locked.** The year-end **Wrap** ("Your Year in Births") is free for everyone: it is a shareable acquisition hook, so never gate it. Pre-3.0 buyers are grandfathered (see Stork Pro below).
 
-The app is a **thin app target on top of an SPM umbrella package** (`Packages/Stork`) of layered, single-responsibility modules — clean architecture in the style of StreetIQ's SCOUT. Dependencies point **inward**: features depend on the design system and core; data implements core's protocols; **core depends on nothing** (Foundation + SwiftData only).
+The app is a **thin app target on top of an SPM umbrella package** (`Packages/Stork`) of layered, single-responsibility modules — a clean, layered architecture. Dependencies point **inward**: features depend on the design system and core; data implements core's protocols; **core depends on nothing** (Foundation + SwiftData only).
 
 ## Build & Run
 

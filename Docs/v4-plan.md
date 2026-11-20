@@ -8,11 +8,11 @@ Base branch `claude/v4` (version 4.0.0, build 400). Read `CLAUDE.md`, this file 
 - Never edit the main checkout (it holds uncommitted Xcode noise; leave it), another worktree, or any other repo. Other repos named below are READ-ONLY references.
 - Commit to your branch in small, described commits ending with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. Never push. Never change version or build numbers.
 - Only edit the files your package owns (table below). If you must touch a file another package owns, keep the change minimal and say so in your report.
-- Never open, read or build anything belonging to StreetIQ or SCOUT, and never write those names into any file or commit.
+- Work only inside this repository: never open, read or build unrelated projects on this Mac.
 
 ## Builds and simulators
 - Package: `cd Packages/Stork && swift build && swift test`. App: `xcodebuild build -workspace Stork.xcworkspace -scheme Stork -destination 'platform=iOS Simulator,id=<your sim>' -derivedDataPath .build-dd` (`.build-dd` stays untracked).
-- Use the dedicated Stork simulators (Nick, 2026-11-19), never clones: "Stork iPhone" `F380D8AF-FDF6-4BD9-A548-32C179BBCAEE` and "Stork iPad" `E7DDE14C-62A0-4EBB-89CD-DC4CE176A5BC` (iOS 27.2); Duo checks use the stock "iPhone Duo" `0DDC8DB3-61F0-4CA3-90A7-3CDC07DA6E5A`. They are shared: if one is busy, wait and retry. Never erase or reset them, and never use, modify or delete "SCOUT ENG-1529".
+- Use the dedicated Stork simulators (Nick, 2026-11-19), never clones: "Stork iPhone" `F380D8AF-FDF6-4BD9-A548-32C179BBCAEE` and "Stork iPad" `E7DDE14C-62A0-4EBB-89CD-DC4CE176A5BC` (iOS 27.2); Duo checks use the stock "iPhone Duo" `0DDC8DB3-61F0-4CA3-90A7-3CDC07DA6E5A`. They are shared: if one is busy, wait and retry. Never erase or reset them, and never use, modify or delete simulators that belong to other projects.
 - No Mac apps, no desktop capture, no computer-use tools. Simulators only.
 - The iPhone Duo simulator boots FOLDED and cannot be unfolded from the command line. Check the folded Duo, iPhone and iPad yourself. For the unfolded Duo, build the layout from the `FoldAwareness` helpers and the reference code, render what you can (SwiftUI previews at the unfolded size, or the DEBUG launch flags), and say plainly what is unverified. The lead does the unfolded check with Nick afterwards.
 - Screenshots of every visual change go to `/Users/nickmolargik/Developer/Molargik Software LLC/Marketing/Stork 4.0/verification/<pkg>/` with descriptive names (before and after where it helps).

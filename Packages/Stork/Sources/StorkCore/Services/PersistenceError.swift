@@ -3,7 +3,7 @@
 //  StorkCore
 //
 //  The typed failure domain for the persistence boundary. Repositories and use-cases
-//  declare `throws(PersistenceError)` (SCOUT's typed-throws idiom), so view models catch
+//  declare `throws(PersistenceError)` (the typed-throws idiom), so view models catch
 //  a concrete, exhaustive error instead of `any Error` — and tests can match on cases.
 //
 
