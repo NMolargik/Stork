@@ -176,7 +176,28 @@ public struct MainView: View {
             return router.selectedTab == .dashboard
         }
 
+        /// The window width, measured so medium-width iPad windows can drop the sidebar toggle.
+        @State private var windowWidth: CGFloat = 0
+
+        /// An iPad window in regular width that is too narrow for the sidebar toggle, four tabs
+        /// and the toolbar buttons side by side: the top bar would overflow and hide a tab behind
+        /// a chevron, so it uses the plain tab bar (no sidebar) until there is room.
+        private var usesPlainTabBar: Bool {
+            horizontalSizeClass == .regular && !PhoneDuo.isDuo && windowWidth > 0 && windowWidth < 900
+        }
+
         var body: some View {
+            Group {
+                if usesPlainTabBar {
+                    tabs.tabViewStyle(.tabBarOnly)
+                } else {
+                    tabs.tabViewStyle(.sidebarAdaptable)
+                }
+            }
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { windowWidth = $0 }
+        }
+
+        private var tabs: some View {
             TabView(selection: $router.selectedTab) {
                 Tab(String(localized: AppTab.dashboard.localizedTitle), systemImage: AppTab.dashboard.systemImage, value: .dashboard) {
                     NavigationStack {
@@ -221,7 +242,6 @@ public struct MainView: View {
                     }
                 }
             }
-            .tabViewStyle(.sidebarAdaptable)
             #if canImport(HealthKit)
             .tabViewBottomAccessoryIfAvailable(isEnabled: showsStepPill && !PhoneDuo.isDuo) {
                 HStack(spacing: 12) {
